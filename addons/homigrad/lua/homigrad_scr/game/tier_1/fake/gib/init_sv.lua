@@ -198,7 +198,6 @@ function Gib_Input(rag,bone,dmgInfo,player)
 	end
 	--ахуенно когда взрываеца от прикосновения да?
 	--да
-	--КАКОЙ ПРЕКРАСНЫЙ ДЕНЬ,ЕСЛИ ТЫ ОЛЕНЬ
 	if dmgInfo:GetDamage() >= 300 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) or rag:GetVelocity():Length() > 700 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) then
 			dmgInfo:ScaleDamage(5000)
 			sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
