@@ -15,8 +15,8 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
 
         if
             dmginfo:GetDamageType() == DMG_CRUSH and
-            dmginfo:GetDamage() >= 4 and
-            ent:GetVelocity():Length() > 150
+            dmginfo:GetDamage() >= 5 and
+            ent:GetVelocity():Length() > 350
         then
             ply:ChatPrint("Твоя шея была сломана")
             ent:EmitSound("NPC_Barnacle.BreakNeck",511,200,1,CHAN_ITEM)

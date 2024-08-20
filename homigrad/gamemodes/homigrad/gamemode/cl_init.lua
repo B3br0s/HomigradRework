@@ -274,6 +274,11 @@ local function ToggleMenu(toggle)
         wepMenu:SetPos(w/3,h/2)
         wepMenu:MakePopup()
         wepMenu:SetKeyboardInputEnabled(false)
+		if wep:GetClass()!="weapon_hands" then
+			wepMenu:AddOption("Выкинуть",function()
+				LocalPlayer():ConCommand("say *drop")
+			end)
+		end
         if wep:Clip1()>0 then
             wepMenu:AddOption("Разрядить",function()
                 net.Start("Unload")

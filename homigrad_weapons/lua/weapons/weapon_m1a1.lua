@@ -17,7 +17,7 @@ SWEP.Primary.Ammo			= "pistol"
 SWEP.Primary.Cone = 0.006
 SWEP.Primary.Damage = 40
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "pwb/weapons/vz61/shoot.wav"
+SWEP.Primary.Sound = "weapons/mac10/mac10-1.wav"
 SWEP.Primary.Force = 70/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.05
@@ -35,7 +35,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "pistol"
+SWEP.HoldType = "revolver"
 
 ------------------------------------------
 

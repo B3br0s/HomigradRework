@@ -1,16 +1,20 @@
 if engine.ActiveGamemode() == "homigrad" then
 local PlayerMeta = FindMetaTable("Player")
 local EntityMeta = FindMetaTable("Entity")
+local handsarrivetime = 0.3
+local forwardarrivetime = 0.85
+local backarrivetime = 0.35
+local handsangup = 110
 
 Organs = {
-	['brain']=5,
-	['lungs']=40,
-	['liver']=10,
-	['stomach']=30,
-	['intestines']=30,
-	['heart']=20,
+	['brain']=25,
+	['lungs']=160,
+	['liver']=60,
+	['stomach']=90,
+	['intestines']=90,
+	['heart']=80,
 	['artery']=1,
-	['spine']=5
+	['spine']=25
 }
 
 RagdollDamageBoneMul={		--Умножения урона при попадании по регдоллу
@@ -1080,8 +1084,10 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 					local ang=ply:EyeAngles()
 					ang:RotateAroundAxis(eyeangs:Forward(),90)
 					ang:RotateAroundAxis(eyeangs:Right(),75)
+					ang:RotateAroundAxis(ang:Up(),handsangup)
+
 					local shadowparams = {
-						secondstoarrive=0.3,
+						secondstoarrive=handsarrivetime,
 						pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
 						angle=ang,
 						maxangular=670,
@@ -1112,10 +1118,11 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 				local ang=ply:EyeAngles()
 				ang:RotateAroundAxis(eyeangs:Forward(),90)
 				ang:RotateAroundAxis(eyeangs:Right(),75)
+				ang:RotateAroundAxis(ang:Up(),handsangup)
 				local pos = ply:EyePos()
 				pos[3] = head:GetPos()[3]
 				local shadowparams = {
-					secondstoarrive=0.3,
+					secondstoarrive=handsarrivetime,
 					pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*15,
 					angle=ang,
 					maxangular=670,
@@ -1286,7 +1293,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 				local shadowparams = {
-					secondstoarrive=0.5,
+					secondstoarrive=forwardarrivetime,
 					pos=lh:GetPos(),
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
@@ -1310,7 +1317,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			
 			if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
-					secondstoarrive=0.3,
+					secondstoarrive=forwardarrivetime,
 					pos=rh:GetPos(),
 					angle=phys:GetAngles(),
 					maxangulardamp=10,
@@ -1334,7 +1341,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
-					secondstoarrive=0.4,
+					secondstoarrive=backarrivetime,
 					pos=chst:GetPos(),
 					angle=phys:GetAngles(),
 					maxangulardamp=10,

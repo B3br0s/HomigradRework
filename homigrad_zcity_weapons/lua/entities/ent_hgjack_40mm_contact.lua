@@ -7,7 +7,7 @@ ENT.Category = "JModHomigrad"
 ENT.Spawnable = true
 ENT.JModPreferredCarryAngles = Angle(0, -140, 0)
 --ENT.Model = "models/pwb/weapons/w_f1_thrown.mdl"
-ENT.Model = "models/pwb/weapons/w_m320_projectile.mdl"
+ENT.Model = "models/kali/weapons/mgsv/magazines/ammunition/40mm grenade.mdl"
 ENT.SpoonScale = 2
 
 if SERVER then

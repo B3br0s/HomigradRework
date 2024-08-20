@@ -3,14 +3,14 @@ hook.Add("PlayerSpawn","Damage",function(ply)
     if PLYSPAWN_OVERRIDE then return end
 
 	ply.Organs = {
-		['brain']=5,
-		['lungs']=40,
-		['liver']=10,
-		['stomach']=30,
-		['intestines']=30,
-		['heart']=20,
+		['brain']=25,
+		['lungs']=160,
+		['liver']=60,
+		['stomach']=90,
+		['intestines']=90,
+		['heart']=80,
 		['artery']=1,
-		['spine']=5
+		['spine']=25
 	}
 
 	ply.InternalBleeding=nil

@@ -130,7 +130,7 @@ HomigradScoreboard.Paint = function(self,w,h)
 
     draw.SimpleText("Статус", "HomigradFont", 100, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("Имя", "HomigradFont", w / 2, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    draw.SimpleText("HOMIGRAD OLD REWORK", "HomigradFontLarge", w / 2, h / 2, Color(155, 155, 165, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText("HOMIGRAD REWORK", "HomigradFontLarge", w / 2, h / 2, Color(155, 155, 165, 5), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("Frags | Deaths", "HomigradFont", w - 300, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("Пинг", "HomigradFont", w - 200, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("Команда", "HomigradFont", w - 100, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)

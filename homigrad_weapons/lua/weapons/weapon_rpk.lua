@@ -17,7 +17,7 @@ SWEP.Primary.Ammo			= "7.62x39 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 45
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "pwb2/weapons/rpk/rpk-1.wav"
+SWEP.Primary.Sound = "weapons/ak47/ak47_tp.wav"
 --SWEP.Primary.SoundFar = "ak74/ak74_dist.wav"
 SWEP.Primary.Force = 240/3
 SWEP.ReloadTime = 2
@@ -36,7 +36,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "smg"
+SWEP.HoldType = "ar2"
 
 ------------------------------------------
 

@@ -1,27 +1,28 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "HK USP-S"
+SWEP.PrintName 				= "SKS"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Пистолет под калибр 9х19"
-SWEP.Category 				= "Оружие"
+SWEP.Instructions			= "Самозарядный карабин Симонова – советская самозарядная винтовка/карабин, разработанный Сергеем Симоновым и принятый на вооружение СА и ряд стран в 1949 году."
+SWEP.Category 				= "Оружие 2"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
 
 ------------------------------------------
 
-SWEP.Primary.ClipSize		= 12
-SWEP.Primary.DefaultClip	= 12
-SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= "9х19 mm Parabellum"
+SWEP.Primary.ClipSize		= 1
+SWEP.Primary.DefaultClip	= 2
+SWEP.Primary.Automatic		= false  
+SWEP.Primary.Ammo			= "XBowBolt"
 SWEP.Primary.Cone = 0
-SWEP.Primary.Damage = 25
+SWEP.Primary.Damage = 255
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "m45/m45_suppressed_fp.wav"
-SWEP.Primary.Force = 70/3
+SWEP.Primary.Sound = "weapons/crossbow/bolt_fly4.wav"
+SWEP.ReloadSound = "weapons/crossbow/reload1.wav"
+SWEP.Primary.Force = 255
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.14
+SWEP.ShootWait = .03
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
@@ -34,7 +35,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "revolver"
+SWEP.HoldType = "ar2"
 
 ------------------------------------------
 
@@ -43,24 +44,24 @@ SWEP.SlotPos				= 1
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/weapons/v_bean_beansmusp.mdl"
-SWEP.WorldModel				= "models/weapons/w_bean_beansmusp.mdl"
+SWEP.ViewModel				= "models/weapons/w_jmod_crossbow.mdl"
+SWEP.WorldModel				= "models/weapons/insurgency/w_sks.mdl"
 
-SWEP.vbwPos = Vector(7.5,0.1,-6)
+SWEP.vbwPos = Vector(0,0,0)
 
 SWEP.Supressed = true
 
-SWEP.dwmModeScale = 1
-SWEP.dwmForward = 0
-SWEP.dwmRight = 1
-SWEP.dwmUp = 0
+SWEP.dwmModeScale = 0.9
+SWEP.dwmForward = 12
+SWEP.dwmRight = 0
+SWEP.dwmUp = 3
 
-SWEP.dwmAUp = 4
-SWEP.dwmARight = -5.5
-SWEP.dwmAForward = -90
-
-SWEP.addAng = Angle(1.1,1.3,0)
-SWEP.addPos = Vector(0,4,-0.7)
+SWEP.dwmAUp = 90
+SWEP.dwmARight = 180
+SWEP.dwmAForward = 0
+SWEP.addAng = Angle( 16, 1, 0 )
+SWEP.addPos = Vector(0,0,2)
+SWEP.Efect = "PhyscannonImpact"
 
 local model 
 if CLIENT then
@@ -68,7 +69,6 @@ if CLIENT then
     GDrawWorldModel = model
     model:SetNoDraw(true)
 end
-
 if SERVER then
     function SWEP:GetPosAng()
         local owner = self:GetOwner()

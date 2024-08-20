@@ -305,7 +305,7 @@ else
     util.AddNetworkString("ChooseWeaponCrate")
 
     function ENT:Initialize()
-        self:SetModel("models/kali/props/cases/rifle case a.mdl")
+        self:SetModel("models/n7/props/cases/rifle_case_a.mdl")
         self:PhysicsInit(SOLID_VPHYSICS)
         self:SetMoveType(MOVETYPE_VPHYSICS)
         self:SetSolid(SOLID_VPHYSICS)

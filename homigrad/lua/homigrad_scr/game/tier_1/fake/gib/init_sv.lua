@@ -198,7 +198,7 @@ function Gib_Input(rag,bone,dmgInfo,player)
 	end
 	--ахуенно когда взрываеца от прикосновения да?
 	--да
-	if dmgInfo:GetDamage() >= 300 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) or rag:GetVelocity():Length() > 700 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) then
+	if dmgInfo:GetDamage() >= 700 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 750 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) then
 			dmgInfo:ScaleDamage(5000)
 			sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
 			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
@@ -229,7 +229,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	--разве это не смешно когда ножом башка взрывается?
 	--нет
 	
-	if dmgInfo:GetDamage() >= 10 then
+	if dmgInfo:GetDamage() >= 1 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)

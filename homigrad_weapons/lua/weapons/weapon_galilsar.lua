@@ -19,12 +19,12 @@ SWEP.Primary.Ammo			= "9x39 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 45
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "pwb2/weapons/asval/ak47-1.wav"
+SWEP.Primary.Sound = "weapons/m4a1/m4a1_suppressed_tp.wav"
 --SWEP.Primary.SoundFar = "mp5k/mp5k_suppressed_tp.wav"
 SWEP.Primary.Force = 200/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.065
-SWEP.ReloadSound = "pwb2/weapons/deserteagle/reload.wav"
+SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
 SWEP.TwoHands = true
 
 SWEP.Secondary.ClipSize		= -1
