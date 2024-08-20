@@ -50,12 +50,16 @@ Vectors = {
 ["weapon_xm8_lmg"]=Vector(13,-1,2),
 ["weapon_hk_arbalet"]=Vector(13,-1,2),
 ["weapon_vector"]=Vector(2,-1,0),
+["weapon_sks"]=Vector(0,0,1),
+["weapon_saiga12"]=Vector(12,0,5),
+["weapon_m1garand"]=Vector(0,0,1),
 }
 
 Vectors2 = {
 ["weapon_mp5"]=Vector(11,-2	,-2.5),
 ["weapon_ar15"]=Vector(9,-2,-3),
 ["weapon_act3_m249"]=Vector(10,-1,-6),
+["weapon_saiga12"]=Vector(15,0,-4),
 ["weapon_ak74"]=Vector(12,-3,-2),
 ["weapon_akm"]=Vector(12,-4,-5),
 ["weapon_ak74u"]=Vector(10,-3,-5),
@@ -82,6 +86,8 @@ Vectors2 = {
 ["weapon_xm8_lmg"]=Vector(9,-2,-3),
 ["weapon_hk_arbalet"]=Vector(15,-3,-3),
 ["weapon_vector"]=Vector(12,-1,-4),
+["weapon_sks"]=Vector(18,0,-5),
+["weapon_m1garand"]=Vector(13,0,-5),
 }
 
 vecZero = Vector(0,0,0)

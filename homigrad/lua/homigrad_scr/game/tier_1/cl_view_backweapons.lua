@@ -161,7 +161,7 @@ hook.Add("PostDrawOpaqueRenderables","draw_weapons",function()--почему-т�
                 
                 if pistol then
                     --[[if isFamale then
-                        localPos = wep.vbwPosF or wep.vbwPos or PistolOffsetF
+                        localPos = wep.F or wep.vbwPos or PistolOffsetF
                         localAng = wep.vbwAngF or wep.vbwAng or PistolAngF
                     else]]--
                         localPos = wep.vbwPos or PistolOffset

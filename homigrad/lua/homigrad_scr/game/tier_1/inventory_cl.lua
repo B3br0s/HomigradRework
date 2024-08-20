@@ -56,7 +56,10 @@ Gunshuy = {
 	"weapon_knife",
 	"weapon_pipe",
 	"weapon_sar2",
-	"weapon_civil_famas"
+	"weapon_civil_famas",
+	"weapon_m1garand",
+	"weapon_saiga12",
+	"weapon_sks"
 }
 
 local AmmoTypes = {

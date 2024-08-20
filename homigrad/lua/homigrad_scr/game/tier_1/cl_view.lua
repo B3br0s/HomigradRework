@@ -326,6 +326,9 @@ local weps = {
 ["weapon_doublebarrel"] = true,
 ["weapon_doublebarrel_dulo"] = true,
 ["weapon_awp"] = true,
+["weapon_sks"] = true,
+["weapon_saiga12"]=true,
+["weapon_m1garand"] = true,
 }
 
 local ScopeLerp = 0
@@ -688,6 +691,21 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			--Vector(6,5,1.42)
 			vecWep = hand.Pos + hand.Ang:Up() * 6.0 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.93
 			angWep = hand.Ang + Angle(-10,0,0)
+		end
+		if weaponClass == "weapon_sks" then
+			--Vector(6,5,1.42) 
+			vecWep = hand.Pos + hand.Ang:Up() * 5.2 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.93
+			angWep = hand.Ang + Angle(0,15,0)
+		end
+		if weaponClass == "weapon_saiga12" then
+			--Vector(0,0,0) 
+			vecWep = hand.Pos + hand.Ang:Up() * 5.4 - hand.Ang:Forward() * 4.5 + hand.Ang:Right() * 0.8
+			angWep = hand.Ang + Angle(0,0,0)
+		end
+		if weaponClass == "weapon_m1garand" then
+			--Vector(6,5,1.42) 
+			vecWep = hand.Pos + hand.Ang:Up() * 5.2 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 1.23
+			angWep = hand.Ang + Angle(0,15,0)
 		end
 		if weaponClass == "weapon_rpgg" then
 			--Vector(7,5,1)

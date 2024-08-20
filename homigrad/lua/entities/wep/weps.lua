@@ -52,7 +52,10 @@ Guns = {
 "weapon_hk_arbalet",
 "weapon_doublebarrel",
 "weapon_doublebarrel_dulo",
-"weapon_spas12"
+"weapon_spas12",
+"weapon_sks",
+"weapon_saiga12",
+"weapon_m1garand"
 }
 GunsModel = {
 ["weapon_glock18"]="models/pwb2/weapons/w_fiveseven.mdl",
@@ -60,6 +63,7 @@ GunsModel = {
 ["weapon_mp5"]="models/pwb2/weapons/w_mp5a3.mdl",
 ["weapon_ar15"]="models/pwb2/weapons/w_m4a1.mdl",
 ["weapon_ak74"]="models/pwb/weapons/w_m134.mdl",
+["weapon_saiga12"]="models/pwb/weapons/w_saiga_12.mdl",
 ["weapon_akm"]="models/pwb/weapons/w_akm.mdl",
 ["weapon_fiveseven"]="models/pwb/weapons/w_p99.mdl",
 ["weapon_hk_usp"]="models/pwb2/weapons/w_usptactical.mdl",
@@ -114,6 +118,8 @@ GunsModel = {
 ["weapon_awp"]="models/weapons/salatbase/w_snip_awp.mdl",
 ["weapon_doublebarrel_dulo"]="models/weapons/tfa_ins2/w_doublebarrel_sawnoff.mdl",
 ["weapon_doublebarrel_dulo"]="models/weapons/tfa_ins2/w_doublebarrel.mdl",
+["weapon_sks"]="models/weapons/insurgency/w_sks.mdl",
+["weapon_m1garand"]="models/weapons/insurgency/w_m1a1.mdl",
 }
 
 ShootWait = {
@@ -123,6 +129,7 @@ ShootWait = {
 ["weapon_ar15"]=0.08,
 ["weapon_ak74"]=0.02,
 ["weapon_akm"]=0.1,
+["weapon_saiga12"]=0.15,
 ["weapon_fiveseven"]=0.08,
 ["weapon_hk_usp"]=0.08,
 ["weapon_deagle"]=0.15,
@@ -157,6 +164,8 @@ ShootWait = {
 ["weapon_hk_arbalet"]=0,
 ["weapon_doublebarrel_dulo"]=0.1,
 ["weapon_doublebarrel"]=0.1,
+["weapon_sks"]=0.1,
+["weapon_m1garand"]=0.15,
 }
 
 ReloadTime = {
@@ -177,6 +186,7 @@ ReloadTime = {
 ["weapon_galilsar"]=2,
 ["weapon_m14"]=2,
 ["weapon_m1a1"]=2,
+["weapon_saiga12"]=2,
 ["weapon_mk18"]=2,
 ["weapon_m249"]=4,
 ["weapon_m4a1"]=2,
@@ -199,6 +209,8 @@ ReloadTime = {
 ["weapon_hk_arbalet"]=2,
 ["weapon_doublebarrel"]=2,
 ["weapon_doublebarrel_dulo"]=2,
+["weapon_sks"]=2,
+["weapon_m1garand"]=2,
 }
 
 
@@ -213,6 +225,7 @@ TwoHandedOrNo = {
 ["weapon_hk_usp"]=false,
 ["weapon_deagle"]=false,
 ["weapon_beretta"]=false,
+["weapon_saiga12"]=true,
 ["weapon_ak74u"]=true,
 ["weapon_l1a1"]=true,
 ["weapon_fal"]=true,
@@ -242,6 +255,8 @@ TwoHandedOrNo = {
 ["weapon_hk_arbalet"]=true,
 ["weapon_doublebarrel"]=true,
 ["weapon_doublebarrel_dulo"]=true,
+["weapon_sks"]=true,
+["weapon_m1garand"]=true,
 }
 
 Automatic = {
@@ -251,6 +266,7 @@ Automatic = {
 ["weapon_ar15"]=false,
 ["weapon_ak74"]=true,
 ["weapon_akm"]=true,
+["weapon_saiga12"]=false,
 ["weapon_fiveseven"]=false,
 ["weapon_hk_usp"]=false,
 ["weapon_deagle"]=false,
@@ -284,6 +300,8 @@ Automatic = {
 ["weapon_hk_arbalet"]=false,
 ["weapon_doublebarrel"]=false,
 ["weapon_doublebarrel_dulo"]=false,
+["weapon_sks"]=false,
+["weapon_m1garand"]=false,
 }
 
 end

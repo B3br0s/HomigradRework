@@ -1,4 +1,5 @@
---[[if CLIENT then
+local enable = false
+if CLIENT and enable then
 	local blacklistweapon = { ["weapon_hands"] = true } -- Initialize blacklist with the correct table format
 
 	local WeaponInventory = nil
@@ -113,7 +114,7 @@
 		slot:SetSize(80, 80)
 		slot:SetBackgroundColor(Color(60, 60, 60, 150))
 		
---	local model = vgui.Create("DModelPanel", slot)
+		local model = vgui.Create("DModelPanel", slot)
 		model:SetSize(180,180)
 		model:Center()
 		model:SetCamPos(Vector(-2,-1,100))
@@ -332,7 +333,7 @@
 			dragPanel:SetAlpha(255)
 			dragPanel = nil
 		end
-	end
+	end]]
 
 	vgui.Register("CustomWeaponInventory", PANEL, "EditablePanel")
 	vgui.Register("CustomWeaponInventoryPlayerModel", PANELPLAYERMODEL, "EditablePanel")
@@ -373,4 +374,4 @@
 			timer.Simple(1, function() daun = false end)
 		end
 	end)
-end]]
+end

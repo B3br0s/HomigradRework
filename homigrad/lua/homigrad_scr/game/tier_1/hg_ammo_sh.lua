@@ -24,6 +24,18 @@ local ammotypes = {
         maxsplash = 5
     },
 
+    ["762x33mm"] = {
+        name = "7.62x33 mm",
+        dmgtype = DMG_BULLET, 
+        tracer = TRACER_LINE,
+        plydmg = 0,
+        npcdmg = 0,
+        force = 400,
+        maxcarry = 120,
+        minsplash = 10,
+        maxsplash = 5
+    },
+
     ["545×39mm"] = {
         name = "5.45x39 mm",
         dmgtype = DMG_BULLET, 
@@ -193,6 +205,11 @@ local ammoents = {
         Scale = 1.2,
         Color = Color(125,155,95)
     },
+
+    ["762x33mm"] = {
+        Material = "models/hmcd_ammobox_22",
+        Scale = 0.8,
+    },
 }
 
 print("yea!")
@@ -323,7 +340,8 @@ local ammolistent = {
     [46] = "57×28mm",
     [47] = "762x39mm",
     [48] = "9x39mm",
-    [49] = "9х19mm"
+    [49] = "9х19mm",
+    [50] = "762x33mm",
 }
 
 if SERVER then
