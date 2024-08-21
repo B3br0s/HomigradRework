@@ -7,7 +7,7 @@ SWEP.Instructions			= "Имеет траекторию полёта. Обращ�
 SWEP.Category 				= "Оружие 2"
 --SWEP.WepSelectIcon			= "pwb/sprites/m134"
 
-SWEP.Spawnable 				= true
+SWEP.Spawnable 				= false
 SWEP.AdminOnly 				= false
 
 SWEP.Primary.ClipSize		= 1

@@ -13,7 +13,7 @@ SWEP.WorldModel = "models/realistic_police/taser/w_taser.mdl"
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.DefaultClip = 1
 SWEP.Primary.Automatic = false
-SWEP.Primary.Ammo = "AR2AltFire"
+SWEP.Primary.Ammo = "Taser Cartridge"
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1

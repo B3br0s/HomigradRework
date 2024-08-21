@@ -95,6 +95,30 @@ local ammotypes = {
         minsplash = 10,
         maxsplash = 5
     },
+    
+    ["9x18rubber"] = {
+        name = "9x18 Rubber",
+        dmgtype = DMG_BULLET, 
+        tracer = TRACER_LINE,
+        plydmg = 0,
+        npcdmg = 0,
+        force = 100,
+        maxcarry = 80,
+        minsplash = 10,
+        maxsplash = 5
+    },
+
+    ["tasercartridge"] = {
+        name = "Taser Cartridge",
+        dmgtype = DMG_BULLET, 
+        tracer = TRACER_LINE,
+        plydmg = 0,
+        npcdmg = 0,
+        force = 100,
+        maxcarry = 80,
+        minsplash = 10,
+        maxsplash = 5
+    },
 
     ["46×30mm"] = {
         name = "4.6×30 mm",
@@ -181,6 +205,16 @@ local ammoents = {
 
     [".45rubber"] = {
         Material = "models/hmcd_ammobox_38",
+        Scale = 0.8,
+    },
+
+    ["9x18rubber"] = {
+        Material = "models/hmcd_ammobox_38",
+        Scale = 0.8,
+    },
+
+    ["tasercartridge"] = {
+        Material = "models/hmcd_ammobox_22",
         Scale = 0.8,
     },
 
@@ -342,6 +376,8 @@ local ammolistent = {
     [48] = "9x39mm",
     [49] = "9х19mm",
     [50] = "762x33mm",
+    [51] = "9х18mm",
+    [52] = "tasercartridge",
 }
 
 if SERVER then

@@ -95,12 +95,18 @@ function jailbreak.PlayerSpawn(ply,teamID)
 
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
 
+	tdm.GiveSwep(ply,teamTbl.main_weapon,teamID == 1 and 16 or 4)
+	tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 1 and 8 or 2)
+	if teamID == 2 then
+		ply:GiveAmmo(120,"9x18 Rubber",false)
+	end
+
 	tdm.GiveSwep(ply,teamTbl.main_weapon,teamID == 2 and 16 or 4)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 2 and 8 or 2)
 
     if teamID == 2 then
-        JMod.EZ_Equip_Armor(ply,"Medium-Helmet",color)
-        JMod.EZ_Equip_Armor(ply,"Light-Vest",color)
+        JMod.EZ_Equip_Armor(ply,"Medium-Helmet")
+        JMod.EZ_Equip_Armor(ply,"Light-Vest")
 	elseif teamID == 1 then
 		ply:SetPlayerColor(Color(255,170,0))
     end

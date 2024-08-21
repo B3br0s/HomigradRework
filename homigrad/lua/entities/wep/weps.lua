@@ -54,11 +54,13 @@ Guns = {
 "weapon_doublebarrel_dulo",
 "weapon_spas12",
 "weapon_sks",
+"weapon_makarov",
 "weapon_saiga12",
 "weapon_m1garand"
 }
 GunsModel = {
 ["weapon_glock18"]="models/pwb2/weapons/w_fiveseven.mdl",
+["weapon_makarov"]="models/weapons/insurgency/w_makarov.mdl",
 ["weapon_p220"]="models/pwb/weapons/w_cz75.mdl",
 ["weapon_mp5"]="models/pwb2/weapons/w_mp5a3.mdl",
 ["weapon_ar15"]="models/pwb2/weapons/w_m4a1.mdl",
@@ -125,6 +127,7 @@ GunsModel = {
 ShootWait = {
 ["weapon_glock18"]=0.08,
 ["weapon_p220"]=0.08,
+["weapon_makarov"]=0.12,
 ["weapon_mp5"]=0.06,
 ["weapon_ar15"]=0.08,
 ["weapon_ak74"]=0.02,
@@ -171,6 +174,7 @@ ShootWait = {
 ReloadTime = {
 ["weapon_glock18"]=2,
 ["weapon_p220"]=2,
+["weapon_makarov"]=2,
 ["weapon_mp5"]=2,
 ["weapon_ar15"]=2,
 ["weapon_ak74"]=2,
@@ -220,6 +224,7 @@ TwoHandedOrNo = {
 ["weapon_mp5"]=true,
 ["weapon_ar15"]=true,
 ["weapon_ak74"]=true,
+["weapon_makarov"]=false,
 ["weapon_akm"]=true,
 ["weapon_fiveseven"]=false,
 ["weapon_hk_usp"]=false,
@@ -266,6 +271,7 @@ Automatic = {
 ["weapon_ar15"]=false,
 ["weapon_ak74"]=true,
 ["weapon_akm"]=true,
+["weapon_makarov"]=false,
 ["weapon_saiga12"]=false,
 ["weapon_fiveseven"]=false,
 ["weapon_hk_usp"]=false,
