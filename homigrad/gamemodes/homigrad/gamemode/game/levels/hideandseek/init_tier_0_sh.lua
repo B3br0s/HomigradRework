@@ -6,7 +6,7 @@ hideandseek.red = {"Искатель",Color(255,55,55),
     weapons = {"weapon_radio","weapon_gurkha","weapon_hands","med_band_big","med_band_small","medkit","painkiller"},
     main_weapon = {"weapon_m3super","weapon_saiga12","weapon_xm1014","weapon_sks"},
     secondary_weapon = {"weapon_makarov","weapon_fiveseven","weapon_glock"},
-    models = {"models/players/an_generic_terrorist.mdl"}
+    models = {"models/player/Group02/male_08.mdl"}
 }
 
 hideandseek.green = {"Прячущийся",Color(55,55,255),

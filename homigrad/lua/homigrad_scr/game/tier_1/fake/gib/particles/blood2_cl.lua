@@ -35,7 +35,7 @@ end
 bloodparticels_hook[4] = function(mul)
     local time = CurTime()
 
-    for i = 1,#bloodparticels2 + math.random(2,8) do
+    for i = 1,#bloodparticels2 + math.random(20,60) do
         local part = bloodparticels2[i]
         if not part then break end
 

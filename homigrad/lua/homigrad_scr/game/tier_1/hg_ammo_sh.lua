@@ -12,6 +12,18 @@ local ammotypes = {
         maxsplash = 5
     },
 
+    ["airsoftballs"] = {
+        name = "Airsoft Balls",
+        dmgtype = DMG_BULLET, 
+        tracer = TRACER_LINE,
+        plydmg = 0,
+        npcdmg = 0,
+        force = 200,
+        maxcarry = 120,
+        minsplash = 10,
+        maxsplash = 5
+    },
+
     ["762x39mm"] = {
         name = "7.62x39 mm",
         dmgtype = DMG_BULLET, 
@@ -107,6 +119,17 @@ local ammotypes = {
         minsplash = 10,
         maxsplash = 5
     },
+    ["762x54mm"] = {
+        name = "7.62x54 mm",
+        dmgtype = DMG_BULLET, 
+        tracer = TRACER_LINE,
+        plydmg = 0,
+        npcdmg = 0,
+        force = 100,
+        maxcarry = 80,
+        minsplash = 10,
+        maxsplash = 5
+    },
 
     ["tasercartridge"] = {
         name = "Taser Cartridge",
@@ -175,6 +198,11 @@ local ammoents = {
         Scale = 1.2
     },
 
+    ["airsoftballs"] = {
+        Material = "models/hmcd_ammobox_556",
+        Scale = 1.2
+    },
+
     ["762x39mm"] = {
         Material = "mmodels/hmcd_ammobox_792",
         Scale = 1,
@@ -209,6 +237,11 @@ local ammoents = {
     },
 
     ["9x18rubber"] = {
+        Material = "models/hmcd_ammobox_38",
+        Scale = 0.8,
+    },
+
+    ["762x54mm"] = {
         Material = "models/hmcd_ammobox_38",
         Scale = 0.8,
     },
@@ -378,6 +411,8 @@ local ammolistent = {
     [50] = "762x33mm",
     [51] = "9х18mm",
     [52] = "tasercartridge",
+    [53] = "762x54mm",
+    [54] = "airsoftballs",
 }
 
 if SERVER then

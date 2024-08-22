@@ -35,7 +35,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "pistol"
+SWEP.HoldType = "revolver"
 
 ------------------------------------------
 

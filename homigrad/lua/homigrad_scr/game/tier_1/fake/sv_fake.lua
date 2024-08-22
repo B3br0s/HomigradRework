@@ -7,13 +7,13 @@ local backarrivetime = 0.35
 local handsangup = 110
 
 Organs = {
-	['brain']=25,
-	['lungs']=160,
-	['liver']=60,
-	['stomach']=90,
-	['intestines']=90,
-	['heart']=80,
-	['artery']=1,
+	['brain']=5,
+	['lungs']=15,
+	['liver']=25,
+	['stomach']=6,
+	['intestines']=40,
+	['heart']=25,
+	['artery']=0.1,
 	['spine']=25
 }
 
@@ -264,7 +264,7 @@ function Faking(ply,force) -- функция падения
 end
 
 hook.Add("CanExitVehicle","fakefastcar",function(veh,ply)
-    --if veh:GetPhysicsObject():GetVelocity():Length() > 100 then Faking(ply) return false end
+    if veh:GetPhysicsObject():GetVelocity():Length() > 100 then Faking(ply) return false end
 end)
 
 function FakeBullseyeTrigger(rag,owner)
@@ -532,7 +532,7 @@ function Stun(Entity)
 			RagdollOwner(fake):Say("*drop")
 			end
 			RagdollOwner(fake).pain = RagdollOwner(fake).pain + 3
-			fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-55,55),math.random(-55,55),0))
+			fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-255,255),math.random(-255,255),0))
 			fake:EmitSound("ambient/energy/spark2.wav")
 		end)
 	elseif Entity:IsRagdoll() then
@@ -545,13 +545,13 @@ function Stun(Entity)
 					RagdollOwner(fake):Say("*drop")
 				end
 				RagdollOwner(fake).pain = RagdollOwner(fake).pain + 3
-				fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-55,55),math.random(-55,55),0))
+				fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-255,255),math.random(-255,255),0))
 				fake:EmitSound("ambient/energy/spark2.wav")
 			end)
 		else
 			local fake = Entity
 			timer.Create( "StunEffect"..Entity:EntIndex(), 0.1, 80, function()
-				fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-55,55),math.random(-55,55),0))
+				fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-255,255),math.random(-255,255),0))
 				fake:EmitSound("ambient/energy/spark2.wav")
 			end)
 		end
@@ -566,7 +566,7 @@ concommand.Add("fake",function(ply)
 	if ply.Seizure then return end
 
 	if ply.brokenspine then return nil end
-	if IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll"):GetVelocity():Length()>300 then return nil end
+	if IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll"):GetVelocity():Length()>200 then return nil end
 	if IsValid(ply:GetNWEntity("Ragdoll")) and table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))>0 then return nil end
 
 	--if IsValid(ply:GetNWEntity("Ragdoll")) and table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Weld' ))>0 then return nil end
@@ -899,7 +899,7 @@ deadBodies = deadBodies or {}
 hook.Add("Think","VelocityFakeHitPlyCheck",function() --проверка на скорость в фейке (для сбивания с ног других игроков)
 	for i,rag in pairs(ents.FindByClass("prop_ragdoll")) do
 		if IsValid(rag) then
-			if rag:GetVelocity():Length() > 200 then
+			if rag:GetVelocity():Length() > 50 then
 				rag:SetCollisionGroup(COLLISION_GROUP_NONE)
 			else
 				rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -1385,7 +1385,7 @@ end)
 hook.Add("Player Think","VelocityPlayerFallOnPlayerCheck",function(ply,time)
 	local speed = ply:GetVelocity():Length()
 	if ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply.fake and not ply:HasGodMode() and ply:Alive() then
-		if speed < 600 then return end
+		if speed < 700 then return end
 		if hook.Run("Should Fake Velocity",ply,speed) ~= nil then return end
 
 		Faking(ply)

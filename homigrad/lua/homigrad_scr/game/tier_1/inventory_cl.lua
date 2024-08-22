@@ -59,6 +59,7 @@ Gunshuy = {
 	"weapon_civil_famas",
 	"weapon_m1garand",
 	"weapon_saiga12",
+	"weapon_svd",
 	"weapon_sks"
 }
 

@@ -12,8 +12,8 @@ hook.Add("CreateMove","afk",function(moveData)
 	if afkStart + 120 < time then
 		if not ply:Alive() or ply:Team() == 1002 then return end
 
-		net.Start("afk")
-		net.SendToServer()
-		RunConsoleCommand("say","афк 9999999")
+	--	net.Start("afk")
+	--	net.SendToServer()
+	--	RunConsoleCommand("say","афк 9999999")
 	end
 end)

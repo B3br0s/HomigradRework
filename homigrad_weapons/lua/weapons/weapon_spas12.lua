@@ -13,7 +13,7 @@ SWEP.AdminOnly 				= false
 
 SWEP.Primary.ClipSize		= 8
 SWEP.Primary.DefaultClip	= 8
-SWEP.Primary.Automatic		= true
+SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "12/70 gauge"
 SWEP.Primary.Cone = 0.05
 SWEP.Primary.Damage = 35
@@ -22,7 +22,7 @@ SWEP.Primary.Sound = "toz_shotgun/toz_fp.wav"
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.15
+SWEP.ShootWait = 0.3
 SWEP.NumBullet = 12
 SWEP.Sight = true
 SWEP.TwoHands = true

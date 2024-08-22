@@ -162,22 +162,29 @@ function Gib_Input(rag,bone,dmgInfo,player)
 
 	local dmgPos = dmgInfo:GetDamagePosition()
 
-	if dmgInfo:GetDamage() >= 50 and dmgInfo:IsDamageType(DMG_BLAST) then
-	local bone = rag:LookupBone("ValveBiped.Bip01_Spine3")
-	if bone and rag:GetPhysicsObjectNum(bone):Distance(dmgPos) <= 75 then
-		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
-		sound.Emit(rag,"physics/body/body_medium_break3.wav")
-		sound.Emit(rag,"physics/flesh/flesh_bloody_break.wav",nil,75)
-
-		BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos())
-
-		rag:Remove()
-
-		return
+	if dmgInfo:IsDamageType(DMG_BLAST) then
+			dmgInfo:ScaleDamage(5000)
+			sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
+			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
+			sound.Emit(rag,"physics/body/body_medium_break3.wav")
+			sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)
+			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
+			sound.Emit(rag,"physics/body/body_medium_break3.wav")
+			sound.Emit(rag,"physics/flesh/flesh_bloody_break.wav",nil,75)
+			sound.Emit(rag,"physics/flesh/flesh_bloody_impact_hard1.wav",nil,75)
+		--[[if player != nil then
+			player:ChatPrint("Тебя разорвало на части.")
+			end]]
+			
+			BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
+			BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
+	
+			rag:Remove()
+			
+			razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
 	end
-	end
 
-	if hitgroup == HITGROUP_HEAD and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
+	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 370 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
 		sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
 		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 		sound.Emit(rag,"physics/body/body_medium_break3.wav")
@@ -229,7 +236,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	--разве это не смешно когда ножом башка взрывается?
 	--нет
 	
-	if dmgInfo:GetDamage() >= 350 then
+	if dmgInfo:GetDamage() >= 15 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)

@@ -39,7 +39,7 @@ end)
 local vec = Vector(0, 0, 32)
 
 hook.Add("Boxes Think", "SpawnEntities", function()
-    if #player.GetAll() == 0 or not roundActive then return end
+    if #player.GetAll() == 0 or not roundActive and roundActiveName != "SandBox" then return end
 
     local func = TableRound().ShouldSpawnLoot
     if func and func() == false then return end

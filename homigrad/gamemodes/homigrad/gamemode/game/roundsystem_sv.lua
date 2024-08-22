@@ -261,7 +261,12 @@ end
 
 COMMANDS.levelend = {function(ply,args)
 	if ply:IsAdmin() then
-		EndRound()
+		if roundActiveName == "SandBox" then
+			EndRound()
+			SetGlobalBool("AccessSpawn",false)
+		else
+			EndRound()
+		end
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then

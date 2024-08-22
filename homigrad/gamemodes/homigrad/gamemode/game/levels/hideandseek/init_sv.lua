@@ -21,13 +21,13 @@ function hideandseek.StartRoundSV(data)
 
 	players = team.GetPlayers(2)
 
-	local count = math.min(math.floor(#players / 5,1))
-    for i = 1,count do
+--	local count = math.min(math.floor(#players / 5,1))
+--    for i = 1,count do
         local ply,key = table.Random(players)
 		players[key] = nil
 
         ply:SetTeam(1)
-    end
+--    end
 
 	local spawnsT,spawnsCT = tdm.SpawnsTwoCommand()
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)

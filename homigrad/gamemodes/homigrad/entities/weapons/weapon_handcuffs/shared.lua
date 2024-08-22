@@ -55,7 +55,7 @@ function SWEP:PrimaryAttack()
     end
 end
 
-local cuffTime = 2
+local cuffTime = 0.25
 function SWEP:Think()
     if SERVER then
         if self.CuffPly then

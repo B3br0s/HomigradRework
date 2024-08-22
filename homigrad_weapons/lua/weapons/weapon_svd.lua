@@ -1,9 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
-SWEP.PrintName 				= "SR-25"
+SWEP.PrintName 				= "АКМ Без Ствольной Коробки"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Снайперская Винтовка Драгунова калибром 7,62x54"
+SWEP.Instructions			= "Автоматическая винтовка под калибр 7,62х39 с отодранной ствольной коробкой и перемотанным магазином и прикладом"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/glock17"
 
@@ -12,18 +12,18 @@ SWEP.AdminOnly 				= false
 
 ------------------------------------------
 
-SWEP.Primary.ClipSize		= 17
-SWEP.Primary.DefaultClip	= 17
-SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= "9х19 mm Parabellum"
+SWEP.Primary.ClipSize		= 30
+SWEP.Primary.DefaultClip	= 30
+SWEP.Primary.Automatic		= true
+SWEP.Primary.Ammo			= "5.45x39 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 25
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "weapons/tfa_ins2/sandstorm_glock/fp.wav"
+SWEP.Primary.Sound = "weapons/sg550/sg550-1.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
-SWEP.Primary.Force = 90/3
+SWEP.Primary.Force = 25/3
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.12
+SWEP.ShootWait = 0.1
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
@@ -36,7 +36,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "revolver"
+SWEP.HoldType = "ar2"
 
 ------------------------------------------
 
@@ -45,13 +45,83 @@ SWEP.SlotPos				= 1
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/ar15/w_colt6149_silencer.mdl"
-SWEP.WorldModel				= "models/weapons/sukasvd/w_svd.mdl"
+SWEP.ViewModel				= "models/weapons/tfa_ins2/w_akm_bw.mdl"
+SWEP.WorldModel				= "models/weapons/tfa_ins2/w_akm_bw.mdl"
 
-SWEP.dwsPos = Vector(13,13,5)
-SWEP.dwsItemPos = Vector(10,-1,-2)
+SWEP.addAng = Angle(0,-0.1,0)
+SWEP.addPos = Vector(0,0.25,5) -- shamanskie to4ki
 
-SWEP.addAng = Angle(0.4,0,0)
-SWEP.addPos = Vector(0,0,-1)
---SWEP.vbwPos = Vector(7,-10,-6)
+SWEP.dwmModeScale = 1
+SWEP.dwmForward = 5
+SWEP.dwmRight = 0.7
+SWEP.dwmUp = -1.3
+
+SWEP.dwmAUp = 180
+SWEP.dwmARight = 180
+SWEP.dwmAForward = 0
+
+
+local model 
+if CLIENT then
+    model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
+    GDrawWorldModel = model
+    model:SetNoDraw(true)
+end
+if SERVER then
+    function SWEP:GetPosAng()
+        local owner = self:GetOwner()
+        local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+        if not Pos then return end
+        
+        Pos:Add(Ang:Forward() * self.dwmForward)
+        Pos:Add(Ang:Right() * self.dwmRight)
+        Pos:Add(Ang:Up() * self.dwmUp)
+
+
+        Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+        Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+        Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+
+        return Pos,Ang
+    end
+else
+    function SWEP:SetPosAng(Pos,Ang)
+        self.Pos = Pos
+        self.Ang = Ang
+    end
+    function SWEP:GetPosAng()
+        return self.Pos,self.Ang
+    end
+end
+function SWEP:DrawWorldModel()
+    local owner = self:GetOwner()
+    if not IsValid(owner) then
+        self:DrawModel()
+
+        return
+    end
+
+    model:SetModel(self.WorldModel)
+
+    local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+    if not Pos then return end
+    
+    Pos:Add(Ang:Forward() * self.dwmForward)
+    Pos:Add(Ang:Right() * self.dwmRight)
+    Pos:Add(Ang:Up() * self.dwmUp)
+
+
+    Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+    Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+    Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+    
+    self:SetPosAng(Pos,Ang)
+
+    model:SetPos(Pos)
+    model:SetAngles(Ang)
+
+    model:SetModelScale(self.dwmModeScale)
+
+    model:DrawModel()
+end
 end

@@ -51,6 +51,7 @@ Vectors = {
 ["weapon_hk_arbalet"]=Vector(13,-1,2),
 ["weapon_vector"]=Vector(2,-1,0),
 ["weapon_sks"]=Vector(0,0,1),
+["weapon_svd"]=Vector(0,0,1),
 ["weapon_saiga12"]=Vector(12,0,5),
 ["weapon_m1garand"]=Vector(0,0,1),
 }
@@ -58,6 +59,7 @@ Vectors = {
 Vectors2 = {
 ["weapon_mp5"]=Vector(11,-2	,-2.5),
 ["weapon_ar15"]=Vector(9,-2,-3),
+["weapon_svd"]=Vector(0,0,1),
 ["weapon_act3_m249"]=Vector(10,-1,-6),
 ["weapon_saiga12"]=Vector(15,0,-4),
 ["weapon_ak74"]=Vector(12,-3,-2),

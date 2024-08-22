@@ -3,13 +3,13 @@ hook.Add("PlayerSpawn","Damage",function(ply)
     if PLYSPAWN_OVERRIDE then return end
 
 	ply.Organs = {
-		['brain']=25,
-		['lungs']=160,
-		['liver']=60,
-		['stomach']=90,
-		['intestines']=90,
-		['heart']=80,
-		['artery']=1,
+		['brain']=5,
+		['lungs']=15,
+		['liver']=25,
+		['stomach']=6,
+		['intestines']=40,
+		['heart']=25,
+		['artery']=0.1,
 		['spine']=25
 	}
 
@@ -47,7 +47,7 @@ function GetPhysicsBoneDamageInfo(ent,dmgInfo)
 	local pos = dmgInfo:GetDamagePosition()
 	local dir = dmgInfo:GetDamageForce():GetNormalized()
 
-	dir:Mul(1024 * 8)
+	dir:Mul(1024 * 16)
 
 	local tr = {}
 	tr.start = pos
@@ -165,21 +165,23 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	dmginfo:SetDamage(dmginfo:GetDamage() * armorMul)
 	local rubatPidor = DamageInfo()
 	rubatPidor:SetAttacker(dmginfo:GetAttacker())
-	--rubatPidor:SetInflictor(dmginfo:GetInflictor())
+	rubatPidor:SetInflictor(dmginfo:GetInflictor())
 	rubatPidor:SetDamage(dmginfo:GetDamage())
 	rubatPidor:SetDamageType(dmginfo:GetDamageType())
 	rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())
 	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
 
+	if dmginfo:GetDamageType() == DMG_BLAST then
+		ply.pain = 500
+		timer.Simple(0.03,function() ply.pain = 0 end )
+	end
+
 	ply.LastDMGInfo = rubatPidor
 
-	dmginfo:ScaleDamage(0.5)
-	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
 	dmginfo:ScaleDamage(0.2)
+	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
+	dmginfo:ScaleDamage(0.1)
 	if rag then
-		if dmginfo:GetDamageType() == DMG_CRUSH then
-			dmginfo:ScaleDamage(1 / 40 / 15)
-		end
 
 		ply:SetHealth(ply:Health() - dmginfo:GetDamage())
 
