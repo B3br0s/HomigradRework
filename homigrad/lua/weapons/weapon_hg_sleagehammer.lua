@@ -29,7 +29,7 @@ SWEP.DrawCrosshair = false
 
 SWEP.DrawAmmo = true
 
-SWEP.Primary.Damage = 55
+SWEP.Primary.Damage = 155
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
