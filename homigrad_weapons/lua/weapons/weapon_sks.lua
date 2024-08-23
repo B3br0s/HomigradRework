@@ -13,7 +13,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.Automatic		= false
     SWEP.Primary.Ammo			= "7.62x39 mm"
     SWEP.Primary.Cone = 0
-    SWEP.Primary.Damage = 40
+    SWEP.Primary.Damage = 45
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = "weapons/sks/sks_fp.wav"
     SWEP.Primary.Force = 240/3

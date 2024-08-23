@@ -45,6 +45,8 @@ end
 local validUserGroup = {
 	superadmin = true,
 	admin = true,
+	Helper = true,
+	ZvezdaTiktoka = false,
 	megapenis = true
 }
 

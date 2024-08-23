@@ -1,10 +1,10 @@
-function hideandseek.StartRoundSV(data)
+function furryinfection.StartRoundSV(data)
     tdm.RemoveItems()
 
 	tdm.DirectOtherTeam(1,2)
 
 	roundTimeStart = CurTime()
-	roundTime = 60 * (2 + math.min(#player.GetAll() / 16,2))
+	roundTime = 750
 	roundTimeLoot = 9999
 
     local players = team.GetPlayers(2)
@@ -12,50 +12,56 @@ function hideandseek.StartRoundSV(data)
     for i,ply in pairs(players) do
 		ply.exit = false
 
-		if ply.hideandseekForceT then
-			ply.hideandseekForceT = nil
+		if ply.furryinfectionForceT then
+			ply.furryinfectionForceT = nil
 
 			ply:SetTeam(2)
+			
 		end
     end
 
 	players = team.GetPlayers(2)
 
---	local count = math.min(math.floor(#players / 5,1))
---    for i = 1,count do
+	local count = math.min(math.floor(#players / 1.5,1))
+    for i = 1,count do
         local ply,key = table.Random(players)
 		players[key] = nil
 
         ply:SetTeam(1)
---    end
+		ply.Blood = 50000
+
+		ply.adrenaline = math.random(1,2)
+
+		ply.painlosing = 5
+
+		ply.virusvichblya = true
+    end
 
 	local spawnsT,spawnsCT = tdm.SpawnsTwoCommand()
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
 	tdm.SpawnCommand(team.GetPlayers(2),spawnsCT)
 
-	hideandseek.police = false
+	furryinfection.police = false
+
+	furryinfection.respawned = false
 
 	tdm.CenterInit()
 
 	return {roundTimeLoot = roundTimeLoot}
 end
 
-function hideandseek.RoundEndCheck()
+function furryinfection.RoundEndCheck()
+	if not furryinfection.respawned then
+	for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() end),1) do
+		furryinfection.respawned = true
+		timer.Simple(3,function() ply:Spawn() ply:SetTeam(1) ply:Spawn() ply:Spawn() ply:StripWeapons() ply:Give("weapon_handsinfected") ply.virusvichblya = true ply.Blood = 50000 ply.adrenaline = math.random(1,2) ply.painlosing = 5 ply:ChatPrint("Не обращай внимания на сообщения о гилте.") furryinfection.respawned = false end )
+	end
+end
     if roundTimeStart + roundTime < CurTime() then
-		if not hideandseek.police then
-			hideandseek.police = true
-			PrintMessage(3,"Спецназ приехал.")
-
-			local aviable = ReadDataMap("spawnpointsct")
-
-			for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() and not ply.roleT and ply:Team() ~= 1002 end),1) do
-				ply:Spawn()
-
-                ply:SetPlayerClass("contr")
-
-				ply:SetTeam(3)
-				
-			end
+		if not furryinfection.police then
+			furryinfection.police = true
+			PrintMessage(3,"Рассвет наступил")
+			EndRound(2)
 		end
 	end
 
@@ -69,7 +75,7 @@ function hideandseek.RoundEndCheck()
 
 	local list = ReadDataMap("spawnpoints_ss_exit")
 
-	if hideandseek.police then
+	if furryinfection.police then
 		for i,ply in pairs(team.GetPlayers(2)) do
 			if not ply:Alive() or ply.exit then continue end
 
@@ -87,19 +93,14 @@ function hideandseek.RoundEndCheck()
 	end
 
 	OAlive = tdm.GetCountLive(team.GetPlayers(3))
-
-	if CTExit > 0 and CTAlive == 0 then EndRound(2) return end
-	if OAlive == 0 and TAlive == 0 and CTAlive == 0 then EndRound() return end
-
-	if OAlive == 0 and TAlive == 0 then EndRound(2) return end
-	if CTAlive == 0 then EndRound(1) return end
-	if TAlive == 0 then EndRound(2) return end
+	
+	if CTAlive == 0 then EndRound(1) PrintMessage(3,"Люди не дожили до рассвета") return end
 end
 
-function hideandseek.EndRound(winner) tdm.EndRoundMessage(winner) end
+function furryinfection.EndRound(winner) tdm.EndRoundMessage(winner) end
 
-function hideandseek.PlayerSpawn(ply,teamID)
-	local teamTbl = hideandseek[hideandseek.teamEncoder[teamID]]
+function furryinfection.PlayerSpawn(ply,teamID)
+	local teamTbl = furryinfection[furryinfection.teamEncoder[teamID]]
 	local color = teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
 	ply:SetPlayerColor(Color(0,0,0):ToVector())
@@ -109,20 +110,10 @@ function hideandseek.PlayerSpawn(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.main_weapon,teamID == 1 and 16 or 4)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 1 and 8 or 2)
 
-	if math.random(1,4) == 4 then ply:Give("weapon_per4ik") end
-	if math.random(1,8) == 8 then ply:Give("adrinaline") end
-	if math.random(1,7) == 7 then ply:Give("painkiller") end
-	if math.random(1,6) == 6 then ply:Give("medkit") end
-	if math.random(1,5) == 5 then ply:Give("med_band_big") end
-	if math.random(1,8) == 8 then ply:Give("morphine") end
-
-	local r = math.random(1,3)
-	ply:Give(r == 1 and "food_fishcan" or r == 2 and "food_spongebob_home" or r == 3 and "food_lays")
-
-	if math.random(1,3) == 3 then ply:Give("food_monster") end
-	if math.random(1,5) == 5 then ply:Give("weapon_knife") end
-
-    if teamID == 1 then
+    if teamID == 2 then
+		ply:GiveAmmo(500,"4.6 x30mm",true)
+		ply:GiveAmmo(500,"9х19 mm Parabellum",true)
+		ply:GiveAmmo(500,"12/70 beanbag",true)
         JMod.EZ_Equip_Armor(ply,"CSA")
         JMod.EZ_Equip_Armor(ply,"Slick Black")
 		JMod.EZ_Equip_Armor(ply,"Bastion Shield")
@@ -130,16 +121,14 @@ function hideandseek.PlayerSpawn(ply,teamID)
 		JMod.EZ_Equip_Armor(ply,"Caiman FA Visor",Color(50,50,50):ToVector())
 		JMod.EZ_Equip_Armor(ply,"MK4A P R.Brassard",Color(50,50,50):ToVector())
 		JMod.EZ_Equip_Armor(ply,"MK4A P L.Brassard",Color(50,50,50):ToVector())
-	elseif teamID == 2 then
-		ply:SetPlayerColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)):ToVector())
     end
 	ply.allowFlashlights = false
 end
 
-function hideandseek.PlayerInitialSpawn(ply) ply:SetTeam(2) end
+function furryinfection.PlayerInitialSpawn(ply) ply:SetTeam(2) end
 
-function hideandseek.PlayerCanJoinTeam(ply,teamID)
-	ply.hideandseekForceT = nil
+function furryinfection.PlayerCanJoinTeam(ply,teamID)
+	ply.furryinfectionForceT = nil
 
 	if teamID == 3 then
 		if ply:IsAdmin() then
@@ -156,7 +145,7 @@ function hideandseek.PlayerCanJoinTeam(ply,teamID)
 
     if teamID == 1 then
 		if ply:IsAdmin() then
-			ply.hideandseekForceT = true
+			ply.furryinfectionForceT = true
 
 			ply:ChatPrint("Милости прошу")
 
@@ -189,7 +178,7 @@ local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_
 local uncommon = {"medkit","weapon_molotok","painkiller"}
 local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_per4ik"}
 
-function hideandseek.ShouldSpawnLoot()
+function furryinfection.ShouldSpawnLoot()
    	if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
 
 	local chance = math.random(100)
@@ -204,13 +193,13 @@ function hideandseek.ShouldSpawnLoot()
 	end
 end
 
-function hideandseek.PlayerDeath(ply,inf,att) return false end
+function furryinfection.PlayerDeath(ply,inf,att) return false end
 
-function hideandseek.GuiltLogic(ply,att,dmgInfo)
+function furryinfection.GuiltLogic(ply,att,dmgInfo)
 	if att.isContr and ply:Team() == 2 then return dmgInfo:GetDamage() * 3 end
 end
 
-function hideandseek.NoSelectRandom()
+function furryinfection.NoSelectRandom()
 	local a,b,c = string.find(string.lower(game.GetMap()),"school")
     return a ~= nil
 end

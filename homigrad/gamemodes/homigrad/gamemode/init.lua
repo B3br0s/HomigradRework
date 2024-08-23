@@ -26,6 +26,7 @@ function GM:PlayerSpawn(ply)
 	ply.attackees = {}
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
+	ply.virusvichblya = false
 	ply.pain = 0
 
 	if ply.NEEDKILLNOW then

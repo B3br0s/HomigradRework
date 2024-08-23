@@ -5,7 +5,7 @@ if SERVER then
 	SWEP.AutoSwitchTo = false
 	SWEP.AutoSwitchFrom = false
 else
-	SWEP.PrintName = "Руки 096"
+	SWEP.PrintName = "Руки Инфицированного"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
@@ -163,7 +163,7 @@ SWEP.InstantPickup = true -- FF compat
 SWEP.Author = ""
 SWEP.Contact = ""
 SWEP.Purpose = ""
-SWEP.Instructions = " Ваши руки, ЛКМ/Перезарядка: поднять/опустить кулаки;\n В поднятом состоянии: ЛКМ - удар, ПКМ - блок;\n В опущенном состоянии: ПКМ - поднять предмет, R - проверить пульс;\n При удержании предмета: Перезарядка - зафиксировать предмет в воздухе, E - крутить предмет в воздухе."
+SWEP.Instructions = "Руки Инфицированного"
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
 SWEP.HoldType = "normal"
@@ -247,34 +247,6 @@ function SWEP:CanPickup(ent)
 end
 
 function SWEP:SecondaryAttack()
-	if not IsFirstTimePredicted() then return end
-	if self:GetFists() then return end
-
-	if SERVER then
-		self:SetCarrying()
-		local ply = self:GetOwner()
-		local tr = util.QuickTrace(ply:GetAttachment(ply:LookupAttachment("eyes")).Pos - vector_up * 2, self:GetOwner():GetAimVector() * self.ReachDistance, {self:GetOwner()})
-
-		if IsValid(tr.Entity) and self:CanPickup(tr.Entity) and not tr.Entity:IsPlayer() then
-			local Dist = (self:GetOwner():GetShootPos() - tr.HitPos):Length()
-
-			if Dist < self.ReachDistance then
-				sound.Play("Flesh.ImpactSoft", self:GetOwner():GetShootPos(), 65, math.random(90, 110))
-				self:SetCarrying(tr.Entity, tr.PhysicsBone, tr.HitPos, Dist)
-				tr.Entity.Touched = true
-				self:ApplyForce()
-			end
-		elseif IsValid(tr.Entity) and tr.Entity:IsPlayer() then
-			local Dist = (self:GetOwner():GetShootPos() - tr.HitPos):Length()
-
-			if Dist < self.ReachDistance then
-				sound.Play("Flesh.ImpactSoft", self:GetOwner():GetShootPos(), 65, math.random(90, 110))
-				self:GetOwner():SetVelocity(self:GetOwner():GetAimVector() * 20)
-				tr.Entity:SetVelocity(-self:GetOwner():GetAimVector() * 50)
-				self:SetNextSecondaryFire(CurTime() + .1)
-			end
-		end
-	end
 end
 
 
@@ -305,22 +277,6 @@ function SWEP:ApplyForce()
 
 			return
 		end
-
-		if self.CarryEnt:GetClass() == "prop_ragdoll" then
-			mul = mul * 3
-			local ply = RagdollOwner(self.CarryEnt)
-			if self:GetOwner():KeyPressed( IN_RELOAD ) then
-				if not ply then
-					self:GetOwner():ChatPrint("У него нет пульса.")
-				else
-					if ply.heartstop then
-						self:GetOwner():ChatPrint("У него нет пульса, но он всё ещё жив.")
-					else
-						self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "У него сильный пульс" or (ply.nextPulse <= 1.5 and "У него нормальный пульс") or (ply.nextPulse < 2 and "У него слабый пульс") or (ply.nextPulse >= 2 and "У него еле ощущаемый пульс."))
-					end
-				end
-			end
-		end
 		vec:Normalize()
 
 		if SERVER then
@@ -336,7 +292,7 @@ function SWEP:ApplyForce()
 						ply.CPR = math.max(ply.CPR + 50,0)
 						
 						ply.o2 = math.min(ply.o2 + 0.5,1)
-						self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft"..tostring(math.random(7))..".wav")
+						self.CarryEnt:EmitSound("npc/zombie/claw_miss"..tostring(math.random(2))..".wav")
 					end
 				else
 					if not ply and self.CarryEnt:GetClass() == "prop_ragdoll" then
@@ -344,7 +300,7 @@ function SWEP:ApplyForce()
 						self.firstTimePrint = false
 						if (self.CPRThink or 0) < CurTime() then
 							self.CPRThink = CurTime() + 1
-							self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft"..tostring(math.random(7))..".wav")
+							self.CarryEnt:EmitSound("npc/zombie/claw_miss"..tostring(math.random(2))..".wav")
 						end
 					end
 				end
@@ -402,39 +358,6 @@ function SWEP:GetCarrying()
 	return self.CarryEnt
 end
 
-hook.Add("ShouldCollide","hjuyhhy",function(ent1,ent2)
-	--[[if not ent1:IsPlayer() then return end
-	if not ent2:IsRagdoll() then return end
-
-	local wep = ent1:GetActiveWeapon()
-	if wep:GetClass() == "weapon_hands" then
-		print(wep.CarryEnt,ent2)
-		if wep.CarryEnt == ent2 then
-			return false
-		end
-	end--]]
-end)
-
-function SWEP:SetCarrying(ent, bone, pos, dist)
-	if IsValid(ent) then
-		self:SetNWBool( "Pickup", true )
-		self.CarryEnt = ent
-		self.CarryBone = bone
-		self.CarryDist = dist
-
-		if not (ent:GetClass() == "prop_ragdoll") then
-			self.CarryPos = ent:WorldToLocal(pos)
-		else
-			self.CarryPos = nil
-		end
-	else
-		self:SetNWBool( "Pickup", false )
-		self.CarryEnt = nil
-		self.CarryBone = nil
-		self.CarryPos = nil
-		self.CarryDist = nil
-	end
-end
 
 function SWEP:Think()
 	if IsValid(self:GetOwner()) and self:GetOwner():KeyDown(IN_ATTACK2) and not self:GetFists() then
@@ -498,15 +421,13 @@ function SWEP:PrimaryAttack()
 	if math.random(1, 2) == 1 then
 		side = "fists_right"
 	end
-
-	if self:GetOwner():KeyDown(IN_ATTACK2) then return end
 	
 	self:SetNextDown(CurTime() + 7)
 
 	if not self:GetFists() then
 		self:SetFists(true)
 		self:DoBFSAnimation("fists_draw")
-		self:SetNextPrimaryFire(CurTime() + .05)
+		self:SetNextPrimaryFire(CurTime() + 0)
 
 		return
 	end
@@ -528,7 +449,7 @@ function SWEP:PrimaryAttack()
 	self:UpdateNextIdle()
 
 	if SERVER then
-		sound.Play("weapons/slam/throw.wav", self:GetPos(), 65, math.random(90, 110))
+		sound.Play("npc/zombie/claw_miss"..tostring(math.random(2))..".wav", self:GetPos(), 65, math.random(90, 110))
 		self:GetOwner():ViewPunch(Angle(0, 0, math.random(-2, 2)))
 
 		timer.Simple(.075, function()
@@ -538,7 +459,7 @@ function SWEP:PrimaryAttack()
 		end)
 	end
 
-	self:SetNextPrimaryFire(CurTime() + .1)
+	self:SetNextPrimaryFire(CurTime() + .2)
 	self:SetNextSecondaryFire(CurTime() + .1)
 end
 
@@ -555,15 +476,15 @@ function SWEP:AttackFront()
 			SelfForce = 25
 
 			if Ent:IsPlayer() and IsValid(Ent:GetActiveWeapon()) and Ent:GetActiveWeapon().GetBlocking and Ent:GetActiveWeapon():GetBlocking() and not RagdollOwner(Ent) then
-				sound.Play("Flesh.ImpactSoft", HitPos, 65, math.random(90, 110))
+				sound.Play("npc/zombie/claw_strike2.wav", HitPos, 65, math.random(90, 110))
 			else
-				sound.Play("Flesh.ImpactHard", HitPos, 65, math.random(90, 110))
+				sound.Play("npc/zombie/claw_strike3.wav", HitPos, 65, math.random(90, 110))
 			end
 		else
-			sound.Play("Flesh.ImpactSoft", HitPos, 65, math.random(90, 110))
+			sound.Play("npc/zombie/claw_strike1.wav", HitPos, 65, math.random(90, 110))
 		end
 
-		local DamageAmt = math.random(30,40)
+		local DamageAmt = math.random(5,10)
 		local Dam = DamageInfo()
 		Dam:SetAttacker(self:GetOwner())
 		Dam:SetInflictor(self.Weapon)
@@ -572,6 +493,7 @@ function SWEP:AttackFront()
 		Dam:SetDamageType(DMG_CLUB)
 		Dam:SetDamagePosition(HitPos)
 		Ent:TakeDamageInfo(Dam)
+		Ent.Bloodlosing = 5
 		local Phys = Ent:GetPhysicsObject()
 
 		if IsValid(Phys) then
@@ -602,67 +524,6 @@ function SWEP:AttackFront()
 	end
 
 	self:GetOwner():LagCompensation(false)
-end
-
---self.CarryDist
---self.CarryPos
---self.CarryBone
-
-function SWEP:Reload()
-	if not IsFirstTimePredicted() then return end
-
-	self:SetFists(false)
-	self:SetBlocking(false)
-	local ent = self:GetCarrying()
-	if SERVER then
-		local target = self:GetOwner():GetAimVector() * (self.CarryDist or 50) + self:GetOwner():GetShootPos()
-		heldents = heldents or {}
-		for i,tbl in pairs(heldents) do
-			if tbl[2] == self:GetOwner() then heldents[i] = nil end
-		end
-		if IsValid(ent) then
-			--if heldents[ent:EntIndex()] then heldents[ent:EntIndex()] = nil end
-			heldents[ent:EntIndex()] = {self.CarryEnt,self:GetOwner(),self.CarryDist,target,self.CarryBone,self.CarryPos}
-		end
-
-	end
-	--self:SetCarrying()
-end
-if SERVER then
-	local angZero = Angle(0,0,0)
-
-	hook.Add("Think","held-entities",function()
-		heldents = heldents or {}
-		for i,tbl in pairs(heldents) do
-			if not tbl or not IsValid(tbl[1]) then heldents[i] = nil continue end
-			local ent,ply,dist,target,bone,pos = tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6]
-			local phys = ent:GetPhysicsObjectNum(bone)
-			local TargetPos = phys:GetPos()
-
-			if pos then
-				TargetPos = ent:LocalToWorld(pos)
-			end
-			
-			local vec = target - TargetPos
-			local len, mul = vec:Length(), ent:GetPhysicsObject():GetMass()
-			vec:Normalize()
-			local avec, velo = vec * len, phys:GetVelocity() - ply:GetVelocity()
-			local Force = (avec - velo / 10) * (bone > 3 and mul / 10 or mul)
-			--слушай а это вообще прикольнее даже чем у кета
-			if math.abs((tbl[2]:GetPos() - tbl[1]:GetPos()):Length()) < 80 and tbl[2]:GetGroundEntity() != tbl[1] then
-				if tbl[6] then
-					phys:ApplyForceOffset(Force, ent:LocalToWorld(pos))
-				else
-					phys:ApplyForceCenter(Force)
-				end
-
-				phys:ApplyForceCenter(Vector(0, 0, mul))
-				phys:AddAngleVelocity(-phys:GetAngleVelocity() / 10)
-			else
-				heldents[i] = nil
-			end
-		end
-	end)
 end
 
 function SWEP:DrawWorldModel()

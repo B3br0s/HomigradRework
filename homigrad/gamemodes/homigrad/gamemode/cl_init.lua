@@ -274,7 +274,7 @@ local function ToggleMenu(toggle)
         wepMenu:SetPos(w/3,h/2)
         wepMenu:MakePopup()
         wepMenu:SetKeyboardInputEnabled(false)
-		if wep:GetClass()!="weapon_hands" then
+		if wep:GetClass()!="weapon_hands" and wep:GetClass()!="weapon_handsinfected" then
 			wepMenu:AddOption("Выкинуть",function()
 				LocalPlayer():ConCommand("say *drop")
 			end)

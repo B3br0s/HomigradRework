@@ -1,7 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 skins = {
 	megapenis = true,
+	Helper = true,
 	meagsponsor = true,
+	ZvezdaTiktoka = false,
 	donator = true,
 	superadmin = true,
 	microdonater = true,

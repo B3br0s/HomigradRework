@@ -139,6 +139,7 @@ hook.Add("PlayerSpawn","homigrad-blood",function(ply)
 
 	ply.IsBleeding = false
 	ply.Blood = 5000
+	ply.virusvichblya = false
 	ply.Bloodlosing=0
 
 	ply.stamina = 100

@@ -30,6 +30,7 @@ hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
 end)
 
 hook.Add("Player Think","Looting",function(ply)
+	if ply.virusvichblya != true then
 	local key = ply:KeyDown(IN_USE)
 
 	if not ply.fake and ply:Alive() and ply:KeyDown(IN_ATTACK2) then
@@ -55,6 +56,7 @@ hook.Add("Player Think","Looting",function(ply)
 			hitEnt:CallOnRemove("fuckoff",function() send(nil,hitEnt,true) end)
 		end
 	end
+end
 
 	ply.okeloot = key
 end)

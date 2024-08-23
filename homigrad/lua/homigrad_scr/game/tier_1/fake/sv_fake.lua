@@ -1,8 +1,8 @@
 if engine.ActiveGamemode() == "homigrad" then
 local PlayerMeta = FindMetaTable("Player")
 local EntityMeta = FindMetaTable("Entity")
-local handsarrivetime = 0.3
-local forwardarrivetime = 0.85
+local handsarrivetime = 0.28
+local forwardarrivetime = 0.8
 local backarrivetime = 0.35
 local handsangup = 110
 
@@ -899,7 +899,7 @@ deadBodies = deadBodies or {}
 hook.Add("Think","VelocityFakeHitPlyCheck",function() --проверка на скорость в фейке (для сбивания с ног других игроков)
 	for i,rag in pairs(ents.FindByClass("prop_ragdoll")) do
 		if IsValid(rag) then
-			if rag:GetVelocity():Length() > 50 then
+			if rag:GetVelocity():Length() > 5 then
 				rag:SetCollisionGroup(COLLISION_GROUP_NONE)
 			else
 				rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)

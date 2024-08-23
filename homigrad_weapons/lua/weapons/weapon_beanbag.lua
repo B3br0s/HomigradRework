@@ -17,14 +17,14 @@ SWEP.Primary.DefaultClip	= 8
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "12/70 beanbag"
 SWEP.Primary.Cone = 0
-SWEP.Primary.Damage = 10
+SWEP.Primary.Damage = 30
 SWEP.RubberBullets = true
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "toz_shotgun/toz_fp.wav"
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
 SWEP.Primary.Force = 0.5
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.7
+SWEP.ShootWait = 0.4
 SWEP.TwoHands = true
 
 SWEP.Secondary.ClipSize		= -1

@@ -184,7 +184,7 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
 	end
 
-	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 370 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
+	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 1500 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
 		sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
 		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 		sound.Emit(rag,"physics/body/body_medium_break3.wav")

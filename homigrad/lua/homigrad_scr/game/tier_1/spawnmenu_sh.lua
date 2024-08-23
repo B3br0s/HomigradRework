@@ -1,7 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 local validUserGroup = {
-	--meagsponsor = true,
-	megapenis = true
+	meagsponsor = true,
+	megapenis = true,
+    ZvezdaTiktoka = false,
+    Helper = true
 }
 
 if SERVER then
