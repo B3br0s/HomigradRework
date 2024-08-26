@@ -31,17 +31,20 @@ function SandBox.StartRoundSV(data)
 
 	SetGlobalBool("AccessSpawn",true)
 
+	SandBox.respawned = false
+
 	tdm.CenterInit()
 
 	return {roundTimeLoot = roundTimeLoot}
 end
 
 function SandBox.RoundEndCheck()
-			for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() end),1) do
-				ply:Spawn()
-
-				ply:SetTeam(1)
-			end
+	if not SandBox.respawned then
+		for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() and ply:Team() ~= 1002 end),1) do
+			SandBox.respawned = true
+			timer.Simple(10,function() ply:SetTeam(1) ply:Spawn() SandBox.respawned = false end )
+		end
+	end
     if roundTimeStart + roundTime < CurTime() then
 		if not SandBox.police then
 			SandBox.police = true

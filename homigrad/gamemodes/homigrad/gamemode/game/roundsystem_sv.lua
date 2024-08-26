@@ -287,6 +287,28 @@ COMMANDS.fakedisabled = {function(ply,args)
 	end
 end}
 
+COMMANDS.goreenabled = {function(ply,args)
+	if ply:IsAdmin() then
+	SetGlobalBool("GoreEnabled",tonumber(args[1]) > 0)
+		if GetGlobalBool("GoreEnabled") then
+			PrintMessage(3,"Расчлененка теперь включена")
+		else
+			PrintMessage(3,"Расчлененка теперь выключена")
+		end
+	end
+end}
+
+COMMANDS.bloodenabled = {function(ply,args)
+	if ply:IsAdmin() then
+	SetGlobalBool("BloodGoreEnabled",tonumber(args[1]) > 0)
+		if GetGlobalBool("BloodGoreEnabled") then
+			PrintMessage(3,"Кровь от расчленения теперь включена")
+		else
+			PrintMessage(3,"Кровь от расчленения теперь выключена")
+		end
+	end
+end}
+
 local function donaterVoteLevel(t,argv,calling_ply,args)
 	local results = t.results
 	local winner

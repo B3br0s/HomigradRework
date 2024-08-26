@@ -176,12 +176,18 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			player:ChatPrint("Тебя разорвало на части.")
 			end]]
 			
-			BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
-			BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
 	
-			rag:Remove()
 			
-			razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
+			if GetGlobalBool("GoreEnabled") then
+				razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
+			end
+
+			if GetGlobalBool("BloodGoreEnabled") then
+				BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
+				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
+			end
+
+			rag:Remove()
 	end
 
 	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 1500 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
@@ -196,12 +202,15 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			rag:EmitSound("physics/flesh/flesh_bloody_break.wav",90,75,2)
 		end)
 
-		Gib_RemoveBone(rag,bone,phys_bone)
-		
-		headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
+		if GetGlobalBool("GoreEnabled") then
+			headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
+		end
 
+		if GetGlobalBool("BloodGoreEnabled") then
 		BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
-		
+		end
+
+		Gib_RemoveBone(rag,bone,phys_bone)
 	end
 	--ахуенно когда взрываеца от прикосновения да?
 	--да
@@ -219,12 +228,16 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			player:ChatPrint("Тебя разорвало на части.")
 			end]]
 			
-			BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
-			BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
+			if GetGlobalBool("GoreEnabled") then
+				razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
+			end
+
+			if GetGlobalBool("BloodGoreEnabled") then
+				BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
+				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
+			end
 
 			rag:Remove()
-			
-			razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
 	end
 	rag:GetPhysicsObject():SetMass(20)
 end

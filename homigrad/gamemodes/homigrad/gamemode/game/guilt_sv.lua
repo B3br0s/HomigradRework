@@ -73,9 +73,12 @@ function GuiltCheck(att,ply)
 		att.Guilt = att.Guilt - 50
 		
 		if not att.noguilt and not att:HasGodMode() then
+			if roundActiveName == "SandBox" then
+			else
 			att.pain = att.pain + 150
 			att.Bloodlosing = att.Bloodlosing + 25
 			att:ChatPrint("+150 Боли и +25 кровотечения за гилт. Текущая боль: "..att.pain.." Текущее кровотечение:"..att.Bloodlosing)
+			end
 		end
 	end
 end
@@ -103,7 +106,8 @@ end)
 
 hook.Add("PlayerInitialSpawn","guiltasdd",function(ply)
 	ply.Guilt = ply:GetPData("Guilt") or 0
-	if not roundActiveName == "SandBox" then
+	if roundActiveName == "SandBox" then
+	else
 		ply:ChatPrint("Ваш гилт составляет " .. tostring(ply.Guilt) .. "%")
 		ply.RoundGuilt = 0
 	end
@@ -124,6 +128,8 @@ end]]--
 
 hook.Add("PlayerSpawn","guilt",function(ply)
 	if PLYSPAWN_OVERRIDE then return end
+	if roundActiveName == "SandBox" then
+	else
 	ply.DontGuiltProtect = nil
 	ply.Seizure = false
 	ply.Guilt = ply.Guilt or 0
@@ -133,6 +139,7 @@ hook.Add("PlayerSpawn","guilt",function(ply)
 			Seizure(ply)
 		end)
 	end]]--
+	end
 end)
 
 hook.Add("PlayerDisconnected","guiltasd",function(ply)

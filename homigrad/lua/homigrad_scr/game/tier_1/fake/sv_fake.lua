@@ -478,7 +478,7 @@ end)
 
 hook.Add("PhysgunPickup", "DropPlayer2", function(ply,ent)
 
-	--if ply:GetUserGroup()=="superadmin" then
+	if ply:GetUserGroup()=="superadmin" then
 
 		if ent:IsPlayer() and !ent.fake then
 			if hook.Run("Should Fake Physgun",ply,ent) ~= nil then return false end
@@ -488,7 +488,7 @@ hook.Add("PhysgunPickup", "DropPlayer2", function(ply,ent)
 			Faking(ent)
 			return false
 		end
-	--end
+	end
 end)
 
 util.AddNetworkString("fuckfake")
