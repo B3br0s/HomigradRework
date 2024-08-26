@@ -73,7 +73,7 @@ hook.Add( 'PlayerSay', 'SolidMapVote.PlayerCommands', function( ply, text, tChat
     if table.HasValue( SolidMapVote[ 'Config' ][ 'Force Vote Commands' ], command ) and not SolidMapVote.isOpen then
         if SolidMapVote[ 'Config' ][ 'Force Vote Permission' ]( ply ) then
             SolidMapVote.start()
-            SolidMapVote.sendMessage( { Color( 0, 177, 106 ), name, color_white, ' has forced the mapvote!' }, true )
+        --    SolidMapVote.sendMessage( { Color( 0, 177, 106 ), name, color_white, ' has forced the mapvote!' }, true )
             return ''
         end
     end
