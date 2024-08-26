@@ -111,6 +111,9 @@ timer.Simple(0.1, function()
 
     local randomVelocity = Vector(math.random(-500, 500), math.random(-500, 500), math.random(-500, 500))
     prop:GetPhysicsObject():SetVelocity(randomVelocity)
+	timer.Simple(20,function()
+		prop:Remove()
+		end)
 end )
 end
 end
@@ -134,6 +137,10 @@ for i = 1, #propModels do
 
     local randomVelocity = Vector(math.random(-150,150), math.random(-500, 500), math.random(-150, 150))
     prop:GetPhysicsObject():SetVelocity(randomVelocity)
+
+	timer.Simple(20,function()
+	prop:Remove()
+	end)
 end
 end )
 end
