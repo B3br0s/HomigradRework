@@ -9,7 +9,7 @@ furryinfection.red = {"Инфицированные",Color(255,55,55),
 
 furryinfection.green = {"Люди",Color(55,55,255),
     weapons = {"weapon_radio","weapon_hands","weapon_kabar","medkit","painkiller","weapon_hg_f1"},
-    main_weapon = {"weapon_beanbag","weapon_hands","weapon_hands","weapon_hands","weapon_mp7","weapon_hands"},
+    main_weapon = {"weapon_akm","weapon_mk18","weapon_spas12","weapon_mp7","weapon_minu14"},
     secondary_weapon = {"weapon_beretta","weapon_fiveseven","weapon_hk_usp","weapon_p220"},
     models = tdm.models
 }

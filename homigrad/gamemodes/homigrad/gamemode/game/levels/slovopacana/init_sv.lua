@@ -168,11 +168,11 @@ local common = {"food_lays","weapon_pipe","weapon_bat","medkit","food_monster","
 local uncommon = {"weapon_molotok","painkiller"}
 
 function riot.ShouldSpawnLoot()
-	local chance = math.random(100)
+	local chance = math.random(0)
 
-	if chance < 30 then
+	if chance < 0 then
 		return true,uncommon[math.random(#uncommon)]
-	elseif chance < 70 then
+	elseif chance < 0 then
 		return true,common[math.random(#common)]
 	else
 		return false

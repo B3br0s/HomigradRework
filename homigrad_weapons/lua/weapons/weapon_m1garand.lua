@@ -13,7 +13,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.Automatic		= false
     SWEP.Primary.Ammo			= "7.62x33 mm"
     SWEP.Primary.Cone = 0
-    SWEP.Primary.Damage = 40
+    SWEP.Primary.Damage = 1.7 * 40
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = "weapons/mosin/mosin_tp.wav"
     SWEP.Primary.Force = 240/3

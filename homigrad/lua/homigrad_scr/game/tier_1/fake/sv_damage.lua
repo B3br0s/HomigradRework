@@ -3,14 +3,14 @@ hook.Add("PlayerSpawn","Damage",function(ply)
     if PLYSPAWN_OVERRIDE then return end
 
 	ply.Organs = {
-		['brain']=5,
-		['lungs']=15,
-		['liver']=25,
-		['stomach']=6,
-		['intestines']=40,
-		['heart']=25,
+		['brain']=2,
+		['lungs']=5,
+		['liver']=10,
+		['stomach']=3,
+		['intestines']=10,
+		['heart']=2,
 		['artery']=0.1,
-		['spine']=25
+		['spine']=2
 	}
 
 	ply.InternalBleeding=nil
@@ -178,9 +178,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	ply.LastDMGInfo = rubatPidor
 
-	dmginfo:ScaleDamage(0.3)
-	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
 	dmginfo:ScaleDamage(0.4)
+	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
+	dmginfo:ScaleDamage(0.35)
 	if rag then
 
 		ply:SetHealth(ply:Health() - dmginfo:GetDamage())

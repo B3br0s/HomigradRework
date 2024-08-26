@@ -41,7 +41,7 @@ SWEP.Vehicle = 0
 SWEP.Sprint = 0
 
 SWEP.Primary.Sound = Sound( "Weapon_Knife.Single" )
-SWEP.Primary.Damage = 40
+SWEP.Primary.Damage = 1.7 * 40
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = true

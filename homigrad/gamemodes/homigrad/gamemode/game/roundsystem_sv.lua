@@ -263,14 +263,26 @@ COMMANDS.levelend = {function(ply,args)
 	if ply:IsAdmin() then
 		if roundActiveName == "SandBox" then
 			EndRound()
-			SetGlobalBool("AccessSpawn",false)
 		else
 			EndRound()
+			SetGlobalBool("AccessSpawn",false)
+			SetGlobalBool("NoFake",false)
 		end
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
 			ulx.doVote( "Закончить раунд?", { "No", "Yes" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
+		end
+	end
+end}
+
+COMMANDS.fakedisabled = {function(ply,args)
+	if ply:IsAdmin() then
+	SetGlobalBool("NoFake",tonumber(args[1]) > 0)
+		if GetGlobalBool("NoFake") then
+			PrintMessage(3,"Фейк теперь выключен")
+		else
+			PrintMessage(3,"Фейк теперь включен")
 		end
 	end
 end}

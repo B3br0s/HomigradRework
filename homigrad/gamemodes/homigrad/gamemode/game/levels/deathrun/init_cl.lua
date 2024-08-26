@@ -1,33 +1,28 @@
-zombieinfection.GetTeamName = tdm.GetTeamName
+deathrun.GetTeamName = tdm.GetTeamName
 
 local colorSpec = ScoreboardSpec
-function zombieinfection.Scoreboard_Status(ply)
+function deathrun.Scoreboard_Status(ply)
 	local lply = LocalPlayer()
 	if not lply:Alive() or lply:Team() == 1002 then return true end
 
 	return "Неизвестно",colorSpec
 end
 
-local aABASDBASDBABDSB = true
-
 local green = Color(0,125,0)
 local white = Color(255,255,255)
 
-function zombieinfection.HUDPaint_RoundLeft(white2,time)
+function deathrun.HUDPaint_RoundLeft(white2,time)
 	local time = math.Round(roundTimeStart + roundTime - CurTime())
 	local acurcetime = string.FormattedTime(time,"%02i:%02i")
 	local lply = LocalPlayer()
-	local name,color = zombieinfection.GetTeamName(lply)
+	local name,color = deathrun.GetTeamName(lply)
 
 	local startRound = roundTimeStart + 7 - CurTime()
     if startRound > 0 and lply:Alive() then
-		if time >= 393 then
-			if aABASDBASDBABDSB == true then
-				aABASDBASDBABDSB = false
-				surface.PlaySound("InfectionMusicZS.wav")
-				timer.Simple(10,function() aABASDBASDBABDSB = true end )
-			end
-		end
+        --[[if playsound then
+            playsound = false
+            surface.PlaySound("snd_jack_hmcd_disaster.mp3")
+        end]]--
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.5,0.5)
 
 
@@ -37,19 +32,19 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
 
         surface.DrawText("Вы " .. name)]]--
         draw.DrawText( "Вы " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Зомби Инфекция", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "DeathRun", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 0,255,0,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply:Team() == 1 then
-            draw.DrawText( "ВАША ЗАДАЧА УБИТЬ ВСЕХ ДО РАССВЕТА", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Ваша задача убить всех раннеров ловушками", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
-            draw.DrawText( "Ваша задача выжить до рассвета", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Ваша задача добраться до конца и убить Смерть", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 		end
         return
     end
 
 	if time > 0 then
-		draw.SimpleText("До рассвета : ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+		draw.SimpleText("До конца DeathRun : ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 	end
 	/*
@@ -64,7 +59,7 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
 	green.a = white2.a
 
 
-	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and zombieinfection.police then
+	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and deathrun.police then
 		local list = SpawnPointsList.spawnpoints_ss_exit
 		--local list = ReadDataMap("spawnpoints_ss_exit")
 		if list then
@@ -76,12 +71,12 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
 
 			draw.SimpleText("Нажми TAB чтобы снова увидеть это.","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
 		else
-			draw.SimpleText("Попроси админа поставить эвакуационные точки для прячущихся...","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
+			draw.SimpleText("Попроси админа поставить эвакуационные точки для школьников...","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
 		end
 	end
 end
 
-function zombieinfection.PlayerClientSpawn()
+function deathrun.PlayerClientSpawn()
 	if LocalPlayer():Team() ~= 3 then return end
 
 	showRoundInfo = CurTime() + 10

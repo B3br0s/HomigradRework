@@ -4,7 +4,7 @@ function furryinfection.StartRoundSV(data)
 	tdm.DirectOtherTeam(1,2)
 
 	roundTimeStart = CurTime()
-	roundTime = 750
+	roundTime = 400
 	roundTimeLoot = 9999
 
     local players = team.GetPlayers(2)
@@ -52,7 +52,7 @@ end
 
 function furryinfection.RoundEndCheck()
 	if not furryinfection.respawned then
-	for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() end),1) do
+	for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() and ply:Team() ~= 1002 end),1) do
 		furryinfection.respawned = true
 		timer.Simple(3,function() ply:Spawn() ply:SetTeam(1) ply:Spawn() ply:Spawn() ply:StripWeapons() ply:Give("weapon_handsinfected") ply.virusvichblya = true ply.Blood = 50000 ply.adrenaline = math.random(1,2) ply.painlosing = 5 ply:ChatPrint("Не обращай внимания на сообщения о гилте.") furryinfection.respawned = false end )
 	end

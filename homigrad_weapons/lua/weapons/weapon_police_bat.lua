@@ -32,7 +32,7 @@ SWEP.DrawAmmo = true
 SWEP.Base = "weapon_base"
 
 SWEP.Primary.Sound = Sound( "physics/metal/metal_sheet_impact_hard2.wav" )
-SWEP.Primary.Damage = 100
+SWEP.Primary.Damage = 1.7 * 100
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = true

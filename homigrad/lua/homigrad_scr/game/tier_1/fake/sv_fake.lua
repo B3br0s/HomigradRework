@@ -1,20 +1,20 @@
 if engine.ActiveGamemode() == "homigrad" then
 local PlayerMeta = FindMetaTable("Player")
 local EntityMeta = FindMetaTable("Entity")
-local handsarrivetime = 0.28
-local forwardarrivetime = 0.8
-local backarrivetime = 0.35
-local handsangup = 110
+local handsarrivetime = 0.25
+local forwardarrivetime = 0.7
+local backarrivetime = 0.27
+local handsangup = 100
 
 Organs = {
-	['brain']=5,
-	['lungs']=15,
-	['liver']=25,
-	['stomach']=6,
-	['intestines']=40,
-	['heart']=25,
+	['brain']=2,
+	['lungs']=5,
+	['liver']=10,
+	['stomach']=3,
+	['intestines']=10,
+	['heart']=2,
 	['artery']=0.1,
-	['spine']=25
+	['spine']=2
 }
 
 RagdollDamageBoneMul={		--Умножения урона при попадании по регдоллу
@@ -31,6 +31,9 @@ RagdollDamageBoneMul={		--Умножения урона при попадани�
 
 	[HITGROUP_HEAD]=2,
 }
+
+util.AddNetworkString("RightHandInDICKator")
+util.AddNetworkString("LeftHandInDICKator")
 
 bonetohitgroup={ --Хитгруппы костей
     ["ValveBiped.Bip01_Head1"]=1,
@@ -139,6 +142,7 @@ function ReturnPlyInfo(ply) -- возвращение информации иг�
 end
 
 function Faking(ply,force) -- функция падения
+	if not GetGlobalBool("NoFake") then
 	if not ply:Alive() then return end
 
 	if not ply.fake then
@@ -261,6 +265,7 @@ function Faking(ply,force) -- функция падения
 			ply:SetNWEntity("Ragdoll",nil)
 		end
 	end
+end
 end
 
 hook.Add("CanExitVehicle","fakefastcar",function(veh,ply)
@@ -488,6 +493,7 @@ end)
 
 util.AddNetworkString("fuckfake")
 hook.Add("PlayerSpawn","resetfakebody",function(ply) --обнуление регдолла после вставания
+	if not GetGlobalBool("NoFake") then
 	ply.fake = false
 	ply:AddEFlags(EFL_NO_DAMAGE_FORCES)
 
@@ -509,6 +515,7 @@ hook.Add("PlayerSpawn","resetfakebody",function(ply) --обнуление рег
 		end
 	end
 	ply:SetNWEntity("Ragdoll",nil)
+	end
 end)
 
 util.AddNetworkString("Unload")
@@ -522,6 +529,7 @@ net.Receive("Unload",function(len,ply)
 end)
 
 function Stun(Entity)
+	if not GetGlobalBool("NoFake") then
 	if Entity:IsPlayer() then
 		Faking(Entity)
 		timer.Create("StunTime"..Entity:EntIndex(), 8, 1, function() end)
@@ -553,7 +561,8 @@ function Stun(Entity)
 			timer.Create( "StunEffect"..Entity:EntIndex(), 0.1, 80, function()
 				fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-255,255),math.random(-255,255),0))
 				fake:EmitSound("ambient/energy/spark2.wav")
-			end)
+				end)
+			end
 		end
 	end
 end
@@ -576,8 +585,10 @@ concommand.Add("fake",function(ply)
 	timer.Create("faketimer"..ply:EntIndex(), 2, 1, function() end)
 
 	if ply:Alive() then
+		if not GetGlobalBool("NoFake") then
 		Faking(ply)
 		ply.fakeragdoll=ply:GetNWEntity("Ragdoll")
+		end
 	end
 end)
 
@@ -899,7 +910,7 @@ deadBodies = deadBodies or {}
 hook.Add("Think","VelocityFakeHitPlyCheck",function() --проверка на скорость в фейке (для сбивания с ног других игроков)
 	for i,rag in pairs(ents.FindByClass("prop_ragdoll")) do
 		if IsValid(rag) then
-			if rag:GetVelocity():Length() > 5 then
+			if rag:GetVelocity():Length() > 1 then
 				rag:SetCollisionGroup(COLLISION_GROUP_NONE)
 			else
 				rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -1253,6 +1264,14 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 			if(!IsValid(rag.ZacConsRH) and (!rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
 				rag.ZacNextGrRH=CurTime()+0.1
+				if handright then
+					handright = false
+					util.AddNetworkString("RightHandInDICKator")
+					net.Start("RightHandInDICKator")
+					net.WriteVector(phys:GetPos())
+					net.WriteBool(true)
+					net.Send(ply)
+				end
 				for i=1,3 do
 					local offset = phys:GetAngles():Up()*5
 					if(i==2)then
@@ -1281,6 +1300,14 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			if(IsValid(rag.ZacConsRH))then
 				rag.ZacConsRH:Remove()
 				rag.ZacConsRH=nil
+				if not handright then
+						handright = false
+						util.AddNetworkString("RightHandInDICKator")
+						net.Start("RightHandInDICKator")
+						net.WriteVector(phys:GetPos())
+						net.WriteBool(false)
+						net.Send(ply)
+				end
 			end
 		end
 		if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH))then
@@ -1535,7 +1562,7 @@ hook.Add("PlayerSay","dropweaponhuy",function(ply,text)
         end
     end
 
-	--[[if string.lower(text)=="!viptest" then
+	if string.lower(text)=="!viptest" then
 		if !ply.fake then
 		ply:SetVelocity( Vector(0,0,50000) )
 		timer.Simple( 5, function()
@@ -1550,7 +1577,7 @@ hook.Add("PlayerSay","dropweaponhuy",function(ply,text)
 			ply:Kick("Ну как тебе ВИП ТЕСТ!!! хи фейк не поможет, жди минуту")
 		end)
 		end
-	end]]--
+	end
 end)
 
 hook.Add("UpdateAnimation","huy",function(ply,event,data)

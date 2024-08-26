@@ -23,7 +23,7 @@ hook.Add("PostCleanupMap", "addboxes", function()
         timer.Remove("SpawnTheBoxes") 
     end
 
-    timer.Create("SpawnTheBoxes", 15, 0, function()
+    timer.Create("SpawnTheBoxes", 10, 0, function()
         hook_Run("Boxes Think")
     end)
 end)
@@ -32,14 +32,14 @@ if timer.Exists("SpawnTheBoxes") then
     timer.Remove("SpawnTheBoxes") 
 end
 
-timer.Create("SpawnTheBoxes", 15, 0, function()
+timer.Create("SpawnTheBoxes", 10, 0, function()
     hook_Run("Boxes Think")
 end)
 
 local vec = Vector(0, 0, 32)
 
 hook.Add("Boxes Think", "SpawnEntities", function()
-    if #player.GetAll() == 0 or not roundActive and roundActiveName != "SandBox" then return end
+    if #player.GetAll() == 0 or not roundActive then return end
 
     local func = TableRound().ShouldSpawnLoot
     if func and func() == false then return end

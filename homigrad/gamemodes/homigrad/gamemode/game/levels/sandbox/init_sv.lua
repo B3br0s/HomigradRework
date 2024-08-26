@@ -39,8 +39,6 @@ end
 function SandBox.RoundEndCheck()
 			for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() end),1) do
 				ply:Spawn()
-				
-				ply.noguilt = true
 
 				ply:SetTeam(1)
 			end
@@ -61,22 +59,6 @@ function SandBox.RoundEndCheck()
 
 	local list = ReadDataMap("spawnpoints_ss_exit")
 
-	if SandBox.police then
-		for i,ply in pairs(team.GetPlayers(2)) do
-			if not ply:Alive() or ply.exit then continue end
-
-			for i,point in pairs(list) do
-				if ply:GetPos():Distance(point[1]) < (point[3] or 250) then
-					ply.exit = true
-					ply:KillSilent()
-
-					CTExit = CTExit + 1
-
-					PrintMessage(3,"Прячущийся сбежал, осталось " .. (CTAlive - 1) .. " школьников")
-				end
-			end
-		end
-	end
 end
 
 function SandBox.EndRound(winner) tdm.EndRoundMessage(winner) end
@@ -97,6 +79,17 @@ end
 function SandBox.PlayerInitialSpawn(ply) ply:SetTeam(2) end
 
 function SandBox.PlayerDeath(ply,inf,att) return false end
+
+function SandBox.ShouldSpawnLoot()
+	if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
+end
+
+function SandBox.PlayerDeath(ply,inf,att) return false end
+
+function SandBox.GuiltLogic(ply,att,dmgInfo)
+ if att.isContr and ply:Team() == 2 then return dmgInfo:GetDamage() * 3 end
+end
+
 
 function SandBox.NoSelectRandom()
 	local a,b,c = string.find(string.lower(game.GetMap()),"school")

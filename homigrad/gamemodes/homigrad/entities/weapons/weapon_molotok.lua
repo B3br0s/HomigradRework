@@ -13,7 +13,7 @@ SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "none"
 
-SWEP.Primary.Damage = 12
+SWEP.Primary.Damage = 1.7 * 12
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true

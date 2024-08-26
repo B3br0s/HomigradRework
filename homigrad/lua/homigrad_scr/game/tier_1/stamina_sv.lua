@@ -1,7 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 hook.Add("Move","move.speed",function(ply,movedata)
     if ply:Alive() then
-		ply.speeed = movedata:GetVelocity():Length()
+		if not roundActiveName == "deathrun" then
+			ply.speeed = movedata:GetVelocity():Length()
+		end
     end
 end)
 
@@ -57,7 +59,9 @@ hook.Add("Player Think","saystamina",function(ply,time)
 	end
 
 	if ply:GetMoveType() == MOVETYPE_WALK and ply:IsSprinting() and ply.speeed > 1 then
-		ply.stamina = ply.stamina - 1 * ply.speeed / 150
+		if not roundActiveName == "deathrun" or not roundActiveName == "nextbots" then
+			ply.stamina = ply.stamina - 1 * ply.speeed / 150
+		end
 	end
 
 	if ply:WaterLevel() == 3 then
