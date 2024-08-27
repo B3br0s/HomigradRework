@@ -1,4 +1,4 @@
-table.insert(LevelList,"furryinfection")
+--table.insert(LevelList,"furryinfection") --Хуй вам))))))
 furryinfection = {}
 furryinfection.Name = "Фурри Инфекция"
 

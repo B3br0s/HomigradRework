@@ -59,7 +59,8 @@ hook.Add("Player Think","saystamina",function(ply,time)
 	end
 
 	if ply:GetMoveType() == MOVETYPE_WALK and ply:IsSprinting() and ply.speeed > 1 then
-		if not roundActiveName == "deathrun" or not roundActiveName == "nextbots" then
+		if roundActiveName == "deathrun" or roundActiveName == "nextbots" then
+		else
 			ply.stamina = ply.stamina - 1 * ply.speeed / 150
 		end
 	end

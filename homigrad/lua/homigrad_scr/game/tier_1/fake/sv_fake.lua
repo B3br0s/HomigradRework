@@ -32,9 +32,6 @@ RagdollDamageBoneMul={		--Умножения урона при попадани�
 	[HITGROUP_HEAD]=2,
 }
 
-util.AddNetworkString("RightHandInDICKator")
-util.AddNetworkString("LeftHandInDICKator")
-
 bonetohitgroup={ --Хитгруппы костей
     ["ValveBiped.Bip01_Head1"]=1,
     ["ValveBiped.Bip01_R_UpperArm"]=5,
@@ -1264,14 +1261,6 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 			if(!IsValid(rag.ZacConsRH) and (!rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
 				rag.ZacNextGrRH=CurTime()+0.1
-				if handright then
-					handright = false
-					util.AddNetworkString("RightHandInDICKator")
-					net.Start("RightHandInDICKator")
-					net.WriteVector(phys:GetPos())
-					net.WriteBool(true)
-					net.Send(ply)
-				end
 				for i=1,3 do
 					local offset = phys:GetAngles():Up()*5
 					if(i==2)then
@@ -1280,6 +1269,14 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 					if(i==3)then
 						offset = phys:GetAngles():Right()*-5
 					end
+				--[[	if handright then
+						handright = false
+						util.AddNetworkString("RightHandInDICKator")
+						net.Start("RightHandInDICKator")
+						net.WriteVector(phys:GetPos())
+						net.WriteBool(true)
+						net.Send(ply)
+					end]]
 					local traceinfo={
 						start=phys:GetPos(),
 						endpos=phys:GetPos()+offset,
@@ -1300,14 +1297,14 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			if(IsValid(rag.ZacConsRH))then
 				rag.ZacConsRH:Remove()
 				rag.ZacConsRH=nil
-				if not handright then
+			--[[if not handright then
 						handright = false
 						util.AddNetworkString("RightHandInDICKator")
 						net.Start("RightHandInDICKator")
 						net.WriteVector(phys:GetPos())
 						net.WriteBool(false)
 						net.Send(ply)
-				end
+				end]]
 			end
 		end
 		if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH))then

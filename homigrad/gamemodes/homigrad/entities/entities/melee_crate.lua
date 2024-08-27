@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 ENT.Type = "anim"
 ENT.PrintName = "Ящик С Холодным Оружием"
 ENT.Author = "B3bros"
@@ -14,16 +16,6 @@ local meleeList = {
     {class = "weapon_hg_crowbar", model = "models/weapons/me_spade/w_me_spade.mdl"},
     {class = "Empty", model = ""},
     {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
-    {class = "Empty", model = ""},
     {class = "Empty", model = ""}
 }
 local meleeListTranslate = {
@@ -32,16 +24,6 @@ local meleeListTranslate = {
     "Фубар",
     "Кукри",
     "Лопата",
-    "Пусто",
-    "Пусто",
-    "Пусто",
-    "Пусто",
-    "Пусто",
-    "Пусто",
-    "Пусто",
-    "Пусто",
-    "Пусто",
-    "Пусто",
     "Пусто",
     "Пусто",
     "Пусто"
