@@ -21,7 +21,7 @@ function jailbreak.StartRoundSV(data)
 
 	players = team.GetPlayers(2)
 
-	local count = math.min(math.floor(#players / 1.1,1))
+	local count = math.min(math.floor(#players / 1.2,1))
     for i = 1,count do
         local ply,key = table.Random(players)
 		players[key] = nil

@@ -12,7 +12,7 @@ jailbreak.red = {"ФСИН",Color(55,55,255),
 jailbreak.green = {"Заключенный",Color(255,170,0),
     weapons = {"weapon_hands"},
 	main_weapon = {"weapon_hands","weapon_hg_kitknife","weapon_hands","adrenaline","weapon_hg_flashbang","weapon_hands","weapon_hands","weapon_hands","weapon_hands","weapon_hands","weapon_hands","weapon_hands","weapon_hands","weapon_hands","weapon_hands","weapon_hands"},
-    models = tdm.models
+    models  = tdm.models
 }
 
 jailbreak.blue = {"ФСИН",Color(55,55,255),

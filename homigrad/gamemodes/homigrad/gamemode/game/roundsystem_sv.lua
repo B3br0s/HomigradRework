@@ -54,8 +54,6 @@ function StartRound()
 
 		SetupSpawnPointsList()
 		SendSpawnPoint()
-		SetGlobalBool("GoreEnabled",true)
-		SetGlobalBool("BloodGoreEnabled",true)
 	end
 
 	if roundActiveName ~= roundActiveNameNext then
