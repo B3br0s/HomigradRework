@@ -1269,14 +1269,6 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 					if(i==3)then
 						offset = phys:GetAngles():Right()*-5
 					end
-				--[[	if handright then
-						handright = false
-						util.AddNetworkString("RightHandInDICKator")
-						net.Start("RightHandInDICKator")
-						net.WriteVector(phys:GetPos())
-						net.WriteBool(true)
-						net.Send(ply)
-					end]]
 					local traceinfo={
 						start=phys:GetPos(),
 						endpos=phys:GetPos()+offset,
@@ -1297,14 +1289,6 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			if(IsValid(rag.ZacConsRH))then
 				rag.ZacConsRH:Remove()
 				rag.ZacConsRH=nil
-			--[[if not handright then
-						handright = false
-						util.AddNetworkString("RightHandInDICKator")
-						net.Start("RightHandInDICKator")
-						net.WriteVector(phys:GetPos())
-						net.WriteBool(false)
-						net.Send(ply)
-				end]]
 			end
 		end
 		if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH))then

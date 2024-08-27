@@ -185,14 +185,14 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			
 	
 			
-			if GetGlobalBool("GoreEnabled") then
+		--	if GetGlobalBool("GoreEnabled") then
 				razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
-			end
+		--	end
 
-			if GetGlobalBool("BloodGoreEnabled") then
+		--	if GetGlobalBool("BloodGoreEnabled") then
 				BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
 				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
-			end
+		--	end
 
 			rag:Remove()
 	end
@@ -209,13 +209,13 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			rag:EmitSound("physics/flesh/flesh_bloody_break.wav",90,75,2)
 		end)
 
-		if GetGlobalBool("GoreEnabled") then
+	--	if GetGlobalBool("GoreEnabled") then
 			headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
-		end
+	--	end
 
-		if GetGlobalBool("BloodGoreEnabled") then
+	--	if GetGlobalBool("BloodGoreEnabled") then
 		BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
-		end
+	--	end
 
 		Gib_RemoveBone(rag,bone,phys_bone)
 	end
@@ -235,14 +235,14 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			player:ChatPrint("Тебя разорвало на части.")
 			end]]
 			
-			if GetGlobalBool("GoreEnabled") then
+		--	if GetGlobalBool("GoreEnabled") then
 				razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
-			end
+		--	end
 
-			if GetGlobalBool("BloodGoreEnabled") then
+		--	if GetGlobalBool("BloodGoreEnabled") then
 				BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
 				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
-			end
+		--	end
 
 			rag:Remove()
 	end

@@ -58,6 +58,7 @@ hook.Add("Player Think","saystamina",function(ply,time)
 		ply:SetNWInt("stamina",ply.stamina)
 	end
 
+	
 	if ply:GetMoveType() == MOVETYPE_WALK and ply:IsSprinting() and ply.speeed > 1 then
 		if roundActiveName == "deathrun" or roundActiveName == "nextbots" then
 		else
