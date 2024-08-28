@@ -42,6 +42,7 @@ Vectors = {
 ["weapon_mp7"]=Vector(0,0,0),
 ["weapon_remington870"]=Vector(-2,-1,0),
 ["weapon_xm1014"]=Vector(12,-1,4),
+["weapon_mag7"]=Vector(3,0,0),
 ["bandage"]=Vector(0,0,0),
 ["weapon_taser"]=Vector(2,1.5,0),
 ["weapon_sar2"]=Vector(16,-2,2),
@@ -57,6 +58,7 @@ Vectors = {
 }
 
 Vectors2 = {
+["weapon_mag7"]=Vector(7,0,0),
 ["weapon_mp5"]=Vector(11,-2	,-2.5),
 ["weapon_ar15"]=Vector(9,-2,-3),
 ["weapon_svd"]=Vector(0,0,1),

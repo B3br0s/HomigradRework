@@ -23,7 +23,7 @@ hook.Add("PostCleanupMap", "addboxes", function()
         timer.Remove("SpawnTheBoxes") 
     end
 
-    timer.Create("SpawnTheBoxes", 10, 0, function()
+    timer.Create("SpawnTheBoxes", 35, 0, function()
         hook_Run("Boxes Think")
     end)
 end)
@@ -32,7 +32,7 @@ if timer.Exists("SpawnTheBoxes") then
     timer.Remove("SpawnTheBoxes") 
 end
 
-timer.Create("SpawnTheBoxes", 10, 0, function()
+timer.Create("SpawnTheBoxes", 35, 0, function()
     hook_Run("Boxes Think")
 end)
 

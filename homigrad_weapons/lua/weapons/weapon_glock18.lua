@@ -20,7 +20,7 @@ SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 20
 SWEP.RubberBullets = false
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "weapons/fiveseven/fiveseven-1.wav"
+SWEP.Primary.Sound = "csgo/weapons/fiveseven/fiveseven_01.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
 SWEP.Primary.Force = 0.1
 SWEP.ReloadTime = 2
@@ -46,10 +46,10 @@ SWEP.SlotPos				= 1
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/pwb2/weapons/w_fiveseven.mdl"
-SWEP.WorldModel				= "models/pwb2/weapons/w_fiveseven.mdl"
+SWEP.ViewModel				= "models/csgo/weapons/w_pist_fiveseven.mdl"
+SWEP.WorldModel				= "models/csgo/weapons/w_pist_fiveseven.mdl"
 
-SWEP.vbwPos = Vector(8,0,-6)
-SWEP.addPos = Vector(0,0,0.2)
+SWEP.vbwPos = Vector(0,0,0)
+SWEP.addPos = Vector(0,0,0)
 SWEP.addAng = Angle(0.4,0,0)
 end

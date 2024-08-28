@@ -304,6 +304,7 @@ local weps = {
 ["weapon_galil"] = true,
 ["weapon_galilsar"] = true,
 ["weapon_m14"] = true,
+["weapon_r8"] = true,
 ["weapon_m1a1"] = true,
 ["weapon_mk18"] = true,
 ["weapon_m249"] = true,
@@ -331,6 +332,7 @@ local weps = {
 ["weapon_svd"] = true,
 ["weapon_makarov"] = true,
 ["weapon_saiga12"]=true,
+["weapon_mag7"] = true,
 ["weapon_m1garand"] = true,
 }
 
@@ -420,7 +422,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		return result
 	end
 
-	--[[if lply:InVehicle() then
+	if lply:InVehicle() then
 		local diffvel = lply:GetVehicle():GetPos() - vel
 		
 		local view = {
@@ -431,7 +433,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		
 		vel = lply:GetVehicle():GetPos()
 		return view
-	end--]]
+	end
 
 	firstPerson = GetViewEntity() == lply
 
@@ -452,10 +454,10 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		local matrix = ply:GetBoneMatrix(body)
 		local bodypos = matrix:GetTranslation()
 		local bodyang = matrix:GetAngles()
-		--bodyang:RotateAroundAxis(bodyang:Right(),90)
+		bodyang:RotateAroundAxis(bodyang:Right(),90)
 
-		--bodyang[2] = eye.Ang[2]
-		--bodyang[3] = 0
+		bodyang[2] = eye.Ang[2]
+		bodyang[3] = 0
 		angEye = eye.Ang--bodyang
 		vecEye = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 14 + bodyang:Right() * -6) or lply:EyePos()
 	end
@@ -542,13 +544,23 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 		if weaponClass == "weapon_glock18" then
 			--Vector(3.85,10,1.45)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.5 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.25
-			angWep = hand.Ang + Angle(5,10,0)
+			vecWep = hand.Pos + hand.Ang:Up() * 2.6 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
+			angWep = hand.Ang + Angle(0,0,0)
+		end
+		if weaponClass == "weapon_mag7" then
+			--Vector(3.85,10,1.45)
+			vecWep = hand.Pos + hand.Ang:Up() * 3.8 - hand.Ang:Forward() * 11 + hand.Ang:Right() * 0.83
+			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_glock" then
 			--Vector(2.3,10,0)
 			vecWep = hand.Pos + hand.Ang:Up() * 2.3 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0
 			angWep = hand.Ang + Angle(-15,5,0)
+		end
+		if weaponClass == "weapon_r8" then
+			--Vector(5.2,-2,1.1)
+			vecWep = hand.Pos + hand.Ang:Up() * 2.2 - hand.Ang:Forward() * 15 + hand.Ang:Right() * 0
+			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_ak74" then
 			--Vector(5.2,-2,1.1)
@@ -960,7 +972,7 @@ hook.Add("Think","mouthanim",function()
 			ent:GetFlexIDByName( "right_mouth_drop" )
 		}
 
-		local weight = ply:IsSpeaking() && math.Clamp( ply:VoiceVolume() * 15, 0, 12 ) || 0
+		local weight = ply:IsSpeaking() && math.Clamp( ply:VoiceVolume() * 5, 0, 12 ) || 0
 
 		for k, v in pairs( flexes ) do
 			ent:SetFlexWeight( v, weight )

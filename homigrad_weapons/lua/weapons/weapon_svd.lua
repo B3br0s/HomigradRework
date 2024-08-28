@@ -7,7 +7,7 @@ SWEP.Instructions			= "Автоматическая винтовка под ка
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/glock17"
 
-SWEP.Spawnable 				= true
+SWEP.Spawnable 				= false
 SWEP.AdminOnly 				= false
 
 ------------------------------------------

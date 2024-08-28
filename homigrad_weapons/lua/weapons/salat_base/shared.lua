@@ -713,6 +713,7 @@ local angSuicide = Angle(160,30,90)
 local angSuicide2 = Angle(160,30,90)
 local angSuicide3 = Angle(60,-30,90)
 local forearm,clavicle,hand = Angle(0,0,0),Angle(0,0,0),Angle(0,0,0)
+local forearmL,clavicleL,handL = Angle(0,0,0),Angle(0,0,0),Angle(0,0,0)
 
 function SWEP:Step()
 	local ply = self:GetOwner()
@@ -726,8 +727,8 @@ function SWEP:Step()
 	local ply = self:GetOwner()
 	if self:GetNWFloat("VisualRecoil") > 0 then
 		if self.HoldType ~= "revolver" then
-			ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"), Vector(0, -self.animLerp.x / 3, -self.animLerp.x / 3), false)
-			ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"), Angle(0, 0, -self.animLerp.x), false)
+			ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"), Vector(0, -self.animLerp.x / 3, -self.animLerp.x / 3), false)
+			ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"), Angle(0, 0, -self.animLerp.x), false)
 		end
 
 		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"), self.animLerp * 2, false)
@@ -801,13 +802,26 @@ function SWEP:Step()
 				self:SetWeaponHoldType(self.HoldType)
 				hand:Set(angZero)
 				forearm:Set(angZero)
+				handL:Set(angZero)
+				forearmL:Set(angZero)
+				clavicle:Set(Angle(0,0,0))
+				clavicleL:Set(Angle(0,0,0))
 			elseif not self.TwoHands and ply:GetNWBool("Suiciding") then
 				self:SetWeaponHoldType("normal")
-				forearm:Set(angSuicide2)
-				hand:Set(angSuicide3)
+				forearm:Set(Angle(-15,-100,40))
+				hand:Set(Angle(45,-35,-70))
+				clavicle:Set(Angle(0,0,0))
+				clavicleL:Set(Angle(0,0,0))
+				handL:Set(angZero)
+				forearmL:Set(angZero)
 			elseif ply:GetNWBool("Suiciding") then
 				self:SetWeaponHoldType("normal")
-				hand:Set(angSuicide)
+				forearm:Set(Angle(0,-60,30))
+				hand:Set(Angle(40,-105,-80))
+				clavicle:Set(Angle(0,0,0))
+				forearmL:Set(Angle(20,-100,0))
+				handL:Set(Angle(0,-45,0))
+				clavicleL:Set(Angle(0,-30,0))
 			end
 		end
 	else
@@ -838,7 +852,10 @@ function SWEP:Step()
 	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
 
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),forearm,false)
-	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),clavicle,false)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),forearmL,false)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),handL,false)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),clavicleL,false)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),clavicle,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),hand,false)
 end
 
@@ -849,14 +866,20 @@ function SWEP:Holster( wep )
 
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Hand" ), Angle( 0,0,0 ) )
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Forearm" ), Angle( 0,0,0 ))
-	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Clavicle" ),Angle( 0,0,0 ))
+	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_UpperArm" ),Angle( 0,0,0 ))
+	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_L_Hand" ), Angle( 0,0,0 ) )
+	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_L_Forearm" ), Angle( 0,0,0 ))
+	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_L_UpperArm" ),Angle( 0,0,0 ))
 
 	return true
 end
 
 hook.Add("PlayerDeath","weapons",function(ply)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),angZero,false)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),angZero,false)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),angZero,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),angZero,false)
-	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),angZero,false)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),angZero,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),angZero,false)
 end)
 
