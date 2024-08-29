@@ -55,8 +55,6 @@ function nextbots.RoundEndCheck()
 					ply:KillSilent()
 
 					CTExit = CTExit + 1
-
-					PrintMessage(3,"Школьник сбежал, осталось " .. (CTAlive - 1) .. " школьников")
 				end
 			end
 		end

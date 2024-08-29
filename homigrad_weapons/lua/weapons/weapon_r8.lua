@@ -40,7 +40,7 @@ SWEP.HoldType = "revolver"
 ------------------------------------------
 
 function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(7,math.Rand(-1,1),0)
+    self.eyeSpray = self.eyeSpray - Angle(5,math.Rand(-1,1),0)
 end
 
 SWEP.Slot					= 2

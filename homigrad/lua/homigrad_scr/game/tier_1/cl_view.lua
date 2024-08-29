@@ -421,20 +421,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 		return result
 	end
-
-	if lply:InVehicle() then
-		local diffvel = lply:GetVehicle():GetPos() - vel
-		
-		local view = {
-			origin = lply:EyePos() + diffvel * 10,
-			angles = lply:EyeAngles(),
-			fov = fov
-		}
-		
-		vel = lply:GetVehicle():GetPos()
-		return view
-	end
-
+	
 	firstPerson = GetViewEntity() == lply
 
 	local bone = lply:LookupBone("ValveBiped.Bip01_Head1")

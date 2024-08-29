@@ -64,6 +64,49 @@ function StartRound()
 	for i,ply in pairs(players) do
 		ply:KillSilent()
 	end
+	if not GetGlobalBool("closedondev") then
+		if roundActiveName == "SandBox" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: SandBox")
+		elseif roundActiveName == "stopitslender" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Stop It, Slender!")
+		elseif roundActiveName == "hl2dm" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Half Life 2 DeathMatch")
+		elseif roundActiveName == "homicide" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Хомисайд")
+		elseif roundActiveName == "bahmut" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Конфликт Хомиграда")
+		elseif roundActiveName == "basedefence" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Base Defence")
+		elseif roundActiveName == "cp" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Capture Point")	
+		elseif roundActiveName == "css" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Counter Strike")	
+		elseif roundActiveName == "deathmatch" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: DeathMatch")	
+		elseif roundActiveName == "deathrun" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: DeathRun")
+		elseif roundActiveName == "events" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Event")
+		elseif roundActiveName == "furryinfection" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Furry Infection")
+		elseif roundActiveName == "hideandseek" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Hide And Seek")
+		elseif roundActiveName == "jailbreak" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: JailBreak")
+		elseif roundActiveName == "nextbot" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: NextBots")
+		elseif roundActiveName == "riot" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Riot")
+		elseif roundActiveName == "slovopacana" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Слово Пацана")
+		elseif roundActiveName == "tdm" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Team DeathMatch")
+		elseif roundActiveName == "wick" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: John Wick")
+		elseif roundActiveName == "zombieinfection" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Zombie Infection")
+		end
+	end
 
 	if SERVER then
 		if timer.Exists( "ULXVotemap") then

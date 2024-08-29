@@ -73,25 +73,6 @@ end
 		if ply.exit then CTExit = CTExit + 1 return false end
 	end)
 
-	local list = ReadDataMap("spawnpoints_ss_exit")
-
-	if furryinfection.police then
-		for i,ply in pairs(team.GetPlayers(2)) do
-			if not ply:Alive() or ply.exit then continue end
-
-			for i,point in pairs(list) do
-				if ply:GetPos():Distance(point[1]) < (point[3] or 250) then
-					ply.exit = true
-					ply:KillSilent()
-
-					CTExit = CTExit + 1
-
-					PrintMessage(3,"Прячущийся сбежал, осталось " .. (CTAlive - 1) .. " школьников")
-				end
-			end
-		end
-	end
-
 	OAlive = tdm.GetCountLive(team.GetPlayers(3))
 	
 	if CTAlive == 0 then EndRound(1) PrintMessage(3,"Люди не дожили до рассвета") return end

@@ -266,17 +266,18 @@ COMMANDS.setmaxplayers = {function(ply,args)
 	PrintMessageChat(3,"Лимит игроков : " .. tostring(MaxPlayers))
 end}
 
-CloseDev = tobool(SData_Get("dev"))
-
 COMMANDS.closedev = {function(ply,args)
-	CloseDev = tonumber(args[1]) > 0
 
-	SData_Set("dev",tostring(CloseDev))
-
-	if CloseDev then
-		PrintMessageChat(3,"Сервер закрыт. fuck you!")
+	if tonumber(args[1]) > 0 then
+		SetGlobalBool("closedondev",true)
+		PrintMessageChat(3,"Сервер закрыт.")
+		RunConsoleCommand("hostname","Homigrad Rework | СЕРВЕР НА РАЗРАБОТКЕ")
+		discord_log('logs', 'Сервер закрылся на разработку')
 	else
+		SetGlobalBool("closedondev",false)
 		PrintMessageChat(3,"Сервер открыт")
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: "..roundActiveName)
+		discord_log('logs', 'Сервер открылся с разработки')
 	end
 end}
 

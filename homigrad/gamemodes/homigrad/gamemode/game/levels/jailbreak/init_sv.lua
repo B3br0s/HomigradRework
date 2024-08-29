@@ -69,7 +69,7 @@ function jailbreak.RoundEndCheck()
 
 					CTExit = CTExit + 1
 
-					PrintMessage(3,"Школьник сбежал, осталось " .. (CTAlive - 1) .. " школьников")
+					PrintMessage(3,"Заключенный сбежал, осталось " .. (CTAlive - 1) .. " заключенных")
 				end
 			end
 		end

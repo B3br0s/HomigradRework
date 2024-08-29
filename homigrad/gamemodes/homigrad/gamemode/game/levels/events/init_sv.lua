@@ -72,7 +72,7 @@ function events.RoundEndCheck()
 
 					CTExit = CTExit + 1
 
-					PrintMessage(3,"Прячущийся сбежал, осталось " .. (CTAlive - 1) .. " школьников")
+					PrintMessage(3,"Прячущийся сбежал, осталось " .. (CTAlive - 1) .. " тех кто прячется")
 				end
 			end
 		end

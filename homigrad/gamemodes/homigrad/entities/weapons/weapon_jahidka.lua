@@ -1,6 +1,6 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Шакидка"
+SWEP.PrintName 				= "Пояс смертника"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пояс смертника, исход всегда один"
 SWEP.Category 				= "Примочки убийцы"
@@ -45,10 +45,10 @@ if SERVER then
         if self.alalal then return end
 
         local owner = self:GetOwner()
-        owner:EmitSound("snd_jack_hmcd_jihad1.wav",75)
+--        owner:EmitSound("snd_jack_hmcd_jihad1.wav",75)
         self.alalal = true
 
-        timer.Simple(math.Rand(0.5,1),function()
+        timer.Simple(math.Rand(0.01,0.02),function()
             if not IsValid(owner) then return end
 
             local SelfPos,PowerMult = owner:GetPos(),6

@@ -65,8 +65,6 @@ function nextbots.HUDPaint_RoundLeft(white2,time)
 			end
 
 			draw.SimpleText("Нажми TAB чтобы снова увидеть это.","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
-		else
-			draw.SimpleText("Попроси админа поставить эвакуационные точки для школьников...","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
 		end
 	end
 end

@@ -266,7 +266,7 @@
 	end
 
 	hook.Add("CanExitVehicle","fakefastcar",function(veh,ply)
-		if veh:GetPhysicsObject():GetVelocity():Length() > 100 then Faking(ply) return false end
+		if veh:GetPhysicsObject():GetVelocity():Length() > 50 then Faking(ply) return false end
 	end)
 
 	function FakeBullseyeTrigger(rag,owner)
@@ -1395,8 +1395,7 @@
 		if ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply.fake and not ply:HasGodMode() and ply:Alive() then
 			if speed < 700 then return end
 			if hook.Run("Should Fake Velocity",ply,speed) ~= nil then return end
-
-			Faking(ply)
+				Faking(ply)
 		end
 	end)
 	util.AddNetworkString("ebal_chellele")
