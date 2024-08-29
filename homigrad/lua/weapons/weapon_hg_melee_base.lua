@@ -107,21 +107,41 @@ function SWEP:Deploy()
 	self:SetNextPrimaryFire(CurTime())
 	self:SetHoldType(self.HoldTypeWep)
 	if SERVER then
-		self:GetOwner():EmitSound(self.DrawSound,60)
+		if self:GetOwner():GetActiveWeapon():GetClass() != "weapon_hg_chainsaw" then
+			self:GetOwner():EmitSound(self.DrawSound,30)
+		else
+			self:GetOwner():EmitSound(self.DrawSound,30)
+			timer.Simple(3.3,function()
+				self:GetOwner():EmitSound("weapons/melee/chainsaw_idle.wav",30)	
+			end ) 
+		end
 	end
 end
 
 function SWEP:Holster()
+	if self:GetOwner():GetActiveWeapon():GetClass() == "weapon_hg_chainsaw" then 
+		if SERVER then
+			self:GetOwner():StopSound("weapons/melee/chainsaw_idle.wav")
+			self:GetOwner():StopSound("weapons/melee/chainsaw_attack.wav")
+			self:GetOwner():StopSound("weapons/melee/chainsaw_start_01.wav")
+			self:GetOwner():EmitSound( "weapons/melee/chainsaw_die_01.wav",30)
+		end
+	end
 return true
 end
 
 function SWEP:PrimaryAttack()
 	self:GetOwner():SetAnimation( PLAYER_ATTACK1 )
-	self:SetNextPrimaryFire( CurTime() + self.Primary.Delay/((self:GetOwner().stamina or 100)/100)-(self:GetOwner():GetNWInt("Adrenaline")/5) )
+		self:SetNextPrimaryFire( CurTime() + self.Primary.Delay/((self:GetOwner().stamina or 100)/100)-(self:GetOwner():GetNWInt("Adrenaline")/5) )
 
 	if SERVER then
-		self:GetOwner():EmitSound( "weapons/slam/throw.wav",60 )
-		self:GetOwner().stamina = math.max(self:GetOwner().stamina - self.Primary.Damage / 5,0)
+		if self:GetOwner():GetActiveWeapon():GetClass() != "weapon_hg_chainsaw" then
+			self:GetOwner():EmitSound( "weapons/slam/throw.wav",60 )
+			self:GetOwner().stamina = math.max(self:GetOwner().stamina - self.Primary.Damage / 16,0)
+		else
+			self:GetOwner():EmitSound( "weapons/melee/chainsaw_attack.wav",30 )
+			timer.Simple(0.5,function() self:GetOwner():StopSound("weapons/melee/chainsaw_attack.wav") end )
+		end
 	end
 	self:GetOwner():LagCompensation( true )
 	local ply = self:GetOwner()
@@ -162,11 +182,11 @@ function SWEP:PrimaryAttack()
 			local angle = self:GetOwner():GetAngles().y - tr.Entity:GetAngles().y
 			if angle < -180 then angle = 360 + angle end
 
-			if angle <= 90 and angle >= -90 then
-				dmginfo:SetDamage( self.Primary.Damage * 1.5 )
-			else
-				dmginfo:SetDamage( self.Primary.Damage / 1.5 )
-			end
+				if angle <= 90 and angle >= -90 then
+					dmginfo:SetDamage( self.Primary.Damage * 1.5 )
+				else
+					dmginfo:SetDamage( self.Primary.Damage / 1.5 )
+				end
 
 			if tr.Entity:IsNPC() or tr.Entity:IsPlayer() then
 				self:GetOwner():EmitSound( self.FlashHitSound,60 )

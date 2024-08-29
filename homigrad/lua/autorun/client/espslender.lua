@@ -1,5 +1,5 @@
 hook.Add("PreDrawHalos", "ESP_DrawPlayersHealthColor", function()
-    if LocalPlayer().IsSlenderman then
+    if LocalPlayer().virusvichblya then
         for _, ply in ipairs(player.GetAll()) do
             if ply != LocalPlayer() and ply:Alive() then
                 local health = math.Clamp(ply:Health(), 0, 150)

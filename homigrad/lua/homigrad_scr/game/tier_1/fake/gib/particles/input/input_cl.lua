@@ -45,15 +45,15 @@ end
 
 
 local function explode(pos)
-	local xx,yy = 50,15
+	local xx,yy = 50,40
 	local w,h = 150 / xx,200 / yy
 
 	for x = 1,xx do
 		for y = 1,yy do
-			local dir = Vector(0,0,-1)
+			local dir = Vector(math.random(-1,1),math.random(-1,1),-0.5)
 			dir:Rotate(Angle(h * y * Rand(0.9,1.1),w * x * Rand(0.9,1.1),0))
 			dir[3] = dir[3] + Rand(-0.5,2.5)
-			dir:Mul(360)
+			dir:Mul(180)
 
 			addBloodPart(pos,dir,mats[random(1,#mats)],random(1,20),random(10,20))
 		end
@@ -75,7 +75,7 @@ net.Receive("blood particle headshoot",function()
 
 	local l1,l2 = pos - dir / 2,pos + dir / 2
 
-	local r = random(10,15)
+	local r = random(20,25)
 
 	for i = 1,r do
 		local vel = Vector(vel[1],vel[2],vel[3])
@@ -101,12 +101,12 @@ concommand.Add("testpart",function()
 
 	local r = random(10,15)
 
-	--[[for i = 1,r do
+	for i = 1,r do
 		local vel = Vector(vel[1],vel[2],vel[3])
 		vel:Rotate(Angle(Rand(-15,15) * Rand(0.9,1.1),Rand(-15,15) * Rand(0.9,1.1)))
 
 		addBloodPart(Lerp(i / r * Rand(0.9,1.1),l1,l2),vel,mats[random(1,#mats)],random(10,15),random(10,15))
-	end]]--
+	end
 
 	for i = 1,8 do
 		addBloodPart2(pos + VectorRand(-vecR,vecR),VectorRand(-vecR,vecR),mats[random(1,#mats)],random(30,45),random(30,45),Rand(1,2))

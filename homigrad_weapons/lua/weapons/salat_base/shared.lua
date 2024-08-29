@@ -897,6 +897,6 @@ function SWEP:Deploy()
 end
 
 function SWEP:ShouldDropOnDie()
-	return false
+	return true
 end
 end
