@@ -1,7 +1,36 @@
 if engine.ActiveGamemode() == "homigrad" then
+	--[[local skini = {
+		{skin = "phoenix_storms/mat/mat_phx_carbonfiber", namee = "carbonfiber"},
+		{skin = "sal/acc/armor01_3", namee = "greencamo"},
+		{skin = "sal/acc/armor01_4", namee = "multicamo"},
+		{skin = "sal/acc/armor01_5", namee = "desertcamo"},
+		{skin = "models/foodnhouseholditems/cj_b_plastic", namee = "blue"},
+		{skin = "models/jacky_camouflage/digi", namee = "cyancamo"},
+		{skin = "models/jacky_camouflage/digi2", namee = "pixelcamo"},
+		{skin = "models/flesh", namee = "flesh"},
+		{skin = "models/debug/debugwhite", namee = "clearwhite"},
+		{skin = "models/props_c17/frostedglass_01a", namee = "glass"},
+		{skin = "models/wireframe", namee = "wireframe"},
+		{skin = "phoenix_storms/stripes", namee = "isolate"},
+		{skin = "debug/env_cubemap_model", namee = "cubemap"},
+		{skin = "sal/acc/armor01_2", namee = "blackcarbon"},
+		{skin = "models/props/cs_office/clouds", namee = "clouds"},
+		{skin = "models/props/cs_assault/dollar", namee = "dollar"},
+		{skin = "phoenix_storms/black_chrome", namee = "blackchrome"},
+		{skin = "models/dav0r/hoverball", namee = "hoverball"}
+	}]]
+
+	function FindInTableByName(tbl, name)
+		for k, v in pairs(tbl) do
+			if v.namee and v.namee == name then
+				return k, v -- Return the index and the matched table if found
+			end
+		end
+		return nil, nil -- Return nil if the name is not found
+	end
+
 skins = {
 	megapenis = true,
-	Helper = true,
 	meagsponsor = true,
 	ZvezdaTiktoka = false,
 	donator = true,
@@ -77,7 +106,9 @@ SWEP.vbwPos = false
 SWEP.vbwAng = false
 SWEP.Suppressed = false
 
-local hg_skins = CreateClientConVar("hg_skins","1",true,false,"ubrat govno",0,1)
+local hg_skins = CreateClientConVar("hg_skins","1",true,false,"CSGO????",0,1)
+local hg_skin = CreateClientConVar("hg_skin","1",true,false,"Ну и хули мы стоим?")
+
 local hg_show_hitposmuzzle = CreateClientConVar("hg_show_hitposmuzzle","0",false,false,"huy",0,1)
 
 local defaultBulletPosAng = {
@@ -86,6 +117,7 @@ local defaultBulletPosAng = {
 	ar2 = {Vector(20, -0.8, 11.2), Angle(-9.5, 0, 0)},
 	smg = {Vector(14, -0.8, 6.8), Angle(-9.5, 0, 0)},
 }
+
 
 hook.Add("HUDPaint","admin_hitpos",function()
 	if hg_show_hitposmuzzle:GetBool() and LocalPlayer():IsAdmin() then
@@ -96,9 +128,9 @@ hook.Add("HUDPaint","admin_hitpos",function()
 
 		local att = wep:GetAttachment(att)
 
-		--local att2 = wep:LookupAttachment("muzzle")
+		local att2 = wep:LookupAttachment("muzzle")
 
-		--local att2 = wep:GetAttachment(att)
+		local att2 = wep:GetAttachment(att)
 		
 		if not att then
 			local Pos,Ang = wep:GetPosAng()
@@ -264,8 +296,7 @@ function SWEP:DrawWorldModel()
 	if not hg_skins:GetBool() then return end
 
     if (IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() and skins[self:GetOwner():GetUserGroup()]) then
-        --self:SetSubMaterial( 0, self:GetNWString( "skin" ) )
-		--для лохов
+        self:SetSubMaterial( 0, self:GetNWString( "skin" ) )
         self:DrawModel()
     end
 end
@@ -285,7 +316,7 @@ function SWEP:BulletCallbackFunc(dmgAmt,ply,tr,dmg,tracer,hard,multi)
 		local vPoint = tr.HitPos
 		local effectdata = EffectData()
 		effectdata:SetOrigin( vPoint )
-		--util.Effect( "BloodImpact", effectdata )
+		util.Effect( "BloodImpact", effectdata )
 	end
 	if(self.NumBullet or 1>1)then return end
 	if(tr.HitSky)then return end
@@ -352,21 +383,33 @@ end
 
 homigrad_weapons = homigrad_weapons or {}
 
-local skini = {
-	"sal/acc/armor01_2",
-	"sal/acc/armor01_3",
-	"sal/acc/armor01_4",
-	"sal/acc/armor01_5",
-	"models/foodnhouseholditems/cj_b_plastic",
-	"models/jacky_camouflage/digi",
-	"models/jacky_camouflage/digi2"
-}
-
 function SWEP:Initialize()
 	homigrad_weapons[self] = true
 
+	local skini = {
+		"phoenix_storms/mat/mat_phx_carbonfiber",
+		"sal/acc/armor01_3",
+		"sal/acc/armor01_4",
+		"sal/acc/armor01_5",
+		"models/foodnhouseholditems/cj_b_plastic",
+		"models/jacky_camouflage/digi",
+		"models/jacky_camouflage/digi2",
+	--	"models/flesh",
+		"models/debug/debugwhite",
+	--	"models/props_c17/frostedglass_01a",
+	--	"models/wireframe",
+		"phoenix_storms/stripes",
+		"sal/acc/armor01_2",
+	--	"models/props/cs_office/clouds",
+		"models/props/cs_assault/dollar",
+		"phoenix_storms/black_chrome",
+		"models/dav0r/hoverball",
+	}
+
+--	local foundIndex, foundTable = FindInTableByName(skini, GetConVar("hg_skin"):GetString())
 	if SERVER then
-		self:SetNWString( "skin", table.Random(skini) )
+	--	self:SetNWString( "skin", foundTable.skin )
+	self:SetNWString( "skin", table.Random(skini) )
 	end
 
 	self.lerpClose = 0
@@ -526,7 +569,7 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	ply:LagCompensation(true)
 
 	local obj = self:LookupAttachment("muzzle")
-	
+	 
 	local Attachment = self:GetAttachment(obj)
 
 	if not Attachment then

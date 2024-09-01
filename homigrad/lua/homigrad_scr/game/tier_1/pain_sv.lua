@@ -82,7 +82,7 @@ hook.Add("Player Think","homigrad-pain",function(ply,time)
 		k = 1 - ply.adrenaline / 2
 	end
 
-	if ply.adrenaline > 2 then
+	if ply.adrenaline > 2 and not ply.vkololinh then
 		ply.stamina = 30
 		ply.pain = ply.pain + 5
 		--ply.KillReason = "adrenaline"
@@ -115,6 +115,7 @@ hook.Add("PostPlayerDeath","RefreshPain",function(ply)
 	ply.pain = 0
 	ply.painlosing = 1
 	
+	ply.vkololinh = false
 	ply.otravlen = false
 	ply.otravlen2 = false
 

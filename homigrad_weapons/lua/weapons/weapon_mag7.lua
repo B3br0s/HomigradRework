@@ -15,7 +15,7 @@ SWEP.Primary.DefaultClip	= 12
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "12/70 gauge"
 SWEP.Primary.Cone = 0.15
-SWEP.Primary.Damage = 1.7 * 20
+SWEP.Primary.Damage = 1.7 * 40
 SWEP.Primary.Spread = 2
 SWEP.Primary.Sound = "csgo/weapons/mag7/mag7_01.wav"
 SWEP.Primary.SoundFar = "weapons/mini14/mini14_dist.wav"
@@ -23,7 +23,7 @@ SWEP.Primary.Force = 25
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.8
 SWEP.ReloadSound = "csgo/weapons/mag7/mag7_reload.wav"
-SWEP.NumBullet = 12
+SWEP.NumBullet = 8
 SWEP.Sight = true
 SWEP.TwoHands = true
 							

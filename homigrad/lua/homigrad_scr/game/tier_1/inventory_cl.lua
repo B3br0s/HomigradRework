@@ -27,6 +27,7 @@ Gunshuy = {
 	"weapon_galilsar",
 	"weapon_m14",
 	"weapon_m1a1",
+	"weapon_pkm",
 	"weapon_mk18",
 	"weapon_m249",
 	"weapon_m4a1",

@@ -5,7 +5,7 @@ local n, e, r, o
 local d = Material('materials/scopes/scope_dbm.png')
 CameraSetFOV = 120
 
-CreateClientConVar("hg_fov","120",true,false,nil,90,120)
+CreateClientConVar("hg_fov","130",true,false,nil,90,130)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
 
 CreateClientConVar("hg_bodycam","0",true,false,nil,0,1)
@@ -305,6 +305,7 @@ local weps = {
 ["weapon_galilsar"] = true,
 ["weapon_m14"] = true,
 ["weapon_r8"] = true,
+["weapon_pkm"]=true,
 ["weapon_m1a1"] = true,
 ["weapon_mk18"] = true,
 ["weapon_m249"] = true,
@@ -568,6 +569,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			--Vector(5.05,7,0.725)
 			vecWep = hand.Pos + hand.Ang:Up() * 5.01 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.725
 			angWep = hand.Ang + Angle(-5,0,0)
+		end
+		if weaponClass == "weapon_pkm" then
+			--Vector(5.05,7,0.725)
+			vecWep = hand.Pos + hand.Ang:Up() * 4.8 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 1.15
+			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_m4a1airsoft" then
 			--Vector(5.05,7,0.725)

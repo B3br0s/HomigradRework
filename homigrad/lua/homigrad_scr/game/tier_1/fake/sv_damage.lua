@@ -172,8 +172,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
 
 	if dmginfo:GetDamageType() == DMG_BLAST then
-		ply.pain = 500
-		timer.Simple(0.03,function() ply.pain = 0 end )
+		ply.pain = 700
 	end
 
 	ply.LastDMGInfo = rubatPidor

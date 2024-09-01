@@ -1,0 +1,59 @@
+if engine.ActiveGamemode() == "homigrad" then
+SWEP.Base = 'salat_base' -- base 
+
+SWEP.PrintName 				= "ПКМ"
+SWEP.Instructions			= "Пулемёт под калибр 7,62х54"
+SWEP.Category 				= "Оружие"
+
+SWEP.Spawnable 				= true
+SWEP.AdminOnly 				= false
+
+------------------------------------------
+
+SWEP.Primary.ClipSize		= 100
+SWEP.Primary.DefaultClip	= 100
+SWEP.Primary.Automatic		= true
+SWEP.Primary.Ammo			= "7.62x54 mm"
+SWEP.Primary.Cone = 0
+SWEP.Primary.Damage = 1.7 * 130
+SWEP.Primary.Spread = 0
+SWEP.Primary.Sound = "weapons/m40a1/m40a1_tp.wav"
+SWEP.Primary.SoundFar = "ak74/ak74_dist.wav"
+SWEP.Primary.Force = 240/3
+SWEP.ReloadTime = 2
+SWEP.ShootWait = 0.1
+SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.TwoHands = true
+							
+SWEP.Secondary.ClipSize		= -1
+SWEP.Secondary.DefaultClip	= -1
+SWEP.Secondary.Automatic	= false
+SWEP.Secondary.Ammo			= "none"
+
+SWEP.addPos = Vector(0,3,0)
+SWEP.addAng = Angle(0,0,0)
+
+------------------------------------------
+
+SWEP.Weight					= 5
+SWEP.AutoSwitchTo			= false
+SWEP.AutoSwitchFrom			= false
+
+SWEP.HoldType = "ar2"
+
+------------------------------------------
+
+function SWEP:ApplyEyeSpray()
+    self.eyeSpray = self.eyeSpray - Angle(0.5,math.Rand(-0.5,0.5),0)
+end
+
+------------------------------------------
+
+SWEP.Slot					= 2
+SWEP.SlotPos				= 0
+SWEP.DrawAmmo				= true
+SWEP.DrawCrosshair			= false
+
+SWEP.ViewModel				= "models/pwb2/weapons/w_pkm.mdl"
+SWEP.WorldModel				= "models/pwb2/weapons/w_pkm.mdl"
+end

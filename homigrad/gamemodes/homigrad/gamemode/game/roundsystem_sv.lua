@@ -70,7 +70,7 @@ function StartRound()
 		elseif roundActiveName == "stopitslender" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Stop It, Slender!")
 		elseif roundActiveName == "hl2dm" then
-		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Half Life 2 DeathMatch")
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Half Life 2 DM")
 		elseif roundActiveName == "homicide" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Хомисайд")
 		elseif roundActiveName == "bahmut" then
@@ -105,6 +105,8 @@ function StartRound()
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: John Wick")
 		elseif roundActiveName == "zombieinfection" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Zombie Infection")
+		elseif roundActiveName == "hl2coop" then
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Half Life 2 Coop")
 		end
 	end
 
@@ -305,10 +307,11 @@ end
 COMMANDS.levelend = {function(ply,args)
 	if ply:IsAdmin() then
 		if roundActiveName == "SandBox" then
+			SetGlobalBool("AccessSpawn",false)
+			SetGlobalBool("NoFake",false)
 			EndRound()
 		else
 			EndRound()
-			SetGlobalBool("AccessSpawn",false)
 			SetGlobalBool("NoFake",false)
 		end
 	else

@@ -33,7 +33,6 @@ local validUserGroupSuperAdmin = {
 local validUserGroup = {
 	megapenis = true,
 	ZvezdaTiktoka = false,
-	Helper = true,
 	meagsponsor = true
 }
 

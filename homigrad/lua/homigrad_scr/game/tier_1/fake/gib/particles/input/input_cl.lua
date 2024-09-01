@@ -45,7 +45,7 @@ end
 
 
 local function explode(pos)
-	local xx,yy = 50,40
+	local xx,yy = 50,25
 	local w,h = 150 / xx,200 / yy
 
 	for x = 1,xx do

@@ -529,35 +529,35 @@
 		if not GetGlobalBool("NoFake") then
 		if Entity:IsPlayer() then
 			Faking(Entity)
-			timer.Create("StunTime"..Entity:EntIndex(), 8, 1, function() end)
+			timer.Create("StunTime"..Entity:EntIndex(), 6, 1, function() end)
 			local fake = Entity:GetNWEntity("Ragdoll")
 			timer.Create( "StunEffect"..Entity:EntIndex(), 0.1, 80, function()
-				local rand = math.random(1,50)
-				if rand == 50 then
+				local rand = math.random(1,20)
+				if rand == 20 then
 				RagdollOwner(fake):Say("*drop")
 				end
-				RagdollOwner(fake).pain = RagdollOwner(fake).pain + 3
-				fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-255,255),math.random(-255,255),0))
-				fake:EmitSound("ambient/energy/spark2.wav")
+				RagdollOwner(fake).pain = RagdollOwner(fake).pain + 1
+				fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-55,55),math.random(-55,55),0))
+				fake:EmitSound("ambient/energy/spark"..math.random(1,6)..".wav")
 			end)
 		elseif Entity:IsRagdoll() then
 			if RagdollOwner(Entity) then
 				RagdollOwner(Entity):Say("*drop")
-				timer.Create("StunTime"..RagdollOwner(Entity):EntIndex(), 8, 1, function() end)
+				timer.Create("StunTime"..RagdollOwner(Entity):EntIndex(), 6, 1, function() end)
 				local fake = Entity
 				timer.Create( "StunEffect"..RagdollOwner(Entity):EntIndex(), 0.1, 80, function()
 					if rand == 50 then
 						RagdollOwner(fake):Say("*drop")
 					end
 					RagdollOwner(fake).pain = RagdollOwner(fake).pain + 3
-					fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-255,255),math.random(-255,255),0))
-					fake:EmitSound("ambient/energy/spark2.wav")
+					fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-55,55),math.random(-55,55),0))
+					fake:EmitSound("ambient/energy/spark"..math.random(1,6)..".wav")
 				end)
 			else
 				local fake = Entity
 				timer.Create( "StunEffect"..Entity:EntIndex(), 0.1, 80, function()
-					fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-255,255),math.random(-255,255),0))
-					fake:EmitSound("ambient/energy/spark2.wav")
+					fake:GetPhysicsObjectNum(1):SetVelocity(fake:GetPhysicsObjectNum(1):GetVelocity()+Vector(math.random(-55,55),math.random(-55,55),0))
+					fake:EmitSound("ambient/energy/spark"..math.random(1,6)..".wav")
 					end)
 				end
 			end

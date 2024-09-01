@@ -42,6 +42,40 @@ SWEP.HoldType = "ar2"
 
 ------------------------------------------
 
+function SWEP:Initialize()
+    if CLIENT then return end -- Only run on server side
+
+    local ply = self:GetOwner()
+    if not IsValid(ply) then return end
+
+    -- Check if the SWEP already has an attached silencer
+    if IsValid(self.SilencerModel) then
+        ply:ChatPrint("Silencer is already attached.")
+        return
+    end
+
+    -- Spawn the silencer model
+    local silencer = ents.Create("prop_physics")
+    if not IsValid(silencer) then return end
+    silencer:SetModel(modelPath)
+    silencer:SetMoveType(MOVETYPE_NONE) -- Prevents the prop from moving
+    silencer:SetSolid(SOLID_NONE) -- Make it non-solid, just for visual attachment
+    silencer:Spawn()
+
+    -- Attach the silencer to the SWEP
+    silencer:SetParent(self) -- Attach it to the SWEP itself
+    silencer:FollowBone(self, self:LookupBone("ValveBiped.Bip01_R_Hand") or 0) -- Attach to the SWEP's hand bone
+
+    -- Adjust the local position and angles for proper placement on the weapon
+    silencer:SetLocalPos(Vector(25, 0, -5)) -- Adjust these values to position it correctly
+    silencer:SetLocalAngles(Angle(0, 0, 0)) -- Adjust these angles if needed
+
+    -- Save a reference to the silencer so we can check if it's already attached
+    self.SilencerModel = silencer
+
+    ply:ChatPrint("Silencer attached to weapon.")
+        end
+
 SWEP.Slot					= 2
 SWEP.SlotPos				= 0
 SWEP.DrawAmmo				= true

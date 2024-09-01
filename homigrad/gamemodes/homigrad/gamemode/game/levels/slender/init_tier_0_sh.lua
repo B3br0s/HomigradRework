@@ -4,7 +4,7 @@ stopitslender.Name = "Stop it, Slender!"
 
 stopitslender.red = {"Слендер",Color(255,55,55),
     weapons = {"weapon_hands"},
-    models = {"models/slendereightpages/SlenderMan SMTEP.mdl"}
+    models = {"models/slendermanshadow/Slenderman.mdl"}
 }
 
 stopitslender.green = {"Выжившие",Color(55,55,255),

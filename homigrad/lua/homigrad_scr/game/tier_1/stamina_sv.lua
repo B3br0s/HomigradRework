@@ -103,7 +103,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		if ply:IsSprinting() then
 			if foot == 0 then
 				if ply.LeftLeg < 1 then
-					ply.pain = ply.pain + 500
+					ply.pain = ply.pain + 5
 					if ply.firstTimeNotifiedLeftLeg then
 						ply:ChatPrint("Вы чувствуете невыносимую боль от бега на сломанной левой ноге. ")
 						ply.firstTimeNotifiedLeftLeg = false
@@ -113,7 +113,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	
 			if foot == 1 then
 				if ply.RightLeg < 1 then
-					ply.pain = ply.pain + 500
+					ply.pain = ply.pain + 5
 					if ply.firstTimeNotifiedRightLeg then
 						ply:ChatPrint("Вы чувствуете невыносимую боль от бега на сломанной правой ноге. ")
 						ply.firstTimeNotifiedRightLeg = false

@@ -27,6 +27,7 @@ function GM:PlayerSpawn(ply)
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
 	ply.virusvichblya = false
+	ply.slendermanblya = false
 	ply.pain = 0
 
 	if ply.NEEDKILLNOW then

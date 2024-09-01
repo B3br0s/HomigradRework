@@ -3,7 +3,6 @@ local validUserGroup = {
 	meagsponsor = true,
 	megapenis = true,
     ZvezdaTiktoka = false,
-    Helper = true
 }
 
 if SERVER then

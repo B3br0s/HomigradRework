@@ -55,6 +55,7 @@ Vectors = {
 ["weapon_svd"]=Vector(0,0,1),
 ["weapon_saiga12"]=Vector(12,0,5),
 ["weapon_m1garand"]=Vector(0,0,1),
+["weapon_pkm"]=Vector(0,-2,2),
 }
 
 Vectors2 = {
@@ -76,6 +77,7 @@ Vectors2 = {
 ["weapon_mk18"]=Vector(12,-2,-4),
 ["weapon_m249"]=Vector(15,-4,-4),
 ["weapon_m4a1"]=Vector(9,-2,-3),
+["weapon_pkm"]=Vector(13.5,-2,2),
 ["weapon_minu14"]=Vector(16,0,-4),
 ["weapon_mp40"]=Vector(5,-3,1),
 ["weapon_rpk"]=Vector(12,-2,-2),
