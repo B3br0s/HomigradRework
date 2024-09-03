@@ -9,9 +9,51 @@ function zombieinfection.Scoreboard_Status(ply)
 end
 
 local aABASDBASDBABDSB = true
+local aABASDBASDBABDSBa = true
 
 local green = Color(0,125,0)
 local white = Color(255,255,255)
+
+    local flashBrightness = 5
+    local flashDuration = 10  -- Flash duration in seconds
+    local flashStartTime = 0
+    local isFlashing = false
+
+    -- Function to trigger the screen flash
+function FlashScreen()
+        flashStartTime = CurTime()  -- Set the start time of the flash
+        flashBrightness = 1.0       -- Set initial brightness level for flash
+        isFlashing = true
+end
+
+    -- Hook to handle the color correction and brightness effect
+    hook.Add("RenderScreenspaceEffects", "FlashScreenEffect", function()
+        if isFlashing then
+            -- Calculate how much time has passed since the flash started
+            local elapsedTime = CurTime() - flashStartTime
+
+            -- If the flash is still within the duration, reduce brightness over time
+            if elapsedTime <= flashDuration then
+                local brightness = flashBrightness * (1 - (elapsedTime / flashDuration))
+                
+                -- Apply the color correction effect with the calculated brightness
+                DrawColorModify({
+                    ["$pp_colour_addr"] = 0,
+                    ["$pp_colour_addg"] = 0,
+                    ["$pp_colour_addb"] = 0,
+                    ["$pp_colour_brightness"] = brightness,
+                    ["$pp_colour_contrast"] = 1,
+                    ["$pp_colour_colour"] = 1,
+                    ["$pp_colour_mulr"] = 0,
+                    ["$pp_colour_mulg"] = 0,
+                    ["$pp_colour_mulb"] = 0
+                })
+            else
+                -- Stop the flash after the duration is over
+                isFlashing = false
+            end
+        end
+    end)
 
 function zombieinfection.HUDPaint_RoundLeft(white2,time)
 	local time = math.Round(roundTimeStart + roundTime - CurTime())
@@ -19,70 +61,32 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
 	local lply = LocalPlayer()
 	local name,color = zombieinfection.GetTeamName(lply)
 
-	local startRound = roundTimeStart + 7 - CurTime()
+	local startRound = roundTimeStart + 2 - CurTime()
     if startRound > 0 and lply:Alive() then
-		if time >= 393 then
+		if time >= 595 then
 			if aABASDBASDBABDSB == true then
 				aABASDBASDBABDSB = false
-				surface.PlaySound("InfectionMusicZS.wav")
+				surface.PlaySound("infectionround/infectionroundstart.wav")
 				timer.Simple(10,function() aABASDBASDBABDSB = true end )
+				timer.Simple(14.5,function() FlashScreen() end )
 			end
 		end
-        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.5,0.5)
+        lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.1,0.1)
 
-
-        --[[surface.SetFont("HomigradFontBig")
-        surface.SetTextColor(color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255)
-        surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
-
-        surface.DrawText("Вы " .. name)]]--
-        draw.DrawText( "Вы " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        draw.DrawText( "Зомби Инфекция", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-
-        if lply:Team() == 1 then
-            draw.DrawText( "ВАША ЗАДАЧА УБИТЬ ВСЕХ ДО РАССВЕТА", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        else
-            draw.DrawText( "Ваша задача выжить до рассвета", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,155,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-		end
+		lply:SetNWBool("INFECTED",false)
         return
     end
-
 	if time > 0 then
 		draw.SimpleText("До рассвета : ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 	end
-	/*
-	local time = math.Round(roundTimeStart + (roundTimeLoot or 0) - CurTime())
-	local acurcetime = string.FormattedTime(time,"%02i:%02i")
-
-	if time > 0 then
-		draw.SimpleText("До спавна лута :","HomigradFont",ScrW() / 2 - 200,ScrH() - 50,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
-		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH() - 50,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
-	end
-	*/
 	green.a = white2.a
 
 
-	if lply:Team() == 3 or lply:Team() == 2 or not lply:Alive() and zombieinfection.police then
-		local list = SpawnPointsList.spawnpoints_ss_exit
-		--local list = ReadDataMap("spawnpoints_ss_exit")
-		if list then
-			for i,point in pairs(list[3]) do
-				point = ReadPoint(point)
-				local pos = point[1]:ToScreen()
-				draw.SimpleText("EXIT","ChatFont",pos.x,pos.y,green,TEXT_ALIGN_CENTER)
-			end
-
-			draw.SimpleText("Нажми TAB чтобы снова увидеть это.","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
-		else
-			draw.SimpleText("Попроси админа поставить эвакуационные точки для прячущихся...","HomigradFont",ScrW() / 2,ScrH() - 100,white2,TEXT_ALIGN_CENTER)
-		end
-	end
 end
 
 function zombieinfection.PlayerClientSpawn()
 	if LocalPlayer():Team() ~= 3 then return end
 
-	showRoundInfo = CurTime() + 10
+	showRoundInfo = CurTime() + 18
 end

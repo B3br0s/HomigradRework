@@ -1,7 +1,9 @@
 if engine.ActiveGamemode() == "homigrad" then
 	hook.Add("Move","move.speed",function(ply,movedata)
 		if ply:Alive() then
-			ply.speeed = movedata:GetVelocity():Length()
+			if roundActiveName == "nextbots" or roundActiveName == "deathrun" or roundActiveName == "eft" then
+				ply.speeed = movedata:GetVelocity():Length()
+			end
 		end
 	end)
 	
@@ -57,9 +59,9 @@ if engine.ActiveGamemode() == "homigrad" then
 		end
 	
 		if ply:GetMoveType() == MOVETYPE_WALK and ply:IsSprinting() then
-			if roundActiveName == "deathrun" or roundActiveName == "nextbots" then
+			if roundActiveName == "deathrun" or roundActiveName == "nextbots" or roundActiveName == "eft" then
 			else
-				ply.stamina = ply.stamina - 1 * ply.speeed / 150
+				ply.stamina = ply.stamina - 1
 			end
 		end
 	

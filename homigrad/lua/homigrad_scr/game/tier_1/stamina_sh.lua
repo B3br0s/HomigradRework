@@ -25,9 +25,9 @@ gg = function(ply,mv,value)
 	value = mv:GetMaxSpeed() * value
 
 
-	if roundActiveName == "deathrun" or roundActiveName == "nextbots" then
+	if roundActiveName == "deathrun" or roundActiveName == "nextbots" or roundActiveName == "eft" then
 	else
-		ply:SetRunSpeed(Lerp((ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 0.05 or 1,ply:GetRunSpeed(),(ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 450 or ply:GetWalkSpeed()) + 4)
+		ply:SetRunSpeed(Lerp((ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 0.05 or 1,ply:GetRunSpeed(),(ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 450 or ply:GetWalkSpeed()) + 3.5)
 	end
 
 	mv:SetMaxSpeed(value)

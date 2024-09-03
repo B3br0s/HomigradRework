@@ -1,8 +1,8 @@
-function eftdm.StartRoundSV()
+function eft.StartRoundSV()
 	tdm.RemoveItems()
 
 	roundTimeStart = CurTime()
-	roundTime = 60 * (2 + math.min(#player.GetAll() / 8,2))
+	roundTime = 150 * (2 + math.min(#player.GetAll() / 8,2))
 
 	tdm.DirectOtherTeam(3,1,2)
 
@@ -16,27 +16,31 @@ function eftdm.StartRoundSV()
 	tdm.CenterInit()
 end
 
-function eftdm.RoundEndCheck()
+function eft.RoundEndCheck()
 
 	if roundTimeStart + roundTime - CurTime() <= 0 then EndRound() end
 	
 	local TAlive = tdm.GetCountLive(team.GetPlayers(1))
 	local CTAlive = tdm.GetCountLive(team.GetPlayers(2))
 
-	if TAlive == 0 and CTAlive == 0 then EndRound() return end
-
-	if TAlive == 0 then EndRound(2) end
-	if CTAlive == 0 then EndRound(1) end
+	if TAlive == 0 and CTAlive == 1 then EndRound(2) return end
+	if TAlive == 1 and CTAlive == 0 then EndRound(1) return end
 
 	tdm.Center()
 end
 
-function eftdm.EndRound(winner) tdm.EndRoundMessage(winner) end
+function eft.EndRound(winner)
+    for i, ply in ipairs( player.GetAll() ) do
+	    if ply:Alive() then
+        end
+    end
+end
 
-function eftdm.PlayerInitialSpawn(ply) ply:SetTeam(math.random(1,2)) end
 
-function eftdm.PlayerSpawn(ply,teamID)
-	local teamTbl = eftdm[eftdm.teamEncoder[teamID]]
+function eft.PlayerInitialSpawn(ply) ply:SetTeam(math.random(1,2)) end
+
+function eft.PlayerSpawn(ply,teamID)
+	local teamTbl = eft[eft.teamEncoder[teamID]]
 	local color = teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
 
@@ -48,27 +52,25 @@ function eftdm.PlayerSpawn(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon)
 	
 	if teamID == 2 then
-		ply:SetPlayerClass("combine")
-		if math.random(1,2) == 2 then ply:Give("weapon_hg_hl2") end
-		--JMod.EZ_Equip_Armor(ply,"Medium-Helmet",Color(0,0,0,0))
-		JMod.EZ_Equip_Armor(ply,"Light-Vest",Color(0,0,0,0))
+		ply:SetPlayerClass("usec")
+		JMod.EZ_Equip_Armor(ply,"Galvion Caiman")
+		JMod.EZ_Equip_Armor(ply,"Slick Tan")
+		JMod.EZ_Equip_Armor(ply,"TT Trooper 35")
 	end
 
 	if teamID == 1 then
-		if math.random(1,4) == 4 then ply:Give("adrinaline") end
-		if math.random(1,4) == 4 then ply:Give("morphine") end
-		if math.random(1,3) == 3 then ply:Give("weapon_hg_hl2") end
+		ply:SetPlayerClass("bear")
 
-		JMod.EZ_Equip_Armor(ply,"Medium-Helmet",color)
-		local r = math.random(1,2)
-		JMod.EZ_Equip_Armor(ply,"Light-Vest",Color(0,0,0,0))
+		JMod.EZ_Equip_Armor(ply,"Pillbox")
+		JMod.EZ_Equip_Armor(ply,"Bastion")
+		JMod.EZ_Equip_Armor(ply,"Korund")
 	end
 
 end
 
-function eftdm.PlayerCanJoinTeam(ply,teamID)
+function eft.PlayerCanJoinTeam(ply,teamID)
     if teamID == 3 then ply:ChatPrint("Иди нахуй") return false end
 end
 
-function eftdm.ShouldSpawnLoot() return false end
-function eftdm.PlayerDeath(ply,inf,att) return false end
+function eft.ShouldSpawnLoot() return false end
+function eft.PlayerDeath(ply,inf,att) return false end

@@ -69,16 +69,16 @@ end,1}
 
 function GuiltCheck(att,ply)
 	if att.Guilt >= 100 then
-		att.Guilt = att.Guilt - 25
+		att.Guilt = att.Guilt - 75
 		
 		if not att.noguilt and not att:HasGodMode() then
-			if roundActiveName == "SandBox" or roundActiveName == "zombieinfection" then
+			if roundActiveName == "SandBox" or roundActiveName == "zombieinfection" or roundActiveName == "eft" then
 			else
 			att.pain = att.pain + 150
 			att.Bloodlosing = att.Bloodlosing + 25
 			att:SetVelocity( Vector(0,0,99999))
 			att:ChatPrint("+150 Боли и +25 кровотечения за гилт. Текущая боль: "..att.pain.." Текущее кровотечение:"..att.Bloodlosing)
-		--	RunConsoleCommand("say", "*drop")
+			RunConsoleCommand("say", "*drop")
 			local r = math.random(1,6)
 			if r == 3 then
 				att:ChatPrint("КОООООООООООООООООООООООООСМОООООООООООООООООООООООООООООООООС")

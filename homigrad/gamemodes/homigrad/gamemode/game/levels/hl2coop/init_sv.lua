@@ -20,14 +20,19 @@ function hl2coop.StartRoundSV(data)
     end
 
 	players = team.GetPlayers(2)
-
-    for i = 1,3 do
-        local ply,key = table.Random(players)
-		players[key] = nil
-
-        ply:SetTeam(1)
-    end
-
+	if #players > 1 then
+		for i = 1,#players / 1.5 do
+			local ply,key = table.Random(players)
+			players[key] = nil
+	
+			ply:SetTeam(1)
+		end
+	elseif #players == 1 and #players < 2 then
+		local ply,key = table.Random(players)
+			players[key] = nil
+	
+			ply:SetTeam(1)
+	end
 	local spawnsT,spawnsCT = tdm.SpawnsTwoCommand()
 	tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
 	tdm.SpawnCommand(team.GetPlayers(2),spawnsCT)

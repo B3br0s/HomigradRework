@@ -23,10 +23,10 @@ if engine.ActiveGamemode() == "homigrad" then
 	function FindInTableByName(tbl, name)
 		for k, v in pairs(tbl) do
 			if v.namee and v.namee == name then
-				return k, v -- Return the index and the matched table if found
+				return k, v
 			end
 		end
-		return nil, nil -- Return nil if the name is not found
+		return nil, nil
 	end
 
 skins = {
@@ -41,7 +41,11 @@ skins = {
 local vecZero = Vector(0,0,0)
 local angZero = Angle(0,0,0)
 SWEP.Base = 'weapon_base' -- base
-
+SWEP.sightyes = false
+SWEP.SightPos = Vector(0,0,0)
+SWEP.SightAng = Angle(0,0,0)
+SWEP.ValidAttachments = {}
+SWEP.ATTObjects = {}
 SWEP.PrintName 				= "salat_base"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= ""
@@ -106,8 +110,8 @@ SWEP.vbwPos = false
 SWEP.vbwAng = false
 SWEP.Suppressed = false
 
-local hg_skins = CreateClientConVar("hg_skins","1",true,false,"CSGO????",0,1)
-local hg_skin = CreateClientConVar("hg_skin","1",true,false,"Ну и хули мы стоим?")
+local hg_skins = CreateClientConVar("hg_skins","0",true,false,"CSGO????",0,1)
+--local hg_skin = CreateClientConVar("hg_skin","1",true,false,"Ну и хули мы стоим?")
 
 local hg_show_hitposmuzzle = CreateClientConVar("hg_show_hitposmuzzle","0",false,false,"huy",0,1)
 
@@ -160,6 +164,13 @@ local vecZero = vector_origin
 local angZero = angle_zero
 SWEP.addPos = vector_origin
 SWEP.addAng = angle_zero
+
+concommand.Add("ch_getmaterials", function(ply)
+	if not ply:IsAdmin() then return end
+	local wep = ply:GetActiveWeapon()
+	PrintTable(wep:GetMaterials())
+	wep:SetSubMaterial(2, "empty")
+end)
 
 function SWEP:GetDefaultLocalMuzzlePos()
 	local pos, ang = unpack(defaultBulletPosAng[self:GetHoldType()] or defaultBulletPosAng.default)
@@ -290,15 +301,97 @@ if SERVER then return end
 	end
 end
 
+concommand.Add("attach", function(ply,cmd,args)
+	if not ply:IsAdmin() then return end
+	local wep = ply:GetActiveWeapon()
+	if not wep or not IsValid(wep) then return end
+	wep:SetNWBool(args[1], true)
+end)
+concommand.Add("unattach", function(ply,cmd,args)
+	if not ply:IsAdmin() then return end
+	local wep = ply:GetActiveWeapon()
+	if not wep or not IsValid(wep) then return end
+	wep:SetNWBool(args[1], false)
+end)
 function SWEP:DrawWorldModel()
     self:DrawModel()
-	
-	if not hg_skins:GetBool() then return end
 
-    if (IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() and skins[self:GetOwner():GetUserGroup()]) then
-        self:SetSubMaterial( 0, self:GetNWString( "skin" ) )
-        self:DrawModel()
-    end
+	if self.SubMaterial then
+
+		for index, newmaterial in pairs(self.SubMaterial) do
+			self:SetSubMaterial(index, newmaterial)
+		end
+		
+	end
+
+	if IsValid(self:GetOwner()) then
+		-- скины
+		local ply = self:GetOwner()
+		if hg_skins:GetBool() and skins[self:GetOwner():GetUserGroup()] then
+        	self:SetSubMaterial( 0, self:GetNWString( "skin" ) )
+       		self:DrawModel()
+    	end
+		-- аттачменты
+		if self.ValidAttachments then
+			for attachment, info in pairs(self.ValidAttachments) do
+				if self:GetNWBool(attachment, false) == true then
+					if not self.ATTObjects[attachment] then
+						self.ATTObjects[attachment] = ClientsideModel(info.model)
+						self.ATTObjects[attachment]:SetPos(ply:GetPos())
+						self.ATTObjects[attachment]:SetParent(ply)
+						self.ATTObjects[attachment]:SetNoDraw(true)
+						self.ATTObjects[attachment]:SetModelScale(info.scale, 0)
+						if info.newsight then
+							if not self.AimPosInfo then
+								self.AimPosInfo = {
+									info.aimpos,
+									info.aimang
+								}
+								self.SightPos.x = self.AimPosInfo[1].x
+								self.SightPos.y = self.AimPosInfo[1].y
+								self.SightPos.z = self.AimPosInfo[1].z
+								self.SightAng = self.AimPosInfo[2]
+							end
+						end
+					else
+						local matrix_rhand = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand"))
+						if not matrix_rhand then return end
+						local pos, ang = matrix_rhand:GetTranslation(), matrix_rhand:GetAngles()
+						if not pos or not ang then return end
+						self.ATTObjects[attachment]:SetRenderOrigin(pos + ang:Right() * info.positionright + ang:Forward() * info.positionforward + ang:Up() * info.positionup)
+						ang:RotateAroundAxis(ang:Forward(), info.angleforward)
+						ang:RotateAroundAxis(ang:Right(), info.angleright)
+						ang:RotateAroundAxis(ang:Up(), info.angleup)
+						self.ATTObjects[attachment]:SetRenderAngles(ang)
+						self.ATTObjects[attachment]:SetupBones()
+						self.ATTObjects[attachment]:DrawModel()
+					end
+				end
+
+				if ply == LocalPlayer() then
+					if self.AimPosInfo then
+						self.sightyes = true
+						self.SightPos.x = self.AimPosInfo[1].x
+						self.SightPos.y = self.AimPosInfo[1].y
+						self.SightPos.z = self.AimPosInfo[1].z
+						self.SightAng = self.AimPosInfo[2]
+					else
+						self.sightyes = false
+						self.SightPos.x = 0
+						self.SightPos.y = 0
+						self.SightPos.z = 0
+						self.SightAng = Angle(0,0,0)
+					end
+				end
+			end
+		end
+
+		self:DrawModel()
+	else
+
+		self:DrawModel()
+
+	end
 end
 
 HMCD_SurfaceHardness={
@@ -388,6 +481,8 @@ function SWEP:Initialize()
 
 	local skini = {
 		"phoenix_storms/mat/mat_phx_carbonfiber",
+		"pure_noise/grayscale_uniform_lit",
+		"pure_noise/moving/rgb_uniform_lit",
 		"sal/acc/armor01_3",
 		"sal/acc/armor01_4",
 		"sal/acc/armor01_5",

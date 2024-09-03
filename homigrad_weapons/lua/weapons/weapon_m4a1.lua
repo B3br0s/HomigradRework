@@ -31,7 +31,9 @@ SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
-
+SWEP.SubMaterial = {
+    [1] = "null"
+}
 ------------------------------------------
 
 SWEP.Weight					= 5
@@ -54,4 +56,24 @@ SWEP.vbwPos = Vector(-2,-3.7,2)
 SWEP.vbwAng = Angle(5,-30,0)
 
 SWEP.OffsetVec = Vector(10,-2.6,2)
+
+SWEP.ValidAttachments = {
+    ["Elcan"] = {
+        positionright = 0,
+        positionforward = 10,
+        positionup = -5,
+
+        angleforward = 180,
+        angleright = 0,
+        angleup = 0,
+
+        newsight = true,
+        aimpos = Vector(5.05,7,0.5),
+        aimang = Angle(-5,0,0),
+
+        scale = 1,
+        model = "models/weapons/arc9/darsu_eft/mods/scope_elcan_specter_hco.mdl",
+    }
+}
+
 end

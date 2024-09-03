@@ -48,7 +48,7 @@ end
 
 local function ToggleScoreboard(toggle)
 	if toggle then
-        if IsValid(HomigradScoreboard) then return end--shut the fuck up
+        if IsValid(HomigradScoreboard) then return end
 
 		showRoundInfo = CurTime() + 2.5
 
@@ -124,14 +124,12 @@ local function ToggleScoreboard(toggle)
 		HomigradScoreboard.players = {}
 		HomigradScoreboard.delaySort = 0
 HomigradScoreboard.Paint = function(self,w,h)
-    -- Background with rounded corners
     surface.SetDrawColor(15, 15, 15, 255)
-    draw.RoundedBox(16, 0, 0, w, h, Color(15, 15, 15, 230)) -- Change to draw a rounded box with a radius of 16
+    draw.RoundedBox(16, 0, 0, w, h, Color(15, 15, 15, 230))
 
     draw.SimpleText("Статус", "HomigradFont", 100, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("Имя", "HomigradFont", w / 2, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("HOMIGRAD REWORK", "HomigradFontLarge", w / 2, h / 2, Color(155, 155, 165, 5), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    draw.SimpleText("Frags | Deaths", "HomigradFont", w - 300, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("Пинг", "HomigradFont", w - 200, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("Команда", "HomigradFont", w - 100, 15, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText("Игроков: " .. table.Count(player.GetAll()), "HomigradFont", 15, h - 25, green, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -156,7 +154,6 @@ HomigradScoreboard.Paint = function(self,w,h)
         self:Sort()
     end
 
-    -- Remaining UI elements
     surface.SetMaterial(grtodown)
     surface.SetDrawColor(125, 125, 155, math.min(animWheelUp * 255, 10))
     surface.DrawTexturedRect(0, 0, w, animWheelUp)
@@ -293,9 +290,9 @@ end
 				draw.SimpleText(name1,"HomigradFont",w / 2,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				
 				-- if not ply.TimeStart then
-					local kd = ply:Deaths() .. " | " .. ply:Frags()
+				--	local kd = ply:Deaths() .. " | " .. ply:Frags()
 
-					draw.SimpleText(kd,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+				--	draw.SimpleText(kd,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				-- else
 				-- 	local time = math.floor(CurTime() - ply.TimeStart + (ply.Time or 0))
 				-- 	local dTime,hTime,mTime = math.floor(time / 60 / 60 / 24),tostring(math.floor(time / 60 / 60) % 24),tostring(math.floor(time / 60) % 60)
@@ -347,9 +344,9 @@ end
             HomigradScoreboard:Remove()
 		end]]
 
-	--[[	local muteAll = SB_CreateButton(HomigradScoreboard)
-		muteAll:SetSize(175,30)
-		muteAll:SetPos(-muteAll:GetWide() - 35 + HomigradScoreboard:GetWide() / 2,HomigradScoreboard:GetTall() - 45)
+	local muteAll = SB_CreateButton(HomigradScoreboard)
+		muteAll:SetSize(180,25)
+		muteAll:SetPos(HomigradScoreboard:GetWide() / 2.45,HomigradScoreboard:GetTall() - 60)
 		muteAll.text = "Замутить всех"
 
 		function muteAll:Paint(w,h)
@@ -357,19 +354,19 @@ end
 			SB_PaintButton(self,w,h)
 		end
 
-		function muteAll:DoClick() muteall = not muteall end]]
+		function muteAll:DoClick() muteall = not muteall end
 
---[[		local muteAllDead = SB_CreateButton(HomigradScoreboard)
-		muteAllDead:SetSize(175,30)
-		muteAllDead:SetPos(35 + HomigradScoreboard:GetWide() / 2,HomigradScoreboard:GetTall() - 45)
-		muteAllDead.text = "Замутить мертвых"
+		local muteAllDead = SB_CreateButton(HomigradScoreboard)
+		muteAllDead:SetSize(180,25)
+		muteAllDead:SetPos(HomigradScoreboard:GetWide() / 2.45,HomigradScoreboard:GetTall() - 30)
+		muteAllDead.text = "Замутить Мёртвых"
 
 		function muteAllDead:Paint(w,h)
 			self.textColor = not muteAlldead and green or red
 			SB_PaintButton(self,w,h)
 		end
 
-		function muteAllDead:DoClick() muteAlldead = not muteAlldead end]]
+		function muteAllDead:DoClick() muteAlldead = not muteAlldead end
 
 		local func = TableRound().ScoreboardBuild
 

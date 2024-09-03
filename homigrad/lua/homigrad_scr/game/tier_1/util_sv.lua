@@ -13,7 +13,7 @@ local explosions = {
 }
 
 local function BoomSmall(ent)
-    if roundActiveName != "hl2coop" then
+    if roundActiveName != "hl2coop" or roundActiveName != "deathrun" then
         local SelfPos,PowerMult = ent:LocalToWorld(ent:OBBCenter()),2
 
         timer.Simple(math.Rand(0,.1),function()
@@ -37,7 +37,7 @@ local function BoomSmall(ent)
     
             JMod.WreckBuildings(ent, SelfPos, PowerMult/2)
             JMod.BlastDoors(ent, SelfPos, PowerMult)
-    
+            if roundActiveName != "hl2coop" or roundActiveName != "deathrun" then
             for i = 1, 3 do
                 local FireVec = ( VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
                 FireVec.z = FireVec.z / 2
@@ -52,13 +52,16 @@ local function BoomSmall(ent)
                 Flame:Spawn()
                 Flame:Activate()
             end
+        end
     
             timer.Simple(0,function()
+                if roundActiveName != "hl2coop" or roundActiveName != "deathrun" then
                 local ZaWarudo = game.GetWorld()
                 local Infl, Att = (IsValid(ent) and ent) or ZaWarudo, (IsValid(ent) and IsValid(ent.Owner) and ent.Owner) or (IsValid(ent) and ent) or ZaWarudo
                 util.BlastDamage(Infl,Att,SelfPos,120 * PowerMult,120 * PowerMult)
     
                 util.BlastDamage(Infl,Att,SelfPos,20 * PowerMult,1000 * PowerMult)
+                end
             end)
         end)
     end
@@ -66,7 +69,7 @@ end
 
 hook.Add( "EntityTakeDamage", "EntityDamageExample", function( target, dmginfo )
     if explosions[target:GetModel()] then
-        if roundActiveName != "hl2coop" then
+        if roundActiveName != "hl2coop" or roundActiveName != "deathrun" then
             local r = math.random(1,55)
             if dmginfo:IsDamageType(DMG_GENERIC+DMG_SLASH+DMG_CLUB+DMG_BULLET+DMG_CRUSH+DMG_FALL) then
                 dmginfo:SetDamage( 0 )

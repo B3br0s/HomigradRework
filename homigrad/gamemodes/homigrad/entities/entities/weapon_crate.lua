@@ -7,7 +7,6 @@ ENT.Spawnable = true
 ENT.AdminSpawnable = false
 
 numba = 0
--- List of possible weapons in the crate and their respective models
 local weaponList = {
     {class = "weapon_deagle", model = "models/pwb2/weapons/w_matebahomeprotection.mdl"},
     {class = "weapon_m14", model = "models/pwb/weapons/w_tmp.mdl"},
@@ -43,16 +42,15 @@ if CLIENT then
     local isPanelOpen = false
     local currentWeaponModel = ""
     local currentWeaponName = ""
-    local isLoading = false -- To track if the loading circle is active
-    local loadingProgress = 0 -- Progress of the loading circle
-    local modelPanel -- Define the model panel at a higher scope to reuse
-    local animationStartTime = 0 -- To track the time when the animation starts
-    local isClosing = false -- To check if the panel is in the closing animation state
+    local isLoading = false
+    local loadingProgress = 0
+    local modelPanel
+    local animationStartTime = 0
+    local isClosing = false
 
-    -- Function to draw the loading circle
     local function drawLoadingCircle(x, y, radius, thickness, progress)
         local segments = 64
-        local startAngle = -90 -- Start at the top
+        local startAngle = -90
         local endAngle = startAngle + (progress * 360)
 
         surface.SetDrawColor(255, 255, 255, 255)
@@ -70,16 +68,13 @@ if CLIENT then
         end
     end
 
-    -- Function to open the VGUI
     local function openVgui(ent)
         if isPanelOpen then return end
         isPanelOpen = true
-        animationStartTime = CurTime() -- Set animation start time
+        animationStartTime = CurTime()
 
-        -- Play the sound when the VGUI opens
         surface.PlaySound("items/ammocrate_open.wav")
 
-        -- Create the panel with an initial size of 0,81
         local panel = vgui.Create("DFrame")
         panel:SetSize(0, 81)
         panel:Center()
@@ -90,50 +85,42 @@ if CLIENT then
         panel:MakePopup()
 		isClosing = false
 
-        -- Set the full target size for the panel
         local fullWidth = 306
         local fullHeight = 81
-        local animationDuration = 0.1 -- Faster animation duration (0.1 seconds)
+        local animationDuration = 0.1
 
-        -- Panel's Think function to handle the animation
         panel.Think = function(self)
             local elapsedTime = CurTime() - animationStartTime
             local progress = math.Clamp(elapsedTime / animationDuration, 0, 1)
 
             if isClosing then
-                -- Reverse the size from full size to 0 (closing animation)
                 local newWidth = Lerp(1 - progress, 0, fullWidth)
                 self:SetSize(newWidth, fullHeight)
-                self:Center() -- Keep the panel centered
+                self:Center()
 
-                -- When the animation completes, actually close the panel
                 if progress >= 1 then
                     self:Remove()
                 end
             else
-                -- Opening animation: Lerp the size from 0 to full size
                 local newWidth = Lerp(progress, 0, fullWidth)
                 self:SetSize(newWidth, fullHeight)
-                self:Center() -- Keep the panel centered
+                self:Center()
             end
 
-            -- Close the panel if clicked outside
             local mx, my = input.GetCursorPos()
             local px, py = self:GetPos()
             local pw, ph = self:GetSize()
 
             if input.IsMouseDown(MOUSE_LEFT) and (mx < px or mx > (px + pw) or my < py or my > (py + ph)) then
-            if isClosing then return end -- Prevent multiple closures
-            isClosing = true -- Set the flag to initiate the closing animation
-            animationStartTime = CurTime() -- Reset the animation start time
+            if isClosing then return end
+            isClosing = true
+            animationStartTime = CurTime()
 			isPanelOpen = false
             net.Start("CloseCrate")
             net.WriteEntity(ent)
             net.SendToServer()
-			-- Play the close sound when the VGUI is closed
             surface.PlaySound("items/ammocrate_close.wav")
 
-            -- Stop the loading progress timer if the panel is closed early
             timer.Remove("LoadingProgress")
             isLoading = false
             end
@@ -143,12 +130,10 @@ if CLIENT then
         net.WriteEntity(ent)
         net.SendToServer()
 
-        -- Add a gradient to the background of the panel with 60% transparency
         panel.Paint = function(self, w, h)
-            local col1 = Color(15, 15, 15, 200)  -- 60% transparent
-            local col2 = Color(50, 50, 50, 200)  -- 60% transparent
+            local col1 = Color(15, 15, 15, 200)
+            local col2 = Color(50, 50, 50, 200)
 
-            -- Gradient from bottom to top
             for i = 0, h do
                 local ratio = i / h
                 local r = Lerp(ratio, col2.r, col1.r)
@@ -157,50 +142,40 @@ if CLIENT then
                 local a = Lerp(ratio, col2.a, col1.a)
 
                 surface.SetDrawColor(r, g, b, a)
-                surface.DrawRect(0, h - i, w, 1)  -- Move from bottom to top
+                surface.DrawRect(0, h - i, w, 1)
             end
 
-            -- Draw a white border around the panel
-            surface.SetDrawColor(15, 15, 15, 255)  -- White border color
-            surface.DrawOutlinedRect(0, 0, w, h, 2)  -- Border thickness of 2px
+            surface.SetDrawColor(15, 15, 15, 255)
+            surface.DrawOutlinedRect(0, 0, w, h, 2)
         end
 
-        -- Loot button to allow interaction
         local lootButton = vgui.Create("DButton", panel)
         lootButton:SetSize(73, 73)
-        lootButton:SetPos(115, 4) -- Adjust position to avoid overlapping edges
-        lootButton:SetText("")  -- No text needed since the model will be shown
+        lootButton:SetPos(115, 4)
+        lootButton:SetText("")
 
-        -- Create the model panel inside the button
         modelPanel = vgui.Create("DModelPanel", lootButton)
-        modelPanel:SetSize(lootButton:GetWide(), lootButton:GetTall()) -- Fit model to button
-        modelPanel.LayoutEntity = function(ent) return end  -- Stop the model from rotating
-        modelPanel:Center()  -- Center the model panel within the button
+        modelPanel:SetSize(lootButton:GetWide(), lootButton:GetTall())
+        modelPanel.LayoutEntity = function(ent) return end
+        modelPanel:Center()
 
-        -- **Important**: Disable mouse input on the model panel so it doesn't block the button click
         modelPanel:SetMouseInputEnabled(false)
 
-        -- Add the weapon name at the bottom of the button
         lootButton.Paint = function(self, w, h)
-            -- Draw button background
             draw.RoundedBox(8, 0, 0, w, h, Color(100, 100, 100, 50))
 
-            -- Draw the border
-            surface.SetDrawColor(255, 255, 255, 255)  -- White border color
-            surface.DrawOutlinedRect(0, 0, w, h, 1)  -- Border thickness of 1px
+            surface.SetDrawColor(255, 255, 255, 255)
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
 
-            -- Draw weapon name at the bottom of the button
             draw.SimpleText(currentWeaponName, "Trebuchet18", w / 2, h - 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-            -- If loading is active, draw the loading circle
             if isLoading then
                 drawLoadingCircle(w / 2, h / 2, 30, 6, loadingProgress)
             end
         end
 
-        -- When the button is clicked, start the loading process
         lootButton.DoClick = function()
-            if isLoading then return end -- Prevent multiple clicks
+            if isLoading then return end
 
             isLoading = true
             loadingProgress = 0
@@ -211,13 +186,11 @@ if CLIENT then
                 surface.PlaySound("eft_gear_sounds/gear_backpack_pickup.wav")
             end)
 
-            -- Start a timer to simulate the delay (3 seconds in this example)
             timer.Create("LoadingProgress", 0.01, 20, function()
-                loadingProgress = loadingProgress + (1 / 20) -- Update the progress
+                loadingProgress = loadingProgress + (1 / 20)
                 if loadingProgress >= 1 then
-                    isLoading = false -- Loading complete
+                    isLoading = false
 
-                    -- Request weapon loot from server after the delay
                     net.Start("LootWeaponFromCrate")
                     net.WriteEntity(ent)
                     net.SendToServer()
@@ -225,24 +198,20 @@ if CLIENT then
             end)
         end
 
-        -- Ensure the flag is reset when the panel is closed
         panel.OnClose = function()
-            if isClosing then return end -- Prevent multiple closures
-            isClosing = true -- Set the flag to initiate the closing animation
-            animationStartTime = CurTime() -- Reset the animation start time
+            if isClosing then return end
+            isClosing = true
+            animationStartTime = CurTime()
         end
     end
 
-    -- Update the button with the weapon 3D model when the weapon is received
     net.Receive("UpdateWeaponName", function()
-        currentWeaponName = net.ReadString()  -- Receive the weapon name
-        currentWeaponModel = net.ReadString()  -- Also read the weapon model path
+        currentWeaponName = net.ReadString()
+        currentWeaponModel = net.ReadString()
 
-        -- Ensure the model panel exists before updating
         if IsValid(modelPanel) then
             modelPanel:SetModel(currentWeaponModel)
 
-            -- Adjust camera angles for specific models
             if currentWeaponName == "Mateba" then
                 modelPanel:SetCamPos(Vector(7, 30, 2))
                 modelPanel:SetLookAng(Vector(0, -90, 0))
@@ -319,7 +288,6 @@ else
     end
 
     function ENT:Use(ply)
-        -- Only allow opening the crate if it has not been looted
         if ply:IsPlayer() then
             if not self.BeingLooted then
                 self.BeingLooted = true
@@ -359,20 +327,16 @@ else
         end
 		net.Start("UpdateWeaponName")
 		net.WriteString(weaponListTranslate[numba])
-		net.WriteString(weaponList[numba].model)  -- Send the model path to the client
+		net.WriteString(weaponList[numba].model)
         net.Send(ply)
     end)
 
-    -- Handle weapon looting
     net.Receive("LootWeaponFromCrate", function(len, ply)
         local crate = net.ReadEntity()
-
-        -- Make sure the entity is valid and the player is interacting with the correct crate
         if IsValid(crate) and crate:GetClass() == "weapon_crate" then
 
             local weapon = crate.WeaponIns
             if weapons.GetStored(weapon) then
-                -- Give the weapon to the player
                 if ply:HasWeapon(weapon) then
                     ply:ChatPrint("У тебя уже есть это оружие.")
                 else
@@ -381,7 +345,7 @@ else
 					numba = 10
 					net.Start("UpdateWeaponName")
 					net.WriteString(weaponListTranslate[numba])
-					net.WriteString(weaponList[numba].model)  -- Send the model path to the client
+					net.WriteString(weaponList[numba].model)
 					net.Send(ply)
                 end
             else
@@ -390,7 +354,7 @@ else
 				else
 					net.Start("UpdateWeaponName")
 					net.WriteString(weaponListTranslate[numba])
-					net.WriteString(weaponList[numba].model)  -- Send the model path to the client
+					net.WriteString(weaponList[numba].model)
 					net.Send(ply)
 					ply:ChatPrint("Ты еблан, тут пусто")
 				end

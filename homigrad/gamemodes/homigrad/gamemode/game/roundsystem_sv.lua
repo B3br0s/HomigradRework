@@ -55,9 +55,13 @@ function StartRound()
 		SetupSpawnPointsList()
 		SendSpawnPoint()
 	end
+	local mapName = game.GetMap()
 
 	if roundActiveName ~= roundActiveNameNext then
 		SetActiveRound(roundActiveNameNext)
+	end
+	if string.find(mapName, "d1") or string.find(mapName, "d2") or string.find(mapName, "d3") then
+		SetActiveRound("hl2coop")
 	end
 
 	local players = PlayersInGame()

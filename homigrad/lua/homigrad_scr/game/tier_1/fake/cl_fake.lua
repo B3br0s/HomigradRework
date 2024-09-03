@@ -43,3 +43,69 @@ hook.Add("Initialize", "CheckGamemode", function()
         end)
     end
 end)
+
+local ATTInformation = {
+    
+}
+
+hook.Add("PostDrawOpaqueRenderables", "Holosightes", function()
+    local ply = LocalPlayer()
+    local weapon = ply:GetActiveWeapon()
+    if not IsValid(weapon) or not weapon.ActivitySight then return end
+    local sight = weapon.ActivitySight
+    local infoatt = ATTInformation[weapon:GetClass()][sight]
+    local sightsam = weapon.AttachmentsOBJ[sight]
+    local material = Material(infoatt.ReticleMaterial, "noclamp nocull smooth")
+    local correctpos = IsValid(weapon.WModel) and weapon.WModel or weapon
+    render.UpdateScreenEffectTexture()
+    render.ClearStencil()
+    render.SetStencilEnable(true)
+    render.SetStencilCompareFunction(STENCIL_ALWAYS)
+    render.SetStencilPassOperation(STENCIL_REPLACE)
+    render.SetStencilFailOperation(STENCIL_KEEP)
+    render.SetStencilZFailOperation(STENCIL_REPLACE)
+    render.SetStencilWriteMask(255)
+    render.SetStencilTestMask(255)
+
+    render.SetBlend(0)
+
+    render.SetStencilReferenceValue(1)
+
+    sightsam:DrawModel()
+    
+    render.SetBlend(1)
+
+    render.SetStencilPassOperation(STENCIL_KEEP)
+    render.SetStencilCompareFunction(STENCIL_EQUAL)
+
+	render.DepthRange(0.993, 0)
+	render.SetMaterial(material or Material("empty"))
+    local size = weapon:GetNWFloat("ReticleSize")
+    local attachment = correctpos:GetAttachment(1)
+    if not attachment then return end
+	local pos = attachment.Pos
+	local ang = sightsam:GetAngles()
+	ang:RotateAroundAxis(ang:Right(), weapon:GetNWFloat("AngleRightAxis", 0))
+    local up = ang:Up()
+    local right = ang:Right()
+    local forward = ang:Forward()
+    pos = pos + forward * 100 + up * weapon:GetNWInt("ReticlePosUp", 0) + right * weapon:GetNWInt("ReticlePosRight", 0)
+	local xr, yr = pos:ToScreen().x, pos:ToScreen().y
+	local lighted = size + 0.7
+	render.DrawQuad(
+	    	pos + (up * lighted / 2) - (right * lighted / 2),
+	    	pos + (up * lighted / 2) + (right * lighted / 2),
+        	pos - (up * lighted / 2) + (right * lighted / 2),
+        	pos - (up * lighted / 2) - (right * lighted / 2),
+    	Color(162,165,165)
+    )
+    render.DrawQuad(
+        	pos + (up * size / 2) - (right * size / 2),
+        	pos + (up * size / 2) + (right * size / 2),
+        	pos - (up * size / 2) + (right * size / 2),
+        	pos - (up * size / 2) - (right * size / 2),
+        standart
+    )
+	render.DepthRange(0, 1)
+    render.SetStencilEnable(false)
+end)

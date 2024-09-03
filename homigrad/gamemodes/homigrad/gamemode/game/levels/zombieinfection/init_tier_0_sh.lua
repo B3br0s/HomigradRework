@@ -9,7 +9,7 @@ zombieinfection.red = {"Инфицированные",Color(255,55,55),
 
 zombieinfection.green = {"Люди",Color(55,55,255),
     weapons = {"weapon_radio","weapon_hands","weapon_kabar","medkit","painkiller","weapon_hg_f1"},
-    main_weapon = {"weapon_spas12","weapon_mp7","weapon_minu14"},
+    main_weapon = {"weapon_spas12","weapon_mp7","weapon_hands","weapon_hands"},
     secondary_weapon = {"weapon_beretta","weapon_fiveseven","weapon_hk_usp","weapon_p220"},
     models = tdm.models
 }

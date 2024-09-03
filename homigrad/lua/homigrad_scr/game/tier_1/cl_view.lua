@@ -5,7 +5,7 @@ local n, e, r, o
 local d = Material('materials/scopes/scope_dbm.png')
 CameraSetFOV = 120
 
-CreateClientConVar("hg_fov","130",true,false,nil,90,130)
+CreateClientConVar("hg_fov","120",true,false,nil,90,120)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
 
 CreateClientConVar("hg_bodycam","0",true,false,nil,0,1)
@@ -324,6 +324,7 @@ local weps = {
 ["weapon_spas12"] = true,
 ["weapon_xm8_lmg"] = true,
 ["weapon_hk_arbalet"] = true,
+["weapon_mk18"] = true,
 ["weapon_vector"] = true,
 ["weapon_doublebarrel"] = true,
 ["weapon_doublebarrel_dulo"] = true,
@@ -506,7 +507,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 	end
 
-	fov = Lerp(ScopeLerp,fov,75)
+	fov = Lerp(ScopeLerp,fov,CameraSetFOV)
 
 	angRecoil[3] = 0
 	
@@ -520,7 +521,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 				if oldShootTime ~= lastShootTime then
 					oldShootTime = lastShootTime
 					startRecoil = CurTime() + 0.05
-					recoil = math.Rand(0.9,1.1) * (scope and 0.5 or 0.5)
+					recoil = math.Rand(0.5,1.1) * (scope and 0.5 or 0.5)
 				end
 			end
 		end
@@ -529,7 +530,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 		fov = fov - anim_pos * (scope and 2 or 1)
 		angRecoil[3] = anim_pos * (scope and 10 or 5)
-
+	if wep.sightyes == false then
 		if weaponClass == "weapon_glock18" then
 			--Vector(3.85,10,1.45)
 			vecWep = hand.Pos + hand.Ang:Up() * 2.6 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
@@ -537,7 +538,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_mag7" then
 			--Vector(3.85,10,1.45)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.8 - hand.Ang:Forward() * 11 + hand.Ang:Right() * 0.83
+			vecWep = hand.Pos + hand.Ang:Up() * 4.15 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.83
 			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_glock" then
@@ -770,6 +771,14 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
 			angWep = hand.Ang + Angle(-24,0,0)
 		end
+		if weaponClass == "weapon_mk18" then
+			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
+			angWep = hand.Ang + Angle(-24,0,0)
+		end
+	else
+		vecWep = hand.Pos + hand.Ang:Up() * wep.SightPos.x - hand.Ang:Forward() * wep.SightPos.x + hand.Ang:Right() * wep.SightPos.z
+		angWep = hand.Ang + Angle(0,0,0)
+	end
 	end
 
 
@@ -959,13 +968,14 @@ hook.Add("Think","mouthanim",function()
 
 		local flexes = {
 			ent:GetFlexIDByName( "jaw_drop" ),
+			ent:GetFlexIDByName( "jaw_clencher" ),
 			ent:GetFlexIDByName( "left_part" ),
 			ent:GetFlexIDByName( "right_part" ),
 			ent:GetFlexIDByName( "left_mouth_drop" ),
 			ent:GetFlexIDByName( "right_mouth_drop" )
 		}
 
-		local weight = ply:IsSpeaking() && math.Clamp( ply:VoiceVolume() * 5, 0, 12 ) || 0
+		local weight = ply:IsSpeaking() && math.Clamp( ply:VoiceVolume() * 15, 0, 12 ) || 0
 
 		for k, v in pairs( flexes ) do
 			ent:SetFlexWeight( v, weight )

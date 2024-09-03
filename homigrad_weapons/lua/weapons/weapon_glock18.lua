@@ -52,4 +52,6 @@ SWEP.WorldModel				= "models/csgo/weapons/w_pist_fiveseven.mdl"
 SWEP.vbwPos = Vector(0,0,0)
 SWEP.addPos = Vector(0,0,0)
 SWEP.addAng = Angle(0.4,0,0)
+SWEP.AimPosition = Vector(3.85,10,1.45)
+SWEP.AimAngle = Angle(0,0,0)
 end
