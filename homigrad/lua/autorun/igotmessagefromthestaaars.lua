@@ -3,7 +3,7 @@ if SERVER then
 end
 
 if CLIENT then
-local enabled = flase
+local enabled = true
 
     local runAnimActivity = ACT_HL2MP_RUN_FAST
 

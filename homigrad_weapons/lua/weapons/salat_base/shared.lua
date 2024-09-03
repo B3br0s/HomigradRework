@@ -132,9 +132,9 @@ hook.Add("HUDPaint","admin_hitpos",function()
 
 		local att = wep:GetAttachment(att)
 
-		local att2 = wep:LookupAttachment("muzzle")
+	--	local att2 = wep:LookupAttachment("muzzle")
 
-		local att2 = wep:GetAttachment(att)
+	--	local att2 = wep:GetAttachment(att)
 		
 		if not att then
 			local Pos,Ang = wep:GetPosAng()
@@ -331,11 +331,11 @@ function SWEP:DrawWorldModel()
         	self:SetSubMaterial( 0, self:GetNWString( "skin" ) )
        		self:DrawModel()
     	end
-		-- аттачменты
+		-- аттачменты 
 		if self.ValidAttachments then
 			for attachment, info in pairs(self.ValidAttachments) do
 				if self:GetNWBool(attachment, false) == true then
-					if not self.ATTObjects[attachment] then
+					if not self.ATTObjects[attachment] then	
 						self.ATTObjects[attachment] = ClientsideModel(info.model)
 						self.ATTObjects[attachment]:SetPos(ply:GetPos())
 						self.ATTObjects[attachment]:SetParent(ply)
@@ -351,6 +351,14 @@ function SWEP:DrawWorldModel()
 								self.SightPos.y = self.AimPosInfo[1].y
 								self.SightPos.z = self.AimPosInfo[1].z
 								self.SightAng = self.AimPosInfo[2]
+							end
+						end
+						if info.holosight then
+							if not self.ACTSight then
+								self.ACTSight = {
+									attachment
+								}
+								self.ActivitySight = self.ACTSight[1]
 							end
 						end
 					else
@@ -381,6 +389,12 @@ function SWEP:DrawWorldModel()
 						self.SightPos.y = 0
 						self.SightPos.z = 0
 						self.SightAng = Angle(0,0,0)
+					end
+
+					if self.ACTSight then
+						self.ActivitySight = self.ACTSight[1]
+					else
+						self.ActivitySight = nil
 					end
 				end
 			end
@@ -473,7 +487,7 @@ function SWEP:RicochetOrPenetrate(initialTrace)
 		})
 	end
 end
-
+SWEP.SightPos = Vector(0,0,0)
 homigrad_weapons = homigrad_weapons or {}
 
 function SWEP:Initialize()
@@ -523,6 +537,7 @@ end
 
 if CLIENT then
 	net.Receive("huysound",function(len)
+		local entwep = net.ReadEntity()
 		local pos = net.ReadVector()
 		local sound = net.ReadString()
 		local farsound = net.ReadString() or "m9/m9_dist.wav"
@@ -532,7 +547,11 @@ if CLIENT then
 
 		local dist = LocalPlayer():EyePos():Distance(pos)
 		if ent:IsValid() and dist < 1100 then
-			ent:EmitSound(sound,ent.Supressed and 35 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
+			if entwep:GetNWBool("Suppressor", false) != true then
+				ent:EmitSound(sound,125,math.random(100,120),1,CHAN_WEAPON,0,0)
+			else
+				ent:EmitSound(entwep.Primary.SoundSupresor,125,math.random(100,120),1,CHAN_WEAPON,0,0)
+			end
 		elseif ent:IsValid() then
 			ent:EmitSound(farsound,ent.Supressed and 35 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
 		end
@@ -568,13 +587,19 @@ function SWEP:PrimaryAttack()
 	
 	if SERVER then
 		net.Start("huysound")
+		net.WriteEntity(self)
 		net.WriteVector(self:GetPos())
 		net.WriteString(self.Primary.Sound)
 		net.WriteString(self.Primary.SoundFar)
 		net.WriteEntity(self:GetOwner())
 		net.Broadcast()
 	else
-		self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+		if self:GetNWBool("Suppressor", false) != true then
+			self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+		else
+			self:EmitSound(self.Primary.SoundSupresor,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+
+		end
 	end
 	
 	local dmg = self.Primary.Damage

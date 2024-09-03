@@ -16,6 +16,8 @@ function zombieinfection.StartRoundSV(data)
 			ply.zombieinfectionForceT = nil
 
 			ply:SetTeam(2)
+
+			ply:SetNWBool("GivenWeapon",false)
 			
 		end
     end
@@ -38,21 +40,22 @@ function zombieinfection.StartRoundSV(data)
 
 			ply.Organs['artery']=0
 
-			ply.Blood = 4000
+		--	ply.Organs['spine']=0
 
-			ply.Organs['spine']=0
-
-			timer.Simple(10.7,function ()
+			timer.Simple(5.7,function ()
 				ply:Kill()
 			end)
 	
 			ply.virusvichblya = true
 
 			ply:SetNWBool("INFECTED",true)
+
+
+    sound.Play("homigrad/player/male/male_cough"..math.random(1,5)..".wav", ply:GetPos())
 		end
 	end)
 
-	timer.Simple(26,function ()
+	timer.Simple(35,function ()
 		zombieinfection.respawned = false
 	end)
 	tdm.CenterInit()
@@ -96,18 +99,37 @@ function zombieinfection.PlayerSpawn(ply,teamID)
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
 	ply:SetPlayerColor(Color(0,0,0):ToVector())
 
-    if teamID == 2 then
-		ply:Give("weapon_hands")
-		tdm.GiveSwep(ply,teamTbl.main_weapon)
-	    tdm.GiveSwep(ply,teamTbl.secondary_weapon)
-		ply:GiveAmmo(500,"4.6 x30mm",true)
-		ply:GiveAmmo(500,"9х19 mm Parabellum",true)
-		ply:GiveAmmo(500,"12/70 beanbag",true)
-    end
+	if teamID == 2 then
+		ply:SetNWBool("GivenWeapon", false) -- Initially, no weapon is given
+		ply:Give("weapon_hands") -- Give the player "weapon_hands"
+	
+		-- Ensure that we only give weapons if "GivenWeapon" is false (no weapons given yet)
+		if not ply:GetNWBool("GivenWeapon") then
+			timer.Simple(21, function()
+				if not IsValid(ply) then return end -- Make sure the player is still valid
+				
+				ply:SetNWBool("GivenWeapon", true) -- Mark weapons as given
+				tdm.GiveSwep(ply, teamTbl.main_weapon) -- Give main weapon
+				tdm.GiveSwep(ply, teamTbl.secondary_weapon) -- Give secondary weapon
+				ply:GiveAmmo(500, "4.6 x30mm", true) -- Give ammo
+				ply:GiveAmmo(500, "9х19 mm Parabellum", true) -- Give ammo
+				ply:GiveAmmo(500, "12/70 beanbag", true) -- Give ammo
+			end)
+	
+			timer.Simple(40, function()
+				if not IsValid(ply) then return end -- Ensure the player is valid
+				if ply:GetNWBool("GivenWeapon") then
+					ply:SetNWBool("GivenWeapon", false) -- Reset "GivenWeapon" after 25 seconds
+				end
+			end)
+		end
+	end
+	
+
 	ply.allowFlashlights = false
 end
 
-function zombieinfection.PlayerInitialSpawn(ply) ply:SetTeam(2) end
+function zombieinfection.PlayerInitialSpawn(ply) ply:SetTeam(2) ply:SetNWBool("GivenWeapon",false) end
 
 function zombieinfection.PlayerCanJoinTeam(ply,teamID)
 	ply.zombieinfectionForceT = nil

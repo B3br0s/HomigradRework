@@ -19,6 +19,7 @@ SWEP.Primary.Cone = 0.05
 SWEP.Primary.Damage = 1.7 * 45
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "snd_jack_hmcd_sht_close.wav"
+SWEP.Primary.SoundSupresor = "weapons/darsu_eft/m4a1/fire_new/m4a1_fire_silenced_distant_loop1.ogg"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_sht_far.wav"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
@@ -62,4 +63,35 @@ SWEP.CLR = 0.025
 
 SWEP.addAng = Angle(2.5,0.1,0)
 SWEP.addPos = Vector(0,0,0)
+SWEP.ValidAttachments = {
+    ["Eotech553"] = {
+        positionright = 0.5,
+        positionforward = 10,
+        positionup = -5.7,
+
+        angleforward = 180,
+        angleright = 5,
+        angleup = 0,
+
+        holosight = true,
+        newsight = true,
+        aimpos = Vector(5.5,4,1.20),
+        aimang = Angle(-1,0,0),
+
+        scale = 0.8,
+        model = "models/weapons/arc9_eft_shared/atts/optic/eft_optic_553.mdl",
+    },
+    ["Suppressor"] = {
+        positionright = 0.5,
+        positionforward = 29,
+        positionup = -7.45,
+
+        angleforward = 180,
+        angleright = 8,
+        angleup = 0,
+
+        scale = 1.4,
+        model = "models/weapons/arc9_eft_shared/atts/muzzle/silencer_all_rotor_43_v1.mdl",
+    }
+}
 end

@@ -52,4 +52,23 @@ SWEP.vbwPos = Vector(6,-8.7,2)
 SWEP.vbwAng = Angle(0,5,-90)
 SWEP.addPos = Vector(0,0,0)
 SWEP.addAng = Angle(0.25,0.025,0)
+SWEP.ValidAttachments = {
+    ["Eotech553"] = {
+        positionright = 0.96,
+        positionforward = 7,
+        positionup = -6.8,
+
+        angleforward = 180,
+        angleright = 5,
+        angleup = 0,
+
+        holosight = true,
+        newsight = true,
+        aimpos = Vector(7,8,0.88),
+        aimang = Angle(-6,0,0),
+
+        scale = 1,
+        model = "models/weapons/arc9_eft_shared/atts/optic/eft_optic_553.mdl",
+    }
+}
 end

@@ -46,4 +46,22 @@ if engine.ActiveGamemode() == "homigrad" then
     
     SWEP.addAng = Angle(0.5,-0.35,0)
     SWEP.addPos = Vector(0,0,0)
+
+    SWEP.ValidAttachments = {
+        ["Hexagon"] = {
+            positionright = 3.5,
+            positionforward = 32,
+            positionup = -5,
+    
+            angleforward = 180,
+            angleright = 2,
+            angleup = 5,
+    
+            suppressingsound = true,
+            newsight = false,
+            
+            scale = 1,
+            model = "models/weapons/arc9/darsu_eft/mods/silencer_12g_hexagon_12k.mdl",
+        }
+    }
     end

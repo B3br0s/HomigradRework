@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+ if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "M4A1"
@@ -59,21 +59,21 @@ SWEP.OffsetVec = Vector(10,-2.6,2)
 
 SWEP.ValidAttachments = {
     ["Elcan"] = {
-        positionright = 0,
-        positionforward = 10,
-        positionup = -5,
+        positionright = 0.96,
+        positionforward = 7,
+        positionup = -5.2,
 
         angleforward = 180,
-        angleright = 0,
+        angleright = 5,
         angleup = 0,
 
+        holosight = true,
         newsight = true,
-        aimpos = Vector(5.05,7,0.5),
+        aimpos = Vector(5.55,7,0.725),
         aimang = Angle(-5,0,0),
 
         scale = 1,
         model = "models/weapons/arc9/darsu_eft/mods/scope_elcan_specter_hco.mdl",
     }
 }
-
 end

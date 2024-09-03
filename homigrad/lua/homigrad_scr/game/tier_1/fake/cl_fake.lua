@@ -1,51 +1,36 @@
--- Make sure the script waits until everything is fully loaded
-hook.Add("Initialize", "CheckGamemode", function()
-    if engine.ActiveGamemode() == "homigrad" then
-        -- Now everything is loaded, we can proceed safely
-
-        local iconKA1337 = Material("icon32/hand_point_090") -- Load the material once
-        local drawIcon = false
-        local pos = Vector(0, 0, 0) -- Default vector
-
-        -- Net receiver
-        net.Receive("RightHandInDICKator", function()
-            pos = net.ReadVector() -- Update the position
-            local isenabled = net.ReadBool() -- Receive the enable/disable flag
-
-            if isenabled then
-                drawIcon = true
-            else
-                drawIcon = false
-            end
-
-            -- Debug print to ensure position and enable flag are correct
-            print("Received Position: ", pos)
-            print("Is Enabled: ", isenabled)
-        end)
-
-        -- Hook to draw the icon on the screen
-        hook.Add("HUDPaint", "DrawRightHandIndicator", function()
-            if drawIcon then
-                -- Make sure the position is valid
-                if pos then
-                    local screenPos = pos:ToScreen() -- Convert world position to 2D screen coordinates
-
-                    -- Check if the position is within screen bounds
-                    if screenPos.visible then
-                        surface.SetDrawColor(255, 255, 255, 255) -- Set icon color (white)
-                        surface.SetMaterial(iconKA1337) -- Set the material to the icon texture
-                        surface.DrawTexturedRect(screenPos.x - 16, screenPos.y - 16, 32, 32) -- Draw the icon (32x32 pixels, centered)
-                    else
-                        print("Position not visible on screen")
-                    end
-                end
-            end
-        end)
-    end
-end)
-
 local ATTInformation = {
-    
+    ["weapon_m4a1"] = {
+        ["Elcan"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_elcan_specter_hco_lod0_mark.png",
+            ReticleSize = 10,
+            ReticleUp = 5.8,
+            ReticleRight = 0,
+        }
+    },
+    ["weapon_r8"] = {
+        ["Leapers"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_base_aimpoint_acro_p1_mark.png",
+            ReticleSize = 15,
+            ReticleUp = 4,
+            ReticleRight = -0.2,
+        }
+    },
+    ["weapon_m249"] = {
+        ["Eotech553"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_eotech_xps3-0_marks.png",
+            ReticleSize = 10,
+            ReticleUp = 6,
+            ReticleRight = -0.3,
+        }
+    },
+    ["weapon_remington870"] = {
+        ["Eotech553"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_eotech_xps3-0_marks.png",
+            ReticleSize = 5,
+            ReticleUp = 9,
+            ReticleRight = -0.3,
+        }
+    }
 }
 
 hook.Add("PostDrawOpaqueRenderables", "Holosightes", function()
@@ -54,9 +39,9 @@ hook.Add("PostDrawOpaqueRenderables", "Holosightes", function()
     if not IsValid(weapon) or not weapon.ActivitySight then return end
     local sight = weapon.ActivitySight
     local infoatt = ATTInformation[weapon:GetClass()][sight]
-    local sightsam = weapon.AttachmentsOBJ[sight]
+    local sightsam = weapon.ATTObjects[sight]
     local material = Material(infoatt.ReticleMaterial, "noclamp nocull smooth")
-    local correctpos = IsValid(weapon.WModel) and weapon.WModel or weapon
+    local correctpos = weapon
     render.UpdateScreenEffectTexture()
     render.ClearStencil()
     render.SetStencilEnable(true)
@@ -78,33 +63,25 @@ hook.Add("PostDrawOpaqueRenderables", "Holosightes", function()
     render.SetStencilPassOperation(STENCIL_KEEP)
     render.SetStencilCompareFunction(STENCIL_EQUAL)
 
-	render.DepthRange(0.993, 0)
+	render.DepthRange(0.93, 0)
 	render.SetMaterial(material or Material("empty"))
-    local size = weapon:GetNWFloat("ReticleSize")
+    local size = infoatt.ReticleSize
     local attachment = correctpos:GetAttachment(1)
     if not attachment then return end
 	local pos = attachment.Pos
 	local ang = sightsam:GetAngles()
-	ang:RotateAroundAxis(ang:Right(), weapon:GetNWFloat("AngleRightAxis", 0))
     local up = ang:Up()
     local right = ang:Right()
     local forward = ang:Forward()
-    pos = pos + forward * 100 + up * weapon:GetNWInt("ReticlePosUp", 0) + right * weapon:GetNWInt("ReticlePosRight", 0)
+    pos = pos + forward * 100 + up * infoatt.ReticleUp + right * infoatt.ReticleRight
 	local xr, yr = pos:ToScreen().x, pos:ToScreen().y
 	local lighted = size + 0.7
-	render.DrawQuad(
-	    	pos + (up * lighted / 2) - (right * lighted / 2),
-	    	pos + (up * lighted / 2) + (right * lighted / 2),
-        	pos - (up * lighted / 2) + (right * lighted / 2),
-        	pos - (up * lighted / 2) - (right * lighted / 2),
-    	Color(162,165,165)
-    )
     render.DrawQuad(
         	pos + (up * size / 2) - (right * size / 2),
         	pos + (up * size / 2) + (right * size / 2),
         	pos - (up * size / 2) + (right * size / 2),
         	pos - (up * size / 2) - (right * size / 2),
-        standart
+        Color(255,255,255,255)
     )
 	render.DepthRange(0, 1)
     render.SetStencilEnable(false)

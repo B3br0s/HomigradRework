@@ -190,7 +190,6 @@ function Gib_Input(rag,bone,dmgInfo,player)
 		--	end
 
 		--	if GetGlobalBool("BloodGoreEnabled") then
-				BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
 				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
 		--	end
 

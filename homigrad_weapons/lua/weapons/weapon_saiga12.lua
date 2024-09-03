@@ -24,7 +24,7 @@ SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
 SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
 SWEP.ShootWait = 0.15
-SWEP.NumBullet = 12
+SWEP.NumBullet = 8
 SWEP.Sight = true
 SWEP.TwoHands = true
 
@@ -60,4 +60,21 @@ SWEP.vbwPos = Vector(0,0,0)
 SWEP.vbwAng = Angle(0,0,0)
 
 SWEP.addAng = Angle(1,0.1,0)
+SWEP.ValidAttachments = {
+    ["salvo"] = {
+        positionright = 0.89,
+        positionforward = 23,
+        positionup = -6.78,
+
+        angleforward = 180,
+        angleright = 10,
+        angleup = 0,
+
+        suppressingsound = true,
+        newsight = false,
+        
+        scale = 0.7,
+        model = "models/weapons/arc9/darsu_eft/mods/silencer_base_silencerco_salvo_12g.mdl",
+    }
+}
 end

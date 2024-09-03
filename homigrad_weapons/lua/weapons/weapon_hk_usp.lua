@@ -53,4 +53,22 @@ SWEP.vbwPos = Vector(6.5,3.4,-4)
 
 SWEP.addPos = Vector(0,0,-0.9)
 SWEP.addAng = Angle(-0.4,0.5,0)
+
+SWEP.ValidAttachments = {
+    ["wavedd"] = {
+        positionright = 1.545,
+        positionforward = 9.7,
+        positionup = -4.8,
+
+        angleforward = 180,
+        angleright = 10,
+        angleup = 0,
+
+        suppressingsound = true,
+        newsight = false,
+        
+        scale = 1,
+        model = "models/weapons/arc9/darsu_eft/mods/silencer_wave_dd_wave_qd_supressor_multi.mdl",
+    }
+}
 end

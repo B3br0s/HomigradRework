@@ -21,6 +21,7 @@ SWEP.Primary.Damage = 1.7 * 25
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "ak74/ak74_fp.wav"
 SWEP.Primary.SoundFar = "ak74/ak74_dist.wav"
+SWEP.Primary.SoundSupresor = "ak74/ak74_suppressed_tp.wav"
 SWEP.Primary.Force = 140/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.075
@@ -51,4 +52,19 @@ SWEP.ViewModel				= "models/pwb/weapons/w_aks74u.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_aks74u.mdl"
 
 SWEP.vbwPos = Vector(5,-6,-6)
+
+SWEP.ValidAttachments = {
+    ["Suppressor"] = {
+        positionright = 0.89,
+        positionforward = 20,
+        positionup = -6.32,
+
+        angleforward = 180,
+        angleright = 10,
+        angleup = 0,
+        
+        scale = 1,
+        model = "models/weapons/arc9/darsu_eft/mods/silencer_12g_hexagon_12k.mdl",
+    },
+}
 end

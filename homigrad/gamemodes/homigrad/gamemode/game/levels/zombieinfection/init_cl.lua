@@ -8,8 +8,17 @@ function zombieinfection.Scoreboard_Status(ply)
 	return "Неизвестно",colorSpec
 end
 
+surface.CreateFont("CenterTextFont", {
+    font = "Trebuchet24", -- Font name
+    size = 48,            -- Font size
+    weight = 500,         -- Font weight (thickness)
+    antialias = true,     -- Enable antialiasing
+})
+
+
 local aABASDBASDBABDSB = true
 local aABASDBASDBABDSBa = true
+local aABASDBASDBABDSBaa = true
 
 local green = Color(0,125,0)
 local white = Color(255,255,255)
@@ -68,7 +77,7 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
 				aABASDBASDBABDSB = false
 				surface.PlaySound("infectionround/infectionroundstart.wav")
 				timer.Simple(10,function() aABASDBASDBABDSB = true end )
-				timer.Simple(14.5,function() FlashScreen() end )
+				timer.Simple(14.2,function() FlashScreen() end )
 			end
 		end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.1,0.1)
@@ -77,8 +86,16 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
         return
     end
 	if time > 0 then
-		draw.SimpleText("До рассвета : ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
-		draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2 + 200,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+	--	draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+    --draw.SimpleText("До рассвета : ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+    draw.SimpleText("1 AM","HomigradFont",ScrW() / 2,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+        if time == 560 then
+			if aABASDBASDBABDSBaa == true then
+				aABASDBASDBABDSBaa = false
+                timer.Simple(10,function() aABASDBASDBABDSBaa = true end )
+				surface.PlaySound("ambient/alarms/warningbell1.wav")
+			end
+		end
 	end
 	green.a = white2.a
 
@@ -88,5 +105,5 @@ end
 function zombieinfection.PlayerClientSpawn()
 	if LocalPlayer():Team() ~= 3 then return end
 
-	showRoundInfo = CurTime() + 18
+	showRoundInfo = CurTime() + 15
 end

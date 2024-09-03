@@ -77,16 +77,7 @@ net.Receive("blood particle headshoot",function()
 
 	local r = random(20,25)
 
-	for i = 1,r do
-		local vel = Vector(vel[1],vel[2],vel[3])
-		vel:Rotate(Angle(Rand(-15,15) * Rand(0.9,1.1),Rand(-15,15) * Rand(0.9,1.1)))
-
-		addBloodPart(Lerp(i / r * Rand(0.9,1.1),l1,l2),vel,mats[random(1,#mats)],random(20,30),random(20,30))
-	end
-
-	for i = 10,20 do
-		addBloodPart2(pos,vecZero,mats[random(1,#mats)],random(20,30),random(20,30),Rand(20,30))
-	end
+	addBloodPart(pos,dir,mats[random(1,#mats)],r,r)
 end)
 
 concommand.Add("testpart",function()

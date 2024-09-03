@@ -771,14 +771,17 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
 			angWep = hand.Ang + Angle(-24,0,0)
 		end
-		if weaponClass == "weapon_mk18" then
+	--[[	if weaponClass == "weapon_mk18" then
 			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
 			angWep = hand.Ang + Angle(-24,0,0)
-		end
+		end]]
 	else
-		vecWep = hand.Pos + hand.Ang:Up() * wep.SightPos.x - hand.Ang:Forward() * wep.SightPos.x + hand.Ang:Right() * wep.SightPos.z
-		angWep = hand.Ang + Angle(0,0,0)
+		if weaponClass != "weapon_taser" then
+			vecWep = hand.Pos + hand.Ang:Up() * wep.SightPos.x - hand.Ang:Forward() * wep.SightPos.x + hand.Ang:Right() * wep.SightPos.z
+			angWep = hand.Ang + Angle(0,0,0)
+		end
 	end
+	
 	end
 
 
@@ -870,7 +873,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local val = math.min(math.Round(playerFPS / 120,1),1)
 	
 	diffpos = LerpFT(0.1,diffpos,(output_pos - (oldview.origin or output_pos)) / 6)
-	diffang = LerpFT(0.1,diffang,(output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 50 + (lply:EyeAngles() + (lply:GetActiveWeapon().eyeSpray or angZero) * 1000):Forward() * anim_pos * 1)
+	diffang = LerpFT(0.1,diffang,(output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 20 + (lply:EyeAngles() + (lply:GetActiveWeapon().eyeSpray or angZero) * 1000):Forward() * anim_pos * 1)
 
 	if RENDERSCENE then
 		if hg_cool_camera:GetBool() then
