@@ -55,6 +55,29 @@ SWEP.WorldModel				= "models/pwb2/weapons/w_m4super90.mdl"
 SWEP.vbwPos = Vector(-2,-3.7,2)
 SWEP.vbwAng = Angle(5,-30,0)
 
+SWEP.addPos = Vector(0,0,0)
+SWEP.addAng = Angle(1.7,0,0)
+
+SWEP.ValidAttachments = {
+    ["Eotech553"] = {
+        positionright = 1.05,
+        positionforward = 10,
+        positionup = -5.4,
+
+        angleforward = 180,
+        angleright = 10,
+        angleup = 0,
+
+        holosight = true,
+        newsight = true,
+        aimpos = Vector(5,4,0.65),
+        aimang = Angle(5,-30,0),
+
+        scale = 0.8,
+        model = "models/weapons/arc9_eft_shared/atts/optic/eft_optic_553.mdl",
+    }
+}
+
 function SWEP:ApplyEyeSpray()
     self.eyeSpray = self.eyeSpray - Angle(5,math.Rand(-2,2),0)
 end

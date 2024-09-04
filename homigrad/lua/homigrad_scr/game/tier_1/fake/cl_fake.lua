@@ -63,7 +63,7 @@ local ATTInformation = {
         ["Eotech553"] = {
             ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_eotech_xps3-0_marks.png",
             ReticleSize = 10,
-            ReticleUp = 6,
+            ReticleUp = 1,
             ReticleRight = -0.3,
         }
     },
@@ -72,6 +72,14 @@ local ATTInformation = {
             ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_eotech_xps3-0_marks.png",
             ReticleSize = 5,
             ReticleUp = 9,
+            ReticleRight = -0.3,
+        }
+    },
+    ["weapon_m3super"] = {
+        ["Eotech553"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_eotech_xps3-0_marks.png",
+            ReticleSize = 10,
+            ReticleUp = -1.5,
             ReticleRight = -0.3,
         }
     }

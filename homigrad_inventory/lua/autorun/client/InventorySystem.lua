@@ -1,4 +1,4 @@
---[[if CLIENT then
+if CLIENT then
     local WeaponInventory
     local InventoryOpen = false
     local dragPanel = nil
@@ -8,7 +8,12 @@
     local Weapons = {}
     local daun = false
     local PlayerModelPanel = nil
+    local PlayerModelAlpha = 0 -- Variable for player model transparency
     local dragText = ""
+
+    hook.Add("HUDShouldDraw", "HideDefaultWeaponSelection", function(name)
+        if name == "CHudWeaponSelection" then return false end
+    end)
 
     local function DrawBlur(panel, amount)
         local x, y = panel:LocalToScreen(0, 0)
@@ -36,7 +41,7 @@
                     RunConsoleCommand("use", slot.Weapon:GetClass())
                     RunConsoleCommand("say", "*drop")
                     WeaponInventory:CloseInventory()
-                    timer.Simple(0.1,function ()
+                    timer.Simple(0.1, function ()
                         WeaponInventory:OpenInventory() 
                     end)
                 end
@@ -60,17 +65,12 @@
             if self.Weapon and IsValid(self.Weapon) then
                 draw.SimpleText(self.Weapon:GetPrintName(), "DermaDefaultBold", w / 2, h - 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
             end
-
-            if dragPanel == self then
-                draw.SimpleText(dragText, "DermaDefaultBold", self:GetPos() + self:GetSize() / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            end
         end
 
         function slot:OnMousePressed(mousecode)
             if mousecode == MOUSE_LEFT then
                 if self.Weapon then
                     dragPanel = self
-                    dragText = self.Weapon:GetPrintName()
                 end
             elseif mousecode == MOUSE_RIGHT then
                 CreateContextMenu(self)
@@ -80,11 +80,12 @@
         function slot:OnMouseReleased(mousecode)
             if mousecode == MOUSE_LEFT and dragPanel then
                 if self:IsHovered() and self ~= dragPanel then
+                    -- Swap weapons between the two slots
                     self.Weapon, dragPanel.Weapon = dragPanel.Weapon, self.Weapon
-                    dragPanel = nil
-                    dragText = ""
                     surface.PlaySound("buttons/button14.wav")
                 end
+                dragPanel = nil
+                dragText = ""
             end
         end
 
@@ -121,6 +122,14 @@
             end
         end
 
+        function PlayerModelPanel:PaintOver(w, h)
+            if PlayerModelAlpha > 0 then
+                self:SetAlpha(PlayerModelAlpha)
+            else
+                self:SetAlpha(0)
+            end
+        end
+
         function PlayerModelPanel:PostDrawModel(ent)
             ent.EZarmor = LocalPlayer().EZarmor
             JMod.ArmorPlayerModelDraw(ent)
@@ -151,10 +160,17 @@
     end
 
     function PANEL:Think()
-        if InventoryOpen and self.FadeAlpha < 255 then
-            self.FadeAlpha = math.min(self.FadeAlpha + FrameTime() * 500, 255)
-        elseif not InventoryOpen and self.FadeAlpha > 0 then
-            self.FadeAlpha = math.max(self.FadeAlpha - FrameTime() * 500, 0)
+        -- Handle opening and closing animation for inventory and player model
+        if InventoryOpen then
+            if self.FadeAlpha < 255 then
+                self.FadeAlpha = math.min(self.FadeAlpha + FrameTime() * 500, 255)
+            end
+            PlayerModelAlpha = self.FadeAlpha -- Match alpha with inventory panel
+        else
+            if self.FadeAlpha > 0 then
+                self.FadeAlpha = math.max(self.FadeAlpha - FrameTime() * 500, 0)
+            end
+            PlayerModelAlpha = self.FadeAlpha -- Match alpha with inventory panel
         end
 
         if self.FadeAlpha <= 0 and not InventoryOpen then
@@ -226,17 +242,17 @@
         end
     end)
 
-    hook.Add("PlayerSpawn", "abnavitpizduinventar", function()
+    hook.Add("PlayerSpawn", "UpdatePlayerModelPanel", function()
         if IsValid(WeaponInventory) then
             WeaponInventory:OpenInventory()
         end
     end)
 
-    hook.Add("Think", "Ruki", function()
+    hook.Add("Think", "FirstSlot", function()
         if input.IsKeyDown(KEY_1) and not daun then
             daun = true
             RunConsoleCommand("use", "weapon_hands" or "weapon_handsinfected")
             timer.Simple(0.2, function() daun = false end)
         end
     end)
-end]]
+end

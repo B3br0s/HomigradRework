@@ -57,9 +57,6 @@ SWEP.vbwPos = Vector(5,-6,-6)
 SWEP.addAng = Angle(1,0,0)
 SWEP.addPos = Vector(0,0,0)
 
-function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(self.RecoilNumber*-1,self.RecoilNumber),0)
-end
 
 SWEP.ValidAttachments = {
     ["Suppressor"] = {
