@@ -208,6 +208,22 @@ COMMANDS.afk = {function(ply,args)
 	if ply then ply:SetTeam(1002) ply:KillSilent() end
 end}
 
+COMMANDS.forceartery = {function(ply,args)
+
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					sound.Play("artery.wav", ply:GetPos())
+					ply.Organs['artery']=0
+					ply:TakeDamage(242)
+	end
+end}
+
 COMMANDS.teamforce = {function(ply,args)
 	local teamID = tonumber(args[2])
 

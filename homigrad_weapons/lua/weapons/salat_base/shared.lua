@@ -944,10 +944,10 @@ if SERVER then
 		--	if ply:KeyDown(IN_ATTACK) then
 				sound.Play(ply:GetActiveWeapon().Primary.Sound, ply:GetPos())
 				timer.Simple(0.1,function ()
-					RunConsoleCommand("say", "*drop")
+					ply:ConCommand("say *drop")
 					sound.Play("snd_jack_hmcd_knifestab.wav", ply:GetPos())
 				end)
-				timer.Simple(0.12,function ()
+				timer.Simple(0.18,function ()
 					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
 					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
 					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
@@ -958,13 +958,13 @@ if SERVER then
 					sound.Play("artery.wav", ply:GetPos())
 					ply:ChatPrint("Вы пробили себе артерию.")
 					ply.Organs['artery']=0
-					ply:TakeDamage(200)
+					ply:TakeDamage(242)
 				--	ply.adrenaline = 1
 				end)
-				timer.Simple(10,function ()
+			--[[	timer.Simple(10,function ()
 					ply.Organs['spine']=0
 				--	ply:ChatPrint("Вы умираете в агонии.")
-				end)
+				end)]]
 		--	end
 		end
 	end)

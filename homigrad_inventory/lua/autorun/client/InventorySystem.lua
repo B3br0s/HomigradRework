@@ -1,4 +1,4 @@
-if CLIENT then
+--[[if CLIENT then
     local WeaponInventory
     local InventoryOpen = false
     local dragPanel = nil
@@ -255,4 +255,4 @@ if CLIENT then
             timer.Simple(0.2, function() daun = false end)
         end
     end)
-end
+end]]
