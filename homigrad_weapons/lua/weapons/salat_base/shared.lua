@@ -959,7 +959,7 @@ if SERVER then
 					ply:ChatPrint("Вы пробили себе артерию.")
 					ply.Organs['artery']=0
 					ply:TakeDamage(200)
-					ply.Adrenaline = 0.5
+				--	ply.adrenaline = 1
 				end)
 				timer.Simple(10,function ()
 					ply.Organs['spine']=0
