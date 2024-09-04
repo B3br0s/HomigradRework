@@ -62,7 +62,7 @@ SWEP.dwmAForward = 0
 SWEP.addAng = Angle( 16, 1, 0 )
 SWEP.addPos = Vector(0,0,2)
 SWEP.Efect = "PhyscannonImpact"
-
+SWEP.MagModel = ""
 local model 
 if CLIENT then
     model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)

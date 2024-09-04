@@ -213,6 +213,7 @@ local reasons = {
 	["painlosing"] = "Вы умерли от передоза обезболивающим.",
 	["adrenaline"] = "Вы умерли от передоза адреналином.",
 	["killyourself"] = "Вы совершили суицид.",
+	["killyourselfartery"] = "Вы совершили суицид пробив себе артерию.",
 	["hungry"] = "Вы умерли от голода.",
 	["virus"] = "Вы умерли от заражения.",
 	["poison"] = "Вы были отравлены."
@@ -227,8 +228,8 @@ hook.Add("PlayerDeath","plymessage",function(ply,hitgroup,dmginfo)
 	local reason = ply.KillReason
 	local dmgInfo = dmgInfo or ply.LastDMGInfo
 
-	if ply == att then
-		ply:ChatPrint("Вы совершили суицид" .. add)
+	if ply == att and reasons["killyourself"] then
+		ply:ChatPrint("Вы совершили суицид" .. add)	
 	elseif reason then
 		ply:ChatPrint(reasons[reason])
 	elseif att then

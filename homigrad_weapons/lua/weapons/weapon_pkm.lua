@@ -19,6 +19,7 @@ SWEP.Primary.Damage = 1.7 * 130
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/m40a1/m40a1_tp.wav"
 SWEP.Primary.SoundFar = "ak74/ak74_dist.wav"
+SWEP.MagModel = "models/gredwitch/kord/kord_mag.mdl"
 SWEP.Primary.Force = 240/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.1

@@ -196,7 +196,7 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			rag:Remove()
 	end
 
-	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 100 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
+	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 250 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
 		sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
 		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 		sound.Emit(rag,"physics/body/body_medium_break3.wav")
@@ -369,10 +369,13 @@ end)
 
 local max = math.max
 local util_TraceLine = util.TraceLine
-local util_Decal = util.Decal
+local util_Decal = util.DecalEx
 
 local tr = {}
-
+matblood = {}
+for i = 1,10 do 
+	matblood[i] = Material("decals/model_z_blood" .. i) 
+end
 hook.Add("Think","Gib",function()
 	local time = CurTime()
 
@@ -393,8 +396,7 @@ hook.Add("Think","Gib",function()
 				local traceResult = util_TraceLine(tr)
 				if traceResult.Hit then
 					ent:EmitSound("ambient/water/drip" .. math.random(1,4) .. ".wav", 60,math.random(230,240),0.1,CHAN_AUTO)
-
-					util_Decal("Blood",traceResult.HitPos + traceResult.HitNormal,traceResult.HitPos - traceResult.HitNormal,ply)
+            		util_Decal(matblood[math.random(1,#matblood)], game.GetWorld() ,traceResult.HitPos + traceResult.HitNormal,traceResult.HitPos - traceResult,HitNormal, Color(190,44,44,155),0.7,0.7)
 				else
 					BloodParticle(ent:GetPos() + ent:OBBCenter(),ent:GetVelocity() + Vector(math.Rand(-5,5),math.Rand(-5,5),0))
 				end

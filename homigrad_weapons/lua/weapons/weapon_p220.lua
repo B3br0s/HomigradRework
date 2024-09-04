@@ -7,6 +7,7 @@ SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
+SWEP.MagModel = "models/csgo/weapons/w_pist_cz_75_mag.mdl"
 SWEP.AdminOnly 				= false
 
 ------------------------------------------

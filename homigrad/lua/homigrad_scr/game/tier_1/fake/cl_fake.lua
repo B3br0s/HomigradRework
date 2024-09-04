@@ -3,8 +3,14 @@ local ATTInformation = {
         ["Elcan"] = {
             ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_elcan_specter_hco_lod0_mark.png",
             ReticleSize = 10,
-            ReticleUp = 5.8,
+            ReticleUp = 2,
             ReticleRight = 0,
+        },
+        ["Walther"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_walther_mrs_mark_002.png",
+            ReticleSize = 15,
+            ReticleUp = 2.8,
+            ReticleRight = -0.2,
         }
     },
     ["weapon_r8"] = {
@@ -12,6 +18,44 @@ local ATTInformation = {
             ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_base_aimpoint_acro_p1_mark.png",
             ReticleSize = 15,
             ReticleUp = 4,
+            ReticleRight = -0.2,
+        }
+    },
+    ["weapon_mp7"] = {
+        ["Pilad"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_walther_mrs_mark_002.png",
+            ReticleSize = 15,
+            ReticleUp = 4,
+            ReticleRight = -0.2,
+        }
+    },
+    ["weapon_akm"] = {
+        ["Opk7"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_ekb_okp7_true_marks.png",
+            ReticleSize = 10,
+            ReticleUp = 1,
+            ReticleRight = -0.2,
+        },
+        ["Pkaa"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_30mm_leupold_mark4_lr_6,5_20x50_marks.png",
+            ReticleSize = 60,
+            ReticleUp = 2,
+            ReticleRight = 0,
+        }
+    },
+    ["weapon_galilsar"] = {
+        ["Opk7"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_ekb_okp7_true_marks.png",
+            ReticleSize = 10,
+            ReticleUp = 2,
+            ReticleRight = -0.2,
+        },
+    },
+    ["weapon_ak74u"] = {
+        ["Opk7"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_ekb_okp7_true_marks.png",
+            ReticleSize = 10,
+            ReticleUp = 1,
             ReticleRight = -0.2,
         }
     },

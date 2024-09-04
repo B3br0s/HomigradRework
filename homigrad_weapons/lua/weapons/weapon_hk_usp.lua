@@ -20,9 +20,11 @@ SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 40
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/tfa_ins2/usp_tactical/fp1.wav"
+SWEP.Primary.SoundSupresor = "m45/m45_suppressed_fp.wav"
 SWEP.Primary.SoundFar = "weapons/tfa_ins2/usp_tactical/fpddd.wav"
 SWEP.Primary.Force = 90/3
 SWEP.ReloadTime = 2
+SWEP.MagModel = "models/csgo/weapons/w_pist_223_mag.mdl"
 SWEP.ShootWait = 0.14
 
 SWEP.Secondary.ClipSize		= -1
@@ -55,7 +57,7 @@ SWEP.addPos = Vector(0,0,-0.9)
 SWEP.addAng = Angle(-0.4,0.5,0)
 
 SWEP.ValidAttachments = {
-    ["wavedd"] = {
+    ["Suppressor"] = {
         positionright = 1.545,
         positionforward = 9.7,
         positionup = -4.8,

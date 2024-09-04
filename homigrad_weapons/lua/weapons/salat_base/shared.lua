@@ -111,6 +111,8 @@ SWEP.vbwAng = false
 SWEP.Suppressed = false
 
 local hg_skins = CreateClientConVar("hg_skins","0",true,false,"CSGO????",0,1)
+local hg_default_muzzle = CreateClientConVar("hg_default_muzzle","0",true,false,"caladudi remek bakopas risamstir",0,1)
+local hg_noeffects_muzzle = CreateClientConVar("hg_noeffects_muzzle","0",true,false,"optimization(no)",0,1)
 --local hg_skin = CreateClientConVar("hg_skin","1",true,false,"Ну и хули мы стоим?")
 
 local hg_show_hitposmuzzle = CreateClientConVar("hg_show_hitposmuzzle","0",false,false,"huy",0,1)
@@ -313,9 +315,17 @@ concommand.Add("unattach", function(ply,cmd,args)
 	if not wep or not IsValid(wep) then return end
 	wep:SetNWBool(args[1], false)
 end)
+
+local zeroAng = Angle(0,0,0)
+hook.Add("PlayerSwitchWeapon", "sexos?", function(ply)
+	local bc = ply:GetBoneCount()
+	for i = 1, bc do
+		ply:ManipulateBoneAngles(i, Angle(0,0,0), true)
+	end
+end)
+
 function SWEP:DrawWorldModel()
     self:DrawModel()
-
 	if self.SubMaterial then
 
 		for index, newmaterial in pairs(self.SubMaterial) do
@@ -487,7 +497,7 @@ function SWEP:RicochetOrPenetrate(initialTrace)
 		})
 	end
 end
-SWEP.SightPos = Vector(0,0,0)
+
 homigrad_weapons = homigrad_weapons or {}
 
 function SWEP:Initialize()
@@ -597,6 +607,7 @@ function SWEP:PrimaryAttack()
 		if self:GetNWBool("Suppressor", false) != true then
 			self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
 		else
+			self.Efect = "PhyscannonImpact"
 			self:EmitSound(self.Primary.SoundSupresor,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
 
 		end
@@ -604,7 +615,7 @@ function SWEP:PrimaryAttack()
 	
 	local dmg = self.Primary.Damage
     self:FireBullet(dmg, 1, 5)
-	self:SetNWFloat("VisualRecoil", self:GetNWFloat("VisualRecoil") + self.Recoil)
+	self:SetNWFloat("VisualRecoil", self:GetNWFloat("VisualRecoil") + self.Primary.Force/90)
 
 	if SERVER and not ply:IsNPC() then
 		if ply.RightArm < 1 then
@@ -639,6 +650,30 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+function spawn_mag(modelPath, owner, weapon)
+	local prop = ents.Create("prop_physics")
+
+	if not IsValid(prop) then return end
+
+	prop:SetModel(modelPath)
+
+	prop:SetPos(owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_L_Hand")))
+
+	prop:Spawn()
+
+	prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+
+	timer.Simple(15,function ()
+		prop:Remove()
+	end)
+
+	local phys = prop:GetPhysicsObject()
+
+	if IsValid(phys) then
+		phys:Wake()
+	end
+end
+
 function SWEP:Reload()
 	if !self:GetOwner():KeyDown(IN_WALK) then
 		self.AmmoChek = 3
@@ -647,6 +682,9 @@ function SWEP:Reload()
 		if ( self.NextShot > CurTime() ) then return end
 		self:GetOwner():SetAnimation(PLAYER_RELOAD)
 		self:EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO)
+		timer.Simple(0.1,function ()
+			spawn_mag(self.MagModel,self:GetOwner(),self,self.BigMagModel)
+		end)
 		timer.Create( "reload"..self:EntIndex(), self.ReloadTime, 1, function()
 			if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self then
 				local oldclip = self:Clip1()
@@ -783,12 +821,43 @@ function SWEP:FireBullet(dmg, numbul, spread)
 
 	ply:LagCompensation(false)
 
-	local effectdata = EffectData()
-	effectdata:SetOrigin(shootOrigin)
-	effectdata:SetAngles(shootAngles)
-	effectdata:SetScale(self:IsScope() and 0.1 or 1)
-	effectdata:SetNormal(shootDir)
-	util.Effect(self.Efect or "MuzzleEffect",effectdata)
+	if GetConVar("hg_noeffects_muzzle"):GetBool() == false then
+		local effectdata = EffectData()
+		effectdata:SetOrigin(shootOrigin)
+		effectdata:SetAngles(shootAngles)
+		effectdata:SetScale(self:IsScope() and 0.1 or 1)
+		effectdata:SetNormal(shootDir)
+		if self.Efect then
+			util.Effect(self.Efect,effectdata)
+		else
+			if GetConVar("hg_default_muzzle"):GetBool() == true then
+				util.Effect(self.Efect or "MuzzleEffect", effectdata)
+			elseif GetConVar("hg_default_muzzle"):GetBool() == false then
+				if self.NumBullet then
+					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ar",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ar2",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ar3",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ar4",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ar5",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					else
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_357",shootOrigin,shootAngles)
+					end
+			end
+		end
+	end
 
 	if self:GetOwner():IsNPC() then
 		self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
@@ -860,6 +929,45 @@ if SERVER then
 		ply.suiciding = not ply.suiciding
 		ply:SetNWBool("Suiciding",ply.suiciding)
 	end)
+	concommand.Add("suicideknife",function (ply,cmd,args)
+		local suicidetable = { 
+		["weapon_kabar"] = true,
+		["weapon_gurkha"] = true,
+		["weapon_hg_kitknife"] = true,
+		["weapon_knife"] = true,
+		["weapon_t"] = true,
+		["weapon_hg_hatchet"] = true,
+		["weapon_hg_fireaxe"] = true
+		}
+		if not ply:Alive() then return end
+		if suicidetable[ply:GetActiveWeapon():GetClass()] then
+		--	if ply:KeyDown(IN_ATTACK) then
+				sound.Play(ply:GetActiveWeapon().Primary.Sound, ply:GetPos())
+				timer.Simple(0.1,function ()
+					RunConsoleCommand("say", "*drop")
+					sound.Play("snd_jack_hmcd_knifestab.wav", ply:GetPos())
+				end)
+				timer.Simple(0.12,function ()
+					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
+					sound.Play("artery.wav", ply:GetPos())
+					ply:ChatPrint("Вы пробили себе артерию.")
+					ply.Organs['artery']=0
+					ply:TakeDamage(200)
+					ply.Adrenaline = 0.5
+				end)
+				timer.Simple(10,function ()
+					ply.Organs['spine']=0
+				--	ply:ChatPrint("Вы умираете в агонии.")
+				end)
+		--	end
+		end
+	end)
 end
 
 hook.Add("PlayerDeath","suciding",function(ply)
@@ -881,23 +989,17 @@ local forearmL,clavicleL,handL = Angle(0,0,0),Angle(0,0,0),Angle(0,0,0)
 function SWEP:Step()
 	local ply = self:GetOwner()
 	local isLocal = self:IsLocal()
-
+	if self:GetNWBool("Grip", false) == true then
+		self.HoldType = "SMG"
+		if self.RecoilNumber then
+			self.RecoilNumber = self.RecoilNumber - self.RecoilNumber / 2
+		end
+	end
 	if not IsValid(ply) or ply:IsNPC() or IsValid(ply:GetNWEntity("Ragdoll")) then return end
-
 	self.animProg = self:GetNWFloat("VisualRecoil") or 0
 	self.animLerp = self.animLerp or Angle(0, 0, 0)
 	self.animLerp = LerpAngle(0.25, self.animLerp, Angle(5, 0, self.HoldType == "revolver" and 0 or -2) * self.animProg)
 	local ply = self:GetOwner()
-	if self:GetNWFloat("VisualRecoil") > 0 then
-		if self.HoldType ~= "revolver" then
-			ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"), Vector(0, -self.animLerp.x / 3, -self.animLerp.x / 3), false)
-			ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"), Angle(0, 0, -self.animLerp.x), false)
-		end
-
-		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"), self.animLerp * 2, false)
-		--print(animProg)
-		self:SetNWFloat("VisualRecoil", Lerp(4 * FrameTime(), self:GetNWFloat("VisualRecoil") or 0, 0))
-	end
 
 	if isLocal then
 		self.eyeSpray = self.eyeSpray or Angle(0,0,0)
@@ -1013,7 +1115,6 @@ function SWEP:Step()
 	clavicle:Add(closeAng)
 
 	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
-
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),forearm,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),forearmL,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),handL,false)

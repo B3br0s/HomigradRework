@@ -94,7 +94,6 @@ if timer.Exists("reload"..self:EntIndex()) or self:Clip1()>=self:GetMaxClip1() o
 end
 
 function SWEP:SecondaryAttack()
-
 	SWEP.AimPosition = Vector(3.85,10,1.45)
-SWEP.AimAngle = Angle(0,0,0)
+	SWEP.AimAngle = Angle(0,0,0)
 end

@@ -13,7 +13,7 @@ local LerpVector = LerpVector
 local math_random = math.random
 local table_remove = table.remove
 
-local util_Decal = util.Decal
+local util_Decal = util.DecalEx
 local util_TraceLine = util.TraceLine
 local render_SetMaterial = render.SetMaterial
 local render_DrawSprite = render.DrawSprite
@@ -26,7 +26,10 @@ bloodparticels_hook[1] = function(anim_pos)
         render_DrawSprite(LerpVector(anim_pos,part[2],part[1]),part[5],part[6])
     end
 end
-
+matblood = {}
+for i = 1,10 do 
+	matblood[i] = Material("decals/model_z_blood" .. i) 
+end
 bloodparticels_hook[2] = function(mul)
     for i = 1,#bloodparticels1 do
         local part = bloodparticels1[i]
@@ -45,11 +48,7 @@ bloodparticels_hook[2] = function(mul)
             table_remove(bloodparticels1,i)
             
             local dir = result.HitNormal
-			
-            util_Decal("Blood",hitPos + dir,hitPos - dir)
-			util_Decal("Blood",hitPos + dir,hitPos - dir)
-            util_Decal("Blood",hitPos + dir,hitPos - dir)
-			util_Decal("Blood",hitPos + dir,hitPos - dir)
+            util_Decal(matblood[math.random(1,#matblood)], game.GetWorld() ,hitPos + dir,hitPos - dir, Color(150,24,24,155), 0.7,0.7)
             sound.Play("ambient/water/drip" .. math_random(1,4) .. ".wav",hitPos,60,math_random(230,240))
             continue
         else

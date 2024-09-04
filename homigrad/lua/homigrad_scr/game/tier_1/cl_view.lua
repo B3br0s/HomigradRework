@@ -520,15 +520,15 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			if not oldShootTime then oldShootTime = lastShootTime else
 				if oldShootTime ~= lastShootTime then
 					oldShootTime = lastShootTime
-					startRecoil = CurTime() + 0.05
-					recoil = math.Rand(0.5,1.1) * (scope and 0.5 or 0.5)
+					startRecoil = CurTime() + 0.1
+					recoil = math.Rand(0.2,0.6) * (scope and 0.5 or 0.5)
 				end
 			end
 		end
 		
 		local anim_pos = max(startRecoil - CurTime(),0) * 5
 
-		fov = fov - anim_pos * (scope and 2 or 1)
+		fov = fov
 		angRecoil[3] = anim_pos * (scope and 10 or 5)
 	if wep.sightyes == false then
 		if weaponClass == "weapon_glock18" then
@@ -618,7 +618,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_p220" then
 			--Vector(2.7,10,0.12)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.7 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.12
+			vecWep = hand.Pos + hand.Ang:Up() * 3 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.12
 			angWep = hand.Ang + Angle(-15,02,0)
 		end
 		if weaponClass == "weapon_hk_usp" then
@@ -713,7 +713,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_sks" then
 			--Vector(6,5,1.42) 
-			vecWep = hand.Pos + hand.Ang:Up() * 5.2 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.93
+			vecWep = hand.Pos + hand.Ang:Up() * 5.4 - hand.Ang:Forward() * 3 + hand.Ang:Right() * 0.78
 			angWep = hand.Ang + Angle(0,15,0)
 		end
 		if weaponClass == "weapon_svd" then
@@ -771,15 +771,19 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
 			angWep = hand.Ang + Angle(-24,0,0)
 		end
+		if weaponClass == "weapon_taser" then
+			--Vector(5.3,4,0.78)
+			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
+			angWep = hand.Ang + Angle(-24,0,0)
+		end
 	--[[	if weaponClass == "weapon_mk18" then
 			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
 			angWep = hand.Ang + Angle(-24,0,0)
 		end]]
 	else
-		if weaponClass != "weapon_taser" then
-			vecWep = hand.Pos + hand.Ang:Up() * wep.SightPos.x - hand.Ang:Forward() * wep.SightPos.x + hand.Ang:Right() * wep.SightPos.z
-			angWep = hand.Ang + Angle(0,0,0)
-		end
+		if not wep.SightPos then return end
+		vecWep = hand.Pos + hand.Ang:Up() * (wep.SightPos.x or 0) - hand.Ang:Forward() * (wep.SightPos.x or 0) + hand.Ang:Right() * (wep.SightPos.z or 0)
+		angWep = hand.Ang + Angle(0,0,0)
 	end
 	
 	end
@@ -844,7 +848,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local output_pos = vecEye
 
 	if wep and hand then
-		local posRecoil = Vector(recoil * 8,0,recoil * 1.5)
+		local posRecoil = Vector(recoil,0,recoil * 1.5)
 		posRecoil:Rotate(hand.Ang)
 		view.znear = Lerp(ScopeLerp,1,max(1 - recoil,0.2))
 		output_pos = output_pos + posRecoil
@@ -872,7 +876,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	
 	local val = math.min(math.Round(playerFPS / 120,1),1)
 	
-	diffpos = LerpFT(0.1,diffpos,(output_pos - (oldview.origin or output_pos)) / 6)
+	diffpos = LerpFT(0.1,diffpos,(output_pos - (oldview.origin or output_pos)) / 2)
 	diffang = LerpFT(0.1,diffang,(output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 20 + (lply:EyeAngles() + (lply:GetActiveWeapon().eyeSpray or angZero) * 1000):Forward() * anim_pos * 1)
 
 	if RENDERSCENE then

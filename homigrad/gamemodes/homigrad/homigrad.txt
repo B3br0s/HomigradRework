@@ -1,7 +1,7 @@
 "homigrad"
 {
 	"base"		"sandbox"
-	"title"		"Homigrad"
+	"title"		"Homigrad Rework"
 	"maps"		""
 	"menusystem"	"1"
 }

@@ -54,7 +54,7 @@ SWEP.WorldModel				= "models/csgo/weapons/w_pist_revolver.mdl"
 SWEP.vbwPos = Vector(8.5,-10,-8)
 
 SWEP.addPos = Vector(0,0,0)
-SWEP.addAng = Angle(3.65,-0.5,0)
+SWEP.addAng = Angle(-0.6,-0.3,0)
 
 SWEP.ValidAttachments = {
     ["Leapers"] = {
@@ -63,12 +63,12 @@ SWEP.ValidAttachments = {
         positionup = -5.9,
 
         angleforward = 180,
-        angleright = 5,
+        angleright = 10,
         angleup = 0,
 
         holosight = true,
         newsight = true,
-        aimpos = Vector(5.8,7,0),
+        aimpos = Vector(5.1,7,0),
         aimang = Angle(0,0,0),
 
         scale = 1,

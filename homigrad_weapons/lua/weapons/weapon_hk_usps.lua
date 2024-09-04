@@ -22,6 +22,8 @@ SWEP.Primary.Sound = "m45/m45_suppressed_fp.wav"
 SWEP.Primary.Force = 70/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.14
+SWEP.Efect = "PhyscannonImpact"
+SWEP.MagModel = "models/csgo/weapons/w_pist_223_mag.mdl"
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1

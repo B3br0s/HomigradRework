@@ -6,6 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/glock17"
+SWEP.MagModel = "models/weapons/arc9/darsu_eft/mods/mag_glock_std_17.mdl"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

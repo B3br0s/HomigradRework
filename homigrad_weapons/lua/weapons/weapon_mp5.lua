@@ -16,6 +16,7 @@ SWEP.Primary.DefaultClip	= 30
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "9х19 mm Parabellum"
 SWEP.Primary.Cone = 0
+SWEP.MagModel = "models/csgo/weapons/w_pist_tec9_mag.mdl"
 SWEP.Primary.Damage = 1.7 * 30
 SWEP.Primary.Spread = 5
 SWEP.Primary.Sound = "mp5k/mp5k_fp.wav"

@@ -434,6 +434,7 @@ function FireShot(wep)
 	--wep:EmitSound( wep.GetSound, 75, 100, 1, CHAN_WEAPON)
 	if SERVER then
 		net.Start("huysound")
+		net.WriteEntity(wep)
 		net.WriteVector(wep:GetPos())
 		net.WriteString(weptable.Primary.Sound)
 		net.WriteString(weptable.Primary.SoundFar)
@@ -449,12 +450,21 @@ function FireShot(wep)
 		wep:GetPhysicsObject():ApplyForceCenter(wep:GetAngles():Forward()*-damage*0.05+wep:GetAngles():Right()*VectorRand(-90,90)+wep:GetAngles():Up()*100)
 	end
 	wep.Clip=wep.Clip-1
-	-- Make a muzzle flash
-	local effectdata = EffectData()
-	effectdata:SetOrigin( shootOrigin )
-	effectdata:SetAngles( shootAngles )
-	effectdata:SetScale( 1 )
-	util.Effect( "MuzzleEffect", effectdata )
+	if GetConVar("hg_noeffects_muzzle"):GetBool() == false then
+		local effectdata = EffectData()
+		effectdata:SetOrigin( shootOrigin )
+		effectdata:SetAngles( shootAngles )
+		effectdata:SetScale( 1 )
+			if GetConVar("hg_default_muzzle"):GetBool() == true then
+				util.Effect("MuzzleEffect", effectdata)
+			elseif GetConVar("hg_default_muzzle"):GetBool() == false then
+					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("matin_mw_muzzleflash_357",shootOrigin,shootAngles)
+			end
+		end
+	end
 
-end
 end

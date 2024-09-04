@@ -1,9 +1,8 @@
 if SERVER then
     AddCSLuaFile()
 end
-
 if CLIENT then
-local enabled = true
+local hg_new_run = CreateClientConVar("hg_new_run","1",true,false,"CHTOOOO?",0,1)
 
     local runAnimActivity = ACT_HL2MP_RUN_FAST
 
@@ -14,7 +13,7 @@ local enabled = true
 
         local activeWeapon = ply:GetActiveWeapon()
 
-        if ply:KeyDown(IN_FORWARD) and ply:KeyDown(IN_SPEED) and (IsValid(activeWeapon) and activeWeapon:GetClass() == "weapon_hands" or not IsValid(activeWeapon)) and enabled then
+        if ply:KeyDown(IN_FORWARD) and ply:KeyDown(IN_SPEED) and (IsValid(activeWeapon) and activeWeapon:GetClass() == "weapon_hands" or not IsValid(activeWeapon)) and GetConVar("hg_new_run"):GetBool() == true then
             if not IsValid(ply:GetNWEntity("Ragdoll")) then
                 local animSequence = ply:SelectWeightedSequence(runAnimActivity)
                 if animSequence >= 0 then

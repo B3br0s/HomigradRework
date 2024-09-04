@@ -126,7 +126,43 @@ function SWEP:DrawHUD()
 		Circle(hitPos:ToScreen().x, hitPos:ToScreen().y, 40 * Size, 32)
 	end
 end
-
+SWEP.WMShitInformation = {
+	positionright = 1.4,
+	positionforward = 0,
+	positionup = 1,
+	angleforward = 180,
+	angleright = -50,
+	angleup = 0
+}
+if CLIENT then
+function SWEP:DrawWorldModel()
+	if IsValid(self:GetOwner()) then
+		local ply = self:GetOwner()
+		if not self.WMSHIT then
+			self.WMSHIT = ClientsideModel(self.WorldModel)
+			self.WMSHIT:SetPos(ply:GetPos())
+			self.WMSHIT:SetParent(ply)
+			self.WMSHIT:SetNoDraw(true)
+			self.WMSHIT:SetModelScale(info.scale, 0)
+		else
+			local matrixhand = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand"))
+			if not matrixhand then return end
+			local pos, ang = matrixhand:GetTranslation(), matrixhand:GetAngles()
+			if not pos or not ang then return end
+			local info = self.WMShitInformation
+			self.WMSHIT:SetRenderOrigin(pos + ang:Right() * info.positionright + ang:Forward() * info.positionforward + ang:Up() * info.positionup)
+			ang:RotateAroundAxis(ang:Forward(), info.angleforward)
+			ang:RotateAroundAxis(ang:Right(), info.angleright)
+			ang:RotateAroundAxis(ang:Up(), info.angleup)
+			self.WMSHIT:SetRenderAngles(ang)
+			self.WMSHIT:SetupBones()
+			self.WMSHIT:DrawModel()		
+		end
+	else
+		self:DrawModel()
+	end
+end
+end
 
 function SWEP:Initialize()
 self:SetHoldType( "knife" )
@@ -141,13 +177,9 @@ function SWEP:Deploy()
 	end
 end
 
-function SWEP:Holster()
-return true
-end
-
 function SWEP:PrimaryAttack()
 	self:GetOwner():SetAnimation( PLAYER_ATTACK1 )
-	self:SetNextPrimaryFire( CurTime() + self.Primary.Delay/((self:GetOwner().stamina or 100)/100)-(self:GetOwner():GetNWInt("Adrenaline")/5) )
+	self:SetNextPrimaryFire( CurTime() + self.Primary.Delay/((self:GetOwner().stamina or 100)/100)-(self:GetOwner():GetNWInt("Adrenaline")/5) - 0.1 )
 
 	if SERVER then
 		self:GetOwner():EmitSound( "weapons/slam/throw.wav",60 )
@@ -219,7 +251,28 @@ function SWEP:PrimaryAttack()
 			util.Decal("ManhackCut",pos1,pos2)
 		end
 	end
-
+			if CLIENT then
+				
+				local vPoint = tr.HitPos
+				local effectdata = EffectData()
+				effectdata:SetOrigin( vPoint )
+				effectdata:SetNormal( tr.HitNormal )
+				effectdata:SetEntity( tr.Entity )
+				effectdata:SetFlags(3)
+				effectdata:SetColor(0)
+				effectdata:SetScale(2)
+				if tr.Hit then
+					if tr.Entity:IsPlayer() then
+						util.Effect( "bloodspray", effectdata )
+					end
+				
+					if tr.Entity:GetClass() == "prop_ragdoll" then
+						util.Effect( "bloodspray", effectdata )
+					end
+				
+				end
+			
+			end
 	self:GetOwner():LagCompensation( false )
 end
 
@@ -228,7 +281,13 @@ end
 
 function SWEP:Reload()
 end
+local zeroAng = Angle(0,0,0)
 
 function SWEP:Think()
+	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Clavicle"), Angle(0, 20, 30), true)
+	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Forearm"), Angle(0, 0, 0), true)
+	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_Spine4"), Angle(0, -10, 0), true)
+	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Clavicle"), Angle(0, 0, -35), true)
 end
+
 end

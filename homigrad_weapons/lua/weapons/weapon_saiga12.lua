@@ -20,6 +20,7 @@ SWEP.Primary.Damage = 1.7 * 25
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "kar98k/kar98k.wav"
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
+SWEP.Primary.SoundSupresor = "homigrad/weapons/rifle/masada_sil.wav"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
 SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
@@ -61,7 +62,7 @@ SWEP.vbwAng = Angle(0,0,0)
 
 SWEP.addAng = Angle(1,0.1,0)
 SWEP.ValidAttachments = {
-    ["salvo"] = {
+    ["Suppressor"] = {
         positionright = 0.89,
         positionforward = 23,
         positionup = -6.78,

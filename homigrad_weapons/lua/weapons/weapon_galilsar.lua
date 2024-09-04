@@ -46,6 +46,8 @@ SWEP.Slot					= 2
 SWEP.SlotPos				= 0
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
+SWEP.MagModel = "models/csgo/weapons/w_rif_galilar_mag.mdl"
+SWEP.Efect = "PhyscannonImpact"
 
 SWEP.ViewModel				= "models/pwb2/weapons/w_asval.mdl"
 SWEP.WorldModel				= "models/pwb2/weapons/w_asval.mdl"
@@ -54,4 +56,36 @@ SWEP.addAng = Angle(0,0,0)
 SWEP.addPos = Vector(0,0,0)
 
 SWEP.Supressed = true
+
+SWEP.ValidAttachments = {
+    ["Opk7"] = {
+        positionright = 0.9,
+        positionforward = 4,
+        positionup = -5.5,
+
+        angleforward = 178,
+        angleright = 10,
+        angleup = -0.1,
+
+        holosight = true,
+        newsight = true,
+        aimpos = Vector(5.1,7,0.5),
+        aimang = Angle(-5,0,0),
+
+        scale = 1,
+        model = "models/weapons/arc9_eft_shared/atts/optic/dovetail/okp7.mdl",
+    },
+    ["Grip"] = {
+        positionright = 1,
+        positionforward = 14,
+        positionup = -5.8,
+
+        angleforward = 178,
+        angleright = 30,
+        angleup = -0.1,
+
+        scale = 1,
+        model = "models/weapons/arc9/darsu_eft/mods/pistolgrip_ar15_tactical_dynamics_hexgrip.mdl",
+    },
+}
 end

@@ -37,6 +37,7 @@ SWEP.Secondary.Ammo			= "none"
 SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
+SWEP.MagModel = "models/csgo/weapons/w_shot_mag7_mag.mdl"
 
 SWEP.HoldType = "ar2"
 SWEP.Shotgun = true

@@ -17,8 +17,10 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = "weapons/sks/sks_fp.wav"
     SWEP.Primary.Force = 240/3
+    SWEP.Primary.SoundSupresor = "weapons/sks/sks_suppressed_fp.wav"
     SWEP.ReloadTime = 2
     SWEP.ShootWait = 0.1
+    SWEP.MagModel = "models/gredwitch/bar/bar_mag.mdl"
     SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
     SWEP.TwoHands = true
 
@@ -48,7 +50,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.addPos = Vector(0,0,0)
 
     SWEP.ValidAttachments = {
-        ["Hexagon"] = {
+        ["Suppressor"] = {
             positionright = 3.5,
             positionforward = 32,
             positionup = -5,
@@ -56,9 +58,6 @@ if engine.ActiveGamemode() == "homigrad" then
             angleforward = 180,
             angleright = 2,
             angleup = 5,
-    
-            suppressingsound = true,
-            newsight = false,
             
             scale = 1,
             model = "models/weapons/arc9/darsu_eft/mods/silencer_12g_hexagon_12k.mdl",

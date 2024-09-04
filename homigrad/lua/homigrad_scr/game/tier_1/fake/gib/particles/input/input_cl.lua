@@ -1,6 +1,6 @@
 if engine.ActiveGamemode() == "homigrad" then
 local mats = {}
-for i = 1,8 do mats[i] = Material("decals/blood" .. i) end
+for i = 1,8 do mats[i] = Material("decals/model_z_blood" .. i) end
 local countmats = #mats
 
 local random = math.random
@@ -21,7 +21,7 @@ local function addBloodPart(pos,vel,mat,w,h)
 end
 
 net.Receive("blood particle",function()
-	addBloodPart(net.ReadVector(),net.ReadVector(),mats[random(1,#mats)],random(10,15),random(10,15))
+	addBloodPart(net.ReadVector(),net.ReadVector(),mats[random(1,#mats)],random(4,5),random(4,5))
 end)
 
 local Rand = math.Rand

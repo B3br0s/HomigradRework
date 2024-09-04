@@ -43,6 +43,7 @@ SWEP.HoldType = "smg"
 
 SWEP.Slot					= 2
 SWEP.SlotPos				= 0
+SWEP.MagModel = "models/csgo/weapons/w_pist_tec9_mag.mdl"
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
@@ -54,4 +55,24 @@ SWEP.vbwAng = Angle(5,-30,0)
 
 SWEP.addPos = Vector(0,0,0)
 SWEP.addAng = Angle(-0.5,0,0)
+
+SWEP.ValidAttachments = {
+    ["Pilad"] = {
+        positionright = 0.95,
+        positionforward = 2.5,
+        positionup = -4,
+
+        angleforward = 180,
+        angleright = 10,
+        angleup = -0.1,
+
+        holosight = true,
+        newsight = true,
+        aimpos = Vector(4.5,-3.7,0.75),
+        aimang = Angle(-5,0,0),
+
+        scale = 0.8,
+        model = "models/weapons/arc9/darsu_eft/mods/scope_all_vomz_pilad_p1x42_weaver.mdl",
+    }
+}
 end

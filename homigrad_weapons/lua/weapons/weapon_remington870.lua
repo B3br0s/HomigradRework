@@ -19,11 +19,12 @@ SWEP.Primary.Cone = 0.05
 SWEP.Primary.Damage = 1.7 * 45
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "snd_jack_hmcd_sht_close.wav"
-SWEP.Primary.SoundSupresor = "weapons/darsu_eft/m4a1/fire_new/m4a1_fire_silenced_distant_loop1.ogg"
+SWEP.Primary.SoundSupresor = "homigrad/weapons/rifle/masada_sil.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_sht_far.wav"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.5
+SWEP.RecoilNumber = 4
 SWEP.NumBullet = 8
 SWEP.Sight = true
 SWEP.TwoHands = true
@@ -53,7 +54,7 @@ SWEP.ViewModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
 SWEP.WorldModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
 
 function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(5,math.Rand(-2,2),0)
+    self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(-2,2),0)
 end
 
 SWEP.vbwPos = Vector(-9,-5,-5)

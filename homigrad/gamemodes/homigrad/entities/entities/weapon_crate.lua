@@ -83,6 +83,7 @@ if CLIENT then
         panel:SetDraggable(false)
         panel:ShowCloseButton(false)
         panel:MakePopup()
+
 		isClosing = false
 
         local fullWidth = 306

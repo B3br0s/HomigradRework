@@ -23,6 +23,7 @@ SWEP.Primary.Sound = "m4a1/m4a1_fp.wav"
 SWEP.Primary.SoundFar = "m4a1/m4a1_dist.wav"
 SWEP.Primary.Force = 160/3
 SWEP.ReloadTime = 2
+SWEP.MagModel = "models/csgo/weapons/w_rif_m4a1_mag.mdl"
 SWEP.ShootWait = 0.07
 SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
 SWEP.TwoHands = true
@@ -30,6 +31,7 @@ SWEP.TwoHands = true
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
+SWEP.RecoilNumber = 0.4
 SWEP.Secondary.Ammo			= "none"
 SWEP.SubMaterial = {
     [1] = "null"
@@ -57,6 +59,10 @@ SWEP.vbwAng = Angle(5,-30,0)
 
 SWEP.OffsetVec = Vector(10,-2.6,2)
 
+function SWEP:ApplyEyeSpray()
+    self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(self.RecoilNumber*-1,self.RecoilNumber),0)
+end
+
 SWEP.ValidAttachments = {
     ["Elcan"] = {
         positionright = 0.96,
@@ -64,16 +70,45 @@ SWEP.ValidAttachments = {
         positionup = -5.2,
 
         angleforward = 180,
-        angleright = 5,
+        angleright = 10,
         angleup = 0,
 
         holosight = true,
         newsight = true,
-        aimpos = Vector(5.55,7,0.725),
+        aimpos = Vector(5.3,7,0.725),
         aimang = Angle(-5,0,0),
 
         scale = 1,
         model = "models/weapons/arc9/darsu_eft/mods/scope_elcan_specter_hco.mdl",
+    },
+    ["Walther"] = {
+        positionright = 0.96,
+        positionforward = 7,
+        positionup = -5.2,
+
+        angleforward = 180,
+        angleright = 10,
+        angleup = 0,
+
+        holosight = true,
+        newsight = true,
+        aimpos = Vector(5,7,0.725),
+        aimang = Angle(-5,0,0),
+
+        scale = 1,
+        model = "models/weapons/arc9/darsu_eft/mods/scope_all_walther_mrs.mdl",
+    },
+    ["Grip"] = {
+        positionright = 1,
+        positionforward = 15,
+        positionup = -5.8,
+
+        angleforward = 178,
+        angleright = 30,
+        angleup = -0.1,
+
+        scale = 1,
+        model = "models/weapons/arc9/darsu_eft/mods/pistolgrip_ar15_f1_firearms_st2_pc_skeletonized.mdl",
     }
 }
 end

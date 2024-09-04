@@ -28,6 +28,7 @@ SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
 SWEP.TwoHands = true
 
 SWEP.Secondary.ClipSize		= -1
+SWEP.MagModel = "models/csgo/weapons/w_rif_m4a1_mag.mdl"
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
