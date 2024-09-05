@@ -58,7 +58,7 @@ function SWEP:Heal(ent)
 		return true
 	end
 
-	if ent:Health() < 150 then
+	if ent:Health() < 100 then
 		ent:SetHealth(math.Clamp(self:GetOwner():Health() + 10,0,150))
 		ent.hungryregen = ent.hungryregen + 6
 		sound.Play(healsound,ent:GetPos(),75,100,0.5)

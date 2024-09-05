@@ -45,8 +45,8 @@ function GM:PlayerSpawn(ply)
 
 	if ply:GetNWBool("DynamicFlashlight") then ply:Flashlight(false) end
 
-	ply:SetHealth(150)
-	ply:SetMaxHealth(150)
+	ply:SetHealth(100)
+	ply:SetMaxHealth(100)
 	ply:SetWalkSpeed(200)
 	ply:SetRunSpeed(350)
 	ply:SetSlowWalkSpeed(75)

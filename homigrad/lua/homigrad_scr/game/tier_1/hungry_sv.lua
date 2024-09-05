@@ -33,7 +33,7 @@ hook.Add("Player Think","homigrad-hungry",function(ply,time)
 		end
 	end
 
-	ply:SetHealth(not ply.heartstop and (math.min(ply:Health() + math.max(math.ceil(ply.hungryregen),1),150)) or ply:Health())
+--	ply:SetHealth(not ply.heartstop and (math.min(ply:Health() + math.max(math.ceil(ply.hungryregen),1),150)) or ply:Health())
 end)
 
 local furrypedik = {

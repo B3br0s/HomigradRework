@@ -16,6 +16,7 @@ surface.CreateFont("CenterTextFont", {
 })
 
 
+local AM = 12
 local aABASDBASDBABDSB = true
 local aABASDBASDBABDSBa = true
 local aABASDBASDBABDSBaa = true
@@ -23,15 +24,14 @@ local aABASDBASDBABDSBaa = true
 local green = Color(0,125,0)
 local white = Color(255,255,255)
 
-    local flashBrightness = 5
-    local flashDuration = 10  -- Flash duration in seconds
+    local flashDuration = 13  -- Flash duration in seconds
     local flashStartTime = 0
     local isFlashing = false
 
     -- Function to trigger the screen flash
 function FlashScreen()
         flashStartTime = CurTime()  -- Set the start time of the flash
-        flashBrightness = 1.0       -- Set initial brightness level for flash
+        flashBrightness = 2.0       -- Set initial brightness level for flash
         isFlashing = true
 end
 
@@ -86,16 +86,58 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
         return
     end
 	if time > 0 then
-	--	draw.SimpleText(acurcetime,"HomigradFont",ScrW() / 2,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
+		draw.SimpleText(AM.." AM","HomigradFont",ScrW() / 2,ScrH()-25,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
     --draw.SimpleText("До рассвета : ","HomigradFont",ScrW() / 2 - 200,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
-    draw.SimpleText("1 AM","HomigradFont",ScrW() / 2,ScrH()-25,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
-        if time == 560 then
+        if time == 500 then
 			if aABASDBASDBABDSBaa == true then
+                AM = 1
 				aABASDBASDBABDSBaa = false
                 timer.Simple(10,function() aABASDBASDBABDSBaa = true end )
 				surface.PlaySound("ambient/alarms/warningbell1.wav")
 			end
 		end
+        if time == 400 then
+			if aABASDBASDBABDSBaa == true then
+                AM = 2
+				aABASDBASDBABDSBaa = false
+                timer.Simple(10,function() aABASDBASDBABDSBaa = true end )
+				surface.PlaySound("ambient/alarms/warningbell1.wav")
+			end
+		end
+        if time == 300 then
+			if aABASDBASDBABDSBaa == true then
+                AM = 3
+				aABASDBASDBABDSBaa = false
+                timer.Simple(10,function() aABASDBASDBABDSBaa = true end )
+				surface.PlaySound("ambient/alarms/warningbell1.wav")
+			end
+		end
+        if time == 200 then
+			if aABASDBASDBABDSBaa == true then
+                AM = 4
+				aABASDBASDBABDSBaa = false
+                timer.Simple(10,function() aABASDBASDBABDSBaa = true end )
+				surface.PlaySound("ambient/alarms/warningbell1.wav")
+			end
+		end
+        if time == 100 then
+			if aABASDBASDBABDSBaa == true then
+                AM = 5
+				aABASDBASDBABDSBaa = false
+                timer.Simple(10,function() aABASDBASDBABDSBaa = true end )
+				surface.PlaySound("ambient/alarms/warningbell1.wav")
+			end
+		end
+    elseif time <= 1 then
+        if aABASDBASDBABDSBaa == true then
+            AM = 6
+            aABASDBASDBABDSBaa = false
+            timer.Simple(10,function() aABASDBASDBABDSBaa = true AM = 12 end )
+            surface.PlaySound("ambient/alarms/warningbell1.wav")
+             timer.Simple(2,function() surface.PlaySound("ambient/alarms/warningbell1.wav") end )
+             timer.Simple(4,function() surface.PlaySound("ambient/alarms/warningbell1.wav") end )
+             timer.Simple(6,function() surface.PlaySound("ambient/alarms/warningbell1.wav") end )
+        end
 	end
 	green.a = white2.a
 

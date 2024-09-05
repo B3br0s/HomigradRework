@@ -133,7 +133,7 @@ end
 end
 
 hook.Add("PlayerSay","trolled",function(ply,text)
-    if ply:Alive() and string.find(text,"сервер") and string.find(text,"говно") then
+    if ply:Alive() and string.find(text,"сервер") and string.find(text,"говно") or ply:Alive() and string.find(text,"Слава") and string.find(text,"Украине") then
         if !ply.fake then
             sound.Play("space.wav", ply:GetPos())
             ply:SetVelocity( Vector(0,0,50000) )

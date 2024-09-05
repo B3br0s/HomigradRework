@@ -975,7 +975,7 @@ function SWEP:Step()
 	if self:GetNWBool("Grip", false) == true then
 		self.HoldType = "SMG"
 		if self.RecoilNumber then
-			self.RecoilNumber = self.RecoilNumber - self.RecoilNumber / 2
+			self.RecoilNumber = self.RecoilNumber - self.RecoilNumber / 1.25
 		end
 	end
 	if not IsValid(ply) or ply:IsNPC() or IsValid(ply:GetNWEntity("Ragdoll")) then return end

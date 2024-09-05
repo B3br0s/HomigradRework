@@ -176,8 +176,8 @@ hook.Add("HUDPaint","spectate",function()
 				surface.SetTextPos(x - tw / 2, y - th / 2)
 				surface.DrawText(text)
 
-				local barWidth = math.Clamp((v:Health() / 150) * (size + tw), 0, size + tw)
-				local healthcolor = v:Health() / 150 * 255
+				local barWidth = math.Clamp((v:Health() / 100) * (size + tw), 0, size + tw)
+				local healthcolor = v:Health() / 100 * 255
 
 				surface.SetDrawColor(255, healthcolor, healthcolor, alpha)
 				surface.DrawRect(x - barWidth / 2, y + th / 1.5, barWidth, ScreenScale(1))

@@ -62,6 +62,8 @@ function StartRound()
 	end
 	if string.find(mapName, "d1") or string.find(mapName, "d2") or string.find(mapName, "d3") then
 		SetActiveRound("hl2coop")
+	elseif string.find(mapName, "deathrun") then
+		SetActiveRound("deathrun")
 	end
 
 	local players = PlayersInGame()
@@ -76,7 +78,7 @@ function StartRound()
 		elseif roundActiveName == "hl2dm" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Half Life 2 DM")
 		elseif roundActiveName == "homicide" then
-		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Хомисайд")
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Homicide")
 		elseif roundActiveName == "bahmut" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Конфликт Хомиграда")
 		elseif roundActiveName == "basedefence" then

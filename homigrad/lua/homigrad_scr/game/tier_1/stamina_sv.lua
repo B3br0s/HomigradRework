@@ -92,7 +92,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	
 		local k = math.Clamp(ply.stamina / 100,0,1) * 0.6
 		k = k + ply.adrenaline / 4
-		k = math.Clamp(k,0,1) * (ply.painlosing > 1 and 1 or ply.LeftLeg) * (ply.painlosing > 1 and 1 or ply.RightLeg) * math.max(ply:Health() / 150,0.2)
+		k = math.Clamp(k,0,1) * (ply.painlosing > 1 and 1 or ply.LeftLeg) * (ply.painlosing > 1 and 1 or ply.RightLeg) * math.max(ply:Health() / 100,0.2)
 		
 		net.Start("info_staminamul")
 		net.WriteFloat(k)

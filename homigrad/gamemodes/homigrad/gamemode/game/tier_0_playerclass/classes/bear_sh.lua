@@ -18,8 +18,8 @@ function CLASS.On(self)
     self:SetWalkSpeed(160)
     self:SetRunSpeed(300)
 
-    self:SetHealth(150)
-    self:SetMaxHealth(150)
+    self:SetHealth(100)
+    self:SetMaxHealth(100)
 
     --tdm.GiveSwep(self,CLASS.main_weapons,8)
 

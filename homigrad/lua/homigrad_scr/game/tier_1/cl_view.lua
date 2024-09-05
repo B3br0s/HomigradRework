@@ -316,7 +316,6 @@ local weps = {
 ["weapon_ump"] = true,
 ["weapon_xm1014"] = true,
 ["weapon_remington870"] = true,
-["weapon_taser"] = true,
 ["weapon_sar2"] = true,
 ["weapon_rpgg"] = true,
 ["weapon_beanbag"] = true,
@@ -1110,7 +1109,7 @@ hook.Add("RenderScreenspaceEffects","BloomEffect-homigrad",function()
 	end
 
 	if LocalPlayer():Alive() then
-		tab2["$pp_colour_colour"] = LocalPlayer():Health() / 150
+		tab2["$pp_colour_colour"] = LocalPlayer():Health() / 100
 		DrawColorModify(tab2)
 	end
 

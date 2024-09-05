@@ -32,7 +32,7 @@ function zombieinfection.StartRoundSV(data)
 
 	zombieinfection.respawned = true
 
-	timer.Simple(14.3,function ()
+	timer.Simple(15,function ()
 		local count = math.min(math.floor(#players / 1.5,1))
 		for i = 1,count do
 			local ply,key = table.Random(players)
@@ -40,22 +40,19 @@ function zombieinfection.StartRoundSV(data)
 
 			ply.Organs['artery']=0
 
-		--	ply.Organs['spine']=0
+			ply:TakeDamage(200)
 
-			timer.Simple(5.7,function ()
-				ply:Kill()
-			end)
+		--	ply.Organs['spine']=0
 	
 			ply.virusvichblya = true
 
 			ply:SetNWBool("INFECTED",true)
 
-
-    sound.Play("homigrad/player/male/male_cough"..math.random(1,5)..".wav", ply:GetPos())
+   			sound.Play("homigrad/player/male/male_cough"..math.random(1,5)..".wav", ply:GetPos())
 		end
 	end)
 
-	timer.Simple(35,function ()
+	timer.Simple(60,function ()
 		zombieinfection.respawned = false
 	end)
 	tdm.CenterInit()
@@ -103,9 +100,7 @@ function zombieinfection.PlayerSpawn(ply,teamID)
 		ply:SetNWBool("GivenWeapon", false) -- Initially, no weapon is given
 		ply:Give("weapon_hands") -- Give the player "weapon_hands"
 	
-		-- Ensure that we only give weapons if "GivenWeapon" is false (no weapons given yet)
 		if not ply:GetNWBool("GivenWeapon") then
-			timer.Simple(21, function()
 				if not IsValid(ply) then return end -- Make sure the player is still valid
 				
 				ply:SetNWBool("GivenWeapon", true) -- Mark weapons as given
@@ -114,14 +109,6 @@ function zombieinfection.PlayerSpawn(ply,teamID)
 				ply:GiveAmmo(500, "4.6 x30mm", true) -- Give ammo
 				ply:GiveAmmo(500, "9х19 mm Parabellum", true) -- Give ammo
 				ply:GiveAmmo(500, "12/70 beanbag", true) -- Give ammo
-			end)
-	
-			timer.Simple(40, function()
-				if not IsValid(ply) then return end -- Ensure the player is valid
-				if ply:GetNWBool("GivenWeapon") then
-					ply:SetNWBool("GivenWeapon", false) -- Reset "GivenWeapon" after 25 seconds
-				end
-			end)
 		end
 	end
 	

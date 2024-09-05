@@ -86,7 +86,9 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 			--elseif roundActiveName == "scp" then
 				--draw.SimpleText("До прибытия МОГ: " .. math.Round(scp.spawnMOG),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 			else
-				draw.SimpleText("До конца раунда: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT) 
+				if roundActiveName != "zombieinfection" then
+					draw.SimpleText("До конца раунда: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
+				end
 			end
 			else draw.SimpleText("Время вышло","HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 		end
