@@ -9,7 +9,15 @@
     local daun = false
     local PlayerModelPanel = nil
     local PlayerModelAlpha = 0 -- Variable for player model transparency
-    local dragText = ""
+    local SlotWeaponMap = {
+    slot1=nil,    
+    slot2=nil,    
+    slot3=nil,    
+    slot4=nil,    
+    slot5=nil,   
+    slot6=nil,    
+    slot7=nil,    
+    } -- Mapping of slot indices to weapon class names
 
     hook.Add("HUDShouldDraw", "HideDefaultWeaponSelection", function(name)
         if name == "CHudWeaponSelection" then return false end
@@ -40,6 +48,9 @@
                 if IsValid(slot.Weapon) then
                     RunConsoleCommand("use", slot.Weapon:GetClass())
                     RunConsoleCommand("say", "*drop")
+                    -- Update SlotWeaponMap and remove the weapon from the slot
+                    SlotWeaponMap[slot.index] = nil
+                    slot.Weapon = nil
                     WeaponInventory:CloseInventory()
                     timer.Simple(0.1, function ()
                         WeaponInventory:OpenInventory() 
@@ -54,7 +65,7 @@
         local slot = vgui.Create("DPanel", parent)
         slot:SetSize(80, 80)
         slot.index = index
-        slot.Weapon = nil
+        slot.Weapon = SlotWeaponMap[slot.index] or nil
         slot:SetBackgroundColor(Color(60, 60, 60, 150))
 
         function slot:Paint(w, h)
@@ -80,12 +91,26 @@
         function slot:OnMouseReleased(mousecode)
             if mousecode == MOUSE_LEFT and dragPanel then
                 if self:IsHovered() and self ~= dragPanel then
-                    -- Swap weapons between the two slots
-                    self.Weapon, dragPanel.Weapon = dragPanel.Weapon, self.Weapon
+                    local tmpWeapon = self.Weapon
+                    self.Weapon = dragPanel.Weapon
+                    dragPanel.Weapon = tmpWeapon
+        
+
+                    SlotWeaponMap[self.index] = self.Weapon and self.Weapon:GetClass() or nil
+                    SlotWeaponMap[dragPanel.index] = dragPanel.Weapon and dragPanel.Weapon:GetClass() or nil
+                 -- print(SlotWeaponMap[self.index])
+                    print("--------------")
+                    print(SlotWeaponMap[1])
+                    print(SlotWeaponMap[2])
+                    print(SlotWeaponMap[3])
+                    print(SlotWeaponMap[4])
+                    print(SlotWeaponMap[5])
+                    print(SlotWeaponMap[6])
+                    print(SlotWeaponMap[7])
+                    print("--------------")
                     surface.PlaySound("buttons/button14.wav")
                 end
                 dragPanel = nil
-                dragText = ""
             end
         end
 
@@ -196,9 +221,13 @@
         CreatePlayerModelPanel(self)
 
         Weapons = LocalPlayer():GetWeapons()
-        for _, slot in ipairs(Slots) do
+
+        -- Reset SlotWeaponMap and slot contents
+        for i = 1, MaxSlots do
+            SlotWeaponMap[i] = nil
+            local slot = Slots[i]
             if IsValid(slot) then
-                slot.Weapon = nil
+                slot.Weapon = nil or SlotWeaponMap[slot.index]
             end
         end
 
@@ -206,12 +235,23 @@
         for i = 1, MaxSlots do
             local slot = Slots[i]
             if IsValid(slot) then
-                while weaponIndex <= #Weapons do
-                    local weapon = Weapons[weaponIndex]
-                    weaponIndex = weaponIndex + 1
-                    if IsValid(weapon) and not blacklistweapon[weapon:GetClass()] then
-                        slot.Weapon = weapon
-                        break
+                local weaponClass = SlotWeaponMap[i]
+                if weaponClass then
+                    for _, weapon in ipairs(Weapons) do
+                        if IsValid(weapon) and weapon:GetClass() == weaponClass and not blacklistweapon[weaponClass] then
+                                slot.Weapon = nil
+                            break
+                        end
+                    end
+                else
+                    while weaponIndex <= #Weapons do
+                        local weapon = Weapons[weaponIndex]
+                        weaponIndex = weaponIndex + 1
+                        if IsValid(weapon) and not blacklistweapon[weapon:GetClass()] then
+                            slot.Weapon = weapon or SlotWeaponMap[slot.index]
+                            SlotWeaponMap[slot.index] = weapon:GetClass()
+                            break
+                        end
                     end
                 end
             end
@@ -255,4 +295,5 @@
             timer.Simple(0.2, function() daun = false end)
         end
     end)
-end]]
+end
+]]

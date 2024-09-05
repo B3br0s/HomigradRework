@@ -34,7 +34,7 @@ if CLIENT then
             modelIcon:SetTooltip(modelName)
 
             modelIcon.DoClick = function()
-                SetClipboardText(modelPath)
+                SetClipboardText('"'..modelPath..'"')
                 notification.AddLegacy("Скопирован путь к модельке: " .. modelPath, NOTIFY_HINT, 5)
             end
         end

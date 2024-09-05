@@ -1,5 +1,5 @@
 local cashSystem = {}
-local cashDataFolder = "homigrad_data/"
+local cashDataFolder = "cash_data/"
 
 local function getPlayerDataFilePath(ply)
     return cashDataFolder .. ply:SteamID64() .. ".txt"

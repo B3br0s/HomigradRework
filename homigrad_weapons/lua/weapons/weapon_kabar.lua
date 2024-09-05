@@ -284,10 +284,13 @@ end
 local zeroAng = Angle(0,0,0)
 
 function SWEP:Think()
+	if not self:GetOwner():GetNWBool("Suicidingknife") then
 	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Clavicle"), Angle(0, 20, 30), true)
 	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Forearm"), Angle(0, 0, 0), true)
+	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand"), Angle(0, 0, 0), true)
 	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_Spine4"), Angle(0, -10, 0), true)
 	self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Clavicle"), Angle(0, 0, -35), true)
+	end
 end
 
 end

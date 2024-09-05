@@ -942,29 +942,10 @@ if SERVER then
 		if not ply:Alive() then return end
 		if suicidetable[ply:GetActiveWeapon():GetClass()] then
 		--	if ply:KeyDown(IN_ATTACK) then
-				sound.Play(ply:GetActiveWeapon().Primary.Sound, ply:GetPos())
-				timer.Simple(0.1,function ()
-					ply:ConCommand("say *drop")
-					sound.Play("snd_jack_hmcd_knifestab.wav", ply:GetPos())
-				end)
-				timer.Simple(0.18,function ()
-					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
-					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
-					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
-					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
-					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
-					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
-					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
-					sound.Play("artery.wav", ply:GetPos())
-					ply:ChatPrint("Вы пробили себе артерию.")
-					ply.Organs['artery']=0
-					ply:TakeDamage(242)
-				--	ply.adrenaline = 1
-				end)
-			--[[	timer.Simple(10,function ()
-					ply.Organs['spine']=0
-				--	ply:ChatPrint("Вы умираете в агонии.")
-				end)]]
+				ply.suicidingknife = not ply.suicidingknife
+				ply:SetNWBool("Suicidingknife",ply.suicidingknife)
+				print(ply:GetNWBool("Suicidingknife"))
+				
 		--	end
 		end
 	end)
@@ -973,6 +954,8 @@ end
 hook.Add("PlayerDeath","suciding",function(ply)
 	ply.suiciding = false
 	ply:SetNWBool("Suiciding",false)
+	ply.suicidingknife = false
+	ply:SetNWBool("Suicidingknife",false)
 end)
 
 local util_QuickTrace = util.QuickTrace

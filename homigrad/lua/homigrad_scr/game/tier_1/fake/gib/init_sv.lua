@@ -373,8 +373,8 @@ local util_Decal = util.DecalEx
 
 local tr = {}
 matblood = {}
-for i = 1,10 do 
-	matblood[i] = Material("decals/model_z_blood" .. i) 
+for i = 1,8 do 
+	matblood[i] = Material("decals/blood" .. i) 
 end
 hook.Add("Think","Gib",function()
 	local time = CurTime()

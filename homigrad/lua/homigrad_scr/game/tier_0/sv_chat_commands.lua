@@ -243,7 +243,7 @@ hook.Add("CheckPassword","sync",function(steamID)
 	--if CloseDev then return false,"dev" end
 
 	if MaxPlayers and #getNotDonaters() + 1 > MaxPlayers then
-		return false,"limit players\nСервер заполнен, но есть еще донат слоты!\nМожете их купить здесь http://80.85.241.23"
+		return false,"limit players\nСервер заполнен"
 	end
 
 	if Sync then return false,"xd" end
