@@ -136,11 +136,16 @@ if CLIENT then
             end
         else
                 if not ply:Alive() then return end
-             if suicidetable[ply:GetActiveWeapon():GetClass()] or not ply:GetActiveWeapon().Base == 'salat_base' then
+                if IsValid(ply:GetActiveWeapon()) then
+             if suicidetable[ply:GetActiveWeapon():GetClass()] then
             local forearmID_r = ply:LookupBone(boneManipulation.forearm_bone_r)
             local handID_r = ply:LookupBone(boneManipulation.hand_bone_r)
             local clavicleID_r = ply:LookupBone(boneManipulation.clavicle_bone_r)
             local upperarmID_r = ply:LookupBone(boneManipulation.upperarm_bone_r)
+            local weapon = ply:GetActiveWeapon()
+            if IsValid(weapon) and weapon.HoldType then
+                weapon:SetHoldType(weapon.HoldType)
+            end
             if ply:GetActiveWeapon():GetClass() != "weapon_kabar" then
             if forearmID_r then
                 ply:ManipulateBonePosition(forearmID_r, Vector(0, 0, 0))
@@ -188,10 +193,7 @@ if CLIENT then
             end
 
         end
-            local weapon = ply:GetActiveWeapon()
-            if IsValid(weapon) and weapon.HoldType then
-                weapon:SetHoldType(weapon.HoldType)
-            end
+    end
         end
         end
     end)
