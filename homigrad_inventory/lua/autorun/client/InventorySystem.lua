@@ -5,24 +5,16 @@
     local Slots = {}
     local MaxSlots = 7
     local blacklistweapon = { ["weapon_hands"] = true }
-    local Weapons = {}
-    local daun = false
+    local SlotAssignments = {} -- Stores weapon class assignments for each slot
     local PlayerModelPanel = nil
-    local PlayerModelAlpha = 0 -- Variable for player model transparency
-    local SlotWeaponMap = {
-    slot1=nil,    
-    slot2=nil,    
-    slot3=nil,    
-    slot4=nil,    
-    slot5=nil,   
-    slot6=nil,    
-    slot7=nil,    
-    } -- Mapping of slot indices to weapon class names
+    local PlayerModelAlpha = 0
 
+    -- Disable the default weapon HUD
     hook.Add("HUDShouldDraw", "HideDefaultWeaponSelection", function(name)
         if name == "CHudWeaponSelection" then return false end
     end)
 
+    -- Function to draw a blur effect
     local function DrawBlur(panel, amount)
         local x, y = panel:LocalToScreen(0, 0)
         surface.SetDrawColor(255, 255, 255)
@@ -35,25 +27,23 @@
         end
     end
 
+    -- Function to create the context menu for a slot
     local function CreateContextMenu(slot)
         local menu = DermaMenu()
         if slot.Weapon and not blacklistweapon[slot.Weapon:GetClass()] then
-            menu:AddOption("Использовать", function()
+            menu:AddOption("Use", function()
                 if IsValid(slot.Weapon) then
                     RunConsoleCommand("use", slot.Weapon:GetClass())
                 end
             end):SetIcon("icon16/tick.png")
 
-            menu:AddOption("Выкинуть", function()
+            menu:AddOption("Drop", function()
                 if IsValid(slot.Weapon) then
                     RunConsoleCommand("use", slot.Weapon:GetClass())
                     RunConsoleCommand("say", "*drop")
-                    -- Update SlotWeaponMap and remove the weapon from the slot
-                    SlotWeaponMap[slot.index] = nil
-                    slot.Weapon = nil
                     WeaponInventory:CloseInventory()
-                    timer.Simple(0.1, function ()
-                        WeaponInventory:OpenInventory() 
+                    timer.Simple(0.1, function()
+                        WeaponInventory:OpenInventory()
                     end)
                 end
             end):SetIcon("icon16/delete.png")
@@ -61,11 +51,12 @@
         menu:Open()
     end
 
+    -- Function to create a weapon slot
     local function CreateWeaponSlot(parent, index)
         local slot = vgui.Create("DPanel", parent)
         slot:SetSize(80, 80)
         slot.index = index
-        slot.Weapon = SlotWeaponMap[slot.index] or nil
+        slot.Weapon = nil
         slot:SetBackgroundColor(Color(60, 60, 60, 150))
 
         function slot:Paint(w, h)
@@ -91,23 +82,15 @@
         function slot:OnMouseReleased(mousecode)
             if mousecode == MOUSE_LEFT and dragPanel then
                 if self:IsHovered() and self ~= dragPanel then
-                    local tmpWeapon = self.Weapon
+                    -- Swap the weapons between the two slots
+                    local tempWeapon = self.Weapon
                     self.Weapon = dragPanel.Weapon
-                    dragPanel.Weapon = tmpWeapon
-        
+                    dragPanel.Weapon = tempWeapon
 
-                    SlotWeaponMap[self.index] = self.Weapon and self.Weapon:GetClass() or nil
-                    SlotWeaponMap[dragPanel.index] = dragPanel.Weapon and dragPanel.Weapon:GetClass() or nil
-                 -- print(SlotWeaponMap[self.index])
-                    print("--------------")
-                    print(SlotWeaponMap[1])
-                    print(SlotWeaponMap[2])
-                    print(SlotWeaponMap[3])
-                    print(SlotWeaponMap[4])
-                    print(SlotWeaponMap[5])
-                    print(SlotWeaponMap[6])
-                    print(SlotWeaponMap[7])
-                    print("--------------")
+                    -- Update the slot assignments
+                    SlotAssignments[self.index] = self.Weapon and self.Weapon:GetClass() or nil
+                    SlotAssignments[dragPanel.index] = dragPanel.Weapon and dragPanel.Weapon:GetClass() or nil
+
                     surface.PlaySound("buttons/button14.wav")
                 end
                 dragPanel = nil
@@ -117,11 +100,12 @@
         return slot
     end
 
+    -- Function to create the player model panel
     local function CreatePlayerModelPanel(parent)
         if IsValid(PlayerModelPanel) then
             PlayerModelPanel:Remove()
         end
-        
+
         PlayerModelPanel = vgui.Create("DModelPanel", parent)
         PlayerModelPanel:SetSize(400, 500)
         PlayerModelPanel:SetPos(0, ScrH() / 2 - 300)
@@ -133,13 +117,13 @@
         function PlayerModelPanel:LayoutEntity(ent)
             ent:SetAngles(Angle(0, 0, 0))
         end
-            
+
         Ent:SetSkin(LocalPlayer():GetSkin())
         for k, v in pairs(LocalPlayer():GetBodyGroups()) do
             local cur_bgid = LocalPlayer():GetBodygroup(v.id)
             Ent:SetBodygroup(v.id, cur_bgid)
         end
-            
+
         if LocalPlayer().EZarmor.suited and LocalPlayer().EZarmor.bodygroups then
             PlayerModelPanel:SetColor(LocalPlayer():GetColor())
             for k, v in pairs(LocalPlayer().EZarmor.bodygroups) do
@@ -148,11 +132,7 @@
         end
 
         function PlayerModelPanel:PaintOver(w, h)
-            if PlayerModelAlpha > 0 then
-                self:SetAlpha(PlayerModelAlpha)
-            else
-                self:SetAlpha(0)
-            end
+            self:SetAlpha(PlayerModelAlpha)
         end
 
         function PlayerModelPanel:PostDrawModel(ent)
@@ -220,39 +200,42 @@
 
         CreatePlayerModelPanel(self)
 
+        -- Get player's weapons
         Weapons = LocalPlayer():GetWeapons()
 
-        -- Reset SlotWeaponMap and slot contents
-        for i = 1, MaxSlots do
-            SlotWeaponMap[i] = nil
-            local slot = Slots[i]
+        -- Clear the slots before assigning
+        for _, slot in ipairs(Slots) do
             if IsValid(slot) then
-                slot.Weapon = nil or SlotWeaponMap[slot.index]
+                slot.Weapon = nil
             end
         end
 
-        local weaponIndex = 1
+        -- Assign weapons to slots based on SlotAssignments
         for i = 1, MaxSlots do
             local slot = Slots[i]
             if IsValid(slot) then
-                local weaponClass = SlotWeaponMap[i]
+                local weaponClass = SlotAssignments[i]
                 if weaponClass then
                     for _, weapon in ipairs(Weapons) do
-                        if IsValid(weapon) and weapon:GetClass() == weaponClass and not blacklistweapon[weaponClass] then
-                                slot.Weapon = nil
+                        if weapon:GetClass() == weaponClass then
+                            slot.Weapon = weapon
                             break
                         end
                     end
-                else
-                    while weaponIndex <= #Weapons do
-                        local weapon = Weapons[weaponIndex]
-                        weaponIndex = weaponIndex + 1
-                        if IsValid(weapon) and not blacklistweapon[weapon:GetClass()] then
-                            slot.Weapon = weapon or SlotWeaponMap[slot.index]
-                            SlotWeaponMap[slot.index] = weapon:GetClass()
-                            break
-                        end
-                    end
+                end
+            end
+        end
+
+        -- If no assignment exists, populate based on the player's inventory order
+        local weaponIndex = 1
+        for i = 1, MaxSlots do
+            local slot = Slots[i]
+            if IsValid(slot) and not slot.Weapon and weaponIndex <= #Weapons then
+                local weapon = Weapons[weaponIndex]
+                weaponIndex = weaponIndex + 1
+                if IsValid(weapon) and not blacklistweapon[weapon:GetClass()] then
+                    slot.Weapon = weapon
+                    SlotAssignments[i] = weapon:GetClass() -- Save assignment for persistence
                 end
             end
         end

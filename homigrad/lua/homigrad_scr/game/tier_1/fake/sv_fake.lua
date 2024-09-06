@@ -872,8 +872,8 @@
 	hook.Add("Player Collide","homigrad-fake",function(ply,hitEnt,data)
 		--if not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 80 then
 		if
-			(gg:GetBool() and not ply:HasGodMode() and data.Speed > 200) or
-			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 150)
+			(gg:GetBool() and not ply:HasGodMode() and data.Speed > 25) or
+			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 25 / hitEnt:GetPhysicsObject():GetMass() * 20 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 150)
 		then
 			timer.Simple(0,function()
 				if not IsValid(ply) or ply.fake then return end
@@ -886,7 +886,7 @@
 	end)
 
 	hook.Add("OnPlayerHitGround","GovnoJopa",function(ply,a,b,speed)
-		if speed > 200 then
+		if speed > 50 then
 			if hook.Run("Should Fake Ground",ply) ~= nil then return end
 
 			local tr = {}
