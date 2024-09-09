@@ -36,18 +36,6 @@ local ammotypes = {
         maxsplash = 5
     },
 
-    ["762x33mm"] = {
-        name = "7.62x33 mm",
-        dmgtype = DMG_BULLET, 
-        tracer = TRACER_LINE,
-        plydmg = 0,
-        npcdmg = 0,
-        force = 400,
-        maxcarry = 120,
-        minsplash = 10,
-        maxsplash = 5
-    },
-
     ["545×39mm"] = {
         name = "5.45x39 mm",
         dmgtype = DMG_BULLET, 
@@ -108,7 +96,7 @@ local ammotypes = {
         maxsplash = 5
     },
     
-    ["9x18rubber"] = {
+    ["9x18mmrubber"] = {
         name = "9x18 Rubber",
         dmgtype = DMG_BULLET, 
         tracer = TRACER_LINE,
@@ -236,7 +224,7 @@ local ammoents = {
         Scale = 0.8,
     },
 
-    ["9x18rubber"] = {
+    ["9x18mmrubber"] = {
         Material = "models/hmcd_ammobox_38",
         Scale = 0.8,
     },
@@ -271,11 +259,6 @@ local ammoents = {
         Material = "models/hmcd_ammobox_22",
         Scale = 1.2,
         Color = Color(125,155,95)
-    },
-
-    ["762x33mm"] = {
-        Material = "models/hmcd_ammobox_22",
-        Scale = 0.8,
     },
 }
 
@@ -406,13 +389,12 @@ local ammolistent = {
     [45] = "556x45mm",
     [46] = "57×28mm",
     [47] = "762x39mm",
-    [48] = "9x39mm",
-    [49] = "9х19mm",
-    [50] = "762x33mm",
-    [51] = "9х18mm",
-    [52] = "tasercartridge",
-    [53] = "762x54mm",
-    [54] = "airsoftballs",
+    [48] = "762x54mm",
+    [49] = "9x18mmrubber",
+    [50] = "9x39mm",
+    [51] = "9х19mm",
+    [52] = "airsoftballs",
+    [69] = "tasercartridge",
 }
 
 if SERVER then

@@ -6,9 +6,9 @@ ENT.Author = "B3bros"
 ENT.Spawnable = true
 ENT.AdminSpawnable = false
 
-numba = 0
+numbaachub = 0
 local meleeList = {
-    {class = "melee_kabar", model = "models/weapons/insurgency/w_marinebayonet.mdl"},
+    {class = "weapon_kabar", model = "models/weapons/insurgency/w_marinebayonet.mdl"},
     {class = "weapon_hg_fireaxe", model = "models/weapons/me_axe_fire_tracer/w_me_axe_fire.mdl"},
     {class = "weapon_hg_fubar", model = "models/weapons/me_fubar/w_me_fubar.mdl"},
     {class = "weapon_gurkha", model = "models/pwb2/melees/w_mp5a3.mdl"},
@@ -106,7 +106,7 @@ if CLIENT then
                 isClosing = true
                 animationStartTime = CurTime()
                 isPanelOpen = false
-                net.Start("CloseCrate")
+                net.Start("CloseCratee")
                 net.WriteEntity(ent)
                 net.SendToServer()
                 surface.PlaySound("items/ammocrate_close.wav")
@@ -202,44 +202,6 @@ if CLIENT then
 
         if IsValid(modelPanel) then
             modelPanel:SetModel(currentmeleeModel)
-
-            if currentmeleeName == "Mateba" then
-                modelPanel:SetCamPos(Vector(7, 30, 2))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentmeleeName == "TMP" then
-                modelPanel:SetCamPos(Vector(-10, 50, 3))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentmeleeName == "AKM" then
-                modelPanel:SetCamPos(Vector(-3, 60, 4))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentmeleeName == "HK MP5a3" then
-                modelPanel:SetCamPos(Vector(5, 45, 0))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentmeleeName == "M590" then
-                modelPanel:SetCamPos(Vector(-1.5, 60, 5))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentmeleeName == "HK USP-S" then
-                modelPanel:SetCamPos(Vector(10, 1, 35))
-                modelPanel:SetLookAng(Vector(90, 90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentmeleeName == "FAMAS-Civil" then
-                modelPanel:SetCamPos(Vector(5.5, 50, 1))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentmeleeName == "АКС-74У" then
-                modelPanel:SetCamPos(Vector(-5, 50, 4))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentmeleeName == "Five-Seven" then
-                modelPanel:SetCamPos(Vector(5, 30, 1.6))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            end
         end
     end)
 
@@ -251,7 +213,7 @@ else
     util.AddNetworkString("UpdatemeleeName")
     util.AddNetworkString("OpenmeleeBoxVGUI")
     util.AddNetworkString("LootmeleeFromCrate")
-    util.AddNetworkString("CloseCrate")
+    util.AddNetworkString("CloseCratee")
     util.AddNetworkString("ChoosemeleeCrate")
 
     function ENT:Initialize()
@@ -295,7 +257,7 @@ else
         end
     end
 
-    net.Receive("CloseCrate", function(len, ply)
+    net.Receive("CloseCratee", function(len, ply)
         local crate = net.ReadEntity()
         crate.BeingLooted = false
     end)
@@ -305,11 +267,11 @@ else
         if crate.meleeIns == "PUSTOSUKAPUSTOOOOZAREGENTEORUZHIE" then
             local randomIndex = math.random(1, #meleeList)
             crate.meleeIns = meleeList[randomIndex].class
-            numba = randomIndex
+            numbaachub = randomIndex
         end
         net.Start("UpdatemeleeName")
-        net.WriteString(meleeListTranslate[numba])
-        net.WriteString(meleeList[numba].model)
+        net.WriteString(meleeListTranslate[numbaachub])
+        net.WriteString(meleeList[numbaachub].model)
         net.Send(ply)
     end)
 
@@ -327,10 +289,10 @@ else
                 else
                     ply:Give(melee)
                     crate.meleeIns = "Empty"
-                    numba = 10
+                    numbaachub = 10
                     net.Start("UpdatemeleeName")
-                    net.WriteString(meleeListTranslate[numba])
-                    net.WriteString(meleeList[numba].model)
+                    net.WriteString(meleeListTranslate[6])
+                    net.WriteString(meleeList[6].model)
                     net.Send(ply)
                 end
             else

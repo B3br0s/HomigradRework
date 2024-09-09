@@ -775,10 +775,6 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
 			angWep = hand.Ang + Angle(-24,0,0)
 		end
-	--[[	if weaponClass == "weapon_mk18" then
-			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
-			angWep = hand.Ang + Angle(-24,0,0)
-		end]]
 	else
 		if not wep.SightPos then return end
 		vecWep = hand.Pos + hand.Ang:Up() * (wep.SightPos.x or 0) - hand.Ang:Forward() * (wep.SightPos.x or 0) + hand.Ang:Right() * (wep.SightPos.z or 0)
@@ -941,32 +937,6 @@ hook.Add("HUDShouldDraw","HideHUD",function(name)
 	if (hide[name]) then return false end
 end)
 
---[[
-local allowedRanks = {
-  ["superadmin"] = true,
-  ["admin"] = true,
-  ["operator"] = true,
-  ["moderator"] = true,
-  ["user"] = true,
-  ["viptest"] = true,
-  ["kakaha"] = true
-}]]--
-
---[[прицелчики
-hook.Add("PostDrawOpaqueRenderables", "example", function()
-	local hand = LocalPlayer():GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
-	local eye = LocalPlayer():GetAttachment(ply:LookupAttachment("eyes"))
-	possight = hand.Pos + hand.Ang:Up() * 4.4 - hand.Ang:Forward() * -1 + hand.Ang:Right() * -0.15
-	angle = hand.Ang + Angle(-90,0,0)
-
-
-	cam.Start3D2D( possight, angle, 1 )
-		surface.SetDrawColor( 255, 0, 0, 200)
-		draw.NoTexture()
-		draw.Circle(0,0,0.05,25 )
-	cam.End3D2D()
-end )
-]]--
 
 hook.Add("Think","mouthanim",function()
 	for i, ply in pairs(player.GetAll()) do
@@ -989,7 +959,7 @@ hook.Add("Think","mouthanim",function()
 	end
 end)
 
-net.Receive("fuckfake",function(len) -- testing shit, stops creating errors.
+net.Receive("fuckfake",function(len)
 --ply:SetNWEntity("Ragdoll",nil)
 --end)
 	for i, ply in pairs(player.GetAll()) do

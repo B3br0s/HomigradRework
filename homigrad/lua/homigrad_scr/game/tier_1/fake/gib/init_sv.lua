@@ -165,6 +165,8 @@ function Gib_Input(rag,bone,dmgInfo,player)
 		end
 	end
 
+	ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(-90),math.random(130),math.random(130)))	
+
 	local phys_bone = rag:TranslateBoneToPhysBone(bone)
 
 	local dmgPos = dmgInfo:GetDamagePosition()
@@ -186,8 +188,10 @@ function Gib_Input(rag,bone,dmgInfo,player)
 	
 			
 		--	if GetGlobalBool("GoreEnabled") then
-				razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
+		if dmgInfo:GetDamage() >= 2000 then
+				razrivtela(rag:GetPos())
 		--	end
+		end
 
 		--	if GetGlobalBool("BloodGoreEnabled") then
 				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
@@ -196,60 +200,39 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			rag:Remove()
 	end
 
-	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 250 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
-		sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
-		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
+	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 300 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
+		sound.Emit(rag,"homigrad/headshoot.wav")
+	--	sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 		sound.Emit(rag,"physics/body/body_medium_break3.wav")
-		sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)
+	--	sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)
 
 		timer.Simple(0.05,function()
 			if not IsValid(rag) then return end
 
-			rag:EmitSound("physics/flesh/flesh_bloody_break.wav",90,75,2)
+		--	rag:EmitSound("physics/flesh/flesh_bloody_break.wav",90,75,2)
 		end)
 
 	--	if GetGlobalBool("GoreEnabled") then
-			headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
 	--	end
 
 	--	if GetGlobalBool("BloodGoreEnabled") then
 				BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
 
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 	--	end
+	if dmgInfo:GetDamage() >= 1000 then
+		headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
 
 		Gib_RemoveBone(rag,bone,phys_bone)
+end
+		
 	end
 	--ахуенно когда взрываеца от прикосновения да?
 	--да
@@ -268,53 +251,36 @@ function Gib_Input(rag,bone,dmgInfo,player)
 			end]]
 			
 		--	if GetGlobalBool("GoreEnabled") then
-				razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
+		if dmgInfo:GetDamage() >= 1600 then
+	--		razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
+		end
 		--	end
 
 		--	if GetGlobalBool("BloodGoreEnabled") then
 		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
 		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
+		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
 		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
 		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
+		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
+		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
+		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-	--	end
+		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
+		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
 
 				BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)	
 				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
@@ -332,7 +298,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	--разве это не смешно когда ножом башка взрывается?
 	--нет
 	
-	if dmgInfo:GetDamage() >= 15 then
+	if dmgInfo:GetDamage() >= 1 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)
@@ -396,7 +362,7 @@ hook.Add("Think","Gib",function()
 				local traceResult = util_TraceLine(tr)
 				if traceResult.Hit then
 					ent:EmitSound("ambient/water/drip" .. math.random(1,4) .. ".wav", 60,math.random(230,240),0.1,CHAN_AUTO)
-            		util_Decal(matblood[math.random(1,#matblood)], game.GetWorld() ,traceResult.HitPos + traceResult.HitNormal,traceResult.HitPos - traceResult,HitNormal, Color(190,44,44,155),0.7,0.7)
+            	--	util_Decal(matblood[math.random(1,#matblood)], game.GetWorld() ,traceResult.HitPos + traceResult.HitNormal,traceResult.HitPos - traceResult,HitNormal, Color(190,44,44,155),0.7,0.7)
 				else
 					BloodParticle(ent:GetPos() + ent:OBBCenter(),ent:GetVelocity() + Vector(math.Rand(-5,5),math.Rand(-5,5),0))
 				end

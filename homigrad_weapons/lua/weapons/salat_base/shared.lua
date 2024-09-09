@@ -651,7 +651,8 @@ function SWEP:PrimaryAttack()
 end
 
 function spawn_mag(modelPath, owner, weapon)
-	local prop = ents.Create("prop_physics")
+	if SERVER then
+		local prop = ents.Create("prop_physics")
 
 	if not IsValid(prop) then return end
 
@@ -672,6 +673,7 @@ function spawn_mag(modelPath, owner, weapon)
 	if IsValid(phys) then
 		phys:Wake()
 	end
+	end
 end
 
 function SWEP:Reload()
@@ -683,7 +685,7 @@ function SWEP:Reload()
 		self:GetOwner():SetAnimation(PLAYER_RELOAD)
 		self:EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO)
 		timer.Simple(0.1,function ()
-			spawn_mag(self.MagModel,self:GetOwner(),self,self.BigMagModel)
+	--		spawn_mag(self.MagModel,self:GetOwner(),self,self.BigMagModel)
 		end)
 		timer.Create( "reload"..self:EntIndex(), self.ReloadTime, 1, function()
 			if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self then

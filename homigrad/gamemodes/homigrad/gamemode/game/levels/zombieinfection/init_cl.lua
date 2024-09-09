@@ -74,6 +74,7 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
     if startRound > 0 and lply:Alive() then
 		if time >= 595 then
 			if aABASDBASDBABDSB == true then
+                AM = 12
 				aABASDBASDBABDSB = false
 				surface.PlaySound("infectionround/infectionroundstart.wav")
 				timer.Simple(10,function() aABASDBASDBABDSB = true end )

@@ -16,7 +16,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if
             dmginfo:GetDamageType() == DMG_CRUSH and
             dmginfo:GetDamage() >= 5 and
-            ent:GetVelocity():Length() > 190
+            ent:GetVelocity():Length() > 150
         then
             ply:ChatPrint("Твоя шея была сломана")
             ent:EmitSound("homigrad/player/neck_snap_01.wav",100,100,10,CHAN_ITEM)

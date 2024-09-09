@@ -1,10 +1,13 @@
 	if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
-	local handsarrivetime = 0.25
-	local forwardarrivetime = 0.7
-	local backarrivetime = 0.27
+	local handsarrivetime = 0.3
+	local forwardarrivetime = 0.5
+	local backarrivetime = 0.24
 	local handsangup = 100
+
+	util.AddNetworkString("HandindicatorR")
+	util.AddNetworkString("HandindicatorL")
 
 	Organs = {
 		['brain']=2,
@@ -1186,7 +1189,7 @@
 					local angs = ply:EyeAngles()
 					angs:RotateAroundAxis(angs:Forward(),90)
 					local shadowparams = {
-						secondstoarrive=0.1,
+						secondstoarrive=0.001,
 						pos=head:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
 						angle=angs,
 						maxangulardamp=10,
@@ -1242,6 +1245,10 @@
 						local trace = util.TraceLine(traceinfo)
 						if(trace.Hit and !trace.HitSky)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
+							net.Start("HandindicatorL")
+							net.WriteVector(phys:GetPos())
+							net.WriteBool(true)
+							net.Send(ply)
 							if(IsValid(cons))then
 								rag.ZacConsLH=cons
 							end
@@ -1254,6 +1261,9 @@
 				if(IsValid(rag.ZacConsLH))then
 					rag.ZacConsLH:Remove()
 					rag.ZacConsLH=nil
+					net.Start("HandindicatorL")
+					net.WriteBool(false)
+					net.Send(ply)
 				end
 			end
 			if(ply:KeyDown(IN_WALK)) and !RagdollOwner(rag).Otrub and !timer.Exists("StunTime"..ply:EntIndex()) then
@@ -1278,6 +1288,10 @@
 						local trace = util.TraceLine(traceinfo)
 						if(trace.Hit and !trace.HitSky)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
+							net.Start("HandindicatorR")
+							net.WriteVector(phys:GetPos())
+							net.WriteBool(true)
+							net.Send(ply)
 							if(IsValid(cons))then
 								rag.ZacConsRH=cons
 							end
@@ -1289,6 +1303,9 @@
 				if(IsValid(rag.ZacConsRH))then
 					rag.ZacConsRH:Remove()
 					rag.ZacConsRH=nil
+					net.Start("HandindicatorR")
+					net.WriteBool(false)
+					net.Send(ply)
 				end
 			end
 			if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH))then

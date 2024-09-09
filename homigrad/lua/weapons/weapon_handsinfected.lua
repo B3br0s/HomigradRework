@@ -484,7 +484,7 @@ function SWEP:AttackFront()
 			sound.Play("npc/zombie/claw_strike1.wav", HitPos, 65, math.random(90, 110))
 		end
 
-		local DamageAmt = math.random(15,30)
+		local DamageAmt = math.random(10,20)
 		local Dam = DamageInfo()
 		Dam:SetAttacker(self:GetOwner())
 		Dam:SetInflictor(self.Weapon)
