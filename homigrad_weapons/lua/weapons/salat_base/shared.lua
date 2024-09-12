@@ -716,8 +716,9 @@ function SWEP:Reload()
 				end)
 			end
 		end
-		if self.LoadSound then
-			for i = 1, self.Primary.DefaultClip - self:Clip1() do
+		
+		if self.LoadSound and self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ) > 0 and self:Clip1() < self:GetMaxClip1() then
+			for i = 1, self:GetMaxClip1() - self:Clip1() do
 				timer.Simple(0.5 * i, function()
 					self:EmitSound(self.LoadSound..".wav", 60, 100, 0.8, CHAN_AUTO)
 					if i == self.Primary.DefaultClip then
@@ -726,12 +727,14 @@ function SWEP:Reload()
 						self:EmitSound(self.Primary.PumpSound, 60, 100, 0.8, CHAN_AUTO)
 					end)
 				end
-				timer.Simple(0.5,function ()
-					local oldclip = self:Clip1()
-				self:SetClip1(math.Clamp(self:Clip1()+self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ),0,self:GetMaxClip1()))
-				local needed = self:Clip1()-oldclip
-				self:GetOwner():SetAmmo(self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )-needed, self:GetPrimaryAmmoType())
-				self.AmmoChek = 5
+				timer.Simple(1,function ()
+					if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self then
+						local oldclip = self:Clip1()
+						self:SetClip1(math.Clamp(self:Clip1()+self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ),0,self:GetMaxClip1()))
+						local needed = self:Clip1()-oldclip
+						self:GetOwner():SetAmmo(self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )-needed, self:GetPrimaryAmmoType())
+						self.AmmoChek = 5
+					end
 				end)
 					end
 				end)
