@@ -1,4 +1,4 @@
-table.insert(LevelList,"eft")
+--table.insert(LevelList,"eft")
 eft = {}
 eft.Name = "EFT"
 
