@@ -571,11 +571,11 @@ end
 function SWEP:PrimaryAttack()
 	self.ShootNext = self.NextShot or NextShot
 
+
 	if not IsFirstTimePredicted() then return end
 
 	if self.NextShot > CurTime() then return end
 	if timer.Exists("reload"..self:EntIndex()) then return end
-
 
 	local canfire = self:CanFireBullet()
 	--self:GetOwner():ChatPrint(tostring(canfire)..(CLIENT and " client" or " server"))
@@ -606,10 +606,19 @@ function SWEP:PrimaryAttack()
 	else
 		if self:GetNWBool("Suppressor", false) != true then
 			self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+			if self.Primary.PumpSound then
+				timer.Simple(0.2,function ()
+					sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
+				end)
+			end
 		else
 			self.Efect = "PhyscannonImpact"
 			self:EmitSound(self.Primary.SoundSupresor,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
-
+			if self.Primary.PumpSound then
+				timer.Simple(0.2,function ()
+					sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
+				end)
+			end
 		end
 	end
 	
@@ -684,6 +693,28 @@ function SWEP:Reload()
 		if ( self.NextShot > CurTime() ) then return end
 		self:GetOwner():SetAnimation(PLAYER_RELOAD)
 		self:EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO)
+		if self.MagOut then
+			timer.Simple(self.MagOutWait,function ()
+				self:EmitSound(self.MagOut,60,100,0.8,CHAN_AUTO)
+			end)
+		end
+		if self.MagIn then
+			timer.Simple(self.MagInWait,function ()
+				self:EmitSound(self.MagIn,60,100,0.8,CHAN_AUTO)
+			end)
+		end
+		if self:Clip1() == 0 then
+			if self.BoltOut then
+				timer.Simple(self.BoltOutWait,function ()
+					self:EmitSound(self.BoltOut,60,100,0.8,CHAN_AUTO)
+				end)
+			end
+			if self.BoltIn then
+				timer.Simple(self.BoltInWait,function ()
+					self:EmitSound(self.BoltIn,60,100,0.8,CHAN_AUTO)
+				end)
+			end
+		end
 		timer.Simple(0.1,function ()
 	--		spawn_mag(self.MagModel,self:GetOwner(),self,self.BigMagModel)
 		end)
@@ -975,9 +1006,10 @@ function SWEP:Step()
 	local ply = self:GetOwner()
 	local isLocal = self:IsLocal()
 	if self:GetNWBool("Grip", false) == true then
-		self.HoldType = "SMG"
+		self:SetHoldType("smg")
+		self.HoldType = "smg"
 		if self.RecoilNumber then
-			self.RecoilNumber = self.RecoilNumber - self.RecoilNumber / 1.25
+			self.RecoilNumber = 0.2
 		end
 	end
 	if not IsValid(ply) or ply:IsNPC() or IsValid(ply:GetNWEntity("Ragdoll")) then return end

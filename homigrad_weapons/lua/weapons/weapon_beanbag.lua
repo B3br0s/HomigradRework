@@ -22,9 +22,10 @@ SWEP.RubberBullets = true
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "toz_shotgun/toz_fp.wav"
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
+SWEP.Primary.PumpSound = "csgo/weapons/sawedoff/sawedoff_pump.wav"
 SWEP.Primary.Force = 0.5
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.4
+SWEP.ShootWait = 0.6
 SWEP.TwoHands = true
 
 SWEP.Secondary.ClipSize		= -1

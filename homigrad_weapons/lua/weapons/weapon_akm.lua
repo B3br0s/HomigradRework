@@ -26,8 +26,16 @@ SWEP.Primary.SoundSupresor = "ak74/ak74_suppressed_tp.wav"
 SWEP.Primary.Force = 240/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.1
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.ReloadSound = ""
 SWEP.TwoHands = true
+SWEP.MagOut = "zcitysnd/sound/weapons/ak74/handling/ak74_magout.wav"
+SWEP.MagIn = "zcitysnd/sound/weapons/ak74/handling/ak74_magin.wav"
+SWEP.BoltOut = "zcitysnd/sound/weapons/ak74/handling/ak74_boltrelease.wav"
+SWEP.BoltIn = "zcitysnd/sound/weapons/ak74/handling/ak74_boltback.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 0.9
+SWEP.BoltInWait = 1.2
+SWEP.BoltOutWait = 1.5
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1

@@ -1,5 +1,9 @@
 local usableEntities = {
     ["func_button"] = true,
+    ["func_door"] = true,
+    ["func_movelinear"] = true,
+    ["func_door_rotating"] = true,
+    ["class C_BaseEntity"] = true,
     ["weapon_crate"] = true,
     ["explosive_crate"] = true,
     ["ent_ammo_.45rubber"] = true,
@@ -8,6 +12,7 @@ local usableEntities = {
     ["ent_ammo_12/70gauge"] = true,
     ["ent_ammo_46×30mm"] = true,
     ["ent_ammo_545×39mm"] = true,
+    ["func_breakable"] = false,
     ["ent_ammo_556x45mm"] = true,
     ["ent_ammo_57×28mm"] = true,
     ["ent_ammo_762x33mm"] = true,
@@ -18,11 +23,21 @@ local usableEntities = {
     ["ent_ammo_9х19mm"] = true,
     ["ent_ammo_airsoftballs"] = true,
     ["ent_ammo_tasercartridge"] = true,
-    ["melee_crate"] = true
+    ["melee_crate"] = true,
+    ["prop_door"] = true,
+    ["prop_door_rotating"] = true,
+    ["prop_effect"] = true
 }
 
 local entityNames = {
     ["func_button"] = "Кнопка",
+    ["func_door"] = "Дверь",
+    ["func_movelinear"] = "Двигающийся Объект",
+    ["class C_BaseEntity"] = "Кнопка",
+    ["func_door_rotating"] = "Дверь",
+    ["prop_door"] = "Дверь",
+    ["prop_door_rotating"] = "Дверь",
+    ["prop_effect"] = "Эффект",
     ["weapon_crate"] = "Оружейный Ящик",
     ["explosive_crate"] = "Ящик Со Взрывчаткой",
     ["ent_ammo_.45rubber"] = "Патроны .45 Резиновые",
@@ -36,6 +51,7 @@ local entityNames = {
     ["ent_ammo_762x33mm"] = "Патроны 7.62x33мм",
     ["ent_ammo_762x39mm"] = "Патроны 7.62x39мм",
     ["ent_ammo_762x54mm"] = "Патроны 7.62x54мм",
+    ["func_breakable"] = "",--"Ломающийся Объект",
     ["ent_ammo_9x18mmrubber"] = "Патроны 9x18мм",
     ["ent_ammo_9x39mm"] = "Патроны 9x39мм",
     ["ent_ammo_9х19mm"] = "Патроны 9x19мм",
@@ -62,6 +78,7 @@ hook.Add("PreDrawHalos", "DrawUsableEntityHalos", function()
 
     local trace = ply:GetEyeTrace()
     local hitEntity = trace.Entity
+--print(hitEntity) -- debug fr😀
 
 
     if IsValid(hitEntity) and usableEntities[hitEntity:GetClass()] and ply:GetPos():DistToSqr(hitEntity:GetPos()) <= (haloDistance * haloDistance) then

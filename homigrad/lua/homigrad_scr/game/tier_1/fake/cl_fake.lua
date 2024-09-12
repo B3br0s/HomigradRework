@@ -36,7 +36,7 @@ if CLIENT then
             return
         end
         
-        local newPos = net.ReadVector() + obbCenter
+        local newPos = --[[rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_R_Hand"))]] net.ReadVector() + obbCenter
         ragdollRightHandPos = SmoothTransition(ragdollRightHandPos, newPos)
         istrueR = net.ReadBool()
     end)
@@ -50,7 +50,7 @@ if CLIENT then
             return
         end
         
-        local newPos = net.ReadVector() + obbCenter
+        local newPos = --[[rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_L_Hand"))]]net.ReadVector() + obbCenter
         ragdollLeftHandPos = SmoothTransition(ragdollLeftHandPos, newPos)
         istrueL = net.ReadBool()
     end)

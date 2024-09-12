@@ -1,6 +1,13 @@
 -- Define the entity list for spawning
 local ENTITY_LIST = {
     "explosive_crate",
+    "melee_crate",
+    "melee_crate",
+    "melee_crate",
+    "melee_crate",
+    "ent_drop_flashlight",
+    "ent_drop_flashlight",
+    "ent_drop_flashlight",
     "weapon_crate"
 }
 
@@ -32,7 +39,7 @@ if timer.Exists("SpawnTheBoxes") then
     timer.Remove("SpawnTheBoxes") 
 end
 
-timer.Create("SpawnTheBoxes", 35, 0, function()
+timer.Create("SpawnTheBoxes", 20, 0, function()
     hook_Run("Boxes Think")
 end)
 
@@ -52,7 +59,7 @@ hook.Add("Boxes Think", "SpawnEntities", function()
     local ent = ents.Create(entName)
 
     if IsValid(ent) then
-		print("Crate Spawned,Crate Type Is: "..entName)
+		print("Crate Spawned,Crate Type Is: "..entName.." His Position at"..ent:GetPos())
         ent:SetPos(spawns[math.random(#spawns)] + vec)
         ent:Spawn()
         ent:Activate() -- Activate the entity if needed

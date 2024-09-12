@@ -1,52 +1,67 @@
 if engine.ActiveGamemode() == "homigrad" then
-SWEP.Base = 'salat_base' -- base
-
-SWEP.PrintName 				= "TAR21"
-SWEP.Instructions			= "Пендоское оружие?"
-SWEP.Category 				= "Оружие"
-
-SWEP.Spawnable 				= true
-SWEP.AdminOnly 				= false
-
-------------------------------------------
-
-SWEP.Primary.ClipSize		= 30
-SWEP.Primary.DefaultClip	= 30
-SWEP.Primary.Automatic		= true
-SWEP.Primary.Ammo			= "ar2"
-SWEP.Primary.Cone = 0.006
-SWEP.Primary.Damage = 1.7 * 40
-SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "weapons/revolver/revolver_tp.wav"
-SWEP.Primary.Force = 250/3
-SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.10
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
-SWEP.TwoHands = true
-
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Ammo			= "none"
-
-------------------------------------------
-
-SWEP.Weight					= 5
-SWEP.AutoSwitchTo			= false
-SWEP.AutoSwitchFrom			= false
-
-SWEP.HoldType = "smg"
-
-------------------------------------------
-
-SWEP.Slot					= 2
-SWEP.SlotPos				= 2
-SWEP.DrawAmmo				= true
-SWEP.DrawCrosshair			= false
-
-SWEP.ViewModel				= "models/pwb/weapons/w_tar21.mdl"
-SWEP.WorldModel				= "models/pwb/weapons/w_tar21.mdl"
-
-SWEP.vbwPos = Vector(12,-1.7,-12)
-SWEP.vbwAng = Angle(10,-30,0)
-end
+    SWEP.Base = 'salat_base' -- base
+    
+    SWEP.PrintName 				= "Nova"
+    SWEP.Author 				= "Homigrad"
+    SWEP.Instructions			= "Дробовик под калибр 12/70"
+    SWEP.Category 				= "Оружие"
+    
+    SWEP.Spawnable 				= true
+    SWEP.AdminOnly 				= false
+    
+    ------------------------------------------
+    
+    SWEP.Primary.ClipSize		= 6
+    SWEP.Primary.DefaultClip	= 6
+    SWEP.Primary.Automatic		= false
+    SWEP.Primary.Ammo			= "12/70 gauge"
+    SWEP.Primary.Cone = 0.05
+    SWEP.Primary.Damage = 1.7 * 45
+    SWEP.Primary.Spread = 0
+    SWEP.Primary.Sound = "csgo/weapons/nova/nova-1.wav"
+    SWEP.Primary.SoundFar = "snd_jack_hmcd_sht_far.wav"
+    SWEP.Primary.PumpSound = "csgo/weapons/nova/nova_pump.wav"
+    SWEP.Primary.Force = 15
+    SWEP.ReloadTime = 2
+    SWEP.ShootWait = 0.5
+    SWEP.RecoilNumber = 4
+    SWEP.NumBullet = 8
+    SWEP.Sight = true
+    SWEP.TwoHands = true
+    SWEP.shotgun = true
+    
+    SWEP.Secondary.ClipSize		= -1
+    SWEP.Secondary.DefaultClip	= -1
+    SWEP.Secondary.Automatic	= false
+    SWEP.Secondary.Ammo			= "none"
+    
+    ------------------------------------------
+    
+    SWEP.Weight					= 5
+    SWEP.AutoSwitchTo			= false
+    SWEP.AutoSwitchFrom			= false
+    
+    SWEP.HoldType = "ar2"
+    
+    ------------------------------------------
+    
+    SWEP.Slot					= 2
+    SWEP.SlotPos				= 0
+    SWEP.DrawAmmo				= true
+    SWEP.DrawCrosshair			= false
+    
+    SWEP.ViewModel				= "models/csgo/weapons/w_shot_nova.mdl"
+    SWEP.WorldModel				= "models/csgo/weapons/w_shot_nova.mdl"
+    
+    function SWEP:ApplyEyeSpray()
+        self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(-2,2),0)
+    end
+    
+    SWEP.vbwPos = Vector(-9,-5,-5)
+    
+    SWEP.CLR_Scope = 0.05
+    SWEP.CLR = 0.025
+    
+    SWEP.addAng = Angle(2.5,0.1,0)
+    SWEP.addPos = Vector(0,0,0)
+    end

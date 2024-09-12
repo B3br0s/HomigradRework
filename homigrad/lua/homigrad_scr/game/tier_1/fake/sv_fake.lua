@@ -1293,6 +1293,10 @@
 							net.WriteBool(true)
 							net.Send(ply)
 							if(IsValid(cons))then
+								net.Start("HandindicatorR")
+								net.WriteVector(phys:GetPos())
+								net.WriteBool(true)
+								net.Send(ply)
 								rag.ZacConsRH=cons
 							end
 							break

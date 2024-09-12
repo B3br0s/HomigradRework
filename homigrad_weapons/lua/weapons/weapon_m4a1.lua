@@ -19,14 +19,21 @@ SWEP.Primary.Ammo			= "5.56x45 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 40
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "m4a1/m4a1_fp.wav"
+SWEP.Primary.Sound = "zcitysnd/sound/weapons/m4a1/m4a1_fp.wav"
+SWEP.Primary.SoundSupresor = "zcitysnd/sound/weapons/m4a1/m4a1_suppressed_fp.wav"
 SWEP.Primary.SoundFar = "m4a1/m4a1_dist.wav"
 SWEP.Primary.Force = 160/3
 SWEP.ReloadTime = 2
 SWEP.MagModel = "models/csgo/weapons/w_rif_m4a1_mag.mdl"
 SWEP.ShootWait = 0.07
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.ReloadSound = ""
 SWEP.TwoHands = true
+SWEP.MagOut = "csgo/weapons/m4a1/m4a1_clipout.wav"
+SWEP.MagIn = "csgo/weapons/m4a1/m4a1_clipin.wav"
+SWEP.BoltOut = "csgo/weapons/m4a1/m4a1_silencer_boltback.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 0.9
+SWEP.BoltOutWait = 1.2
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
@@ -97,6 +104,18 @@ SWEP.ValidAttachments = {
 
         scale = 1,
         model = "models/weapons/arc9/darsu_eft/mods/scope_all_walther_mrs.mdl",
+    },
+    ["Suppressor"] = {
+        positionright = 0.96,
+        positionforward = 23,
+        positionup = -7.1,
+
+        angleforward = 180,
+        angleright = 10,
+        angleup = 0,
+
+        scale = 1,
+        model = "models/weapons/arc9/darsu_eft/mods/silencer_tbac_thunder_beast_ultra_5_762x51.mdl",
     },
     ["Grip"] = {
         positionright = 1,

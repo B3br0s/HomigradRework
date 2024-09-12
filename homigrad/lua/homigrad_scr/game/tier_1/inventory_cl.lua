@@ -129,7 +129,7 @@ net.Receive("inventory",function()
 
 	panel = vgui.Create("DFrame")
 	panel:SetAlpha(255)
-	panel:SetSize(500, 400)
+	panel:SetSize(430, 300)
 	panel:Center()
 	panel:SetDraggable(false)
 	panel:MakePopup()

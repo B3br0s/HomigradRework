@@ -177,9 +177,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 
 	ply.LastDMGInfo = rubatPidor
 
-	dmginfo:ScaleDamage(0.5)
+	dmginfo:ScaleDamage(0.3)
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-	dmginfo:ScaleDamage(0.5)
+	dmginfo:ScaleDamage(0.45)
 	if rag then
 
 		ply:SetHealth(ply:Health() - dmginfo:GetDamage())

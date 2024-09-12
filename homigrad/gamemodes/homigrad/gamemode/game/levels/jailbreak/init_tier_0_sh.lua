@@ -6,7 +6,7 @@ jailbreak.red = {"ФСИН",Color(55,55,255),
     weapons = {"weapon_radio","weapon_police_bat","weapon_hands","weapon_taser","weapon_handcuffs","weapon_makarov"},
     main_weapon = {"weapon_hands"},
     secondary_weapon = {"weapon_hands"},
-    models = {"models/rashkinsk/fsin/camo/camo_07.mdl","models/rashkinsk/fsin/camo/camo_06.mdl","models/rashkinsk/fsin/camo/camo_07.mdl",}
+    models = tdm.models
 }
 
 jailbreak.green = {"Заключенный",Color(255,170,0),

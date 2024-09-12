@@ -22,7 +22,15 @@ SWEP.Primary.SoundFar = "mp5k/mp5k_dist.wav"
 SWEP.Primary.Force = 120/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.06
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.MagOut = "csgo/weapons/galilar/galil_clipout.wav"
+SWEP.MagIn = "csgo/weapons/galilar/galil_clipin.wav"
+SWEP.BoltOut = "csgo/weapons/galilar/galil_boltback.wav"
+SWEP.BoltIn = "csgo/weapons/galilar/galil_boltforward.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 0.9
+SWEP.BoltOutWait = 1.2
+SWEP.BoltInWait = 1.4
+SWEP.ReloadSound = ""--"weapons/ar2/ar2_reload.wav"
 SWEP.TwoHands = true
 
 							

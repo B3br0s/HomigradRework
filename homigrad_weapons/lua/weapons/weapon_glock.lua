@@ -23,8 +23,18 @@ SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "csgo/weapons/glock18/glock_01.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
 SWEP.Primary.Force = 90/3
+SWEP.ReloadSound = ""
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.12
+SWEP.MagOut = "csgo/weapons/glock18/glock_clipout.wav"
+SWEP.MagIn = "csgo/weapons/glock18/glock_clipin.wav"
+SWEP.BoltOut = "csgo/weapons/glock18/glock_slideback.wav"
+SWEP.BoltIn = "csgo/weapons/glock18/glock_sliderelease.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 1.5
+SWEP.BoltOutWait = 1.7
+SWEP.BoltInWait = 1.9
+
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1

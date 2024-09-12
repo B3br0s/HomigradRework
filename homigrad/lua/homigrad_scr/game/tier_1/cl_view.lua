@@ -642,7 +642,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_l1a1" then
 			--Vector(5.7,4,1.1)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.65 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.77
+			vecWep = hand.Pos + hand.Ang:Up() * 4.45 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.8
 			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_fal" then

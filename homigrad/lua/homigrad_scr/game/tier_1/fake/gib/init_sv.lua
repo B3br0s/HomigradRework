@@ -202,6 +202,7 @@ function Gib_Input(rag,bone,dmgInfo,player)
 
 	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 300 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
 		sound.Emit(rag,"homigrad/headshoot.wav")
+		sound.Emit(rag,"homigrad/player/headshot" .. math.random(1,2) .. ".wav")
 	--	sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 		sound.Emit(rag,"physics/body/body_medium_break3.wav")
 	--	sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)
@@ -227,16 +228,16 @@ function Gib_Input(rag,bone,dmgInfo,player)
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
 	--	end
-	if dmgInfo:GetDamage() >= 1000 then
+	if dmgInfo:GetDamage() > 500 then
 		headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
 
 		Gib_RemoveBone(rag,bone,phys_bone)
 end
 		
 	end
-	--ахуенно когда взрываеца от прикосновения да?
+	--крута🎈 когда взрываеца от прикосновения да?
 	--да
-	if dmgInfo:GetDamage() >= 1600 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 800 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) then
+	if dmgInfo:GetDamage() >= 1200 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 740 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) then
 			dmgInfo:ScaleDamage(5000)
 			sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
 			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
@@ -298,12 +299,12 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	--разве это не смешно когда ножом башка взрывается?
 	--нет
 	
-	if dmgInfo:GetDamage() >= 1 then
+	if dmgInfo:GetDamage() >= 50 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)
 
-			if not IsValid(rag) or not bone then return end--неебу как пашол нахуй
+			if not IsValid(rag) or not bone then return end--бу
 
 			Gib_Input(rag,bone,dmgInfo,player)
 		end)
