@@ -100,7 +100,6 @@
         return slot
     end
 
-    -- Function to create the player model panel
     local function CreatePlayerModelPanel(parent)
         if IsValid(PlayerModelPanel) then
             PlayerModelPanel:Remove()
