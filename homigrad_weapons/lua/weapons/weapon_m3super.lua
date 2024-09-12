@@ -23,6 +23,7 @@ SWEP.Primary.Sound = "rifle_win1892/win1892_fire_01.wav"
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
+SWEP.LoadSound = "csgo/weapons/xm1014/xm1014_insertshell_01"
 SWEP.ShootWait = 0.4
 SWEP.NumBullet = 8
 SWEP.Sight = true

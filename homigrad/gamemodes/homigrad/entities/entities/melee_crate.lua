@@ -11,7 +11,7 @@ local meleeList = {
     {class = "weapon_kabar", model = "models/weapons/insurgency/w_marinebayonet.mdl"},
     {class = "weapon_hg_fireaxe", model = "models/weapons/me_axe_fire_tracer/w_me_axe_fire.mdl"},
     {class = "weapon_hg_fubar", model = "models/weapons/me_fubar/w_me_fubar.mdl"},
-    {class = "weapon_gurkha", model = "models/pwb2/melees/w_mp5a3.mdl"},
+    {class = "weapon_gurkha", model = "models/weapons/insurgency/w_gurkha.mdl"},
     {class = "weapon_hg_crowbar", model = "models/weapons/me_spade/w_me_spade.mdl"},
     {class = "Empty", model = ""},
     {class = "Empty", model = ""},

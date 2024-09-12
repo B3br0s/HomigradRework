@@ -28,11 +28,9 @@ SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.12
 SWEP.MagOut = "csgo/weapons/glock18/glock_clipout.wav"
 SWEP.MagIn = "csgo/weapons/glock18/glock_clipin.wav"
-SWEP.BoltOut = "csgo/weapons/glock18/glock_slideback.wav"
 SWEP.BoltIn = "csgo/weapons/glock18/glock_sliderelease.wav"
 SWEP.MagOutWait = 0.2
 SWEP.MagInWait = 1.5
-SWEP.BoltOutWait = 1.7
 SWEP.BoltInWait = 1.9
 
 

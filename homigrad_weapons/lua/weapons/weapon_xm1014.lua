@@ -20,6 +20,7 @@ SWEP.Primary.Damage = 1.7 * 25
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "mil_mp5a4/mp5_fire_01.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_snp_far.wav"
+SWEP.LoadSound = "csgo/weapons/xm1014/xm1014_insertshell_01"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.2

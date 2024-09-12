@@ -1,8 +1,8 @@
 	if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
-	local handsarrivetime = 0.3
-	local forwardarrivetime = 0.5
+	local handsarrivetime = 0.2
+	local forwardarrivetime = 0.4
 	local backarrivetime = 0.24
 	local handsangup = 100
 

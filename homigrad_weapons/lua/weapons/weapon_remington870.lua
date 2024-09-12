@@ -22,6 +22,7 @@ SWEP.Primary.Sound = "zcitysnd/sound/weapons/toz_shotgun/toz_tp.wav"
 SWEP.Primary.SoundSupresor = "zcitysnd/sound/weapons/toz_shotgun/toz_suppressed_fp.wav"
 SWEP.Primary.PumpSound = "csgo/weapons/sawedoff/sawedoff_pump.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_sht_far.wav"
+SWEP.LoadSound = "csgo/weapons/sawedoff/sawedoff_insertshell_01"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.5

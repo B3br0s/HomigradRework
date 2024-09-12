@@ -21,9 +21,10 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.Sound = "csgo/weapons/nova/nova-1.wav"
     SWEP.Primary.SoundFar = "snd_jack_hmcd_sht_far.wav"
     SWEP.Primary.PumpSound = "csgo/weapons/nova/nova_pump.wav"
+    SWEP.LoadSound = "csgo/weapons/nova/nova_insertshell_01"
     SWEP.Primary.Force = 15
     SWEP.ReloadTime = 2
-    SWEP.ShootWait = 0.5
+    SWEP.ShootWait = 0.7
     SWEP.RecoilNumber = 4
     SWEP.NumBullet = 8
     SWEP.Sight = true
