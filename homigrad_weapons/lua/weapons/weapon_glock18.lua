@@ -25,6 +25,12 @@ SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
 SWEP.Primary.Force = 0.1
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.12
+SWEP.MagOut = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav"
+SWEP.MagIn = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
+SWEP.BoltOut = "zcitysnd/sound/weapons/m1911/handling/m1911_boltrelease.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 1.5
+SWEP.BoltOutWait = 2
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1

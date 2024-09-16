@@ -61,6 +61,7 @@ Gunshuy = {
 	"weapon_m1garand",
 	"weapon_saiga12",
 	"weapon_svd",
+	"weapon_de",
 	"weapon_sks"
 }
 

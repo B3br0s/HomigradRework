@@ -20,9 +20,9 @@ SWEP.Primary.Cone = 0
 SWEP.MagModel = "models/csgo/weapons/w_rif_ak47_mag.mdl"
 SWEP.Primary.Damage = 1.7 * 25
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "ak74/ak74_fp.wav"
+SWEP.Primary.Sound = "zcitysnd/sound/weapons/ak74/ak74_fp.wav"
 SWEP.Primary.SoundFar = "ak74/ak74_dist.wav"
-SWEP.Primary.SoundSupresor = "ak74/ak74_suppressed_tp.wav"
+SWEP.Primary.SoundSupresor = "zcitysnd/sound/weapons/ak74/ak74_suppressed_fp.wav"
 SWEP.Primary.Force = 240/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.1
@@ -64,6 +64,10 @@ SWEP.vbwPos = Vector(5,-6,-6)
 
 SWEP.addAng = Angle(1,0,0)
 SWEP.addPos = Vector(0,0,0)
+
+function SWEP:ApplyEyeSpray()
+    self.eyeSpray = self.eyeSpray - Angle(1,math.Rand(-0.5,0.5),0)
+end 
 
 
 SWEP.ValidAttachments = {

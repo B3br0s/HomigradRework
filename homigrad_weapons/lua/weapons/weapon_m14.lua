@@ -17,19 +17,28 @@ SWEP.Primary.Ammo			= "ar2"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 40
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "weapons/mp5k/mp5k_suppressed_fp.wav"
+SWEP.Primary.Sound = "zcitysnd/sound/weapons/galil/galil_suppressed_tp.wav"
 --SWEP.Primary.SoundFar = "weapons/m14/m14_dist.wav"
 SWEP.Primary.Force = 270/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.06
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.ReloadSound = ""
 SWEP.TwoHands = true
 SWEP.Supressed = true
+SWEP.Efect = "PhyscannonImpact"
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
+SWEP.MagOut = "zcitysnd/sound/weapons/m14/handling/m14_magout.wav"
+SWEP.MagIn = "zcitysnd/sound/weapons/m14/handling/m14_magin.wav"
+SWEP.BoltOut = "zcitysnd/sound/weapons/m14/handling/m14_boltrelease.wav"
+SWEP.BoltIn = "zcitysnd/sound/weapons/m14/handling/m14_boltback.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 0.9
+SWEP.BoltOutWait = 1.35 
+SWEP.BoltInWait = 1.13
 
 ------------------------------------------
 
@@ -37,7 +46,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "smg"
+SWEP.HoldType = "ar2"
 
 ------------------------------------------
 

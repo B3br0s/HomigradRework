@@ -24,7 +24,15 @@ SWEP.Primary.SoundFar = "m16a4/m16a4_dist.wav"
 SWEP.Primary.Force = 110/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.09
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.ReloadSound = ""
+SWEP.MagOut = "csgo/weapons/famas/famas_clipout.wav"
+SWEP.MagIn = "csgo/weapons/famas/famas_clipin.wav"
+SWEP.BoltOut = "csgo/weapons/famas/famas_boltback.wav"
+SWEP.BoltIn = "csgo/weapons/famas/famas_boltforward.wav"
+SWEP.MagOutWait = 0.1   
+SWEP.MagInWait = 1
+SWEP.BoltOutWait = 1.4
+SWEP.BoltInWait = 1.5
 SWEP.TwoHands = true
 
 SWEP.Secondary.ClipSize		= -1

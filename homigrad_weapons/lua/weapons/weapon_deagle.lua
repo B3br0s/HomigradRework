@@ -24,6 +24,15 @@ SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
 SWEP.Primary.Force = 105/40
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.12
+SWEP.Baraban = true
+SWEP.MagOut = "csgo/weapons/revolver/revolver_clipout.wav"
+SWEP.MagIn = "csgo/weapons/revolver/revolver_clipin.wav"
+SWEP.BoltOut = "csgo/weapons/revolver/revolver_siderelease.wav"
+SWEP.BoltIn = "csgo/weapons/revolver/revolver_sideback.wav"
+SWEP.MagOutWait = 0.6
+SWEP.MagInWait = 1.5
+SWEP.BoltInWait = 2
+SWEP.BoltOutWait = 0.3
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1

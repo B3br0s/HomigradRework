@@ -210,96 +210,61 @@ function SWEP:GetBulletSourcePos()
 end
 
 function SWEP:DrawHUD()
-if SERVER then return end
-	if not self.DrawScope then return end
-	local ply = self:GetOwner()
-	local view = {angles = Angle(0, 0, 0)}
-
-	local shootOrigin, shootAng = self:GetBulletSourcePos()
-	local ScopeAng = shootAng
-	ScopeAng.z = view.angles.z or 0
-	z = 0
-	local rt = {
-		x = 0,
-		y = 0,
-		w = 512,
-		h = 512,
-		angles = ScopeAng + self.ScopeAdjustAng,
-		origin = shootOrigin + self.ScopeAdjustPos,
-		drawviewmodel = false,
-		fov = self.ScopeFov,
-		znear = 1,
-		zfar = 26000
-	}
-
-	rt.angles[3] = rt.angles[3] - 180
-	render.PushRenderTarget(self.rtmat, 0, 0, 512, 512)
-	local old = DisableClipping(true)
-	render.Clear(1, 1, 1, 255)
-	render.RenderView(rt)
-	cam.Start2D()
-	surface.SetDrawColor(255, 255, 255, 255) -- Set the drawing color
-	surface.SetMaterial(self.ScopeMat) -- Use our cached material
-	surface.DrawTexturedRectRotated(256 + self.UVAdjust[1], 256 + self.UVAdjust[2], 512 * self.UVScale[1], 512 * self.UVScale[2], self.ScopeRot or 0) -- Actually draw the rectangl
-	cam.End2D()
-	DisableClipping(old)
-	render.PopRenderTarget()
-
-	show = math.Clamp(self.AmmoChek or 0,0,1)
-	self.AmmoChek = Lerp(2*FrameTime(),self.AmmoChek or 0,0)
-	color_gray = Color(225,215,125,190*show)
-	color_gray1 = Color(225,215,125,255*show)
+	show = math.Clamp(self.AmmoChek or 0, 0, 1)
+	self.AmmoChek = Lerp(2 * FrameTime(), self.AmmoChek or 0, 0)
+	color_gray = Color(200,200,200, 190 * show)
+	color_gray1 = Color(200,200,200, 255 * show)
 	if show > 0 then
-	local ply = LocalPlayer()
-	local ammo,ammobag = self:GetMaxClip1(), self:Clip1()
-	if ammobag > ammo - 1 then
-		text = "Полон"
-	elseif ammobag > ammo - ammo/3 then
-		text = "~Почти полон"
-	elseif ammobag > ammo/3 then
-		text = "~Половина"
-	elseif ammobag >= 1 then
-		text = "~Почти пуст"
-	elseif ammobag < 1 then
-		text = "Пуст"
-	end
+		local ply = LocalPlayer()
+		local ammo, ammobag = self:GetMaxClip1(), self:Clip1()
+		if ammobag > ammo - 1 then
+			text = "Полон"
+			color_gray1 = Color(0,255,0, 255 * show)
+		elseif ammobag > ammo - ammo / 3 then
+			text = "~Почти полон"
+			color_gray1 = Color(128, 255, 0, 255 * show)
+		elseif ammobag > ammo / 3 then
+			text = "~Половина"
+			color_gray1 = Color(255, 200, 0, 255 * show)
+		elseif ammobag >= 1 then
+			text = "~Почти пуст"
+			color_gray1 = Color(255, 68, 0, 255 * show)
+		elseif ammobag < 1 then
+			text = "Пуст"
+			color_gray1 = Color(145, 0, 15, 255 * show)
+		end
 
-	local ammomags = ply:GetAmmoCount( self:GetPrimaryAmmoType() )
+		local ammomags = ply:GetAmmoCount(self:GetPrimaryAmmoType())
+		if oldclip ~= ammobag then
+			randomx = math.random(0, 5)
+			randomy = math.random(0, 5)
+			timer.Simple(0.15, function() oldclip = ammobag end)
+		else
+			randomx = 0
+			randomy = 0
+		end
 
-	if oldclip != ammobag then
-		randomx = math.random(0, 5)
-		randomy = math.random(0, 5)
-		timer.Simple(0.15, function()
-			oldclip = ammobag
-		end)
-	else
-		randomx = 0
-		randomy = 0
-	end
+		if oldmag ~= ammomags then
+			randomxmag = math.random(0, 5)
+			randomymag = math.random(0, 5)
+			timer.Simple(0.35, function() oldmag = ammomags end)
+		else
+			randomxmag = 0
+			randomymag = 0
+		end
 
-	if oldmag != ammomags then
-		randomxmag = math.random(0, 5)
-		randomymag = math.random(0, 5)
-		timer.Simple(0.35, function()
-			oldmag = ammomags
-		end)
-	else
-		randomxmag = 0
-		randomymag = 0
-	end
-
-	local hand = ply:GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
-	local textpos = (hand.Pos+hand.Ang:Forward()*7+hand.Ang:Up()*5+hand.Ang:Right()*-1):ToScreen()
-	if self.revolver then
-		draw.DrawText( "Барабан | "..ammobag, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
-		draw.DrawText( "Пуль | "..ammomags, "HomigradFontBig", textpos.x+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
-	elseif self.shotgun then
-		draw.DrawText( "Магазин | "..text, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
-		draw.DrawText( "Патрон | "..ammomags, "HomigradFontBig", textpos.x+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
-	else
-		draw.DrawText( "Магазин | "..text, "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
-		draw.DrawText( "Магазинов | "..math.Round(ammomags/ammo), "HomigradFontBig", textpos.x+5+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )
-	end
+		local hand = ply:GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
+		local textpos = (hand.Pos + hand.Ang:Forward() * 7 + hand.Ang:Up() * 5 + hand.Ang:Right() * -1):ToScreen()
+		if self.revolver then
+			draw.DrawText("Барабан | " .. ammobag, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
+			draw.DrawText("Пуль | " .. ammomags, "HomigradFontBig", textpos.x + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
+		elseif self.shotgun then
+			draw.DrawText("Магазин | " .. text, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
+			draw.DrawText("Патрон | " .. ammomags, "HomigradFontBig", textpos.x + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
+		else
+			draw.DrawText("Магазин | " .. text, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
+			draw.DrawText("Магазинов | " .. math.Round(ammomags / ammo), "HomigradFontBig", textpos.x + 5 + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
+		end
 	end
 end
 
@@ -546,6 +511,10 @@ if SERVER then
 end
 
 if CLIENT then
+	concommand.Add("hg_checkammo",function(ply)
+		if not ply:Alive() then return end
+		
+	end)
 	net.Receive("huysound",function(len)
 		local entwep = net.ReadEntity()
 		local pos = net.ReadVector()
@@ -704,7 +673,18 @@ function SWEP:Reload()
 				self:EmitSound(self.MagIn,60,100,0.8,CHAN_AUTO)
 			end)
 		end
-		if self:Clip1() == 0 then
+		if self:Clip1() == 0 and not self.Baraban then
+			if self.BoltOut then
+				timer.Simple(self.BoltOutWait,function ()
+					self:EmitSound(self.BoltOut,60,100,0.8,CHAN_AUTO)
+				end)
+			end
+			if self.BoltIn then
+				timer.Simple(self.BoltInWait,function ()
+					self:EmitSound(self.BoltIn,60,100,0.8,CHAN_AUTO)
+				end)
+			end
+		elseif self.Baraban then
 			if self.BoltOut then
 				timer.Simple(self.BoltOutWait,function ()
 					self:EmitSound(self.BoltOut,60,100,0.8,CHAN_AUTO)
@@ -718,24 +698,24 @@ function SWEP:Reload()
 		end
 		
 		if self.LoadSound and self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ) > 0 and self:Clip1() < self:GetMaxClip1() then
+			local empty = false
 			for i = 1, self:GetMaxClip1() - self:Clip1() do
 				timer.Simple(0.5 * i, function()
-					self:EmitSound(self.LoadSound..".wav", 60, 100, 0.8, CHAN_AUTO)
-					if i == self.Primary.DefaultClip then
-				if self.Primary.PumpSound and self:Clip1() == 0 then
-					timer.Simple(0.3,function ()
-						self:EmitSound(self.Primary.PumpSound, 60, 100, 0.8, CHAN_AUTO)
-					end)
-				end
-				timer.Simple(1,function ()
-					if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self then
-						local oldclip = self:Clip1()
-						self:SetClip1(math.Clamp(self:Clip1()+self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ),0,self:GetMaxClip1()))
-						local needed = self:Clip1()-oldclip
-						self:GetOwner():SetAmmo(self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )-needed, self:GetPrimaryAmmoType())
-						self.AmmoChek = 5
+					if self:Clip1() == 0 then
+						empty = true
 					end
-				end)
+					self:EmitSound(self.LoadSound..".wav", 60, 100, 0.8, CHAN_AUTO)
+					if i == self:GetMaxClip1() then
+						if self.Primary.PumpSound and empty == true then
+						timer.Simple(0.3,function ()
+							self:EmitSound(self.Primary.PumpSound, 60, 100, 0.8, CHAN_AUTO)
+						end)
+						end
+				end
+					if self:Clip1() < self:GetMaxClip1() then
+						self:SetClip1(self:Clip1() + 1)	
+						self:GetOwner():SetAmmo(self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )-1, self:GetPrimaryAmmoType())
+						self.AmmoChek = 5
 					end
 				end)
 			end			
@@ -744,7 +724,7 @@ function SWEP:Reload()
 	--		spawn_mag(self.MagModel,self:GetOwner(),self,self.BigMagModel)
 		end)
 		timer.Create( "reload"..self:EntIndex(), self.ReloadTime, 1, function()
-			if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self and not self.NumBullet then
+			if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self and not self.LoadSound then
 				local oldclip = self:Clip1()
 				self:SetClip1(math.Clamp(self:Clip1()+self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ),0,self:GetMaxClip1()))
 				local needed = self:Clip1()-oldclip

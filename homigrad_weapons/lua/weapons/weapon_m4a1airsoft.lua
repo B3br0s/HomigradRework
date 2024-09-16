@@ -7,7 +7,7 @@ SWEP.Instructions			= "Страйкбольная Автоматическая �
 SWEP.Category 				= "Оружие"
 
 
-SWEP.Spawnable 				= true
+SWEP.Spawnable 				= false
 SWEP.AdminOnly 				= false
 
 ------------------------------------------

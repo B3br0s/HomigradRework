@@ -24,8 +24,14 @@ SWEP.Primary.SoundFar = "m4a1/m4a1_dist.wav"
 SWEP.Primary.Force = 160/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.08
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.ReloadSound = ""
 SWEP.TwoHands = true
+SWEP.MagOut = "zcitysnd/sound/weapons/m4a1/handling/m4a1_magout.wav"
+SWEP.MagIn = "zcitysnd/sound/weapons/m4a1/handling/m4a1_magin.wav"
+SWEP.BoltOut = "zcitysnd/sound/weapons/m4a1/handling/m4a1_boltrelease.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 0.9
+SWEP.BoltOutWait = 1.2
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.MagModel = "models/csgo/weapons/w_rif_m4a1_mag.mdl"

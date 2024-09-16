@@ -26,8 +26,16 @@ SWEP.MagModel = "models/draco/w_draco_mag.mdl"
 SWEP.Primary.Force = 140/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.075
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.ReloadSound = ""
 SWEP.TwoHands = true
+SWEP.MagOut = "zcitysnd/sound/weapons/aks74u/handling/aks_magout.wav"
+SWEP.MagIn = "zcitysnd/sound/weapons/aks74u/handling/aks_magin.wav"
+SWEP.BoltOut = "zcitysnd/sound/weapons/aks74u/handling/aks_boltrelease.wav"
+SWEP.BoltIn = "zcitysnd/sound/weapons/aks74u/handling/aks_boltback.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 0.9
+SWEP.BoltInWait = 1.2
+SWEP.BoltOutWait = 1.5
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
@@ -54,6 +62,8 @@ SWEP.ViewModel				= "models/pwb/weapons/w_aks74u.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_aks74u.mdl"
 
 SWEP.vbwPos = Vector(5,-6,-6)
+
+
 
 function SWEP:ApplyEyeSpray()
     self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(self.RecoilNumber*-1,self.RecoilNumber),0)

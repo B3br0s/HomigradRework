@@ -10,7 +10,7 @@ local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
 
 CreateClientConVar("hg_bodycam","0",true,false,nil,0,1)
 
-CreateClientConVar("hg_fakecam_mode","0",true,false,nil,0,1)
+--CreateClientConVar("hg_fakecam_mode","0.3",true,false,nil,0,1)
 
 CreateClientConVar("hg_deathsound","1",true,false,nil,0,1)
 CreateClientConVar("hg_deathscreen","1",true,false,nil,0,1)
@@ -296,6 +296,7 @@ local weps = {
 ["weapon_hk_usp"] = true,
 ["weapon_mp7"] = true,
 ["weapon_hk_usps"] = true,
+["weapon_de"] = true,
 ["weapon_akm"] = true,
 ["weapon_deagle"] = true,
 ["weapon_ak74u"] = true,
@@ -307,7 +308,6 @@ local weps = {
 ["weapon_r8"] = true,
 ["weapon_pkm"]=true,
 ["weapon_m1a1"] = true,
-["weapon_mk18"] = true,
 ["weapon_m249"] = true,
 ["weapon_m4a1"] = true,
 ["weapon_minu14"] = true,
@@ -325,8 +325,6 @@ local weps = {
 ["weapon_hk_arbalet"] = true,
 ["weapon_mk18"] = true,
 ["weapon_vector"] = true,
-["weapon_doublebarrel"] = true,
-["weapon_doublebarrel_dulo"] = true,
 ["weapon_awp"] = true,
 ["weapon_sks"] = true,
 ["weapon_m4a1airsoft"] = true,
@@ -465,7 +463,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			eyeAngs = att.Ang
 			att.Pos = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 10 + bodyang:Right() * -8) or lply:EyePos()
 		end
-		local anghook = GetConVar("hg_fakecam_mode"):GetFloat()
+		local anghook = 0.25--GetConVar("hg_fakecam_mode"):GetFloat()
 		LerpEyeRagdoll = LerpAngleFT(0.08,LerpEyeRagdoll,LerpAngle(anghook,eyeAngs,att.Ang))
 
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL
@@ -630,6 +628,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			vecWep = hand.Pos + hand.Ang:Up() * 4.25 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
 			angWep = hand.Ang + Angle(0,0,0)
 		end
+		if weaponClass == "weapon_de" then
+			--Vector(3.9,10,1.09)
+			vecWep = hand.Pos + hand.Ang:Up() * 3.25 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
+			angWep = hand.Ang + Angle(0,0,0)
+		end
 		if weaponClass == "weapon_akm" then
 			--Vector(5.1,5,0.76)
 			vecWep = hand.Pos + hand.Ang:Up() * 5.0 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.76
@@ -764,11 +767,6 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			--Vector(2.5,10,0.3)
 			vecWep = hand.Pos + hand.Ang:Up() * 8.3 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 1.4
 			angWep = hand.Ang + Angle(15,0,0)
-		end
-		if weaponClass == "weapon_doublebarrel" or weaponClass == "weapon_doublebarrel_dulo" then
-			--Vector(5.3,4,0.78)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
-			angWep = hand.Ang + Angle(-24,0,0)
 		end
 		if weaponClass == "weapon_taser" then
 			--Vector(5.3,4,0.78)

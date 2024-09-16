@@ -13,6 +13,7 @@ cir = {
 
 Vectors = {
 ["weapon_glock18"]=Vector(4,-1,2.5),
+["weapon_de"]=Vector(2,-1,1),
 ["weapon_p220"]=Vector(13.5,-0.5,4),
 ["weapon_mp5"]=Vector(0.5,-1,0),
 ["weapon_ar15"]=Vector(-3,-1,0),

@@ -167,6 +167,18 @@ local ammotypes = {
         maxsplash = 5
     },
 
+    [".50action"] = {
+        name = ".50 Action Express",
+        dmgtype = DMG_BULLET, 
+        tracer = TRACER_LINE,
+        plydmg = 0,
+        npcdmg = 0,
+        force = 100,
+        maxcarry = 150,
+        minsplash = 10,
+        maxsplash = 5
+    },
+
     ["9x39mm"] = {
         name = "9x39 mm",
         dmgtype = DMG_BULLET, 
@@ -249,6 +261,11 @@ local ammoents = {
         Scale = 0.8,
     },
 
+    [".50action"] = {
+        Material = "models/hmcd_ammobox_22",
+        Scale = 0.8,
+    },
+
     ["9x39mm"] = {
         Material = "models/hmcd_ammobox_9",
         Scale = 0.9,
@@ -287,7 +304,7 @@ end
 
 timer.Simple(1,function()
     game.BuildAmmoTypes()
-    --PrintTable(game.GetAmmoTypes()) -- no you don't do that. I hate that spam.
+--PrintTable(game.GetAmmoTypes()) -- no you don't do that. I hate that spam.
 end)
 
 if CLIENT then
@@ -382,19 +399,20 @@ end
 local ammolistent = {
     [38] = ".44magnum",
     [39] = ".45rubber",
-    [40] = "12/70beanbag",
-    [41] = "12/70gauge",
-    [42] = "46×30mm",
-    [44] = "545×39mm",
-    [45] = "556x45mm",
-    [46] = "57×28mm",
-    [47] = "762x39mm",
-    [48] = "762x54mm",
-    [49] = "9x18mmrubber",
-    [50] = "9x39mm",
-    [51] = "9х19mm",
-    [52] = "airsoftballs",
-    [69] = "tasercartridge",
+    [40] = ".50action",
+    [41] = "12/70beanbag",
+    [42] = "12/70gauge",
+    [43] = "46×30mm",
+    [45] = "545×39mm",
+    [46] = "556x45mm",
+    [47] = "57×28mm",
+    [48] = "762x39mm",
+    [49] = "762x54mm",
+    [50] = "9x18mmrubber",
+    [51] = "9x39mm",
+    [52] = "9х19mm",
+    [53] = "airsoftballs",
+    [70] = "tasercartridge",
 }
 
 if SERVER then

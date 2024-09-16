@@ -1,9 +1,12 @@
-	if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
+	-- дефолт модельки
 	local handsarrivetime = 0.2
-	local forwardarrivetime = 0.4
-	local backarrivetime = 0.24
+	local forwardarrivetime = 0.25
+	local backarrivetime = 0.17
+	local velocititouebat = 10
+	-- угол
 	local handsangup = 100
 
 	util.AddNetworkString("HandindicatorR")
@@ -269,7 +272,7 @@
 	end
 
 	hook.Add("CanExitVehicle","fakefastcar",function(veh,ply)
-		if veh:GetPhysicsObject():GetVelocity():Length() > 50 then Faking(ply) return false end
+		if veh:GetPhysicsObject():GetVelocity():Length() > 10 then Faking(ply) return false end
 	end)
 
 	function FakeBullseyeTrigger(rag,owner)
@@ -416,7 +419,7 @@
 		rag:SetEyeTarget(Vector(0,0,0))
 		local phys = rag:GetPhysicsObject()
 		if IsValid(phys) then
-			phys:SetMass(30)
+			phys:SetMass(10)
 		end
 
 		net.Start("pophead")
@@ -688,23 +691,41 @@
 		["models/LeymiRBA/Gyokami/Gyokami.mdl"] = 50,
 		["models/player/smoky/Smoky.mdl"] = 65,
 		["models/player/smoky/Smokycl.mdl"] = 65,
-		["models/knyaje pack/dibil/sso_politepeople.mdl"] = 20
+		["models/knyaje pack/dibil/sso_politepeople.mdl"] = 20,
+		["models/catalina/lizardman.mdl"] = 60,
+		["models/dejtriyev/hl1/ryangosling.mdl"] = 60,
+		["models/vinrax/player/Billy_Herrington.mdl"] = 60,
+		["models/player/furry/wolfy.mdl"] = 60,
+		["models/bloocobalt/splinter cell/chemsuit_cod.mdl"] = 60,
+		["models/player/jesus/jesus.mdl"] = 60,
+		["models/player/joe/k_pm.mdl"] = 60,
+		["models/player/megamind/megamind.mdl"] = 60,
+		["models/player/minyon.mdl"] = 60,
+		["models/player/oguzok.mdl"] = 60,
+		["models/petaly/peter_griffin/petergriffin.mdl"] = 80,
+		["models/petaly/peter_griffin/petergriffin2.mdl"] = 80,
+		["models/player/open season/boog.mdl"] = 60,
+		["models/kuhnya/barinov.mdl"] = 60
 	}
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = 20
+		CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = 50
 	end
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = 20
+		CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = 50
 	end
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = 20
+		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = 50
+	end
+
+	for i = 1,9 do
+		CustomWeight["models/player/Rusty/NatGuard/male_0"..i..".mdl"] = 50
 	end
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = 20
+		CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = 50
 	end
 
 
@@ -875,8 +896,8 @@
 	hook.Add("Player Collide","homigrad-fake",function(ply,hitEnt,data)
 		--if not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 80 then
 		if
-			(gg:GetBool() and not ply:HasGodMode() and data.Speed > 25) or
-			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 25 / hitEnt:GetPhysicsObject():GetMass() * 20 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 150)
+			(gg:GetBool() and not ply:HasGodMode() and data.Speed > 5) or
+			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 5 / hitEnt:GetPhysicsObject():GetMass() * 10 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > velocititouebat)
 		then
 			timer.Simple(0,function()
 				if not IsValid(ply) or ply.fake then return end
@@ -889,7 +910,7 @@
 	end)
 
 	hook.Add("OnPlayerHitGround","GovnoJopa",function(ply,a,b,speed)
-		if speed > 50 then
+		if speed > 10 then
 			if hook.Run("Should Fake Ground",ply) ~= nil then return end
 
 			local tr = {}

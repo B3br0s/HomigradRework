@@ -4,6 +4,7 @@ SWEP.PrintName = "Коктейль Молотова"
 SWEP.Author = "Homigrad"
 SWEP.Instructions = "Стеклянная бутылка, содержащая горючую жидкость и запал"
 SWEP.Category = "Гранаты"
+SWEP.RequiresPin = false
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

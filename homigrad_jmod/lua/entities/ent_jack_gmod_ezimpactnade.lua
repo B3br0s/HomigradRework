@@ -5,10 +5,8 @@ ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.Category = "JMod - EZ Explosives"
 ENT.PrintName = "EZ Impact Grenade"
 ENT.Spawnable = true
-ENT.Model = "models/jmod/explosives/grenades/impactnade/impact_grenade.mdl"
+ENT.Model = "models/pwb/weapons/w_rgd5_thrown.mdl"
 --ENT.ModelScale=1.5
-ENT.SpoonModel = "models/jmod/explosives/grenades/impactnade/impact_grenade_cap.mdl"
-ENT.SpoonSound = "physics/cardboard/cardboard_box_impact_soft2.wav"
 local BaseClass = baseclass.Get(ENT.Base)
 
 if SERVER then

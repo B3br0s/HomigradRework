@@ -3,7 +3,7 @@ SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "Remington870 Police"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Дробовик под калибр 12/70 beanbag"
+SWEP.Instructions			= "Дробовик под калибр 12/70 Фасоль"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "entities/weapon_insurgencymakarov.png"
 
@@ -25,7 +25,9 @@ SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
 SWEP.Primary.PumpSound = "csgo/weapons/sawedoff/sawedoff_pump.wav"
 SWEP.Primary.Force = 0.5
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.6
+SWEP.ShootWait = 0.7
+SWEP.NumBullet = 1
+SWEP.LoadSound = "csgo/weapons/sawedoff/sawedoff_insertshell_01"
 SWEP.TwoHands = true
 
 SWEP.Secondary.ClipSize		= -1
@@ -43,6 +45,11 @@ SWEP.HoldType = "ar2"
 SWEP.shotgun = true
 
 ------------------------------------------
+
+function SWEP:ApplyEyeSpray()
+    self.eyeSpray = self.eyeSpray - Angle(1,math.Rand(-0.5,0.5),0)
+    self.NumBullet = math.random(1,3)
+end
 
 SWEP.Slot					= 2
 SWEP.SlotPos				= 0

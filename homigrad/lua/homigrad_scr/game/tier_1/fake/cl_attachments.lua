@@ -13,6 +13,14 @@ local ATTInformation = {
             ReticleRight = -0.2,
         }
     },
+    ["weapon_mk18"] = {
+        ["Elcan"] = {
+            ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_all_elcan_specter_hco_lod0_mark.png",
+            ReticleSize = 10,
+            ReticleUp = 3,
+            ReticleRight = -0.4,
+        },
+    },
     ["weapon_r8"] = {
         ["Leapers"] = {
             ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_base_aimpoint_acro_p1_mark.png",

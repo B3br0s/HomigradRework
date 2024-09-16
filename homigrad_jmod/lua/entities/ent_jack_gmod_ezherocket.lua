@@ -78,12 +78,12 @@ if SERVER then
 	function ENT:PhysicsCollide(data, physobj)
 		if not IsValid(self) then return end
 
-		if data.DeltaTime > 0.2 then
+		if data.DeltaTime > 0.1 then
 			if data.Speed > 50 then
 				self:EmitSound("Canister.ImpactHard")
 			end
 
-			local DetSpd = 300
+			local DetSpd = 50
 
 			if (data.Speed > DetSpd) and (self:GetState() == STATE_LAUNCHED) then
 				self:Detonate()
@@ -118,12 +118,8 @@ if SERVER then
 		self:TakePhysicsDamage(dmginfo)
 
 		if JMod.LinCh(dmginfo:GetDamage(), 60, 120) then
-			if math.random(1, 3) == 1 then
-				self:Break()
-			else
 				JMod.SetOwner(self, dmginfo:GetAttacker())
 				self:Detonate()
-			end
 		end
 	end
 
@@ -156,12 +152,12 @@ if SERVER then
 		if self.Exploded then return end
 		self.Exploded = true
 		local SelfPos, Att, Dir = self:GetPos() + Vector(0, 0, 30), self:GetOwner() or game.GetWorld(), -self:GetRight()
-		JMod.Sploom(Att, SelfPos, 150)
+		--JMod.Sploom(Att, SelfPos, 150)
 		---
 		util.ScreenShake(SelfPos, 1000, 3, 2, 1500)
-		self:EmitSound("snd_jack_fragsplodeclose.wav", 90, 100)
+		self:EmitSound("rust/mlrs/mlrs-rocket-explosion-0"..math.random(1,3)..".ogg", 90, 100)
 		---
-		util.BlastDamage(game.GetWorld(), Att, SelfPos + Vector(0, 0, 50), 200, 200)
+	--util.BlastDamage(game.GetWorld(), Att, SelfPos + Vector(0, 0, 50), 200, 200)
 
 		for k, ent in pairs(ents.FindInSphere(SelfPos, 200)) do
 			if ent:GetClass() == "npc_helicopter" then
@@ -174,7 +170,7 @@ if SERVER then
 		JMod.BlastDoors(self, SelfPos, 3)
 
 		---
-		timer.Simple(.2, function()
+		timer.Simple(.3, function()
 			local Tr = util.QuickTrace(SelfPos - Dir * 100, Dir * 300)
 
 			if Tr.Hit then
@@ -187,7 +183,7 @@ if SERVER then
 		local Ang = self:GetAngles()
 		Ang:RotateAroundAxis(Ang:Forward(), -90)
 
-		timer.Simple(.1, function()
+		timer.Simple(.01, function()
 			ParticleEffect("50lb_air", SelfPos - Dir * 20, Ang)
 			ParticleEffect("50lb_air", SelfPos - Dir * 50, Ang)
 			ParticleEffect("50lb_air", SelfPos - Dir * 80, Ang)
@@ -205,9 +201,9 @@ if SERVER then
 		constraint.RemoveAll(self)
 		Phys:EnableMotion(true)
 		Phys:Wake()
-		Phys:ApplyForceCenter(-self:GetRight() * 20000)
+		Phys:ApplyForceCenter(-self:GetRight() * 999999999)
 		---
-		self:EmitSound("snds_jack_gmod/rocket_launch.wav", 80, math.random(95, 105))
+		self:EmitSound("rust/mlrs/mlrs-rocket-launch-0"..math.random(1,3)..".wav", 100, math.random(95, 105))
 		local Eff = EffectData()
 		Eff:SetOrigin(self:GetPos())
 		Eff:SetNormal(self:GetRight())
@@ -221,7 +217,7 @@ if SERVER then
 
 		util.ScreenShake(self:GetPos(), 20, 255, .5, 300)
 		---
-		self.NextDet = CurTime() + .25
+		self.NextDet = CurTime()
 
 		---
 		timer.Simple(30, function()
@@ -244,13 +240,14 @@ if SERVER then
 		end
 
 		local Phys = self:GetPhysicsObject()
-		JMod.AeroDrag(self, -self:GetRight(), .75)
+		JMod.AeroDrag(self, -self:GetRight(), 1)
 
 		if self:GetState() == STATE_LAUNCHED then
 			if self.FuelLeft > 0 then
-				Phys:ApplyForceCenter(-self:GetRight() * 20000)
-				self.FuelLeft = self.FuelLeft - 5
+				Phys:ApplyForceCenter(-self:GetRight() * 999999999)
+				self.FuelLeft = self.FuelLeft - 0.1
 				---
+				print("A")
 				local Eff = EffectData()
 				Eff:SetOrigin(self:GetPos())
 				Eff:SetNormal(self:GetRight())
@@ -259,7 +256,7 @@ if SERVER then
 			end
 		end
 
-		self:NextThink(CurTime() + .05)
+		self:NextThink(.01)
 
 		return true
 	end
@@ -288,7 +285,7 @@ elseif CLIENT then
 		self.Mdl:DrawModel()
 
 		if self:GetState() == STATE_LAUNCHED then
-			self.BurnoutTime = self.BurnoutTime or CurTime() + 1
+			self.BurnoutTime = self.BurnoutTime or CurTime()
 
 			if self.BurnoutTime > CurTime() then
 				render.SetMaterial(GlowSprite)

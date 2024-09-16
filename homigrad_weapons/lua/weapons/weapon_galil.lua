@@ -24,8 +24,16 @@ SWEP.Primary.SoundFar = "m16a4/m16a4_dist.wav"
 SWEP.Primary.Force = 240/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.07
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.ReloadSound = ""
 SWEP.TwoHands = true
+SWEP.MagOut = "zcitysnd/sound/weapons/galil/handling/galil_magout.wav"
+SWEP.MagIn = "zcitysnd/sound/weapons/galil/handling/galil_magin.wav"
+SWEP.BoltOut = "zcitysnd/sound/weapons/galil/handling/galil_boltrelease.wav"
+SWEP.BoltIn = "zcitysnd/sound/weapons/galil/handling/galil_boltback.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 0.9
+SWEP.BoltOutWait = 1.55 
+SWEP.BoltInWait = 1.35
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1

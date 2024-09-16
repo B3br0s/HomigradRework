@@ -25,6 +25,15 @@ SWEP.Primary.Force = 85/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.06
 SWEP.TwoHands = true
+SWEP.MagOut = "zcitysnd/sound/weapons/mp40/handling/mp40_magout.wav"
+SWEP.MagIn = "zcitysnd/sound/weapons/mp40/handling/mp40_magin.wav"
+SWEP.BoltIn = "zcitysnd/sound/weapons/mp5k/handling/mp5k_boltback.wav"
+SWEP.BoltOut = "zcitysnd/sound/weapons/mp5k/handling/mp5k_boltrelease.wav"
+SWEP.Baraban = true
+SWEP.MagOutWait = 0.5
+SWEP.MagInWait = 1.5
+SWEP.BoltInWait = 0.2
+SWEP.BoltOutWait = 1.9
 							
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1

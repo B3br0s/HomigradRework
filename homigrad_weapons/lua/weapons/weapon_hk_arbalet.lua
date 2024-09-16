@@ -4,7 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "Арбалет"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Арбик с болтами"
-SWEP.Category 				= "Оружие 2"
+SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

@@ -146,9 +146,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 				slots.leftcalf or
 				slots.rightcalf
 			then
-				sound.Emit(ent,"snd_jack_hmcd_ricochet_"..math.random(1,2)..".wav",90)
+				sound.Emit(ent,"homigrad/physics/shield/bullet_hit_shield_0"..math.random(1,7)..".wav",90)
 			else
-				sound.Emit(ent,"player/kevlar" .. math.random(1,6) .. ".wav",90)
+				sound.Emit(ent,"homigrad/player/headshot_helmet.wav",90)
 			end
 		end
 
@@ -171,15 +171,11 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())
 	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
 
-	if dmginfo:GetDamageType() == DMG_BLAST then
-		ply.pain = 700
-	end
-
 	ply.LastDMGInfo = rubatPidor
 
-	dmginfo:ScaleDamage(0.3)
+	dmginfo:ScaleDamage(0.2)
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-	dmginfo:ScaleDamage(0.45)
+	dmginfo:ScaleDamage(0.4)
 	if rag then
 
 		ply:SetHealth(ply:Health() - dmginfo:GetDamage())

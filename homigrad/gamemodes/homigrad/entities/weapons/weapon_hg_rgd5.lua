@@ -8,6 +8,12 @@ SWEP.Category = "Гранаты"
 SWEP.Slot = 4
 SWEP.SlotPos = 2
 SWEP.Spawnable = true
+SWEP.RequiresPin = true
+SWEP.PinOut = false
+SWEP.PinSound = "weapons/tfa_csgo/flashbang/pinpull.wav"
+SWEP.Leveractivatedonce = false
+SWEP.a = 1
+SWEP.LeverProebal = false
 
 SWEP.ViewModel = "models/pwb/weapons/w_rgd5.mdl"
 SWEP.WorldModel = "models/pwb/weapons/w_rgd5.mdl"

@@ -4,6 +4,7 @@ SWEP.Base = 'salat_base' -- base
 SWEP.PrintName 				= "M249"
 SWEP.Instructions			= "Пулемёт под калибр 5,56х45"
 SWEP.Category 				= "Оружие"
+SWEP.Baraban = true
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -22,8 +23,16 @@ SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/m249/m249_dist.wav"
 SWEP.Primary.Force = 160/3
 SWEP.ReloadTime = 4
 SWEP.ShootWait = 0.075
-SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.ReloadSound = ""
 SWEP.TwoHands = true
+SWEP.MagOut = "zcitysnd/sound/weapons/m249/handling/m249_beltalign.wav"
+SWEP.MagIn = "zcitysnd/sound/weapons/m249/handling/m249_beltpullout.wav"
+SWEP.BoltOut = "zcitysnd/sound/weapons/m249/handling/m249_boltback.wav"
+SWEP.BoltIn = "zcitysnd/sound/weapons/m249/handling/m249_boltrelease.wav"
+SWEP.MagOutWait = 0.2
+SWEP.MagInWait = 2.5
+SWEP.BoltOutWait = 3.5
+SWEP.BoltInWait = 3.7
 							
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1

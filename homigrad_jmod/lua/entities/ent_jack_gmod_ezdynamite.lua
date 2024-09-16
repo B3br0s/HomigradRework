@@ -36,9 +36,8 @@ if SERVER then
 	end
 
 	function ENT:Initialize()
-		self:SetModel("models/jmod/explosives/grenades/dynamite/dynamite.mdl")
+		self:SetModel("models/jmod/explosives/grenades/dynamite/jmod_dynamite01a.mdl")
 		--self:SetModelScale(.25, 0)
-		self:SetMaterial("models/entities/mat_jack_dynamite")
 		self:SetBodygroup(0, 0)
 		self:PhysicsInit(SOLID_VPHYSICS)
 		self:SetMoveType(MOVETYPE_VPHYSICS)
@@ -159,9 +158,9 @@ if SERVER then
 
 		if state == JMod.EZ_STATE_ARMED then
 			local Fsh = EffectData()
-			Fsh:SetOrigin(self:GetPos() + self:GetForward() * 6)
+			Fsh:SetOrigin(self:GetPos() + self:GetUp() * 5)
 			Fsh:SetScale(1)
-			Fsh:SetNormal(self:GetForward())
+			Fsh:SetNormal(self:GetUp())
 			util.Effect("eff_jack_fuzeburn", Fsh, true, true)
 			self.Entity:EmitSound("snd_jack_sss.wav", 65, math.Rand(90, 110))
 			JMod.EmitAIsound(self:GetPos(), 500, .5, 8)

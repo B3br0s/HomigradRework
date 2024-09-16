@@ -3,7 +3,7 @@ if engine.ActiveGamemode() == "homigrad" then
     
     SWEP.PrintName 				= "M1A1"
     SWEP.Author 				= "Homigrad"
-    SWEP.Instructions			= "M1 Garand, официально — US Rifle, Caliber .30, M1, — американская самозарядная винтовка времён Второй мировой войны."
+    SWEP.Instructions			= ""
     SWEP.Category 				= "Оружие"
     SWEP.Spawnable 				= true
     SWEP.AdminOnly 				= false
@@ -11,17 +11,23 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.ClipSize		= 10
     SWEP.Primary.DefaultClip	= 10
     SWEP.Primary.Automatic		= false
-    SWEP.Primary.Ammo			= "7.62x33 mm"
+    SWEP.Primary.Ammo			= "7.62x39 mm"
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.7 * 40
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = "weapons/mosin/mosin_tp.wav"
+    SWEP.Primary.Sound = "zcitysnd/sound/weapons/m1a1/m1a1_fp.wav"
     SWEP.Primary.Force = 240/3
     SWEP.ReloadTime = 2
     SWEP.ShootWait = 0.1
-    SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+    SWEP.ReloadSound = ""
     SWEP.TwoHands = true
-
+    SWEP.MagOut = "zcitysnd/sound/weapons/m1a1/handling/m1a1_magout.wav"
+    SWEP.MagIn = "zcitysnd/sound/weapons/m1a1/handling/m1a1_magin.wav"
+    SWEP.BoltIn = "zcitysnd/sound/weapons/m1a1/handling/m1a1_boltrelease.wav"
+    SWEP.MagOutWait = 0.2
+    SWEP.MagInWait = 1
+    SWEP.BoltInWait = 1.3
+    
     SWEP.vbwAng = Vector(0,0,0)
     SWEP.vbwPos = Vector(0,0,0)
 

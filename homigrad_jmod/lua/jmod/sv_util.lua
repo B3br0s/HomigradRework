@@ -60,9 +60,9 @@ function JMod.EZ_WeaponLaunch(ply)
 
 	if IsValid(FirstWep) then
 		-- knock knock it's pizza time
-		FirstWep:EmitSound("buttons/button6.wav", 75, 110)
+		--FirstWep:EmitSound("buttons/button6.wav", 75, 110)
 
-		timer.Simple(.2, function()
+		timer.Simple(.1, function()
 			if IsValid(FirstWep) then
 				FirstWep.DropOwner = ply
 				FirstWep:Launch()

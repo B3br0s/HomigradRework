@@ -19,7 +19,7 @@ SWEP.Primary.Ammo			= "12/70 gauge"
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.Damage = 1.7 * 30
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "rifle_win1892/win1892_fire_01.wav"
+SWEP.Primary.Sound = ("zcitysnd/sound/weapons/firearms/shtg_winchestersx3/shotgun_semiauto_fire"..math.random(1,2)..".wav")
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
@@ -80,6 +80,7 @@ SWEP.ValidAttachments = {
 }
 
 function SWEP:ApplyEyeSpray()
+    self.Primary.Sound = ("zcitysnd/sound/weapons/firearms/shtg_winchestersx3/shotgun_semiauto_fire"..math.random(1,2)..".wav")
     self.eyeSpray = self.eyeSpray - Angle(5,math.Rand(-2,2),0)
 end
 end

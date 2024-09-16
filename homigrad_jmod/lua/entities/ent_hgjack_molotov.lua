@@ -35,7 +35,7 @@ if SERVER then
 				self:SetState(JMod.EZ_STATE_ARMED)
 			end
 		end)
-		self:EmitSound("ambient/fire/mtov_flame2.wav")
+		self:EmitSound("weapons/tfa_csgo/molotov/fire_ignite_4.wav")
 		self:Ignite(15)
 		--self:SpoonEffect()
 	end
@@ -70,13 +70,13 @@ if SERVER then
 		if self.Exploded then return end
 		self.Exploded = true
 		local SelfPos, Owner, SelfVel = self:LocalToWorld(self:OBBCenter()), self:GetOwner() or self, self:GetPhysicsObject():GetVelocity()
-		local Boom = ents.Create("env_explosion")
+		--[[local Boom = ents.Create("env_explosion")
 		Boom:SetPos(SelfPos)
 		Boom:SetKeyValue("imagnitude", "50")
 		Boom:SetOwner(Owner)
 		Boom:Spawn()
-		Boom:Fire("explode", 0)
-		self:EmitSound("ambient/fire/mtov_flame2.wav")
+		Boom:Fire("explode", 0)]]
+		self:EmitSound("weapons/tfa_csgo/molotov/molotov_detonate_1.wav")
 
 		for i = 1, 5 do
 			local FireVec = (VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
