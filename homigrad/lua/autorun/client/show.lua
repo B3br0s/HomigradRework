@@ -1,4 +1,4 @@
---[[hook.Add("HUDPaint", "ShowSWEPBones", function()
+concommand.Add("getbones", function(ply)
     local ply = LocalPlayer() -- Get the local player
     if not IsValid(ply) then return end
 
@@ -21,11 +21,8 @@
             -- Convert bone position to 2D screen position
             local screenPos = bonePos:ToScreen()
 
-            draw.SimpleText(boneName, "Trebuchet24", screenPos.x, screenPos.y, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            print(boneName)
 
-            -- Optionally, draw a small circle at the bone's position
-            surface.SetDrawColor(255, 0, 0, 255) -- Red color
-            surface.DrawRect(screenPos.x - 2, screenPos.y - 2, 4, 4) -- Small rectangle representing the bone
         end
     end
-end)]]
+end)

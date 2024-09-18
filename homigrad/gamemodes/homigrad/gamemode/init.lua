@@ -220,7 +220,8 @@ COMMANDS.forceartery = {function(ply,args)
 					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
 					sound.Play("artery.wav", ply:GetPos())
 					ply.Organs['artery']=0
-					ply:TakeDamage(100)
+					ply.Organs['spine']=0
+					ply:TakeDamage(50)
 	end
 end}
 

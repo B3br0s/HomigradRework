@@ -2,7 +2,7 @@ if SERVER then
     AddCSLuaFile()
 end
 if CLIENT then
-local hg_new_run = CreateClientConVar("hg_new_run","1",true,false,"CHTOOOO?",0,1)
+local hg_new_run = CreateClientConVar("hg_new_run","0",true,false,"CHTOOOO?",0,1)
 
     local runAnimActivity = ACT_HL2MP_RUN_FAST
 

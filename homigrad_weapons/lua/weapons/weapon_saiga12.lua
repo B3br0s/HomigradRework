@@ -1,5 +1,5 @@
 if engine.ActiveGamemode() == "homigrad" then
-SWEP.Base = 'salat_base' -- base
+SWEP.Base = 'b3bros_base' -- base
 
 SWEP.PrintName 				= "Сайга-12"
 SWEP.Author 				= "Homigrad"

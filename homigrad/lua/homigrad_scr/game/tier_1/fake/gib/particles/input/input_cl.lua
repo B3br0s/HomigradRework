@@ -1,6 +1,6 @@
 if engine.ActiveGamemode() == "homigrad" then
 local mats = {}
-for i = 1,8 do mats[i] = Material("decals/model_z_blood" .. i) end
+for i = 1,8 do mats[i] = Material("decals/blood" .. i) end
 local countmats = #mats
 
 local random = math.random

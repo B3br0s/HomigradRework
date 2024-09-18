@@ -413,7 +413,7 @@ end)
 
 hook.Add("WeaponEquip","PlayerManualPickup",function(wep,ply)
 	timer.Simple(0,function()
-		if wep.Base == "salat_base" then
+		if wep.Base == "b3bros_base" then
 			if wep.TwoHands then
 				for i,weap in pairs(ply:GetWeapons()) do
 					if weap:GetClass() == ply.slots[3] then

@@ -1,24 +1,4 @@
 if engine.ActiveGamemode() == "homigrad" then
-	--[[local skini = {
-		{skin = "phoenix_storms/mat/mat_phx_carbonfiber", namee = "carbonfiber"},
-		{skin = "sal/acc/armor01_3", namee = "greencamo"},
-		{skin = "sal/acc/armor01_4", namee = "multicamo"},
-		{skin = "sal/acc/armor01_5", namee = "desertcamo"},
-		{skin = "models/foodnhouseholditems/cj_b_plastic", namee = "blue"},
-		{skin = "models/jacky_camouflage/digi", namee = "cyancamo"},
-		{skin = "models/jacky_camouflage/digi2", namee = "pixelcamo"},
-		{skin = "models/flesh", namee = "flesh"},
-		{skin = "models/debug/debugwhite", namee = "clearwhite"},
-		{skin = "models/props_c17/frostedglass_01a", namee = "glass"},
-		{skin = "models/wireframe", namee = "wireframe"},
-		{skin = "phoenix_storms/stripes", namee = "isolate"},
-		{skin = "debug/env_cubemap_model", namee = "cubemap"},
-		{skin = "sal/acc/armor01_2", namee = "blackcarbon"},
-		{skin = "models/props/cs_office/clouds", namee = "clouds"},
-		{skin = "models/props/cs_assault/dollar", namee = "dollar"},
-		{skin = "phoenix_storms/black_chrome", namee = "blackchrome"},
-		{skin = "models/dav0r/hoverball", namee = "hoverball"}
-	}]]
 
 	function FindInTableByName(tbl, name)
 		for k, v in pairs(tbl) do
@@ -28,16 +8,6 @@ if engine.ActiveGamemode() == "homigrad" then
 		end
 		return nil, nil
 	end
-
-skins = {
-	megapenis = true,
-	meagsponsor = true,
-	ZvezdaTiktoka = false,
-	donator = true,
-	superadmin = true,
-	microdonater = true,
-	admin = true
-}
 local vecZero = Vector(0,0,0)
 local angZero = Angle(0,0,0)
 SWEP.Base = 'weapon_base' -- base
@@ -46,13 +16,13 @@ SWEP.SightPos = Vector(0,0,0)
 SWEP.SightAng = Angle(0,0,0)
 SWEP.ValidAttachments = {}
 SWEP.ATTObjects = {}
-SWEP.PrintName 				= "b3bros_base"
+SWEP.PrintName 				= "B3bros Base"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= ""
 SWEP.Category 				= "Other"
 SWEP.WepSelectIcon			= ""
 
-SWEP.Spawnable 				= false
+SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
 
 ------------------------------------------
@@ -98,7 +68,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = ""
+SWEP.HoldType = "revolver"
 SWEP.revolver = false
 SWEP.shotgun = false
 
@@ -110,10 +80,8 @@ SWEP.vbwPos = false
 SWEP.vbwAng = false
 SWEP.Suppressed = false
 
-local hg_skins = CreateClientConVar("hg_skins","0",true,false,"CSGO????",0,1)
 local hg_default_muzzle = CreateClientConVar("hg_default_muzzle","0",true,false,"caladudi remek bakopas risamstir",0,1)
 local hg_noeffects_muzzle = CreateClientConVar("hg_noeffects_muzzle","0",true,false,"optimization(no)",0,1)
---local hg_skin = CreateClientConVar("hg_skin","1",true,false,"Ну и хули мы стоим?")
 
 local hg_show_hitposmuzzle = CreateClientConVar("hg_show_hitposmuzzle","0",false,false,"huy",0,1)
 
@@ -302,10 +270,10 @@ function SWEP:DrawWorldModel()
 	if IsValid(self:GetOwner()) then
 		-- скины
 		local ply = self:GetOwner()
-		if hg_skins:GetBool() and skins[self:GetOwner():GetUserGroup()] then
+		--[[if hg_skins:GetBool() and skins[self:GetOwner():GetUserGroup()] then
         	self:SetSubMaterial( 0, self:GetNWString( "skin" ) )
        		self:DrawModel()
-    	end
+    	end]]
 		-- аттачменты 
 		if self.ValidAttachments then
 			for attachment, info in pairs(self.ValidAttachments) do
@@ -468,6 +436,10 @@ homigrad_weapons = homigrad_weapons or {}
 function SWEP:Initialize()
 	homigrad_weapons[self] = true
 
+	self.Instructions = ("                                Урон: "..self.Primary.Damage.."                                           ".."Время До Выстрела: "..self.ShootWait.."       Вместительность:"..self:GetMaxClip1())
+
+	print(self.Instructions)
+
 	local skini = {
 		"phoenix_storms/mat/mat_phx_carbonfiber",
 		"pure_noise/grayscale_uniform_lit",
@@ -497,6 +469,7 @@ function SWEP:Initialize()
 	end
 
 	self.lerpClose = 0
+
 end
 
 function SWEP:PrePrimaryAttack()
@@ -534,6 +507,13 @@ if CLIENT then
 end
 
 function SWEP:PrimaryAttack()
+	if self.CanManipulatorKuklovodAngle then
+		self:ManipulateSlideBoneForAng()
+		timer.Simple(0.2,function ()
+			self:ManipulateSlideBoneBacAng()
+		end)
+	end
+
 	self.ShootNext = self.NextShot or NextShot
 
 
@@ -571,6 +551,15 @@ function SWEP:PrimaryAttack()
 	else
 		if self:GetNWBool("Suppressor", false) != true then
 			self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+			if self:Clip1() != 0 then
+				if self.CanManipulatorKuklovod then
+					self:ManipulateSlideBoneFor()
+					timer.Simple(0.05,function ()
+						self:ManipulateSlideBoneBac()
+					end)
+				end
+				end
+		
 			if self.Primary.PumpSound then
 				timer.Simple(0.2,function ()
 					sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
@@ -579,6 +568,12 @@ function SWEP:PrimaryAttack()
 		else
 			self.Efect = "PhyscannonImpact"
 			self:EmitSound(self.Primary.SoundSupresor,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+			if self.CanManipulatorKuklovod then
+				self:ManipulateSlideBoneFor()
+				timer.Simple(0.01,function ()
+					self:ManipulateSlideBoneBac()
+				end)
+			end
 			if self.Primary.PumpSound then
 				timer.Simple(0.2,function ()
 					sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
@@ -774,7 +769,11 @@ function SWEP:FireBullet(dmg, numbul, spread)
 
 	local shootOrigin = Attachment.Pos
 	local vec = vecZero
-	vec:Set(self.addPos)
+	if self.MuzzleFXPos then
+		vec:Set(self.MuzzleFXPos)
+	else
+		vec:Set(self.addPos)
+	end
 	vec:Rotate(Attachment.Ang)
 	shootOrigin:Add(vec)
 
@@ -885,7 +884,7 @@ function SWEP:FireBullet(dmg, numbul, spread)
 					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
 					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
 					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
-					else
+				else
 					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
 					ParticleEffect("matin_mw_muzzleflash_357",shootOrigin,shootAngles)
 					end

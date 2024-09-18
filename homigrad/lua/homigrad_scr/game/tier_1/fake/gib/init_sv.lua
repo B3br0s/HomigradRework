@@ -79,24 +79,23 @@ local validBone = {
 
 local function razrivtela(pos)
 			local propModels = {
-	"models/mosi/fnv/props/gore/gorehead03.mdl",
-	"models/mosi/fnv/props/gore/gorehead02.mdl",
-	"models/mosi/fnv/props/gore/gorehead06.mdl",
-	"models/mosi/fnv/props/gore/gorehead05.mdl",
-	"models/mosi/fnv/props/gore/gorehead04.mdl",
-	"models/mosi/fnv/props/gore/gorearm03.mdl",
-	"models/mosi/fnv/props/gore/gorearm.mdl",
-	"models/mosi/fnv/props/gore/gorearm01.mdl",
-	"models/mosi/fnv/props/gore/gorearm02.mdl",
-	"models/mosi/fnv/props/gore/goreleg03.mdl",
-	"models/mosi/fnv/props/gore/gorelegb01.mdl",
-	"models/mosi/fnv/props/gore/gorelegb03.mdl",
-	"models/mosi/fnv/props/gore/gorelegb02.mdl",
-	"models/mosi/fnv/props/gore/goretorso02.mdl",
-	"models/mosi/fnv/props/gore/goretorso05.mdl",
 	"models/Gibs/HGIBS_rib.mdl",
 	"models/Gibs/HGIBS_rib.mdl",
-	"models/mosi/fnv/props/gore/goretorso03.mdl"
+	"models/Gibs/HGIBS_scapula.mdl",
+	"models/Gibs/HGIBS_scapula.mdl",
+	"models/Gibs/HGIBS_scapula.mdl",
+	"models/Gibs/HGIBS_scapula.mdl",
+	"models/Gibs/HGIBS_spine.mdl",
+	"models/Gibs/HGIBS_rib.mdl",
+	"models/Gibs/HGIBS_rib.mdl",
+	"models/Gibs/HGIBS_rib.mdl",
+	"models/Gibs/HGIBS_rib.mdl",
+	"models/Gibs/HGIBS_spine.mdl",
+	"models/Gibs/HGIBS.mdl",
+	"models/Gibs/HGIBS_rib.mdl",
+	"models/Gibs/HGIBS_spine.mdl",
+	"models/Gibs/HGIBS_spine.mdl",
+	"models/Gibs/HGIBS_spine.mdl",
 }
 
 
@@ -173,14 +172,9 @@ function Gib_Input(rag,bone,dmgInfo,player)
 
 	if dmgInfo:IsDamageType(DMG_BLAST) then
 			dmgInfo:ScaleDamage(5000)
-			sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
-			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
+			sound.Emit(rag,"physics/body/body_medium_break4.wav")
+			sound.Emit(rag,"physics/body/body_medium_break2.wav")
 			sound.Emit(rag,"physics/body/body_medium_break3.wav")
-			sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)
-			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
-			sound.Emit(rag,"physics/body/body_medium_break3.wav")
-			sound.Emit(rag,"physics/flesh/flesh_bloody_break.wav",nil,75)
-			sound.Emit(rag,"physics/flesh/flesh_bloody_impact_hard1.wav",nil,75)
 		--[[if player != nil then
 			player:ChatPrint("Тебя разорвало на части.")
 			end]]
@@ -203,9 +197,6 @@ function Gib_Input(rag,bone,dmgInfo,player)
 	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 300 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
 		sound.Emit(rag,"homigrad/headshoot.wav")
 		sound.Emit(rag,"homigrad/player/headshot" .. math.random(1,2) .. ".wav")
-	--	sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
-		sound.Emit(rag,"physics/body/body_medium_break3.wav")
-	--	sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)
 
 		timer.Simple(0.05,function()
 			if not IsValid(rag) then return end
@@ -237,35 +228,40 @@ end
 	end
 	--крута🎈 когда взрываеца от прикосновения да?
 	--да
-	if dmgInfo:GetDamage() >= 1200 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 740 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) then
+	if dmgInfo:GetDamage() >= 1200 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 740 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) or math.random(1,65) == 12 then
 			dmgInfo:ScaleDamage(5000)
-			sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
-			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
-			sound.Emit(rag,"physics/body/body_medium_break3.wav")
-			sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)
-			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
-			sound.Emit(rag,"physics/body/body_medium_break3.wav")
-			sound.Emit(rag,"physics/flesh/flesh_bloody_break.wav",nil,75)
-			sound.Emit(rag,"physics/flesh/flesh_bloody_impact_hard1.wav",nil,75)
+			sound.Emit(rag,"physics/body/body_medium_break4.wav")
+			sound.Emit(rag,"physics/body/body_medium_break2.wav")
+			sound.Emit(rag,"physics/flesh/flesh_bloody_impact_hard1.wav")
 		--[[if player != nil then
 			player:ChatPrint("Тебя разорвало на части.")
 			end]]
 			
 		--	if GetGlobalBool("GoreEnabled") then
-		if dmgInfo:GetDamage() >= 1600 then
-	--		razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
-		end
+			razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
 		--	end
 
 		--	if GetGlobalBool("BloodGoreEnabled") then
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
 		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
 		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
 		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-		ParticleEffect("exit_blood_explosion",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
 		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
 		ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))	
@@ -299,7 +295,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	--разве это не смешно когда ножом башка взрывается?
 	--нет
 	
-	if dmgInfo:GetDamage() >= 50 then
+	if dmgInfo:GetDamage() >= 40 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)
@@ -336,13 +332,10 @@ end)
 
 local max = math.max
 local util_TraceLine = util.TraceLine
-local util_Decal = util.DecalEx
+local util_Decal = util.Decal
 
 local tr = {}
-matblood = {}
-for i = 1,8 do 
-	matblood[i] = Material("decals/blood" .. i) 
-end
+
 hook.Add("Think","Gib",function()
 	local time = CurTime()
 
@@ -363,7 +356,8 @@ hook.Add("Think","Gib",function()
 				local traceResult = util_TraceLine(tr)
 				if traceResult.Hit then
 					ent:EmitSound("ambient/water/drip" .. math.random(1,4) .. ".wav", 60,math.random(230,240),0.1,CHAN_AUTO)
-            	--	util_Decal(matblood[math.random(1,#matblood)], game.GetWorld() ,traceResult.HitPos + traceResult.HitNormal,traceResult.HitPos - traceResult,HitNormal, Color(190,44,44,155),0.7,0.7)
+
+					util_Decal("Blood",traceResult.HitPos + traceResult.HitNormal,traceResult.HitPos - traceResult.HitNormal,ply)
 				else
 					BloodParticle(ent:GetPos() + ent:OBBCenter(),ent:GetVelocity() + Vector(math.Rand(-5,5),math.Rand(-5,5),0))
 				end

@@ -310,6 +310,7 @@ local weps = {
 ["weapon_m1a1"] = true,
 ["weapon_m249"] = true,
 ["weapon_m4a1"] = true,
+["b3bros_base"] = true,
 ["weapon_minu14"] = true,
 ["weapon_mp40"] = true,
 ["weapon_rpk"] = true,
@@ -495,12 +496,12 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 				pointshooting = not pointshooting
 			end
 			if pointshooting then
-				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.1 or 1,ScopeLerp,0.85)
+				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.25 or 1,ScopeLerp,0.85)
 			else
-				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.1 or 1,ScopeLerp,1)
+				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.25 or 1,ScopeLerp,1)
 			end
 		else
-			ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.1 or 1,ScopeLerp,0)
+			ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.25 or 1,ScopeLerp,0)
 		end
 	end
 
@@ -530,7 +531,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	if wep.sightyes == false then
 		if weaponClass == "weapon_glock18" then
 			--Vector(3.85,10,1.45)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.6 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
+			vecWep = hand.Pos + hand.Ang:Up() * 1.6 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
 			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_mag7" then
@@ -540,12 +541,12 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_glock" then
 			--Vector(2.3,10,0)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.3 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0
+			vecWep = hand.Pos + hand.Ang:Up() * 1.7 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.125
 			angWep = hand.Ang + Angle(-15,5,0)
 		end
 		if weaponClass == "weapon_r8" then
 			--Vector(5.2,-2,1.1)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.2 - hand.Ang:Forward() * 15 + hand.Ang:Right() * 0
+			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.15
 			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_ak74" then
@@ -554,6 +555,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			angWep = hand.Ang + Angle(-25,20,-25)
 		end
 		if weaponClass == "weapon_xm1014" then
+			--Vector(3.55,4,0.95)
+			vecWep = hand.Pos + hand.Ang:Up() * 3.55 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.95
+			angWep = hand.Ang + Angle(-8,0,0)
+		end
+		if weaponClass == "b3bros_base" then
 			--Vector(3.55,4,0.95)
 			vecWep = hand.Pos + hand.Ang:Up() * 3.55 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.95
 			angWep = hand.Ang + Angle(-8,0,0)
@@ -630,12 +636,12 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_de" then
 			--Vector(3.9,10,1.09)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.25 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.05
-			angWep = hand.Ang + Angle(0,0,0)
+			vecWep = hand.Pos + hand.Ang:Up() * 1.9 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.2
+			angWep = hand.Ang + Angle(0,8,0)
 		end
 		if weaponClass == "weapon_akm" then
 			--Vector(5.1,5,0.76)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.0 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.76
+			vecWep = hand.Pos + hand.Ang:Up() * 3.8 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 0.95
 			angWep = hand.Ang + Angle(-8,5,0)
 		end
 		if weaponClass == "weapon_ak74u" then

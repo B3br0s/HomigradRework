@@ -1,5 +1,5 @@
 if engine.ActiveGamemode() == "homigrad" then
-SWEP.Base = 'salat_base' -- base 
+SWEP.Base = 'b3bros_base' -- base 
 
 SWEP.PrintName 				= "РПК"
 SWEP.Instructions			= "Пулемёт под калибр 7,62х39"

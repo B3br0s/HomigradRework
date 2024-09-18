@@ -2,7 +2,6 @@ if not engine.ActiveGamemode() == "homigrad" then return end
 local math_Clamp = math.Clamp
 
 local furrypedik = {
-	"STEAM_1:0:164588130"
 }
 
 local veipbasic = {

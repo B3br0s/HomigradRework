@@ -78,7 +78,7 @@ function GuiltCheck(att,ply)
 			att.Bloodlosing = att.Bloodlosing + 25
 			att:SetVelocity( Vector(0,0,9999))
 			att:ChatPrint("+150 Боли и +25 кровотечения за гилт. Текущая боль: "..att.pain.." Текущее кровотечение:"..att.Bloodlosing)
-			att:concommand("say", "*drop")
+			att:ConCommand("say", "*drop")
 			local r = math.random(1,6)
 			if r == 3 then
 				att:ChatPrint("КОООООООООООСМООООООООООООС")

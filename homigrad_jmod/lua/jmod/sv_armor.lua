@@ -1,4 +1,4 @@
-﻿local EquipSounds = {"snds_jack_gmod/equip1.wav", "snds_jack_gmod/equip2.wav", "snds_jack_gmod/equip3.wav", "snds_jack_gmod/equip4.wav", "snds_jack_gmod/equip5.wav"}
+﻿local EquipSounds = {"homigrad/player/footsteps/new/suit_t_01.wav", "homigrad/player/footsteps/new/suit_t_02.wav", "homigrad/player/footsteps/new/suit_t_03.wav", "homigrad/player/footsteps/new/suit_t_04.wav", "homigrad/player/footsteps/new/suit_t_05.wav"}
 
 local function IsDamageThisType(dmg, typ)
 	if type(typ) ~= "number" then return false end

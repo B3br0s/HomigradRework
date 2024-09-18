@@ -1,10 +1,10 @@
 if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
-	-- дефолт модельки
-	local handsarrivetime = 0.2
-	local forwardarrivetime = 0.25
-	local backarrivetime = 0.17
+
+	local handsarrivetime = 0.235
+	local forwardarrivetime = 0.05
+	local backarrivetime = 0.02
 	local velocititouebat = 10
 	-- угол
 	local handsangup = 100
@@ -369,8 +369,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		wep = wep or ply:GetActiveWeapon()
 		if !IsValid(wep) then return end
 
-		if wep:GetClass() == "weapon_hands" then return end
-		if wep.Base == "salat_base" then
+		if wep:GetClass() == "weapon_hands" or wep:GetClass() == "weapon_handsinfected" then return end
+		if wep.Base == "b3bros_base" then
 			if wep.TwoHands then
 				ply.slots[3] = nil
 			else
@@ -705,6 +705,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		["models/petaly/peter_griffin/petergriffin.mdl"] = 80,
 		["models/petaly/peter_griffin/petergriffin2.mdl"] = 80,
 		["models/player/open season/boog.mdl"] = 60,
+		["models/it/pennywise/pennywisev2/player/Pennywise_player.mdl"] = 60,
 		["models/kuhnya/barinov.mdl"] = 60
 	}
 
@@ -895,10 +896,11 @@ if engine.ActiveGamemode() == "homigrad" then
 
 	hook.Add("Player Collide","homigrad-fake",function(ply,hitEnt,data)
 		--if not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 80 then
+		print(hitEnt:GetVelocity():Length())
 		if
-			(gg:GetBool() and not ply:HasGodMode() and data.Speed > 5) or
-			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 5 / hitEnt:GetPhysicsObject():GetMass() * 10 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > velocititouebat)
-		then
+			(gg:GetBool() and not ply:HasGodMode()) or
+			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 5 / hitEnt:GetPhysicsObject():GetMass() * 10 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > velocititouebat)  --сбитие с ног
+		then 
 			timer.Simple(0,function()
 				if not IsValid(ply) or ply.fake then return end
 
@@ -1247,7 +1249,15 @@ if engine.ActiveGamemode() == "homigrad" then
 						rag.ZacConsLH=nil
 					end
 				end
+				--[[if(IsValid(rag.ZacConsLH) and (rag.ZacNextGrLH || rag.ZacNextGrLH<=CurTime()))then
+					net.Start("HandindicatorL")
+					net.WriteVector(phys:GetPos())
+					net.WriteEntity(rag)
+					net.WriteBool(true)
+					net.Send(ply)
+				end]]
 				if(!IsValid(rag.ZacConsLH) and (!rag.ZacNextGrLH || rag.ZacNextGrLH<=CurTime()))then
+					
 					rag.ZacNextGrLH=CurTime()+0.1
 					for i=1,3 do
 						local offset = phys:GetAngles():Up()*-5
@@ -1266,11 +1276,9 @@ if engine.ActiveGamemode() == "homigrad" then
 						local trace = util.TraceLine(traceinfo)
 						if(trace.Hit and !trace.HitSky)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
-							net.Start("HandindicatorL")
-							net.WriteVector(phys:GetPos())
-							net.WriteBool(true)
-							net.Send(ply)
 							if(IsValid(cons))then
+								ply:SetNWBool("HvatL",true)
+								rag:EmitSound("physics/body/body_medium_impact_soft5.wav",500,100,0.5,CHAN_AUTO)
 								rag.ZacConsLH=cons
 							end
 							break
@@ -1282,14 +1290,23 @@ if engine.ActiveGamemode() == "homigrad" then
 				if(IsValid(rag.ZacConsLH))then
 					rag.ZacConsLH:Remove()
 					rag.ZacConsLH=nil
-					net.Start("HandindicatorL")
+					ply:SetNWBool("HvatL",false)
+					--[[net.Start("HandindicatorL")
+					net.WriteEntity(rag)
 					net.WriteBool(false)
-					net.Send(ply)
+					net.Send(ply)]]
 				end
 			end
 			if(ply:KeyDown(IN_WALK)) and !RagdollOwner(rag).Otrub and !timer.Exists("StunTime"..ply:EntIndex()) then
 				local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
+				--[[if(IsValid(rag.ZacConsRH) and (rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
+					net.Start("HandindicatorR")
+					net.WriteVector(phys:GetPos())
+					net.WriteEntity(rag)
+					net.WriteBool(true)
+					net.Send(ply)
+				end]]
 				if(!IsValid(rag.ZacConsRH) and (!rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
 					rag.ZacNextGrRH=CurTime()+0.1
 					for i=1,3 do
@@ -1309,16 +1326,10 @@ if engine.ActiveGamemode() == "homigrad" then
 						local trace = util.TraceLine(traceinfo)
 						if(trace.Hit and !trace.HitSky)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
-							net.Start("HandindicatorR")
-							net.WriteVector(phys:GetPos())
-							net.WriteBool(true)
-							net.Send(ply)
 							if(IsValid(cons))then
-								net.Start("HandindicatorR")
-								net.WriteVector(phys:GetPos())
-								net.WriteBool(true)
-								net.Send(ply)
+								ply:SetNWBool("HvatR",true)
 								rag.ZacConsRH=cons
+								rag:EmitSound("physics/body/body_medium_impact_soft5.wav",500,100,0.5,CHAN_AUTO)
 							end
 							break
 						end
@@ -1328,9 +1339,11 @@ if engine.ActiveGamemode() == "homigrad" then
 				if(IsValid(rag.ZacConsRH))then
 					rag.ZacConsRH:Remove()
 					rag.ZacConsRH=nil
-					net.Start("HandindicatorR")
+					ply:SetNWBool("HvatR",false)
+					--[[net.Start("HandindicatorR")
+					net.WriteEntity(rag)
 					net.WriteBool(false)
-					net.Send(ply)
+					net.Send(ply)]]
 				end
 			end
 			if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH))then
