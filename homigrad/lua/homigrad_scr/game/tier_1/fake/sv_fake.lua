@@ -2,9 +2,9 @@ if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
 
-	local handsarrivetime = 0.235
-	local forwardarrivetime = 0.05
-	local backarrivetime = 0.02
+	local handsarrivetime = 0.21
+	local forwardarrivetime = 0.03
+	local backarrivetime = 0.01
 	local velocititouebat = 10
 	-- угол
 	local handsangup = 100
@@ -1278,6 +1278,7 @@ if engine.ActiveGamemode() == "homigrad" then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
 								ply:SetNWBool("HvatL",true)
+								--ply:SetNWVector("HvatLVec",phys:GetPos())
 								rag:EmitSound("physics/body/body_medium_impact_soft5.wav",500,100,0.5,CHAN_AUTO)
 								rag.ZacConsLH=cons
 							end
@@ -1291,6 +1292,7 @@ if engine.ActiveGamemode() == "homigrad" then
 					rag.ZacConsLH:Remove()
 					rag.ZacConsLH=nil
 					ply:SetNWBool("HvatL",false)
+					--ply:SetNWVector("HvatLVec",phys:GetPos())
 					--[[net.Start("HandindicatorL")
 					net.WriteEntity(rag)
 					net.WriteBool(false)
@@ -1328,6 +1330,7 @@ if engine.ActiveGamemode() == "homigrad" then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
 								ply:SetNWBool("HvatR",true)
+								--ply:SetNWVector("HvatRVec",phys:GetPos())
 								rag.ZacConsRH=cons
 								rag:EmitSound("physics/body/body_medium_impact_soft5.wav",500,100,0.5,CHAN_AUTO)
 							end
@@ -1340,6 +1343,7 @@ if engine.ActiveGamemode() == "homigrad" then
 					rag.ZacConsRH:Remove()
 					rag.ZacConsRH=nil
 					ply:SetNWBool("HvatR",false)
+					--ply:SetNWVector("HvatRVec",phys:GetPos())
 					--[[net.Start("HandindicatorR")
 					net.WriteEntity(rag)
 					net.WriteBool(false)

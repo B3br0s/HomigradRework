@@ -172,6 +172,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
 
 	ply.LastDMGInfo = rubatPidor
+	if ply.LastDMGInfo:IsDamageType(DMG_CRUSH) then
 	if rag:GetVelocity():Length() > 2 and rag:GetVelocity():Length() < 250 then
 		dmginfo:ScaleDamage(0)
 	elseif rag:GetVelocity():Length() > 250 and rag:GetVelocity():Length() < 350 then
@@ -186,6 +187,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		dmginfo:ScaleDamage(0.6)
 	elseif rag:GetVelocity():Length() > 700 and rag:GetVelocity():Length() < 800 then
 		dmginfo:ScaleDamage(0.7)
+	end
+	else
+		dmginfo:ScaleDamage(1)
 	end
 	
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)

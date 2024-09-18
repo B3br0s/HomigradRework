@@ -65,7 +65,7 @@ SWEP.OtherModel				= "models/pwb/weapons/w_akm.mdl"
 SWEP.vbwPos = Vector(5,-6,-6)
 
 SWEP.addAng = Angle(0,0,0)
-SWEP.addPos = Vector(0,-3.5,0)
+SWEP.addPos = Vector(30,-5,-2)
 SWEP.MuzzleFXPos = Vector(30,-5,-2)
 function SWEP:ApplyEyeSpray()
     self.eyeSpray = self.eyeSpray - Angle(0.2,math.Rand(-0.5,0.5),0)

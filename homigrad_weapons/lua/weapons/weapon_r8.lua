@@ -17,7 +17,7 @@ SWEP.Primary.DefaultClip	= 8
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= ".44 Remington Magnum"
 SWEP.Primary.Cone = 0
-SWEP.Primary.Damage = 1.7 * 155
+SWEP.Primary.Damage = 1.7 * 60
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "csgo/weapons/revolver/revolver-1_01.wav"
 SWEP.Primary.HammerSound = "arccw_go/revolver/revolver_prepare.wav"
@@ -54,7 +54,7 @@ SWEP.HoldType = "revolver"
 ------------------------------------------
 
 function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(8,math.Rand(-1,1),0)
+    self.eyeSpray = self.eyeSpray - Angle(3,math.Rand(-1,1),0)
 end
 
 SWEP.Slot					= 2
@@ -68,8 +68,8 @@ SWEP.OtherModel				= "models/csgo/weapons/w_pist_revolver.mdl"
 
 SWEP.vbwPos = Vector(8.5,-10,-8)
 
-SWEP.addPos = Vector(0,0,0)
-SWEP.addAng = Angle(-0.6,-0.3,0)
+SWEP.addAng = Angle(0.4,0.5,0)
+SWEP.addPos = Vector(30,-4.3,-2.2)
 SWEP.MuzzleFXPos = Vector(30,-5,-2)
 
 SWEP.ValidAttachments = {
@@ -93,8 +93,8 @@ SWEP.ValidAttachments = {
 }
 SWEP.dwmModeScale = 1 -- pos
     SWEP.dwmForward = -13
-    SWEP.dwmRight = 5.3
-    SWEP.dwmUp = -1.5
+    SWEP.dwmRight = 5.32
+    SWEP.dwmUp = -1.47
     
     SWEP.dwmAUp = 0 -- ang
     SWEP.dwmARight = -15

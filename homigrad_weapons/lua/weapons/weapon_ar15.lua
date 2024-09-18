@@ -56,9 +56,115 @@ SWEP.SlotPos				= 0
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/pwb2/weapons/w_m4a1.mdl"
-SWEP.WorldModel				= "models/pwb2/weapons/w_m4a1.mdl"
+SWEP.OtherModel				= "models/pwb2/weapons/w_m4a1.mdl"
+SWEP.ViewModel				= "models/weapons/arccw_go/v_rif_car15.mdl"
+SWEP.WorldModel				= "models/weapons/arccw_go/v_rif_car15.mdl"
 
-SWEP.vbwPos = Vector(-4,-4.2,1)
-SWEP.vbwAng = Angle(7,-30,0)
+SWEP.addAng = Angle(0,0,0)
+SWEP.addPos = Vector(20,-4.9,-1.5)
+
+SWEP.MuzzleFXPos = Vector(20,-1,-3)
+SWEP.dwmModeScale = 1 -- pos
+    SWEP.dwmForward = -10
+    SWEP.dwmRight = 5.8
+    SWEP.dwmUp = -2.9
+    
+    SWEP.dwmAUp = 0 -- ang
+    SWEP.dwmARight = -15
+    SWEP.dwmAForward = 180
+    
+    local model 
+    if CLIENT then
+        model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
+        GDrawWorldModel = model
+        model:SetNoDraw(true)
+    end
+    
+    if SERVER then
+        function SWEP:GetPosAng()
+            local owner = self:GetOwner()
+            local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+            if not Pos then return end
+            
+            Pos:Add(Ang:Forward() * self.dwmForward)
+            Pos:Add(Ang:Right() * self.dwmRight)
+            Pos:Add(Ang:Up() * self.dwmUp)
+    
+            Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+            Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+            Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+    
+            return Pos,Ang
+        end
+    else
+        function SWEP:SetPosAng(Pos,Ang)
+            self.Pos = Pos
+            self.Ang = Ang
+        end
+        function SWEP:GetPosAng()
+            return self.Pos,self.Ang
+        end
+    end
+    
+    function SWEP:ManipulateSlideBoneFor()
+        if not IsValid(model) then return end
+    
+        local slideBone = model:LookupBone("v_weapon.AK47_bolt")
+        if not slideBone then return end
+        for i = 1, 150 do
+            timer.Simple(0.0002 * i,function ()
+                local slideOffset = LerpVector( 2, Vector(0,0,0),Vector(0,0,-i / 100) )
+                model:ManipulateBonePosition(slideBone, slideOffset)   
+            end)
+        end
+    end
+
+    function SWEP:ManipulateSlideBoneBac()
+        if not IsValid(model) then return end
+    
+        local slideBone = model:LookupBone("v_weapon.AK47_bolt")
+        if not slideBone then return end
+    
+        for i = 0, 150 do
+            timer.Simple(0.0002 * i,function ()
+                local slideOffset = LerpVector( 2, Vector(0,0,0),Vector(0,0,-1.5 + i / 100))
+                model:ManipulateBonePosition(slideBone, slideOffset)
+            end)
+        end
+    end
+    
+    function SWEP:DrawWorldModel()
+        local owner = self:GetOwner()
+        if LocalPlayer() == owner then
+        if not IsValid(owner) then
+            self:DrawModel()
+            return
+        end
+            model:SetModel(self.WorldModel)
+        
+
+        local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+        if not Pos then return end
+        
+        Pos:Add(Ang:Forward() * self.dwmForward)
+        Pos:Add(Ang:Right() * self.dwmRight)
+        Pos:Add(Ang:Up() * self.dwmUp)
+    
+        Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+        Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+        Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+        
+        self:SetPosAng(Pos,Ang)
+    
+        model:SetPos(Pos)
+        model:SetAngles(Ang)
+    
+        model:SetModelScale(self.dwmModeScale)
+    
+        model:DrawModel()
+    else
+            self:SetModel(self.OtherModel)
+            self:DrawModel()
+end
+end
 end

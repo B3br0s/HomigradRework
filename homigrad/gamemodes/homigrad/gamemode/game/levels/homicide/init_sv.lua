@@ -37,15 +37,20 @@ local function makeT(ply)
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
     elseif homicide.roundType == 3 then
-        local wep = ply:Give("weapon_hk_arbalet")
-        ply:GiveAmmo(8, "XBowBolt", true) -- slots = bolts.
-        wep:SetClip1(wep:GetMaxClip1())
         ply:Give("weapon_kabar")
         ply:Give("weapon_hg_t_syringepoison")
         ply:Give("weapon_hg_t_vxpoison")
         print(player.GetCount())
+    elseif homicide.roundType == 5 then
+        if math.random(1,2) == 1 then
+        JMod.EZ_Equip_Armor(ply,"Death Shadow") 
+            ply:Give("weapon_kabar")  
+        else
+        JMod.EZ_Equip_Armor(ply,"UBEY") 
+            ply:Give("weapon_hg_kitknife") 
+        end
     else
-        local wep = ply:Give("weapon_deagle")
+        local wep = ply:Give("weapon_r8")
         ply:GiveAmmo(3*8, ".44 Remington Magnum", true) -- slots = bullets.
         wep:SetClip1(wep:GetMaxClip1())
         ply:Give("weapon_kabar")
@@ -76,15 +81,13 @@ local function makeCT(ply)
         wep:SetClip1(wep:GetMaxClip1())
         AddNotificate( ply,"Вы невиновный со скрытым огнестрельным оружием.")
     elseif homicide.roundType == 3 then
-        local wep = ply:Give("weapon_taser")
         ply:Give("weapon_police_bat")
         ply:Give("weapon_handcuffs")
-        wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"Вы полицейский под прикрытием. Вам выдан шокер и дубинка\nВаша задача: связать преступника.")
+        AddNotificate( ply,"Вы полицейский под прикрытием. Вам выдана дубинка\nВаша задача: связать преступника.")
     elseif homicide.roundType == 4 then
-        local wep = ply:Give("weapon_deagle")
+        local wep = ply:Give("weapon_r8")
         wep:SetClip1(wep:GetMaxClip1())
-        AddNotificate( ply,"Вы невиновный ковбой с револьвером в кобуре.")
+        AddNotificate( ply,"Вы невиновный ковбой с R8 в кобуре.")
     else
     end
 
@@ -194,6 +197,7 @@ function homicide.StartRoundSV()
         end
     end
 
+
     timer.Simple(0,function()
         for i,ply in pairs(homicide.t) do
             if not IsValid(ply) then table.remove(homicide.t,i) continue end
@@ -265,9 +269,11 @@ function homicide.RoundEndCheck()
 end
 
 function homicide.EndRound(winner)
-    PrintMessage(3,(winner == 1 and "Победа предателей." or winner == 2 and "Победа невиновых." or "Ничья"))
-    if homicide.t and #homicide.t > 0 then
+    if homicide.t and #homicide.t > 0 and homicide.roundType != 5 then
+        PrintMessage(3,(winner == 1 and "Победа предателей." or winner == 2 and "Победа невиновых." or "Ничья"))
         PrintMessage(3,#homicide.t > 1 and ("Трейторами были: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("Трейтором был: " .. homicide.t[1]:Name()))
+    elseif homicide.t and #homicide.t > 0 and homicide.roundType == 5 then
+        PrintMessage(3,(winner == 1 and "Победа Серийных Убийц." or winner == 2 and "Победа невиновых." or "Ничья"))
     end
 end
 
@@ -281,7 +287,60 @@ function homicide.PlayerSpawn(ply,teamID)
     ply:SetPlayerColor(color:ToVector())
 
 	ply:Give("weapon_hands")
-    timer.Simple(0,function() ply.allowFlashlights = false end)
+    timer.Simple(0,function() ply.allowFlashlights = false 
+    local tablea = {
+        "LBT-2670 SFMP",
+        "Sanitar's Bag",
+        "Pillbox",
+        "Pilgrim",
+        "Paratus 3-Day",
+        "Tri-Zip",
+        "Armband [C]",
+        "6Sh118",
+        "LBT-2670 SFMP",
+        "Blackjack",
+        "F4 Terminator"
+    }
+    local tableb = {
+        "Scav Vest",
+        "Commando T",
+        "Azimut B",
+        "Thunderbolt",
+        "RK-PT-25",
+        "CSA",
+        "D3CRX",
+        "Triton",
+        "Commando Black",
+        "Hexgrid",
+        "Security Vest",
+        "DIY IDEA CR",
+        "MRig",
+        "Chicom"
+    }
+    local tablec = {
+        "Faceless",
+        "Hockey Brawler",
+        "Glorious",
+        "Deadly Skull",
+        "Death Knight"
+    }
+    if homicide.roundType != 5 then
+    if math.random(1,3) >= 2 then
+        JMod.EZ_Equip_Armor(ply,tablea[math.random(#tablea)]) 
+    end
+    if math.random(1,3) >= 2 then
+        JMod.EZ_Equip_Armor(ply,tablec[math.random(#tableb)]) 
+    end
+    if math.random(1,3) >= 2 then
+        JMod.EZ_Equip_Armor(ply,tableb[math.random(#tablec)]) 
+    end
+    end
+        
+    if homicide.roundType == 4 then
+        local wep = ply:Give("weapon_r8")
+        ply:GiveAmmo(3*8, ".44 Remington Magnum", true)
+        wep:SetClip1(wep:GetMaxClip1())
+    end end)
 end
 
 function homicide.PlayerInitialSpawn(ply)
@@ -318,7 +377,7 @@ function homicide.PlayerDeath(ply,inf,att) return false end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
 local uncommon = {"medkit","weapon_molotok","weapon_per4ik","painkiller"}
-local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_deagle","weapon_minu14"}
+local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_r8","weapon_minu14"}
 
 function homicide.ShouldSpawnLoot()
 if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end

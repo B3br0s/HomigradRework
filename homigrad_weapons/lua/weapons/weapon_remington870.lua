@@ -3,7 +3,6 @@ SWEP.Base = 'b3bros_base' -- base
 
 SWEP.PrintName 				= "Remington 870"
 SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Дробовик под калибр 12/70"
 SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
@@ -13,7 +12,9 @@ SWEP.AdminOnly 				= false
 
 SWEP.Primary.ClipSize		= 6
 SWEP.Primary.DefaultClip	= 6
+SWEP.CanShoot = true
 SWEP.Primary.Automatic		= false
+SWEP.CanManipulatorKuklovod = true
 SWEP.Primary.Ammo			= "12/70 gauge"
 SWEP.Primary.Cone = 0.05
 SWEP.Primary.Damage = 1.7 * 45
@@ -25,7 +26,7 @@ SWEP.Primary.SoundFar = "snd_jack_hmcd_sht_far.wav"
 SWEP.LoadSound = "csgo/weapons/sawedoff/sawedoff_insertshell_01"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.5
+SWEP.ShootWait = 0.8
 SWEP.RecoilNumber = 4
 SWEP.NumBullet = 8
 SWEP.Sight = true
@@ -52,8 +53,9 @@ SWEP.SlotPos				= 0
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
-SWEP.WorldModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
+SWEP.OtherModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
+SWEP.ViewModel				= "models/weapons/arccw_go/v_shot_870.mdl"
+SWEP.WorldModel				= "models/weapons/arccw_go/v_shot_870.mdl"
 
 function SWEP:ApplyEyeSpray()
     self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(-2,2),0)
@@ -64,37 +66,120 @@ SWEP.vbwPos = Vector(-9,-5,-5)
 SWEP.CLR_Scope = 0.05
 SWEP.CLR = 0.025
 
-SWEP.addAng = Angle(2.5,0.1,0)
-SWEP.addPos = Vector(0,0,0)
-SWEP.ValidAttachments = {
-    ["Eotech553"] = {
-        positionright = 0.5,
-        positionforward = 10,
-        positionup = -5.7,
+SWEP.addAng = Angle(0,0,0)
+SWEP.addPos = Vector(30,-4.3,-2.2)
 
-        angleforward = 180,
-        angleright = 5,
-        angleup = 0,
+SWEP.MuzzleFXPos = Vector(30,-5,-2)
 
-        holosight = true,
-        newsight = true,
-        aimpos = Vector(5.5,4,1.20),
-        aimang = Angle(-1,0,0),
+SWEP.dwmModeScale = 1 -- pos
+    SWEP.dwmForward = -13
+    SWEP.dwmRight = 4.4
+    SWEP.dwmUp = -1.5
+    
+    SWEP.dwmAUp = 0 -- ang
+    SWEP.dwmARight = -15
+    SWEP.dwmAForward = 180
+    
+    local model 
+    if CLIENT then
+        model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
+        GDrawWorldModel = model
+        model:SetNoDraw(true)
+    end
+    
+    if SERVER then
+        function SWEP:GetPosAng()
+            local owner = self:GetOwner()
+            local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+            if not Pos then return end
+            
+            Pos:Add(Ang:Forward() * self.dwmForward)
+            Pos:Add(Ang:Right() * self.dwmRight)
+            Pos:Add(Ang:Up() * self.dwmUp)
+    
+            Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+            Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+            Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+    
+            return Pos,Ang
+        end
+    else
+        function SWEP:SetPosAng(Pos,Ang)
+            self.Pos = Pos
+            self.Ang = Ang
+        end
+        function SWEP:GetPosAng()
+            return self.Pos,self.Ang
+        end
+    end
+    
+    function SWEP:ManipulateSlideBoneFor()
+        if not IsValid(model) then return end
+    
+        local slideBone = model:LookupBone("v_weapon.sawedoff_pump")
+        if not slideBone then return end
+        for i = 1, 450 do
+            timer.Simple(0.0002 * i,function ()
+                local slideOffset = LerpVector( 2, Vector(0,0,0),Vector(0,0,-i / 350) )
+                model:ManipulateBonePosition(slideBone, slideOffset)
+            end)
+        end
+    end
 
-        scale = 0.8,
-        model = "models/weapons/arc9_eft_shared/atts/optic/eft_optic_553.mdl",
-    },
-    ["Suppressor"] = {
-        positionright = 0.5,
-        positionforward = 29,
-        positionup = -7.45,
+    function SWEP:ManipulateSlideBoneBac()
+        if not IsValid(model) then return end
+    
+        local slideBone = model:LookupBone("v_weapon.sawedoff_pump")
+        if not slideBone then return end
+    
+        for i = 0, 450 do
+            timer.Simple(0.0002 * i,function ()
+                local slideOffset = LerpVector( 2, Vector(0,0,0),Vector(0,0,-1 + i / 350))
+                model:ManipulateBonePosition(slideBone, slideOffset)
+            end)
+        end
+    end
 
-        angleforward = 180,
-        angleright = 8,
-        angleup = 0,
+    function PumpAnimForHandsFor()
+        print("a")
+    end
 
-        scale = 1.4,
-        model = "models/weapons/arc9_eft_shared/atts/muzzle/silencer_all_rotor_43_v1.mdl",
-    }
-}
+    function PumpAnimForHandsBac()
+        print("b")
+    end
+    
+    function SWEP:DrawWorldModel()
+        local owner = self:GetOwner()
+        if LocalPlayer() == owner then
+        if not IsValid(owner) then
+            self:DrawModel()
+            return
+        end
+            model:SetModel(self.WorldModel)
+        
+
+        local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+        if not Pos then return end
+        
+        Pos:Add(Ang:Forward() * self.dwmForward)
+        Pos:Add(Ang:Right() * self.dwmRight)
+        Pos:Add(Ang:Up() * self.dwmUp)
+    
+        Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+        Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+        Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+        
+        self:SetPosAng(Pos,Ang)
+    
+        model:SetPos(Pos)
+        model:SetAngles(Ang)
+    
+        model:SetModelScale(self.dwmModeScale)
+    
+        model:DrawModel()
+    else
+            self:SetModel(self.OtherModel)
+            self:DrawModel()
+end
+end
 end

@@ -52,7 +52,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.SlotPos				= 1
     SWEP.DrawAmmo				= true
     SWEP.DrawCrosshair			= false
-    SWEP.MuzzleFXPos = Vector(30,-5,-2)
+    SWEP.MuzzleFXPos = Vector(10,0,-2)
     
     SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_fiveseven.mdl"
     SWEP.WorldModel				= "models/weapons/arccw_go/v_pist_fiveseven.mdl"

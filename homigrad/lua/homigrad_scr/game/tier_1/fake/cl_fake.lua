@@ -8,10 +8,10 @@ if CLIENT then
     local posL,angL = nil,nil
 
     hook.Add("Think", "FakeIndick",function ()
-        if ply:GetNWBool("fake") and IsValid(ply:GetNWEntity("Ragdoll")) then
+        if IsValid(ply:GetNWEntity("Ragdoll") ) and ply:Alive() and ply:GetNWBool("fake") then
             rag = ply:GetNWEntity("Ragdoll")
             obbeblo = rag:OBBCenter()
-            if ply:KeyDown(IN_WALK) and ply:GetNWBool("HvatR") and IsValid(ply:GetNWEntity("Ragdoll")) then
+            if ply:KeyDown(IN_WALK) and ply:GetNWBool("HvatR") and IsValid(ply:GetNWEntity("Ragdoll")) and ply:Alive() then
                 posR,angR = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
             elseif ply:KeyDown(IN_SPEED) and ply:GetNWBool("HvatL") and IsValid(ply:GetNWEntity("Ragdoll")) then
                 posL,angL = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_L_Hand"))
@@ -19,7 +19,7 @@ if CLIENT then
         end
     end)
     hook.Add("HUDPaint", "FakeIndickR",function ()
-        if ply:KeyDown(IN_WALK) and ply:GetNWBool("HvatR") and posR != nil and IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWBool("fake") then
+        if ply:KeyDown(IN_WALK) and ply:GetNWBool("HvatR") and posR != nil and IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWBool("fake") and ply:Alive() then
             local RightScreenPos = posR:ToScreen()
             surface.SetDrawColor(255, 255, 255, 255)
             surface.SetMaterial(Material("vgui/iconright.png"))
@@ -27,7 +27,7 @@ if CLIENT then
         end
     end)
     hook.Add("HUDPaint", "FakeIndickL",function ()
-        if ply:KeyDown(IN_SPEED) and ply:GetNWBool("HvatL") and posL != nil and IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWBool("fake") then
+        if ply:KeyDown(IN_SPEED) and ply:GetNWBool("HvatL") and posL != nil and IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWBool("fake") and ply:Alive() then
             local LeftScreenPos = posL:ToScreen()
             surface.SetDrawColor(255, 255, 255, 255)
             surface.SetMaterial(Material("vgui/iconleft.png"))

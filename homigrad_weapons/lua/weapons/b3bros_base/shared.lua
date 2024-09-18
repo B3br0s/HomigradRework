@@ -438,7 +438,6 @@ function SWEP:Initialize()
 
 	self.Instructions = ("                                Урон: "..self.Primary.Damage.."                                           ".."Время До Выстрела: "..self.ShootWait.."       Вместительность:"..self:GetMaxClip1())
 
-	print(self.Instructions)
 
 	local skini = {
 		"phoenix_storms/mat/mat_phx_carbonfiber",
@@ -552,11 +551,18 @@ function SWEP:PrimaryAttack()
 		if self:GetNWBool("Suppressor", false) != true then
 			self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
 			if self:Clip1() != 0 then
-				if self.CanManipulatorKuklovod then
+				if self.CanManipulatorKuklovod and not self.NumBullet then
 					self:ManipulateSlideBoneFor()
 					timer.Simple(0.05,function ()
 						self:ManipulateSlideBoneBac()
 					end)
+				elseif self.CanManipulatorKuklovod and self.NumBullet then
+					timer.Simple(0.3,function ()
+					self:ManipulateSlideBoneFor()
+					timer.Simple(0.2,function ()
+						self:ManipulateSlideBoneBac()
+					end)
+				end)
 				end
 				end
 		
@@ -699,7 +705,13 @@ function SWEP:Reload()
 					if i == self:GetMaxClip1() then
 						if self.Primary.PumpSound and empty == true then
 						timer.Simple(0.3,function ()
-							self:EmitSound(self.Primary.PumpSound, 60, 100, 0.8, CHAN_AUTO)
+						self:EmitSound(self.Primary.PumpSound, 60, 100, 0.8, CHAN_AUTO)
+						if self.CanManipulatorKuklovod and self.NumBullet then
+							self:ManipulateSlideBoneFor()
+							timer.Simple(0.2,function ()
+								self:ManipulateSlideBoneBac()
+							end)
+						end
 						end)
 						end
 				end

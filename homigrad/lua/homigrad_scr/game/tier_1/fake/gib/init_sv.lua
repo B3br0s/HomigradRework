@@ -228,10 +228,11 @@ end
 	end
 	--крута🎈 когда взрываеца от прикосновения да?
 	--да
-	if dmgInfo:GetDamage() >= 1200 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 740 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) or math.random(1,65) == 12 then
+	if dmgInfo:GetDamage() >= 1200 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 740 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) or math.random(1,50) == 12 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) then
 			dmgInfo:ScaleDamage(5000)
 			sound.Emit(rag,"physics/body/body_medium_break4.wav")
 			sound.Emit(rag,"physics/body/body_medium_break2.wav")
+			sound.Emit(rag,"homigrad/blood_splash.wav")
 			sound.Emit(rag,"physics/flesh/flesh_bloody_impact_hard1.wav")
 		--[[if player != nil then
 			player:ChatPrint("Тебя разорвало на части.")
@@ -295,7 +296,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	--разве это не смешно когда ножом башка взрывается?
 	--нет
 	
-	if dmgInfo:GetDamage() >= 40 then
+	if dmgInfo:GetDamage() >= 30 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)

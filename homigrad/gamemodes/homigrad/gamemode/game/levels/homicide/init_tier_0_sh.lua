@@ -26,7 +26,8 @@ end
     ["standard"] = 2,
     ["soe"] = 1,
     ["wild-west"] = 4,
-    ["gun-free-zone"] = 3
+    ["gun-free-zone"] = 3,
+    ["psycho"] = 5
 }--]]
 
 local homicide_setmode = CreateConVar("homicide_setmode","",FCVAR_LUA_SERVER,"")
@@ -52,8 +53,8 @@ function homicide.StartRound(data)
     game.CleanUpMap(false)
 
     if SERVER then
-        local roundType = homicide_setmode:GetInt() == math.random(1,4) or (homicide.IsMapBig() and 1) or false
-        homicide.roundType = math.random(1,4)
+        local roundType = homicide_setmode:GetInt() == math.random(1,5) or (homicide.IsMapBig() and 1) or false
+        homicide.roundType = math.random(1,5)
         --homicide.roundType = roundType or math.random(2,4)
         --soe, standard, gun-free-zone, wild west
         --print(homicide_setmode:GetString(),homicide.roundType)
@@ -82,7 +83,11 @@ if SERVER then return end
 local red,blue = Color(200,0,10),Color(75,75,255)
 local gray = Color(122,122,122,255)
 function homicide.GetTeamName(ply)
+    if homicide.roundType != 5 then
     if ply.roleT then return "Предатель",red end
+    else
+    if ply.roleT then return "Серийный Убийца",red end
+    end
     if ply.roleCT then return "Невиновный",blue end
 
     local teamID = ply:Team()
@@ -116,8 +121,8 @@ function homicide.Scoreboard_Status(ply)
 end
 
 local red,blue = Color(200,0,10),Color(75,75,255)
-local roundTypes = {"Чрезвычайное Положение", "Обычный", "Безоружная Зона", "Дикий Запад"}
-local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3"}
+local roundTypes = {"Чрезвычайное Положение", "Обычный", "Безоружная Зона", "Дикий Запад","Серийный Убийца"}
+local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3","snd_jack_hmcd_psycho.mp3"}
 
 function homicide.HUDPaint_RoundLeft(white2)
     local roundType = homicide.roundType or 2
@@ -144,10 +149,11 @@ function homicide.HUDPaint_RoundLeft(white2)
 
         if lply.roleT then --Traitor
             if homicide.roundType == 3 then --gunfree
-                draw.DrawText( "Полицейские всех обыскали и забрали ваше оружие\nНа такой случай вы припрятали Арбалет...", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-                draw.DrawText( "Арбалет является скрытым оружием каким-то образом, имея огромные габариты...", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-            elseif homicide.roundType == 4 then --wildwest
-                draw.DrawText( "Вы взяли с собой револьвер заместо USP-S, дабы не выбиваться из толпы.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "Полицейские всех обыскали и забрали ваше огнестрельное оружие и взрывчатку", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            elseif homicide.roundType == 4 then
+                draw.DrawText( "Вы взяли с собой R8 заместо USP-S, дабы не выбиваться из толпы.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            elseif homicide.roundType == 5 then
+                draw.DrawText( "Вы серийный убийца,ваша задача убить всех до прибытия полиции.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.1, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             else --emergency/base
                 draw.DrawText( "Ваша задача убить всех до прибытия полиции", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             end
@@ -157,12 +163,14 @@ function homicide.HUDPaint_RoundLeft(white2)
             elseif homicide.roundType == 2 then --base
                 draw.DrawText( "У вас есть скрытое огнестрельное оружие, постарайтесь нейтрализовать предателя", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             elseif homicide.roundType == 3 then --gunfree
-                draw.DrawText( "Полицейские у всех забрали оружие.\n\nВам, как сотруднику под прикрытием, выдали Шокер и Наручники. Постарайтесь связать или убить предателя", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-            elseif homicide.roundType == 4 then --wildwest
-                draw.DrawText( "У вас есть револьвер, постарайтесь нейтрализовать предателя", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+                draw.DrawText( "Полицейские у всех забрали оружие.\n\nВам, как сотруднику под прикрытием, выдали Дубинку и Наручники. Постарайтесь связать или убить предателя", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             end
         else
+        if homicide.roundType != 5 then
             draw.DrawText( "Найдите предателя, свяжите или убейте его для победы. Не доверяйте никому...", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        else
+            draw.DrawText( "В вашем районе завёлся серийный убийца,не дайте ему себя убить...", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 255,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        end
         end
         return
     end

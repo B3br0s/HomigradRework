@@ -35,7 +35,7 @@ SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Recoil = 0.5
-SWEP.Primary.Delay = 0.7
+SWEP.Primary.Delay = 0.4
 SWEP.Primary.Force = 60
 
 SWEP.Secondary.ClipSize = 0
@@ -45,8 +45,8 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.DrawSound = "snd_jack_hmcd_knifedraw.wav"
 SWEP.HitSound = "snd_jack_hmcd_knifehit.wav"
-SWEP.FlashHitSound = "snd_jack_hmcd_slash.wav"
+SWEP.FlashHitSound = "snd_jack_hmcd_knifestab.wav"
 SWEP.ShouldDecal = true
-SWEP.HoldTypeWep = "melee"
+SWEP.HoldTypeWep = "knife"
 SWEP.DamageType = DMG_SLASH 
 end

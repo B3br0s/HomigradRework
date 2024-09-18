@@ -60,14 +60,14 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.OtherModel				= "models/csgo/weapons/w_pist_deagle.mdl"
     
     function SWEP:ApplyEyeSpray()
-        self.eyeSpray = self.eyeSpray - Angle(20,math.Rand(-1,1),0)
+        self.eyeSpray = self.eyeSpray - Angle(9,math.Rand(-1,1),0)
     end 
 
     SWEP.dwsPos = Vector(13,13,5)
     SWEP.dwsItemPos = Vector(10,-1,-2)
     
-    SWEP.addAng = Angle(0,0,0)
-    SWEP.addPos = Vector(0,-4,-6)
+    SWEP.addAng = Angle(1,-0.2,0)
+    SWEP.addPos = Vector(30,-4,-2.2)
     
     SWEP.MuzzleFXPos = Vector(30,-5,-2)
     --SWEP.vbwPos = Vector(7,-10,-6)

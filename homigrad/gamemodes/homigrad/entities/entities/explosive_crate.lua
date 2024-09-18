@@ -63,7 +63,7 @@ if CLIENT then
         isPanelOpen = true
         animationStartTime = CurTime()
 
-        surface.PlaySound("items/ammocrate_open.wav")
+        surface.PlaySound("homigrad/vgui/item_drop1_common.wav")
 
         local panel = vgui.Create("DFrame")
         panel:SetSize(0, 81)
@@ -75,7 +75,7 @@ if CLIENT then
         panel:MakePopup()
 		isClosing = false
 
-        local fullWidth = 306
+        local fullWidth = 153
         local fullHeight = 81
         local animationDuration = 0.1
 
@@ -109,7 +109,7 @@ if CLIENT then
             net.Start("CloseCrate")
             net.WriteEntity(ent)
             net.SendToServer()
-            surface.PlaySound("items/ammocrate_close.wav")
+            surface.PlaySound("homigrad/vgui/item_drop.wav")
 
             timer.Remove("LoadingProgress")
             isLoading = false
@@ -141,7 +141,7 @@ if CLIENT then
 
         local lootButton = vgui.Create("DButton", panel)
         lootButton:SetSize(73, 73)
-        lootButton:SetPos(115, 4)
+        lootButton:SetPos(42, 4)
         lootButton:SetText("")
 
         modelPanel = vgui.Create("DImage", lootButton)

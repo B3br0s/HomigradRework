@@ -62,8 +62,8 @@ SWEP.WorldModel				= "models/weapons/arccw_go/v_pist_glock.mdl"
 SWEP.dwsPos = Vector(13,13,5)
 SWEP.dwsItemPos = Vector(10,-1,-2)
 
-SWEP.addAng = Angle(0.4,0,0)
-SWEP.addPos = Vector(0,0,0)
+SWEP.addAng = Angle(1,0,0)
+SWEP.addPos = Vector(30,-3,0)
 SWEP.MuzzleFXPos = Vector(30,-5,-2)
 
 SWEP.dwmModeScale = 1 -- pos
