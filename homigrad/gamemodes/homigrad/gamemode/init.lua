@@ -26,6 +26,8 @@ function GM:PlayerSpawn(ply)
 	ply.attackees = {}
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
+	ply:SetNWBool("fake",false)
+	ply:SetNWEntity("Ragdoll",nil)
 	ply.virusvichblya = false
 	ply.slendermanblya = false
 	ply.pain = 0
