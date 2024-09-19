@@ -35,7 +35,7 @@ SWEP.MagInWait = 1.5
 SWEP.BoltInWait = 2
 SWEP.Primary.Delay = 1
 SWEP.BoltOutWait = 0.3
-SWEP.ShootDelay = 0.22
+SWEP.ShootDelay = 0.17
 SWEP.revolver = true
 
 SWEP.Secondary.ClipSize		= -1
@@ -54,7 +54,7 @@ SWEP.HoldType = "revolver"
 ------------------------------------------
 
 function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(3,math.Rand(-1,1),0)
+    self.eyeSpray = self.eyeSpray - Angle(2,math.Rand(-1,1),0)
 end
 
 SWEP.Slot					= 2

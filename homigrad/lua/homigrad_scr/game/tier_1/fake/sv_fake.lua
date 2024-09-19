@@ -2,7 +2,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
 
-	local handsarrivetime = 0.21
+	local handsarrivetime = 0.3
 	local forwardarrivetime = 0.03
 	local backarrivetime = 0.01
 	local velocititouebat = 10
@@ -106,6 +106,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		local info = ply.Info
 		info.Hp = ply:Health()
 		info.Armor = ply:Armor()
+		ply:SetNWBool("HvatL",false)
+		ply:SetNWBool("HvatR",false)
 		return info
 	end
 
@@ -979,6 +981,10 @@ if engine.ActiveGamemode() == "homigrad" then
 		rag.ZacLastCallTime=CurTime()
 		local eyeangs = ply:EyeAngles()
 		local head = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Head1" )) )
+		local penis = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Pelvis" )) )
+		local ohhspina = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
+		local noska1 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Toe0" )) )
+		local noska2 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Toe0" )) )
 		rag:SetFlexWeight(9,0)
 		local dist = (rag:GetAttachment(rag:LookupAttachment( "eyes" )).Ang:Forward()*10000):Distance(ply:GetAimVector()*10000)
 		local distmod = math.Clamp(1-(dist/20000),0.1,1)
@@ -1222,8 +1228,25 @@ if engine.ActiveGamemode() == "homigrad" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
+					local shadowparams2 = {
+						secondstoarrive=0.25,
+						pos=penis:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+						angle=angs,
+						maxangulardamp=10,
+						maxspeeddamp=10,
+						maxangular=370,
+						maxspeed=40,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
 					head:Wake()
 					head:ComputeShadowControl(shadowparams)
+					if ply:GetNWBool("HvatL",false) == true and ply:GetNWBool("HvatR",false) == true then
+					ohhspina:Wake()
+					ohhspina:ComputeShadowControl(shadowparams2)
+					penis:Wake()
+					penis:ComputeShadowControl(shadowparams2)
+					end
 				end
 			end
 			if(ply:KeyDown(IN_SPEED)) and (RagdollOwner(rag) and !RagdollOwner(rag).Otrub) and !timer.Exists("StunTime"..ply:EntIndex()) then
