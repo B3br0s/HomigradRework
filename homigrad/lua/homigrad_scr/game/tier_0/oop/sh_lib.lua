@@ -1,5 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
-local LIB = ents.Reg("lib_event")
+local LIB = oop.Reg("lib_event")
 if not LIB then return end
 
 LIB.event = {}
@@ -106,7 +105,9 @@ end--никогда не юзал
 local _event,r1,r2,r3,r4,r5,r6,success
 local empty = {}
 
-local pcall = util.pcall
+local err = function(err) ErrorNoHaltWithStack(err) end
+
+local xpcall = xpcall
 
 function LIB:Event_Call(class,...)
 	_event = self.event[class]
@@ -120,7 +121,7 @@ function LIB:Event_Call(class,...)
 	::loop::
 
 	for name,func in pairs(event_list[i] or empty) do
-		success,r1,r2,r3,r4,r5,r6 = pcall(func,self,...)
+		success,r1,r2,r3,r4,r5,r6 = xpcall(func,err,self,...)
 
 		if success and r1 ~= nil then return r1,r2,r3,r4,r5,r6 end
 	end
@@ -131,6 +132,8 @@ function LIB:Event_Call(class,...)
 		goto loop
 	end
 end
+
+LIB.Event_Run = LIB.Event_Call
 
 function LIB:Event_CallNoSelf(class,...)
 	_event = self.event[class]
@@ -144,7 +147,7 @@ function LIB:Event_CallNoSelf(class,...)
 	::loop::
 
 	for name,func in pairs(event_list[i] or empty) do
-		success,r1,r2,r3,r4,r5,r6 = pcall(func,...)
+		success,r1,r2,r3,r4,r5,r6 = xpcall(func,err,...)
 
 		if success and r1 ~= nil then return r1,r2,r3,r4,r5,r6 end
 	end
@@ -170,7 +173,7 @@ function LIB:Event_Call1(class,callback1,...)
 	for name,func in pairs(event_list[i] or empty) do
 		if callback1(name) == false then return end
 
-		success,r1,r2,r3,r4,r5,r6 = pcall(func,self,...)
+		success,r1,r2,r3,r4,r5,r6 = xpcall(func,err,self,...)
 
 		if success and r1 ~= nil then return r1,r2,r3,r4,r5,r6 end
 	end
@@ -194,7 +197,7 @@ function LIB:Event_Call2(class,callback2,...)
 	::loop::
 
 	for name,func in pairs(event_list[i] or empty) do
-		success,r1,r2,r3,r4,r5,r6 = pcall(func,self,...)
+		success,r1,r2,r3,r4,r5,r6 = xpcall(func,err,self,...)
 
 		if not success then continue end
 
@@ -224,7 +227,7 @@ function LIB:Event_Call12(class,callback1,callback2,...)
 	for name,func in pairs(event_list[i] or empty) do
 		if callback1(name) == false then return end
 
-		success,r1,r2,r3,r4,r5,r6 = pcall(func,self,...)
+		success,r1,r2,r3,r4,r5,r6 = xpcall(func,err,self,...)
 
 		if not success then continue end
 
@@ -271,14 +274,4 @@ function LIB:Construct()
 	content:Event_Construct()
 
 	content:Event_CallNoSelf("Construct",self)
-end
 end--ну и хуета конешно
-
---[[
-	лутче избегать лишник калов, ну нахуй
-	тогда мне неты так же нужно делать раз я типо да ага
-	три заповеди блядь кек
-	event add
-	event remove
-	event call
-]]--20 09 2022 12 16: чего блядь...

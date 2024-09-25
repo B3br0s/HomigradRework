@@ -7,6 +7,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 ------------------------------------------
 
@@ -14,6 +15,10 @@ SWEP.Primary.ClipSize		= 25
 SWEP.Primary.DefaultClip	= 25
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "pistol"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/uzi' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 30
 SWEP.Primary.Spread = 0

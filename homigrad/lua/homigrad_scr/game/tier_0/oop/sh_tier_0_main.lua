@@ -1,6 +1,6 @@
-if engine.ActiveGamemode() == "homigrad" then
 oop = oop or {}--sasi
 --эт лиш регистрация классов
+--уоопъ
 
 oop.listClass = oop.listClass or {}
 local listClass = oop.listClass
@@ -48,7 +48,7 @@ function oop.RegEx(className,base)
         class = {
             {}, --content
             {}, --non inherit content
-            {},  --files includd
+            {}, --files includd
             baseChildrens = {}
         }
 
@@ -60,10 +60,13 @@ function oop.RegEx(className,base)
     class.base = base
 
     local content = class[1]
-    for k in pairs(content) do content[k] = nil end
 
-    local nonInheritContent = class[2]
-    for k in pairs(nonInheritContent) do nonInheritContent[k] = nil end
+    if not content.noClear then
+        for k in pairs(content) do content[k] = nil end
+        
+        local nonInheritContent = class[2]
+        for k in pairs(nonInheritContent) do nonInheritContent[k] = nil end
+    end
 
     content.ClassName = className
 
@@ -74,8 +77,8 @@ end
 
 --
 
-function oop.InsertFile(class,isFolder)
-    local pathInsert = hg.GetPath(2)
+function oop.InsertFile(class,isFolder,add)
+    local pathInsert = GetPath(2 + (add or 0))
     local listFiles = class[3]
 
     if isFolder then pathInsert = string.GetPathFromFilename(pathInsert) end
@@ -90,13 +93,23 @@ end
 oop.override = {}
 local override = oop.override
 
+/*local overflow = {}
+
+timer.Create("OOP Overflow reset",1,0,function() for k in pairs(overflow) do overflow[k] = nil end end)*/
+
 function oop.Include(class,isFirst)
     local className = class.ClassName
+   /*overflow[className] = (overflow[className] or 0) + 1
+
+    if overflow[className] > 1024 then
+        error("wtf is going on? with " .. className)
+    end*/
+
     for i,path in pairs(class[3]) do
         if string.sub(path,#path - 3,#path) == ".lua" then
             include(path)
         else
-            hg.includeDir(path)
+            IncludeDir(path)
         end
 
         if isFirst then return end
@@ -112,7 +125,7 @@ end
 
 function oop.GetClassName(className)
     if not className then
-        return string.gsub(string.GetFileFromFilename(hg.GetPath(2)),".lua","")
+        return string.gsub(string.GetFileFromFilename(GetPath(2)),".lua","")
     else
         return className
     end
@@ -120,13 +133,13 @@ end
 
 --
 
-function oop.Reg(className,base,isFolder)
+function oop.Reg(className,base,isFolder,add)
     className = oop.GetClassName(className)
     local overrideClass = override[className]
-    if overrideClass then return overrideClass[1],overrideClass end
+    if overrideClass then return overrideClass[1],overrideClass[2] end
 
     local class = oop.RegEx(className,base)
-    oop.InsertFile(class,isFolder)
+    oop.InsertFile(class,isFolder,add)
     override[className] = class
     oop.Include(class)
 end
@@ -134,24 +147,33 @@ end
 function oop.RegConnect(className,isFolder)
     className = oop.GetClassName(className)
     local overrideClass = override[className]
-    if overrideClass then return overrideClass[1],overrideClass end
+    if overrideClass then return overrideClass[1],overrideClass[2] end
 
     local class = listClass[className]
-    oop.InsertFile(class,isFolder)
+    if not class then error("invalid class " .. className) end
+
+    oop.InsertFile(class,isFolder,add)
     oop.Include(class,true)
 end
 
 function oop.Get(className)
     className = oop.GetClassName(className)
     local overrideClass = override[className]
-    if overrideClass then return overrideClass[1],overrideClass end
+    if overrideClass then return overrideClass[1],overrideClass[2] end
 
-    oop.Include(listClass[className],true)
+    local class = listClass[className]
+    if not class then error("invalid class " .. className) end
+
+    oop.Include(class,true)
 end
 
-ents.listClass = listClass--HAHA
-ents.RegEx = oop.RegEx
-ents.Reg = oop.Reg
-ents.RegConnect = oop.RegConnect
-ents.Get = oop.Get
+function oop.Create(className,...)
+    local class = listClass[className]
+
+    local obj = util.tableCopy(class[1])
+    util.tableLink(obj,class[2])
+
+    if obj.Create then obj:Create(...) end
+
+    return obj
 end

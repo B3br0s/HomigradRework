@@ -6,6 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Травматический пистолет под калибр 9х18 Rubber"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/glock17"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -19,7 +20,11 @@ SWEP.Primary.Ammo			= "9x18 Rubber"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 15
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "zcitysnd/sound/weapons/makarov/makarov_fp.wav"
+SWEP.Primary.Sound = "weapons/makarov/makarov_fp.wav"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
 SWEP.Primary.Force = 90/3
 SWEP.ReloadTime = 2

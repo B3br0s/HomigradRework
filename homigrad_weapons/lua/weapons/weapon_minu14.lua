@@ -7,6 +7,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 ------------------------------------------
 
@@ -17,6 +18,10 @@ SWEP.Primary.Ammo			= "12/70 gauge"
 SWEP.Primary.Cone = 0.05
 SWEP.Primary.Damage = 1.7 * 45
 SWEP.Primary.Spread = 0
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/m590a1' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/m590/m590_fp.wav"
 --SWEP.Primary.SoundFar = "weapons/mini14/mini14_dist.wav"
 SWEP.Primary.PumpSound = "csgo/weapons/nova/nova_pump.wav"

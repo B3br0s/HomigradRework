@@ -165,13 +165,13 @@ function SolidMapVote.selectMaps()
     SolidMapVote.maps = {} -- Reset the active maps
 
     -- Check for map underflow
-    if #SolidMapVote.mapPool <= 6 then
+    if #SolidMapVote.mapPool <= 7 then
         SolidMapVote.maps = SolidMapVote.mapPool
         return SolidMapVote.maps
     end
 
     -- Do nominations
-    if #SolidMapVote.nominations >= 6 then
+    if #SolidMapVote.nominations >= 7 then
         -- Maps are only nominations, can't fit random maps
         for steamID64, map in pairs( SolidMapVote.nominations ) do
             table.insert( SolidMapVote.maps, map )
@@ -187,7 +187,7 @@ function SolidMapVote.selectMaps()
 
     -- Do random map selection
     local i = table.Count( SolidMapVote.nominations )
-    while i < 6 do
+    while i < 7 do
         local map = SolidMapVote[ 'Config' ][ 'Fair Map Recycling' ] and
                     SolidMapVote.selectRandomMapFairly( SolidMapVote.mapPool, SolidMapVote.mapPlayCounts ) or
                     table.Random( SolidMapVote.mapPool )

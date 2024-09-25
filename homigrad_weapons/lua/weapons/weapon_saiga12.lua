@@ -5,6 +5,7 @@ SWEP.PrintName 				= "Сайга-12"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Полуавтоматический дробовик на базе АК под калибр 12/70"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -22,6 +23,10 @@ SWEP.Primary.Sound = "zcitysnd/sound/weapons/firearms/shtg_winchestersx3/shotgun
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
 SWEP.Primary.SoundSupresor = "homigrad/weapons/rifle/masada_sil.wav"
 SWEP.Primary.Force = 15
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/saiga_12' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.ReloadTime = 2
 SWEP.ReloadSound = ""
 SWEP.ShootWait = 0.15

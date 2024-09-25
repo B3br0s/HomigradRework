@@ -4,6 +4,7 @@ SWEP.Base = 'b3bros_base' -- base
 SWEP.PrintName 				= "MAG-7"
 SWEP.Instructions			= ""
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/weapon_csgo_mag7.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -20,6 +21,10 @@ SWEP.Primary.Spread = 2
 SWEP.Primary.PumpSound = "csgo/weapons/nova/nova_pump.wav"
 SWEP.Primary.Sound = "csgo/weapons/mag7/mag7_01.wav"
 SWEP.Primary.SoundFar = "weapons/mini14/mini14_dist.wav"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'csgo/econ/weapons/base_weapons/weapon_mag7' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Force = 25
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.8

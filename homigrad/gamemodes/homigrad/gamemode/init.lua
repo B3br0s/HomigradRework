@@ -4,6 +4,8 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 util.AddNetworkString("remove_jmod_effects")
+util.AddNetworkString("dropweapon")
+util.AddNetworkString("useweaponinb")
 
 local specColor = Vector(0.25,0.25,0.25)
 
@@ -26,11 +28,18 @@ function GM:PlayerSpawn(ply)
 	ply.attackees = {}
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
+	ply:SetNWBool("HvatR",false)
+	ply:SetNWBool("HvatL",false)
 	ply:SetNWBool("fake",false)
 	ply:SetNWEntity("Ragdoll",nil)
 	ply.virusvichblya = false
 	ply.slendermanblya = false
 	ply.pain = 0
+	ply:SetNWFloat("pain",0)
+	ply:SetNWFloat("painlosing",0)
+	ply:SetNWFloat("Bloodlosing",0)
+	ply:SetNWFloat("Blood",5000)
+	ply:SetNWFloat("adrenaline",0)
 
 	if ply.NEEDKILLNOW then
 		if ply.NEEDKILLNOW == 1 then ply:KillSilent() else ply:KillSilent() end
@@ -309,7 +318,7 @@ votemap2:addParam{ type=ULib.cmds.StringArg, completes=ulx.maps, hint="map", err
 votemap2:defaultAccess( ULib.ACCESS_ADMIN )
 votemap2:help( "Starts a public map vote." )
 
-hook.Add("Player Think","HasGodMode Rep",function(ply) ply:SetNWBool("HasGodMode",ply:HasGodMode()) end)
+hook.Add("Player Think","HasGodMode Rep",function(ply) ply:SetNWBool("HasGodMode",ply:HasGodMode()) ply:SetNWFloat("painlosing",ply.painlosing) ply:SetNWFloat("pain",ply.pain) ply:SetNWFloat("Blood",ply.Blood) ply:SetNWFloat("Bloodlosing",ply.Bloodlosing) end)
 
 resource.AddWorkshop("864612139") --remove red death screen
 
@@ -336,7 +345,15 @@ function GM:DoPlayerDeath(ply) end
 function GM:PlayerStartVoice(ply)
 	if ply:Alive() then return true end
 end
-
+net.Receive("dropweapon",function(len,ply)
+	local prevweap = ply:GetActiveWeapon()
+	ply:SelectWeapon(net.ReadString())
+	ply:DropWeapon1()
+	ply:SelectWeapon(prevweap:GetClass())
+end)
+net.Receive("useweaponinb",function(len,ply)
+	ply:SelectWeapon(net.ReadString())
+end)
 util.AddNetworkString("lasertgg")
 net.Receive("lasertgg",function(len,ply)
 	local boolen = net.ReadBool()

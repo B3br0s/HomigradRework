@@ -6,6 +6,7 @@ SWEP.PrintName = "LIT-ENERGY"
 SWEP.Author = "Homigrad"
 SWEP.Purpose = "Ебать кондиций в моменте набрал"
 SWEP.Category = "Вкусности"
+SWEP.IconkaInv = "vgui/monster.png"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3

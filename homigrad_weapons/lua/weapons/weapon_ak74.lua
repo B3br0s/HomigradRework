@@ -6,9 +6,14 @@ SWEP.Author 				= "ADMINI"
 SWEP.Instructions			= "MINIGUN АДМИНХУЙ! БАМ БАМ БАМ!"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/m134"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= true
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/m134' )
+SWEP.BounceWeaponIcon = false
+end
 
 ------------------------------------------
 

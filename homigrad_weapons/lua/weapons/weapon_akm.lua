@@ -5,7 +5,7 @@ SWEP.PrintName 				= "АКМ"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Автоматическая винтовка под калибр 7,62х39"
 SWEP.Category 				= "Оружие"
-SWEP.WepSelectIcon          = "pwb/sprites/akm"
+SWEP.IconkaInv = "vgui/weapon_csgo_ak47.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -28,6 +28,10 @@ SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.08
 SWEP.ReloadSound = ""
 SWEP.TwoHands = true
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'csgo/econ/weapons/base_weapons/weapon_ak47' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.MagOut = "zcitysnd/sound/weapons/ak74/handling/ak74_magout.wav"
 SWEP.MagIn = "zcitysnd/sound/weapons/ak74/handling/ak74_magin.wav"
 SWEP.BoltOut = "zcitysnd/sound/weapons/ak74/handling/ak74_boltrelease.wav"
@@ -59,8 +63,8 @@ SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
 SWEP.ViewModel				= "models/weapons/arccw_go/v_rif_ak47.mdl"
-SWEP.WorldModel				= "models/weapons/arccw_go/v_rif_ak47.mdl"
-SWEP.OtherModel				= "models/pwb/weapons/w_akm.mdl"
+SWEP.WorldModel				= "models/pwb/weapons/w_akm.mdl"
+SWEP.OtherModel				= "models/weapons/arccw_go/v_rif_ak47.mdl"
 
 SWEP.vbwPos = Vector(5,-6,-6)
 
@@ -197,7 +201,7 @@ SWEP.dwmModeScale = 1 -- pos
             self:DrawModel()
             return
         end
-            model:SetModel(self.WorldModel)
+            model:SetModel(self.OtherModel)
         
 
         local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
@@ -220,7 +224,7 @@ SWEP.dwmModeScale = 1 -- pos
     
         model:DrawModel()
     else
-            self:SetModel(self.OtherModel)
+            self:SetModel(self.WorldModel)
             self:DrawModel()
 end
 end

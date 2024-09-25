@@ -15,6 +15,22 @@ surface.CreateFont("HomigradFontBig",{
 	shadow = true
 })
 
+surface.CreateFont("HomigradFontInv",{
+	font = "Roboto",
+	size = 15,
+	weight = 1100,
+	outline = false,
+	shadow = true
+})
+
+surface.CreateFont("HomigradFontInvSmall",{
+	font = "Roboto",
+	size = 12,
+	weight = 1100,
+	outline = false,
+	shadow = true
+})
+
 surface.CreateFont("HomigradFontLarge",{
 	font = "Roboto",
 	size = ScreenScale(30),
@@ -310,8 +326,8 @@ local function ToggleMenu(toggle)
         plyMenu:MakePopup()
         plyMenu:SetKeyboardInputEnabled(false)
 
-		plyMenu:AddOption("Меню Брони",function()
-            LocalPlayer():ConCommand("jmod_ez_inv")
+		plyMenu:AddOption("Инвентарь",function()
+            LocalPlayer():ConCommand("hg_inv")
         end)
 		plyMenu:AddOption("Меню Патрон",function()
 			LocalPlayer():ConCommand("hg_ammomenu")

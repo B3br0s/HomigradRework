@@ -179,8 +179,8 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
 
-SWEP.DrawWeaponSelection = DrawWeaponSelection
-SWEP.OverridePaintIcon = OverridePaintIcon
+--SWEP.DrawWeaponSelection = DrawWeaponSelection
+--SWEP.OverridePaintIcon = OverridePaintIcon
 
 function TrownGranade(ply,force,granade)
     local granade = ents.Create(granade)

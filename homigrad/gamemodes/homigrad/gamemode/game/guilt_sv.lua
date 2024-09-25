@@ -72,7 +72,7 @@ function GuiltCheck(att,ply)
 		att.Guilt = att.Guilt - 75
 		
 		if not att.noguilt and not att:HasGodMode() then
-			if roundActiveName == "SandBox" or roundActiveName == "zombieinfection" or roundActiveName == "eft" then
+			if roundActiveName == "SandBox" or roundActiveName == "zombieinfection" or roundActiveName == "homicide" or roundActiveName == "eft" then
 			else
 			att.pain = att.pain + 150
 			att.Bloodlosing = att.Bloodlosing + 25

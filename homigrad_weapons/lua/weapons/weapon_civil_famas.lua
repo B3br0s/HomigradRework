@@ -6,7 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Полуавтоматическа винтовка под калибр 5.56×45"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/aks74u"
-
+SWEP.IconkaInv = "vgui/weapon_csgo_famas.png"
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
 
@@ -14,6 +14,10 @@ SWEP.AdminOnly 				= false
 
 SWEP.Primary.ClipSize		= 30
 SWEP.Primary.DefaultClip	= 30
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'csgo/econ/weapons/base_weapons/weapon_famas' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "5.56x45 mm"
 SWEP.Primary.Cone = 0

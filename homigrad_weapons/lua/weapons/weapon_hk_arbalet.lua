@@ -5,6 +5,7 @@ SWEP.PrintName 				= "Арбалет"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Арбик с болтами"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -20,6 +21,10 @@ SWEP.Primary.Damage = 1.7 * 100
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/crossbow/bolt_fly4.wav"
 SWEP.ReloadSound = "weapons/crossbow/reload1.wav"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Force = 255
 SWEP.ReloadTime = 2
 SWEP.ShootWait = .03

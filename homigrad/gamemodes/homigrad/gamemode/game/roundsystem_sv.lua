@@ -9,6 +9,7 @@ function RoundTimeSync(ply)
 	net.WriteFloat(roundTimeStart)
 	net.WriteFloat(roundTime)
 	net.WriteFloat(roundTimeLoot or 0)
+	net.WriteFloat(roundTimeSWAT or 0)
 	net.Broadcast()
 
 	if ply then net.Send(ply) else net.Broadcast() end
@@ -72,46 +73,70 @@ function StartRound()
 	end
 	if not GetGlobalBool("closedondev") then
 		if roundActiveName == "SandBox" then
+		logToDiscord("Режим сменился на SandBox", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: SandBox")
 		elseif roundActiveName == "stopitslender" then
+		logToDiscord("Режим сменился на Stop It, Slender!", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Stop It, Slender!")
+		elseif roundActiveName == "swat" then
+		logToDiscord("Режим сменился на SWAT", "Info")
+		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: SWAT")
 		elseif roundActiveName == "hl2dm" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Half Life 2 DM")
+		logToDiscord("Режим сменился на HL2DM", "Info")
 		elseif roundActiveName == "homicide" then
+		logToDiscord("Режим сменился на Homicide", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Homicide")
 		elseif roundActiveName == "bahmut" then
+		logToDiscord("Режим сменился на Конфликт Хомиграда", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Конфликт Хомиграда")
 		elseif roundActiveName == "basedefence" then
+		logToDiscord("Режим сменился на Base Defence", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Base Defence")
 		elseif roundActiveName == "cp" then
+		logToDiscord("Режим сменился на Capture Point", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Capture Point")	
 		elseif roundActiveName == "css" then
+		logToDiscord("Режим сменился на Counter Strike", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Counter Strike")	
 		elseif roundActiveName == "deathmatch" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: DeathMatch")	
+		logToDiscord("Режим сменился на DeathMatch", "Info")
 		elseif roundActiveName == "deathrun" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: DeathRun")
+		logToDiscord("Режим сменился на DeathRun", "Info")
 		elseif roundActiveName == "events" then
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Event")
+		logToDiscord("Режим сменился на Event", "Info")
 		elseif roundActiveName == "furryinfection" then
+		logToDiscord("Режим сменился на Furry Infection", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Furry Infection")
 		elseif roundActiveName == "hideandseek" then
+		logToDiscord("Режим сменился на Hide And Seek", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Hide And Seek")
 		elseif roundActiveName == "jailbreak" then
+		logToDiscord("Режим сменился на JailBreak", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: JailBreak")
 		elseif roundActiveName == "nextbot" then
+		logToDiscord("Режим сменился на NextBots", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: NextBots")
 		elseif roundActiveName == "riot" then
+		logToDiscord("Режим сменился на RIOT", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Riot")
 		elseif roundActiveName == "slovopacana" then
+		logToDiscord("Режим сменился на Слово Пацана", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Слово Пацана")
 		elseif roundActiveName == "tdm" then
+		logToDiscord("Режим сменился на Team DeathMatch", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Team DeathMatch")
 		elseif roundActiveName == "wick" then
+		logToDiscord("Режим сменился на John Wick", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: John Wick")
 		elseif roundActiveName == "zombieinfection" then
+		logToDiscord("Режим сменился на Zombie Infection", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Zombie Infection")
 		elseif roundActiveName == "hl2coop" then
+		logToDiscord("Режим сменился на Half Life 2 Coop", "Info")
 		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: Half Life 2 Coop")
 		end
 	end
@@ -229,6 +254,7 @@ local errr = function(_err)
 end
 
 function EndRound(winner)
+
 	roundStarter = nil
 
 	if ulx.voteInProgress and ulx.voteInProgress.title == "Закончить раунд?" then
@@ -241,6 +267,7 @@ function EndRound(winner)
 		if data then
 			success,data = pcall(data,winner)
 			if success then
+				logToDiscord("Раунд Закончен.", "Info")
 				data = data or {}
 			else
 				PrintMessage(3,data)

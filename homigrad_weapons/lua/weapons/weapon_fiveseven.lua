@@ -6,6 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/p99"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -14,6 +15,10 @@ SWEP.AdminOnly 				= false
 
 SWEP.Primary.ClipSize		= 15
 SWEP.Primary.DefaultClip	= 15
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/p99' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "9х19 mm Parabellum"
 SWEP.Primary.Cone = 0

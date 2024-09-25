@@ -4,6 +4,7 @@ SWEP.Base = 'b3bros_base' -- base
 SWEP.PrintName 				= "ПКМ"
 SWEP.Instructions			= "Пулемёт под калибр 7,62х54"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -16,6 +17,10 @@ SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "7.62x54 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 130
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/pkm' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/fnfal/fnfal_fp.wav"
 SWEP.Primary.SoundFar = "ak74/ak74_dist.wav"

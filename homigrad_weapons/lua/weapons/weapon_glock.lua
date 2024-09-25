@@ -6,6 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/glock17"
+SWEP.IconkaInv = "vgui/weapon_csgo_glock.png"
 SWEP.MagModel = "models/weapons/arc9/darsu_eft/mods/mag_glock_std_17.mdl"
 
 SWEP.Spawnable 				= true
@@ -51,13 +52,17 @@ SWEP.HoldType = "revolver"
 ------------------------------------------
 
 SWEP.Slot					= 2
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/glock17' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.SlotPos				= 1
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.OtherModel				= "models/pwb/weapons/w_glock17.mdl"
+SWEP.OtherModel				= "models/weapons/arccw_go/v_pist_glock.mdl"
 SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_glock.mdl"
-SWEP.WorldModel				= "models/weapons/arccw_go/v_pist_glock.mdl"
+SWEP.WorldModel				= "models/pwb/weapons/w_glock17.mdl"
 
 SWEP.dwsPos = Vector(13,13,5)
 SWEP.dwsItemPos = Vector(10,-1,-2)
@@ -142,7 +147,7 @@ SWEP.dwmModeScale = 1 -- pos
             self:DrawModel()
             return
         end
-            model:SetModel(self.WorldModel)
+            model:SetModel(self.OtherModel)
         
 
         local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
@@ -165,7 +170,7 @@ SWEP.dwmModeScale = 1 -- pos
     
         model:DrawModel()
     else
-            self:SetModel(self.OtherModel)
+            self:SetModel(self.WorldModel)
             self:DrawModel()
 end
 end

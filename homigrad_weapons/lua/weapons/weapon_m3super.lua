@@ -9,12 +9,17 @@ SWEP.WepSelectIcon			= "pwb2/vgui/weapons/m4super90"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/weapon_csgo_xm1014.png"
 
 ------------------------------------------
 
 SWEP.Primary.ClipSize		= 8
 SWEP.Primary.DefaultClip	= 8
 SWEP.Primary.Automatic		= true
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Ammo			= "12/70 gauge"
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.Damage = 1.7 * 30

@@ -5,6 +5,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Author 				= "Homigrad"
     SWEP.Instructions			= "Дробовик под калибр 12/70"
     SWEP.Category 				= "Оружие"
+    SWEP.IconkaInv = "vgui/weapon_csgo_nova.png"
     
     SWEP.Spawnable 				= true
     SWEP.AdminOnly 				= false
@@ -23,6 +24,10 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.PumpSound = "csgo/weapons/nova/nova_pump.wav"
     SWEP.LoadSound = "csgo/weapons/nova/nova_insertshell_01"
     SWEP.Primary.Force = 15
+    if CLIENT then
+    SWEP.WepSelectIcon = surface.GetTextureID( 'csgo/econ/weapons/base_weapons/weapon_nova' )
+    SWEP.BounceWeaponIcon = false
+    end
     SWEP.ReloadTime = 2
     SWEP.ShootWait = 0.7
     SWEP.RecoilNumber = 4

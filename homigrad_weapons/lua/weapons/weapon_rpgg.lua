@@ -5,6 +5,7 @@ SWEP.PrintName 				= "AT-4"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Имеет траекторию полёта. Обращаться максимально неосторожно."
 SWEP.Category 				= "Оружие 2"
+SWEP.IconkaInv = "vgui/pineapple.png"
 --SWEP.WepSelectIcon			= "pwb/sprites/m134"
 
 SWEP.Spawnable 				= false

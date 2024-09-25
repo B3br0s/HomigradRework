@@ -9,6 +9,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/weapon_csgo_m4a1.png"
 
 ------------------------------------------
 
@@ -40,6 +41,10 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.RecoilNumber = 0.4
 SWEP.Secondary.Ammo			= "none"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.SubMaterial = {
     [1] = "null"
 }

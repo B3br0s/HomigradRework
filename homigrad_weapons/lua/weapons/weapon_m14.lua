@@ -7,6 +7,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/weapon_csgo_mp9.png"
 
 ------------------------------------------
 
@@ -15,6 +16,10 @@ SWEP.Primary.DefaultClip	= 30
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "ar2"
 SWEP.Primary.Cone = 0
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/tmp' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Damage = 1.7 * 40
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/galil/galil_suppressed_tp.wav"

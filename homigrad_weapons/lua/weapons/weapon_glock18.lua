@@ -6,6 +6,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Instructions			= "Бронебойный пистолет. Пробьёт даже дыру в твоей жопе."
     SWEP.Category 				= "Оружие"
     SWEP.WepSelectIcon			= "entities/weapon_insurgencymakarov.png"
+    SWEP.IconkaInv = "vgui/weapon_csgo_fiveseven.png"
     
     SWEP.Spawnable 				= true
     SWEP.AdminOnly 				= false
@@ -53,10 +54,14 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.DrawAmmo				= true
     SWEP.DrawCrosshair			= false
     SWEP.MuzzleFXPos = Vector(10,0,-2)
+    if CLIENT then
+    SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+    SWEP.BounceWeaponIcon = false
+    end
     
     SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_fiveseven.mdl"
-    SWEP.WorldModel				= "models/weapons/arccw_go/v_pist_fiveseven.mdl"
-    SWEP.OtherModel = "models/csgo/weapons/w_pist_fiveseven.mdl"
+    SWEP.WorldModel				= "models/csgo/weapons/w_pist_fiveseven.mdl"
+    SWEP.OtherModel = "models/weapons/arccw_go/v_pist_fiveseven.mdl"
     
     SWEP.vbwPos = Vector(0,0,0)
     SWEP.addPos = Vector(13,-3.5,0)
@@ -140,7 +145,7 @@ if engine.ActiveGamemode() == "homigrad" then
             self:DrawModel()
             return
         end
-            model:SetModel(self.WorldModel)
+            model:SetModel(self.OtherModel)
         
 
         local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
@@ -163,7 +168,7 @@ if engine.ActiveGamemode() == "homigrad" then
     
         model:DrawModel()
     else
-            self:SetModel(self.OtherModel)
+            self:SetModel(self.WorldModel)
             self:DrawModel()
 end
 end

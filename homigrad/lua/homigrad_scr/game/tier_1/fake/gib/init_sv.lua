@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+	if engine.ActiveGamemode() == "homigrad" then
 local vecZero = Vector(0,0,0)
 
 local function removeBone(rag,bone,phys_bone)
@@ -228,7 +228,7 @@ end
 	end
 	--крута🎈 когда взрываеца от прикосновения да?
 	--да
-	if dmgInfo:GetDamage() >= 1200 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 740 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) or math.random(1,50) == 12 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) then
+	if dmgInfo:GetDamage() >= 1200 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 740 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) or math.random(1,100) == 12 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) then
 			dmgInfo:ScaleDamage(5000)
 			sound.Emit(rag,"physics/body/body_medium_break4.wav")
 			sound.Emit(rag,"physics/body/body_medium_break2.wav")

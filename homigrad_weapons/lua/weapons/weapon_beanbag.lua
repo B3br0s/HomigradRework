@@ -5,7 +5,7 @@ SWEP.PrintName 				= "Remington870 Police"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Дробовик под калибр 12/70 Фасоль"
 SWEP.Category 				= "Оружие"
-SWEP.WepSelectIcon			= "entities/weapon_insurgencymakarov.png"
+SWEP.IconkaInv = "vgui/weapon_csgo_sawedoff.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -16,6 +16,10 @@ SWEP.Primary.ClipSize		= 8
 SWEP.Primary.DefaultClip	= 8
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "12/70 beanbag"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/remington_870' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 30
 SWEP.RubberBullets = true

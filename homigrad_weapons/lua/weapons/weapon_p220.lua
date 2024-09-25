@@ -8,6 +8,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.MagModel = "models/csgo/weapons/w_pist_cz_75_mag.mdl"
+SWEP.IconkaInv = "vgui/weapon_csgo_cz75a.png"
 SWEP.AdminOnly 				= false
 
 ------------------------------------------
@@ -24,6 +25,10 @@ SWEP.Primary.SoundFar = "m9/m9_dist.wav"
 SWEP.Primary.Force = 90/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.08
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/cz75' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.MagOut = "csgo/weapons/glock18/glock_clipout.wav"
 SWEP.MagIn = "csgo/weapons/glock18/glock_clipin.wav"
 SWEP.BoltIn = "csgo/weapons/glock18/glock_sliderelease.wav"

@@ -6,6 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/usptactical"
+SWEP.IconkaInv = "vgui/weapon_csgo_usp_silencer.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -19,6 +20,10 @@ SWEP.Primary.Ammo			= "9х19 mm Parabellum"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 40
 SWEP.Primary.Spread = 0
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/m1911/m1911_tp.wav"
 SWEP.Primary.SoundSupresor = "zcitysnd/sound/weapons/m45/m45_suppressed_fp.wav"
 SWEP.Primary.SoundFar = "weapons/tfa_ins2/usp_tactical/fpddd.wav"

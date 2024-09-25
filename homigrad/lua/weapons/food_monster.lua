@@ -4,8 +4,9 @@ AddCSLuaFile()
 
 SWEP.PrintName = "Энергетик"
 SWEP.Author = "Homigrad"
-SWEP.Purpose = "Энергетический напиток"
+SWEP.Purpose = "Энергетический напиток."
 SWEP.Category = "Вкусности"
+SWEP.IconkaInv = "vgui/monster.png"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3

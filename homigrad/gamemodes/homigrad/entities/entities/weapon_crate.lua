@@ -8,34 +8,12 @@ ENT.AdminSpawnable = false
 
 numba = 0
 local weaponList = {
-    {class = "weapon_deagle", model = "models/pwb2/weapons/w_matebahomeprotection.mdl"},
-    {class = "weapon_m14", model = "models/pwb/weapons/w_tmp.mdl"},
-    {class = "weapon_akm", model = "models/pwb/weapons/w_akm.mdl"},
-    {class = "weapon_mp5", model = "models/pwb2/weapons/w_mp5a3.mdl"},
-    {class = "weapon_minu14", model = "models/pwb/weapons/w_m590a1.mdl"},
-    {class = "weapon_hk_usps", model = "models/weapons/w_bean_beansmusp.mdl"},
-    {class = "weapon_civil_famas", model = "models/pwb2/weapons/w_famasg2.mdl"},
-    {class = "weapon_ak74u", model = "models/pwb/weapons/w_aks74u.mdl"},
-    {class = "weapon_glock18", model = "models/csgo/weapons/w_pist_fiveseven.mdl"},
-	{class = "Empty", model = ""},
-	{class = "Empty", model = ""},
-	{class = "Empty", model = ""},
-	{class = "Empty", model = ""}
+    {class = "food_litenergy", model = "vgui/wep_jack_hmcd_fooddrink", rarity = "common"},
+    {class = "Empty", model = "", rarity = "nullxiety"}
 }
 local weaponListTranslate = {
-    "Mateba",
-    "TMP",
-    "AKM",
-    "HK MP5a3",
-    "M590",
-    "HK USP-S",
-    "FAMAS-Civil",
-    "АКС-74У",
-    "Five-Seven",
-	"Пусто",
-	"Пусто",
-	"Пусто",
-	"Пусто"
+    "Lit-Energy",
+    "Пусто"
 }
 
 if CLIENT then
@@ -84,11 +62,11 @@ if CLIENT then
         panel:ShowCloseButton(false)
         panel:MakePopup()
 
-		isClosing = false
+        isClosing = false
 
-        local fullWidth = 153
-        local fullHeight = 81
-        local animationDuration = 0.1
+        local fullWidth = 73
+        local fullHeight = 73
+        local animationDuration = 0.05
 
         panel.Think = function(self)
             local elapsedTime = CurTime() - animationStartTime
@@ -98,7 +76,6 @@ if CLIENT then
                 local newWidth = Lerp(1 - progress, 0, fullWidth)
                 self:SetSize(newWidth, fullHeight)
                 self:Center()
-
                 if progress >= 1 then
                     self:Remove()
                 end
@@ -113,17 +90,17 @@ if CLIENT then
             local pw, ph = self:GetSize()
 
             if input.IsMouseDown(MOUSE_LEFT) and (mx < px or mx > (px + pw) or my < py or my > (py + ph)) then
-            if isClosing then return end
-            isClosing = true
-            animationStartTime = CurTime()
-			isPanelOpen = false
-            net.Start("CloseCrate")
-            net.WriteEntity(ent)
-            net.SendToServer()
-            surface.PlaySound("homigrad/vgui/item_drop.wav")
+                if isClosing then return end
+                isClosing = true
+                animationStartTime = CurTime()
+                isPanelOpen = false
+                net.Start("CloseCrate")
+                net.WriteEntity(ent)
+                net.SendToServer()
+                surface.PlaySound("homigrad/vgui/item_drop.wav")
 
-            timer.Remove("LoadingProgress")
-            isLoading = false
+                timer.Remove("LoadingProgress")
+                isLoading = false
             end
         end
 
@@ -147,32 +124,50 @@ if CLIENT then
             end
 
             surface.SetDrawColor(15, 15, 15, 255)
-            surface.DrawOutlinedRect(0, 0, w, h, 2)
+            surface.DrawOutlinedRect(0, 0, w, h, 1) 
         end
 
         local lootButton = vgui.Create("DButton", panel)
         lootButton:SetSize(73, 73)
-        lootButton:SetPos(42, 4)
+        lootButton:SetPos(0, 0)
         lootButton:SetText("")
 
-        modelPanel = vgui.Create("DModelPanel", lootButton)
-        modelPanel:SetSize(lootButton:GetWide(), lootButton:GetTall())
-        modelPanel.LayoutEntity = function(ent) return end
+        modelPanel = vgui.Create("DImage", lootButton)
+        modelPanel:SetSize(lootButton:GetWide() / 1.5, lootButton:GetTall() / 1.5)
         modelPanel:Center()
 
         modelPanel:SetMouseInputEnabled(false)
 
         lootButton.Paint = function(self, w, h)
-            draw.RoundedBox(8, 0, 0, w, h, Color(100, 100, 100, 50))
-
+            draw.RoundedBox(0, 0, 0, w, h, Color(100, 100, 100, 255))
+            
             surface.SetDrawColor(255, 255, 255, 255)
-            surface.DrawOutlinedRect(0, 0, w, h, 1)
 
             draw.SimpleText(currentWeaponName, "Trebuchet18", w / 2, h - 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
 
             if isLoading then
                 drawLoadingCircle(w / 2, h / 2, 30, 6, loadingProgress)
             end
+        end
+
+        modelPanel.Think = function(self)
+            local elapsedTime = CurTime() - animationStartTime
+            local progress = math.Clamp(elapsedTime / animationDuration, 0, 1)
+
+            if isClosing then
+                local newWidth = Lerp(1 - progress, 0, fullWidth / 1.5)
+                self:SetSize(newWidth, fullHeight / 1.5)
+                self:Center()
+                if progress >= 1 then
+                    self:Remove()
+                end
+            else
+                local newWidth = Lerp(progress, 0, fullWidth / 1.5)
+                self:SetSize(newWidth, fullHeight / 1.5)
+                self:Center()
+            end
+
         end
 
         lootButton.DoClick = function()
@@ -211,59 +206,13 @@ if CLIENT then
         currentWeaponModel = net.ReadString()
 
         if IsValid(modelPanel) then
-            modelPanel:SetModel(currentWeaponModel)
-
-            if currentWeaponName == "Mateba" then
-                modelPanel:SetCamPos(Vector(7, 30, 2))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "TMP" then
-                modelPanel:SetCamPos(Vector(-10, 50, 3))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "AKM" then
-                modelPanel:SetCamPos(Vector(-3, 60, 4))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "HK MP5a3" then
-                modelPanel:SetCamPos(Vector(5, 45, 0))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "M590" then
-                modelPanel:SetCamPos(Vector(-1.5, 60, 5))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "HK USP-S" then
-                modelPanel:SetCamPos(Vector(10, 1, 35))
-                modelPanel:SetLookAng(Vector(90, 90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "FAMAS-Civil" then
-                modelPanel:SetCamPos(Vector(5.5, 50, 1))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "Шокер" then
-                modelPanel:SetCamPos(Vector(2.5, 40, 0.2))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "Перцовка" then
-                modelPanel:SetCamPos(Vector(25, -0.5, -0.2))
-                modelPanel:SetLookAng(Vector(0, 180, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "АКС-74У" then
-                modelPanel:SetCamPos(Vector(-5, 50, 4))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            elseif currentWeaponName == "Five-Seven" then
-                modelPanel:SetCamPos(Vector(5, 30, 1.6))
-                modelPanel:SetLookAng(Vector(0, -90, 0))
-                modelPanel:SetLookAt(Vector(0, 0, 0))
-            end
+            modelPanel:SetImage(currentWeaponModel)
         end
     end)
 
     net.Receive("OpenWeaponBoxVGUI", function()
         openVgui(net.ReadEntity())
-		local cratesuka = net.ReadEntity()
+        local cratesuka = net.ReadEntity()
     end)
 else
     util.AddNetworkString("UpdateWeaponName")
@@ -273,7 +222,7 @@ else
     util.AddNetworkString("ChooseWeaponCrate")
 
     function ENT:Initialize()
-        self:SetModel("models/n7/props/cases/rifle_case_a.mdl")
+        self:SetModel("models/props_crates/supply_crate01_static.mdl")
         self:PhysicsInit(SOLID_VPHYSICS)
         self:SetMoveType(MOVETYPE_VPHYSICS)
         self:SetSolid(SOLID_VPHYSICS)
@@ -300,7 +249,7 @@ else
             else
                 if not self.DolbaebCheck then
                     self.DolbaebCheck = true
-                    timer.Simple(3, function() self.DolbaebCheck = false end)
+                    timer.Simple(1, function() self.DolbaebCheck = false end)
                     ply:ChatPrint("Этот ящик уже обыскивает другой игрок.")
                 end
             end
@@ -315,7 +264,6 @@ else
 
     net.Receive("CloseCrate", function(len, ply)
         local crate = net.ReadEntity()
-		print(crate)
         crate.BeingLooted = false
     end)
 
@@ -326,9 +274,9 @@ else
             crate.WeaponIns = weaponList[randomIndex].class
             numba = randomIndex
         end
-		net.Start("UpdateWeaponName")
-		net.WriteString(weaponListTranslate[numba])
-		net.WriteString(weaponList[numba].model)
+        net.Start("UpdateWeaponName")
+        net.WriteString(weaponListTranslate[numba])
+        net.WriteString(weaponList[numba].model)
         net.Send(ply)
     end)
 
@@ -339,26 +287,25 @@ else
             local weapon = crate.WeaponIns
             if weapons.GetStored(weapon) then
                 if ply:HasWeapon(weapon) then
-                    ply:ChatPrint("У тебя уже есть это оружие.")
+                    ply:ChatPrint("У тебя уже есть это.")
                 else
                     ply:Give(weapon)
                     crate.WeaponIns = "Empty"
-					numba = 10
-					net.Start("UpdateWeaponName")
-					net.WriteString(weaponListTranslate[numba])
-					net.WriteString(weaponList[numba].model)
-					net.Send(ply)
+                    numba = 2
+                    net.Start("UpdateWeaponName")
+                    net.WriteString(weaponListTranslate[numba])
+                    net.WriteString(weaponList[numba].model)
+                    net.Send(ply)
                 end
             else
-				if not crate.WeaponIns == "Empty" then
-					ply:ChatPrint("Ошибка! Оружие '" .. weapon .. "' не существует.")
-				else
-					net.Start("UpdateWeaponName")
-					net.WriteString(weaponListTranslate[numba])
-					net.WriteString(weaponList[numba].model)
-					net.Send(ply)
-					ply:ChatPrint("Ты еблан, тут пусто")
-				end
+                if not crate.WeaponIns == "Empty" then
+                    ply:ChatPrint("Ошибка! Оружие '" .. weapon .. "' не существует.")
+                else
+                    net.Start("UpdateWeaponName")
+                    net.WriteString(weaponListTranslate[numba])
+                    net.WriteString(weaponList[numba].model)
+                    net.Send(ply)
+                end
             end
         else
             ply:ChatPrint("Ошибка! Ящик не существует.")

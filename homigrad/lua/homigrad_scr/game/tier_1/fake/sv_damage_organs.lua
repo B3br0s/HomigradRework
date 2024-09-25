@@ -16,7 +16,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if
             dmginfo:GetDamageType() == DMG_CRUSH and
             dmginfo:GetDamage() >= 6 and
-            ent:GetVelocity():Length() > 400
+            ent:GetVelocity():Length() > 170
         then
             ply:ChatPrint("Твоя шея была сломана")
             ent:EmitSound("homigrad/player/neck_snap_01.wav",100,100,10,CHAN_ITEM)
@@ -151,7 +151,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if huy then --ply:ChatPrint("You were hit in the intestines.")
             if ply.Organs['intestines']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                 ply.Organs['intestines']=math.max(ply.Organs['intestines']-dmg,0)
-                --if ply.Organs['intestines']==0 then ply:ChatPrint("Твои кишечник был уничтожен.")end
+                if ply.Organs['intestines']==0 then ply:ChatPrint("Твои кишечник был уничтожен.")end
             end
         end
 
@@ -161,7 +161,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if huy then --ply:ChatPrint("You were hit in the heart.")
             if ply.Organs['heart']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                 ply.Organs['heart']=math.max(ply.Organs['heart']-dmg,0)
-                --if ply.Organs['heart']==0 then ply:ChatPrint("Ты чувствоешь очень сильную боль в сердце.") end
+                if ply.Organs['heart']==0 then ply:ChatPrint("Ты чувствуешь очень сильную боль в сердце.") end
             end
         end
 
@@ -198,6 +198,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
                     ply.brokenspine=true 
                     ply:ChatPrint("Твоя спина была сломана.")
                     ent:EmitSound("NPC_Barnacle.BreakNeck",70,125,0.7,CHAN_ITEM)
+                    ent:EmitSound("homigrad/player/neck_snap_01.wav",100,100,10,CHAN_ITEM)
                 end
             end
         end

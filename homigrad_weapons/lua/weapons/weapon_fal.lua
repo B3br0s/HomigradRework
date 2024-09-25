@@ -5,6 +5,7 @@ SWEP.PrintName 				= "L85A1"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Автоматическая винтовка под калибр 5,56х45"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -18,6 +19,10 @@ SWEP.Primary.Ammo			= "ar2"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 40
 SWEP.Primary.Spread = 0
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/l85a1' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/mp40/mp40_fp.wav"
 SWEP.Primary.Force = 240/3
 SWEP.ReloadTime = 2

@@ -1,281 +1,344 @@
---[[if CLIENT then
-    local WeaponInventory
-    local InventoryOpen = false
-    local dragPanel = nil
-    local Slots = {}
-    local MaxSlots = 7
-    local blacklistweapon = { ["weapon_hands"] = true }
-    local SlotAssignments = {} -- Stores weapon class assignments for each slot
-    local PlayerModelPanel = nil
-    local PlayerModelAlpha = 0
+local armorSlots = {
+    "head", "eyes", "mouthnose", "ears", "rightshoulder", "rightforearm", 
+    "rightthigh", "rightcalf", "chest", "pelvis", "leftshoulder", "leftforearm", 
+    "leftthigh", "leftcalf", "acc_head", "acc_eyes", "acc_neck", "acc_ears", 
+    "acc_lshoulder", "acc_rshoulder", "acc_backpack", "back", "acc_chestrig", "armband"
+}
 
-    -- Disable the default weapon HUD
-    hook.Add("HUDShouldDraw", "HideDefaultWeaponSelection", function(name)
-        if name == "CHudWeaponSelection" then return false end
-    end)
+local inventoryFrame
+local currentb
 
-    -- Function to draw a blur effect
-    local function DrawBlur(panel, amount)
-        local x, y = panel:LocalToScreen(0, 0)
-        surface.SetDrawColor(255, 255, 255)
-        surface.SetMaterial(Material("pp/blurscreen"))
-        for i = 1, 7 do
-            Material("pp/blurscreen"):SetFloat("$blur", (i / 3) * (amount or 6))
-            Material("pp/blurscreen"):Recompute()
-            render.UpdateScreenEffectTexture()
-            surface.DrawTexturedRect(x * -1, y * -1, ScrW(), ScrH())
+local ArmorSlotButtons = {
+    {
+        title = "Выкинуть",
+        actionFunc = function(slot, itemID, itemData, itemInfo)
+            net.Start("JMod_Inventory")
+            net.WriteInt(1, 8) -- drop action
+            net.WriteString(itemID)
+            net.SendToServer()
+
+            -- Ensure the button's image is reset after the action
+            timer.Simple(0.1, function()
+                slot.butt:SetImage("null.vmt")
+                PopulateArmorSlots()
+                slot:InvalidateLayout(true)
+            end)
+        end        
+    },
+    {
+        title = "Переключить",
+        visTestFunc = function(slot, itemID, itemData, itemInfo)
+            return itemInfo and itemInfo.tgl
+        end,
+        actionFunc = function(slot, itemID, itemData, itemInfo)
+            net.Start("JMod_Inventory")
+            net.WriteInt(2, 8) -- toggle
+            net.WriteString(itemID)
+            net.SendToServer()
+            timer.Simple(0.001, function() PopulateArmorSlots() slot:InvalidateLayout(true) end)
+        end
+    },
+    {
+        title = "Починить",
+        visTestFunc = function(slot, itemID, itemData, itemInfo)
+            return itemInfo and itemData.dur < itemInfo.dur * 0.9
+        end,
+        actionFunc = function(slot, itemID, itemData, itemInfo)
+            net.Start("JMod_Inventory")
+            net.WriteInt(3, 8) -- repair
+            net.WriteString(itemID)
+            net.SendToServer()
+            timer.Simple(0.001, function() PopulateArmorSlots() slot:InvalidateLayout(true) end)
+        end
+    },
+    {
+        title = "Перезарядить",
+        visTestFunc = function(slot, itemID, itemData, itemInfo)
+            if itemInfo and itemInfo.chrg then
+                for resource, maxAmt in pairs(itemInfo.chrg) do
+                    if itemData.chrg[resource] < maxAmt then return true end
+                end
+            end
+            return false
+        end,
+        actionFunc = function(slot, itemID, itemData, itemInfo)
+            net.Start("JMod_Inventory")
+            net.WriteInt(4, 8) -- recharge
+            net.WriteString(itemID)
+            net.SendToServer()
+            timer.Simple(0.001, function() PopulateArmorSlots() slot:InvalidateLayout(true) end)
+        end
+    }
+}
+
+local function GetItemInSlot(armorTable, slot)
+    if not (armorTable and armorTable.items) then return nil end
+    for id, armorData in pairs(armorTable.items) do
+        local ArmorInfo = JMod.ArmorTable[armorData.name]
+        if ArmorInfo and ArmorInfo.slots and ArmorInfo.slots[slot] then
+            return id, armorData, ArmorInfo
         end
     end
+    return nil
+end
 
-    -- Function to create the context menu for a slot
-    local function CreateContextMenu(slot)
-        local menu = DermaMenu()
-        if slot.Weapon and not blacklistweapon[slot.Weapon:GetClass()] then
-            menu:AddOption("Use", function()
-                if IsValid(slot.Weapon) then
-                    RunConsoleCommand("use", slot.Weapon:GetClass())
+function PopulateArmorSlots()
+    local playerArmor = LocalPlayer().EZarmor
+    if not playerArmor then
+        print("No EZarmor data found for player.")
+        return
+    end
+
+    for _, slotName in ipairs(armorSlots) do
+        local itemID, itemData, armorInfo = GetItemInSlot(playerArmor, slotName)
+        if itemID then
+            armorSlots[slotName] = {
+                id = itemID,
+                data = itemData,
+                specs = armorInfo
+            }
+        else
+            armorSlots[slotName] = nil
+        end
+    end
+end
+
+local function CreateSlot(slotName, parent)
+    local slot = vgui.Create("DPanel", parent)
+    slot:SetSize(50, 50)
+
+    local ItemID, ItemData, ItemInfo = JMod.GetItemInSlot(LocalPlayer().EZarmor, slotName)
+    
+    slot.Paint = function(self, w, h)
+        surface.SetDrawColor(15, 15, 15, 200)
+        surface.DrawRect(0, 0, w, h)
+
+        surface.DrawOutlinedRect(0, 0, w, h, 1)
+    end
+
+    slot.Think = function(self)
+        if self.nextUpdateTime and self.nextUpdateTime > RealTime() then return end
+        self.nextUpdateTime = RealTime() + 1.5
+    
+        local armorItem = armorSlots[slotName]
+        
+        if not IsValid(self.butt) then
+            self.butt = vgui.Create("DImage", self)
+            self.butt:SetSize(50, 50)
+            self.butt:Center()
+        end
+    
+        if armorItem then
+            local expectedImagePath = "null.vmt"
+            if ItemInfo and ItemInfo.ent then
+                local entityIconPath = "entities/" .. ItemInfo.ent .. ".png"
+                if file.Exists("materials/" .. entityIconPath, "GAME") then
+                    expectedImagePath = entityIconPath
+                else
+                    expectedImagePath = "vgui/entities/default.png"
                 end
-            end):SetIcon("icon16/tick.png")
-
-            menu:AddOption("Drop", function()
-                if IsValid(slot.Weapon) then
-                    RunConsoleCommand("use", slot.Weapon:GetClass())
-                    RunConsoleCommand("say", "*drop")
-                    WeaponInventory:CloseInventory()
-                    timer.Simple(0.1, function()
-                        WeaponInventory:OpenInventory()
+            end
+            if self.butt:GetImage() ~= expectedImagePath then
+                self.butt:SetImage(expectedImagePath)
+            end
+        else
+            if self.butt:GetImage() ~= "null.vmt" then
+                self.butt:SetImage("null.vmt")
+            end
+        end
+    end
+    
+    slot.OnMousePressed = function(self, mouseCode)
+        if armorSlots[slotName] and mouseCode == MOUSE_RIGHT then
+            local contextMenu = DermaMenu()
+            for _, action in ipairs(ArmorSlotButtons) do
+                local isVisible = true
+                if action.visTestFunc then
+                    isVisible = action.visTestFunc(slot, ItemID, ItemData, ItemInfo)
+                end
+                if isVisible then
+                    currentb = slot.butt
+                    contextMenu:AddOption(action.title, function()
+                        action.actionFunc(slot, ItemID, ItemData, ItemInfo)
                     end)
                 end
-            end):SetIcon("icon16/delete.png")
+            end
+            contextMenu:Open()
         end
-        menu:Open()
     end
 
-    -- Function to create a weapon slot
-    local function CreateWeaponSlot(parent, index)
-        local slot = vgui.Create("DPanel", parent)
-        slot:SetSize(80, 80)
-        slot.index = index
-        slot.Weapon = nil
-        slot:SetBackgroundColor(Color(60, 60, 60, 150))
+    return slot
+end
 
-        function slot:Paint(w, h)
-            draw.RoundedBox(8, 0, 0, w, h, self:GetBackgroundColor())
-            surface.SetDrawColor(255, 255, 255, 255)
-            surface.DrawOutlinedRect(0, 0, w, h, 2)
+local function CreateInventorySlot(i, inventoryFrame, inventorySlotXPos)
+    local inventorySlot = vgui.Create("DPanel", inventoryFrame)
+    inventorySlot:SetSize(80, 80)
+    inventorySlot:SetPos(inventorySlotXPos, ScrH() - 85)
+    inventorySlot.SlotItem = "Empty"
+    inventorySlot.SlotItemnn = "Empty"
 
-            if self.Weapon and IsValid(self.Weapon) then
-                draw.SimpleText(self.Weapon:GetPrintName(), "DermaDefaultBold", w / 2, h - 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
-            end
-        end
-
-        function slot:OnMousePressed(mousecode)
-            if mousecode == MOUSE_LEFT then
-                if self.Weapon then
-                    dragPanel = self
-                end
-            elseif mousecode == MOUSE_RIGHT then
-                CreateContextMenu(self)
-            end
-        end
-
-        function slot:OnMouseReleased(mousecode)
-            if mousecode == MOUSE_LEFT and dragPanel then
-                if self:IsHovered() and self ~= dragPanel then
-                    -- Swap the weapons between the two slots
-                    local tempWeapon = self.Weapon
-                    self.Weapon = dragPanel.Weapon
-                    dragPanel.Weapon = tempWeapon
-
-                    -- Update the slot assignments
-                    SlotAssignments[self.index] = self.Weapon and self.Weapon:GetClass() or nil
-                    SlotAssignments[dragPanel.index] = dragPanel.Weapon and dragPanel.Weapon:GetClass() or nil
-
-                    surface.PlaySound("buttons/button14.wav")
-                end
-                dragPanel = nil
-            end
-        end
-
-        return slot
+    local image = vgui.Create("DImage", inventorySlot)
+    image:SetSize(inventorySlot:GetWide() - 20, inventorySlot:GetTall() - 20)
+    image:SetImage("null.vmt")
+    image:SetPos(10, -5)
+    image.Paint = function(self, w, h)
+        local angle = -45
+        surface.SetDrawColor(255, 255, 255, 255)
+        surface.SetMaterial(self:GetMaterial())
+        surface.DrawTexturedRectRotated(w / 2, h / 2, w, h, angle)
     end
 
-    local function CreatePlayerModelPanel(parent)
-        if IsValid(PlayerModelPanel) then
-            PlayerModelPanel:Remove()
+    for _, weapon in ipairs(LocalPlayer():GetWeapons()) do
+        if i == 1 and weapon.Slot == 2 and weapon.SlotPos == 0 then
+            inventorySlot.SlotItem = weapon:GetClass()
+            inventorySlot.SlotItemnn = weapon:GetPrintName()
+            if weapon.IconkaInv then
+                image:SetImage(weapon.IconkaInv)
+            end
+        elseif i == 2 and weapon.Slot == 2 and weapon.SlotPos == 1 then
+            inventorySlot.SlotItem = weapon:GetClass()
+            inventorySlot.SlotItemnn = weapon:GetPrintName()
+            if weapon.IconkaInv then
+                image:SetImage(weapon.IconkaInv)
+            end
+        elseif i == 4 and weapon.Slot == 3 then
+            inventorySlot.SlotItem = weapon:GetClass()
+            inventorySlot.SlotItemnn = weapon:GetPrintName()
+            if weapon.IconkaInv then
+                image:SetImage(weapon.IconkaInv)
+            end
+        elseif i == 3 and weapon.Slot == 1 then
+            inventorySlot.SlotItem = weapon:GetClass()
+            inventorySlot.SlotItemnn = weapon:GetPrintName()
+            if weapon.IconkaInv then
+                image:SetImage(weapon.IconkaInv)
+            end
+        end
+    end
+
+    inventorySlot.Paint = function(self, w, h)
+        surface.SetDrawColor(15, 15, 15, 200)
+        surface.DrawRect(0, 0, w, h)
+        if inventorySlot.SlotItem ~= "Empty" then
+            draw.SimpleText(inventorySlot.SlotItemnn, "HomigradFont", w / 2, h - 20, Color(255, 255, 255), TEXT_ALIGN_CENTER)   
+        end
+        surface.DrawOutlinedRect(0, 0, w, h, 1)
+    end
+
+    inventorySlot.OnMousePressed = function(self, mouseCode)
+        if inventorySlot.SlotItem ~= "Empty" and mouseCode == MOUSE_RIGHT then
+            local contextMenu = DermaMenu()
+
+            contextMenu:AddOption("Use", function()
+                net.Start("useweaponinb")
+                net.WriteString(inventorySlot.SlotItem)
+                net.SendToServer()
+            end)
+
+            contextMenu:AddOption("Drop", function()
+                print(inventorySlot.SlotItem)
+                net.Start("dropweapon")
+                net.WriteString(inventorySlot.SlotItem)
+                net.SendToServer()
+                image:SetImage("null.vmt")
+                inventorySlot.SlotItem = "Empty"
+                inventorySlot.SlotItemnn = "Empty"
+            end)
+
+            contextMenu:Open()
+        end
+    end
+
+    return inventorySlot
+end
+
+local function OpenInventory()
+    if IsValid(inventoryFrame) then
+        inventoryFrame:Close()
+        inventoryFrame = nil
+        return
+    end
+    if LocalPlayer():Alive() and LocalPlayer():GetNWBool("fake") == false then
+        inventoryFrame = vgui.Create("DFrame")
+        inventoryFrame:SetSize(ScrW(), ScrH())
+        inventoryFrame:Center()
+        inventoryFrame:SetTitle("")
+        inventoryFrame:MakePopup()
+        inventoryFrame:ShowCloseButton(false)
+        inventoryFrame:SetDraggable(false)
+        inventoryFrame:SetKeyBoardInputEnabled(false)
+
+        inventoryFrame.Paint = function(self, w, h)
+            surface.SetDrawColor(0, 0, 0, 180)
+            surface.DrawRect(0, 0, w, h)
         end
 
-        PlayerModelPanel = vgui.Create("DModelPanel", parent)
-        PlayerModelPanel:SetSize(400, 500)
-        PlayerModelPanel:SetPos(0, ScrH() / 2 - 300)
-        PlayerModelPanel:SetModel(LocalPlayer():GetModel())
-        PlayerModelPanel:SetLookAt(Vector(0, 0, 60))
-        PlayerModelPanel:SetCamPos(Vector(80, 0, 60))
+        local playerModelPanel = vgui.Create("DModelPanel", inventoryFrame)
+        playerModelPanel:SetSize(300, 500)
+        playerModelPanel:SetPos(100, ScrH() / 2 - 330)
+        playerModelPanel:SetModel(LocalPlayer():GetModel())
+        local Ent = playerModelPanel:GetEntity()
 
-        local Ent = PlayerModelPanel:GetEntity()
-        function PlayerModelPanel:LayoutEntity(ent)
-            ent:SetAngles(Angle(0, 0, 0))
+        function playerModelPanel:LayoutEntity(ent)
+            ent:SetAngles(Angle(0,0,0))
         end
 
-        Ent:SetSkin(LocalPlayer():GetSkin())
-        for k, v in pairs(LocalPlayer():GetBodyGroups()) do
-            local cur_bgid = LocalPlayer():GetBodygroup(v.id)
-            Ent:SetBodygroup(v.id, cur_bgid)
-        end
+        playerModelPanel:SetCamPos(Vector(45, 0, 45))
 
-        if LocalPlayer().EZarmor.suited and LocalPlayer().EZarmor.bodygroups then
-            PlayerModelPanel:SetColor(LocalPlayer():GetColor())
-            for k, v in pairs(LocalPlayer().EZarmor.bodygroups) do
+        Ent.GetPlayerColor = function() return Vector(GetConVarString("cl_playercolor")) end
+
+        local Ply = LocalPlayer()
+
+        if Ply.EZarmor and Ply.EZarmor.suited and Ply.EZarmor.bodygroups then
+            playerModelPanel:SetColor(Ply:GetColor())
+            for k, v in pairs(Ply.EZarmor.bodygroups) do
                 Ent:SetBodygroup(k, v)
             end
         end
 
-        function PlayerModelPanel:PaintOver(w, h)
-            self:SetAlpha(PlayerModelAlpha)
+        for k, v in pairs(Ply:GetBodyGroups()) do
+            local cur_bgid = Ply:GetBodygroup(v.id)
+            Ent:SetBodygroup(v.id, cur_bgid)
         end
 
-        function PlayerModelPanel:PostDrawModel(ent)
-            ent.EZarmor = LocalPlayer().EZarmor
+        function playerModelPanel:PostDrawModel(ent)
+            ent.EZarmor = Ply.EZarmor
             JMod.ArmorPlayerModelDraw(ent)
         end
-    end
 
-    local PANEL = {}
-    PANEL.FadeAlpha = 0
+        PopulateArmorSlots()
 
-    function PANEL:Init()
-        self:SetSize(ScrW(), ScrH())
-        self:SetPos(0, 0)
-        self:SetVisible(false)
-        self:SetKeyboardInputEnabled(false)
-        self:SetMouseInputEnabled(true)
+        local x, y, slotSize = ScrW() / 4 - 400, ScrH() / 2 - 300, 52
 
-        CreatePlayerModelPanel(self)
+        CreateSlot("head", inventoryFrame):SetPos(x, y)
+        CreateSlot("acc_eyes", inventoryFrame):SetPos(x + slotSize, y)
+        CreateSlot("mouthnose", inventoryFrame):SetPos(x + slotSize, y + slotSize)
+        CreateSlot("acc_ears", inventoryFrame):SetPos(x, y + slotSize)
 
-        local slotSpacing = 90
-        local startX = (ScrW() / 2) - ((MaxSlots * slotSpacing) / 2)
-        local startY = ScrH() - 150
+        CreateSlot("acc_chestrig", inventoryFrame):SetPos(x + slotSize * 5, y + slotSize * 2)
+        CreateSlot("back", inventoryFrame):SetPos(x + slotSize * 6, y + slotSize * 2)
+        CreateSlot("chest", inventoryFrame):SetPos(x + slotSize * 6, y + slotSize * 3)
+        CreateSlot("armband", inventoryFrame):SetPos(x + slotSize * 5, y + slotSize * 3)
+        CreateSlot("pelvis", inventoryFrame):SetPos(x + slotSize * 5.5, y + slotSize * 4)
 
-        for i = 1, MaxSlots do
-            local slot = CreateWeaponSlot(self, i)
-            slot:SetPos(startX + (i - 1) * slotSpacing, startY)
-            table.insert(Slots, slot)
+        CreateSlot("rightcalf", inventoryFrame):SetPos(x, y + slotSize * 6)
+        CreateSlot("leftcalf", inventoryFrame):SetPos(x + slotSize, y + slotSize * 6)
+
+        CreateSlot("rightforearm", inventoryFrame):SetPos(x, y + slotSize * 4.4)
+        CreateSlot("leftforearm", inventoryFrame):SetPos(x + slotSize, y + slotSize * 4.4)
+        
+        CreateSlot("rightthigh", inventoryFrame):SetPos(x + slotSize * 5.5, y + slotSize * 5.3)
+        CreateSlot("leftthigh", inventoryFrame):SetPos(x + slotSize * 4.5, y + slotSize * 5.3)
+
+        CreateSlot("rightshoulder", inventoryFrame):SetPos(x + slotSize, y + slotSize * 2.3)
+        CreateSlot("leftshoulder", inventoryFrame):SetPos(x, y + slotSize * 2.3)
+
+        local inventorySlotXPos = ScrW() / 2 - 320
+        for i = 1, 8 do
+            CreateInventorySlot(i, inventoryFrame, inventorySlotXPos)
+            inventorySlotXPos = inventorySlotXPos + 80
         end
     end
-
-    function PANEL:Think()
-        -- Handle opening and closing animation for inventory and player model
-        if InventoryOpen then
-            if self.FadeAlpha < 255 then
-                self.FadeAlpha = math.min(self.FadeAlpha + FrameTime() * 500, 255)
-            end
-            PlayerModelAlpha = self.FadeAlpha -- Match alpha with inventory panel
-        else
-            if self.FadeAlpha > 0 then
-                self.FadeAlpha = math.max(self.FadeAlpha - FrameTime() * 500, 0)
-            end
-            PlayerModelAlpha = self.FadeAlpha -- Match alpha with inventory panel
-        end
-
-        if self.FadeAlpha <= 0 and not InventoryOpen then
-            self:SetVisible(false)
-        end
-    end
-
-    function PANEL:Paint(w, h)
-        if self.FadeAlpha > 0 then
-            self:SetAlpha(self.FadeAlpha)
-            DrawBlur(self, 4)
-            draw.RoundedBox(0, 0, 0, w, h, Color(10, 10, 10, self.FadeAlpha * 0.6))
-        end
-    end
-
-    function PANEL:OpenInventory()
-        self:SetVisible(true)
-        InventoryOpen = true
-        self:MakePopup()
-        self:SetKeyboardInputEnabled(false)
-        self:SetMouseInputEnabled(true)
-
-        CreatePlayerModelPanel(self)
-
-        -- Get player's weapons
-        Weapons = LocalPlayer():GetWeapons()
-
-        -- Clear the slots before assigning
-        for _, slot in ipairs(Slots) do
-            if IsValid(slot) then
-                slot.Weapon = nil
-            end
-        end
-
-        -- Assign weapons to slots based on SlotAssignments
-        for i = 1, MaxSlots do
-            local slot = Slots[i]
-            if IsValid(slot) then
-                local weaponClass = SlotAssignments[i]
-                if weaponClass then
-                    for _, weapon in ipairs(Weapons) do
-                        if weapon:GetClass() == weaponClass then
-                            slot.Weapon = weapon
-                            break
-                        end
-                    end
-                end
-            end
-        end
-
-        -- If no assignment exists, populate based on the player's inventory order
-        local weaponIndex = 1
-        for i = 1, MaxSlots do
-            local slot = Slots[i]
-            if IsValid(slot) and not slot.Weapon and weaponIndex <= #Weapons then
-                local weapon = Weapons[weaponIndex]
-                weaponIndex = weaponIndex + 1
-                if IsValid(weapon) and not blacklistweapon[weapon:GetClass()] then
-                    slot.Weapon = weapon
-                    SlotAssignments[i] = weapon:GetClass() -- Save assignment for persistence
-                end
-            end
-        end
-    end
-
-    function PANEL:CloseInventory()
-        InventoryOpen = false
-        self:SetKeyboardInputEnabled(false)
-        self:SetMouseInputEnabled(false)
-    end
-
-    vgui.Register("CustomWeaponInventory", PANEL, "EditablePanel")
-
-    concommand.Add("hg_openinv", function()
-        if not IsValid(WeaponInventory) then
-            WeaponInventory = vgui.Create("CustomWeaponInventory")
-        end
-
-        if InventoryOpen then
-            WeaponInventory:CloseInventory()
-            surface.PlaySound("eft_gear_sounds/gear_backpack_pickup.wav")
-        else
-            if LocalPlayer():Alive() then
-                WeaponInventory:OpenInventory()
-                surface.PlaySound("eft_gear_sounds/gear_backpack_use.wav")
-            end
-        end
-    end)
-
-    hook.Add("PlayerSpawn", "UpdatePlayerModelPanel", function()
-        if IsValid(WeaponInventory) then
-            WeaponInventory:OpenInventory()
-        end
-    end)
-
-    hook.Add("Think", "FirstSlot", function()
-        if input.IsKeyDown(KEY_1) and not daun then
-            daun = true
-            RunConsoleCommand("use", "weapon_hands" or "weapon_handsinfected")
-            timer.Simple(0.2, function() daun = false end)
-        end
-    end)
 end
-]]
+
+concommand.Add("hg_inv", OpenInventory)

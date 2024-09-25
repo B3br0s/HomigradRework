@@ -21,7 +21,8 @@ net.Receive("round_time",function()
 	roundTimeStart = net.ReadFloat()
 	roundTime = net.ReadFloat()
 	roundTimeLoot = net.ReadFloat()
-end)
+	roundTimeSWAT = net.ReadFloat()
+	end)
 
 showRoundInfo = CurTime() + 3
 roundActiveName = roundActiveName or "tdm"
@@ -49,6 +50,17 @@ local yellow = Color(255,255,0)
 
 hook.Add("HUDPaint","homigrad-roundstate",function()
 	if roundActive then
+		if roundActiveName == "swat" then
+			local time = math.Round(roundTimeStart + roundTimeSWAT - CurTime())
+			local acurcetime = string.FormattedTime(time,"%02i:%02i")
+
+			if (roundTimeStart + roundTimeSWAT - CurTime()) > 0 then
+			draw.SimpleText("ДО ПРИБЫТИЯ SWAT: "..acurcetime,"HomigradFontBig",ScrW()/10,ScrH()-50,Color(0,50,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			else
+			draw.SimpleText("SWAT ПРИБЫЛ","HomigradFontBig",ScrW()/10,ScrH()-50,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+		end
+		end
+
 		local func = TableRound().HUDPaint_RoundLeft
 
 		if func then

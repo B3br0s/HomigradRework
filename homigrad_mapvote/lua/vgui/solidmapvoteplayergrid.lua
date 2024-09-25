@@ -10,7 +10,7 @@ function PANEL:Init()
     self:SetCursor( 'hand' )
     self:SetText( '' )
 
-    self:SetColumns( 5 )
+    self:SetColumns( 6 )
     self:SetXPos( 0 )
 end
 

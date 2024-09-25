@@ -46,6 +46,7 @@ function homigradPulse(ply)
 	heartstop = ply.Organs["heart"] == 0 or heartstop
 	heartstop = ply.o2 <= 0 and true or heartstop
 	local pulse = math.min(5000 / ply.Blood,5) - math.min(ply.adrenaline / 5,0.6) - math.min(100 / ply.stamina - 1,0.5)
+	ply:SetNWFloat("pulse",pulse)
 
 	return pulse,heartstop
 end

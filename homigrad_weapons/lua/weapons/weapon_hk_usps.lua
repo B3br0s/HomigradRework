@@ -5,6 +5,7 @@ SWEP.PrintName 				= "HK USP-S"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/weapon_csgo_usp_silencer.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -23,6 +24,10 @@ SWEP.Primary.Force = 70/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.14
 SWEP.Efect = "PhyscannonImpact"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.MagModel = "models/csgo/weapons/w_pist_223_mag.mdl"
 SWEP.MagOut = "zcitysnd/sound/weapons/m45/handling/m45_magout.wav"
 SWEP.MagIn = "zcitysnd/sound/weapons/m45/handling/m45_maghit.wav"

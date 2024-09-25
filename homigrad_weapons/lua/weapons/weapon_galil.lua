@@ -6,6 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Автоматическая винтовка под калибр 5,56х45"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/ace23"
+SWEP.IconkaInv = "vgui/weapon_csgo_galilar.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -18,6 +19,10 @@ SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "5.56x45 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 40
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'csgo/econ/weapons/base_weapons/weapon_galilar' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/firearms/mil_m16a4/m16_fire_01.wav"
 SWEP.Primary.SoundFar = "m16a4/m16a4_dist.wav"

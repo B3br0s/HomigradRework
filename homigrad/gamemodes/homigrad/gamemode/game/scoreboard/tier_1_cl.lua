@@ -344,13 +344,24 @@ end
             HomigradScoreboard:Remove()
 		end]]
 
-	local muteAll = SB_CreateButton(HomigradScoreboard)
+		local muteAll = SB_CreateButton(HomigradScoreboard)
 		muteAll:SetSize(180,25)
 		muteAll:SetPos(HomigradScoreboard:GetWide() / 2.45,HomigradScoreboard:GetTall() - 60)
 		muteAll.text = "Замутить всех"
 
+		--[[local Openinv = SB_CreateButton(HomigradScoreboard)
+		Openinv:SetSize(180,25)
+		Openinv:SetPos(HomigradScoreboard:GetWide() / 2.45,HomigradScoreboard:GetTall() - 90)
+		Openinv.text = "Открыть Инвентарь"]]
+
+		--[[function Openinv:Paint(w,h)
+			SB_PaintButton(self,w,h)
+		end]]
+
+		--function Openinv:DoClick() LocalPlayer():ConCommand("hg_openinv") notification.AddLegacy("hg_openinv - команда для открытия/закрытия инвентаря", NOTIFY_HINT, 8) end
+
 		function muteAll:Paint(w,h)
-			self.textColor = not muteall and green or red
+			self.textColor = not muteall and green	 or red
 			SB_PaintButton(self,w,h)
 		end
 

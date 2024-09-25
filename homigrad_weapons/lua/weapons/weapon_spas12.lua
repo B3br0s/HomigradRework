@@ -5,6 +5,7 @@ SWEP.PrintName 				= "SPAS-12"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Полуавтоматический дробовик под калибр 12/70"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -22,6 +23,10 @@ SWEP.Primary.Sound = "zcitysnd/sound/weapons/firearms/rifle_win1892/win1892_fire
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
 SWEP.LoadSound = "csgo/weapons/sawedoff/sawedoff_insertshell_01"
 SWEP.Primary.Force = 15
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/spas_12' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.3
 SWEP.NumBullet = 12

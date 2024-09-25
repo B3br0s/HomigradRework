@@ -172,7 +172,9 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
 
 	ply.LastDMGInfo = rubatPidor
-	if ply.LastDMGInfo:IsDamageType(DMG_CRUSH) then
+	if ply.LastDMGInfo:IsDamageType(DMG_CRUSH) or ply.LastDMGInfo:IsDamageType(DMG_FALL) then
+	--print(rag:GetVelocity():Length())
+	--print(rubatPidor:GetDamageType())
 	if rag:GetVelocity():Length() > 2 and rag:GetVelocity():Length() < 250 then
 		dmginfo:ScaleDamage(0)
 	elseif rag:GetVelocity():Length() > 250 and rag:GetVelocity():Length() < 350 then

@@ -6,6 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/m9"
+SWEP.IconkaInv = "vgui/weapon_csgo_elite.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -16,6 +17,10 @@ SWEP.Primary.ClipSize		= 15
 SWEP.Primary.DefaultClip	= 15
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "9х19 mm Parabellum"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/m9' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 25
 SWEP.Primary.Spread = 0

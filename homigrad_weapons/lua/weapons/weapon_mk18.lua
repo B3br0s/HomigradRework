@@ -15,6 +15,10 @@ SWEP.Primary.DefaultClip	= 30
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "5.56x45 mm"
 SWEP.Primary.Cone = 0
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/hk416' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Damage = 1.7 * 55
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/mk18/mk18_fp.wav"

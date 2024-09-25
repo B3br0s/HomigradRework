@@ -4,6 +4,7 @@ SWEP.Base = 'b3bros_base' -- base
 SWEP.PrintName 				= "РПК"
 SWEP.Instructions			= "Пулемёт под калибр 7,62х39"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/weapon_csgo_ak47.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -19,6 +20,10 @@ SWEP.Primary.Damage = 1.7 * 45
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/rpk/rpk_fp.wav"
 --SWEP.Primary.SoundFar = "ak74/ak74_dist.wav"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/rpk' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Force = 240/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.08

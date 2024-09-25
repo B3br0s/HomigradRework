@@ -158,7 +158,7 @@ local text
 local hg_disable_stoprenderunfocus = CreateClientConVar("hg_disable_stoprenderunfocus","0",true)
 
 local prekols = {
-	"Homigrad Reworked"
+	"Homigrad Rework"
 }
 
 local developer = GetConVar("developer")
@@ -299,6 +299,7 @@ local weps = {
 ["weapon_de"] = true,
 ["weapon_akm"] = true,
 ["weapon_deagle"] = true,
+["weapon_fnp"] = true,
 ["weapon_ak74u"] = true,
 ["weapon_l1a1"] = true,
 ["weapon_fal"] = true,
@@ -310,7 +311,7 @@ local weps = {
 ["weapon_m1a1"] = true,
 ["weapon_m249"] = true,
 ["weapon_m4a1"] = true,
-["b3bros_base"] = true,
+["b3bros_base2"] = true,
 ["weapon_minu14"] = true,
 ["weapon_mp40"] = true,
 ["weapon_rpk"] = true,
@@ -464,7 +465,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			eyeAngs = att.Ang
 			att.Pos = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 10 + bodyang:Right() * -8) or lply:EyePos()
 		end
-		local anghook = 0.25--GetConVar("hg_fakecam_mode"):GetFloat()
+		local anghook = 0.3--GetConVar("hg_fakecam_mode"):GetFloat()
 		LerpEyeRagdoll = LerpAngleFT(0.08,LerpEyeRagdoll,LerpAngle(anghook,eyeAngs,att.Ang))
 
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL
@@ -496,12 +497,12 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 				pointshooting = not pointshooting
 			end
 			if pointshooting then
-				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.25 or 1,ScopeLerp,0.85)
+				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.6 or 1,ScopeLerp,0.85)
 			else
-				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.25 or 1,ScopeLerp,1)
+				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.4 or 1,ScopeLerp,1)
 			end
 		else
-			ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.25 or 1,ScopeLerp,0)
+			ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.4 or 1,ScopeLerp,0)
 		end
 	end
 
@@ -559,11 +560,6 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			vecWep = hand.Pos + hand.Ang:Up() * 3.55 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.95
 			angWep = hand.Ang + Angle(-8,0,0)
 		end
-		if weaponClass == "b3bros_base" then
-			--Vector(3.55,4,0.95)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.55 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 0.95
-			angWep = hand.Ang + Angle(-8,0,0)
-		end
 		if weaponClass == "weapon_remington870" then
 			--Vector(3.8,4,0.65)
 			vecWep = hand.Pos + hand.Ang:Up() * 2.6 - hand.Ang:Forward() * 5 + hand.Ang:Right() * 1.62
@@ -571,8 +567,13 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_ar15" then
 			--Vector(5.05,7,0.725)
-			vecWep = hand.Pos + hand.Ang:Up() * 4.3 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 1.19
+			vecWep = hand.Pos + hand.Ang:Up() * 5.05 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.725
 			angWep = hand.Ang + Angle(-5,0,0)
+		end
+		if weaponClass == "weapon_fnp" then
+			--Vector(5.05,7,0.725)
+			vecWep = hand.Pos + hand.Ang:Up() * 2 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.52
+			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_pkm" then
 			--Vector(5.05,7,0.725)
@@ -586,7 +587,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_mp7" then
 			--Vector(3.25,7,0.79)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.9 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.79
+			vecWep = hand.Pos + hand.Ang:Up() * 3.65 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.82
 			angWep = hand.Ang + Angle(-10,0,0)
 		end
 		if weaponClass == "weapon_beretta" then
@@ -759,25 +760,10 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			vecWep = hand.Pos + hand.Ang:Up() * 3.1 - hand.Ang:Forward() * 6 + hand.Ang:Right() * 0.85
 			angWep = hand.Ang + Angle(-7,0,0)
 		end--new weapons starts here
-		if weaponClass == "weapon_vector" then
-			--Vector(6,6,0.69)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.3 - hand.Ang:Forward() * 6 + hand.Ang:Right() * 0.75
-			angWep = hand.Ang + Angle(-7,0,0)
-		end
-		if weaponClass == "weapon_xm8_lmg" then
-			--Vector(6,6,0.69)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.3 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.6
-			angWep = hand.Ang + Angle(-7,0,0)
-		end
 		if weaponClass == "weapon_hk_arbalet" then
 			--Vector(2.5,10,0.3)
 			vecWep = hand.Pos + hand.Ang:Up() * 8.3 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 1.4
 			angWep = hand.Ang + Angle(15,0,0)
-		end
-		if weaponClass == "weapon_taser" then
-			--Vector(5.3,4,0.78)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 8 + hand.Ang:Right() * 0.85
-			angWep = hand.Ang + Angle(-24,0,0)
 		end
 	else
 		if not wep.SightPos then return end
@@ -1083,7 +1069,7 @@ hook.Add("RenderScreenspaceEffects","BloomEffect-homigrad",function()
 	end
 
 	if LocalPlayer():Alive() then
-		tab2["$pp_colour_colour"] = LocalPlayer():Health() / 100
+		tab2["$pp_colour_colour"] = LocalPlayer():Health() / 90
 		DrawColorModify(tab2)
 	end
 

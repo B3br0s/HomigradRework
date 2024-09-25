@@ -11,8 +11,8 @@ hook.Add("Player Think","ControlPlayersAdmins",function(ply,time)
 		if enta:IsPlayer() and !enta.fake and !IsValid(ply.CarryEnt) then
 
 			Faking(enta)
-			local text = tostring(ply:Name()).." поднял игрока "..enta:Name()
-			--DiscordSendMessage("💙" .. text)
+			local text = tostring(ply:Name().." | "..ply:SteamID()).." поднял игрока "..enta:Name()
+			logToDiscord(text, "Info")
 			print(text)
 		end
 		if !IsValid(enta:GetPhysicsObject()) then return end
@@ -23,8 +23,8 @@ hook.Add("Player Think","ControlPlayersAdmins",function(ply,time)
 		timer.Simple(5, function() ply.AdminAttackerWithPhys = false end)
 		if IsValid(ply.CarryEnt) then
 			if ply:KeyPressed(IN_ATTACK) then
-				local text = tostring(ply:Name()).." поднял ентити "..tostring(RagdollOwner(ply.CarryEnt) and RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
-				--DiscordSendMessage("💙" .. text)
+				local text = tostring(ply:Name().." | "..ply:SteamID()).." поднял ентити "..tostring(RagdollOwner(ply.CarryEnt) and RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
+				logToDiscord(text, "Info")
 				print(text)
 			end
 

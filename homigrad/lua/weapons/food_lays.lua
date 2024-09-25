@@ -4,8 +4,9 @@ AddCSLuaFile()
 
 SWEP.PrintName = "Чипсы"
 SWEP.Author = "Homigrad"
-SWEP.Purpose = "Чипсы"
+SWEP.Purpose = "Чипсы с классическим вкусом"
 SWEP.Category = "Вкусности"
+SWEP.IconkaInv = "vgui/chips.png"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3
@@ -91,8 +92,8 @@ if(CLIENT)then
 	
 			if (IsValid(_Owner)) then
 				-- Specify a good position
-				local offsetVec = Vector(7,-5,0)
-				local offsetAng = Angle(180, -45, 90)
+				local offsetVec = Vector(6,-4,0)
+				local offsetAng = Angle(-90, -45, 90)
 				
 				local boneid = _Owner:LookupBone("ValveBiped.Bip01_R_Hand") -- Right Hand
 				if !boneid then return end

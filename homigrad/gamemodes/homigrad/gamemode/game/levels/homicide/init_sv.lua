@@ -42,6 +42,7 @@ local function makeT(ply)
         ply:Give("weapon_hg_t_vxpoison")
         print(player.GetCount())
     elseif homicide.roundType == 5 then
+        ply:SetModel("models/player/corpse1.mdl")
         if math.random(1,2) == 1 then
         JMod.EZ_Equip_Armor(ply,"Death Shadow") 
             ply:Give("weapon_kabar")  
@@ -88,6 +89,9 @@ local function makeCT(ply)
         local wep = ply:Give("weapon_r8")
         wep:SetClip1(wep:GetMaxClip1())
         AddNotificate( ply,"Вы невиновный ковбой с R8 в кобуре.")
+    elseif homicide.roundType == 5 then
+        local wep = ply:Give("weapon_phonehomigx")
+        AddNotificate( ply,"Вы невиновный с телефоном.")
     else
     end
 
@@ -192,7 +196,7 @@ function homicide.StartRoundSV()
         local ply = table.Random(players)
         table.RemoveByValue(players,ply)
 
-        if homicide.roundType <= 4 then
+        if homicide.roundType <= 5 then
             makeCT(ply)
         end
     end

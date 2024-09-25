@@ -2,10 +2,10 @@ if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
 
-	local handsarrivetime = 0.3
-	local forwardarrivetime = 0.03
-	local backarrivetime = 0.01
-	local velocititouebat = 10
+	local handsarrivetime = 0.25
+	local forwardarrivetime = 0.2
+	local backarrivetime = 0.1
+	local velocititouebat = 25
 	-- угол
 	local handsangup = 100
 
@@ -106,8 +106,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		local info = ply.Info
 		info.Hp = ply:Health()
 		info.Armor = ply:Armor()
-		ply:SetNWBool("HvatL",false)
-		ply:SetNWBool("HvatR",false)
+		ply:SetNWBool("LeftArm",false)
+		ply:SetNWBool("RightArm",false)
 		return info
 	end
 
@@ -421,7 +421,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		rag:SetEyeTarget(Vector(0,0,0))
 		local phys = rag:GetPhysicsObject()
 		if IsValid(phys) then
-			phys:SetMass(10)
+			phys:SetMass(12)
 		end
 
 		net.Start("pophead")
@@ -467,7 +467,8 @@ if engine.ActiveGamemode() == "homigrad" then
 	end)
 
 	hook.Add("PostPlayerDeath","fuckyou",function(ply)
-
+		ply:SetNWBool("LeftArm",false)
+		ply:SetNWBool("RightArm",false)
 	end)
 
 	hook.Add("PhysgunDrop", "DropPlayer", function(ply,ent)
@@ -591,6 +592,8 @@ if engine.ActiveGamemode() == "homigrad" then
 
 		if ply:Alive() then
 			if not GetGlobalBool("NoFake") then
+			ply:SetNWBool("LeftArm",false)
+			ply:SetNWBool("RightArm",false)
 			Faking(ply)
 			ply.fakeragdoll=ply:GetNWEntity("Ragdoll")
 			end
@@ -681,15 +684,6 @@ if engine.ActiveGamemode() == "homigrad" then
 		["models/player/combine_super_soldier.mdl"] = 80,
 		["models/player/combine_soldier_prisonguard.mdl"] = 70,
 		["models/player/azov.mdl"] = 10,
-		["models/player/Rusty/NatGuard/male_01.mdl"] = 90,
-		["models/player/Rusty/NatGuard/male_02.mdl"] = 90,
-		["models/player/Rusty/NatGuard/male_03.mdl"] = 90,
-		["models/player/Rusty/NatGuard/male_04.mdl"] = 90,
-		["models/player/Rusty/NatGuard/male_05.mdl"] = 90,
-		["models/player/Rusty/NatGuard/male_06.mdl"] = 90,
-		["models/player/Rusty/NatGuard/male_07.mdl"] = 90,
-		["models/player/Rusty/NatGuard/male_08.mdl"] = 90,
-		["models/player/Rusty/NatGuard/male_09.mdl"] = 90,
 		["models/LeymiRBA/Gyokami/Gyokami.mdl"] = 50,
 		["models/player/smoky/Smoky.mdl"] = 65,
 		["models/player/smoky/Smokycl.mdl"] = 65,
@@ -712,23 +706,23 @@ if engine.ActiveGamemode() == "homigrad" then
 	}
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = 50
+		CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = 100
 	end
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = 50
+		CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = 100
 	end
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = 50
+		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = 100
 	end
 
 	for i = 1,9 do
-		CustomWeight["models/player/Rusty/NatGuard/male_0"..i..".mdl"] = 50
+		CustomWeight["models/player/Rusty/NatGuard/male_0"..i..".mdl"] = 100
 	end
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = 50
+		CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = 100
 	end
 
 
@@ -779,7 +773,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		
 		rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 		if IsValid(rag:GetPhysicsObject()) then
-			rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 20)
+			rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 40)
 		end
 		rag:Activate()
 		rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -898,18 +892,29 @@ if engine.ActiveGamemode() == "homigrad" then
 
 	hook.Add("Player Collide","homigrad-fake",function(ply,hitEnt,data)
 		--if not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 80 then
-		print(hitEnt:GetVelocity():Length())
 		if
 			(gg:GetBool() and not ply:HasGodMode()) or
 			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 5 / hitEnt:GetPhysicsObject():GetMass() * 10 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > velocititouebat)  --сбитие с ног
 		then 
-			timer.Simple(0,function()
-				if not IsValid(ply) or ply.fake then return end
-
-				if hook.Run("Should Fake Collide",ply,hitEnt,data) == false then return end
-
-				Faking(ply)
-			end)
+			if hitEnt:GetClass() == "prop_physics" then
+				if hitEnt:GetVelocity():Length() > velocititouebat + 120 then
+					timer.Simple(0,function()
+						if not IsValid(ply) or ply.fake then return end
+		
+						--if hook.Run("Should Fake Collide",ply,hitEnt,data) == false then return end
+		
+						Faking(ply)
+					end)	
+				end
+			elseif hitEnt:GetClass() == "prop_ragdoll" then
+				timer.Simple(0,function()
+					if not IsValid(ply) or ply.fake then return end
+	
+					--if hook.Run("Should Fake Collide",ply,hitEnt,data) == false then return end
+	
+					Faking(ply)
+				end)
+			end
 		end
 	end)
 
@@ -955,8 +960,8 @@ if engine.ActiveGamemode() == "homigrad" then
 	end)
 
 	hook.Add( "KeyPress", "Shooting", function( ply, key )
-		if !ply:Alive() or ply.Otrub then return end
-
+		if !ply:Alive() or ply.Otrub then ply:SetNWBool("LeftArm",false) ply:SetNWBool("RightArm",false) return end
+		
 		if key == IN_RELOAD then
 			Reload(ply.wep)
 		end
@@ -983,8 +988,10 @@ if engine.ActiveGamemode() == "homigrad" then
 		local head = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Head1" )) )
 		local penis = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Pelvis" )) )
 		local ohhspina = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
-		local noska1 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Toe0" )) )
-		local noska2 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Toe0" )) )
+		local noska1 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Thigh" )) )
+		local noska2 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Thigh" )) )
+		local noska3 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Calf" )) )
+		local noska4 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Calf" )) )
 		rag:SetFlexWeight(9,0)
 		local dist = (rag:GetAttachment(rag:LookupAttachment( "eyes" )).Ang:Forward()*10000):Distance(ply:GetAimVector()*10000)
 		local distmod = math.Clamp(1-(dist/20000),0.1,1)
@@ -1229,7 +1236,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						deltatime=deltatime,
 					}
 					local shadowparams2 = {
-						secondstoarrive=0.25,
+						secondstoarrive=0.9,
 						pos=penis:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
 						angle=angs,
 						maxangulardamp=10,
@@ -1241,11 +1248,15 @@ if engine.ActiveGamemode() == "homigrad" then
 					}
 					head:Wake()
 					head:ComputeShadowControl(shadowparams)
-					if ply:GetNWBool("HvatL",false) == true and ply:GetNWBool("HvatR",false) == true then
+					if ply:GetNWBool("LeftArm") and ply:GetNWBool("RightArm") and ply:KeyDown(IN_BACK) then
 					ohhspina:Wake()
 					ohhspina:ComputeShadowControl(shadowparams2)
 					penis:Wake()
 					penis:ComputeShadowControl(shadowparams2)
+					noska3:Wake()
+					noska3:ComputeShadowControl(shadowparams2)
+					noska4:Wake()
+					noska4:ComputeShadowControl(shadowparams2)
 					end
 				end
 			end
@@ -1272,13 +1283,6 @@ if engine.ActiveGamemode() == "homigrad" then
 						rag.ZacConsLH=nil
 					end
 				end
-				--[[if(IsValid(rag.ZacConsLH) and (rag.ZacNextGrLH || rag.ZacNextGrLH<=CurTime()))then
-					net.Start("HandindicatorL")
-					net.WriteVector(phys:GetPos())
-					net.WriteEntity(rag)
-					net.WriteBool(true)
-					net.Send(ply)
-				end]]
 				if(!IsValid(rag.ZacConsLH) and (!rag.ZacNextGrLH || rag.ZacNextGrLH<=CurTime()))then
 					
 					rag.ZacNextGrLH=CurTime()+0.1
@@ -1300,12 +1304,13 @@ if engine.ActiveGamemode() == "homigrad" then
 						if(trace.Hit and !trace.HitSky)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
-								ply:SetNWBool("HvatL",true)
-								--ply:SetNWVector("HvatLVec",phys:GetPos())
+								ply:SetNWBool("LeftArm",true)
 								rag:EmitSound("physics/body/body_medium_impact_soft5.wav",500,100,0.5,CHAN_AUTO)
 								rag.ZacConsLH=cons
 							end
 							break
+						elseif(trace.Hit and trace.HitSky)then
+							ply:SetNWBool("LeftArm",false)
 						end
 					end
 				end
@@ -1314,8 +1319,8 @@ if engine.ActiveGamemode() == "homigrad" then
 				if(IsValid(rag.ZacConsLH))then
 					rag.ZacConsLH:Remove()
 					rag.ZacConsLH=nil
-					ply:SetNWBool("HvatL",false)
-					--ply:SetNWVector("HvatLVec",phys:GetPos())
+					ply:SetNWBool("LeftArm",false)
+					--ply:SetNWVector("LeftArmVec",phys:GetPos())
 					--[[net.Start("HandindicatorL")
 					net.WriteEntity(rag)
 					net.WriteBool(false)
@@ -1352,12 +1357,14 @@ if engine.ActiveGamemode() == "homigrad" then
 						if(trace.Hit and !trace.HitSky)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
-								ply:SetNWBool("HvatR",true)
-								--ply:SetNWVector("HvatRVec",phys:GetPos())
+								ply:SetNWBool("RightArm",true)
+								--ply:SetNWVector("RightArmVec",phys:GetPos())
 								rag.ZacConsRH=cons
 								rag:EmitSound("physics/body/body_medium_impact_soft5.wav",500,100,0.5,CHAN_AUTO)
 							end
 							break
+						elseif(trace.Hit and trace.HitSky)then
+							ply:SetNWBool("RightArm",false)
 						end
 					end
 				end
@@ -1365,8 +1372,8 @@ if engine.ActiveGamemode() == "homigrad" then
 				if(IsValid(rag.ZacConsRH))then
 					rag.ZacConsRH:Remove()
 					rag.ZacConsRH=nil
-					ply:SetNWBool("HvatR",false)
-					--ply:SetNWVector("HvatRVec",phys:GetPos())
+					ply:SetNWBool("RightArm",false)
+					--ply:SetNWVector("RightArmVec",phys:GetPos())
 					--[[net.Start("HandindicatorR")
 					net.WriteEntity(rag)
 					net.WriteBool(false)
@@ -1380,9 +1387,9 @@ if engine.ActiveGamemode() == "homigrad" then
 				angs:RotateAroundAxis(angs:Forward(),90)
 				angs:RotateAroundAxis(angs:Up(),90)
 				local speed = 30
-				
+
 				if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
-					local shadowparams = {
+					local shadowparams1 = {
 						secondstoarrive=forwardarrivetime,
 						pos=lh:GetPos(),
 						angle=phys:GetAngles(),
@@ -1393,8 +1400,24 @@ if engine.ActiveGamemode() == "homigrad" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
+					local shadowparams2 = {
+						secondstoarrive=forwardarrivetime * 2,
+						pos=lh:GetPos(),
+						angle=phys:GetAngles(),
+						maxangulardamp=10,
+						maxspeeddamp=10,
+						maxangular=50,
+						maxspeed=speed,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
+					if ply:GetNWBool("LeftArm") == true and ply:GetNWBool("RightArm") == true then
 					phys:Wake()
-					phys:ComputeShadowControl(shadowparams)
+					phys:ComputeShadowControl(shadowparams1)
+					else
+					phys:Wake()
+					phys:ComputeShadowControl(shadowparams2)
+					end
 				end
 			end
 			if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsRH))then

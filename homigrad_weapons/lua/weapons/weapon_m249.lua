@@ -5,6 +5,7 @@ SWEP.PrintName 				= "M249"
 SWEP.Instructions			= "Пулемёт под калибр 5,56х45"
 SWEP.Category 				= "Оружие"
 SWEP.Baraban = true
+SWEP.IconkaInv = "vgui/weapon_csgo_m249.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -15,6 +16,10 @@ SWEP.Primary.ClipSize		= 100
 SWEP.Primary.DefaultClip	= 100
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "5.56x45 mm"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/m249' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 100
 SWEP.Primary.Spread = 0

@@ -5,6 +5,7 @@ SWEP.PrintName 				= "HK MP5a3"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет-пулемёт под калибр 9х19"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/weapon_csgo_mp5sd.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -27,6 +28,10 @@ SWEP.ShootWait = 0.06
 SWEP.TwoHands = true
 SWEP.MagOut = "zcitysnd/sound/weapons/mp40/handling/mp40_magout.wav"
 SWEP.MagIn = "zcitysnd/sound/weapons/mp40/handling/mp40_magin.wav"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/mp5' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.BoltIn = "zcitysnd/sound/weapons/mp5k/handling/mp5k_boltback.wav"
 SWEP.BoltOut = "zcitysnd/sound/weapons/mp5k/handling/mp5k_boltrelease.wav"
 SWEP.Baraban = true

@@ -20,9 +20,9 @@ SWEP.PrintName 				= "B3bros Base"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= ""
 SWEP.Category 				= "Other"
-SWEP.WepSelectIcon			= ""
+--SWEP.WepSelectIcon			= ""
 
-SWEP.Spawnable 				= true
+SWEP.Spawnable 				= false
 SWEP.AdminOnly 				= false
 
 ------------------------------------------
@@ -74,7 +74,7 @@ SWEP.shotgun = false
 
 ------------------------------------------
 
-SWEP.DrawWeaponSelection = function(...) DrawWeaponSelection(...) end
+--SWEP.DrawWeaponSelection = function(...) DrawWeaponSelection(...) end
 SWEP.vbw = true
 SWEP.vbwPos = false
 SWEP.vbwAng = false
@@ -436,7 +436,7 @@ homigrad_weapons = homigrad_weapons or {}
 function SWEP:Initialize()
 	homigrad_weapons[self] = true
 
-	self.Instructions = ("                                Урон: "..self.Primary.Damage.."                                           ".."Время До Выстрела: "..self.ShootWait.."       Вместительность:"..self:GetMaxClip1())
+	self.Instructions = ("Урон: "..self.Primary.Damage.."                                           ".."Время До Выстрела: "..self.ShootWait.."       Вместительность:"..self:GetMaxClip1())
 
 
 	local skini = {
@@ -694,40 +694,11 @@ function SWEP:Reload()
 			end
 		end
 		
-		if self.LoadSound and self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ) > 0 and self:Clip1() < self:GetMaxClip1() then
-			local empty = false
-			for i = 1, self:GetMaxClip1() - self:Clip1() do
-				timer.Simple(0.5 * i, function()
-					if self:Clip1() == 0 then
-						empty = true
-					end
-					self:EmitSound(self.LoadSound..".wav", 60, 100, 0.8, CHAN_AUTO)
-					if i == self:GetMaxClip1() then
-						if self.Primary.PumpSound and empty == true then
-						timer.Simple(0.3,function ()
-						self:EmitSound(self.Primary.PumpSound, 60, 100, 0.8, CHAN_AUTO)
-						if self.CanManipulatorKuklovod and self.NumBullet then
-							self:ManipulateSlideBoneFor()
-							timer.Simple(0.2,function ()
-								self:ManipulateSlideBoneBac()
-							end)
-						end
-						end)
-						end
-				end
-					if self:Clip1() < self:GetMaxClip1() then
-						self:SetClip1(self:Clip1() + 1)	
-						self:GetOwner():SetAmmo(self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )-1, self:GetPrimaryAmmoType())
-						self.AmmoChek = 5
-					end
-				end)
-			end			
-	end
 		timer.Simple(0.1,function ()
 	--		spawn_mag(self.MagModel,self:GetOwner(),self,self.BigMagModel)
 		end)
 		timer.Create( "reload"..self:EntIndex(), self.ReloadTime, 1, function()
-			if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self and not self.LoadSound then
+			if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self then --and not self.LoadSound then
 				local oldclip = self:Clip1()
 				self:SetClip1(math.Clamp(self:Clip1()+self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() ),0,self:GetMaxClip1()))
 				local needed = self:Clip1()-oldclip
@@ -1065,10 +1036,10 @@ function SWEP:Step()
 		if SERVER then self:SetNWBool("IsScope",scope) end
 
 		if isLocal then
-			if (ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1) then
+			--if (ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1) then
 				local p = 0.3 - math.min((painlosing or 0),0.3)
 				self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p,p),math.Rand(-p,p),math.Rand(-p,p))
-			end
+			--end
 		end
 
 		if isLocal or SERVER then
@@ -1155,6 +1126,10 @@ end
 function SWEP:Holster( wep )
 	local ply = self:GetOwner()
 
+	if SERVER then
+		self:GetOwner():EmitSound("homigrad/player/holster"..math.random(1,3)..".wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
+	end
+
 	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
 
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Hand" ), Angle( 0,0,0 ) )
@@ -1181,7 +1156,7 @@ function SWEP:SecondaryAttack() return end
 function SWEP:Deploy()
 	self:SetHoldType("normal")
 	if SERVER then
-		self:GetOwner():EmitSound("snd_jack_hmcd_pistoldraw.wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
+		self:GetOwner():EmitSound("homigrad/player/deploy"..math.random(1,3)..".wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
 	end
 
 	self.NextShot = CurTime() + 0.5

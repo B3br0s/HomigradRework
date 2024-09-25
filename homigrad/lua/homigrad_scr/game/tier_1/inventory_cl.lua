@@ -16,6 +16,7 @@ Gunshuy = {
 	"weapon_ar15",
 	"weapon_ak74",
 	"weapon_akm",
+	"weapon_fnp",
 	"weapon_fiveseven",
 	"weapon_hk_usp",
 	"weapon_deagle",

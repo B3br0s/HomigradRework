@@ -7,6 +7,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/weapon_csgo_p90.png"
 
 ------------------------------------------
 
@@ -20,6 +21,10 @@ SWEP.Primary.Spread = 5
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/m40a1/m40a1_fp.wav"
 SWEP.Primary.SoundFar = "mp5k/mp5k_dist.wav"
 SWEP.Primary.Force = 120/3
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/p90' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.05
 SWEP.TwoHands = true

@@ -1,7 +1,6 @@
 -- Define the entity list for spawning
 local ENTITY_LIST = {
-    "explosive_crate",
-    "weapon_crate"
+    "base_crate"
 }
 
 local spawns = {}

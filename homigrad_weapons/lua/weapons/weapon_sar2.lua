@@ -5,7 +5,7 @@ SWEP.PrintName 				= "Automatic Rifle 2"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Основное штурмовое оружие Альянса"
 SWEP.Category 				= "Оружие"
-SWEP.WepSelectIcon          = "pwb/sprites/akm"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -19,6 +19,10 @@ SWEP.Primary.Ammo			= "ar2"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 45
 SWEP.Primary.Spread = 0
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Sound = "weapons/arccw/fire1.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_snp_far.wav"
 SWEP.Primary.Force = 270/3

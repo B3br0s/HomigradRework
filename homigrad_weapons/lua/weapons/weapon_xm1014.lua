@@ -8,6 +8,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/weapon_csgo_xm1014.png"
 
 ------------------------------------------
 
@@ -24,6 +25,10 @@ SWEP.LoadSound = "csgo/weapons/xm1014/xm1014_insertshell_01"
 SWEP.Primary.Force = 15
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.2
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'csgo/econ/weapons/base_weapons/weapon_xm1014' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.NumBullet = 8
 SWEP.Sight = true
 SWEP.TwoHands = true

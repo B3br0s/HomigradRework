@@ -4,6 +4,7 @@ SWEP.Base = 'b3bros_base' -- base
 SWEP.PrintName 				= "Remington 870"
 SWEP.Author 				= "Homigrad"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/weapon_csgo_sawedoff.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -35,6 +36,10 @@ SWEP.shotgun = true
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'csgo/econ/weapons/base_weapons/weapon_sawedoff' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
 
@@ -53,9 +58,9 @@ SWEP.SlotPos				= 0
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.OtherModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
+SWEP.OtherModel				= "models/weapons/arccw_go/v_shot_870.mdl"
 SWEP.ViewModel				= "models/weapons/arccw_go/v_shot_870.mdl"
-SWEP.WorldModel				= "models/weapons/arccw_go/v_shot_870.mdl"
+SWEP.WorldModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
 
 function SWEP:ApplyEyeSpray()
     self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(-2,2),0)
@@ -155,7 +160,7 @@ SWEP.dwmModeScale = 1 -- pos
             self:DrawModel()
             return
         end
-            model:SetModel(self.WorldModel)
+            model:SetModel(self.OtherModel)
         
 
         local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
@@ -178,7 +183,7 @@ SWEP.dwmModeScale = 1 -- pos
     
         model:DrawModel()
     else
-            self:SetModel(self.OtherModel)
+            self:SetModel(self.WorldModel)
             self:DrawModel()
 end
 end

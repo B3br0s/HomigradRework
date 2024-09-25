@@ -9,6 +9,7 @@ SWEP.WepSelectIcon			= "pwb/sprites/glock17"
 
 SWEP.Spawnable 				= false
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/weapon_csgo_ak47.png"
 
 ------------------------------------------
 

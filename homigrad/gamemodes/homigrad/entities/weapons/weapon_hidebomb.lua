@@ -27,8 +27,8 @@ SWEP.SlotPos				= 2
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/props_junk/cardboard_jox004a.mdl"
-SWEP.WorldModel				= "models/props_junk/cardboard_jox004a.mdl"
+SWEP.ViewModel				= "models/minic23/csgo/c4_trailer_source2.mdl"
+SWEP.WorldModel				= "models/minic23/csgo/c4_trailer_source2.mdl"
 
 SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
@@ -155,7 +155,7 @@ if SERVER then
 
         if not IsValid(ent) then
             ent = ents.Create("prop_physics")
-            ent:SetModel("models/props_junk/cardboard_box004a.mdl")
+            ent:SetModel("models/minic23/csgo/c4_trailer_source2.mdl")
 
             ent:SetPos(traceResult.HitPos)
             ent:Spawn()
@@ -190,15 +190,15 @@ else
 
         self.mdl = self.mdl or false
         if not IsValid(self.mdl) then
-            self.mdl = ClientsideModel("models/props_junk/cardboard_jox004a.mdl")
+            self.mdl = ClientsideModel("models/minic23/csgo/c4_trailer_source2.mdl")
             self.mdl:SetNoDraw(true)
-            self.mdl:SetModelScale(0.5)
+            self.mdl:SetModelScale(1)
         end
         self:CallOnRemove("huyhuy",function() self.mdl:Remove() end)
         local matrix = self:GetOwner():GetBoneMatrix(11)
         if not matrix then return end
 
-        self.mdl:SetRenderOrigin(matrix:GetTranslation()+matrix:GetAngles():Forward()*3+matrix:GetAngles():Right()*3)
+        self.mdl:SetRenderOrigin(matrix:GetTranslation()+matrix:GetAngles():Forward()*-22+matrix:GetAngles():Right()*2.5+matrix:GetAngles():Up()*7)
         self.mdl:SetRenderAngles(matrix:GetAngles())
         self.mdl:DrawModel()
     end

@@ -7,6 +7,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Category 				= "Оружие"
     SWEP.Spawnable 				= true
     SWEP.AdminOnly 				= false
+    SWEP.IconkaInv = "vgui/pineapple.png"
     
     SWEP.Primary.ClipSize		= 10
     SWEP.Primary.DefaultClip	= 10
@@ -21,6 +22,10 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.ReloadTime = 2
     SWEP.ShootWait = 0.1
     SWEP.MagModel = "models/gredwitch/bar/bar_mag.mdl"
+    if CLIENT then
+    SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+    SWEP.BounceWeaponIcon = false
+    end
     SWEP.ReloadSound = ""
     SWEP.TwoHands = true
     SWEP.MagOut = "zcitysnd/sound/weapons/sks/handling/sks_magout.wav"

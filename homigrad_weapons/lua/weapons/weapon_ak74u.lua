@@ -6,6 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Автоматическая винтовка под калибр 5,45х39"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/aks74u"
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -29,6 +30,10 @@ SWEP.ShootWait = 0.075
 SWEP.ReloadSound = ""
 SWEP.TwoHands = true
 SWEP.MagOut = "zcitysnd/sound/weapons/aks74u/handling/aks_magout.wav"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/aks74u' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.MagIn = "zcitysnd/sound/weapons/aks74u/handling/aks_magin.wav"
 SWEP.BoltOut = "zcitysnd/sound/weapons/aks74u/handling/aks_boltrelease.wav"
 SWEP.BoltIn = "zcitysnd/sound/weapons/aks74u/handling/aks_boltback.wav"

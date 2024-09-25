@@ -5,6 +5,7 @@ SWEP.PrintName 				= "R8"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Револьвер под калибр .44 Remington Magnum"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/weapon_csgo_revolver.png"
 SWEP.CanManipulatorKuklovodAngle = true
 
 SWEP.Spawnable 				= true
@@ -47,6 +48,10 @@ SWEP.Secondary.Ammo			= "none"
 
 SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.AutoSwitchFrom			= false
 
 SWEP.HoldType = "revolver"
@@ -54,7 +59,7 @@ SWEP.HoldType = "revolver"
 ------------------------------------------
 
 function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(2,math.Rand(-1,1),0)
+    self.eyeSpray = self.eyeSpray - Angle(2,math.Rand(-0.2,0.2),0)
 end
 
 SWEP.Slot					= 2
@@ -63,13 +68,13 @@ SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
 SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_r8.mdl"
-SWEP.WorldModel				= "models/weapons/arccw_go/v_pist_r8.mdl"
-SWEP.OtherModel				= "models/csgo/weapons/w_pist_revolver.mdl"
+SWEP.WorldModel				= "models/csgo/weapons/w_pist_revolver.mdl"
+SWEP.OtherModel				= "models/weapons/arccw_go/v_pist_r8.mdl"
 
 SWEP.vbwPos = Vector(8.5,-10,-8)
 
-SWEP.addAng = Angle(0.4,0.5,0)
-SWEP.addPos = Vector(30,-4.3,-2.2)
+SWEP.addAng = Angle(0,0.5,0)
+SWEP.addPos = Vector(0,-5,0)
 SWEP.MuzzleFXPos = Vector(30,-5,-2)
 
 SWEP.ValidAttachments = {
@@ -141,7 +146,7 @@ SWEP.dwmModeScale = 1 -- pos
         if not slideBone then return end
     
         for i = 1, 60 do
-            timer.Simple(0.0005 * i,function ()
+            timer.Simple(0.0001 * i,function ()
                 local slideOffset = LerpAngle( 1.5, Angle(0,0,0),Angle(0,0,-30 + i / 2) )
                 model:ManipulateBoneAngles(slideBone, slideOffset)   
             end)
@@ -155,7 +160,7 @@ SWEP.dwmModeScale = 1 -- pos
         if not slideBone then return end
     
         for i = 1, 60 do
-            timer.Simple(0.003 * i,function ()
+            timer.Simple(0.001 * i,function ()
                 local slideOffset = LerpAngle( 1.5, Angle(0,0,0),Angle(0,0,-i / 2) )
                 model:ManipulateBoneAngles(slideBone, slideOffset)   
             end)
@@ -171,7 +176,7 @@ SWEP.dwmModeScale = 1 -- pos
             self:DrawModel()
             return
         end
-            model:SetModel(self.WorldModel)
+            model:SetModel(self.OtherModel)
         
 
         local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
@@ -194,7 +199,7 @@ SWEP.dwmModeScale = 1 -- pos
     
         model:DrawModel()
     else
-            self:SetModel(self.OtherModel)
+            self:SetModel(self.WorldModel)
             self:DrawModel()
 end
 end

@@ -2,10 +2,11 @@ if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'weapon_base'
 AddCSLuaFile()
 
-SWEP.PrintName = "Банка Рыбы"
+SWEP.PrintName = "Шпроты"
 SWEP.Author = "Homigrad"
-SWEP.Purpose = "Консервированная рыба"
+SWEP.Purpose = "Консервированные шпроты"
 SWEP.Category = "Вкусности"
+SWEP.IconkaInv = "vgui/fishcan.png"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 3
@@ -91,7 +92,7 @@ if(CLIENT)then
 	
 			if (IsValid(_Owner)) then
 				-- Specify a good position
-				local offsetVec = Vector(4,-1,0)
+				local offsetVec = Vector(4,-2.2,-1)
 				local offsetAng = Angle(180, -45, 90)
 				
 				local boneid = _Owner:LookupBone("ValveBiped.Bip01_R_Hand") -- Right Hand

@@ -9,6 +9,7 @@ SWEP.WepSelectIcon			= "pwb2/vgui/weapons/matebahomeprotection"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/pineapple.png"
 
 ------------------------------------------
 
@@ -19,6 +20,10 @@ SWEP.Primary.Ammo			= ".44 Remington Magnum"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 30
 SWEP.Primary.Spread = 0
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+SWEP.BounceWeaponIcon = false
+end
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/revolver/revolver_fp.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
 SWEP.Primary.Force = 105/40

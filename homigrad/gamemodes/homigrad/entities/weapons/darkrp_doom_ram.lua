@@ -1,100 +1,108 @@
-AddCSLuaFile()
+if SERVER then
+    AddCSLuaFile()
+end
 
-SWEP.Slot = 5
-SWEP.SlotPos = 1
-SWEP.DrawAmmo = false
-SWEP.DrawCrosshair = false
-
-SWEP.PrintName = "Ломатель дверей"
-SWEP.Author = "0oa"
-
-SWEP.ViewModelFOV = 62
-SWEP.ViewModelFlip = false
-SWEP.ViewModel = Model("models/weapons/c_rpg.mdl")
-SWEP.WorldModel = Model("models/weapons/w_rocket_launcher.mdl")
-SWEP.AnimPrefix = "rpg"
-
-SWEP.UseHands = true
+SWEP.PrintName = "Battering Ram"
+SWEP.Author = "Homigrad"
+SWEP.Category = "Разное"
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.Category = "DarkRP"
 
-SWEP.Sound = Sound("physics/wood/wood_box_impact_hard3.wav")
+SWEP.Primary.ClipSize = -1
+SWEP.Primary.DefaultClip = -1
+SWEP.Primary.Automatic = false
+SWEP.Primary.Ammo = "none"
 
-SWEP.Primary.ClipSize = -1      -- Size of a clip
-SWEP.Primary.DefaultClip = 0        -- Default number of bullets in a clip
-SWEP.Primary.Automatic = false      -- Automatic/Semi Auto
-SWEP.Primary.Ammo = ""
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
 
-SWEP.Secondary.ClipSize = -1        -- Size of a clip
-SWEP.Secondary.DefaultClip = 0     -- Default number of bullets in a clip
-SWEP.Secondary.Automatic = false     -- Automatic/Semi Auto
-SWEP.Secondary.Ammo = ""
+SWEP.UseHands = true
+SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
+SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl"
+SWEP.ViewModelFOV = 54
 
-SWEP.DrawWeaponSelection = DrawWeaponSelection
-SWEP.OverridePaintIcon = OverridePaintIcon
+SWEP.HitDistance = 80
 
 function SWEP:Initialize()
-    self:SetHoldType("normal")
+    self:SetHoldType("rpg")
 end
 
-function SWEP:Deploy() end
-function SWEP:Holster()
-    self:SetNWBool("Ready",false)
-
-    return true
+local function IsDoor(ent)
+    if not IsValid(ent) then return false end
+    local class = ent:GetClass()
+    return class == "prop_door_rotating" or class == "func_door" or class == "func_door_rotating"
 end
 
 function SWEP:PrimaryAttack()
-    local Owner = self:GetOwner()
-    if not IsValid(Owner) then return end
+    self:SetNextPrimaryFire(CurTime() + 1)
 
-    if not self:GetNWBool("Ready") then return end
-
-    self:SetNextPrimaryFire(CurTime() + 0.1)
-
-    local trace = Owner:GetEyeTrace()
-
-    local ent = trace.Entity
-    if not IsValid(ent) or not darkrp.doors[ent:GetClass()] then return end
+    local owner = self:GetOwner()
+    owner:SetAnimation(PLAYER_ATTACK1)
+    self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav")
 
     if SERVER then
-        ent:Fire("UnLock")
-        ent:Fire("Open")
+        local tr = owner:GetEyeTrace()
+        local target = tr.Entity
+
+        if IsDoor(target) and tr.HitPos:Distance(owner:GetPos()) <= self.HitDistance then
+            self:EmitSound("snd_jack_hmcd_explosion_far.wav")
+
+            if target:GetClass() == "prop_door_rotating" then
+                local doorPos = target:GetPos()
+                local doorAngles = target:GetAngles()
+                local doorModel = target:GetModel()
+                local doorSkin = target:GetSkin() or 0
+
+                target:Fire("Unlock", "", 0)
+                target:Fire("Open", "", 0)
+                target:Remove()
+
+
+                local physDoor = ents.Create("prop_physics")
+                physDoor:SetModel(doorModel)
+                physDoor:SetPos(doorPos)
+                physDoor:SetAngles(doorAngles)
+                physDoor:SetSkin(doorSkin)
+                physDoor:Spawn()
+
+                local phys = physDoor:GetPhysicsObject()
+                if IsValid(phys) then
+                    local forceDirection = owner:GetAimVector() * 10000
+                    phys:ApplyForceCenter(forceDirection)
+                end
+            elseif target:GetClass() == "func_door" or target:GetClass() == "func_door_rotating" then
+                local doorPos = target:GetPos()
+                local doorAngles = target:GetAngles()
+                local doorModel = target:GetModel()
+                local doorSkin = target:GetSkin() or 0
+
+                target:Fire("Unlock", "", 0)
+                target:Fire("Open", "", 0)
+                target:Fire("Disable", "", 0.1)
+
+                local physDoor = ents.Create("prop_physics")
+                physDoor:SetModel(doorModel)
+                physDoor:SetPos(doorPos)
+                physDoor:SetAngles(doorAngles)
+                physDoor:SetSkin(doorSkin)
+                physDoor:Spawn()
+
+                target:Remove()
+
+                local phys = physDoor:GetPhysicsObject()
+                if IsValid(phys) then
+                    local forceDirection = owner:GetAimVector() * 10000
+                    phys:ApplyForceCenter(forceDirection)
+                end
+            end
+        else
+            self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav")
+        end
     end
-
-    self:SetNextPrimaryFire(CurTime() + 2.5)
-
-    Owner:SetAnimation(PLAYER_ATTACK1)
-    Owner:EmitSound(self.Sound)
-    Owner:ViewPunch(Angle(-10,0,0))
 end
 
 function SWEP:SecondaryAttack()
-    self:SetNextSecondaryFire(CurTime() + 0.30)
-
-    self:SetNWBool("Ready",not self:GetNWBool("Ready"))
-
-    if self:GetNWBool("Ready") then
-        self:SetHoldType("rpg")
-    else
-        self:SetHoldType("normal")
-    end
-end
-
-
-function SWEP:GetViewModelPosition(pos, ang)
-    local Mul = 1
-
-    if self.LastIron > CurTime() - 0.25 then
-        Mul = math.Clamp((CurTime() - self.LastIron) / 0.25, 0, 1)
-    end
-
-    if self:GetNWBool("Ready") then
-        Mul = 1 - Mul
-    end
-
-    ang:RotateAroundAxis(ang:Right(), - 15 * Mul)
-    return pos,ang
 end

@@ -9,6 +9,7 @@ if engine.ActiveGamemode() == "homigrad" then
     
     SWEP.Spawnable 				= true
     SWEP.AdminOnly 				= false
+    SWEP.IconkaInv = "vgui/weapon_csgo_deagle.png"
     
     ------------------------------------------
     
@@ -56,8 +57,8 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.DrawCrosshair			= false
     
     SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_deagle.mdl"
-    SWEP.WorldModel				= "models/weapons/arccw_go/v_pist_deagle.mdl"
-    SWEP.OtherModel				= "models/csgo/weapons/w_pist_deagle.mdl"
+    SWEP.WorldModel				= "models/csgo/weapons/w_pist_deagle.mdl"
+    SWEP.OtherModel				= "models/weapons/arccw_go/v_pist_deagle.mdl"
     
     function SWEP:ApplyEyeSpray()
         self.eyeSpray = self.eyeSpray - Angle(9,math.Rand(-1,1),0)
@@ -67,6 +68,10 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.dwsItemPos = Vector(10,-1,-2)
     
     SWEP.addAng = Angle(1,-0.2,0)
+    if CLIENT then
+    SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+    SWEP.BounceWeaponIcon = false
+    end
     SWEP.addPos = Vector(30,-4,-2.2)
     
     SWEP.MuzzleFXPos = Vector(30,-5,-2)
@@ -148,7 +153,7 @@ if engine.ActiveGamemode() == "homigrad" then
             self:DrawModel()
             return
         end
-            model:SetModel(self.WorldModel)
+            model:SetModel(self.OtherModel)
         
 
         local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
@@ -171,8 +176,8 @@ if engine.ActiveGamemode() == "homigrad" then
     
         model:DrawModel()
     else
-            self:SetModel(self.OtherModel)
+            self:SetModel(self.WorldModel)
             self:DrawModel()
 end
 end
-    end
+end

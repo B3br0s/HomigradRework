@@ -7,6 +7,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
+SWEP.IconkaInv = "vgui/weapon_csgo_mp7.png"
 
 ------------------------------------------
 
@@ -17,15 +18,19 @@ SWEP.Primary.Ammo			= "4.6×30 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 30
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "zcitysnd/sound/weapons/mp40/mp40_fp.wav"
+if CLIENT then
+SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/mp7' )
+SWEP.BounceWeaponIcon = false
+end
+SWEP.Primary.Sound = "arccw_go/mp7/mp7_01.wav"
 SWEP.Primary.SoundFar = "mp5k/mp5k_dist.wav"
 SWEP.Primary.Force = 120/3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.06
-SWEP.MagOut = "csgo/weapons/galilar/galil_clipout.wav"
-SWEP.MagIn = "csgo/weapons/galilar/galil_clipin.wav"
-SWEP.BoltOut = "csgo/weapons/galilar/galil_boltback.wav"
-SWEP.BoltIn = "csgo/weapons/galilar/galil_boltforward.wav"
+SWEP.MagOut = "arccw_go/mp7/mp7_clipout.wav"
+SWEP.MagIn = "arccw_go/mp7/mp7_clipin.wav"
+SWEP.BoltOut = "arccw_go/mp7/mp7_slideback.wav"
+SWEP.BoltIn = "arccw_go/mp7/mp7_slideforward.wav"
 SWEP.MagOutWait = 0.2
 SWEP.MagInWait = 0.9
 SWEP.BoltOutWait = 1.2
@@ -55,32 +60,100 @@ SWEP.MagModel = "models/csgo/weapons/w_pist_tec9_mag.mdl"
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/pwb2/weapons/w_mp7.mdl"
+SWEP.ViewModel				= "models/weapons/arccw_go/v_smg_mp7.mdl"
 SWEP.WorldModel				= "models/pwb2/weapons/w_mp7.mdl"
+SWEP.OtherModel				= "models/weapons/arccw_go/v_smg_mp7.mdl"
 
 SWEP.vbwPos = Vector(-2,-3.7,1)
 SWEP.vbwAng = Angle(5,-30,0)
 
-SWEP.addPos = Vector(0,0,0)
-SWEP.addAng = Angle(-0.5,0,0)
+SWEP.addAng = Angle(0,0.5,0)
+SWEP.addPos = Vector(0,-5,0)
+SWEP.MuzzleFXPos = Vector(5,0,0)
 
-SWEP.ValidAttachments = {
-    ["Pilad"] = {
-        positionright = 0.95,
-        positionforward = 2.5,
-        positionup = -4,
+SWEP.dwmModeScale = 1 -- pos
+    SWEP.dwmForward = 0
+    SWEP.dwmRight = 0
+    SWEP.dwmUp = -2.9
+    
+    SWEP.dwmAUp = 0 -- ang
+    SWEP.dwmARight = -15
+    SWEP.dwmAForward = 180
+    
+    local model 
+    if CLIENT then
+        model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
+        GDrawWorldModel = model
+        model:SetNoDraw(true)
+    end
+    
+    if SERVER then
+        function SWEP:GetPosAng()
+            local owner = self:GetOwner()
+            local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+            if not Pos then return end
+            
+            Pos:Add(Ang:Forward() * self.dwmForward)
+            Pos:Add(Ang:Right() * self.dwmRight)
+            Pos:Add(Ang:Up() * self.dwmUp)
+    
+            Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+            Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+            Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+    
+            return Pos,Ang
+        end
+    else
+        function SWEP:SetPosAng(Pos,Ang)
+            self.Pos = Pos
+            self.Ang = Ang
+        end
+        function SWEP:GetPosAng()
+            return self.Pos,self.Ang
+        end
+    end
 
-        angleforward = 180,
-        angleright = 10,
-        angleup = -0.1,
+    SWEP.dwmModeScale = 1 -- pos
+    SWEP.dwmForward = -13
+    SWEP.dwmRight = 6.15
+    SWEP.dwmUp = -2.8
+    
+    SWEP.dwmAUp = 0 -- ang
+    SWEP.dwmARight = -15
+    SWEP.dwmAForward = 180
+    
+function SWEP:DrawWorldModel()
+    local owner = self:GetOwner()
+    if LocalPlayer() == owner then
+    if not IsValid(owner) then
+        self:DrawModel()
+        return
+    end
+        model:SetModel(self.OtherModel)
+    
 
-        holosight = true,
-        newsight = true,
-        aimpos = Vector(4.5,-3.7,0.75),
-        aimang = Angle(-5,0,0),
+    local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+    if not Pos then return end
+    
+    Pos:Add(Ang:Forward() * self.dwmForward)
+    Pos:Add(Ang:Right() * self.dwmRight)
+    Pos:Add(Ang:Up() * self.dwmUp)
 
-        scale = 0.8,
-        model = "models/weapons/arc9/darsu_eft/mods/scope_all_vomz_pilad_p1x42_weaver.mdl",
-    }
-}
+    Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+    Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+    Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+    
+    self:SetPosAng(Pos,Ang)
+
+    model:SetPos(Pos)
+    model:SetAngles(Ang)
+
+    model:SetModelScale(self.dwmModeScale)
+
+    model:DrawModel()
+else
+        self:SetModel(self.WorldModel)
+        self:DrawModel()
+end
+end
 end

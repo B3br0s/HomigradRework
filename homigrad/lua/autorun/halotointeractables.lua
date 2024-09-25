@@ -21,6 +21,7 @@ local usableEntities = {
     ["ent_ammo_762x54mm"] = true,
     ["ent_ammo_9x18mmrubber"] = true,
     ["ent_ammo_9x39mm"] = true,
+    ["base_crate"] = true,
     ["ent_ammo_9х19mm"] = true,
     ["ent_ammo_airsoftballs"] = true,
     ["ent_ammo_tasercartridge"] = true,
@@ -39,7 +40,8 @@ local entityNames = {
     ["prop_door"] = "Дверь",
     ["prop_door_rotating"] = "Дверь",
     ["prop_effect"] = "Эффект",
-    ["weapon_crate"] = "Оружейный Ящик",
+    ["base_crate"] = "Обычный Ящик",
+    ["weapon_crate"] = "Обычный Ящик",
     ["explosive_crate"] = "Ящик Со Взрывчаткой",
     ["ent_ammo_.45rubber"] = "Патроны .45 Резиновые",
     ["ent_ammo_.50action"] = "Патроны .50 Action Express",
@@ -83,7 +85,7 @@ hook.Add("PreDrawHalos", "DrawUsableEntityHalos", function()
 --print(hitEntity) -- debug fr😀
 
 
-    if IsValid(hitEntity) and usableEntities[hitEntity:GetClass()] and ply:GetPos():DistToSqr(hitEntity:GetPos()) <= (haloDistance * haloDistance) then
+    if IsValid(hitEntity) and usableEntities[hitEntity:GetClass()] and ply:GetPos():DistToSqr(hitEntity:GetPos()) <= (haloDistance * haloDistance) and ply:Alive() then
 
         halo.Add({hitEntity}, Color(255, 255, 255), 1, 1, 5, true, true)
     end
@@ -98,7 +100,7 @@ hook.Add("HUDPaint", "DrawUsableEntityName", function()
     local trace = ply:GetEyeTrace()
     local hitEntity = trace.Entity
 
-    if IsValid(hitEntity) and entityNames[hitEntity:GetClass()] and ply:GetPos():DistToSqr(hitEntity:GetPos()) <= (haloDistance * haloDistance) then
+    if IsValid(hitEntity) and entityNames[hitEntity:GetClass()] and ply:GetPos():DistToSqr(hitEntity:GetPos()) <= (haloDistance * haloDistance) and ply:Alive() then
         currentEntity = hitEntity
         textAlpha = math.Clamp(textAlpha + fadeSpeed * FrameTime() * 255, 0, 255)
     else
