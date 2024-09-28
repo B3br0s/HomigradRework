@@ -47,7 +47,7 @@ if engine.ActiveGamemode() == "homigrad" then
                 local dir = result.HitNormal
     
                 util_Decal("Blood",hitPos + dir,hitPos - dir)
-                sound.Play("ambient/water/drip" .. math_random(1,4) .. ".wav",hitPos,60,math_random(230,240))
+                sound.Play("homigrad/player/blooddrip" .. math_random(1,4) .. ".wav",hitPos,60,math_random(230,240))
                 continue
             else
                 pos:Set(posSet)

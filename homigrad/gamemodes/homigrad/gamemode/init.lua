@@ -28,18 +28,25 @@ function GM:PlayerSpawn(ply)
 	ply.attackees = {}
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
-	ply:SetNWBool("HvatR",false)
-	ply:SetNWBool("HvatL",false)
+	ply.Metabolizm = math.random(1,1.3)
+	ply:SetNWBool("RightArm",false)
+	ply:SetNWBool("LeftArm",false)
 	ply:SetNWBool("fake",false)
 	ply:SetNWEntity("Ragdoll",nil)
 	ply.virusvichblya = false
 	ply.slendermanblya = false
 	ply.pain = 0
+	ply.Paralizovan = false
 	ply:SetNWFloat("pain",0)
 	ply:SetNWFloat("painlosing",0)
 	ply:SetNWFloat("Bloodlosing",0)
 	ply:SetNWFloat("Blood",5000)
+	ply:SetNWBool("paraliz",false)
 	ply:SetNWFloat("adrenaline",0)
+
+	if ply:IsAdmin() then
+		ply.Metabolizm = 2
+	end
 
 	if ply.NEEDKILLNOW then
 		if ply.NEEDKILLNOW == 1 then ply:KillSilent() else ply:KillSilent() end
@@ -99,6 +106,7 @@ function GM:PlayerSpawn(ply)
 end
 
 function GM:PlayerDeath(ply,inf,att)
+	ply.Paralizovan = false
 	if not roundActive then return end
 
 	if att == ply then att = ply.Attacker2 end
@@ -132,6 +140,8 @@ end
 
 function GM:PlayerDeathThink(ply)
 	local tbl = {}
+
+	ply.Paralizovan = false
 
 	for _, ply in ipairs(player.GetAll()) do
 		if not ply:Alive() then continue end
@@ -236,6 +246,14 @@ COMMANDS.forceartery = {function(ply,args)
 	end
 end}
 
+COMMANDS.forcepain = {function(ply,args)
+
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+					ply.pain = args[2]
+					ply:TakeDamage(50)
+	end
+end}
+
 COMMANDS.teamforce = {function(ply,args)
 	local teamID = tonumber(args[2])
 
@@ -318,7 +336,29 @@ votemap2:addParam{ type=ULib.cmds.StringArg, completes=ulx.maps, hint="map", err
 votemap2:defaultAccess( ULib.ACCESS_ADMIN )
 votemap2:help( "Starts a public map vote." )
 
-hook.Add("Player Think","HasGodMode Rep",function(ply) ply:SetNWBool("HasGodMode",ply:HasGodMode()) ply:SetNWFloat("painlosing",ply.painlosing) ply:SetNWFloat("pain",ply.pain) ply:SetNWFloat("Blood",ply.Blood) ply:SetNWFloat("Bloodlosing",ply.Bloodlosing) end)
+hook.Add("Player Think","HasGodMode Rep",function(ply) 
+	 ply:SetNWBool("HasGodMode",ply:HasGodMode()) 
+	 ply:SetNWFloat("painlosing",ply.painlosing) 
+	 ply:SetNWFloat("pain",ply.pain) 
+	 ply:SetNWFloat("Blood",ply.Blood) 
+	 ply:SetNWFloat("Bloodlosing",ply.Bloodlosing) 
+	 ply:SetNWFloat("o2",ply.o2)
+	 ply:SetNWBool("paraliz",ply.Paralizovan)
+	 ply:SetNWFloat("Metabolizm",ply.Metabolizm)
+	 ply:SetNWFloat("spid",ply.speeed)
+end)
+
+hook.Add("PlayerCanHearPlayersVoice", "PreventParalyzedPlayersFromTalking", function(listener, talker)
+    if talker:GetNWBool("paraliz", false) then
+        return false, false
+    end
+end)
+
+hook.Add("PlayerSay", "PreventParalyzedPlayersFromTexting", function(ply, text)
+    if ply:GetNWBool("paraliz", false) then
+        return ""
+    end
+end)
 
 resource.AddWorkshop("864612139") --remove red death screen
 

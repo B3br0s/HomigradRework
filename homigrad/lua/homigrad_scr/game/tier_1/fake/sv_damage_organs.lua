@@ -2,6 +2,10 @@ if engine.ActiveGamemode() == "homigrad" then
 hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
     local ent = rag or ply
     local inf = dmginfo:GetInflictor()
+    
+    if dmginfo:GetDamageType() == DMG_SLASH then -- ваууу тибя пирнули ыхыхыхыххых
+        --ply:ChatPrint("Тебя пырнули.")
+    end
 
     if hitgroup == HITGROUP_HEAD then
         if not haveHelmet and dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then
@@ -16,10 +20,10 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if
             dmginfo:GetDamageType() == DMG_CRUSH and
             dmginfo:GetDamage() >= 6 and
-            ent:GetVelocity():Length() > 170
+            ent:GetVelocity():Length() > 180
         then
             ply:ChatPrint("Твоя шея была сломана")
-            ent:EmitSound("homigrad/player/neck_snap_01.wav",100,100,10,CHAN_ITEM)
+            ent:EmitSound("homigrad/player/neck_snap_01.wav",100,100,0.4,CHAN_ITEM)
             dmginfo:ScaleDamage(5000 * 50000)
             return
         end
@@ -37,7 +41,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.LeftArm = math.min(0.6,ply.LeftArm - sub)
             if ply.msgLeftArm < CurTime() then
                 ply.msgLeftArm = CurTime() + 1
-                ply:ChatPrint("Правая рука повреждена.")
+                ply:ChatPrint("Правая рука сломана.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -46,7 +50,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.RightArm = math.max(0.6,ply.RightArm - sub)
             if ply.msgRightArm < CurTime() then
                 ply.msgRightArm = CurTime() + 1
-                ply:ChatPrint("Левая рука повреждена.")
+                ply:ChatPrint("Левая рука сломана.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -55,7 +59,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.LeftLeg = math.max(0.6,ply.LeftLeg - sub)
             if ply.msgLeftLeg < CurTime() then
                 ply.msgLeftLeg = CurTime() + 1
-                ply:ChatPrint("Левая нога повреждена.")
+                ply:ChatPrint("Левая нога сломана.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -64,7 +68,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             ply.RightLeg = math.max(0.6,ply.RightLeg - sub)
             if ply.msgRightLeg < CurTime() then
                 ply.msgRightLeg = CurTime() + 1
-                ply:ChatPrint("Правая нога повреждена.")
+                ply:ChatPrint("Правая нога сломана.")
                 ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
             end
         end
@@ -115,8 +119,8 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             if ply.Organs['brain']!=0 and dmginfo:IsDamageType(DMG_BULLET) and not inf.RubberBullets then
                 ply.Organs['brain']=math.max(ply.Organs['brain']-dmg,0)
                 if ply.Organs["brain"] == 0 then
+                    ply:ChatPrint("Твой мозг был уничтожен.")
                     ply:Kill()
-                    
                     return
                 end
             end
@@ -129,7 +133,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if huy then --ply:ChatPrint("You were hit in the liver.")
             if ply.Organs['liver']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                 ply.Organs['liver']=math.max(ply.Organs['liver']-dmg,0)
-                --if ply.Organs['liver']==0 then ply:ChatPrint("Твоя печень была уничтожена.") end
+                if ply.Organs['liver']==0 then ply:ChatPrint("Твоя печень была уничтожена.") end
             end
         end
         --liver
@@ -174,6 +178,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
             if huy or huy2 then --ply:ChatPrint("You were hit in the artery.")
                 if ply.Organs['artery']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                     ply.Organs['artery']=math.max(ply.Organs['artery']-dmg,0)
+                    ply:ChatPrint("Твоя артерия была пробита.")
                 end
             end
         end

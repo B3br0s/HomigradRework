@@ -48,6 +48,11 @@ if SERVER then
         if self.AmountOfDrop >= 2 then self.Item2 = items[self.R2].item end
         if self.AmountOfDrop >= 3 then self.Item3 = items[self.R3].item end
         if self.AmountOfDrop == 4 then self.Item4 = items[self.R4].item end 
+        
+        local phys = self:GetPhysicsObject()
+        if phys:IsValid() then
+            phys:Wake()
+        end
     end
 
     net.Receive("BoxClose", function(len, ply)

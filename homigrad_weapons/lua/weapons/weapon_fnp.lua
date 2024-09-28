@@ -76,7 +76,7 @@ if engine.ActiveGamemode() == "homigrad" then
         self.eyeSpray = Angle(-0.5,math.Rand(-0.1,0.1),0)
     end
     
-    SWEP.MuzzleFXPos = Vector(20,-5,2)
+    SWEP.MuzzleFXPos = Vector(0,1,0)
     SWEP.vbwPos = Vector(7,-10,-6)
 
     SWEP.dwmModeScale = 1 -- pos

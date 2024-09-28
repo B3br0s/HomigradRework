@@ -21,7 +21,8 @@ hook.Add("HUDPaint","PainEffect",function()
     if not LocalPlayer():Alive() then return end
     
     local w,h = ScrW(),ScrH()
-    k = Lerp(0.1,k,math_Clamp(pain / 250,0,15))
+    k = Lerp(0.1,k,math_Clamp(pain / 450,0,15))
+    k1337 = Lerp(0.1,k,math_Clamp(pain / 50,0,15))
 --[[
     surface.SetMaterial(grtodown)
     surface.SetDrawColor(0,0,0,255)
@@ -40,25 +41,25 @@ hook.Add("HUDPaint","PainEffect",function()
     surface.DrawTexturedRect(w - w * k,0,w * k + 1,h)
 --]]
     
-    local k2 = painlosing >= 5 and (painlosing / 5 - 1) or 0
+    local k2 = painlosing >= 5 and (painlosing / 125 - 1) or 0
    
     DrawMotionBlur(0.2,k2 * 0.9,k2 * 0.06)
 
-    surface.SetMaterial(grtodown)
+    --[[surface.SetMaterial(grtodown)
     surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(0,h * k - h,w,h * 2)
+    surface.DrawTexturedRect(0,h * k - h,w,h * 2)]]
 
-    surface.SetMaterial(grtoup)
+   --[[surface.SetMaterial(grtoup)
     surface.SetDrawColor(0, 0, 0, 255 )
-    surface.DrawTexturedRect(0,h - h * k,w,h)
+    surface.DrawTexturedRect(0,h - h * k,w,h)]]
 
     surface.SetMaterial(grtoright)
     surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(-w + w * k,0,w,h)
+    surface.DrawTexturedRect(-w + w * k1337,0,w,h)
 
     surface.SetMaterial(grtoleft)
     surface.SetDrawColor(0,0,0,255)
-    surface.DrawTexturedRect(w - w * k,0,w,h)
+    surface.DrawTexturedRect(w - w * k1337,0,w,h)
 
     DrawMotionBlur(0.2,k * 0.7,k * 0.03)
 end)

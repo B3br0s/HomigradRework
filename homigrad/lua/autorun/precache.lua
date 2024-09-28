@@ -1,8 +1,7 @@
 game.AddParticles("particles/galaxy_blood_particles.pcf")
 PrecacheParticleSystem("exit_blood_small")
 PrecacheParticleSystem("exit_blood_large")
-PrecacheParticleSystem("exit_blood_explosion")
-PrecacheParticleSystem("blood_stream_goop")
+PrecacheParticleSystem("impact0_smoke")
 
 game.AddParticles("particles/matin_weapon_fx_mwb.pcf")
 

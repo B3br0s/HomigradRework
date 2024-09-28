@@ -465,7 +465,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			eyeAngs = att.Ang
 			att.Pos = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 10 + bodyang:Right() * -8) or lply:EyePos()
 		end
-		local anghook = 0.3--GetConVar("hg_fakecam_mode"):GetFloat()
+		local anghook = 0.3 --GetConVar("hg_fakecam_mode"):GetFloat() --Режим камеры в фейке бтв
 		LerpEyeRagdoll = LerpAngleFT(0.08,LerpEyeRagdoll,LerpAngle(anghook,eyeAngs,att.Ang))
 
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL

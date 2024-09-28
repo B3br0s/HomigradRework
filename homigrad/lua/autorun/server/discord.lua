@@ -18,15 +18,15 @@ local function sendToDiscord(message, logType)
     http.Post(webhookURL, {
         payload_json = util.TableToJSON(payload)
     }, function(result)
-        --print("[Log System] Log sent to Discord successfully.")
+        print("[Log System] Log sent to Discord successfully.")
     end, function(failReason)
-        --print("[Log System] Ошибка!  " .. failReason)
+        print("[Log System] Ошибка!  " .. failReason)
     end)
 end
 
 _G.logToDiscord = function(message, logType)
     logType = logType or "Info"
-    sendToDiscord(message, logType)
+    --sendToDiscord(message, logType)
 end
 
 hook.Add("PlayerInitialSpawn", "LogPlayerSpawn", function(ply)

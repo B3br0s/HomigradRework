@@ -36,7 +36,7 @@ function hl2coop.HUDPaint_RoundLeft(white2,time)
         --draw.DrawText( roundTypes[roundType], "HomigradFontBig", ScrW() / 2, ScrH() / 5, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply:Team() == 1 then
-            draw.DrawText( "Ваша задача пройти Half Life 2", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+            draw.DrawText( "Ваша задача пройти этот уровень Half-Life 2", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 155,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 		end
         return
     end

@@ -4,7 +4,7 @@ zombieinfection.Name = "Зомби Инфекция"
 
 zombieinfection.red = {"Инфицированные",Color(255,55,55),
     weapons = {"weapon_handsinfected"},
-    models = {"models/player/corpse1.mdl","models/player/charple.mdl","models/player/zombie_fast.mdl","models/player/zombie_soldier.mdl"}
+    models = {"models/player/corpse1.mdl","models/player/skeleton.mdl"}
 }
 
 zombieinfection.green = {"Люди",Color(55,55,255),

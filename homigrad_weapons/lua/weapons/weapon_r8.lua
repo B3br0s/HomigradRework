@@ -75,7 +75,7 @@ SWEP.vbwPos = Vector(8.5,-10,-8)
 
 SWEP.addAng = Angle(0,0.5,0)
 SWEP.addPos = Vector(0,-5,0)
-SWEP.MuzzleFXPos = Vector(30,-5,-2)
+SWEP.MuzzleFXPos = Vector(0,1,0)
 
 SWEP.ValidAttachments = {
     ["Leapers"] = {

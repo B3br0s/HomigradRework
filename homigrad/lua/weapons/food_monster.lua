@@ -120,6 +120,7 @@ function SWEP:PrimaryAttack()
 	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
 	if(SERVER)then
+		self:GetOwner().Metabolizm = self:GetOwner().Metabolizm + 0.1
 		self:GetOwner().hungryregen = self:GetOwner().hungryregen + 1
 		self:GetOwner().adrenaline = self:GetOwner().adrenaline + 1
 		self:GetOwner().stamina = self:GetOwner().stamina + 10

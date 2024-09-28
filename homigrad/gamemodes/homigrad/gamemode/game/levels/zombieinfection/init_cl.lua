@@ -78,7 +78,7 @@ function zombieinfection.HUDPaint_RoundLeft(white2,time)
 				aABASDBASDBABDSB = false
 				surface.PlaySound("infectionround/infectionroundstart.wav")
 				timer.Simple(10,function() aABASDBASDBABDSB = true end )
-				timer.Simple(14.2,function() FlashScreen() end )
+				timer.Simple(14.2,function() FlashScreen() surface.PlaySound("weapons/underwater_explode3.wav") surface.PlaySound("weapons/underwater_explode3.wav") surface.PlaySound("weapons/underwater_explode3.wav")surface.PlaySound("weapons/underwater_explode3.wav") surface.PlaySound("weapons/underwater_explode3.wav") surface.PlaySound("weapons/underwater_explode3.wav") surface.PlaySound("weapons/underwater_explode3.wav") surface.PlaySound("weapons/underwater_explode3.wav") end )
 			end
 		end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.1,0.1)
@@ -148,5 +148,5 @@ end
 function zombieinfection.PlayerClientSpawn()
 	if LocalPlayer():Team() ~= 3 then return end
 
-	showRoundInfo = CurTime() + 15
+	showRoundInfo = CurTime() + 5
 end

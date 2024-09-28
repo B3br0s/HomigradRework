@@ -271,4 +271,10 @@ if SERVER then
             return true
         end
     end)
+else
+    hook.Add("PlayerFootstep", "CustomFootstepSounds", function(ply, pos, foot, sound, volume, filter)
+        if IsValid(ply) then
+            return true
+        end
+    end)
 end

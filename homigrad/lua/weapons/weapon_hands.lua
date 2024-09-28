@@ -316,7 +316,11 @@ function SWEP:ApplyForce()
 					if ply.heartstop then
 						self:GetOwner():ChatPrint("У него нет пульса, но он всё ещё жив.")
 					else
+						if ply.Paralizovan then
+						self:GetOwner():ChatPrint("Он парализован.")
+						else
 						self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "У него сильный пульс" or (ply.nextPulse <= 1.5 and "У него нормальный пульс") or (ply.nextPulse < 2 and "У него слабый пульс") or (ply.nextPulse >= 2 and "У него еле ощущаемый пульс."))
+						end
 					end
 				end
 			end
@@ -563,7 +567,8 @@ function SWEP:AttackFront()
 			sound.Play("Flesh.ImpactSoft", HitPos, 65, math.random(90, 110))
 		end
 
-		local DamageAmt = math.random(3, 5)
+		local DamageAmt = math.random(3, 5) * self:GetOwner().Metabolizm
+		--print(DamageAmt)
 		local Dam = DamageInfo()
 		Dam:SetAttacker(self:GetOwner())
 		Dam:SetInflictor(self.Weapon)

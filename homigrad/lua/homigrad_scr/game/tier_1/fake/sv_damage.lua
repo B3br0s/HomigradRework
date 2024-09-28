@@ -172,14 +172,14 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
 
 	ply.LastDMGInfo = rubatPidor
-	if ply.LastDMGInfo:IsDamageType(DMG_CRUSH) or ply.LastDMGInfo:IsDamageType(DMG_FALL) then
+	if ply.LastDMGInfo:IsDamageType(DMG_CRUSH+DMG_FALL)then
 	--print(rag:GetVelocity():Length())
 	--print(rubatPidor:GetDamageType())
-	if rag:GetVelocity():Length() > 2 and rag:GetVelocity():Length() < 250 then
+	if rag:GetVelocity():Length() > 2 and rag:GetVelocity():Length() < 150 then
 		dmginfo:ScaleDamage(0)
-	elseif rag:GetVelocity():Length() > 250 and rag:GetVelocity():Length() < 350 then
-		dmginfo:ScaleDamage(0.1)
-	elseif rag:GetVelocity():Length() > 350 and rag:GetVelocity():Length() < 460 then
+	elseif rag:GetVelocity():Length() > 150 and rag:GetVelocity():Length() < 250 then
+		dmginfo:ScaleDamage(0.15)
+	elseif rag:GetVelocity():Length() > 250 and rag:GetVelocity():Length() < 460 then
 		dmginfo:ScaleDamage(0.3)
 	elseif rag:GetVelocity():Length() > 460 and rag:GetVelocity():Length() < 550 then
 		dmginfo:ScaleDamage(0.4)
@@ -187,8 +187,22 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		dmginfo:ScaleDamage(0.5)
 	elseif rag:GetVelocity():Length() > 600 and rag:GetVelocity():Length() < 700 then
 		dmginfo:ScaleDamage(0.6)
+		if !ply.Paralizovan then
+			ply.Paralizovan = true
+			ply:ChatPrint("Вы были парализованы.")
+			timer.Simple(15,function ()
+				ply.Paralizovan = false
+			end)
+		end
 	elseif rag:GetVelocity():Length() > 700 and rag:GetVelocity():Length() < 800 then
 		dmginfo:ScaleDamage(0.7)
+		if !ply.Paralizovan then
+			ply.Paralizovan = true
+			ply:ChatPrint("Вы были парализованы.")
+			timer.Simple(30,function ()
+				ply.Paralizovan = false
+			end)
+		end
 	end
 	else
 		dmginfo:ScaleDamage(1)
@@ -232,6 +246,7 @@ local reasons = {
 	["killyourselfartery"] = "Вы совершили суицид пробив себе артерию.",
 	["hungry"] = "Вы умерли от голода.",
 	["virus"] = "Вы умерли от заражения.",
+	["water"] = "Вы захлебнулись.",
 	["poison"] = "Вы были отравлены."
 }
 

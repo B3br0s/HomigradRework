@@ -45,15 +45,15 @@ end
 
 
 local function explode(pos)
-	local xx,yy = 50,20
+	local xx,yy = 30,20
 	local w,h = 150 / xx,200 / yy
 
 	for x = 1,xx do
 		for y = 1,yy do
-			local dir = Vector(math.random(-1,1),math.random(-1,1),-0.5)
+			local dir = Vector(math.random(-1,1),math.random(-1,1),0.5)
 			dir:Rotate(Angle(h * y * Rand(0.9,1.1),w * x * Rand(0.9,1.1),0))
 			dir[3] = dir[3] + Rand(-0.5,2.5)
-			dir:Mul(180)
+			dir:Mul(140)
 
 			addBloodPart(pos,dir,mats[random(1,#mats)],random(1,20),random(10,20))
 		end

@@ -32,17 +32,16 @@ function zombieinfection.StartRoundSV(data)
 
 	zombieinfection.respawned = true
 
-	timer.Simple(15,function ()
+	timer.Simple(14.2,function ()
 		local count = math.min(math.floor(#players / 1.5,1))
 		for i = 1,count do
 			local ply,key = table.Random(players)
 			players[key] = nil
-
 			ply.Organs['artery']=0
 
-			ply:TakeDamage(200)
+			ply:TakeDamage(90)
 
-		--	ply.Organs['spine']=0
+			ply.Paralizovan = true
 	
 			ply.virusvichblya = true
 
@@ -64,7 +63,7 @@ function zombieinfection.RoundEndCheck()
 	if not zombieinfection.respawned then
 	for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() and ply:Team() ~= 1002 end),1) do
 		zombieinfection.respawned = true
-		timer.Simple(0.5,function() ply:Spawn() ply:SetTeam(1) ply:Spawn() ply:Spawn() ply:StripWeapons() ply:Give("weapon_handsinfected") ply.virusvichblya = true ply.Blood = 50000 ply.adrenaline = math.random(1,2) ply.painlosing = 5 ply:ChatPrint("Не обращай внимания на сообщения о гилте.") zombieinfection.respawned = false end )
+		timer.Simple(math.random(1,4),function() ply:Spawn() ply:SetTeam(1) ply:Spawn() ply:StripWeapons() ply:Give("weapon_handsinfected") ply.virusvichblya = true ply.Blood = 50000 ply.adrenaline = math.random(1,2) ply.painlosing = 5 ply:ChatPrint("Не обращай внимания на сообщения о гилте.") zombieinfection.respawned = false end )
 	end
 end
     if roundTimeStart + roundTime < CurTime() then
@@ -97,18 +96,17 @@ function zombieinfection.PlayerSpawn(ply,teamID)
 	ply:SetPlayerColor(Color(0,0,0):ToVector())
 
 	if teamID == 2 then
-		ply:SetNWBool("GivenWeapon", false) -- Initially, no weapon is given
+		ply:SetNWBool("GivenWeapon", false) -- Initially, no weapon is given	
 		ply:Give("weapon_hands") -- Give the player "weapon_hands"
 	
 		if not ply:GetNWBool("GivenWeapon") then
 				if not IsValid(ply) then return end -- Make sure the player is still valid
 				
 				ply:SetNWBool("GivenWeapon", true) -- Mark weapons as given
-				tdm.GiveSwep(ply, teamTbl.main_weapon) -- Give main weapon
-				tdm.GiveSwep(ply, teamTbl.secondary_weapon) -- Give secondary weapon
-				ply:GiveAmmo(500, "4.6 x30mm", true) -- Give ammo
-				ply:GiveAmmo(500, "9х19 mm Parabellum", true) -- Give ammo
-				ply:GiveAmmo(500, "12/70 beanbag", true) -- Give ammo
+				for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
+
+				tdm.GiveSwep(ply,teamTbl.main_weapon,teamID == 1 and 16 or 4)
+				tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 1 and 8 or 2)
 		end
 	end
 	
@@ -169,20 +167,7 @@ local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_
 local uncommon = {"medkit","weapon_molotok","painkiller"}
 local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_per4ik"}
 
-function zombieinfection.ShouldSpawnLoot()
-   	if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
-
-	local chance = math.random(100)
-	if chance < 5 then
-		return true,rare[math.random(#rare)]
-	elseif chance < 30 then
-		return true,uncommon[math.random(#uncommon)]
-	elseif chance < 70 then
-		return true,common[math.random(#common)]
-	else
-		return false
-	end
-end
+function zombieinfection.ShouldSpawnLoot() return false end
 
 function zombieinfection.PlayerDeath(ply,inf,att) return false end
 

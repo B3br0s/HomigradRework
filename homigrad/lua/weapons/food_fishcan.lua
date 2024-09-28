@@ -122,6 +122,8 @@ function SWEP:PrimaryAttack()
 
 	if(SERVER)then
 		self:GetOwner().hungryregen = self:GetOwner().hungryregen + 2
+		self:GetOwner().Metabolizm = self:GetOwner().Metabolizm + 0.3
+		--print(self:GetOwner().Metabolizm)
 		self:Remove()
 		sound.Play(healsound, self:GetPos(),75,100,0.5)
 		self:GetOwner():SelectWeapon("weapon_hands")

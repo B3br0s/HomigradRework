@@ -280,6 +280,19 @@ COMMANDS.closedev = {function(ply,args)
 	end
 end}
 
+COMMANDS.paraliz = {function(ply,args) --ЧТООООООООО
+
+	if tonumber(args[2]) > 0 then
+		for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+			ply.Paralizovan = true
+		end
+	else
+		for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+			ply.Paralizovan = false
+		end
+	end
+end}
+
 function player.GetListByName(name)
 	local list = {}
 

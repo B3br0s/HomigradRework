@@ -104,21 +104,29 @@ function PopulateArmorSlots()
 end
 
 local function CreateSlot(slotName, parent)
+    --Создание слотов суко
     local slot = vgui.Create("DPanel", parent)
-    slot:SetSize(50, 50)
+    slot:SetSize(64, 64)
 
     local ItemID, ItemData, ItemInfo = JMod.GetItemInSlot(LocalPlayer().EZarmor, slotName)
     
     slot.Paint = function(self, w, h)
-        surface.SetDrawColor(15, 15, 15, 200)
-        surface.DrawRect(0, 0, w, h)
-
+        --surface.SetDrawColor(25, 25, 25, 255)
+        --surface.DrawRect(0, 0, w, h)
+        
+       -- surface.SetDrawColor(25, 25, 25, 15)
+       if self:IsHovered() then
+        surface.SetDrawColor(45,45,45,255)
+    else
+        surface.SetDrawColor(25,25,25,255)
+    end
+    surface.DrawRect(0,0,w,h)
         surface.DrawOutlinedRect(0, 0, w, h, 1)
     end
 
     slot.Think = function(self)
         if self.nextUpdateTime and self.nextUpdateTime > RealTime() then return end
-        self.nextUpdateTime = RealTime() + 1.5
+        self.nextUpdateTime = RealTime() + 0.1
     
         local armorItem = armorSlots[slotName]
         
@@ -127,24 +135,27 @@ local function CreateSlot(slotName, parent)
             self.butt:SetSize(50, 50)
             self.butt:Center()
         end
+        
+        local expectedImagePath = "null.vmt"
+        
+        if armorItem and ItemInfo and ItemInfo.ent then
+            local entityIconPath = "entities/" .. ItemInfo.ent .. ".png"
     
-        if armorItem then
-            local expectedImagePath = "null.vmt"
-            if ItemInfo and ItemInfo.ent then
-                local entityIconPath = "entities/" .. ItemInfo.ent .. ".png"
+            if not self.cachedEntityIconPath or self.cachedEntityIconPath != entityIconPath then
                 if file.Exists("materials/" .. entityIconPath, "GAME") then
                     expectedImagePath = entityIconPath
                 else
                     expectedImagePath = "vgui/entities/default.png"
                 end
+                self.cachedEntityIconPath = entityIconPath
+            else
+                expectedImagePath = self.cachedEntityIconPath
             end
-            if self.butt:GetImage() ~= expectedImagePath then
-                self.butt:SetImage(expectedImagePath)
-            end
-        else
-            if self.butt:GetImage() ~= "null.vmt" then
-                self.butt:SetImage("null.vmt")
-            end
+        end
+        
+        -- Only set the image if it has changed
+        if self.butt:GetImage() ~= expectedImagePath then
+            self.butt:SetImage(expectedImagePath)
         end
     end
     
@@ -229,13 +240,13 @@ local function CreateInventorySlot(i, inventoryFrame, inventorySlotXPos)
         if inventorySlot.SlotItem ~= "Empty" and mouseCode == MOUSE_RIGHT then
             local contextMenu = DermaMenu()
 
-            contextMenu:AddOption("Use", function()
+            contextMenu:AddOption("Использовать", function()
                 net.Start("useweaponinb")
                 net.WriteString(inventorySlot.SlotItem)
                 net.SendToServer()
             end)
 
-            contextMenu:AddOption("Drop", function()
+            contextMenu:AddOption("Выкинуть", function()
                 print(inventorySlot.SlotItem)
                 net.Start("dropweapon")
                 net.WriteString(inventorySlot.SlotItem)
@@ -269,13 +280,13 @@ local function OpenInventory()
         inventoryFrame:SetKeyBoardInputEnabled(false)
 
         inventoryFrame.Paint = function(self, w, h)
-            surface.SetDrawColor(0, 0, 0, 180)
+            surface.SetDrawColor(0, 0, 0, 220)
             surface.DrawRect(0, 0, w, h)
         end
 
         local playerModelPanel = vgui.Create("DModelPanel", inventoryFrame)
-        playerModelPanel:SetSize(300, 500)
-        playerModelPanel:SetPos(100, ScrH() / 2 - 330)
+        playerModelPanel:SetSize(400, 600)
+        playerModelPanel:SetPos(110, ScrH() / 2 - 480)
         playerModelPanel:SetModel(LocalPlayer():GetModel())
         local Ent = playerModelPanel:GetEntity()
 
@@ -308,30 +319,73 @@ local function OpenInventory()
 
         PopulateArmorSlots()
 
-        local x, y, slotSize = ScrW() / 4 - 400, ScrH() / 2 - 300, 52
+        local x, y = ScrW() / 4 - 410, ScrH() / 2 - 480
+
+        local size = 64
 
         CreateSlot("head", inventoryFrame):SetPos(x, y)
-        CreateSlot("acc_eyes", inventoryFrame):SetPos(x + slotSize, y)
-        CreateSlot("mouthnose", inventoryFrame):SetPos(x + slotSize, y + slotSize)
-        CreateSlot("acc_ears", inventoryFrame):SetPos(x, y + slotSize)
+        CreateSlot("eyes",inventoryFrame):SetPos(x + size,y + size)
+        CreateSlot("mouthnose",inventoryFrame):SetPos(x + size,y)
+        CreateSlot("ears",inventoryFrame):SetPos(x,y + size)
 
-        CreateSlot("acc_chestrig", inventoryFrame):SetPos(x + slotSize * 5, y + slotSize * 2)
-        CreateSlot("back", inventoryFrame):SetPos(x + slotSize * 6, y + slotSize * 2)
-        CreateSlot("chest", inventoryFrame):SetPos(x + slotSize * 6, y + slotSize * 3)
-        CreateSlot("armband", inventoryFrame):SetPos(x + slotSize * 5, y + slotSize * 3)
-        CreateSlot("pelvis", inventoryFrame):SetPos(x + slotSize * 5.5, y + slotSize * 4)
+        CreateSlot("acc_head",inventoryFrame):SetPos(x + size * 5.5,y)
+        CreateSlot("acc_eyes",inventoryFrame):SetPos(x + size * 6.5,y)
+        CreateSlot("acc_neck",inventoryFrame):SetPos(x + size * 5.5,y + size)
+        CreateSlot("acc_ears",inventoryFrame):SetPos(x + size * 6.5,y + size)
 
-        CreateSlot("rightcalf", inventoryFrame):SetPos(x, y + slotSize * 6)
-        CreateSlot("leftcalf", inventoryFrame):SetPos(x + slotSize, y + slotSize * 6)
-
-        CreateSlot("rightforearm", inventoryFrame):SetPos(x, y + slotSize * 4.4)
-        CreateSlot("leftforearm", inventoryFrame):SetPos(x + slotSize, y + slotSize * 4.4)
+        CreateSlot("rightshoulder",inventoryFrame):SetPos(x,y + size * 2 + 32)
+        CreateSlot("rightforearm",inventoryFrame):SetPos(x,y + size * 3 + 32)
         
-        CreateSlot("rightthigh", inventoryFrame):SetPos(x + slotSize * 5.5, y + slotSize * 5.3)
-        CreateSlot("leftthigh", inventoryFrame):SetPos(x + slotSize * 4.5, y + slotSize * 5.3)
+        CreateSlot("leftshoulder",inventoryFrame):SetPos(x + size,y + size * 2 + 32)
+        CreateSlot("leftforearm",inventoryFrame):SetPos(x + size,y + size * 3 + 32)
 
-        CreateSlot("rightshoulder", inventoryFrame):SetPos(x + slotSize, y + slotSize * 2.3)
-        CreateSlot("leftshoulder", inventoryFrame):SetPos(x, y + slotSize * 2.3)
+        CreateSlot("rightthigh",inventoryFrame):SetPos(x + size,y + size * 6 + 32)
+        CreateSlot("rightcalf",inventoryFrame):SetPos(x + size,y + size * 7 + 32)
+
+        CreateSlot("leftthigh",inventoryFrame):SetPos(x + size * 5.5,y + size * 6 + 32)
+        CreateSlot("leftcalf",inventoryFrame):SetPos(x + size * 5.5,y + size * 7 + 32)
+
+        CreateSlot("chest",inventoryFrame):SetPos(x + size * 5.5,y + size * 5)
+        CreateSlot("pelvis",inventoryFrame):SetPos(x + size * 6.5,y + size * 5)
+
+        CreateSlot("back",inventoryFrame):SetPos(x,y + size * 5)
+
+        CreateSlot("acc_chestrig",inventoryFrame):SetPos(x + size,y + size * 5)
+
+        CreateSlot("armband",inventoryFrame):SetPos(x + size * 5.5,y + size * 2 + 32)
+
+        --[[CreateSlot("head",inventoryFrame):SetPos(x,y)
+        CreateSlot("eyes",inventoryFrame):SetPos(x + size,y + size)
+        CreateSlot("mouthnose",inventoryFrame):SetPos(x + size,y)
+
+        CreateSlot("ears",inventoryFrame):SetPos(x,y + size)
+        
+        CreateSlot("rightshoulder",inventoryFrame):SetPos(x,y + size * 2 + 32)
+        CreateSlot("rightforearm",inventoryFrame):SetPos(x,y + size * 3 + 32)
+
+        CreateSlot("rightthigh",inventoryFrame):SetPos(x,y + size * 6 + 32)
+        CreateSlot("rightcalf",inventoryFrame):SetPos(x,y + size * 7 + 32)
+
+        CreateSlot("chest",inventoryFrame):SetPos(x,y + size * 5)
+        CreateSlot("pelvis",inventoryFrame):SetPos(x + size,y + size * 5)
+
+        CreateSlot("leftshoulder",inventoryFrame):SetPos(x,y + size * 2 + 32)
+        CreateSlot("leftforearm",inventoryFrame):SetPos(x,y + size * 3 + 32)
+
+        CreateSlot("leftthigh",inventoryFrame):SetPos(x,y + size * 6 + 32)
+        CreateSlot("leftcalf",inventoryFrame):SetPos(x,y + size * 7 + 32)
+
+        CreateSlot("acc_head",inventoryFrame):SetPos(x,y)
+        CreateSlot("acc_eyes",inventoryFrame):SetPos(x - size,y)
+        CreateSlot("acc_neck",inventoryFrame):SetPos(x,y + size)
+        CreateSlot("acc_ears",inventoryFrame):SetPos(x - size,y + size)
+
+        CreateSlot("acc_lshoulder",inventoryFrame):SetPos(x - size,y + size * 2 + 32)
+        CreateSlot("acc_rshoulder",inventoryFrame):SetPos(x - size,y + size * 3 + 32)
+
+        CreateSlot("acc_backpack",inventoryFrame):SetPos(x - size,y + size * 5)
+        CreateSlot("acc_chestrig",inventoryFrame):SetPos(x,y + size * 5)
+        CreateSlot("armband",inventoryFrame):SetPos(x - size,y + size * 6 + 32)]]
 
         local inventorySlotXPos = ScrW() / 2 - 320
         for i = 1, 8 do

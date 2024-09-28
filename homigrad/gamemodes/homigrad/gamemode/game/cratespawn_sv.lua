@@ -91,17 +91,15 @@ local ammos = {
 local spawns = {}
 
 local crateTypes = { 
-"weapon_crate", 
-"melee_crate", 
-"melee_crate", 
-"melee_crate", 
-"melee_crate", 
-"melee_crate", 
+"base_crate", 
+"base_crate",
+"base_crate",
+"base_crate",
+"base_crate",
 "ent_drop_flashlight", 
 "ent_drop_flashlight",
 "ent_drop_flashlight",
-"ent_drop_flashlight",
-"explosive_crate" }
+"ent_drop_flashlight" }
 
 local function PopulateSpawns()
 	spawns = {}

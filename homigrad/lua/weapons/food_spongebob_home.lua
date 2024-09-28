@@ -86,6 +86,7 @@ function SWEP:PrimaryAttack()
 	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
 	if(SERVER)then
+		self:GetOwner().Metabolizm = self:GetOwner().Metabolizm + 0.25
 		self:GetOwner().hungryregen = self:GetOwner().hungryregen + 1
 		self:Remove()
 		sound.Play(healsound, self:GetPos(),75,100,0.5)

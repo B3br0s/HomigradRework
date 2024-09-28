@@ -76,12 +76,12 @@ if engine.ActiveGamemode() == "homigrad" then
 				ent:EmitSound( "Player.DrownContinue", 40,100, 0.6, CHAN_AUTO )
 			end
 	
-			--[[if ply:Health() <= 0 then
+			if ply:Health() <= 0 then
 				ply.KillReason = "water"
 				ply:Kill()
 	
 				return
-			end--]]
+			end
 		end
 	
 		ply.stamina = math.Clamp(ply.stamina,0,100)

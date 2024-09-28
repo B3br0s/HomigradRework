@@ -4,7 +4,7 @@ swat.Name = "SWAT"
 
 swat.red = {"SWAT",Color(55,55,150),
 	weapons = {"weapon_hands","weapon_police_bat","med_band_big","med_band_small","weapon_taser","weapon_handcuffs","weapon_radio","weapon_hg_flashbang","weapon_glock"},
-	main_weapon = {"weapon_ar15","weapon_mp5","weapon_ak74u","weapon_galil"},
+	main_weapon = {"weapon_ar15","weapon_m4a1"},
 	secondary_weapon = {"darkrp_doom_ram"},
 	models = {"models/monolithservers/mpd/male_04.mdl","models/monolithservers/mpd/male_03.mdl","models/monolithservers/mpd/male_05.mdl","models/monolithservers/mpd/male_02.mdl"}
 }
@@ -12,8 +12,8 @@ swat.red = {"SWAT",Color(55,55,150),
 
 swat.blue = {"Боевики",Color(200,35,35),
 	weapons = {"weapon_hands","med_band_small","weapon_molotok"},
-	main_weapon = {"weapon_mag7","weapon_remington870","weapon_mp5","weapon_hands","weapon_mp7","weapon_saiga12"},
-	secondary_weapon = {"weapon_glock","weapon_hk_usp","weapon_makarov","weapon_glock18","weapon_p220","weapon_beretta","weapon_r8"},
+	main_weapon = {"weapon_hands","weapon_hands","weapon_ar15"},
+	secondary_weapon = {"weapon_glock","weapon_hk_usp","weapon_glock18","weapon_p220","weapon_beretta","weapon_r8"},
 	models = tdm.models
 }
 

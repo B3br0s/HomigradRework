@@ -123,6 +123,7 @@ function SWEP:PrimaryAttack()
 	if(SERVER)then
 		self:GetOwner().hungryregen = self:GetOwner().hungryregen + 5
 		self:GetOwner().stamina = self:GetOwner().stamina + 10
+		self:GetOwner().Metabolizm = self:GetOwner().Metabolizm + 0.1
 		if self.OstalosVipit > 0 then
 		self:SetNextPrimaryFire(CurTime() + 2)
 		sound.Play(healsound, self:GetPos(),75,100,0.5)
