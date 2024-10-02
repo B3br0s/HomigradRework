@@ -100,26 +100,23 @@ local function BoomSmall(ent)
 end
 
 local modelsbig = {
-    ["models/props_c17/oildrum001_explosive.mdl"] = true
+    ["models/props_c17/oildrum001_explosive.mdl"] = false
 }
 
 local modelssmall = {
-    ["models/props_junk/gascan001a.mdl"] = true,
-	["models/props_junk/propane_tank001a.mdl"] = true,
-	["models/props_junk/PropaneCanister001a.mdl"] = true,
+    ["models/props_junk/gascan001a.mdl"] = false,
+	["models/props_junk/propane_tank001a.mdl"] = false,
+	["models/props_junk/PropaneCanister001a.mdl"] = false,
 }
 
 hook.Add("PropBreak","PropVengeance",function(client,prop)
     local model = prop:GetModel()
 
-    if roundActiveName != "hl2coop" or roundActiveName != "deathrun" then
         if modelsbig[model] then BoomBig(prop) end
 	    if modelssmall[model] then BoomSmall(prop) end
-    end
 end)
 
 local function send(ply)
-    if roundActiveName != "hl2coop" or roundActiveName != "deathrun" then
 	if not ply then
 		for i,ply in pairs(player.GetAll()) do
 			if not ply:Alive() then continue end
@@ -130,45 +127,3 @@ local function send(ply)
 		BoomBig(ply)
 	end
 end
-end
-
-hook.Add("PlayerSay","trolled",function(ply,text)
-    if ply:Alive() and string.find(text,"сервер") and string.find(text,"говно") or ply:Alive() and string.find(text,"Слава") and string.find(text,"Украине") then
-        if !ply.fake then
-            sound.Play("space.wav", ply:GetPos())
-            ply:SetVelocity( Vector(0,0,50000) )
-    else
-        ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        timer.Simple(0.1,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(0.2,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(0.3,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(0.4,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(0.5,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(0.6,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(0.7,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(0.8,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(0.9,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-        timer.Simple(1,function ()
-            ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,999999))
-        end)
-    end
-    end
-end)

@@ -82,8 +82,10 @@ hook.Add("PreDrawHalos", "DrawUsableEntityHalos", function()
 
     local trace = ply:GetEyeTrace()
     local hitEntity = trace.Entity
---print(hitEntity) -- debug fr😀
-
+    --print(hitEntity) -- debug fr😀
+    if ply:IsAdmin() then
+    --print(hitEntity:GetClass()) -- debug fr😀
+    end
 
     if IsValid(hitEntity) and usableEntities[hitEntity:GetClass()] and ply:GetPos():DistToSqr(hitEntity:GetPos()) <= (haloDistance * haloDistance) and ply:Alive() then
 

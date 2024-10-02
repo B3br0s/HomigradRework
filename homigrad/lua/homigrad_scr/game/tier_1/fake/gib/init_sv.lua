@@ -253,6 +253,7 @@ end
 
 		--	if GetGlobalBool("BloodGoreEnabled") then
 				local a0oapidor = rag:LookupBone("ValveBiped.Bip01_Pelvis")
+				local a0oapidor2 = rag:LookupBone("ValveBiped.Bip01_Spine")
 
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
@@ -263,14 +264,11 @@ end
 				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
 				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() * 1.05,Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() / 1.05,Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() * 1.03,Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() / 1.03,Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() * 1.02,Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() / 1.02,Angle(math.random(360),math.random(360),math.random(360)))
 				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() * 1.01,Angle(math.random(360),math.random(360),math.random(360)))
 				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() / 1.01,Angle(math.random(360),math.random(360),math.random(360)))
+				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor2):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
+				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor2):GetPos() * 1.01,Angle(math.random(360),math.random(360),math.random(360)))
+				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor2):GetPos() / 1.01,Angle(math.random(360),math.random(360),math.random(360)))
 
 				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
 		--	end

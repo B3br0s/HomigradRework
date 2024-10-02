@@ -59,7 +59,7 @@ SWEP.HoldType = "revolver"
 ------------------------------------------
 
 function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(2,math.Rand(-0.2,0.2),0)
+    self.eyeSpray = self.eyeSpray - Angle(3,math.Rand(-0.1,0.1),0)
 end
 
 SWEP.Slot					= 2
@@ -67,38 +67,20 @@ SWEP.SlotPos				= 1
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_r8.mdl"
+SWEP.ViewModel				= "models/csgo/weapons/w_pist_revolver.mdl"
 SWEP.WorldModel				= "models/csgo/weapons/w_pist_revolver.mdl"
 SWEP.OtherModel				= "models/weapons/arccw_go/v_pist_r8.mdl"
 
 SWEP.vbwPos = Vector(8.5,-10,-8)
 
-SWEP.addAng = Angle(0,0.5,0)
-SWEP.addPos = Vector(0,-5,0)
+SWEP.addPos = Vector(0,0,-1)
+SWEP.addAng = Angle(-4.4,0.5,0)
+
 SWEP.MuzzleFXPos = Vector(0,1,0)
 
-SWEP.ValidAttachments = {
-    ["Leapers"] = {
-        positionright = 1.66,
-        positionforward = 7,
-        positionup = -5.9,
-
-        angleforward = 180,
-        angleright = 10,
-        angleup = 0,
-
-        holosight = true,
-        newsight = true,
-        aimpos = Vector(5.1,7,0),
-        aimang = Angle(0,0,0),
-
-        scale = 1,
-        model = "models/weapons/arc9/darsu_eft/mods/scope_all_leapers_utg_38_ita_1x30.mdl",
-    }
-}
-SWEP.dwmModeScale = 1 -- pos
+    SWEP.dwmModeScale = 1 -- pos
     SWEP.dwmForward = -13
-    SWEP.dwmRight = 5.32
+    SWEP.dwmRight = 5.3
     SWEP.dwmUp = -1.47
     
     SWEP.dwmAUp = 0 -- ang
@@ -167,8 +149,6 @@ SWEP.dwmModeScale = 1 -- pos
         end
     end
 
-    
-    
     function SWEP:DrawWorldModel()
         local owner = self:GetOwner()
         if LocalPlayer() == owner then

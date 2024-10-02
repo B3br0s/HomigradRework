@@ -62,15 +62,14 @@ SWEP.SlotPos				= 0
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/weapons/arccw_go/v_rif_ak47.mdl"
+SWEP.ViewModel				= "models/pwb/weapons/w_akm.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_akm.mdl"
 SWEP.OtherModel				= "models/weapons/arccw_go/v_rif_ak47.mdl"
 
 SWEP.vbwPos = Vector(5,-6,-6)
 
-SWEP.addAng = Angle(0,0,0)
-SWEP.addPos = Vector(30,-5,-2)
-SWEP.MuzzleFXPos = Vector(0,1,0)
+SWEP.addAng = Angle(-5.3,-0.5,0)
+SWEP.addPos = Vector(0,0,0)
 function SWEP:ApplyEyeSpray()
     self.eyeSpray = self.eyeSpray - Angle(0.2,math.Rand(-0.5,0.5),0)
 end 

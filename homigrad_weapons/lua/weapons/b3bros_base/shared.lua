@@ -435,40 +435,8 @@ homigrad_weapons = homigrad_weapons or {}
 
 function SWEP:Initialize()
 	homigrad_weapons[self] = true
-
 	self.Instructions = ("Урон: "..self.Primary.Damage.."                                           ".."Время До Выстрела: "..self.ShootWait.."       Вместительность:"..self:GetMaxClip1())
-
-
-	local skini = {
-		"phoenix_storms/mat/mat_phx_carbonfiber",
-		"pure_noise/grayscale_uniform_lit",
-		"pure_noise/moving/rgb_uniform_lit",
-		"sal/acc/armor01_3",
-		"sal/acc/armor01_4",
-		"sal/acc/armor01_5",
-		"models/foodnhouseholditems/cj_b_plastic",
-		"models/jacky_camouflage/digi",
-		"models/jacky_camouflage/digi2",
-	--	"models/flesh",
-		"models/debug/debugwhite",
-	--	"models/props_c17/frostedglass_01a",
-	--	"models/wireframe",
-		"phoenix_storms/stripes",
-		"sal/acc/armor01_2",
-	--	"models/props/cs_office/clouds",
-		"models/props/cs_assault/dollar",
-		"phoenix_storms/black_chrome",
-		"models/dav0r/hoverball",
-	}
-
---	local foundIndex, foundTable = FindInTableByName(skini, GetConVar("hg_skin"):GetString())
-	if SERVER then
-	--	self:SetNWString( "skin", foundTable.skin )
-	self:SetNWString( "skin", table.Random(skini) )
-	end
-
 	self.lerpClose = 0
-
 end
 
 function SWEP:PrePrimaryAttack()
@@ -1158,12 +1126,9 @@ function SWEP:Deploy()
 	if SERVER then
 		self:GetOwner():EmitSound("homigrad/player/deploy"..math.random(1,3)..".wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
 	end
-
 	self.NextShot = CurTime() + 0.5
-
-	self:SetHoldType( self.HoldType )
+	self:SetHoldType(self.HoldType)
 end
-
 function SWEP:ShouldDropOnDie()
 	return true
 end

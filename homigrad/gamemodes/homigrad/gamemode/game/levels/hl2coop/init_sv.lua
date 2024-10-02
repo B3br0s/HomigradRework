@@ -114,46 +114,15 @@ function hl2coop.PlayerCanJoinTeam(ply,teamID)
 	ply.hl2coopForceT = nil
 
 	if teamID == 3 then
-		if ply:IsAdmin() then
-			ply:ChatPrint("Милости прошу")
-			ply:Spawn()
-
-			return true
-		else
-			ply:ChatPrint("Иди нахуй")
-
-			return false
-		end
+		return false
 	end
 
     if teamID == 1 then
-		if ply:IsAdmin() then
-			ply.hl2coopForceT = true
-
-			ply:ChatPrint("Милости прошу")
-
-			return true
-		else
-			ply:ChatPrint("Пашол нахуй")
-
-			return false
-		end
+		return true
 	end
 
 	if teamID == 2 then
-		if ply:Team() == 1 then
-			if ply:IsAdmin() then
-				ply:ChatPrint("ладно.")
-
-				return true
-			else
-				ply:ChatPrint("Просижовай жопу до конца раунда, лох.")
-
-				return false
-			end
-		end
-
-		return true
+		return false
 	end
 end
 

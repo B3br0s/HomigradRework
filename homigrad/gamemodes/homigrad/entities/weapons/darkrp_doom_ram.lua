@@ -24,16 +24,10 @@ SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
 SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl"
 SWEP.ViewModelFOV = 54
 
-SWEP.HitDistance = 80
+SWEP.HitDistance = 120
 
 function SWEP:Initialize()
     self:SetHoldType("rpg")
-end
-
-local function IsDoor(ent)
-    if not IsValid(ent) then return false end
-    local class = ent:GetClass()
-    return class == "prop_door_rotating" or class == "func_door" or class == "func_door_rotating"
 end
 
 function SWEP:PrimaryAttack()
@@ -44,11 +38,16 @@ function SWEP:PrimaryAttack()
     self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav")
 
     if SERVER then
+        util.AddNetworkString("HuyJopaPizda")
         local tr = owner:GetEyeTrace()
         local target = tr.Entity
 
-        if IsDoor(target) and tr.HitPos:Distance(owner:GetPos()) <= self.HitDistance then
+        if tr.HitPos:Distance(owner:GetPos()) <= self.HitDistance then
             self:EmitSound("snd_jack_hmcd_explosion_far.wav")
+
+            net.Start("HuyJopaPizda")
+            net.WriteString("snd_jack_hmcd_explosion_far.wav")
+            net.Send(self:GetOwner())
 
             if target:GetClass() == "prop_door_rotating" then
                 local doorPos = target:GetPos()
@@ -71,7 +70,11 @@ function SWEP:PrimaryAttack()
                 local phys = physDoor:GetPhysicsObject()
                 if IsValid(phys) then
                     local forceDirection = owner:GetAimVector() * 10000
+                    for i = 1,50 do
+                        timer.Simple(0.001 * i,function ()
                     phys:ApplyForceCenter(forceDirection)
+                    end)
+                end
                 end
             elseif target:GetClass() == "func_door" or target:GetClass() == "func_door_rotating" then
                 local doorPos = target:GetPos()
@@ -95,14 +98,62 @@ function SWEP:PrimaryAttack()
                 local phys = physDoor:GetPhysicsObject()
                 if IsValid(phys) then
                     local forceDirection = owner:GetAimVector() * 10000
+                    for i = 1,50 do
+                    timer.Simple(0.001 * i,function ()
                     phys:ApplyForceCenter(forceDirection)
+                    end)
+                end
+                end
+            elseif target:GetClass() == "player" then
+                Faking(target)
+            
+                    local ragdoll = target:GetNWEntity("Ragdoll")
+                    if IsValid(ragdoll) then
+                        local forceDirection = owner:GetAimVector() * 99999999 * 50
+                        for i = 1,50 do
+                        timer.Simple(0.001 * i,function ()
+                            ragdoll:GetPhysicsObject():ApplyForceCenter(forceDirection * 2)    
+                        end)
+                        end
+                    else
+                        print("Ragdoll entity is not valid!")
+                    end
+                elseif target:GetClass() == "prop_ragdoll" then
+                    if IsValid(target) then
+                        local forceDirection = owner:GetAimVector() * 100
+                        local ragdoll = target
+                
+                        -- Number of physics objects (body parts) in the ragdoll
+                        local numPhysObjs = ragdoll:GetPhysicsObjectCount()
+                
+                        for i = 1, 50 do
+                            timer.Simple(0.01 * i, function()
+                                -- Apply force to each physics object (each body part) of the ragdoll
+                                for physIndex = 0, numPhysObjs - 1 do
+                                    local physObj = ragdoll:GetPhysicsObjectNum(physIndex)
+                                    if IsValid(physObj) then
+                                        physObj:ApplyForceCenter(forceDirection * 2)
+                                    end
+                                end
+                            end)
+                        end
+                    else
+                        print("Ragdoll entity is not valid!")
+                    end
                 end
             end
+            
         else
             self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav")
         end
-    end
 end
+
+if CLIENT then
+    net.Receive("HuyJopaPizda",function ()
+        LocalPlayer():EmitSound(net.ReadString())
+    end)  
+end
+
 
 function SWEP:SecondaryAttack()
 end

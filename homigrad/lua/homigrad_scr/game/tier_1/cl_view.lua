@@ -219,6 +219,7 @@ local scrw, scrh = ScrW(), ScrH()
 local whitelistweps = {
 	["weapon_physgun"] = true,
 	["gmod_tool"] = true,
+	["weapon_physcannon"] = true,
 	["gmod_camera"] = true,
 	["drgbase_possessor"] = true,
 }

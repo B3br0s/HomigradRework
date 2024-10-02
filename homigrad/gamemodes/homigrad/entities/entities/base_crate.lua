@@ -16,6 +16,7 @@ local items = {
     {item = "weapon_t", icon = "vgui/tomahawk.png", rarity = "Rare"},
     {item = "food_fishcan", icon = "vgui/fishcan.png", rarity = "Common"},
     {item = "food_lays", icon = "vgui/chips.png", rarity = "Common"},
+    {item = "weapon_de", icon = "vgui/weapon_csgo_deagle.png", rarity = "Ultra Rare"},
     {item = "weapon_fnp", icon = "vgui/weapon_csgo_tec9.png", rarity = "Ultra Rare"},
     {item = "Empty", icon = "null.vmt", rarity = "None"},
     {item = "Empty", icon = "null.vmt", rarity = "None"}
@@ -118,6 +119,7 @@ if CLIENT then
         panel:ShowCloseButton(false)
         panel:MakePopup()
 
+
         panel.Paint = function(self, w, h)
             draw.RoundedBox(0, 0, 0, w, h, Color(31, 31, 31, 255))
         end
@@ -197,7 +199,7 @@ if CLIENT then
                     local rotationAngle = 0
 
                     loading.Paint = function(self, w, h)
-                        rotationAngle = (rotationAngle + 2.5) % 360
+                        rotationAngle = (rotationAngle + 5) % 360
                         local cx, cy = w / 2, h / 2
                         surface.SetDrawColor(255, 255, 255, 255)
                         surface.SetMaterial(self:GetMaterial())

@@ -2,14 +2,14 @@ if not engine.ActiveGamemode() == "homigrad" then return end
 COMMANDS = COMMANDS or {}
 
 local explosions = {
-    ["models/props_junk/gascan001a.mdl"] = true,
-	["models/props_junk/propane_tank001a.mdl"] = true,
-	["models/props_junk/PropaneCanister001a.mdl"] = true,
-    ["models/props_c17/oildrum001_explosive.mdl"] = true,
-    ["models/props_junk/metalgascan.mdl"] = true,
-    ["models/props_c17/canister02a.mdl"] = true,
-    ["models/props_c17/canister01a.mdl"] = true,
-    ["models/props_c17/oildrum001.mdl"] = true
+    ["models/props_junk/gascan001a.mdl"] = false,
+	["models/props_junk/propane_tank001a.mdl"] = false,
+	["models/props_junk/PropaneCanister001a.mdl"] = false,
+    ["models/props_c17/oildrum001_explosive.mdl"] = false,
+    ["models/props_junk/metalgascan.mdl"] = false,
+    ["models/props_c17/canister02a.mdl"] = false,
+    ["models/props_c17/canister01a.mdl"] = false,
+    ["models/props_c17/oildrum001.mdl"] = false
 }
 
 local function BoomSmall(ent)
@@ -36,7 +36,7 @@ local function BoomSmall(ent)
             end)
     
             JMod.WreckBuildings(ent, SelfPos, PowerMult/2)
-            JMod.BlastDoors(ent, SelfPos, PowerMult)
+            JMod.BlastDoors(ent, SelfPos, PowerMult * 500)
             if roundActiveName != "hl2coop" or roundActiveName != "deathrun" then
             for i = 1, 3 do
                 local FireVec = ( VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()

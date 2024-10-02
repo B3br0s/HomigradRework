@@ -3,7 +3,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	local EntityMeta = FindMetaTable("Entity")
 
 	local handsarrivetime = 0.225
-	local forwardarrivetime = 0.2
+	local forwardarrivetime = 0.3
 	local backarrivetime = 0.1
 	local velocititouebat = 25
 	-- угол
@@ -106,8 +106,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		local info = ply.Info
 		info.Hp = ply:Health()
 		info.Armor = ply:Armor()
-		ply:SetNWBool("LeftArm",false)
-		ply:SetNWBool("RightArm",false)
+		ply:SetNWBool("LeftArmm",false)
+		ply:SetNWBool("RightArmm",false)
 		return info
 	end
 
@@ -467,8 +467,8 @@ if engine.ActiveGamemode() == "homigrad" then
 	end)
 
 	hook.Add("PostPlayerDeath","fuckyou",function(ply)
-		ply:SetNWBool("LeftArm",false)
-		ply:SetNWBool("RightArm",false)
+		ply:SetNWBool("LeftArmm",false)
+		ply:SetNWBool("RightArmm",false)
 	end)
 
 	hook.Add("PhysgunDrop", "DropPlayer", function(ply,ent)
@@ -581,8 +581,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		if ply:GetNWEntity("Ragdoll").isheld==true then return nil end
 		if ply.Seizure then return end
 
-		ply:SetNWBool("LeftArm",false)
-		ply:SetNWBool("RightArm",false)
+		ply:SetNWBool("LeftArmm",false)
+		ply:SetNWBool("RightArmm",false)
 
 		if ply.brokenspine then return nil end
 		if IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll"):GetVelocity():Length()>200 then return nil end
@@ -596,8 +596,8 @@ if engine.ActiveGamemode() == "homigrad" then
 
 		if ply:Alive() then
 			if not GetGlobalBool("NoFake") then
-			ply:SetNWBool("LeftArm",false)
-			ply:SetNWBool("RightArm",false)
+			ply:SetNWBool("LeftArmm",false)
+			ply:SetNWBool("RightArmm",false)
 			Faking(ply)
 			ply.fakeragdoll=ply:GetNWEntity("Ragdoll")
 			end
@@ -706,7 +706,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		["models/petaly/peter_griffin/petergriffin2.mdl"] = 80,
 		["models/player/open season/boog.mdl"] = 60,
 		["models/it/pennywise/pennywisev2/player/Pennywise_player.mdl"] = 60,
-		["models/kuhnya/barinov.mdl"] = 60
+		["models/kuhnya/barinov.mdl"] = 60,
+		["models/player/Taa.mdl"] = 60
 	}
 
 	for i = 1,6 do
@@ -718,7 +719,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	end
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = 100
+		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = 30
 	end
 
 	for i = 1,9 do
@@ -777,7 +778,25 @@ if engine.ActiveGamemode() == "homigrad" then
 		
 		rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 		if IsValid(rag:GetPhysicsObject()) then
-			rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 40)
+			rag:GetPhysicsObject():SetMass(25)
+			local basic1 = handsarrivetime
+			local basic2 = forwardarrivetime
+			local basic3 = backarrivetime
+
+			--[[print(basic1)
+			print(basic2)
+			print(basic3)]]
+
+			if CustomWeight[rag:GetModel()] then
+				handsarrivetime = 0.5
+				forwardarrivetime = 1
+				backarrivetime = 0.8
+			else
+				handsarrivetime = 0.225
+				forwardarrivetime = 0.3
+				backarrivetime = 0.1
+			end
+			
 		end
 		rag:Activate()
 		rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -964,7 +983,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	end)
 
 	hook.Add( "KeyPress", "Shooting", function( ply, key )
-		if !ply:Alive() or ply.Otrub then ply:SetNWBool("LeftArm",false) ply:SetNWBool("RightArm",false) return end
+		if !ply:Alive() or ply.Otrub then ply:SetNWBool("LeftArmm",false) ply:SetNWBool("RightArmm",false) return end
 		
 		if key == IN_RELOAD then
 			Reload(ply.wep)
@@ -1173,7 +1192,7 @@ if engine.ActiveGamemode() == "homigrad" then
 					}
 					head:Wake()
 					head:ComputeShadowControl(shadowparams)
-					if ply:GetNWBool("LeftArm") and ply:GetNWBool("RightArm") and ply:KeyDown(IN_BACK) then
+					if ply:GetNWBool("LeftArmm") and ply:GetNWBool("RightArmm") and ply:KeyDown(IN_BACK) then
 					ohhspina:Wake()
 					ohhspina:ComputeShadowControl(shadowparams2)
 					penis:Wake()
@@ -1266,13 +1285,13 @@ if engine.ActiveGamemode() == "homigrad" then
 						if(trace.Hit and !trace.HitSky)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
-								ply:SetNWBool("LeftArm",true)
+								ply:SetNWBool("LeftArmm",true)
 								rag:EmitSound("grabhand.wav",500,100,0.5,CHAN_AUTO)
 								rag.ZacConsLH=cons
 							end
 							break
 						elseif(trace.Hit and trace.HitSky)then
-							ply:SetNWBool("LeftArm",false)
+							ply:SetNWBool("LeftArmm",false)
 						end
 					end
 				end
@@ -1281,7 +1300,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				if(IsValid(rag.ZacConsLH))then
 					rag.ZacConsLH:Remove()
 					rag.ZacConsLH=nil
-					ply:SetNWBool("LeftArm",false)
+					ply:SetNWBool("LeftArmm",false)
 				end
 			end
 			if(ply:KeyDown(IN_WALK)) and !RagdollOwner(rag).Otrub and !timer.Exists("StunTime"..ply:EntIndex()) then
@@ -1307,13 +1326,13 @@ if engine.ActiveGamemode() == "homigrad" then
 						if(trace.Hit and !trace.HitSky)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
-								ply:SetNWBool("RightArm",true)
+								ply:SetNWBool("RightArmm",true)
 								rag.ZacConsRH=cons
 								rag:EmitSound("grabhand.wav",500,100,0.5,CHAN_AUTO)
 							end
 							break
 						elseif(trace.Hit and trace.HitSky)then
-							ply:SetNWBool("RightArm",false)
+							ply:SetNWBool("RightArmm",false)
 						end
 					end
 				end
@@ -1321,7 +1340,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				if(IsValid(rag.ZacConsRH))then
 					rag.ZacConsRH:Remove()
 					rag.ZacConsRH=nil
-					ply:SetNWBool("RightArm",false)
+					ply:SetNWBool("RightArmm",false)
 				end
 			end
 			if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH))then
@@ -1355,7 +1374,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
-					if ply:GetNWBool("LeftArm") == true and ply:GetNWBool("RightArm") == true then
+					if ply:GetNWBool("LeftArmm") == true and ply:GetNWBool("RightArmm") == true then
 					phys:Wake()
 					phys:ComputeShadowControl(shadowparams1)
 					else

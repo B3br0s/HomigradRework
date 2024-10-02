@@ -200,7 +200,7 @@ function homicide.HUDPaint_RoundLeft(white2)
 
         color.a = 255 * (1 - dis / 350)
         draw.SimpleText(roundTimeStart, "HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-        print(roundTimeStart)
+        --print(roundTimeStart)
         draw.SimpleText(ply:Nick(),"HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end

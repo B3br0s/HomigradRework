@@ -6,7 +6,6 @@ local aABASDBASDBABDSB = true
 local started = false
 function swat.StartRoundCL()
 end
-
 function swat.HUDPaint_RoundLeft(white)
     local lply = LocalPlayer()
 	local name,color = swat.GetTeamName(lply)
@@ -14,18 +13,31 @@ function swat.HUDPaint_RoundLeft(white)
 
     if (roundTimeStart + roundTimeSWAT - CurTime()) <= 0 and not started == true then
         started = true
-        surface.PlaySound("swatarrive.wav")
+        timer.Simple(0.5,function ()
+            surface.PlaySound("swatarrive"..randomm..".wav")   
+        end)
     end
     if (roundTimeStart + roundTimeSWAT - CurTime()) > 116 then
         if aABASDBASDBABDSB == true then
             aABASDBASDBABDSB = false
             started = false
-            surface.PlaySound("swatuntil.wav")
+            randomm = math.random(1,2) 
+            print(randomm)
+            surface.PlaySound("swatuntil"..randomm..".wav")
+            timer.Simple(5,function() aABASDBASDBABDSB = true end )
+        end
+    end
+    if (roundTimeStart + roundTimeSWAT - CurTime()) > 29 and (roundTimeStart + roundTimeSWAT - CurTime()) < 31 then
+        if aABASDBASDBABDSB == true then
+            aABASDBASDBABDSB = false
+            started = false
+            surface.PlaySound("swatin30sec"..math.random(1,3)..".wav")
             timer.Simple(5,function() aABASDBASDBABDSB = true end )
         end
     end
     
     if startRound > 0 and lply:Alive() then
+        randomm = math.random(1,2)
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.5,0.5)
         draw.DrawText( "Ваша команда " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "SWAT", "HomigradFontBig", ScrW() / 2, ScrH() / 8, Color( 155,155,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )

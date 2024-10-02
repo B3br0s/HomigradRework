@@ -56,25 +56,24 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.DrawAmmo				= true
     SWEP.DrawCrosshair			= false
     
-    SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_deagle.mdl"
+    SWEP.ViewModel				= "models/csgo/weapons/w_pist_deagle.mdl"
     SWEP.WorldModel				= "models/csgo/weapons/w_pist_deagle.mdl"
     SWEP.OtherModel				= "models/weapons/arccw_go/v_pist_deagle.mdl"
     
     function SWEP:ApplyEyeSpray()
-        self.eyeSpray = self.eyeSpray - Angle(9,math.Rand(-1,1),0)
+        self.eyeSpray = self.eyeSpray - Angle(4,math.Rand(-1,1),0)
     end 
 
     SWEP.dwsPos = Vector(13,13,5)
     SWEP.dwsItemPos = Vector(10,-1,-2)
     
-    SWEP.addAng = Angle(1,-0.2,0)
     if CLIENT then
     SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
     SWEP.BounceWeaponIcon = false
     end
-    SWEP.addPos = Vector(30,-4,-2.2)
-    
-    SWEP.MuzzleFXPos = Vector(30,-5,-2)
+
+    SWEP.addPos = Vector(0,-1,-1)
+    SWEP.addAng = Angle(-4,-0.3,0)
     --SWEP.vbwPos = Vector(7,-10,-6)
 
     SWEP.dwmModeScale = 1 -- pos

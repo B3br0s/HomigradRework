@@ -1,6 +1,8 @@
 if not engine.ActiveGamemode() == "homigrad" then return end
 nodraw_players = nodraw_players or {}
 
+local pressedalredi = false
+
 hook.Add("Think","ShouldDrawNoclipe",function()
 	local lply = LocalPlayer()
 
@@ -41,6 +43,46 @@ hook.Add("HUDPaint","homigrad-huynyui",function()
 	local lply = LocalPlayer()
 
 	if not lply:Alive() then return end
+	
+	if roundActiveName == "construct" then
+		local text
+
+		local ply = lply
+		local t = {}
+		local eye = ply:GetAttachment(ply:LookupAttachment("eyes"))
+		
+		t.start = eye and eye.Pos or ply:EyePos()
+		t.endpos = t.start + ply:GetAngles():Forward() * 60
+		t.filter = lply
+		local Tr = util.TraceLine(t)
+
+		local Size = math.Clamp(1 - ((Tr.HitPos -lply:GetShootPos()):Length() / 60) ^ 2, .1, .3)
+
+		local ent = Tr.Entity
+ 
+	if IsValid(ent) then
+		if ent:GetClass() == "player" then
+		if IsValid(lply:GetActiveWeapon()) and lply:GetActiveWeapon():GetClass() != "weapon_hands" then
+			surface.SetDrawColor(Color(255, 255, 255, 255 * Size/0.5))
+			Circle(Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y, 105 * Size, 32)
+			Circle(Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y, 75 * Size, 32)
+		end
+		if ply:KeyPressed(IN_USE) and not pressedalredi and not ent:GetNWBool("InTeam") then
+			pressedalredi = true
+			ply:ChatPrint(ent:Name().." Приглашён в команду")
+			timer.Simple(0.5,function ()
+				pressedalredi = false
+			end)
+			net.Start("InvitePlayer")
+			net.WriteEntity(ply)
+			net.WriteEntity(ent)
+			net.SendToServer()
+		end
+		if ent:GetNWBool("InTeam") then return end
+		draw.DrawText("Пригласить "..ent:Name().." в команду.","HomigradFont",Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y + 135, Color(255,255,255), TEXT_ALIGN_CENTER )
+		end
+	end
+	end
 
 	if IsValid(lply:GetActiveWeapon()) and lply:GetActiveWeapon():GetClass() != "weapon_hands" then
 		local ply = lply

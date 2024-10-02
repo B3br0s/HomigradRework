@@ -28,15 +28,17 @@ function GM:PlayerSpawn(ply)
 	ply.attackees = {}
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
-	ply.Metabolizm = math.random(1,1.3)
-	ply:SetNWBool("RightArm",false)
-	ply:SetNWBool("LeftArm",false)
+	ply.Metabolizm = math.random(1,1.1)
+	ply:SetNWBool("RightArmm",false)
+	ply:SetNWBool("LeftArmm",false)
 	ply:SetNWBool("fake",false)
 	ply:SetNWEntity("Ragdoll",nil)
 	ply.virusvichblya = false
 	ply.slendermanblya = false
 	ply.pain = 0
 	ply.Paralizovan = false
+	ply.InviterToTeam = NULL
+	ply:SetNWBool("InTeam",false)
 	ply:SetNWFloat("pain",0)
 	ply:SetNWFloat("painlosing",0)
 	ply:SetNWFloat("Bloodlosing",0)
@@ -45,7 +47,7 @@ function GM:PlayerSpawn(ply)
 	ply:SetNWFloat("adrenaline",0)
 
 	if ply:IsAdmin() then
-		ply.Metabolizm = 2
+		ply.Metabolizm = 3
 	end
 
 	if ply.NEEDKILLNOW then
@@ -230,7 +232,7 @@ COMMANDS.afk = {function(ply,args)
 end}
 
 COMMANDS.forceartery = {function(ply,args)
-
+	if ply:IsAdmin() then
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
 					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
@@ -244,13 +246,23 @@ COMMANDS.forceartery = {function(ply,args)
 					ply.Organs['spine']=0
 					ply:TakeDamage(50)
 	end
+end
 end}
 
 COMMANDS.forcepain = {function(ply,args)
-
+	if ply:IsAdmin() then
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 					ply.pain = args[2]
-					ply:TakeDamage(50)
+	end
+	end
+end}
+
+COMMANDS.forcemb = {function(ply,args)
+	if ply:IsAdmin() then
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+					ply.Metabolizm = args[2]
+					ply:ChatPrint("Ваш метаболизм был прокачен администрацией до "..args[2])
+	end
 	end
 end}
 
@@ -340,7 +352,8 @@ hook.Add("Player Think","HasGodMode Rep",function(ply)
 	 ply:SetNWBool("HasGodMode",ply:HasGodMode()) 
 	 ply:SetNWFloat("painlosing",ply.painlosing) 
 	 ply:SetNWFloat("pain",ply.pain) 
-	 ply:SetNWFloat("Blood",ply.Blood) 
+	 ply:SetNWFloat("Blood",ply.Blood)
+	 ply:SetNWEntity("InviterToTeam",ply.InviterToTeam) 
 	 ply:SetNWFloat("Bloodlosing",ply.Bloodlosing) 
 	 ply:SetNWFloat("o2",ply.o2)
 	 ply:SetNWBool("paraliz",ply.Paralizovan)
@@ -402,23 +415,3 @@ net.Receive("lasertgg",function(len,ply)
 	net.WriteBool(boolen)
 	net.Broadcast()
 end)
-
-/*function GM:IsSpawnpointSuitable( ply, spawnpointent, bMakeSuitable )
-
-	local Pos = spawnpointent:GetPos()
-	local Blockers = 0
-	local Ents = ents.FindInBox( Pos + Vector( -64, -64, 0 ), Pos + Vector( 64, 64, 0 ) )
-
-	--if ( ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED ) then return true end
-	if (ply:Team() == 1 or ply:Team() == 2 or ply:Team() == 3) then return true end
-
-	for k, v in pairs( Ents ) do
-		if ( IsValid( v ) and v:IsPlayer() and v:Alive() ) then
-			Blockers = Blockers + 1
-		end
-	end
-
-	if ( bMakeSuitable ) then return true end
-	if ( Blockers > 0 ) then return false end
-	return true
-end*/

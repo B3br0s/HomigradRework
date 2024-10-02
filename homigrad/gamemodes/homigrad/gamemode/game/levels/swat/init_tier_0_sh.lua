@@ -12,7 +12,7 @@ swat.red = {"SWAT",Color(55,55,150),
 
 swat.blue = {"Боевики",Color(200,35,35),
 	weapons = {"weapon_hands","med_band_small","weapon_molotok"},
-	main_weapon = {"weapon_hands","weapon_hands","weapon_ar15"},
+	main_weapon = {"weapon_hands","weapon_ar15","weapon_mp7","weapon_mag7"},
 	secondary_weapon = {"weapon_glock","weapon_hk_usp","weapon_glock18","weapon_p220","weapon_beretta","weapon_r8"},
 	models = tdm.models
 }

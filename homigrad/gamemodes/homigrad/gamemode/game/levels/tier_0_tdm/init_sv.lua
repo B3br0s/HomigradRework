@@ -98,7 +98,6 @@ changeClass = {
 
 	["item_healthvial"]="med_band_small",
 	["item_healthkit"]="med_band_big",
-	["item_healthcharger"]="medkit",
 	["item_suitcharger"]="painkiller",
 	["item_battery"]="blood_bag",
 	["weapon_alyxgun"]={"food_fishcan","food_lays","food_monster","food_spongebob_home"}

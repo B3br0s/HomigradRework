@@ -30,7 +30,7 @@ function GuiltLogic(ply,att,dmgInfo,dontApply)
 		if not dontApply then
 			local customGuiltAdd = (type(resultHook) == "number" and resultHook) or (type(resultGame) == "number" and resultGame) or (type(resultClass) == "number" and resultClass)
 
-			att.Guilt = (att.Guilt or 0) + math.random(10,15)--(customGuiltAdd or math.min(dmgInfo:GetDamage() / (3),50))
+			att.Guilt = (att.Guilt or 0) + (customGuiltAdd or math.min(dmgInfo:GetDamage() / (3),50))
 			att.DontGuiltProtect = true
 
 			GuiltCheck(att,ply)
@@ -72,7 +72,7 @@ function GuiltCheck(att,ply)
 		att.Guilt = att.Guilt - 75
 		
 		if not att.noguilt and not att:HasGodMode() then
-			if roundActiveName == "SandBox" or roundActiveName == "zombieinfection" or roundActiveName == "homicide" or roundActiveName == "eft" then
+			if roundActiveName == "SandBox" or roundActiveName == "zombieinfection" or roundActiveName == "homicide" or roundActiveName == "eft" or roundActiveName == "construct" then
 			else
 			att.pain = att.pain + 150
 			att.Bloodlosing = att.Bloodlosing + 25

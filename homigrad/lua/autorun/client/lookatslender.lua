@@ -1,4 +1,4 @@
-local slenderCheckInterval = 0.5  -- Check every 0.5 seconds to reduce performance load
+--[[local slenderCheckInterval = 0.5  -- Check every 0.5 seconds to reduce performance load
 local slenderMaxAngle = 120        -- Maximum angle from the player's view in degrees to apply damage
 
 -- Timer to periodically check if Slenderman is within the player's screen radius
@@ -31,3 +31,4 @@ timer.Create("SlendermanCheckTimer", slenderCheckInterval, 0, function()
         end
     end
 end)
+]]

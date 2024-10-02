@@ -4,7 +4,7 @@ hl2coop.Name = "Half Life 2 Coop"
 
 hl2coop.red = {"Повстанцы",Color(186,117,0),
     weapons = {"weapon_radio","weapon_hands","medkit"},
-    main_weapon = {"weapon_mag7","weapon_mp7","weapon_mp5","weapon_hands","weapon_hands"},
+    main_weapon = {"weapon_mag7","weapon_mp7","weapon_mp5","weapon_akm","weapon_ak74u"},
     secondary_weapon = {"weapon_r8","weapon_glock","weapon_p220","weapon_beretta"},
     models = {"models/player/Group03/male_05.mdl","models/player/Group03/male_05.mdl","models/player/Group03m/male_09.mdl"}
 }

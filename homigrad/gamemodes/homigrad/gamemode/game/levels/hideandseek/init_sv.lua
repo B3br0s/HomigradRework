@@ -41,12 +41,12 @@ function hideandseek.StartRoundSV(data)
 end
 
 function hideandseek.RoundEndCheck()
+	local aviable = ReadDataMap("spawnpoints_ss_police")
+
     if roundTimeStart + roundTime < CurTime() then
 		if not hideandseek.police then
 			hideandseek.police = true
 			PrintMessage(3,"Спецназ приехал.")
-
-			local aviable = ReadDataMap("spawnpoints_ss_police")
 
 			for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() and not ply.roleT and ply:Team() ~= 1002 end),1) do
 				ply:Spawn()
@@ -54,7 +54,8 @@ function hideandseek.RoundEndCheck()
                 ply:SetPlayerClass("contr")
 
 				ply:SetTeam(3)
-				
+
+				ply:SetPos(aviable[math.random(1,#aviable)][1])				
 			end
 		end
 	end

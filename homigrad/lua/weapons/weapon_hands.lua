@@ -79,7 +79,6 @@ else
 					draw.DrawText( Tr.Entity:IsPlayer() and Tr.Entity:Name() or Tr.Entity:GetNWString("Nickname") or "", "HomigradFontLarge", Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y - 30, col, TEXT_ALIGN_CENTER )
 
 				else
-
 					local Size = math.max(1 - Tr.Fraction,0.25)
 					surface.SetDrawColor(Color(200, 200, 200, 200))
 					draw.NoTexture()
@@ -98,7 +97,6 @@ else
 					col.a = 255 * Size * 2
 					Circle(Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y, 40 * Size, 32)
 					draw.DrawText( Tr.Entity:IsPlayer() and Tr.Entity:Name() or Tr.Entity:GetNWString("Nickname") or "", "HomigradFontLarge", Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y + 30, col, TEXT_ALIGN_CENTER )
-
 				end
 			end
 		else

@@ -25,7 +25,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.Force = 90/3
     SWEP.ReloadSound = ""
     SWEP.ReloadTime = 2
-    SWEP.ShootWait = 0.12
+    SWEP.ShootWait = 0.09
     SWEP.MagOut = "arccw_go/tec9/tec9_clipout.wav"
     SWEP.MagIn = "arccw_go/tec9/tec9_clipin.wav"
     SWEP.BoltIn = "arccw_go/tec9/tec9_boltpull.wav"
@@ -57,16 +57,13 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.DrawAmmo				= true
     SWEP.DrawCrosshair			= false
     
-    SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_tec9.mdl"
+    SWEP.ViewModel				= "models/csgo/weapons/w_pist_tec9.mdl"
     SWEP.WorldModel				= "models/csgo/weapons/w_pist_tec9.mdl"
     SWEP.OtherModel				= "models/weapons/arccw_go/v_pist_tec9.mdl"
     
-
-    SWEP.dwsPos = Vector(13,13,5)
-    SWEP.dwsItemPos = Vector(10,-1,-2)
     
-    SWEP.addAng = Angle(1,0,0)
-    SWEP.addPos = Vector(0,-5,0)
+    SWEP.addPos = Vector(0,0,-0.9)
+    SWEP.addAng = Angle(-5,-0.6,0)
     if CLIENT then
     SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
     SWEP.BounceWeaponIcon = false

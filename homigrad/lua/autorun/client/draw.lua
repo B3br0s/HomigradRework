@@ -18,6 +18,8 @@ local function drawStates(ply,x,y,align)
 	draw.SimpleText("metabolizm: " .. tostring(ply:GetNWFloat("metabolizm",0)),"ChatFont",x,y + 25 * 13,white,align)
 	draw.SimpleText("speed: " .. tostring(ply:GetNWFloat("speeed",0)),"ChatFont",x,y + 25 * 14,white,align)
 	draw.SimpleText("paralizovan: " .. tostring(ply:GetNWBool("paraliz",false)),"ChatFont",x,y + 25 * 15,white,align)
+	draw.SimpleText("inviter: " .. tostring(ply:GetNWEntity("InviterToTeam")),"ChatFont",x,y + 25 * 16,white,align)
+	draw.SimpleText("inteam: " .. tostring(ply:GetNWBool("InTeam",false)),"ChatFont",x,y + 25 * 17,white,align)
 end
 
 hook.Add("HUDPaint","DevCheck",function()
@@ -25,7 +27,7 @@ hook.Add("HUDPaint","DevCheck",function()
 
 	if not ply:IsSuperAdmin() then return end
 
-	drawStates(ply,45,45)
+	--drawStates(ply,45,45)
 
 	local ply = ply:GetEyeTrace().Entity
 	if not IsValid(ply) then return end
@@ -33,6 +35,6 @@ hook.Add("HUDPaint","DevCheck",function()
 	ply = RagdollOwner(ply) or ply 
 	if not ply:IsPlayer() then return end
 
-	drawStates(ply,ScrW() - 45,45,TEXT_ALIGN_RIGHT)
+	--drawStates(ply,ScrW() - 45,45,TEXT_ALIGN_RIGHT)
 end)
 end
