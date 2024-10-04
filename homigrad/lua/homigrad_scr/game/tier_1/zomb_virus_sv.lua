@@ -126,11 +126,11 @@ end,1}]]--
 concommand.Add( "hg_blevota", function( ply, cmd, args )
     if !ply:Alive() or ply.Otrub then return end
     local r = math.random(1,30)
-    if r > 27 then
+    if r > 17 then
         local snd = table.Random(blevotasfx)
         ply:EmitSound(snd)
         timer.Create("Blevota"..ply:EntIndex(),0.01,15,function()
-            ply.Blood = math.Clamp(ply.Blood - 50,0,5000)
+            ply.Blood = math.Clamp(ply.Blood - 150,0,5000)
             local ent = RagdollOwner(ply) or ply
             local att = ent:GetAttachment(ent:LookupAttachment("eyes"))
             BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())

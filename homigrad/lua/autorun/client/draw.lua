@@ -27,7 +27,7 @@ hook.Add("HUDPaint","DevCheck",function()
 
 	if not ply:IsSuperAdmin() then return end
 
-	--drawStates(ply,45,45)
+	drawStates(ply,45,45)
 
 	local ply = ply:GetEyeTrace().Entity
 	if not IsValid(ply) then return end
@@ -35,6 +35,6 @@ hook.Add("HUDPaint","DevCheck",function()
 	ply = RagdollOwner(ply) or ply 
 	if not ply:IsPlayer() then return end
 
-	--drawStates(ply,ScrW() - 45,45,TEXT_ALIGN_RIGHT)
+	drawStates(ply,ScrW() - 45,45,TEXT_ALIGN_RIGHT)
 end)
 end
