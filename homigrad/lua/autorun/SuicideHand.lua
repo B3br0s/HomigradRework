@@ -24,7 +24,8 @@ if SERVER then
 
             sound.Play("artery.wav", ply:GetPos())
             sound.Play("weapons/knife/knife_hit3.wav", ply:GetPos())
-            ply:TakeDamage(100)
+            ply:TakeDamage(50)
+            --ply:ChatPrint("мурмурмурмурмур пошёл нахуй ты тимур")
             ply.Organs["artery"] = 0
             ply:ChatPrint("Вы пробили себе артерию.")
         end
