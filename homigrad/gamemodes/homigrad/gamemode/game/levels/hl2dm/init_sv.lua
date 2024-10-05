@@ -48,13 +48,13 @@ function hl2dm.PlayerSpawn(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon)
 	
 	if teamID == 2 then
+		if math.random(1,2) == 2 then ply:Give("weapon_hg_hl2") end
+
 		ply:SetPlayerClass("combine")
 	end
 
 	if teamID == 1 then
-		if math.random(1,4) == 4 then ply:Give("adrinaline") end
-		if math.random(1,4) == 4 then ply:Give("morphine") end
-		if math.random(1,3) == 3 then ply:Give("weapon_hg_hl2") end
+		if math.random(1,2) == 2 then ply:Give("weapon_hg_hl2") end
 
 		JMod.EZ_Equip_Armor(ply,"M2")
 		JMod.EZ_Equip_Armor(ply,"ACHHC Olive")

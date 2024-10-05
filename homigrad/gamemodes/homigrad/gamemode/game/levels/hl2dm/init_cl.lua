@@ -13,7 +13,7 @@ function hl2dm.HUDPaint_RoundLeft(white)
     if startRound > 0 and lply:Alive() then
         if playsound then
             playsound = false
-            --surface.PlaySound("music/hl1_song15.mp3")
+            surface.PlaySound("music/hl1_song15.mp3")
         end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.5,0.5)
 
