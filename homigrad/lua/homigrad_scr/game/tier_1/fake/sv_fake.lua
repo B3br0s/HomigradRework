@@ -3,7 +3,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	local EntityMeta = FindMetaTable("Entity")
 
 	local handsarrivetime = 0.225
-	local forwardarrivetime = 0.3
+	local forwardarrivetime = 0.26
 	local backarrivetime = 0.1
 	local velocititouebat = 25
 	-- угол
@@ -985,12 +985,10 @@ if engine.ActiveGamemode() == "homigrad" then
 
 	local dvec = Vector(0,0,-64)
 
-		local NextThink = 0
-
 	hook.Add("Player Think","FakeSuffocation",function(ply,time)
-			if IsValid(ply:GetNWEntity("Ragdoll")) and ply:Alive() then
-			if CurTime() > NextThink then -- троллед
-				NextThink = CurTime() + 3.2
+			if ply:Alive() then
+			if CurTime() > ply:GetNWFloat("NextThinkGay") then -- троллед
+			ply:SetNWFloat("NextThinkGay",CurTime() + 3.4)
 			if table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')) > 0 then
 				--print(table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')))
 				local RopesFoNi = constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')
@@ -1005,8 +1003,8 @@ if engine.ActiveGamemode() == "homigrad" then
 							if boneName1 == "ValveBiped.Bip01_Head1" then
 								if ply.o2 > 0.97 then
 									ply:ChatPrint("Ты задыхаешься.")	
-									ply:EmitSound("homigrad/suffocation.wav")
-									ply:EmitSound("homigrad/suffocation_rope.wav")
+									ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation.wav")
+									ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope.wav")
 								end
 								ply.o2 = ply.o2 - 0.5
 								ply.stamina = ply.stamina - 20
@@ -1014,10 +1012,10 @@ if engine.ActiveGamemode() == "homigrad" then
 								ply:SetHealth(ply:Health() - 5)	
 								if ply.o2 < 0.2 and ply.o2 > 0 then
 									ply:ChatPrint("У тебя нехватка воздуха.")	
-									ply:EmitSound("npc/zombie/zombie_voice_idle"..math.random(1,12)..".wav")
+									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_voice_idle"..math.random(1,12)..".wav")
 								elseif ply.o2 < 0 and ply.Organs['artery']>0 then
 									ply.Organs['artery']=0
-									ply:EmitSound("npc/zombie/zombie_die"..math.random(1,3)..".wav")
+									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_die"..math.random(1,3)..".wav")
 								end
 								--ply:ChatPrint(ply.stamina)
 							end
@@ -1034,8 +1032,8 @@ if engine.ActiveGamemode() == "homigrad" then
 							if boneName2 == "ValveBiped.Bip01_Head1" then
 								if ply.o2 > 0.97 then
 									ply:ChatPrint("Ты задыхаешься.")	
-									ply:EmitSound("homigrad/suffocation.wav")
-									ply:EmitSound("homigrad/suffocation_rope.wav")
+									ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation.wav")
+									ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope.wav")
 								end
 								ply.o2 = ply.o2 - 0.5
 								ply.stamina = ply.stamina - 20
@@ -1043,10 +1041,10 @@ if engine.ActiveGamemode() == "homigrad" then
 								ply:SetHealth(ply:Health() - 5)	
 								if ply.o2 < 0.2 and ply.o2 > 0 then
 									ply:ChatPrint("У тебя нехватка воздуха.")	
-									ply:EmitSound("npc/zombie/zombie_voice_idle"..math.random(1,12)..".wav")
+									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_voice_idle"..math.random(1,12)..".wav")
 								elseif ply.o2 < 0 and ply.Organs['artery']>0 then
 									ply.Organs['artery']=0
-									ply:EmitSound("npc/zombie/zombie_die"..math.random(1,3)..".wav")
+									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_die"..math.random(1,3)..".wav")
 								end
 								--ply:ChatPrint(ply.stamina)
 							end
@@ -1161,8 +1159,24 @@ if engine.ActiveGamemode() == "homigrad" then
 							teleportdistance=0,
 							deltatime=0.01,
 						}
+						local shadowparams1 = {
+							secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.5,
+							pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
+							angle=ang,
+							maxangular=670,
+							maxangulardamp=600,
+							maxspeeddamp=50,
+							maxspeed=3000,
+							teleportdistance=0,
+							deltatime=0.01,
+						}
+						if ply:GetNWBool("RightArmm") == true then
+						phys:Wake()
+						phys:ComputeShadowControl(shadowparams1)
+						else
 						phys:Wake()
 						phys:ComputeShadowControl(shadowparams)
+						end
 					end
 				end
 
@@ -1196,6 +1210,17 @@ if engine.ActiveGamemode() == "homigrad" then
 						teleportdistance=0,
 						deltatime=0.01,
 					}
+					local shadowparams1 = {
+						secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.5,
+						pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
+						angle=ang,
+						maxangular=670,
+						maxangulardamp=600,
+						maxspeeddamp=50,
+						maxspeed=3000,
+						teleportdistance=0,
+						deltatime=0.01,
+					}
 					physa:Wake()
 					if (!ply.suiciding or TwoHandedOrNo[ply.curweapon]) then
 						if TwoHandedOrNo[ply.curweapon] and IsValid(ply.wep) then
@@ -1211,6 +1236,7 @@ if engine.ActiveGamemode() == "homigrad" then
 							phys:ComputeShadowControl(shadowparams)
 							shadowparams.pos=shadowparams.pos+eyeangs:Forward()*-50+eyeangs:Right()*-15
 							physa:ComputeShadowControl(shadowparams)
+							ply:ChatPrint("ssss")
 
 						elseif IsValid(ply.wep) and IsValid(ply.wep:GetPhysicsObject())then
 
@@ -1224,7 +1250,13 @@ if engine.ActiveGamemode() == "homigrad" then
 							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
 							physa:ComputeShadowControl(shadowparams)
 						else
-							physa:ComputeShadowControl(shadowparams)
+							if ply:GetNWBool("LeftArmm") == true then
+								physa:Wake()
+								physa:ComputeShadowControl(shadowparams1)
+							else
+								physa:Wake()
+								physa:ComputeShadowControl(shadowparams)
+							end
 						end
 					else
 						if ply.FakeShooting and IsValid(ply.wep) then
@@ -1437,7 +1469,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						deltatime=deltatime,
 					}
 					local shadowparams2 = {
-						secondstoarrive=ply:GetNWFloat("ForwardArrive") * 1.3,
+						secondstoarrive=ply:GetNWFloat("ForwardArrive") * 1.5,
 						pos=lh:GetPos(),
 						angle=phys:GetAngles(),
 						maxangulardamp=10,
@@ -1447,10 +1479,27 @@ if engine.ActiveGamemode() == "homigrad" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
-					if ply:GetNWBool("LeftArmm") == true and ply:GetNWBool("RightArmm") == true then
+					local shadowparams3 = {
+						secondstoarrive=ply:GetNWFloat("ForwardArrive") / 5,
+						pos=lh:GetPos(),
+						angle=phys:GetAngles(),
+						maxangulardamp=10,
+						maxspeeddamp=10,
+						maxangular=50,
+						maxspeed=speed,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
+					if ply:GetNWBool("LeftArmm") == true and ply:GetNWBool("RightArmm") == false then
 					phys:Wake()
 					phys:ComputeShadowControl(shadowparams1)
-					else
+					elseif ply:GetNWBool("LeftArmm") == false and ply:GetNWBool("RightArmm") == true then
+					phys:Wake()
+					phys:ComputeShadowControl(shadowparams1)
+					elseif ply:GetNWBool("LeftArmm") == true and ply:GetNWBool("RightArmm") == true then
+					phys:Wake()
+					phys:ComputeShadowControl(shadowparams3)
+					elseif ply:GetNWBool("LeftArmm") == false and ply:GetNWBool("RightArmm") == false then
 					phys:Wake()
 					phys:ComputeShadowControl(shadowparams2)
 					end

@@ -133,7 +133,7 @@ local soundDeaths = {
 function CLASS:PlayerDeath()
 	if not self.Otrub then 
 		local name = table.Random(soundDeaths)
-		--EmitSound(self,name)
+		EmitSound(self,name)
 	end
 
 	self:SetPlayerClass()

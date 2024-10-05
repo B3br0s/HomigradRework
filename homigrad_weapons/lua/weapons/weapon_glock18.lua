@@ -59,13 +59,13 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.BounceWeaponIcon = false
     end
     
-    SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_fiveseven.mdl"
+    SWEP.ViewModel				= "models/csgo/weapons/w_pist_fiveseven.mdl"
     SWEP.WorldModel				= "models/csgo/weapons/w_pist_fiveseven.mdl"
     SWEP.OtherModel = "models/weapons/arccw_go/v_pist_fiveseven.mdl"
     
     SWEP.vbwPos = Vector(0,0,0)
-    SWEP.addPos = Vector(13,-3.5,0)
-    SWEP.addAng = Angle(1,0,0)
+    SWEP.addPos = Vector(0,-1,-1)
+    SWEP.addAng = Angle(-4,-0.3,0)
     SWEP.AimPosition = Vector(3.85,10,1.45)
     SWEP.AimAngle = Angle(0,0,0)
     

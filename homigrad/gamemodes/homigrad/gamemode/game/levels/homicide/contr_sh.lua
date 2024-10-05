@@ -148,7 +148,7 @@ end
 local active,oldValue
 
 
-function CLASS:HomigradDamage(hitGroup,dmgInfo,rag)
+function CLASS.HomigradDamage(hitGroup,dmgInfo,rag)
 	if self.Otrub then return end
 
 	if (self.delaysoundpain or 0) > CurTime() then

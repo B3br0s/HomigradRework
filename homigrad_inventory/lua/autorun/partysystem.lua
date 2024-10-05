@@ -94,7 +94,7 @@
             if IsValid(plya) and IsValid(plyb) then
                 plya:ChatPrint(plyb:Name() .. " отклонил ваше приглашение в команду.")
                 plyb:SetNWEntity("InviterToTeam", NULL)
-                plyb.InviterToTeam = nil
+                plyb.InviterToTeam = NULL
             end
         end)
         

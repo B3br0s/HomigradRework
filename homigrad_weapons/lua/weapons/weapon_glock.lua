@@ -61,14 +61,14 @@ SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
 SWEP.OtherModel				= "models/weapons/arccw_go/v_pist_glock.mdl"
-SWEP.ViewModel				= "models/weapons/arccw_go/v_pist_glock.mdl"
+SWEP.ViewModel				= "models/pwb/weapons/w_glock17.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_glock17.mdl"
 
 SWEP.dwsPos = Vector(13,13,5)
 SWEP.dwsItemPos = Vector(10,-1,-2)
 
-SWEP.addAng = Angle(1,0,0)
-SWEP.addPos = Vector(30,-3,0)
+SWEP.addPos = Vector(0,-1,-1)
+SWEP.addAng = Angle(-4,0,0)
 SWEP.MuzzleFXPos = Vector(30,-5,-2)
 
 SWEP.dwmModeScale = 1 -- pos

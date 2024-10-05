@@ -16,3 +16,4 @@ hook.Add("PlayerCanPickupWeapon", "BlockSpecificWeaponsPickup", function(ply, we
         return false
     end
 end)
+

@@ -565,8 +565,7 @@ function SWEP:AttackFront()
 			sound.Play("Flesh.ImpactSoft", HitPos, 65, math.random(90, 110))
 		end
 
-		local DamageAmt = math.random(3, 5) * self:GetOwner().Metabolizm
-		--print(DamageAmt)
+		local DamageAmt = math.random(3,10) * self:GetOwner().Metabolizm
 		local Dam = DamageInfo()
 		Dam:SetAttacker(self:GetOwner())
 		Dam:SetInflictor(self.Weapon)

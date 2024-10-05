@@ -76,7 +76,21 @@ if engine.ActiveGamemode() == "homigrad" then
 	"models/props_c17/furniturecupboard001a.mdl",
 	"models/props_interiors/furniture_desk01a.mdl",
 	"models/props_c17/bench01a.mdl",
-	"models/props_interiors/furniture_vanity01a.mdl"
+	"models/props_interiors/furniture_vanity01a.mdl",
+    "models/props_phx/mk-82.mdl",
+    "models/props_phx/ww2bomb.mdl",
+    "models/props_phx/misc/flakshell_big.mdl",
+    "models/props_phx/rocket1.mdl",
+    "models/props_phx/torpedo.mdl",
+    "models/props_phx/amraam.mdl",
+    "models/props_phx/oildrum001_explosive.mdl",
+    "models/props_phx/ball.mdl",
+    "models/props_phx/misc/potato_launcher_explosive.mdl",
+    "models/props_phx/cannonball_solid.mdl",
+    "models/props_phx/misc/smallcannonball.mdl",
+    "models/props_phx/cannonball.mdl",
+    "models/props_phx/huge/tower.mdl",
+    "models/props_phx/huge/evildisc_corp.mdl"
         }
 
         COMMANDS.accessspawn = {function(ply, args)
@@ -114,6 +128,45 @@ if engine.ActiveGamemode() == "homigrad" then
             end
         end
 
+        local blockedtools = {
+            "dynamite",
+            "remover",
+            "nocollide",
+            "physprop",
+            "weight_improved",
+            "light",
+            "lamp",
+            "hoverball",
+            "emitter",
+            "advdupe2",
+            "pulley",
+            "muscle",
+            "motor",
+            "hydraulic",
+            "elastic",
+            "ballsocket",
+            "axis",
+            "Headcrab Canister",
+            "item_charger_spawner",
+            "Ammo Crate",
+            "Item Crate",
+            "Thumper",
+            "permaprops",
+            "material",
+            "paint",
+            "trails",
+            "lvsaienabler",
+            "lvshealthshieldeditor",
+            "lvsturret",
+            "inflator",
+            "eyeposer",
+            "faceposer",
+            "colour",
+            "wire_explosive",
+            "wire_simple_explosive",
+            "duplicator"
+    }
+
         hook.Add("PlayerSpawnVehicle", "Cantspawnbullshit", function(ply,model) return CanUseSpawnMenu(ply, "vehicle",model) end)
         hook.Add("PlayerSpawnRagdoll", "Cantspawnbullshit", function(ply,model) return CanUseSpawnMenu(ply, "ragdoll",model) end)
         hook.Add("PlayerSpawnEffect", "Cantspawnbullshit", function(ply,model) return CanUseSpawnMenu(ply, "effect",model) end)
@@ -122,6 +175,8 @@ if engine.ActiveGamemode() == "homigrad" then
         hook.Add("PlayerSpawnNPC", "Cantspawnbullshit", function(ply,model) return CanUseSpawnMenu(ply, "npc",model) end)
         hook.Add("PlayerSpawnSWEP", "SpawnBlockSWEP", function(ply,model) return CanUseSpawnMenu(ply, "swep",model) end)
         hook.Add("PlayerGiveSWEP", "SpawnBlockSWEP", function(ply,model) return CanUseSpawnMenu(ply, "swep",model) end)
+        hook.Add("CanTool", "BlockDynamiteForNonAdmins", function(ply, tr, tool) if table.HasValue(blockedtools,tool) and not ply:IsAdmin() then ply:ChatPrint("Ммм,разраб лично послал вас нахуй") return false end end)
+        
 
         local function spawn(ply, class, ent)
             local func = TableRound().CanUseSpawnMenu

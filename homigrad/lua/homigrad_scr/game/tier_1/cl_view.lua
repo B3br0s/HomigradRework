@@ -201,7 +201,7 @@ hook.Add("RenderScene","octoweapons",function(pos,angle,fov)
 	view.drawviewmodel = _view.drawviewmodel
 
 	if CAMERA_ZFAR then
-		view.zfar = CAMERA_ZFAR + 250--cl_fog in homigrad gamemode
+		view.zfar = CAMERA_ZFAR + 8000--cl_fog in homigrad gamemode
 	else
 		view.zfar = nil
 	end
@@ -548,7 +548,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_r8" then
 			--Vector(5.2,-2,1.1)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.4 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.15
+			vecWep = hand.Pos + hand.Ang:Up() * 5.1 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.15
 			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_ak74" then
@@ -693,8 +693,8 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_m4a1" then
 			--Vector(5.05,7,0.725)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.05 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.725
-			angWep = hand.Ang + Angle(-5,0,0)
+			vecWep = hand.Pos + hand.Ang:Up() * 7.5 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 1.15
+			angWep = hand.Ang + Angle(20,2,0)
 		end
 		if weaponClass == "weapon_minu14" then
 			--Vector(5,4,0.95)

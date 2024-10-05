@@ -32,6 +32,7 @@ function GM:PlayerSpawn(ply)
 	ply:SetNWBool("RightArmm",false)
 	ply:SetNWBool("LeftArmm",false)
 	ply:SetNWBool("fake",false)
+	ply:SetNWFloat("NextThinkGay",0)
 	ply:SetNWEntity("Ragdoll",nil)
 	ply.virusvichblya = false
 	ply.slendermanblya = false

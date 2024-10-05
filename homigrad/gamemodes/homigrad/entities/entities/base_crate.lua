@@ -18,6 +18,7 @@ local items = {
     {item = "food_lays", icon = "vgui/chips.png", rarity = "Common"},
     {item = "weapon_de", icon = "vgui/weapon_csgo_deagle.png", rarity = "Ultra Rare"},
     {item = "weapon_fnp", icon = "vgui/weapon_csgo_tec9.png", rarity = "Ultra Rare"},
+    {item = "weapon_c4", icon = "vgui/weapon_csgo_c4.png", rarity = "Rare"},
     {item = "Empty", icon = "null.vmt", rarity = "None"},
     {item = "Empty", icon = "null.vmt", rarity = "None"}
 }
@@ -66,10 +67,11 @@ if SERVER then
     net.Receive("BoxLoot", function(len, ply)
         local entity = net.ReadEntity()
         local slot = net.ReadFloat()
-
+    
         if not IsValid(entity) or not IsValid(ply) then return end
-
+    
         local itemlooted = net.ReadString()
+    
         if slot == 1 and entity.Item1 != "Empty" then
             itemlooted = entity.Item1
             entity.R1 = 1
@@ -87,11 +89,28 @@ if SERVER then
             entity.R4 = 1
             entity.Item4 = "Empty"
         end
-
+    
         if itemlooted and itemlooted != "Empty" then
-            ply:Give(itemlooted)
+            local hasItem = false
+            
+            for _, weapon in ipairs(ply:GetWeapons()) do
+                if weapon:GetClass() == itemlooted then
+                    hasItem = true
+    
+                    if weapon.Primary and weapon.Primary.Ammo != "none" then
+                        ply:GiveAmmo(weapon.Primary.ClipSize,weapon.Primary.Ammo)
+                    end
+                    break
+                end
+            end
+    
+            if not hasItem then
+                ply:Give(itemlooted)
+            end
         end
     end)
+    
+    
 
     function ENT:Use(ply)
         if self.BeingLooted == false then

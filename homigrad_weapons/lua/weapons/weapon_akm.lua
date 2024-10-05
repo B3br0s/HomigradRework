@@ -74,56 +74,6 @@ function SWEP:ApplyEyeSpray()
     self.eyeSpray = self.eyeSpray - Angle(0.2,math.Rand(-0.5,0.5),0)
 end 
 
-
-SWEP.ValidAttachments = {
-    ["Suppressor"] = {
-        positionright = 1,
-        positionforward = 29,
-        positionup = -8.25,
-
-        angleforward = 180,
-        angleright = 10,
-        angleup = 0,
-        
-        scale = 1,
-        model = "models/weapons/arc9/darsu_eft/mods/silencer_12g_hexagon_12k.mdl",
-    },
-    ["Opk7"] = {
-        positionright = 0.75,
-        positionforward = 4,
-        positionup = -6.5,
-
-        angleforward = 178,
-        angleright = 10,
-        angleup = -0.1,
-
-        holosight = true,
-        newsight = true,
-        aimpos = Vector(6,7,0.725),
-        aimang = Angle(-5,0,0),
-
-        scale = 1,
-        model = "models/weapons/arc9_eft_shared/atts/optic/dovetail/okp7.mdl",
-    },
-    ["Pkaa"] = {
-        positionright = 1.05,
-        positionforward = 4,
-        positionup = -6.5,
-
-        angleforward = 178,
-        angleright = 10,
-        angleup = -0.1,
-
-        holosight = true,
-        newsight = true,
-        aimpos = Vector(6,7,0.725),
-        aimang = Angle(-5,0,0),
-
-        scale = 1,
-        model = "models/weapons/arc9_eft_shared/atts/optic/dovetail/pkaa.mdl",
-    }
-}
-
 SWEP.dwmModeScale = 1 -- pos
     SWEP.dwmForward = -10
     SWEP.dwmRight = 5.8

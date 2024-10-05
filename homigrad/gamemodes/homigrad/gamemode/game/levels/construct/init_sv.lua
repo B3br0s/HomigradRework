@@ -90,7 +90,9 @@ function construct.ShouldSpawnLoot()
 	end
 end
 
-function construct.PlayerDeath(ply,inf,att) return false end
+function construct.PlayerDeath(ply,inf,att) print(ply:Nick()) timer.Simple(1,function ()
+	ply:Spawn()
+end) end
 
 function construct.GuiltLogic(ply,att,dmgInfo)
 	if att.isContr and ply:Team() == 2 then return dmgInfo:GetDamage() * 3 end

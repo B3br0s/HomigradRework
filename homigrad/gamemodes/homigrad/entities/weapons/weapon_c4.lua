@@ -1,9 +1,10 @@
 SWEP.Base                   = "weapon_base"
 
-SWEP.PrintName 				= "Дистанционная C4"
+SWEP.PrintName 				= "C4 С таймером"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "ЛКМ, чтобы заложить в проп/поставить; ПКМ, чтобы взорвать"
-SWEP.Category 				= "Примочки убийцы"
+SWEP.Category 				= "Разное"
+SWEP.IconkaInv = "vgui/weapon_csgo_c4.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
@@ -24,7 +25,6 @@ SWEP.AutoSwitchFrom			= false
 
 SWEP.Slot					= 4
 SWEP.SlotPos				= 2
-SWEP.IconkaInv = "vgui/weapon_csgo_c4.png"
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
@@ -53,9 +53,10 @@ if SERVER then
 
     }
 
-    local function Bomb(ent)
+    local function kabum(ent)
         local SelfPos,PowerMult,Model = ent:LocalToWorld(ent:OBBCenter()),6,ent:GetModel()
-
+        ent:EmitSound("arccw_go/c4/c4_until.wav")
+        timer.Simple(0.8,function ()
         ent:EmitSound("homigrad/vgui/arm_bomb.wav")
 		timer.Simple(1,function()
             ParticleEffect("pcf_jack_groundsplode_large",SelfPos,vector_up:Angle())
@@ -128,20 +129,59 @@ if SERVER then
                 --util.BlastDamage(Infl,Att,SelfPos,20 * PowerMult,1000 * PowerMult)
             end)
 		end)
+    end)
         if IsValid(ent.parentBomb) then ent.parentBomb:Remove() end
     end
 
+
+    local function Bomb(ent)
+        local SelfPos, PowerMult, Model = ent:LocalToWorld(ent:OBBCenter()), 6, ent:GetModel()
+    
+        if SERVER then
+            local timeuntilexplode = 0.9
+            for i = 1, 85 do
+                timer.Simple(timeuntilexplode, function()
+                    if not IsValid(ent) then return end
+                    
+                    ent:EmitSound("arccw_go/c4/c4_beep2.wav")
+            
+                    if i == 85 then
+                        if IsValid(ent.owner) then
+                            ent.owner.bombtimed = nil
+
+                            kabum(ent)
+                        end
+                    end
+                end)
+                
+                timeuntilexplode = timeuntilexplode + (0.9 - i / 100)
+            end
+        end   
+    end
+    
+
     function SWEP:Initialize()
         self:SetHoldType("normal")
-        --self:SetNWBool("hasbomb",false)
+        --self:SetNWBool("hasbombtimed",false)
     end
 
     --local cyka = {}
 
     function SWEP:PrimaryAttack()
         local owner = self:GetOwner()
-        if IsValid(owner.bomb) then return end
+        if IsValid(owner.bombtimed) then self:GetOwner():ChatPrint("Ты не можешь заложить две бомбы.") return end
 
+        for i = 1,8 do
+            timer.Simple(0.22 * i,function ()
+                self:EmitSound("arccw_go/c4/key_press"..math.random(1,7)..".wav")  
+                if i == 8 then
+                    timer.Simple(0.5,function ()
+                        self:EmitSound("arccw_go/c4/c4_plant.wav") 
+                    end)
+                end
+            end)
+        end
+        timer.Simple(2.5,function ()
         local tr = {}
         tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
         local dir = Vector(1,0,0)
@@ -150,8 +190,6 @@ if SERVER then
         tr.filter = owner
 
         local traceResult = util.TraceLine(tr)
-        local ent = traceResult.Entity
-        --owner:ChatPrint(ent:GetMaterialType())
 
         if not IsValid(ent) then
             ent = ents.Create("prop_physics")
@@ -164,29 +202,21 @@ if SERVER then
         self:GetOwner().gg = true
 
         owner = ent
-        self:GetOwner().bomb = owner
+        self:GetOwner().bombtimed = owner
         ent.parentBomb = self
         ent.owner = self:GetOwner()
         ent:CallOnRemove("homigrad-bomb",Bomb)
-        ent:EmitSound("buttons/button24.wav",75,50)
-        self:SetNWBool("hasbomb",true)
-    end
-
-    function SWEP:SecondaryAttack()
-        --local bomb = cyka[self:GetOwner()]
-        if not IsValid(self:GetOwner().bomb) then return end
-
-        Bomb(self:GetOwner().bomb)
-        self:GetOwner().bomb = nil
+        self:SetNWBool("hasbombtimed",true)
+        Bomb(self:GetOwner().bombtimed)
         self:Remove()
-        --cyka[self:GetOwner()] = nil
+        end)
     end
 else
     function SWEP:DrawWorldModel()
         local owner = self:GetOwner()
 
         if not IsValid(owner) then self:DrawModel() return end
-        --if self:GetNWBool("hasbomb") then return end
+        --if self:GetNWBool("hasbombtimed") then return end
 
         self.mdl = self.mdl or false
         if not IsValid(self.mdl) then
@@ -201,31 +231,5 @@ else
         self.mdl:SetRenderOrigin(matrix:GetTranslation()+matrix:GetAngles():Forward()*-22+matrix:GetAngles():Right()*2.5+matrix:GetAngles():Up()*7)
         self.mdl:SetRenderAngles(matrix:GetAngles())
         self.mdl:DrawModel()
-    end
-    function SWEP:DrawHUD()
-        local owner = self:GetOwner()
-        local tr = {}
-        tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
-        local dir = Vector(1,0,0)
-        dir:Rotate(owner:EyeAngles())
-        tr.endpos = tr.start + dir * 75
-        tr.filter = owner
-
-        local traceResult = util.TraceLine(tr)
-        local ent = traceResult.Entity
-
-        if not IsValid(ent) then
-            local hit = traceResult.Hit and 1 or 0
-            local frac = traceResult.Fraction
-            surface.SetDrawColor(Color(255, 255, 255, 255 * hit))
-            draw.NoTexture()
-            Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-        else
-            local frac = traceResult.Fraction
-            surface.SetDrawColor(Color(255, 255, 255, 255))
-            draw.NoTexture()
-            Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-            draw.DrawText( "Заложить бомбу "..tostring((util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 3 or util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 66) and "в металлический проп" or ""), "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER )
-        end
     end
 end

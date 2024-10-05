@@ -73,18 +73,19 @@ SWEP.OtherModel				= "models/weapons/arccw_go/v_pist_r8.mdl"
 
 SWEP.vbwPos = Vector(8.5,-10,-8)
 
-SWEP.addPos = Vector(0,0,-1)
-SWEP.addAng = Angle(-4.4,0.5,0)
+
+SWEP.addAng = Angle(11,0.05,0)
+SWEP.addPos = Vector(0,0,0)
 
 SWEP.MuzzleFXPos = Vector(0,1,0)
 
-    SWEP.dwmModeScale = 1 -- pos
-    SWEP.dwmForward = -13
+    SWEP.dwmModeScale = 1. -- pos
+    SWEP.dwmForward = -12
     SWEP.dwmRight = 5.3
-    SWEP.dwmUp = -1.47
+    SWEP.dwmUp = -6
     
     SWEP.dwmAUp = 0 -- ang
-    SWEP.dwmARight = -15
+    SWEP.dwmARight = 0
     SWEP.dwmAForward = 180
     
     local model 

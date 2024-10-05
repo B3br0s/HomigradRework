@@ -60,15 +60,15 @@ SWEP.MagModel = "models/csgo/weapons/w_pist_tec9_mag.mdl"
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
-SWEP.ViewModel				= "models/weapons/arccw_go/v_smg_mp7.mdl"
+SWEP.ViewModel				= "models/pwb2/weapons/w_mp7.mdl"
 SWEP.WorldModel				= "models/pwb2/weapons/w_mp7.mdl"
 SWEP.OtherModel				= "models/weapons/arccw_go/v_smg_mp7.mdl"
 
 SWEP.vbwPos = Vector(-2,-3.7,1)
 SWEP.vbwAng = Angle(5,-30,0)
 
-SWEP.addAng = Angle(0,0.5,0)
-SWEP.addPos = Vector(0,-5,0)
+SWEP.addPos = Vector(0,0,-1)
+SWEP.addAng = Angle(-4.5,-0.6,0)
 SWEP.MuzzleFXPos = Vector(5,0,0)
 
 SWEP.dwmModeScale = 1 -- pos

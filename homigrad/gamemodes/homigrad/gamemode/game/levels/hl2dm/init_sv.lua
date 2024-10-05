@@ -49,9 +49,6 @@ function hl2dm.PlayerSpawn(ply,teamID)
 	
 	if teamID == 2 then
 		ply:SetPlayerClass("combine")
-		if math.random(1,2) == 2 then ply:Give("weapon_hg_hl2") end
-		--JMod.EZ_Equip_Armor(ply,"Medium-Helmet",Color(0,0,0,0))
-		JMod.EZ_Equip_Armor(ply,"Light-Vest",Color(0,0,0,0))
 	end
 
 	if teamID == 1 then
@@ -59,9 +56,8 @@ function hl2dm.PlayerSpawn(ply,teamID)
 		if math.random(1,4) == 4 then ply:Give("morphine") end
 		if math.random(1,3) == 3 then ply:Give("weapon_hg_hl2") end
 
-		JMod.EZ_Equip_Armor(ply,"Medium-Helmet",color)
-		local r = math.random(1,2)
-		JMod.EZ_Equip_Armor(ply,"Light-Vest",Color(0,0,0,0))
+		JMod.EZ_Equip_Armor(ply,"M2")
+		JMod.EZ_Equip_Armor(ply,"ACHHC Olive")
 	end
 
 end
@@ -71,4 +67,16 @@ function hl2dm.PlayerCanJoinTeam(ply,teamID)
 end
 
 function hl2dm.ShouldSpawnLoot() return false end
-function hl2dm.PlayerDeath(ply,inf,att) return false end
+function hl2dm.PlayerDeath(ply,inf,att) if ply.isCombine then 
+
+	ply:GetNWEntity("Ragdoll"):EmitSound("npc/metropolice/die" .. math.random(1,4) .. ".wav") 
+timer.Simple(3.2,function ()
+	ply:GetNWEntity("Ragdoll"):EmitSound("npc/combine_soldier/vo/on1.wav")
+end)
+timer.Simple(3.8,function ()
+	ply:GetNWEntity("Ragdoll"):EmitSound("npc/combine_soldier/vo/requestmedical.wav")
+end)
+timer.Simple(5,function ()
+	ply:GetNWEntity("Ragdoll"):EmitSound("npc/combine_soldier/vo/off3.wav")
+end)
+end return false end

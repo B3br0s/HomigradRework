@@ -20,6 +20,7 @@ local function drawStates(ply,x,y,align)
 	draw.SimpleText("paralizovan: " .. tostring(ply:GetNWBool("paraliz",false)),"ChatFont",x,y + 25 * 15,white,align)
 	draw.SimpleText("inviter: " .. tostring(ply:GetNWEntity("InviterToTeam")),"ChatFont",x,y + 25 * 16,white,align)
 	draw.SimpleText("inteam: " .. tostring(ply:GetNWBool("InTeam",false)),"ChatFont",x,y + 25 * 17,white,align)
+	draw.SimpleText("NT: " .. tostring(ply:GetNWFloat("NextThinkGay",false)),"ChatFont",x,y + 25 * 18,white,align)
 end
 
 hook.Add("HUDPaint","DevCheck",function()
