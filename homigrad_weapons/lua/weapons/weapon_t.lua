@@ -7,6 +7,7 @@ end
 SWEP.PrintName = "Томагавк"
 SWEP.Instructions = "Находится на вооружении кораблей и подводных лодок ВМС США, использовалась во всех значительных военных конфликтах с участием США с момента её принятия на вооружение в 1983 году."
 SWEP.Category = "Ближний Бой"
+SWEP.IconkaInv = "vgui/weapon_pwb_tomahawk.png"
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true

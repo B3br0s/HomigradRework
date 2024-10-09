@@ -33,9 +33,9 @@ function construct.RoundEndCheck()
 		end
 	end
 
-	local TAlive = tdm.GetCountLive(team.GetPlayers(1))
+	--local TAlive = tdm.GetCountLive(team.GetPlayers(1))
 
-	if TAlive == 0 or TAlive == 1 then EndRound() return end
+	--if TAlive == 0 or TAlive == 1 then return end
 end
 
 function construct.EndRound(winner) end
@@ -71,9 +71,9 @@ function construct.PlayerCanJoinTeam(ply,teamID)
 	end
 end
 
-local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
-local uncommon = {"medkit","weapon_molotok","painkiller"}
-local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_per4ik"}
+local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","base_crate","base_crate","base_crate","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
+local uncommon = {"medkit","weapon_molotok","painkiller","base_crate","base_crate"}
+local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_per4ik","base_crate","base_crate"}
 
 function construct.ShouldSpawnLoot()
    	if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
@@ -90,7 +90,7 @@ function construct.ShouldSpawnLoot()
 	end
 end
 
-function construct.PlayerDeath(ply,inf,att) print(ply:Nick()) timer.Simple(1,function ()
+function construct.PlayerDeath(ply,inf,att) timer.Simple(1,function ()
 	ply:Spawn()
 end) end
 

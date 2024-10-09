@@ -10,6 +10,7 @@ SWEP.AdminOnly = false
 
 SWEP.ViewModelFOV = 60
 SWEP.ViewModel = "models/pwb/weapons/w_knife.mdl"
+SWEP.IconkaInv = "vgui/weapon_pwb_knife.png"
 SWEP.WorldModel = "models/pwb/weapons/w_knife.mdl"
 SWEP.ViewModelFlip = false
 

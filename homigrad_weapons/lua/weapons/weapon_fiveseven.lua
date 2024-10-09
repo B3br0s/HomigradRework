@@ -6,7 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/p99"
-SWEP.IconkaInv = "vgui/pineapple.png"
+SWEP.IconkaInv = "vgui/weapon_pwb_p99.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

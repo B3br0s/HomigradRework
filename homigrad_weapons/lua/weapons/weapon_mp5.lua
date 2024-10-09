@@ -5,7 +5,7 @@ SWEP.PrintName 				= "HK MP5a3"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет-пулемёт под калибр 9х19"
 SWEP.Category 				= "Оружие"
-SWEP.IconkaInv = "vgui/weapon_csgo_mp5sd.png"
+SWEP.IconkaInv = "vgui/weapon_pwb_mp5.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

@@ -4,6 +4,7 @@ SWEP.Base = 'b3bros_base' -- base
 SWEP.PrintName 				= "HK-416"
 SWEP.Instructions			= "Автоматическая винтовка под калибр 5,56х45"
 SWEP.Category 				= "Оружие"
+SWEP.IconkaInv = "vgui/weapon_pwb_hk416.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

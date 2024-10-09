@@ -1,4 +1,4 @@
-table.insert(LevelList,"hl2coop")
+--table.insert(LevelList,"hl2coop")
 hl2coop = {}
 hl2coop.Name = "Half Life 2 Coop"
 

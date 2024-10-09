@@ -458,14 +458,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))
 		
 		local eyeAngs = lply:EyeAngles()
-		if GetConVar("hg_bodycam"):GetInt() == 1 then
-			local matrix = ragdoll:GetBoneMatrix(body)
-			local bodypos = matrix:GetTranslation()
-			local bodyang = matrix:GetAngles()
-			
-			eyeAngs = att.Ang
-			att.Pos = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 10 + bodyang:Right() * -8) or lply:EyePos()
-		end
+		
+		local matrix = ragdoll:GetBoneMatrix(body)
+		local bodypos = matrix:GetTranslation()
+		local bodyang = matrix:GetAngles()
+		att.Pos = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 20 - bodyang:Right() * Vector(2, 2, 2)) or lply:EyePos()
 		local anghook = 0.3 --GetConVar("hg_fakecam_mode"):GetFloat() --Режим камеры в фейке бтв
 		LerpEyeRagdoll = LerpAngleFT(0.08,LerpEyeRagdoll,LerpAngle(anghook,eyeAngs,att.Ang))
 
@@ -598,8 +595,8 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_deagle" then
 			--Vector(2.7,10,0.4)
-			vecWep = hand.Pos + hand.Ang:Up() * 2.7 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.4
-			angWep = hand.Ang + Angle(-10,0,0)
+			vecWep = hand.Pos + hand.Ang:Up() * 4.85 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.1
+			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_fiveseven" then
 			--Vector(2.5,10,0.1)
@@ -678,7 +675,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_m1a1" then
 			--Vector(5.25,4,1.15)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.35 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.925
+			vecWep = hand.Pos + hand.Ang:Up() * 4.6 - hand.Ang:Forward() * 10 + hand.Ang:Right() * 0.1
 			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_mk18" then
@@ -713,7 +710,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_ump" then
 			--Vector(6.6,7,1.35)
-			vecWep = hand.Pos + hand.Ang:Up() * 4.4 - hand.Ang:Forward() * 11 + hand.Ang:Right() * 0.79
+			vecWep = hand.Pos + hand.Ang:Up() * 6.8 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 0.7
 			angWep = hand.Ang + Angle(0,0,0)
 		end
 		if weaponClass == "weapon_sar2" then
@@ -758,7 +755,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_spas12" then
 			--Vector(6,6,0.69)
-			vecWep = hand.Pos + hand.Ang:Up() * 3.1 - hand.Ang:Forward() * 6 + hand.Ang:Right() * 0.85
+			vecWep = hand.Pos + hand.Ang:Up() * 4.5 - hand.Ang:Forward() * 9 + hand.Ang:Right() * 0.75
 			angWep = hand.Ang + Angle(-7,0,0)
 		end--new weapons starts here
 		if weaponClass == "weapon_hk_arbalet" then

@@ -226,7 +226,7 @@ local function CreateInventorySlot(i, inventoryFrame, inventorySlotXPos)
             end
         surface.DrawRect(0,0,w,h)
         if inventorySlot.SlotItem ~= "Empty" then
-            draw.SimpleText(inventorySlot.SlotItemnn, "HomigradFont", w / 2, h - 20, Color(255, 255, 255), TEXT_ALIGN_CENTER)   
+            draw.SimpleText(inventorySlot.SlotItemnn, "HomigradFontInvSmallest", w / 2, h - 20, Color(255, 255, 255), TEXT_ALIGN_CENTER)   
         end
     end
 
@@ -383,7 +383,7 @@ local function OpenInventory()
 
         playerModelPanel:SetCamPos(Vector(45, 0, 45))
 
-        Ent.GetPlayerColor = function() return Vector(GetConVarString("cl_playercolor")) end
+        Ent.GetPlayerColor = function() return Vector(LocalPlayer():GetPlayerColor()) end
 
         local Ply = LocalPlayer()
 

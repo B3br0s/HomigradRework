@@ -391,7 +391,7 @@ JMod.ArmorTable = {
 		pos = Vector(1, -3, 0),
 		ang = Angle(-90, 0, -90),
 		wgt = 20,
-		dur = 350,
+		dur = 3500,
 		ent = "ent_jack_gmod_ezarmor_hhead"
 	},
 	["Riot-Helmet"] = {
@@ -441,7 +441,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 1, 0),
 		ang = Angle(-90, 0, -90),
 		wgt = 25,
-		dur = 250,
+		dur = 1250,
 		ent = "ent_jack_gmod_ezarmor_rioth",
 		bdg = {
 			[1] = 0
@@ -452,6 +452,68 @@ JMod.ArmorTable = {
 				head = 0.8,
 				eyes = 0,
 				mouthnose = 0
+			},
+			bdg = {
+				[1] = 1
+			}
+		}
+	},
+	["Core"] = {
+		PrintName = "Core",
+		mdl = "models/cores/para/core.mdl",
+		slots = {
+			head = 0.8,
+			eyes = .6,
+			mouthnose = .6
+		},
+		def = BasicArmorProtectionProfile,
+		bon = "ValveBiped.Bip01_Head1",
+		siz = Vector(0.45,0.45,0.45),
+		pos = Vector(0, 2, 0),
+		ang = Angle(-90, 0, 180),
+		wgt = 25,
+		dur = 50000,
+		ent = "ent_jack_gmod_ezarmor_coreportal",
+		bdg = {
+			[1] = 0
+		},
+		tgl = {
+			mskmat = "",
+			slots = {
+				head = 0.8,
+				eyes = 0,
+				mouthnose = 0	
+			},
+			bdg = {
+				[1] = 1
+			}
+		}
+	},
+	["Vape"] = {
+		PrintName = "Vape",
+		mdl = "models/swamponions/vape.mdl",
+		slots = {
+			head = 0,
+			eyes = 0,
+			mouthnose = 1
+		},
+		def = BasicArmorProtectionProfile,
+		bon = "ValveBiped.Bip01_Head1",
+		siz = Vector(1, 1, 1),
+		pos = Vector(15, -0.5, 0),
+		ang = Angle(-90, -80, 180),
+		wgt = 1,
+		dur = 1,
+		ent = "ent_jack_gmod_ezarmor_vapemouth",
+		bdg = {
+			[1] = 0
+		},
+		tgl = {
+			mskmat = "",
+			slots = {
+				head = 0.8,
+				eyes = 0,
+				mouthnose = 0	
 			},
 			bdg = {
 				[1] = 1
@@ -472,7 +534,7 @@ JMod.ArmorTable = {
 		pos = Vector(1.5, -2, 0),
 		ang = Angle(-80, 0, -90),
 		wgt = 35,
-		dur = 500,
+		dur = 3000,
 		mskmat = "mats_jack_gmod_sprites/slit_vignette.png",
 		ent = "ent_jack_gmod_ezarmor_maska",
 		bdg = {
@@ -590,6 +652,23 @@ JMod.ArmorTable = {
 		ent = "ent_jack_gmod_ezarmor_ltorso",
 		gayPhysics = true
 	},
+	["Guitar"] = {
+		PrintName = "Guitar",
+		mdl = "models/props_phx/misc/fender.mdl",
+		slots = {
+			chest = .4,
+			abdomen = .3
+		},
+		def = BasicArmorProtectionProfile,
+		bon = "ValveBiped.Bip01_Spine",
+		siz = Vector(1, 1, 1),
+		pos = Vector(2, 8.4, 0),
+		ang = Angle(0, 200, 90),
+		wgt = 5,
+		dur = 250,
+		ent = "ent_jack_gmod_ezarmor_guitarspine",
+		gayPhysics = true
+	},
 	["Medium-Light-Vest"] = {
 		PrintName = "Vest-Medium-Light",
 		mdl = "models/player/armor_trooper/trooper.mdl", -- tarkov
@@ -637,7 +716,7 @@ JMod.ArmorTable = {
 		pos = Vector(-4.5, -12, 0),
 		ang = Angle(-85, 0, 90),
 		wgt = 40,
-		dur = 725,
+		dur = 3725,
 		ent = "ent_jack_gmod_ezarmor_mhtorso",
 		gayPhysics = true
 	},
@@ -699,7 +778,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 4, 0),
 		ang = Angle(90, -20, 90),
 		wgt = 15,
-		dur = 300,
+		dur = 3000,
 		ent = "ent_jack_gmod_ezarmor_hlshoulder"
 	},
 	["Light-Right-Shoulder"] = {
@@ -729,7 +808,7 @@ JMod.ArmorTable = {
 		pos = Vector(0, 4, 0),
 		ang = Angle(90, 20, 90),
 		wgt = 15,
-		dur = 300,
+		dur = 3000,
 		ent = "ent_jack_gmod_ezarmor_hrshoulder"
 	},
 	["Left-Forearm"] = {
@@ -792,7 +871,7 @@ JMod.ArmorTable = {
 		pos = Vector(2, 10, 0),
 		ang = Angle(-90, 180, 0),
 		wgt = 25,
-		dur = 250,
+		dur = 2500,
 		ent = "ent_jack_gmod_ezarmor_hlthigh"
 	},
 	["Light-Right-Thigh"] = {
@@ -823,7 +902,7 @@ JMod.ArmorTable = {
 		pos = Vector(2, 10, 0),
 		ang = Angle(-90, 180, 0),
 		wgt = 25,
-		dur = 250,
+		dur = 2500,
 		ent = "ent_jack_gmod_ezarmor_hrthigh"
 	},
 	["Left-Calf"] = {

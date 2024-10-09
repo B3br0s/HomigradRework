@@ -6,7 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Пистолет под калибр 9х19"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/usptactical"
-SWEP.IconkaInv = "vgui/weapon_csgo_usp_silencer.png"
+SWEP.IconkaInv = "vgui/weapon_pwb2_usptactical.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

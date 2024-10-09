@@ -186,9 +186,13 @@ end
 end
 
 function SWEP:PrimaryAttack()
-    if self.CanManipulatorKuklovodAngle then
-		self:ManipulateSlideBoneBacAng()
+    if self.CanManipulatorKuklovodAngle and not self:GetOwner():IsSprinting() then
+        self:ManipulateSlideBoneBacAng()
 
+        --[[timer.Simple(self.ShootDelay,function ()
+            self.Vzeden = true
+        end)]]
+        
         sound.Play(self.Primary.HammerSound,self:GetPos(),65,100)
             
                 self.ShootNext = self.NextShot or NextShot
@@ -202,11 +206,6 @@ function SWEP:PrimaryAttack()
                 local canfire = self:CanFireBullet()
                 --self:GetOwner():ChatPrint(tostring(canfire)..(CLIENT and " client" or " server"))
                 if self:Clip1() <= 0 or not canfire and self.NextShot < CurTime() then
-                    if SERVER then
-                        timer.Simple(self.ShootDelay,function ()
-                        sound.Play("snd_jack_hmcd_click.wav",self:GetPos(),65,100)
-                        end)
-                    end
                     timer.Simple(self.ShootDelay,function ()
                     self:ManipulateSlideBoneForAng()
                     end)
@@ -288,6 +287,6 @@ function SWEP:PrimaryAttack()
                 end
             end)
 
-	end
+    end
 end
 end

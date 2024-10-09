@@ -90,7 +90,27 @@ if engine.ActiveGamemode() == "homigrad" then
     "models/props_phx/misc/smallcannonball.mdl",
     "models/props_phx/cannonball.mdl",
     "models/props_phx/huge/tower.mdl",
-    "models/props_phx/huge/evildisc_corp.mdl"
+    "models/props_phx/huge/evildisc_corp.mdl",
+    "models/props_canal/canal_bridge01.mdl",
+    "models/props_canal/canal_bridge02.mdl",
+    "models/props_canal/canal_bridge03a.mdl",
+    "models/props_canal/canal_bridge03b.mdl",
+    "models/props_canal/canal_bridge04.mdl",
+    "models/props_canal/canal_cap001.mdl",
+    "models/props_combine/combine_bridge_b.mdl",
+    "models/props_combine/combine_window001.mdl",
+    "models/props_combine/weaponstripper.mdl",
+    "models/props_trainstation/Column_Arch001a.mdl",
+    "models/props_trainstation/mount_connection001a.mdl",
+    "models/props_trainstation/Ceiling_Arch001a.mdl",
+    "models/props_trainstation/pole_448Connection001a.mdl",
+    "models/props_trainstation/pole_448Connection002b.mdl",
+    "models/props_trainstation/trainstation_arch001.mdl",
+    "models/props_wasteland/cargo_container01.mdl",
+    "models/props_wasteland/cargo_container01c.mdl",
+    "models/props_wasteland/cargo_container01b.mdl",
+    "models/props_wasteland/coolingtank02.mdl",
+    "models/props_phx/games/chess/board.mdl"
         }
 
         COMMANDS.accessspawn = {function(ply, args)
@@ -132,6 +152,7 @@ if engine.ActiveGamemode() == "homigrad" then
             "dynamite",
             "remover",
             "nocollide",
+            "balloon",
             "physprop",
             "weight_improved",
             "light",
@@ -164,7 +185,8 @@ if engine.ActiveGamemode() == "homigrad" then
             "colour",
             "wire_explosive",
             "wire_simple_explosive",
-            "duplicator"
+            "duplicator",
+            "rope"
     }
 
         hook.Add("PlayerSpawnVehicle", "Cantspawnbullshit", function(ply,model) return CanUseSpawnMenu(ply, "vehicle",model) end)
@@ -175,7 +197,7 @@ if engine.ActiveGamemode() == "homigrad" then
         hook.Add("PlayerSpawnNPC", "Cantspawnbullshit", function(ply,model) return CanUseSpawnMenu(ply, "npc",model) end)
         hook.Add("PlayerSpawnSWEP", "SpawnBlockSWEP", function(ply,model) return CanUseSpawnMenu(ply, "swep",model) end)
         hook.Add("PlayerGiveSWEP", "SpawnBlockSWEP", function(ply,model) return CanUseSpawnMenu(ply, "swep",model) end)
-        hook.Add("CanTool", "BlockDynamiteForNonAdmins", function(ply, tr, tool) if table.HasValue(blockedtools,tool) and not ply:IsAdmin() then ply:ChatPrint("Ммм,разраб лично послал вас нахуй") return false end end)
+        hook.Add("CanTool", "BlockToolGun", function(ply, tr, tool) if table.HasValue(blockedtools,tool) and not ply:IsAdmin() then ply:ChatPrint("Ммм,разраб лично послал вас нахуй") return false end end)
         
 
         local function spawn(ply, class, ent)

@@ -8,7 +8,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false
-SWEP.IconkaInv = "vgui/weapon_csgo_xm1014.png"
+SWEP.IconkaInv = "vgui/weapon_pwb_xm1014.png"
 
 ------------------------------------------
 

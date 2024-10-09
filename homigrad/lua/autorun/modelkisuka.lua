@@ -38,6 +38,16 @@ if CLIENT then
                 notification.AddLegacy("Скопирован путь к модельке: " .. modelPath, NOTIFY_HINT, 5)
             end
         end
+        for modelName, modelPath in pairs(defaultModels) do
+            local modelIcon = iconLayout:Add("SpawnIcon")
+            modelIcon:SetModel(modelPath)
+            modelIcon:SetTooltip(modelName)
+
+            modelIcon.DoClick = function()
+                SetClipboardText('"'..modelPath..'"')
+                notification.AddLegacy("Скопирован путь к модельке: " .. '"'..modelPath..'"', NOTIFY_HINT, 5)
+            end
+        end
     end
 
     concommand.Add("hg_playermodels", function()

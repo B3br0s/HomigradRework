@@ -5,7 +5,7 @@ SWEP.PrintName 				= "Сайга-12"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Полуавтоматический дробовик на базе АК под калибр 12/70"
 SWEP.Category 				= "Оружие"
-SWEP.IconkaInv = "vgui/pineapple.png"
+SWEP.IconkaInv = "vgui/weapon_pwb_saiga_12.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

@@ -132,13 +132,15 @@ SWEP.WMShitInformation = {
 	positionup = 1,
 	angleforward = 180,
 	angleright = -50,
-	angleup = 0
+	angleup = 0,
+	scale = 1
 }
 if CLIENT then
 function SWEP:DrawWorldModel()
 	if IsValid(self:GetOwner()) then
 		local ply = self:GetOwner()
 		if not self.WMSHIT then
+			local info = self.WMShitInformation
 			self.WMSHIT = ClientsideModel(self.WorldModel)
 			self.WMSHIT:SetPos(ply:GetPos())
 			self.WMSHIT:SetParent(ply)

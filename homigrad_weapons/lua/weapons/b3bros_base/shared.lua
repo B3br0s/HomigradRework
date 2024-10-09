@@ -435,7 +435,7 @@ homigrad_weapons = homigrad_weapons or {}
 
 function SWEP:Initialize()
 	homigrad_weapons[self] = true
-	self.Instructions = ("Урон: "..self.Primary.Damage.."                                           ".."Время До Выстрела: "..self.ShootWait.."       Вместительность:"..self:GetMaxClip1())
+	self.Instructions = ("Урон: "..self.Primary.Damage.."                                           ".."Время До Выстрела: "..self.ShootWait.."       Вместительность:"..self:GetMaxClip1().."                            ".."Тип Патронов: "..game.GetAmmoName(self:GetPrimaryAmmoType()))
 	self.lerpClose = 0
 end
 
@@ -519,12 +519,12 @@ function SWEP:PrimaryAttack()
 		if self:GetNWBool("Suppressor", false) != true then
 			self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
 			if self:Clip1() != 0 then
-				if self.CanManipulatorKuklovod and not self.NumBullet then
+				if self.CanManipulatorKuklovod and not self.shotgun then
 					self:ManipulateSlideBoneFor()
 					timer.Simple(0.05,function ()
 						self:ManipulateSlideBoneBac()
 					end)
-				elseif self.CanManipulatorKuklovod and self.NumBullet then
+				elseif self.CanManipulatorKuklovod and self.shotgun then
 					timer.Simple(0.3,function ()
 					self:ManipulateSlideBoneFor()
 					timer.Simple(0.2,function ()
@@ -781,6 +781,7 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	if ply:GetNWBool("Suiciding") then
 		if SERVER then
 			ply.KillReason = "killyourself"
+			ply:DropWeapon1()
 			local dmgInfo = DamageInfo()
 			dmgInfo:SetAttacker(ply)
 			dmgInfo:SetInflictor(self)
@@ -814,31 +815,20 @@ function SWEP:FireBullet(dmg, numbul, spread)
 		if self.Efect then
 			util.Effect(self.Efect,effectdata)
 		else
+			--util.Effect("MuzzleEffect", effectdata)
 			if GetConVar("hg_default_muzzle"):GetBool() == true then
-				util.Effect(self.Efect or "MuzzleEffect", effectdata)
+				util.Effect("MuzzleEffect", effectdata)
 			elseif GetConVar("hg_default_muzzle"):GetBool() == false then
 				if self.NumBullet then
-					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ar",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ar2",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ar3",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ar4",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ar5",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_pl",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
+					ParticleEffect("AC_explosive_round",shootOrigin,shootAngles)
+					ParticleEffect("AC_muzzle_desert",shootOrigin,shootAngles)
+					ParticleEffect("AC_muzzle_shotgun",shootOrigin,shootAngles)
+					ParticleEffect("AC_explosive_round",shootOrigin,shootAngles)
+					ParticleEffect("AC_muzzle_desert",shootOrigin,shootAngles)
+					ParticleEffect("AC_muzzle_shotgun",shootOrigin,shootAngles)
 				else
-					ParticleEffect("matin_mw_muzzleflash_ak",shootOrigin,shootAngles)
-					ParticleEffect("matin_mw_muzzleflash_357",shootOrigin,shootAngles)
-					end
+					ParticleEffect("AC_muzzle_pistol",shootOrigin,shootAngles)
+				end
 			end
 		end
 	end
@@ -872,7 +862,7 @@ end
 
 local pairs,IsValid = pairs,IsValid
 
-hook.Add("Think","weapons-sadsalat",function()
+hook.Add("Think","weapons-b3bros_base",function()
 	for wep in pairs(homigrad_weapons) do
 		if not IsValid(wep) then homigrad_weapons[wep] = nil continue end
 
@@ -928,7 +918,7 @@ if SERVER then
 		--	if ply:KeyDown(IN_ATTACK) then
 				ply.suicidingknife = not ply.suicidingknife
 				ply:SetNWBool("Suicidingknife",ply.suicidingknife)
-				print(ply:GetNWBool("Suicidingknife"))
+				--print(ply:GetNWBool("Suicidingknife"))
 				
 		--	end
 		end
@@ -1005,8 +995,8 @@ function SWEP:Step()
 
 		if isLocal then
 			--if (ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1) then
-				local p = 0.3 - math.min((painlosing or 0),0.3)
-				self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p,p),math.Rand(-p,p),math.Rand(-p,p))
+				--[[local p = 0.3 - math.min((painlosing or 0),0.3)
+				self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p,p),math.Rand(-p,p),math.Rand(-p,p))]]
 			--end
 		end
 

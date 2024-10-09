@@ -2,8 +2,8 @@ if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
 
-	local handsarrivetime = 0.225
-	local forwardarrivetime = 0.26
+	local handsarrivetime = 0.23
+	local forwardarrivetime = 0.22
 	local backarrivetime = 0.1
 	local velocititouebat = 25
 	-- угол
@@ -682,53 +682,63 @@ if engine.ActiveGamemode() == "homigrad" then
 	end
 
 	local CustomWeight = {
-		["models/player/police_fem.mdl"] = 50,
-		["models/player/police.mdl"] = 60,
-		["models/player/combine_soldier.mdl"] = 70,
-		["models/player/combine_super_soldier.mdl"] = 80,
-		["models/player/combine_soldier_prisonguard.mdl"] = 70,
-		["models/player/azov.mdl"] = 10,
-		["models/LeymiRBA/Gyokami/Gyokami.mdl"] = 50,
-		["models/player/smoky/Smoky.mdl"] = 65,
-		["models/player/smoky/Smokycl.mdl"] = 65,
-		["models/knyaje pack/dibil/sso_politepeople.mdl"] = 20,
-		["models/catalina/lizardman.mdl"] = 60,
-		["models/dejtriyev/hl1/ryangosling.mdl"] = 60,
-		["models/vinrax/player/Billy_Herrington.mdl"] = 60,
-		["models/player/furry/wolfy.mdl"] = 60,
-		["models/bloocobalt/splinter cell/chemsuit_cod.mdl"] = 60,
-		["models/player/jesus/jesus.mdl"] = 60,
-		["models/player/joe/k_pm.mdl"] = 60,
-		["models/player/megamind/megamind.mdl"] = 60,
-		["models/player/minyon.mdl"] = 60,
-		["models/player/oguzok.mdl"] = 60,
-		["models/petaly/peter_griffin/petergriffin.mdl"] = 80,
-		["models/petaly/peter_griffin/petergriffin2.mdl"] = 80,
-		["models/player/open season/boog.mdl"] = 60,
-		["models/it/pennywise/pennywisev2/player/Pennywise_player.mdl"] = 60,
-		["models/kuhnya/barinov.mdl"] = 60,
-		["models/player/Taa.mdl"] = 60
+		--[[ ["models/player/police_fem.mdl"] = true,
+		["models/player/police.mdl"] = true,
+		["models/player/combine_soldier.mdl"] = true,
+		["models/player/combine_super_soldier.mdl"] = true,
+		["models/player/combine_soldier_prisonguard.mdl"] = true,
+		["models/player/azov.mdl"] = true,
+		["models/LeymiRBA/Gyokami/Gyokami.mdl"] = true,
+		["models/player/smoky/Smoky.mdl"] = true,
+		["models/player/smoky/Smokycl.mdl"] = true,
+		["models/knyaje pack/dibil/sso_politepeople.mdl"] = true,
+		["models/catalina/lizardman.mdl"] = true,
+		["models/dejtriyev/hl1/ryangosling.mdl"] = true,
+		["models/vinrax/player/Billy_Herrington.mdl"] = true,
+		["models/player/furry/wolfy.mdl"] = true,
+		["models/bloocobalt/splinter cell/chemsuit_cod.mdl"] = true,
+		["models/player/jesus/jesus.mdl"] = true,
+		["models/player/joe/k_pm.mdl"] = true,
+		["models/player/megamind/megamind.mdl"] = true,
+		["models/player/minyon.mdl"] = true,
+		["models/player/oguzok.mdl"] = true,
+		["models/petaly/peter_griffin/petergriffin.mdl"] = true,
+		["models/petaly/peter_griffin/petergriffin2.mdl"] = true,
+		["models/player/open season/boog.mdl"] = true,
+		["models/it/pennywise/pennywisev2/player/Pennywise_player.mdl"] = true,
+		["models/kuhnya/barinov.mdl"] = true,
+		["models/player/Taa.mdl"] = true,
+		["models/player/SGG/hev_helmet.mdl"] = true,
+		["models/lazlo/gordon_freeman.mdl"] = true,
+		["models/policeStrong.mdl"] = true ]]
 	}
 
-	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = 100
-	end
-
-	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = 100
-	end
-
-	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = 30
-	end
-
+	--[[
 	for i = 1,9 do
-		CustomWeight["models/player/Rusty/NatGuard/male_0"..i..".mdl"] = 100
+		CustomWeight["models/player/Rusty/NatGuard/male_0"..i..".mdl"] = true
+	end
+	]]
+	for i = 1,6 do
+		CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = true
 	end
 
 	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = 100
+		CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = true
 	end
+
+	for i = 1,6 do
+		CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = true
+	end
+
+	for i = 1,6 do
+		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = true
+	end
+
+	for modelName, modelPath in pairs(list.Get("PlayerOptionsModel")) do
+		CustomWeight[modelPath] = true
+	end
+
+	--PrintTable(CustomWeight) --dibag blina
 
 
 	util.AddNetworkString("custom name")
@@ -781,8 +791,8 @@ if engine.ActiveGamemode() == "homigrad" then
 			rag:GetPhysicsObject():SetMass(20)
 
 			if CustomWeight[rag:GetModel()] then
-				self:SetNWFloat("HandsArrive",0.5)
-				self:SetNWFloat("ForwardArrive",1)
+				self:SetNWFloat("HandsArrive",0.6)
+				self:SetNWFloat("ForwardArrive",1.2)
 				self:SetNWFloat("BackArrive",0.8)
 			else
 				self:SetNWFloat("HandsArrive",handsarrivetime)
@@ -985,6 +995,23 @@ if engine.ActiveGamemode() == "homigrad" then
 
 	local dvec = Vector(0,0,-64)
 
+	hook.Add("Player Think","FakeCheckArms",function(ply)
+		if CLIENT then return end
+		if ply:GetNWBool("fake") then
+			local rag = ply:GetNWEntity("Ragdoll")
+			if IsValid(rag.ZacConsLH) then
+				return
+			else
+				ply:SetNWBool("LeftArmm",false)
+			end
+			if IsValid(rag.ZacConsRH) then
+				return
+			else
+				ply:SetNWBool("RightArmm",false)
+			end
+		end
+	end)
+
 	hook.Add("Player Think","FakeSuffocation",function(ply,time)
 			if ply:Alive() then
 			if CurTime() > ply:GetNWFloat("NextThinkGay") then -- троллед
@@ -1082,6 +1109,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		local noska2 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Thigh" )) )
 		local noska3 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Calf" )) )
 		local noska4 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Calf" )) )
+		local spinemain = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine2" )) )
 		rag:SetFlexWeight(9,0)
 		local dist = (rag:GetAttachment(rag:LookupAttachment( "eyes" )).Ang:Forward()*10000):Distance(ply:GetAimVector()*10000)
 		local distmod = math.Clamp(1-(dist/20000),0.1,1)
@@ -1160,7 +1188,7 @@ if engine.ActiveGamemode() == "homigrad" then
 							deltatime=0.01,
 						}
 						local shadowparams1 = {
-							secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.5,
+							secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.6,
 							pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
 							angle=ang,
 							maxangular=670,
@@ -1211,7 +1239,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						deltatime=0.01,
 					}
 					local shadowparams1 = {
-						secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.5,
+						secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.6,
 						pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
 						angle=ang,
 						maxangular=670,
@@ -1236,7 +1264,6 @@ if engine.ActiveGamemode() == "homigrad" then
 							phys:ComputeShadowControl(shadowparams)
 							shadowparams.pos=shadowparams.pos+eyeangs:Forward()*-50+eyeangs:Right()*-15
 							physa:ComputeShadowControl(shadowparams)
-							ply:ChatPrint("ssss")
 
 						elseif IsValid(ply.wep) and IsValid(ply.wep:GetPhysicsObject())then
 
@@ -1271,8 +1298,20 @@ if engine.ActiveGamemode() == "homigrad" then
 				end
 				if(ply:KeyDown(IN_USE))then
 					local phys = head
+					local phys2 = spinemain
 					local angs = ply:EyeAngles()
 					angs:RotateAroundAxis(angs:Forward(),90)
+					local shadowparams3 = {
+						secondstoarrive=5,
+						pos=spinemain:GetPos()+eyeangs:Forward()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+						angle=-angs:Forward()*250,
+						maxangulardamp=2.5,
+						maxspeeddamp=10,
+						maxangular=370,
+						maxspeed=40,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
 					local shadowparams = {
 						secondstoarrive=0.001,
 						pos=head:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
@@ -1285,9 +1324,9 @@ if engine.ActiveGamemode() == "homigrad" then
 						deltatime=deltatime,
 					}
 					local shadowparams2 = {
-						secondstoarrive=1,
-						pos=penis:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
-						angle=angs,
+						secondstoarrive=1.5,
+						pos=penis:GetPos()+eyeangs:Forward()*Vector(-50,-50,-50)+eyeangs:Right()*-5+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+						angle=-angs:Forward()*250,
 						maxangulardamp=10,
 						maxspeeddamp=10,
 						maxangular=370,
@@ -1297,6 +1336,12 @@ if engine.ActiveGamemode() == "homigrad" then
 					}
 					head:Wake()
 					head:ComputeShadowControl(shadowparams)
+					if rag:GetVelocity():Length() < 25 then
+					spinemain:Wake()
+					spinemain:ComputeShadowControl(shadowparams3)
+					ohhspina:Wake()
+					ohhspina:ComputeShadowControl(shadowparams3)
+					end
 					if ply:GetNWBool("LeftArmm") and ply:GetNWBool("RightArmm") and ply:KeyDown(IN_BACK) then
 					ohhspina:Wake()
 					ohhspina:ComputeShadowControl(shadowparams2)
@@ -1308,43 +1353,6 @@ if engine.ActiveGamemode() == "homigrad" then
 					noska4:ComputeShadowControl(shadowparams2)
 					end
 				end
-				--[[if(ply:KeyDown(IN_RELOAD))then
-					local phys = head
-					local angs = ply:EyeAngles()
-					angs:RotateAroundAxis(angs:Forward(),90)
-					local shadowparams = {
-						secondstoarrive=0.001,
-						pos=head:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
-						angle=angs,
-						maxangulardamp=10,
-						maxspeeddamp=10,
-						maxangular=370,
-						maxspeed=40,
-						teleportdistance=0,
-						deltatime=deltatime,
-					}
-					local shadowparams2 = {
-						secondstoarrive=0.9,
-						pos=penis:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
-						angle=angs,
-						maxangulardamp=10,
-						maxspeeddamp=10,
-						maxangular=370,
-						maxspeed=40,
-						teleportdistance=0,
-						deltatime=deltatime,
-					}
-					head:Wake()
-					head:ComputeShadowControl(shadowparams)
-					ohhspina:Wake()
-					ohhspina:ComputeShadowControl(shadowparams2)
-					penis:Wake()
-					penis:ComputeShadowControl(shadowparams2)
-					noska3:Wake()
-					noska3:ComputeShadowControl(shadowparams2)
-					noska4:Wake()
-					noska4:ComputeShadowControl(shadowparams2)
-				end]]
 			end
 			if(ply:KeyDown(IN_SPEED)) and (RagdollOwner(rag) and !RagdollOwner(rag).Otrub) and !timer.Exists("StunTime"..ply:EntIndex()) then
 				local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" ))

@@ -6,7 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Автоматическая винтовка под калибр 5,45х39"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb/sprites/aks74u"
-SWEP.IconkaInv = "vgui/pineapple.png"
+SWEP.IconkaInv = "vgui/weapon_pwb_aks74u.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

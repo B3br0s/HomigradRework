@@ -71,6 +71,11 @@ SWEP.vbwAng = Angle(5,-30,0)
 
 SWEP.OffsetVec = Vector(10,-2.6,2)
 
+function SWEP:ApplyEyeSpray()
+    self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(self.RecoilNumber*-1,self.RecoilNumber),0)
+    self.Primary.Sound = ("arccw_go/m4a1/m4a1_0"..math.random(1,3)..".wav")
+end
+
 SWEP.dwmModeScale = 1 -- pos
 SWEP.dwmForward = -10
 SWEP.dwmRight = 5.8
@@ -79,11 +84,6 @@ SWEP.dwmUp = -8
 SWEP.dwmAUp = 0 -- ang
 SWEP.dwmARight = 0
 SWEP.dwmAForward = 180
-
-function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(self.RecoilNumber,math.Rand(self.RecoilNumber*-1,self.RecoilNumber),0)
-    self.Primary.Sound = ("arccw_go/m4a1/m4a1_0"..math.random(1,3)..".wav")
-end
 
 local model 
     if CLIENT then
@@ -146,6 +146,8 @@ local model
         model:SetModelScale(self.dwmModeScale)
     
         model:DrawModel()
+
+        model:SetBodygroup(0, 0)
     else
             self:SetModel(self.WorldModel)
             self:DrawModel()

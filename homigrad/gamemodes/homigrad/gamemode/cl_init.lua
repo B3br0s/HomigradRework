@@ -31,6 +31,14 @@ surface.CreateFont("HomigradFontInvSmall",{
 	shadow = true
 })
 
+surface.CreateFont("HomigradFontInvSmallest",{
+	font = "Roboto",
+	size = 9,
+	weight = 1100,
+	outline = false,
+	shadow = true
+})
+
 surface.CreateFont("HomigradFontLarge",{
 	font = "Roboto",
 	size = ScreenScale(30),
@@ -211,17 +219,11 @@ local laserweps = {
 	["weapon_fiveseven"] = true,
 	["weapon_hk_usp"] = true,
 	["weapon_mk18"] = true,
-	["weapon_fiveseven"] = true,
-	["weapon_hk_usp"] = true,
-	["weapon_m4a1"] = true,
 	["weapon_ar15"] = true,
 	["weapon_m3super"] = true,
-	["weapon_mp7"] = true,
 	["weapon_p220"] = true,
 	["weapon_galil"] = true,
-	["weapon_deagle"] = true,
-	["weapon_beanbag"] = true,
-	["weapon_glock"] = true
+	["weapon_beanbag"] = true
 }
 laserplayers = laserplayers or {}
 local mat = Material("sprites/bluelaser1")

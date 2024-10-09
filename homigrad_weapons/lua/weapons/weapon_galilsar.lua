@@ -6,7 +6,7 @@ SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Автоматическая винтовка со встроенным глушителем под калибр 9х39"
 SWEP.Category 				= "Оружие"
 SWEP.WepSelectIcon			= "pwb2/vgui/weapons/asval"
-SWEP.IconkaInv = "vgui/pineapple.png"
+SWEP.IconkaInv = "vgui/weapon_pwb2_asval.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

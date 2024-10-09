@@ -70,15 +70,6 @@ SWEP.vbwAng = Angle(5,-30,0)
 SWEP.addPos = Vector(0,0,-1)
 SWEP.addAng = Angle(-4.5,-0.6,0)
 SWEP.MuzzleFXPos = Vector(5,0,0)
-
-SWEP.dwmModeScale = 1 -- pos
-    SWEP.dwmForward = 0
-    SWEP.dwmRight = 0
-    SWEP.dwmUp = -2.9
-    
-    SWEP.dwmAUp = 0 -- ang
-    SWEP.dwmARight = -15
-    SWEP.dwmAForward = 180
     
     local model 
     if CLIENT then
@@ -129,9 +120,8 @@ function SWEP:DrawWorldModel()
         self:DrawModel()
         return
     end
-        model:SetModel(self.OtherModel)
+    model:SetModel(self.OtherModel)
     
-
     local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
     if not Pos then return end
     
@@ -155,5 +145,5 @@ else
         self:SetModel(self.WorldModel)
         self:DrawModel()
 end
-end
+end 
 end

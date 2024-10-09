@@ -4,7 +4,7 @@ SWEP.Base = 'b3bros_base' -- base
 SWEP.PrintName 				= "РПК"
 SWEP.Instructions			= "Пулемёт под калибр 7,62х39"
 SWEP.Category 				= "Оружие"
-SWEP.IconkaInv = "vgui/weapon_csgo_ak47.png"
+SWEP.IconkaInv = "vgui/weapon_pwb2_rpk.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

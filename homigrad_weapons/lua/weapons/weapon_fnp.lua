@@ -18,7 +18,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.Automatic		= false
     SWEP.Primary.Ammo			= "9х19 mm Parabellum"
     SWEP.Primary.Cone = 0
-    SWEP.Primary.Damage = 1.7 * 130
+    SWEP.Primary.Damage = 1.7 * 46
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = "arccw_go/tec9/tec9-1.wav"
     SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"

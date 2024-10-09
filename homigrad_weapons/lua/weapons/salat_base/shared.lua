@@ -1,5 +1,5 @@
-if engine.ActiveGamemode() == "homigrad" then
-	--[[local skini = {
+--[[if engine.ActiveGamemode() == "homigrad" then
+	--[local skini = {
 		{skin = "phoenix_storms/mat/mat_phx_carbonfiber", namee = "carbonfiber"},
 		{skin = "sal/acc/armor01_3", namee = "greencamo"},
 		{skin = "sal/acc/armor01_4", namee = "multicamo"},
@@ -18,7 +18,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		{skin = "models/props/cs_assault/dollar", namee = "dollar"},
 		{skin = "phoenix_storms/black_chrome", namee = "blackchrome"},
 		{skin = "models/dav0r/hoverball", namee = "hoverball"}
-	}]]
+	}]
 
 	function FindInTableByName(tbl, name)
 		for k, v in pairs(tbl) do
@@ -1181,4 +1181,4 @@ end
 function SWEP:ShouldDropOnDie()
 	return true
 end
-end
+end]]

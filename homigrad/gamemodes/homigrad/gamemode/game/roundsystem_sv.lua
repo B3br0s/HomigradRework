@@ -61,10 +61,12 @@ function StartRound()
 	if roundActiveName ~= roundActiveNameNext then
 		SetActiveRound(roundActiveNameNext)
 	end
-	if string.find(mapName, "d1") or string.find(mapName, "d2") or string.find(mapName, "d3") then
+	if string.find(mapName, "d1_") or string.find(mapName, "d2_") or string.find(mapName, "d3_") then
 		SetActiveRound("hl2coop")
 	elseif string.find(mapName, "deathrun") then
 		SetActiveRound("deathrun")
+	elseif string.find(mapName, "testchmb") then
+		SetActiveRound("pcoop")
 	end
 
 	local players = PlayersInGame()

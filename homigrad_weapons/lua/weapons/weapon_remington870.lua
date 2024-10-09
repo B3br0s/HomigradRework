@@ -59,7 +59,7 @@ SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= false
 
 SWEP.OtherModel				= "models/weapons/arccw_go/v_shot_870.mdl"
-SWEP.ViewModel				= "models/weapons/arccw_go/v_shot_870.mdl"
+SWEP.ViewModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
 SWEP.WorldModel				= "models/bydistac/weapons/w_shot_m3juper90.mdl"
 
 function SWEP:ApplyEyeSpray()
@@ -71,10 +71,10 @@ SWEP.vbwPos = Vector(-9,-5,-5)
 SWEP.CLR_Scope = 0.05
 SWEP.CLR = 0.025
 
-SWEP.addAng = Angle(0,0,0)
-SWEP.addPos = Vector(30,-4.3,-2.2)
+SWEP.addAng = Angle(-4,-0.3,0)
+SWEP.addPos = Vector(0,0,0)
 
-SWEP.MuzzleFXPos = Vector(30,-5,-2)
+SWEP.MuzzleFXPos = Vector(0,0,0)
 
 SWEP.dwmModeScale = 1 -- pos
     SWEP.dwmForward = -13

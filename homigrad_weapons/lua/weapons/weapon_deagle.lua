@@ -1,169 +1,294 @@
 if engine.ActiveGamemode() == "homigrad" then
-SWEP.Base = 'b3bros_base' -- base
-
-SWEP.PrintName 				= "Mateba Autorevolver HP"
-SWEP.Author 				= "Homigrad"
-SWEP.Instructions			= "Револьвер под калибр .44 Remington Magnum"
-SWEP.Category 				= "Оружие"
-SWEP.WepSelectIcon			= "pwb2/vgui/weapons/matebahomeprotection"
-
-SWEP.Spawnable 				= true
-SWEP.AdminOnly 				= false
-SWEP.IconkaInv = "vgui/pineapple.png"
-
-------------------------------------------
-
-SWEP.Primary.ClipSize		= 6
-SWEP.Primary.DefaultClip	= 6
-SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= ".44 Remington Magnum"
-SWEP.Primary.Cone = 0
-SWEP.Primary.Damage = 1.7 * 30
-SWEP.Primary.Spread = 0
-if CLIENT then
-SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
-SWEP.BounceWeaponIcon = false
-end
-SWEP.Primary.Sound = "zcitysnd/sound/weapons/revolver/revolver_fp.wav"
-SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
-SWEP.Primary.Force = 105/40
-SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.12
-SWEP.Baraban = true
-SWEP.MagOut = "csgo/weapons/revolver/revolver_clipout.wav"
-SWEP.MagIn = "csgo/weapons/revolver/revolver_clipin.wav"
-SWEP.BoltOut = "csgo/weapons/revolver/revolver_siderelease.wav"
-SWEP.BoltIn = "csgo/weapons/revolver/revolver_sideback.wav"
-SWEP.MagOutWait = 0.6
-SWEP.MagInWait = 1.5
-SWEP.BoltInWait = 2
-SWEP.BoltOutWait = 0.3
-
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Ammo			= "none"
-
-------------------------------------------
-
-SWEP.Weight					= 5
-SWEP.AutoSwitchTo			= false
-SWEP.AutoSwitchFrom			= false
-
-SWEP.HoldType = "revolver"
-SWEP.revolver = true
-
-------------------------------------------
-
-SWEP.Slot					= 2
-SWEP.SlotPos				= 1
-SWEP.DrawAmmo				= true
-SWEP.DrawCrosshair			= false
-
-SWEP.ViewModel				= "models/pwb2/weapons/w_matebahomeprotection.mdl"
-SWEP.WorldModel				= "models/pwb2/weapons/w_matebahomeprotection.mdl"
-
-function SWEP:ApplyEyeSpray()
-    self.eyeSpray = self.eyeSpray - Angle(2,math.Rand(-0.5,0.5),0)
-end
-
-local function rolldrum(ply,wpn)
-    local wep = type(wpn) == "string" and ply:GetActiveWeapon() or wpn
+    SWEP.Base = 'b3bros_base' -- base
     
-    if not IsValid(ply) or not IsValid(wep) or wep:GetClass() != "weapon_deagle" then return end
-
-    wep.tries = math.random(math.max(7 - wep:Clip1(),1))
-    --ply:ChatPrint(tostring(wep.tries)..(CLIENT and " client" or " server"))
-
+    SWEP.PrintName 				= "Colt Python"
+    SWEP.Author 				= "Homigrad"
+    SWEP.Instructions			= "Револьвер под калибр .357 Magnum"
+    SWEP.Category 				= "Оружие"
+    SWEP.IconkaInv = "vgui/weapon_csgo_revolver.png"
+    SWEP.CanManipulatorKuklovodAngle = true
+    
+    SWEP.Spawnable 				= true
+    SWEP.AdminOnly 				= false
+    
+    ------------------------------------------
+    
+    SWEP.Primary.ClipSize		= 6
+    SWEP.Primary.DefaultClip	= 6
+    SWEP.Primary.Automatic		= false
+    SWEP.Primary.Ammo			= "357"
+    SWEP.Primary.Cone = 0
+    SWEP.Primary.Damage = 1.7 * 150
+    SWEP.Primary.Spread = 0
+    SWEP.Primary.Sound = "weapons/357/357_fire1.wav"
+    SWEP.NeedToChange = true
+    SWEP.Primary.HammerSound = "weapons/357/357_hammerrelease.wav"
+    SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
+    SWEP.Primary.Force = 90/3
+    SWEP.Baraban = true
+    SWEP.ReloadTime = 2
+    SWEP.ShootWait = 0.3
+    SWEP.MagOut = "csgo/weapons/revolver/revolver_clipout.wav"
+    SWEP.MagIn = "csgo/weapons/revolver/revolver_clipin.wav"
+    SWEP.BoltOut = "csgo/weapons/revolver/revolver_siderelease.wav"
+    SWEP.BoltIn = "csgo/weapons/revolver/revolver_sideback.wav"
+    SWEP.MagOutWait = 0.6
+    SWEP.MagInWait = 1.5
+    SWEP.BoltInWait = 2
+    SWEP.Primary.Delay = 1
+    SWEP.BoltOutWait = 0.3
+    SWEP.ShootDelay = 0.18
+    SWEP.revolver = true
+    
+    SWEP.Secondary.ClipSize		= -1
+    SWEP.Secondary.DefaultClip	= -1
+    SWEP.Secondary.Automatic	= false
+    SWEP.Secondary.Ammo			= "none"
+    
+    ------------------------------------------
+    
+    SWEP.Weight					= 5
+    SWEP.AutoSwitchTo			= false
     if CLIENT then
-        net.Start("hg_rolldrum")
-        net.WriteEntity(wep)
-        net.WriteInt(wep.tries,4)
-        net.SendToServer()
-    else
-        net.Start("hg_rolldrum")
-        net.WriteEntity(wep)
-        net.WriteInt(wep.tries,4)
-        net.Send(ply)
+    SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+    SWEP.BounceWeaponIcon = false
     end
-end
-
-function SWEP:RollDrum()
-    rolldrum(self:GetOwner(),self)
-end
-
-concommand.Add("hg_rolldrum",rolldrum)
-
-if SERVER then
-    util.AddNetworkString("hg_rolldrum")
-
-    net.Receive("hg_rolldrum",function(len,ply)
-        local wep = net.ReadEntity()
-
-        wep.tries = net.ReadInt(4)
-        ply:EmitSound("weapons/357/357_spin1.wav",65)
-        --ply:ChatPrint(tostring(wep.tries)..(CLIENT and " client" or " server"))
-    end)
-else
-    net.Receive("hg_rolldrum",function(len)
-        local ply = LocalPlayer()
-
-        local wep = net.ReadEntity()
-        wep.tries = net.ReadInt(4)
-        --ply:ChatPrint(tostring(wep.tries)..(CLIENT and " client" or " server"))
-    end)
-end
-
-if SERVER then
-    util.AddNetworkString("real_bul")
-
-    function SWEP:Deploy()
-        self:SetHoldType("normal")
+    SWEP.AutoSwitchFrom			= false
+    
+    SWEP.HoldType = "revolver"
+    
+    ------------------------------------------
+    
+    function SWEP:ApplyEyeSpray()
+        self.Primary.Sound = ("weapons/357/357_fire"..math.random(1,3)..".wav")
+        self.eyeSpray = self.eyeSpray - Angle(2,math.Rand(-0.1,0.1),0)
+    end
+    
+    SWEP.Slot					= 2
+    SWEP.SlotPos				= 1
+    SWEP.DrawAmmo				= true
+    SWEP.DrawCrosshair			= false
+    
+    SWEP.ViewModel				= "models/weapons/w_357.mdl"
+    SWEP.WorldModel				= "models/weapons/w_357.mdl"
+    SWEP.OtherModel				= "models/sirgibs/hl2/weapons/357.mdl"
+    
+    SWEP.vbwPos = Vector(8.5,-10,-8)
+    
+    
+    SWEP.addPos = Vector(0,0.3,0)
+    SWEP.addAng = Angle(2,0.55,0)
+    
+    SWEP.MuzzleFXPos = Vector(0,1,0)
+    
+        SWEP.dwmModeScale = 1 -- pos
+        SWEP.dwmForward = 2
+        SWEP.dwmRight = 1.6
+        SWEP.dwmUp = 0.5
         
-        self:GetOwner():EmitSound("snd_jack_hmcd_pistoldraw.wav", 65, 100, 1, CHAN_AUTO)
+        SWEP.dwmAUp = 0 -- ang
+        SWEP.dwmARight = 0
+        SWEP.dwmAForward = 180
+        
+        local model 
+        if CLIENT then
+            model = GDrawWorldModel or ClientsideModel(SWEP.WorldModel,RENDER_GROUP_OPAQUE_ENTITY)
+            GDrawWorldModel = model
+            model:SetNoDraw(true)
+        end
+        
+        if SERVER then
+            function SWEP:GetPosAng()
+                local owner = self:GetOwner()
+                local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+                if not Pos then return end
+                
+                Pos:Add(Ang:Forward() * self.dwmForward)
+                Pos:Add(Ang:Right() * self.dwmRight)
+                Pos:Add(Ang:Up() * self.dwmUp)
+        
+                Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+                Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+                Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+        
+                return Pos,Ang
+            end
+        else
+            function SWEP:SetPosAng(Pos,Ang)
+                self.Pos = Pos
+                self.Ang = Ang
+            end
+            function SWEP:GetPosAng()
+                return self.Pos,self.Ang
+            end
+        end
     
-        self.NextShot = CurTime() + 0.5
+        --смуф
+        function SWEP:ManipulateSlideBoneForAng()
+            if not IsValid(model) then return end
+        
+            local slideBone = model:LookupBone("Hammer")
+            if not slideBone then return end
+        
+            for i = 1, 60 do
+                timer.Simple(0.0001 * i,function ()
+                    local slideOffset = LerpAngle( 1.5, Angle(0,0,0),Angle(0,0,-30 + i / 2) )
+                    model:ManipulateBoneAngles(slideBone, slideOffset)   
+                end)
+            end
+        end
     
-        self:SetHoldType( self.HoldType )
-
-        self.tries = self.tries or math.random(math.max(7 - self:Clip1(),1))
-
-        net.Start("real_bul")
-        net.WriteEntity(self)
-        net.WriteInt(self.tries,4)
-        net.Send(self:GetOwner())
+        function SWEP:ManipulateSlideBoneBacAng()
+            if not IsValid(model) then return end
+        
+            local slideBone = model:LookupBone("Hammer")
+            if not slideBone then return end
+        
+            for i = 1, 60 do
+                timer.Simple(0.001 * i,function ()
+                    local slideOffset = LerpAngle( 1.5, Angle(0,0,0),Angle(0,0,-i / 2) )
+                    model:ManipulateBoneAngles(slideBone, slideOffset)   
+                end)
+            end
+        end
+    
+        function SWEP:DrawWorldModel()
+            local owner = self:GetOwner()
+            if LocalPlayer() == owner then
+            if not IsValid(owner) then
+                self:DrawModel()
+                return
+            end
+                model:SetModel(self.OtherModel)
+            
+    
+            local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
+            if not Pos then return end
+            
+            Pos:Add(Ang:Forward() * self.dwmForward)
+            Pos:Add(Ang:Right() * self.dwmRight)
+            Pos:Add(Ang:Up() * self.dwmUp)
+        
+            Ang:RotateAroundAxis(Ang:Up(),self.dwmAUp)
+            Ang:RotateAroundAxis(Ang:Right(),self.dwmARight)
+            Ang:RotateAroundAxis(Ang:Forward(),self.dwmAForward)
+            
+            self:SetPosAng(Pos,Ang)
+        
+            model:SetPos(Pos)
+            model:SetAngles(Ang)
+        
+            model:SetModelScale(self.dwmModeScale)
+        
+            model:DrawModel()
+        else
+                self:SetModel(self.WorldModel)
+                self:DrawModel()
     end
-else
-    function SWEP:Deploy()
-        self:SetHoldType("normal")
-    
-        self.NextShot = CurTime() + 0.5
-    
-        self:SetHoldType( self.HoldType )
     end
+    
+    function SWEP:PrimaryAttack()
+        if self.CanManipulatorKuklovodAngle and not self:GetOwner():IsSprinting() then
+            self:ManipulateSlideBoneBacAng()
 
-    net.Receive("real_bul",function(len)
-        net.ReadEntity().tries = net.ReadInt(4)
-    end)
-end
-
-function SWEP:CanFireBullet()
-    if not IsFirstTimePredicted() then return end
-
-    self.tries = self.tries or 1--math.ceil(util.SharedRandom("huy"..tostring(CurTime()),1,math.max(6 - self:Clip1(),1)))
-    self.tries = self.tries - 1
-    --self:GetOwner():ChatPrint(tostring(self.tries)..(CLIENT and " client" or " server"))
-
-    return (self.tries <= 0)
-end
-
-SWEP.OffsetVec = Vector(8,5,1)
-
-SWEP.dwsPos = Vector(15,15,5)
-SWEP.dwsItemPos = Vector(-5,0,1.5)
-
-SWEP.vbwPos = Vector(6.2,4.5,-4)
-
-SWEP.addPos = Vector(0,-1,-0.5)
-SWEP.addAng = Angle(0.2,-0.1,0)
-end
+            --[[timer.Simple(self.ShootDelay,function ()
+                self.Vzeden = true
+            end)]]
+            
+            sound.Play(self.Primary.HammerSound,self:GetPos(),65,100)
+                
+                    self.ShootNext = self.NextShot or NextShot
+                
+                
+                    if not IsFirstTimePredicted() then return end
+                
+                    if self.NextShot > CurTime() then return end
+                    if timer.Exists("reload"..self:EntIndex()) then return end
+                
+                    local canfire = self:CanFireBullet()
+                    --self:GetOwner():ChatPrint(tostring(canfire)..(CLIENT and " client" or " server"))
+                    if self:Clip1() <= 0 or not canfire and self.NextShot < CurTime() then
+                        timer.Simple(self.ShootDelay,function ()
+                        self:ManipulateSlideBoneForAng()
+                        end)
+                        self.NextShot = CurTime() + self.ShootWait
+                        self.AmmoChek = 3
+                        return
+                    end
+                
+                    self:PrePrimaryAttack()
+                
+                    if self.isClose or not self:GetOwner():IsNPC() and self:GetOwner():IsSprinting() then return end
+                
+                    local ply = self:GetOwner() -- а ну да
+                    self.NextShot = CurTime() + self.ShootWait
+                    timer.Simple(self.ShootDelay,function ()
+                    self:ManipulateSlideBoneForAng()
+                    if SERVER then
+                        net.Start("huysound")
+                        net.WriteEntity(self)
+                        net.WriteVector(self:GetPos())
+                        net.WriteString(self.Primary.Sound)
+                        net.WriteString(self.Primary.SoundFar)
+                        net.WriteEntity(self:GetOwner())
+                        net.Broadcast()
+                    else
+                        if self:GetNWBool("Suppressor", false) != true then
+                            self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+                        
+                            if self.Primary.PumpSound then
+                                timer.Simple(0.2,function ()
+                                    sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
+                                end)
+                            end
+                        else
+                            self.Efect = "PhyscannonImpact"
+                            self:EmitSound(self.Primary.SoundSupresor,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+                            if self.Primary.PumpSound then
+                                timer.Simple(0.2,function ()
+                                    sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
+                                end)
+                            end
+                        end
+                    end
+    
+                    local dmg = self.Primary.Damage
+                    self:FireBullet(dmg, 1, 5)
+                    self:SetNWFloat("VisualRecoil", self:GetNWFloat("VisualRecoil") + self.Primary.Force/90)
+                
+                    if SERVER and not ply:IsNPC() then
+                        if ply.RightArm < 1 then
+                            ply.pain = ply.pain + self.Primary.Damage / 30 * (self.NumBullet or 1)
+                        end
+                
+                        if ply.LeftArm < 1 and self.TwoHands then
+                            ply.pain = ply.pain + self.Primary.Damage / 30 * (self.NumBullet or 1)
+                        end
+                    end
+                
+                    if CLIENT and ply == LocalPlayer() then
+                        self.ZazhimYaycami = math.min(self.ZazhimYaycami + 1,self.Primary.ClipSize)
+                    end
+                    
+                    if CLIENT and (self:GetOwner() != LocalPlayer()) then
+                        self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+                    end
+                    
+                    self.lastShoot = CurTime()
+                    self:SetNWFloat("LastShoot",CurTime())
+                
+                    if CLIENT and ply == LocalPlayer() then
+                        self.eyeSpray = self.eyeSpray or Angle(0,0,0)
+                        
+                        local func = self.ApplyEyeSpray
+                        if func then
+                            func(self)
+                        else
+                            self.eyeSpray:Add(Angle(math.Rand(-0.9,0.5) * self.Primary.Damage / 30 * math.max((self.ZazhimYaycami / self.Primary.ClipSize),0.2),math.Rand(-0.5,0.5) * self.Primary.Damage / 30 * math.max((self.ZazhimYaycami / self.Primary.ClipSize),0.2),0))
+                        end
+                    end
+                end)
+    
+        end
+    end
+    end

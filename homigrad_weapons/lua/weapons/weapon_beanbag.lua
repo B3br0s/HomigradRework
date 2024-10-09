@@ -5,7 +5,7 @@ SWEP.PrintName 				= "Remington870 Police"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Дробовик под калибр 12/70 Фасоль"
 SWEP.Category 				= "Оружие"
-SWEP.IconkaInv = "vgui/weapon_csgo_sawedoff.png"
+SWEP.IconkaInv = "vgui/weapon_pwb2_remington870police.png"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

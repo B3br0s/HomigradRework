@@ -8,7 +8,7 @@ SWEP.Category 				= "Оружие"
 
 SWEP.Spawnable 				= true
 SWEP.MagModel = "models/csgo/weapons/w_pist_cz_75_mag.mdl"
-SWEP.IconkaInv = "vgui/weapon_csgo_cz75a.png"
+SWEP.IconkaInv = "vgui/weapon_pwb_cz75.png"
 SWEP.AdminOnly 				= false
 
 ------------------------------------------

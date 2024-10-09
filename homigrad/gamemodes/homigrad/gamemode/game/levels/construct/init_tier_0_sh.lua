@@ -3,7 +3,7 @@ construct = {}
 construct.Name = "Construct"
 
 construct.red = {"Игрок",Color(255,255,255),
-    weapons = {"weapon_molotok","weapon_hands","gmod_tool"},
+    weapons = {"weapon_hands","gmod_tool"},
     models = tdm.models
 }
 
