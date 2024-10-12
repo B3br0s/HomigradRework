@@ -100,6 +100,7 @@ end
 
 -- T1
 
+AddgW("Snow","gw_t1_snow","Tier 1")
 AddgW("Aurora Borealis","gw_t1_auroraborealis","Tier 1")
 AddgW("Light Snow","gw_t1_lightsnow","Tier 1")
 AddgW("Light Rain","gw_t1_lightrain","Tier 1")

@@ -4,12 +4,12 @@ SWEP.Base = 'b3bros_base' -- base
 SWEP.PrintName 				= "AT-4"
 SWEP.Author 				= "Homigrad"
 SWEP.Instructions			= "Имеет траекторию полёта. Обращаться максимально неосторожно."
-SWEP.Category 				= "Оружие 2"
+SWEP.Category 				= "Оружие"
 SWEP.IconkaInv = "vgui/pineapple.png"
 --SWEP.WepSelectIcon			= "pwb/sprites/m134"
 
-SWEP.Spawnable 				= false
-SWEP.AdminOnly 				= false
+SWEP.Spawnable 				= true
+SWEP.AdminOnly 				= true
 
 SWEP.Primary.ClipSize		= 1
 SWEP.Primary.DefaultClip	= 1

@@ -256,6 +256,23 @@ COMMANDS.forceartery = {function(ply,args)
 end
 end}
 
+
+COMMANDS.forceguilt = {function(ply,args)
+	if ply:IsAdmin() then
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+					ply.Guilt = args[2]
+	end
+end
+end}
+
+COMMANDS.forceneuro = {function(ply,args)
+	if ply:IsAdmin() then
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+					ply.informedaboutneuro = true
+	end
+end
+end}
+
 COMMANDS.forcepain = {function(ply,args)
 	if ply:IsAdmin() then
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do

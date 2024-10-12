@@ -745,7 +745,9 @@ if engine.ActiveGamemode() == "homigrad" then
 		["models/lazlo/gordon_freeman.mdl"] = true,
 		["models/policeStrong.mdl"] = true ]]
 	}
-
+	local CustomWeightHard = {
+	["models/player/jesus/jesus.mdl"] = true
+	}
 	--[[
 	for i = 1,9 do
 		CustomWeight["models/player/Rusty/NatGuard/male_0"..i..".mdl"] = true
@@ -824,15 +826,19 @@ if engine.ActiveGamemode() == "homigrad" then
 			rag:GetPhysicsObject():SetMass(20)
 
 			if CustomWeight[rag:GetModel()] then
-				self:SetNWFloat("HandsArrive",0.6)
-				self:SetNWFloat("ForwardArrive",1.2)
-				self:SetNWFloat("BackArrive",0.8)
+				self:SetNWFloat("HandsArrive",handsarrivetime * 2)
+				self:SetNWFloat("ForwardArrive",forwardarrivetime * 2)
+				self:SetNWFloat("BackArrive",backarrivetime * 2)
 			else
 				self:SetNWFloat("HandsArrive",handsarrivetime)
 				self:SetNWFloat("ForwardArrive",forwardarrivetime)
 				self:SetNWFloat("BackArrive",backarrivetime)
 			end
-			
+			if CustomWeightHard[rag:GetModel()] then
+				self:SetNWFloat("HandsArrive",handsarrivetime * 2.2)
+				self:SetNWFloat("ForwardArrive",forwardarrivetime * 3)
+				self:SetNWFloat("BackArrive",backarrivetime * 3)
+			end
 		end
 		rag:Activate()
 		rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)

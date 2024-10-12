@@ -1,7 +1,7 @@
 if engine.ActiveGamemode() == "homigrad" then
 include("shared.lua")
 
-SWEP.Dealy = 0.25
+SWEP.Dealy = 0.1
 
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Dealy)

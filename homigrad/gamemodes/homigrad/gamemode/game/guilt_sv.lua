@@ -69,21 +69,21 @@ end,1}
 
 function GuiltCheck(att,ply)
 	if att.Guilt >= 100 then
-		att.Guilt = att.Guilt - 75
+		att.Guilt = 0
 		
 		if not att.noguilt and not att:HasGodMode() then
-			if roundActiveName == "SandBox" or roundActiveName == "zombieinfection" or roundActiveName == "homicide" or roundActiveName == "eft" or roundActiveName == "construct" then
-			else
-			att.pain = att.pain + 150
-			att.Bloodlosing = att.Bloodlosing + 25
-			att:SetVelocity( Vector(0,0,9999))
-			att:ChatPrint("+150 Боли и +25 кровотечения за гилт. Текущая боль: "..att.pain.." Текущее кровотечение:"..att.Bloodlosing)
-			att:ConCommand("say", "*drop")
-			local r = math.random(1,6)
+			--if roundActiveName == "zombieinfection" or roundActiveName == "homicide" or roundActiveName == "eft" or roundActiveName == "construct" then return end
+			att:DropWeapon1()
+			if att.informedaboutneuro then return end
+			att:ChatPrint("Удачи выжить.")
+			timer.Simple(3,function ()
+				att:ChatPrint("Нейротоксин введён.")
+				att.informedaboutneuro = true
+			end)
+			--[[local r = math.random(1,6)
 			if r == 3 then
 				att:ChatPrint("КОООООООООООСМООООООООООООС")
-			end
-			end
+			end]]
 		end
 	end
 end
@@ -133,8 +133,7 @@ end]]--
 
 hook.Add("PlayerSpawn","guilt",function(ply)
 	if PLYSPAWN_OVERRIDE then return end
-	if roundActiveName == "SandBox" then
-	else
+	if roundActiveName == "SandBox" or roundActiveName == "construct" or roundActiveName == "homicide" then return end
 	ply.DontGuiltProtect = nil
 	ply.Seizure = false
 	ply.Guilt = ply.Guilt or 0
@@ -144,7 +143,6 @@ hook.Add("PlayerSpawn","guilt",function(ply)
 			Seizure(ply)
 		end)
 	end]]--
-	end
 end)
 
 hook.Add("PlayerDisconnected","guiltasd",function(ply)

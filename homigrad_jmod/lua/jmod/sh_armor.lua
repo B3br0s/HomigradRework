@@ -458,37 +458,6 @@ JMod.ArmorTable = {
 			}
 		}
 	},
-	["Core"] = {
-		PrintName = "Core",
-		mdl = "models/cores/para/core.mdl",
-		slots = {
-			head = 0.8,
-			eyes = .6,
-			mouthnose = .6
-		},
-		def = BasicArmorProtectionProfile,
-		bon = "ValveBiped.Bip01_Head1",
-		siz = Vector(0.45,0.45,0.45),
-		pos = Vector(0, 2, 0),
-		ang = Angle(-90, 0, 180),
-		wgt = 25,
-		dur = 50000,
-		ent = "ent_jack_gmod_ezarmor_coreportal",
-		bdg = {
-			[1] = 0
-		},
-		tgl = {
-			mskmat = "",
-			slots = {
-				head = 0.8,
-				eyes = 0,
-				mouthnose = 0	
-			},
-			bdg = {
-				[1] = 1
-			}
-		}
-	},
 	["Vape"] = {
 		PrintName = "Vape",
 		mdl = "models/swamponions/vape.mdl",

@@ -100,8 +100,10 @@ hook.Add("Player Think","homigrad-virus",function(ply,time)
             ply:SetNWBool("neurotoxinshake",true)
         elseif phrase == 5 then
             ply:ChatPrint("Тебя тошнит.")
-            timer.Simple(2,function ()
+            timer.Simple(1,function ()
+                if not ply.fake then
                 Faking(ply)
+                end
                 timer.Simple(0.2,function ()
                     ply:ConCommand("hg_blevota")   
                 end)

@@ -102,7 +102,7 @@ function ENT:Initialize()
 				Precipitation=0.45,
 			Wind={
 				Speed=math.random(250,340),
-				Direction=self.WindVec * Vector(math.random(-25,25),math.random(-25,25),math.random(-25,25)),
+				Direction=Vector(math.random(-0.01,0.01),math.random(-0.01,0.01),1.4),
 				},
 			})
 
@@ -223,7 +223,7 @@ function ENT:Initialize()
 				Precipitation=0.9,
 			Wind={
 				Speed=math.random(250,2700),
-				Direction=self.WindVec * Vector(math.random(-25,25),math.random(-25,25),math.random(-25,25)),
+				Direction=Vector(math.random(-25,25),math.random(-25,25),25),
 				},
 			})
 
