@@ -92,7 +92,6 @@ local defaultBulletPosAng = {
 	smg = {Vector(14, -0.8, 6.8), Angle(-9.5, 0, 0)},
 }
 
-
 hook.Add("HUDPaint","admin_hitpos",function()
 	if hg_show_hitposmuzzle:GetBool() and LocalPlayer():IsAdmin() then
 		local wep = LocalPlayer():GetActiveWeapon()
@@ -661,7 +660,7 @@ function SWEP:Reload()
 				end)
 			end
 		end
-		
+		self:GetOwner():SetNWFloat("PosaVistrela",1)
 		timer.Simple(0.1,function ()
 	--		spawn_mag(self.MagModel,self:GetOwner(),self,self.BigMagModel)
 		end)
@@ -821,10 +820,8 @@ function SWEP:FireBullet(dmg, numbul, spread)
 			elseif GetConVar("hg_default_muzzle"):GetBool() == false then
 				if self.NumBullet then
 					ParticleEffect("AC_explosive_round",shootOrigin,shootAngles)
-					ParticleEffect("AC_muzzle_desert",shootOrigin,shootAngles)
 					ParticleEffect("AC_muzzle_shotgun",shootOrigin,shootAngles)
 					ParticleEffect("AC_explosive_round",shootOrigin,shootAngles)
-					ParticleEffect("AC_muzzle_desert",shootOrigin,shootAngles)
 					ParticleEffect("AC_muzzle_shotgun",shootOrigin,shootAngles)
 				else
 					ParticleEffect("AC_muzzle_pistol",shootOrigin,shootAngles)
@@ -994,10 +991,10 @@ function SWEP:Step()
 		if SERVER then self:SetNWBool("IsScope",scope) end
 
 		if isLocal then
-			--if (ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1) then
-				--[[local p = 0.3 - math.min((painlosing or 0),0.3)
-				self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p,p),math.Rand(-p,p),math.Rand(-p,p))]]
-			--end
+			if (ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1) then
+				local p = 0.3 - math.min((painlosing or 0),0.3)
+				self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p,p),math.Rand(-p,p),math.Rand(-p,p))
+			end
 		end
 
 		if isLocal or SERVER then
@@ -1068,28 +1065,90 @@ function SWEP:Step()
 		end
 	end
 
+	local daunang = Angle(-50,50,-20)
+
 	clavicle:Set(angZero)
-	closeAng[3] = -40 * self.lerpClose
-	clavicle:Add(closeAng)
+	clavicle:Add(daunang * self.lerpClose)
+
+	--[[forearmL:Set(angZero)
+	forearmL:Add(closeAng)
+
+	forearm:Set(angZero)
+	forearm:Add(closeAng)]]
 
 	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
+	if ply.suiciding then ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),forearm,false)
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),forearmL,false)
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),handL,false)
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),clavicleL,false)
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
+	
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),clavicle,false)
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),hand,false)end
+	if ply:GetNWFloat("PosaVistrela") == 1 then
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),forearm,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),forearmL,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),handL,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),clavicleL,false)
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
+
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0))
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),clavicle,false)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),hand,false)
+	elseif ply:GetNWFloat("PosaVistrela") == 2 then
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),Angle(0,0,0))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
+
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),Angle(25,25,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),Angle(0,-45,25))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0))
+	elseif ply:GetNWFloat("PosaVistrela") == 3 then
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),Angle(0,0,0))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),Angle(0,0,0))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),Angle(0,0,0))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
+
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,0,0))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),Angle(-25,-25,0))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),Angle(0,45,-25))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0))
+	elseif ply:GetNWFloat("PosaVistrela") == 4 then
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),Angle(0,0,0))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
+
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,25,-45))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),Angle(50,-70,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),Angle(-80,0,-15))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(25,10,0))
+	elseif ply:GetNWFloat("PosaVistrela") == 5 then
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),Angle(0,0,0))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
+
+
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),Angle(0,0,0))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),Angle(15,5,-90))
+	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0))
+end
 end
 
 function SWEP:Holster( wep )
 	local ply = self:GetOwner()
+
 
 	if SERVER then
 		self:GetOwner():EmitSound("homigrad/player/holster"..math.random(1,3)..".wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
 	end
 
 	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
-
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Hand" ), Angle( 0,0,0 ) )
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Forearm" ), Angle( 0,0,0 ))
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_UpperArm" ),Angle( 0,0,0 ))
@@ -1117,6 +1176,9 @@ function SWEP:Deploy()
 		self:GetOwner():EmitSound("homigrad/player/deploy"..math.random(1,3)..".wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
 	end
 	self.NextShot = CurTime() + 0.5
+	if self.HoldType != "pistol" and self.HoldType != "revolver" then
+		self:GetOwner():SetNWFloat("PosaVistrela",1)
+	end
 	self:SetHoldType(self.HoldType)
 end
 function SWEP:ShouldDropOnDie()

@@ -35,6 +35,8 @@ function GM:PlayerSpawn(ply)
 	ply:SetNWFloat("NextThinkGay",0)
 	ply:SetNWEntity("Ragdoll",nil)
 	ply.virusvichblya = false
+	ply:SetNWBool("neurotoxinshake",false)
+	ply:SetNWBool("neurotoxinpripadok",false)
 	ply.slendermanblya = false
 	ply.pain = 0
 	ply.Paralizovan = false
@@ -46,6 +48,8 @@ function GM:PlayerSpawn(ply)
 	ply:SetNWFloat("Blood",5000)
 	ply:SetNWBool("paraliz",false)
 	ply:SetNWFloat("adrenaline",0)
+	ply:SetNWFloat("PosaVistrela",1)
+	ply.informedaboutneuro = false
 
 	if ply:IsAdmin() then
 		ply.Metabolizm = 3
@@ -110,6 +114,8 @@ end
 
 function GM:PlayerDeath(ply,inf,att)
 	ply.Paralizovan = false
+	ply:SetNWBool("neurotoxinshake",false)
+	ply:SetNWBool("neurotoxinpripadok",false)
 	if not roundActive then return end
 
 	if att == ply then att = ply.Attacker2 end
@@ -360,6 +366,8 @@ hook.Add("Player Think","HasGodMode Rep",function(ply)
 	 ply:SetNWBool("paraliz",ply.Paralizovan)
 	 ply:SetNWFloat("Metabolizm",ply.Metabolizm)
 	 ply:SetNWFloat("spid",ply.speeed)
+	 ply:SetNWBool("Suffocating",ply.Suffocating)
+	 ply:SetNWBool("informedaboutneuro",ply.informedaboutneuro)
 end)
 
 hook.Add("PlayerCanHearPlayersVoice", "PreventParalyzedPlayersFromTalking", function(listener, talker)
@@ -392,6 +400,8 @@ COMMANDS.fullup = {function(ply,args)
 	ply.Blood = 5000
 	ply.Bloodlosing = 0
 	ply.dmgimpulse = 0
+	ply.informedaboutneuro = false
+	ply:SetHealth(100)
 end}
 
 function GM:DoPlayerDeath(ply) end

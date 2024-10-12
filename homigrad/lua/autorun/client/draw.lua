@@ -1,7 +1,8 @@
 if CLIENT then
-local cvar = CreateClientConVar("hg_organisminfodev","0")
+local cvar = CreateClientConVar("hg_organisminfodev","0",true,false,"Dev",0,1)
 local white = Color(255,255,255)
 local function drawStates(ply,x,y,align)
+	if cvar:GetBool() then
 	draw.SimpleText("health: " .. ply:Health(),"ChatFont",x,y,white,align)
 	draw.SimpleText("pain: " .. ply:GetNWFloat("pain",0),"ChatFont",x,y + 25 * 1,white,align)
 	draw.SimpleText("painlosing: " .. ply:GetNWFloat("painlosing",0),"ChatFont",x,y + 25 * 2,white,align)
@@ -20,7 +21,10 @@ local function drawStates(ply,x,y,align)
 	draw.SimpleText("paralizovan: " .. tostring(ply:GetNWBool("paraliz",false)),"ChatFont",x,y + 25 * 15,white,align)
 	draw.SimpleText("inviter: " .. tostring(ply:GetNWEntity("InviterToTeam")),"ChatFont",x,y + 25 * 16,white,align)
 	draw.SimpleText("inteam: " .. tostring(ply:GetNWBool("InTeam",false)),"ChatFont",x,y + 25 * 17,white,align)
-	draw.SimpleText("NT: " .. tostring(ply:GetNWFloat("NextThinkGay",false)),"ChatFont",x,y + 25 * 18,white,align)
+	draw.SimpleText("nextthink: " .. tostring(ply:GetNWFloat("NextThinkGay",false)),"ChatFont",x,y + 25 * 18,white,align)
+	draw.SimpleText("suffocating: " .. tostring(ply:GetNWBool("Suffocating",false)),"ChatFont",x,y + 25 * 19,white,align)
+	draw.SimpleText("pose: " .. tostring(ply:GetNWFloat("PosaVistrela",false)),"ChatFont",x,y + 25 * 20,white,align)
+	end
 end
 
 hook.Add("HUDPaint","DevCheck",function()

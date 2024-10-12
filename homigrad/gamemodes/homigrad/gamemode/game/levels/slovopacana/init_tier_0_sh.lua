@@ -1,7 +1,7 @@
 table.insert(LevelList, "slovopacana")
 
 slovopacana = {}
-slovopacana.Name = "Пацанские тёрки"
+slovopacana.Name = "Слово Пацана"
 
 slovopacana.red = {"Октябрьские",Color(66, 135, 245),
 	weapons = {

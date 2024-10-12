@@ -275,7 +275,7 @@ COMMANDS.closedev = {function(ply,args)
 	else
 		SetGlobalBool("closedondev",false)
 		PrintMessageChat(3,"Сервер открыт")
-		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: "..roundActiveName)
+		RunConsoleCommand("hostname","Homigrad Rework | "..TableRound().Name)
 		discord_log('logs', 'Сервер открылся с разработки')
 	end
 end}

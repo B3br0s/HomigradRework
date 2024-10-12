@@ -8,7 +8,7 @@ for i = 1,9 do table.insert(models,"models/player/group03/male_0" .. i .. ".mdl"
 hl2dm.red = {"Повстанцы",Color(125,95,60),
 	weapons = {"weapon_radio","weapon_hands","medkit","painkiller","morphine"},
 	main_weapon = {"weapon_sar2","weapon_spas12","weapon_akm","weapon_mp7"},
-	secondary_weapon = {"weapon_hk_usp","weapon_p220"},
+	secondary_weapon = {"weapon_m1a1","weapon_p220"},
 	models = models
 }
 
@@ -16,7 +16,7 @@ hl2dm.red = {"Повстанцы",Color(125,95,60),
 hl2dm.blue = {"Комбайны",Color(75,75,125),
 	weapons = {"weapon_hands","medkit","painkiller","morphine"},
 	main_weapon = {"weapon_sar2","weapon_spas12","weapon_mp7"},
-	secondary_weapon = {"weapon_hk_usp"},
+	secondary_weapon = {"weapon_m1a1"},
 	models = {"models/player/combine_soldier.mdl"}
 }
 

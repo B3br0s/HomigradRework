@@ -49,6 +49,7 @@ showRoundInfoColor = Color(255,255,255)
 local yellow = Color(255,255,0)
 
 hook.Add("HUDPaint","homigrad-roundstate",function()
+	draw.SimpleText("Homigrad Rework V 0.4.4 (Release)","HomigradFont",10,ScrH()-10,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 	if roundActive then
 		if roundActiveName == "swat" then
 			local time = math.Round(roundTimeStart + roundTimeSWAT - CurTime())
@@ -93,12 +94,12 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 
 		draw.SimpleText("Текущий режим: " .. name,"HomigradFont",ScrW() - 15, ScrH() - 40, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 		if math.Round(roundTimeStart + roundTime - CurTime()) > 0 then
-			if roundActiveName == "homicide" or roundActiveName == "hideandseek" then
+			if roundActiveName == "homicide" and not LocalPlayer():Alive() or roundActiveName == "hideandseek" and not LocalPlayer():Alive() then
 				draw.SimpleText("До прибытия копов: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 			--elseif roundActiveName == "scp" then
 				--draw.SimpleText("До прибытия МОГ: " .. math.Round(scp.spawnMOG),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 			else
-				if roundActiveName != "zombieinfection" then
+				if roundActiveName != "zombieinfection" and not LocalPlayer():Alive() then
 					draw.SimpleText("До конца раунда: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 				end
 			end

@@ -21,7 +21,7 @@ if engine.ActiveGamemode() == "homigrad" then
     SWEP.Primary.Damage = 1.7 * 35
     SWEP.RubberBullets = false
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = "weapons/pistol/pistol_fire2.wav"
+    SWEP.Primary.Sound = "arccw_go/ump45/ump45_9mm.wav"
     SWEP.Primary.SoundFar = "snd_jack_hmcd_smp_far.wav"
     SWEP.Primary.Force = 0.1
     SWEP.ReloadTime = 2

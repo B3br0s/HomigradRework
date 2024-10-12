@@ -17,9 +17,9 @@ SWEP.Primary.DefaultClip	= 8
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "12/70 gauge"
 SWEP.Primary.Cone = 0.05
-SWEP.Primary.Damage = 1.7 * 25
+SWEP.Primary.Damage = 1.7 * 120
 SWEP.Primary.Spread = 0
-SWEP.Primary.Sound = "zcitysnd/sound/weapons/firearms/rifle_win1892/win1892_fire_01.wav"
+SWEP.Primary.Sound = "weapons/shotgun/shotgun_dbl_fire7.wav"
 SWEP.Primary.SoundFar = "toz_shotgun/toz_dist.wav"
 SWEP.LoadSound = "csgo/weapons/sawedoff/sawedoff_insertshell_01"
 SWEP.Primary.Force = 15
@@ -180,5 +180,124 @@ SWEP.dwmModeScale = 1 -- pos
             self:SetModel(self.WorldModel)
             self:DrawModel()
 end
+end
+function SWEP:PrimaryAttack()
+	if self.CanManipulatorKuklovodAngle then
+		self:ManipulateSlideBoneForAng()
+		timer.Simple(0.2,function ()
+			self:ManipulateSlideBoneBacAng()
+		end)
+	end
+
+	self.ShootNext = self.NextShot or NextShot
+
+
+	if not IsFirstTimePredicted() then return end
+
+	if self.NextShot > CurTime() then return end
+	if timer.Exists("reload"..self:EntIndex()) then return end
+
+	local canfire = self:CanFireBullet()
+	--self:GetOwner():ChatPrint(tostring(canfire)..(CLIENT and " client" or " server"))
+	if self:Clip1() <= 0 or not canfire and self.NextShot < CurTime() then
+		if SERVER then
+			sound.Play("snd_jack_hmcd_click.wav",self:GetPos(),65,100)
+		end
+		self.NextShot = CurTime() + self.ShootWait
+		self.AmmoChek = 3
+		return
+	end
+
+	self:PrePrimaryAttack()
+
+	if self.isClose or not self:GetOwner():IsNPC() and self:GetOwner():IsSprinting() then return end
+
+	local ply = self:GetOwner() -- а ну да
+	self.NextShot = CurTime() + self.ShootWait
+	
+	if SERVER then
+		net.Start("huysound")
+		net.WriteEntity(self)
+		net.WriteVector(self:GetPos())
+		net.WriteString(self.Primary.Sound)
+		net.WriteString(self.Primary.SoundFar)
+		net.WriteEntity(self:GetOwner())
+		net.Broadcast()
+	else
+		if self:GetNWBool("Suppressor", false) != true then
+			self:EmitSound(self.Primary.Sound,511,math.random(100,110),1,CHAN_VOICE_BASE,0,0)
+			if self:Clip1() != 0 then
+				if self.CanManipulatorKuklovod and not self.shotgun then
+					self:ManipulateSlideBoneFor()
+					timer.Simple(0.05,function ()
+						self:ManipulateSlideBoneBac()
+					end)
+				elseif self.CanManipulatorKuklovod and self.shotgun then
+					timer.Simple(0.3,function ()
+					self:ManipulateSlideBoneFor()
+					timer.Simple(0.2,function ()
+						self:ManipulateSlideBoneBac()
+					end)
+				end)
+				end
+				end
+		
+			if self.Primary.PumpSound then
+				timer.Simple(0.2,function ()
+					sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
+				end)
+			end
+		else
+			self.Efect = "PhyscannonImpact"
+			self:EmitSound(self.Primary.SoundSupresor,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
+			if self.CanManipulatorKuklovod then
+				self:ManipulateSlideBoneFor()
+				timer.Simple(0.01,function ()
+					self:ManipulateSlideBoneBac()
+				end)
+			end
+			if self.Primary.PumpSound then
+				timer.Simple(0.2,function ()
+					sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
+				end)
+			end
+		end
+	end
+	
+	local dmg = self.Primary.Damage
+    self:FireBullet(dmg, 1, 5)
+	self:SetNWFloat("VisualRecoil", self:GetNWFloat("VisualRecoil") + self.Primary.Force/90)
+
+	if SERVER and not ply:IsNPC() then
+		if ply.RightArm < 1 then
+			ply.pain = ply.pain + self.Primary.Damage / 30 * (self.NumBullet or 1)
+		end
+
+		if ply.LeftArm < 1 and self.TwoHands then
+			ply.pain = ply.pain + self.Primary.Damage / 30 * (self.NumBullet or 1)
+		end
+	end
+
+	if CLIENT and ply == LocalPlayer() then
+		self.ZazhimYaycami = math.min(self.ZazhimYaycami + 1,self.Primary.ClipSize)
+	end
+	
+	if CLIENT and (self:GetOwner() != LocalPlayer()) then
+		self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+	end
+	
+	self.lastShoot = CurTime()
+	self:SetNWFloat("LastShoot",CurTime())
+
+	if CLIENT and ply == LocalPlayer() then
+		self.eyeSpray = self.eyeSpray or Angle(0,0,0)
+		
+		local func = self.ApplyEyeSpray
+		if func then
+			func(self)
+		else
+			self.eyeSpray:Add(Angle(math.Rand(-0.9,0.5) * self.Primary.Damage / 30 * math.max((self.ZazhimYaycami / self.Primary.ClipSize),0.2),math.Rand(-0.5,0.5) * self.Primary.Damage / 30 * math.max((self.ZazhimYaycami / self.Primary.ClipSize),0.2),0))
+		end
+	end
 end
 end

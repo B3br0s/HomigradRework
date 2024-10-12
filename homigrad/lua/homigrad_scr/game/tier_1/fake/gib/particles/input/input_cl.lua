@@ -13,7 +13,16 @@ local vecZero = Vector(0,0,0)
 
 local function addBloodPart(pos,vel,mat,w,h)
 	pos = pos + vecZero
-	vel = vel + vecZero
+	vel = vel + vecZero 
+	local pos2 = Vector()
+	pos2:Set(pos)
+	
+	bloodparticels1[#bloodparticels1 + 1] = {pos,pos2,vel,mat,w,h}
+end
+
+local function addBloodPartCrazy(pos,vel,mat,w,h)
+	pos = pos + vecZero
+	vel = vel * 5 + vecZero 
 	local pos2 = Vector()
 	pos2:Set(pos)
 	
@@ -29,7 +38,7 @@ local Rand = math.Rand
 net.Receive("blood particle more",function()
 	local pos,vel = net.ReadVector(),net.ReadVector()
 
-	for i = 1,random(2,6) do
+	for i = 1,random(2,15) do
 		addBloodPart(pos,vel + Vector(Rand(-15,15),Rand(-15,15)),mats[random(1,#mats)],random(10,15),random(10,15))
 	end
 end)
@@ -40,22 +49,22 @@ local function addBloodPart2(pos,vel,mat,w,h,time)
 	local pos2 = Vector()
 	pos2:Set(pos)
 	
-	bloodparticels2[#bloodparticels2 + 1] = {pos,pos2,vel,mat,w,h,CurTime() + time,time}
+	bloodparticels2[#bloodparticels2 + 1] = {pos,pos2,vel * 15,mat,w,h,CurTime() + time,time}
 end
 
 
 local function explode(pos)
-	local xx,yy = 30,math.random(15,30)
-	local w,h = 150 / xx,200 / yy
+	local xx,yy = 40,90
+	local w,h = 360 / xx,360 / yy
 
 	for x = 1,xx do
 		for y = 1,yy do
-			local dir = Vector(math.random(-3,3),math.random(-3,3),math.random(0.5,2.5))
+			local dir = Vector(math.random(-1,1),math.random(-1,1),-500)
 			dir:Rotate(Angle(h * y * Rand(0.9,1.1),w * x * Rand(0.9,1.1),0))
 			dir[3] = dir[3] + Rand(-0.5,2.5)
 			dir:Mul(math.random(0,150))
 
-			addBloodPart(pos,dir,mats[random(1,#mats)],random(1,20),random(10,20))
+			addBloodPartCrazy(pos,dir,mats[random(1,#mats)],random(1,20),random(10,20))
 		end
 	end
 end
@@ -64,7 +73,7 @@ net.Receive("blood particle explode",function()
 	explode(net.ReadVector())
 end)
 
-local vecR = Vector(10,10,10)
+local vecR = Vector(10,10,2)
 
 net.Receive("blood particle headshoot",function()
 	local pos,vel = net.ReadVector(),net.ReadVector()

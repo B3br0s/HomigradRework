@@ -280,6 +280,8 @@ local function OpenInventory()
         inventoryFrame:SetDraggable(false)
         inventoryFrame:SetKeyBoardInputEnabled(false)
 
+        
+
         if roundActiveName == "construct" then
         
         local teamframe = vgui.Create("DFrame",inventoryFrame)

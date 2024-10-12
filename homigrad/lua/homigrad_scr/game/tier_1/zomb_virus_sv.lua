@@ -9,7 +9,9 @@ local zombies = {
 }
 
 local blevotasfx = {
-    "npc/zombie/zombie_pain1.wav"
+    "hg_blevota1.wav",
+    "hg_blevota2.wav",
+    "hg_blevota3.wav"
 }
 --functions
 
@@ -60,8 +62,54 @@ hook.Add("Player Think","homigrad-virus",function(ply,time)
 
 	if (ply.virusNext or time) > time then return end
     ply.virus = ply.virus or 0
-	ply.virusNext = time + 3
+	ply.virusNext = time + 6
     ply.virusNextNet = ply.virusNextNet or 0
+
+    if ply.informedaboutneuro then
+        local Dmg = DamageInfo()
+
+        Dmg:SetDamageType(DMG_NERVEGAS)
+		Dmg:SetDamage(math.random(5, 10))
+								
+		Dmg:SetInflictor(ply)
+		--Dmg:SetAttacker(ply)
+
+        ply:TakeDamageInfo(Dmg)
+
+        ply.KillReason = "ntoxin"
+
+        local phrase = math.random(1,5)
+
+        if phrase == 1 then
+            ply:ChatPrint("Нейротоксин уничтожает твои ионные каналы.")
+        elseif phrase == 2 then
+            ply:ChatPrint("Нейротоксин уничтожает твои нервные клетки.")
+            ply.pain = ply.pain + 30
+            ply:SetNWBool("neurotoxinpripadok",true)
+            ply:SetNWBool("neurotoxinshake",false)
+            timer.Simple(0.1,function ()
+                ply:SetNWBool("neurotoxinpripadok",false)
+                ply:SetNWBool("neurotoxinshake",true)
+            end)
+        elseif phrase == 3 then
+            ply:ChatPrint("Нейротоксин уничтожает твои лёгкие.")
+            ply.Organs["lungs"]=ply.Organs["lungs"]-ply.Organs["lungs"]/4
+            ply.stamina = ply.stamina - ply.stamina / 1.5
+        elseif phrase == 4 then
+            ply:ChatPrint("Тебя трясёт.")
+            ply:SetNWBool("neurotoxinshake",true)
+        elseif phrase == 5 then
+            ply:ChatPrint("Тебя тошнит.")
+            timer.Simple(2,function ()
+                Faking(ply)
+                timer.Simple(0.2,function ()
+                    ply:ConCommand("hg_blevota")   
+                end)
+            end)
+        end
+        
+        JMod.TryCough(ply)
+    end
 
     if ply.virus > 5 then
         ply.virus = ply.virus + 1
@@ -96,6 +144,8 @@ end)
 
 hook.Add("PostPlayerDeath","RefreshPain",function(ply)
     ply.virus = 0
+    ply:SetNWBool("neurotoxinshake",false)
+    ply:SetNWBool("neurotoxinpripadok",false)
     net.Start("info_virus")
     net.WriteFloat(ply.virus)
     net.Send(ply)
@@ -126,18 +176,30 @@ end,1}]]--
 concommand.Add( "hg_blevota", function( ply, cmd, args )
     if !ply:Alive() or ply.Otrub then return end
     local r = math.random(1,30)
-    if r > 17 then
+    if r > 14 then
         local snd = table.Random(blevotasfx)
-        ply:EmitSound(snd)
+        if ply:GetNWBool("fake") then
+            ply:GetNWEntity("Ragdoll"):EmitSound(snd)
+        else
+            ply:EmitSound(snd)
+        end
         timer.Create("Blevota"..ply:EntIndex(),0.01,15,function()
-            ply.Blood = math.Clamp(ply.Blood - 150,0,5000)
             local ent = RagdollOwner(ply) or ply
             local att = ent:GetAttachment(ent:LookupAttachment("eyes"))
-            BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())
-            BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())
+           --[[ if math.random(1,15) == 3 then
+                ply["Organs"].artery = 0
+                ply:ChatPrint("Ты не можешь остановиться блевать.")
+            end]]
+            for i = 1,50 do
+                timer.Simple(0.01 * i,function ()
+                    ply.Blood = math.Clamp(ply.Blood - 0.5,0,5000)
+                    BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())
+                    BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())    
+                end)
+            end 
         end)
     else
-        ply:ChatPrint("Ты не смог выблеваться")
+        ply:ChatPrint("Ты не смог выблеваться.")
     end
 end )
 

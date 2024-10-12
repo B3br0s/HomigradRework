@@ -16,8 +16,8 @@ SWEP.Primary.DefaultClip	= 45
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo			= "4.6×30 mm"
 if CLIENT then
-SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/uzi' )
-SWEP.BounceWeaponIcon = false
+    SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
+    SWEP.BounceWeaponIcon = false
 end
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 1.7 * 30
@@ -61,7 +61,7 @@ SWEP.WorldModel				= "models/weapons/w_smg1.mdl"
 SWEP.OtherModel				= "models/sirgibs/hl2/weapons/smg1.mdl"
 
 SWEP.vbwPos = Vector(-2,-4,-4)
-SWEP.addAng = Angle(4.5,-0.3,0)
+SWEP.addAng = Angle(8,0,0)
 SWEP.addPos = Vector(0,0,0)
 SWEP.MuzzleFXPos = Vector(0,-2,0)
 

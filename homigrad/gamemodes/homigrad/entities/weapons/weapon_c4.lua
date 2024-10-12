@@ -55,10 +55,6 @@ if SERVER then
 
     local function kabum(ent)
         local SelfPos,PowerMult,Model = ent:LocalToWorld(ent:OBBCenter()),6,ent:GetModel()
-        ent:EmitSound("arccw_go/c4/c4_until.wav")
-        timer.Simple(0.8,function ()
-        ent:EmitSound("homigrad/vgui/arm_bomb.wav")
-		timer.Simple(1,function()
             ParticleEffect("pcf_jack_groundsplode_large",SelfPos,vector_up:Angle())
             util.ScreenShake(SelfPos,99999,99999,1,3000)
             sound.Play("BaseExplosionEffect.Sound", SelfPos,120,math.random(90,110))
@@ -128,8 +124,6 @@ if SERVER then
 
                 --util.BlastDamage(Infl,Att,SelfPos,20 * PowerMult,1000 * PowerMult)
             end)
-		end)
-    end)
         if IsValid(ent.parentBomb) then ent.parentBomb:Remove() end
     end
 
@@ -138,7 +132,7 @@ if SERVER then
         local SelfPos, PowerMult, Model = ent:LocalToWorld(ent:OBBCenter()), 6, ent:GetModel()
     
         if SERVER then
-            local timeuntilexplode = 0.9
+            local timeuntilexplode = 0.83
             for i = 1, 85 do
                 timer.Simple(timeuntilexplode, function()
                     if not IsValid(ent) then return end
@@ -149,7 +143,13 @@ if SERVER then
                         if IsValid(ent.owner) then
                             ent.owner.bombtimed = nil
 
+                            ent:EmitSound("arccw_go/c4/c4_until.wav")
+                            timer.Simple(0.8,function ()
+                            ent:EmitSound("homigrad/vgui/arm_bomb.wav")
+		                    timer.Simple(1,function()
                             kabum(ent)
+                            end)
+                            end)
                         end
                     end
                 end)
@@ -170,7 +170,8 @@ if SERVER then
     function SWEP:PrimaryAttack()
         local owner = self:GetOwner()
         if IsValid(owner.bombtimed) then self:GetOwner():ChatPrint("Ты не можешь заложить две бомбы.") return end
-
+        if self.plantin then return end
+        self.plantin = true
         for i = 1,8 do
             timer.Simple(0.22 * i,function ()
                 self:EmitSound("arccw_go/c4/key_press"..math.random(1,7)..".wav")  

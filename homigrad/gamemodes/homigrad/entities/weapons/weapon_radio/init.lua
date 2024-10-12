@@ -11,8 +11,12 @@ function SWEP:Initialize()
     self.lisens = {}
 end
 
-function SWEP:BippSound(ent,pitch)
-    ent:EmitSound("buttons/button16.wav",75,pitch)
+function SWEP:BippSound(ent,pitch,ending)
+    if ending == false then
+        ent:EmitSound("homigrad/radio/default/startvoice"..math.random(1,2)..".wav",75,pitch)
+    else
+        ent:EmitSound("homigrad/radio/default/endvoice"..math.random(1,2)..".wav",75,pitch)
+    end
 end
 
 function SWEP:CanLisen(output,input,isChat)
@@ -22,8 +26,9 @@ function SWEP:CanLisen(output,input,isChat)
     if not input:HasWeapon("weapon_radio") then return end
 
     if output:GetActiveWeapon() ~= self or (not isChat and not self.Transmit) then return end
-
-    if output:Team() == input:Team() or output:Team() == 1002 then return true end
+    
+    return true
+    --if output:Team() == input:Team() or output:Team() == 1002 then return true end
 end
 
 local CurTime = CurTime
@@ -47,12 +52,16 @@ function SWEP:Step()
             if not self:CanLisen(output,input) then
                 if lisens[input] then
                     lisens[input] = nil
-                    self:BippSound(input,80)
+                    self:BippSound(input,100,true)
                 end
             elseif not lisens[input] then
                 lisens[input] = true
-                input:ChatPrint("Вещает : " .. output:Nick())
-                self:BippSound(input,100)
+                if input:Team() == output:Team() then
+                    input:ChatPrint("Вещает : " .. output:Nick())
+                else
+                    input:ChatPrint("Вещает : Н̴̢̫̻͌͛͝Е̵͇̼͓̓̿̽И̴̝̺͙͌̀̒З̵̡͎̠͌̿В̵͖͎̪́̔͠Е̵̢̼͎̿̔͝С̸͖͖̝̿̽̕Т̸̢͕͍͐̈́́Н̴̞̠̝̓̿̒О̸̞̪̼́̚̕")
+                end
+                self:BippSound(input,100,false)
             end
         end
 
@@ -61,7 +70,7 @@ function SWEP:Step()
         local lisens = self.lisens
         for input in pairs(lisens) do
             lisens[input] = nil
-            self:BippSound(input,80)
+            self:BippSound(input,100,true)
         end
 
         self:SetHoldType("normal")

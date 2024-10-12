@@ -75,7 +75,7 @@ function StartRound()
 	end
 	if not GetGlobalBool("closedondev") then
 		logToDiscord("Режим сменился на "..TableRound().Name, "Info")
-		RunConsoleCommand("hostname","Homigrad Rework | Текущий Режим: "..TableRound().Name)
+		RunConsoleCommand("hostname","Homigrad Rework | "..TableRound().Name)
 	end
 
 	if SERVER then

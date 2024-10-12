@@ -90,7 +90,12 @@ hook.Add("Player Think","homigrad-pain",function(ply,time)
 	end
 	--PrintMessage(3,tostring(ply.Otrub)..ply:Name())
 	ply.pain = math.max(ply.pain - ply.painlosing * 1 + ply.adrenalineNeed * k,0)
-	ply.painlosing = math.max(ply.painlosing - 0.01,1)
+	if !ply.Suffocating then
+		ply.painlosing = math.max(ply.painlosing - 0.01,1)	
+	else
+		ply.painlosing = 0
+	end
+	
 	
 	if ply.painNextNet <= time then
 		ply.painNextNet = time + 0.25
@@ -113,7 +118,12 @@ end)
 
 hook.Add("PostPlayerDeath","RefreshPain",function(ply)
 	ply.pain = 0
-	ply.painlosing = 1
+
+	if !ply.Suffocating == true then
+		ply.painlosing = 1
+	else
+		ply.painlosing = 0
+	end
 	
 	ply.vkololinh = false
 	ply.otravlen = false

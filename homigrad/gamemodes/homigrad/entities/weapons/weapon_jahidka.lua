@@ -45,7 +45,7 @@ if SERVER then
         if self.alalal then return end
 
         local owner = self:GetOwner()
---        owner:EmitSound("snd_jack_hmcd_jihad1.wav",75)
+--      owner:EmitSound("homigrad/vgui/beep07.wav",75)
         self.alalal = true
 
         timer.Simple(math.Rand(0.01,0.02),function()

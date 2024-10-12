@@ -69,7 +69,7 @@ SWEP.dwsItemPos = Vector(10,-1,-2)
 
 SWEP.addPos = Vector(0,-1,-1)
 SWEP.addAng = Angle(-4,0,0)
-SWEP.MuzzleFXPos = Vector(30,-5,-2)
+SWEP.MuzzleFXPos = Vector(0,0,0)
 
 SWEP.dwmModeScale = 1 -- pos
     SWEP.dwmForward = -13

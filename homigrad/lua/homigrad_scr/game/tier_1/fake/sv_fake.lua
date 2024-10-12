@@ -2,15 +2,14 @@ if engine.ActiveGamemode() == "homigrad" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
 
-	local handsarrivetime = 0.23
-	local forwardarrivetime = 0.22
-	local backarrivetime = 0.1
-	local velocititouebat = 25
+	local handsarrivetime = 0.22
+	local forwardarrivetime = 0.3
+	local backarrivetime = 0.005
+	local velocititouebat = 35
 	-- угол
 	local handsangup = 100
 
-	util.AddNetworkString("HandindicatorR")
-	util.AddNetworkString("HandindicatorL")
+	util.AddNetworkString("FlingNahuy")
 
 	Organs = {
 		['brain']=2,
@@ -55,6 +54,37 @@ if engine.ActiveGamemode() == "homigrad" then
 		["ValveBiped.Bip01_R_Calf"]=7,
 		["ValveBiped.Bip01_R_Foot"]=7
 	}
+
+	--[[if SERVER then
+		net.Receive("FlingNahuy",function ()
+			local ply = net.ReadEntity()
+			local rag = ply:GetNWEntity("Ragdoll")
+			local isfake = ply:GetNWBool("fake")
+
+			if isfake and ply:Alive() and not ply.Paralizovan and not ply.Otrub then
+			if math.random(1,320) < 30 then
+	Faking(ply)
+				local dmg = DamageInfo()
+                dmg:SetDamage(9999)
+                dmg:SetDamageType(DMG_CRUSH)
+                dmg:SetAttacker(ply)
+                dmg:SetInflictor(ply)
+				ply:TakeDamageInfo(dmg)
+			else
+				rag:GetPhysicsObjectNum(0):ApplyForceCenter(ply:EyeAngles():Forward()*math.random(-9999999,9999999)*2*999999999*52525+ply:EyeAngles():Right()*math.random(-9999999,9999999)*2*999999999*52525+ply:EyeAngles():Up()*math.random(-9999999,9999999)*2*999999999*52525)
+				if math.random(1,30) == math.random(15,20) then
+				Faking(ply)
+				local dmg = DamageInfo()
+                dmg:SetDamage(9999)
+                dmg:SetDamageType(DMG_CRUSH)
+                dmg:SetAttacker(ply)
+                dmg:SetInflictor(ply)
+				ply:TakeDamageInfo(dmg)
+			end
+			end
+		end)
+	end]]
+
 
 	function GetFakeWeapon(ply)
 		ply.curweapon = ply.Info.ActiveWeapon
@@ -682,6 +712,9 @@ if engine.ActiveGamemode() == "homigrad" then
 	end
 
 	local CustomWeight = {
+		["models/player/combine_super_soldier.mdl"] = true,
+		["models/player/combine_soldier_prisonguard.mdl"] = true,
+		["models/player/combine_soldier.mdl"] = true,
 		--[[ ["models/player/police_fem.mdl"] = true,
 		["models/player/police.mdl"] = true,
 		["models/player/combine_soldier.mdl"] = true,
@@ -922,8 +955,8 @@ if engine.ActiveGamemode() == "homigrad" then
 			(gg:GetBool() and not ply:HasGodMode()) or
 			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 5 / hitEnt:GetPhysicsObject():GetMass() * 10 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > velocititouebat)  --сбитие с ног
 		then 
-			if hitEnt:GetClass() == "prop_physics" then
-				if hitEnt:GetVelocity():Length() > velocititouebat + 120 then
+			if hitEnt:GetClass() == "prop_physics" or hitEnt:GetClass() == "prop_physics_multiplayer" then
+				if hitEnt:GetVelocity():Length() > velocititouebat + 70 then
 					timer.Simple(0,function()
 						if not IsValid(ply) or ply.fake then return end
 		
@@ -966,8 +999,14 @@ if engine.ActiveGamemode() == "homigrad" then
 	hook.Add("Think","VelocityFakeHitPlyCheck",function() --проверка на скорость в фейке (для сбивания с ног других игроков)
 		for i,rag in pairs(ents.FindByClass("prop_ragdoll")) do
 			if IsValid(rag) then
-				if rag:GetVelocity():Length() > 1 then
-					rag:SetCollisionGroup(COLLISION_GROUP_NONE)
+				if rag:GetVelocity():Length() > velocititouebat + 5 then
+					if not IsValid(rag:GetNWEntity("RagdollOwner")) then
+						rag:SetCollisionGroup(COLLISION_GROUP_NONE)	
+					else
+						if rag:GetNWEntity("RagdollOwner"):Alive() then
+							rag:SetCollisionGroup(COLLISION_GROUP_NONE)	
+						end
+					end
 				else
 					rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 				end
@@ -1013,9 +1052,19 @@ if engine.ActiveGamemode() == "homigrad" then
 	end)
 
 	hook.Add("Player Think","FakeSuffocation",function(ply,time)
+		local amounttodecrease = 0.05
+		local amounttopain = math.random(1,6)
 			if ply:Alive() then
 			if CurTime() > ply:GetNWFloat("NextThinkGay") then -- троллед
-			ply:SetNWFloat("NextThinkGay",CurTime() + 3.4)
+			if !ply.Suffocating == true then
+			ply:SetNWFloat("NextThinkGay",CurTime() + 0.1)
+			else
+			ply:SetNWFloat("NextThinkGay",CurTime() + 1)
+			end
+			if ply.Suffocating == true then
+				ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope.wav")
+				--ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation.wav")
+			end
 			if table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')) > 0 then
 				--print(table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')))
 				local RopesFoNi = constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')
@@ -1028,21 +1077,20 @@ if engine.ActiveGamemode() == "homigrad" then
 						--print(ply:Nick())
 
 							if boneName1 == "ValveBiped.Bip01_Head1" then
-								if ply.o2 > 0.97 then
+								if ply.o2 > 0.999 then
+									ply.Suffocating = true
 									ply:ChatPrint("Ты задыхаешься.")	
-									ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation.wav")
-									ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope.wav")
+									--ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation.wav")
+									--ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope.wav")
 								end
-								ply.o2 = ply.o2 - 0.5
+								ply.o2 = ply.o2 - amounttodecrease
 								ply.stamina = ply.stamina - 20
-								ply.pain = ply.pain + 35	
-								ply:SetHealth(ply:Health() - 5)	
-								if ply.o2 < 0.2 and ply.o2 > 0 then
+								ply.pain = ply.pain + amounttopain
+								ply.painlosing = 0
+								ply:SetHealth(ply:Health() - 1)	
+								if ply.o2 < 0.2 and ply.o2 > 0.19 then
 									ply:ChatPrint("У тебя нехватка воздуха.")	
 									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_voice_idle"..math.random(1,12)..".wav")
-								elseif ply.o2 < 0 and ply.Organs['artery']>0 then
-									ply.Organs['artery']=0
-									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_die"..math.random(1,3)..".wav")
 								end
 								--ply:ChatPrint(ply.stamina)
 							end
@@ -1057,27 +1105,33 @@ if engine.ActiveGamemode() == "homigrad" then
 						--print(ply:Nick())
 
 							if boneName2 == "ValveBiped.Bip01_Head1" then
-								if ply.o2 > 0.97 then
+								if ply.o2 > 0.999 then
 									ply:ChatPrint("Ты задыхаешься.")	
-									ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation.wav")
-									ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope.wav")
+									--ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation.wav")
+									--ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope.wav")
 								end
-								ply.o2 = ply.o2 - 0.5
+								ply.o2 = ply.o2 - amounttodecrease
 								ply.stamina = ply.stamina - 20
-								ply.pain = ply.pain + 35
-								ply:SetHealth(ply:Health() - 5)	
-								if ply.o2 < 0.2 and ply.o2 > 0 then
+								ply.pain = ply.pain + amounttopain
+								ply.painlosing = 0
+								ply:SetHealth(ply:Health() - 1)	
+								if ply.o2 < 0.2 and ply.o2 > 0.19 then
 									ply:ChatPrint("У тебя нехватка воздуха.")	
 									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_voice_idle"..math.random(1,12)..".wav")
-								elseif ply.o2 < 0 and ply.Organs['artery']>0 then
-									ply.Organs['artery']=0
-									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_die"..math.random(1,3)..".wav")
 								end
 								--ply:ChatPrint(ply.stamina)
 							end
 
 						--ply:ChatPrint("Bone2 attached: " .. (boneName2 or "Unknown Bone"))
 					end
+				end
+			elseif table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')) == 0 then
+				if ply.Suffocating == true then
+					ply.Suffocating = false
+					ply:GetNWEntity("Ragdoll"):StopSound("homigrad/suffocation_rope.wav")
+					ply:GetNWEntity("Ragdoll"):StopSound("homigrad/suffocation.wav")
+					ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_free.wav")
+					ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope_break.wav")
 				end
 			end
 		end
@@ -1119,7 +1173,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		if !ply.Otrub then rag:SetEyeTarget( LocalPos ) else rag:SetEyeTarget( Vector(0,0,0) ) end
 		if ply:Alive() then
 			if !ply.Otrub then
-				if ply:KeyDown(IN_JUMP) and (table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')) > 0 or ((rag.IsWeld or 0) > 0)) and ply.stamina > 45 and (ply.lastuntietry or 0) < CurTime() then
+				if ply:KeyDown(IN_JUMP) and not ply.Suffocating and (table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')) > 0 or ((rag.IsWeld or 0) > 0)) and ply.stamina > 45 and (ply.lastuntietry or 0) < CurTime() then
 					ply.lastuntietry = CurTime() + 1
 				
 					rag.IsWeld = math.max((rag.IsWeld or 0) - 0.1, 0)
@@ -1301,9 +1355,9 @@ if engine.ActiveGamemode() == "homigrad" then
 					local phys2 = spinemain
 					local angs = ply:EyeAngles()
 					angs:RotateAroundAxis(angs:Forward(),90)
-					local shadowparams3 = {
-						secondstoarrive=5,
-						pos=spinemain:GetPos()+eyeangs:Forward()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+					local shadowparams3	 = {
+						secondstoarrive=4,
+						pos=Vector(spinemain:GetPos().X,spinemain:GetPos().Y,spinemain:GetPos().Z + 50),
 						angle=-angs:Forward()*250,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
@@ -1336,11 +1390,9 @@ if engine.ActiveGamemode() == "homigrad" then
 					}
 					head:Wake()
 					head:ComputeShadowControl(shadowparams)
-					if rag:GetVelocity():Length() < 25 then
-					spinemain:Wake()
-					spinemain:ComputeShadowControl(shadowparams3)
-					ohhspina:Wake()
-					ohhspina:ComputeShadowControl(shadowparams3)
+					if rag:GetVelocity():Length() < 20 then
+						spinemain:Wake()
+						spinemain:ComputeShadowControl(shadowparams3)	
 					end
 					if ply:GetNWBool("LeftArmm") and ply:GetNWBool("RightArmm") and ply:KeyDown(IN_BACK) then
 					ohhspina:Wake()
@@ -1462,7 +1514,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				local angs = ply:EyeAngles()
 				angs:RotateAroundAxis(angs:Forward(),90)
 				angs:RotateAroundAxis(angs:Up(),90)
-				local speed = 30
+				local speed = 50
 
 				if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 					local shadowparams1 = {

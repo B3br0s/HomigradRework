@@ -24,8 +24,7 @@ if CLIENT then
 SWEP.WepSelectIcon = surface.GetTextureID( 'pwb/sprites/smoke' )
 SWEP.BounceWeaponIcon = false
 end
-SWEP.Primary.Sound = "zcitysnd/sound/weapons/m1911/m1911_tp.wav"
-SWEP.Primary.SoundSupresor = "zcitysnd/sound/weapons/m45/m45_suppressed_fp.wav"
+SWEP.Primary.Sound = "arccw_go/usp/usp_unsilenced_01.wav"
 SWEP.Primary.SoundFar = "weapons/tfa_ins2/usp_tactical/fpddd.wav"
 SWEP.Primary.Force = 90/3
 SWEP.ReloadTime = 2

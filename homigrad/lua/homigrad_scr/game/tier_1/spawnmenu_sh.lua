@@ -110,7 +110,9 @@ if engine.ActiveGamemode() == "homigrad" then
     "models/props_wasteland/cargo_container01c.mdl",
     "models/props_wasteland/cargo_container01b.mdl",
     "models/props_wasteland/coolingtank02.mdl",
-    "models/props_phx/games/chess/board.mdl"
+    "models/props_phx/games/chess/board.mdl",
+    "models/props_wasteland/boat_fishing01a.mdl",
+    "models/props_combine/combine_citadel001.mdl"
         }
 
         COMMANDS.accessspawn = {function(ply, args)
@@ -167,7 +169,7 @@ if engine.ActiveGamemode() == "homigrad" then
             "elastic",
             "ballsocket",
             "axis",
-            "Headcrab Canister",
+            "Headcrab Canisters",
             "item_charger_spawner",
             "Ammo Crate",
             "Item Crate",
@@ -186,7 +188,13 @@ if engine.ActiveGamemode() == "homigrad" then
             "wire_explosive",
             "wire_simple_explosive",
             "duplicator",
-            "rope"
+            "rope",
+            "env_headcrabcanister",
+            "item_item_crate",
+            "prop_thumper",
+            "item_charger_spawner",
+            "item_ammo_crate",
+            "camera"
     }
 
         hook.Add("PlayerSpawnVehicle", "Cantspawnbullshit", function(ply,model) return CanUseSpawnMenu(ply, "vehicle",model) end)

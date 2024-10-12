@@ -26,7 +26,7 @@ end
 
 _G.logToDiscord = function(message, logType)
     logType = logType or "Info"
-    --sendToDiscord(message, logType)
+    sendToDiscord(message, logType)
 end
 
 hook.Add("PlayerInitialSpawn", "LogPlayerSpawn", function(ply)

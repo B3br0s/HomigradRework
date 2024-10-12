@@ -4,6 +4,7 @@ local playsound = false
 local bhop
 local aABASDBASDBABDSB = true
 local started = false
+local randomm
 function swat.StartRoundCL()
 end
 function swat.HUDPaint_RoundLeft(white)
@@ -17,7 +18,7 @@ function swat.HUDPaint_RoundLeft(white)
             surface.PlaySound("swatarrive"..randomm..".wav")   
         end)
     end
-    if (roundTimeStart + roundTimeSWAT - CurTime()) > 116 then
+    if (roundTimeStart + roundTimeSWAT - CurTime()) > 118 then
         if aABASDBASDBABDSB == true then
             aABASDBASDBABDSB = false
             started = false

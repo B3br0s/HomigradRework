@@ -56,7 +56,6 @@ if SERVER then
     local function Bomb(ent)
         local SelfPos,PowerMult,Model = ent:LocalToWorld(ent:OBBCenter()),6,ent:GetModel()
 
-        ent:EmitSound("homigrad/vgui/arm_bomb.wav")
 		timer.Simple(1,function()
             ParticleEffect("pcf_jack_groundsplode_large",SelfPos,vector_up:Angle())
             util.ScreenShake(SelfPos,99999,99999,1,3000)
@@ -175,10 +174,16 @@ if SERVER then
     function SWEP:SecondaryAttack()
         --local bomb = cyka[self:GetOwner()]
         if not IsValid(self:GetOwner().bomb) then return end
-
-        Bomb(self:GetOwner().bomb)
-        self:GetOwner().bomb = nil
-        self:Remove()
+        self:GetOwner().bomb:EmitSound("arccw_go/c4/c4_until.wav")
+        timer.Simple(0.9,function ()
+        self:GetOwner().bomb:EmitSound("homigrad/vgui/arm_bomb.wav")    
+        end)
+        timer.Simple(1,function ()
+            Bomb(self:GetOwner().bomb)   
+            self:GetOwner().bomb = nil
+            self:GetOWner():SelectWeapon("weapon_hands")
+            self:Remove()
+        end)
         --cyka[self:GetOwner()] = nil
     end
 else

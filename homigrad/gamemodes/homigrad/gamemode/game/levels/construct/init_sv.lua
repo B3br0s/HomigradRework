@@ -92,6 +92,13 @@ end
 
 function construct.PlayerDeath(ply,inf,att) timer.Simple(1,function ()
 	ply:Spawn()
+	local aviable2 = ReadDataMap("spawnpointsct")
+	local aviable1 = ReadDataMap("spawnpointst")
+	if math.random(1,2) == 1 then
+		ply:SetPos(aviable1[math.random(1,#aviable)][1])
+	else
+		ply:SetPos(aviable2[math.random(1,#aviable)][1])
+	end
 end) end
 
 function construct.GuiltLogic(ply,att,dmgInfo)

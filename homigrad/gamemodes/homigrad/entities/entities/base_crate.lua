@@ -54,6 +54,7 @@ if SERVER then
         local phys = self:GetPhysicsObject()
         if phys:IsValid() then
             phys:Wake()
+            phys:SetMass(70)
         end
     end
 

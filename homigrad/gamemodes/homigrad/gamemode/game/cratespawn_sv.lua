@@ -96,15 +96,20 @@ local crateTypes = {
 "base_crate",
 "base_crate",
 "base_crate",
-"ent_drop_flashlight", 
 "ent_drop_flashlight",
-"ent_drop_flashlight",
-"ent_drop_flashlight" }
+"ent_jack_gmod_ezarmor_balmask",
+"ent_jack_gmod_ezarmor_mltorso",
+"ent_jack_gmod_ezarmor_headset"
+}
 
 local function PopulateSpawns()
 	spawns = {}
-	for _, ent in pairs(ents.FindByClass("info_*")) do
-		table.insert(spawns, ent:GetPos())
+	if ReadDataMap("boxspawn") then
+		table.insert(spawns, ReadDataMap("boxspawn")[math.random(1,#ReadDataMap("boxspawn"))][1])
+	else
+		for _, ent in pairs(ents.FindByClass("info_*")) do
+			table.insert(spawns, ent:GetPos())
+		end
 	end
 end
 
@@ -156,6 +161,7 @@ hook.Add("Boxes Think", "SpawnBoxes", function()
 
 	if math.random(1, 100) <= 50 then
 		entName = table.Random(crateTypes)
+		print(entName)
 	end
 	
 

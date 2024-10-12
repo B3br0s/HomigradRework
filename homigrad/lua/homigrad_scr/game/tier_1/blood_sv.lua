@@ -60,7 +60,7 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 	ply.heartstop = heartstop
 	ply.nextPulse = not heartstop and nextPulse or Lerp(0.1,(ply.nextPulse or 0),5)
 
-	if (ply.CPRThink or 0) < time then
+	if (ply.CPRThink or 0) < time and !ply.Suffocating then
 		ply.CPRThink = time + 1
 		ply.CPR = math.max((ply.CPR or 0) - 5,0)
 		ply.o2 = (ply.heartstop) and math.max((ply.o2 or 1) - 0.1,-3) or math.min((ply.o2 or 1) + 0.1,1)
@@ -150,6 +150,7 @@ hook.Add("PlayerSpawn","homigrad-blood",function(ply)
 	ply.LeftArm = 1
 	ply.Attacker = nil
 	ply.nopain = false
+	ply.Suffocating = false
 	ply.o2 = 1
 
 	ply.Blood = 5000
@@ -177,6 +178,7 @@ hook.Add("PlayerDeath","deathblood",function(ply)
 	ply.RightLeg = 1
 	ply.RightArm = 1
 	ply.LeftArm = 1
+	ply.Suffocating = false
 	ply.o2 = 1
 
 	ply.arterybleeding = nil
@@ -187,6 +189,9 @@ hook.Add("PlayerDeath","deathblood",function(ply)
 	ply.InternalBleeding4 = nil
 	ply.InternalBleeding5 = nil
 	ply.brokenspine = false
+
+	ply:SetNWBool("neurotoxinshake",false)
+	ply:SetNWBool("neurotoxinpripadok",false)
 
 	ply:ConCommand("soundfade 0 1")
 	ply:SetDSP(0)

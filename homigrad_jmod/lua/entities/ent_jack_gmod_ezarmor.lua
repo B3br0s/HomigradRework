@@ -103,7 +103,7 @@ if SERVER then
 			else
 				JMod.Hint(activator, "inventory")
 			end
-		activator:EmitSound("homigrad/player/footsteps/new/suit_ct_0"..math.random(1,11)..".wav",70,100)
+		activator:EmitSound("homigrad/player/footsteps/new/suit_ct_0"..math.random(1,9)..".wav",70,100)
 		--activator:EmitSound("snd_jack_gmod/armorstep1.wav",70,100)--5
 		--activator:EmitSound("snd_jack_gear1.wav",70,100)--6
 		end

@@ -334,6 +334,13 @@ local function ToggleMenu(toggle)
 		plyMenu:AddOption("Меню Патрон",function()
 			LocalPlayer():ConCommand("hg_ammomenu")
 		end)
+		if LocalPlayer():GetActiveWeapon():GetHoldType() == "pistol" or LocalPlayer():GetActiveWeapon():GetHoldType() == "revolver" then
+			if SERVER then return end
+			if LocalPlayer():GetActiveWeapon().Base != "b3bros_base" then return end
+			plyMenu:AddOption("Сменить Позу",function()
+				LocalPlayer():ConCommand("hg_changepos")
+			end)
+		end
 		local EZarmor = LocalPlayer().EZarmor
 		if JMod.GetItemInSlot(EZarmor, "eyes") then
 			plyMenu:AddOption("Активировать Маску/Забрало",function()
@@ -476,3 +483,42 @@ end)
 
 hook.Add("DrawDeathNotice","no",function() return false end)
 
+hook.Add("Think", "NeurotoxinMouseShake", function()
+    local ply = LocalPlayer()
+
+    if not IsValid(ply) then return end
+
+    if ply:GetNWBool("neurotoxinshake", false) and not ply:GetNWBool("neurotoxinpripadok", false) and ply:Alive() then
+		if ply:GetNWBool("fake") then
+			shakeIntensity = 3--3 * ply:Health() / 80
+		else
+			shakeIntensity = 1--1.5 * ply:Health() / 99
+		end
+        local x = math.random(-shakeIntensity, shakeIntensity)
+        local y = math.random(-shakeIntensity, shakeIntensity)
+
+        local angles = ply:EyeAngles()
+        angles.pitch = angles.pitch + y
+        angles.yaw = angles.yaw + x
+
+        ply:SetEyeAngles(angles)
+    end
+end)
+
+hook.Add("Think", "NeurotoxinMouseShakeMaximal", function()
+    local ply = LocalPlayer()
+
+    if not IsValid(ply) then return end
+
+    if ply:GetNWBool("neurotoxinpripadok", false) and ply:Alive() then
+		local shakeIntensitys = 20000
+        local x = math.random(-shakeIntensitys, shakeIntensitys)
+        local y = math.random(-shakeIntensitys, shakeIntensitys)
+
+        local angles = ply:EyeAngles()
+        angles.pitch = angles.pitch + y
+        angles.yaw = angles.yaw + x
+
+        ply:SetEyeAngles(angles)
+    end
+end)

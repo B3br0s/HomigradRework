@@ -489,8 +489,10 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local dist = traca.HitPos:Distance(lply:EyePos())
 
 	if not RENDERSCENE then
+		
 		scope = IsValid(wep) and wep.IsScope and wep:IsScope() and not wep.isClose
 		if scope then
+			if lply:GetNWFloat("PosaVistrela") == 1 then 
 			if lply:KeyPressed(IN_WALK) then
 				pointshooting = not pointshooting
 			end
@@ -499,9 +501,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			else
 				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.4 or 1,ScopeLerp,1)
 			end
+			end
 		else
 			ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.4 or 1,ScopeLerp,0)
 		end
+
 	end
 
 	fov = Lerp(ScopeLerp,fov,CameraSetFOV)
@@ -690,8 +694,8 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		end
 		if weaponClass == "weapon_m4a1" then
 			--Vector(5.05,7,0.725)
-			vecWep = hand.Pos + hand.Ang:Up() * 7.5 - hand.Ang:Forward() * 7 + hand.Ang:Right() * 1.15
-			angWep = hand.Ang + Angle(20,2,0)
+			vecWep = hand.Pos + hand.Ang:Up() * 7.5 - hand.Ang:Forward() * 4 + hand.Ang:Right() * 1.12
+			angWep = hand.Ang + Angle(0,2,0)
 		end
 		if weaponClass == "weapon_minu14" then
 			--Vector(5,4,0.95)
@@ -939,7 +943,13 @@ hook.Add("Think","mouthanim",function()
 			ent:GetFlexIDByName( "right_mouth_drop" )
 		}
 
-		local weight = ply:IsSpeaking() && math.Clamp( ply:VoiceVolume() * 15, 0, 12 ) || 0
+		local weight = ply:IsSpeaking() && math.Clamp( ply:VoiceVolume() * 18, 0, 13 ) || 0
+
+		if (ply:VoiceVolume() * 15) > 7.6 then
+			net.Start("FlingNahuy")
+			net.WriteEntity(ply)
+			net.SendToServer()
+        end
 
 		for k, v in pairs( flexes ) do
 			ent:SetFlexWeight( v, weight )
