@@ -1,0 +1,1 @@
+--[[Everyone in credits is allowed to modify and republish gdisasters. I've also given permission to three over people to redistribute and port over procedural lightning code to other source mods as it shouldn't go to waste in gmod.--]]

@@ -124,7 +124,7 @@ function bahmut.StartRoundSV()
 end
 
 function bahmut.Think()
-    bahmut.LastWave = bahmut.LastWave or CurTime() + 60
+    bahmut.LastWave = bahmut.LastWave or CurTime() + 30
 
     if CurTime() >= bahmut.LastWave then
         SetGlobalInt("Bahmut_respawntime", CurTime())
@@ -150,7 +150,7 @@ function bahmut.Think()
             if IsValid(ent) then ent:Remove() end
             bahmut.ragdolls[ent] = nil
         end
-        bahmut.LastWave = CurTime() + 60
+        bahmut.LastWave = CurTime() + 30
     end
 end
 
@@ -271,6 +271,11 @@ function bahmut.PlayerSpawn(ply,teamID)
 		ply:SetBodygroup(6,1)
 		ply:SetBodygroup(7,1)
 		ply:SetBodygroup(9,2)
+    elseif teamID == 2 then
+        ply:SetBodygroup(1,1)
+        ply:SetBodygroup(2,1)
+        ply:SetBodygroup(3,5)
+        ply:SetBodygroup(4,1)
 	end
 
     ply:SetPlayerColor(color:ToVector())
@@ -280,12 +285,13 @@ function bahmut.PlayerSpawn(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.main_weapon)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon)
 	
-	JMod.EZ_Equip_Armor(ply,"Medium-Helmet",color)
-	local r = math.random(1,2)
-	JMod.EZ_Equip_Armor(ply,(r == 1 and "Medium-Vest") or (r == 2 and "Light-Vest"),color)
+    if teamID == 1 then
+        JMod.EZ_Equip_Armor(ply,"Osprey MK4A A",Color(255,255,255):ToVector())
+    elseif teamID == 2 then
+    end
 
 	if roundStarter then
-		ply:Give("weapon_gredmimomet")
+		--ply:Give("weapon_gredmimomet")
 		ply.allowFlashlights = true
 	end
 end

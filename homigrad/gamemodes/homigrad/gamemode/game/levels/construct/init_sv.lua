@@ -4,7 +4,7 @@ function construct.StartRoundSV(data)
 	tdm.DirectOtherTeam(1,2)
 
 	roundTimeStart = CurTime()
-	roundTime = 380 * (2 + math.min(#player.GetAll() / 16,2))
+	roundTime = 780 * (2 + math.min(#player.GetAll() / 16,2))
 	roundTimeLoot = 30
 
 	SetGlobalBool("AccessSpawn",true)

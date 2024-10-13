@@ -1,4 +1,5 @@
 function GuiltLogic(ply,att,dmgInfo,dontApply)
+	if roundActiveName == "SandBox" or roundActiveName == "construct" or roundActiveName == "homicide" then return end
 	--if ply.RoundGuilt > 3 then return end
 	--if #ply.attackees > 0 then return end
 	if att == ply then return end
@@ -72,7 +73,7 @@ function GuiltCheck(att,ply)
 		att.Guilt = 0
 		
 		if not att.noguilt and not att:HasGodMode() then
-			--if roundActiveName == "zombieinfection" or roundActiveName == "homicide" or roundActiveName == "eft" or roundActiveName == "construct" then return end
+			--if roundActiveName == "SandBox" or roundActiveName == "construct" or roundActiveName == "homicide" then return end
 			att:DropWeapon1()
 			if att.informedaboutneuro then return end
 			att:ChatPrint("Удачи выжить.")

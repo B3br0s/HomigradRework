@@ -27,6 +27,7 @@ gg = function(ply,mv,value)
 
 	if roundActiveName == "deathrun" or roundActiveName == "nextbots" or roundActiveName == "eft" then
 	else
+		if ply.isDOZER == true then return end
 		ply:SetRunSpeed(Lerp((ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 0.05 or 1,ply:GetRunSpeed(),(ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 450 or ply:GetWalkSpeed()) + 3.5)
 	end
 

@@ -49,6 +49,7 @@ function GM:PlayerSpawn(ply)
 	ply:SetNWBool("paraliz",false)
 	ply:SetNWFloat("adrenaline",0)
 	ply:SetNWFloat("PosaVistrela",1)
+	ply.isDOZER = false
 	ply.informedaboutneuro = false
 
 	if ply:IsAdmin() then
@@ -385,6 +386,7 @@ hook.Add("Player Think","HasGodMode Rep",function(ply)
 	 ply:SetNWFloat("spid",ply.speeed)
 	 ply:SetNWBool("Suffocating",ply.Suffocating)
 	 ply:SetNWBool("informedaboutneuro",ply.informedaboutneuro)
+	 ply:SetNWBool("DOZER",ply.isDOZER)
 end)
 
 hook.Add("PlayerCanHearPlayersVoice", "PreventParalyzedPlayersFromTalking", function(listener, talker)

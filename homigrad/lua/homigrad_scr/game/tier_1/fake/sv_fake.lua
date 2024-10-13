@@ -711,70 +711,6 @@ if engine.ActiveGamemode() == "homigrad" then
 		end
 	end
 
-	local CustomWeight = {
-		["models/player/combine_super_soldier.mdl"] = true,
-		["models/player/combine_soldier_prisonguard.mdl"] = true,
-		["models/player/combine_soldier.mdl"] = true,
-		--[[ ["models/player/police_fem.mdl"] = true,
-		["models/player/police.mdl"] = true,
-		["models/player/combine_soldier.mdl"] = true,
-		["models/player/combine_super_soldier.mdl"] = true,
-		["models/player/combine_soldier_prisonguard.mdl"] = true,
-		["models/player/azov.mdl"] = true,
-		["models/LeymiRBA/Gyokami/Gyokami.mdl"] = true,
-		["models/player/smoky/Smoky.mdl"] = true,
-		["models/player/smoky/Smokycl.mdl"] = true,
-		["models/knyaje pack/dibil/sso_politepeople.mdl"] = true,
-		["models/catalina/lizardman.mdl"] = true,
-		["models/dejtriyev/hl1/ryangosling.mdl"] = true,
-		["models/vinrax/player/Billy_Herrington.mdl"] = true,
-		["models/player/furry/wolfy.mdl"] = true,
-		["models/bloocobalt/splinter cell/chemsuit_cod.mdl"] = true,
-		["models/player/jesus/jesus.mdl"] = true,
-		["models/player/joe/k_pm.mdl"] = true,
-		["models/player/megamind/megamind.mdl"] = true,
-		["models/player/minyon.mdl"] = true,
-		["models/player/oguzok.mdl"] = true,
-		["models/petaly/peter_griffin/petergriffin.mdl"] = true,
-		["models/petaly/peter_griffin/petergriffin2.mdl"] = true,
-		["models/player/open season/boog.mdl"] = true,
-		["models/it/pennywise/pennywisev2/player/Pennywise_player.mdl"] = true,
-		["models/kuhnya/barinov.mdl"] = true,
-		["models/player/Taa.mdl"] = true,
-		["models/player/SGG/hev_helmet.mdl"] = true,
-		["models/lazlo/gordon_freeman.mdl"] = true,
-		["models/policeStrong.mdl"] = true ]]
-	}
-	local CustomWeightHard = {
-	["models/player/jesus/jesus.mdl"] = true
-	}
-	--[[
-	for i = 1,9 do
-		CustomWeight["models/player/Rusty/NatGuard/male_0"..i..".mdl"] = true
-	end
-	]]
-	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = true
-	end
-
-	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = true
-	end
-
-	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = true
-	end
-
-	for i = 1,6 do
-		CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = true
-	end
-
-	for modelName, modelPath in pairs(list.Get("PlayerOptionsModel")) do
-		CustomWeight[modelPath] = true
-	end
-
-	--PrintTable(CustomWeight) --dibag blina
-
 
 	util.AddNetworkString("custom name")
 
@@ -823,23 +759,87 @@ if engine.ActiveGamemode() == "homigrad" then
 		
 		rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 		if IsValid(rag:GetPhysicsObject()) then
+			local CustomWeight = {
+				["models/player/combine_super_soldier.mdl"] = true,
+				["models/player/combine_soldier_prisonguard.mdl"] = true,
+				["models/player/combine_soldier.mdl"] = true,
+				["models/player_hl2_combine_ordinal.mdl"] = true,
+				["models/hlvr/characters/combine/grunt/combine_beta_grunt_hlvr_player.mdl"] = true
+			}
+		
+			local CustomWeightHard = {
+				["models/player/jesus/jesus.mdl"] = true,
+				["models/olegun_remake/sso_ukr.mdl"] = true,
+				["models/player/kuma/taliban_rpg.mdl"] = true,
+				["models/catalina/lizardman.mdl"] = true
+			}
+		
+			local CustomWeightVeryHard = {
+			}
+		
+			for i = 1, 6 do
+				CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = true
+			end
+		
+			for i = 1, 6 do
+				CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = true
+			end
+		
+			for i = 1, 6 do
+				CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = true
+			end
+		
+			for i = 1, 6 do
+				CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = true
+			end
+		
+			for modelName, modelPath in pairs(list.Get("PlayerOptionsModel")) do
+				if not CustomWeight[modelPath] and not CustomWeightHard[modelPath] and not CustomWeightVeryHard[modelPath] then
+					CustomWeight[modelPath] = true
+				end
+			end
+		
 			rag:GetPhysicsObject():SetMass(20)
-
-			if CustomWeight[rag:GetModel()] then
-				self:SetNWFloat("HandsArrive",handsarrivetime * 2)
-				self:SetNWFloat("ForwardArrive",forwardarrivetime * 2)
-				self:SetNWFloat("BackArrive",backarrivetime * 2)
+		
+			local model = rag:GetModel()
+			if CustomWeightVeryHard[model] then
+				print("Model found in CustomWeightVeryHard: " .. model)
+			elseif CustomWeightHard[model] then
+				print("Model found in CustomWeightHard: " .. model)
+			elseif CustomWeight[model] then
+				print("Model found in CustomWeight: " .. model)
 			else
-				self:SetNWFloat("HandsArrive",handsarrivetime)
-				self:SetNWFloat("ForwardArrive",forwardarrivetime)
-				self:SetNWFloat("BackArrive",backarrivetime)
+				print("Model not found in any table: " .. model)
 			end
-			if CustomWeightHard[rag:GetModel()] then
-				self:SetNWFloat("HandsArrive",handsarrivetime * 2.2)
-				self:SetNWFloat("ForwardArrive",forwardarrivetime * 3)
-				self:SetNWFloat("BackArrive",backarrivetime * 3)
+			
+			--PrintTable(CustomWeight)
+			if CustomWeightVeryHard[model] == true then
+				self:SetNWFloat("Status", "Very-Hard")
+				self:ChatPrint("D")
+				self:SetNWFloat("BackArrive", backarrivetime * 4)
+				self:SetNWFloat("ForwardArrive", forwardarrivetime * 4)
+				self:SetNWFloat("HandsArrive", handsarrivetime * 3.3)
+			elseif CustomWeightHard[model] == true then
+				self:SetNWFloat("Status", "Hard")
+				self:ChatPrint("C")
+				self:SetNWFloat("BackArrive", backarrivetime * 3)
+				self:SetNWFloat("ForwardArrive", forwardarrivetime * 3)
+				self:SetNWFloat("HandsArrive", handsarrivetime * 2.7)
+			elseif CustomWeight[model] == true then
+				self:SetNWFloat("Status", "Medium")
+				self:ChatPrint("B")
+				self:SetNWFloat("BackArrive", backarrivetime * 2)
+				self:SetNWFloat("ForwardArrive", forwardarrivetime * 2)
+				self:SetNWFloat("HandsArrive", handsarrivetime * 2.3)
+			else
+				self:SetNWFloat("Status", "Light")
+				self:ChatPrint("A")
+				self:SetNWFloat("BackArrive", backarrivetime)
+				self:SetNWFloat("ForwardArrive", forwardarrivetime)
+				self:SetNWFloat("HandsArrive", handsarrivetime)
 			end
-		end
+		end		
+		
 		rag:Activate()
 		rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 		rag:SetNWEntity("RagdollOwner", self)

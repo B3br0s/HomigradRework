@@ -15,7 +15,7 @@ function swat.HUDPaint_RoundLeft(white)
     if (roundTimeStart + roundTimeSWAT - CurTime()) <= 0 and not started == true then
         started = true
         timer.Simple(0.5,function ()
-            surface.PlaySound("swatarrive"..randomm..".wav")   
+            --surface.PlaySound("swatarrive"..randomm..".wav")   
         end)
     end
     if (roundTimeStart + roundTimeSWAT - CurTime()) > 118 then
@@ -24,7 +24,7 @@ function swat.HUDPaint_RoundLeft(white)
             started = false
             randomm = math.random(1,2) 
             print(randomm)
-            surface.PlaySound("swatuntil"..randomm..".wav")
+            --surface.PlaySound("swatuntil"..randomm..".wav")
             timer.Simple(5,function() aABASDBASDBABDSB = true end )
         end
     end

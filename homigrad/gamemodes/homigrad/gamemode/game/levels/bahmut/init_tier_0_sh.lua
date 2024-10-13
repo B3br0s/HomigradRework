@@ -3,20 +3,17 @@ bahmut = {}
 bahmut.Name = "Конфликт Хомиграда"
 
 bahmut.red = {"ЧВК\"ВАГНЕР\"",Color(60,75,60),
-	weapons = {"weapon_radio","weapon_hands"},
-	main_weapon = {"weapon_ak74u","weapon_akm","weapon_galil","weapon_rpk","weapon_galilsar"},
+	weapons = {"weapon_radio","weapon_hands","weapon_hg_rgd5","medkit"},
+	main_weapon = {"weapon_ak74u","weapon_akm"},
 	secondary_weapon = {"weapon_p220", "weapon_deagle","weapon_glock"},
-	models = {"models/knyaje pack/sso_politepeople/sso_politepeople.mdl"}
+	models = {"models/Knyaje Pack/SSO_PolitePeople/SSO_PolitePeople.mdl"}
 }
 
-local models = {}
-for i = 1,9 do table.insert(models,"models/player/rusty/natguard/male_0" .. i .. ".mdl") end
-
-bahmut.blue = {"НАТО",Color(125,125,60),
-	weapons = {"weapon_radio","weapon_hands"},
-	main_weapon = {"weapon_mk18","weapon_m4a1","weapon_xm1014","weapon_m249"},
+bahmut.blue = {"ВСУ",Color(125,125,60),
+	weapons = {"weapon_radio","weapon_hands","weapon_hg_f1","medkit"},
+	main_weapon = {"weapon_ar15"},
 	secondary_weapon = {"weapon_beretta","weapon_fiveseven","weapon_hk_usp"},
-	models = models
+	models = {"models/olegun_remake/sso_ukr.mdl"}
 }
 
 bahmut.teamEncoder = {

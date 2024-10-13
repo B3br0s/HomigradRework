@@ -279,6 +279,15 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
+	if CLIENT then
+		if self.Throwen then return end
+		self.Throwen = true
+		net.Start("ThrowKnife")
+		net.WriteString(self.WorldModel)
+		net.WriteFloat(2000)
+		net.WriteEntity(self:GetOwner())
+		net.SendToServer()
+	end
 end
 
 function SWEP:Reload()

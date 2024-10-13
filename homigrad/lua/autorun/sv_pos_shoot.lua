@@ -3,7 +3,7 @@ if SERVER then
 	
 	net.Receive("ChangePos",function ()
 		local ply = net.ReadEntity()
-		if ply:GetNWFloat("PosaVistrela") then
+		if ply:GetNWFloat("PosaVistrela") and not ply.fake then
 			if ply:GetNWFloat("PosaVistrela") > 4 then
 				ply:SetNWFloat("PosaVistrela",1)
                 ply:SetNWFloat("PosaVistrelaWeapon",ply:GetActiveWeapon())

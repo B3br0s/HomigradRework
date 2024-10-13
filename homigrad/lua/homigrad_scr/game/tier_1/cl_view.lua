@@ -1076,7 +1076,7 @@ hook.Add("RenderScreenspaceEffects","BloomEffect-homigrad",function()
 		LocalPlayer():SetDSP(1)
 	end
 
-	if LocalPlayer():Alive() then
+	if LocalPlayer():Alive() and not LocalPlayer():GetNWBool("DOZER") then
 		tab2["$pp_colour_colour"] = LocalPlayer():Health() / 90
 		DrawColorModify(tab2)
 	end

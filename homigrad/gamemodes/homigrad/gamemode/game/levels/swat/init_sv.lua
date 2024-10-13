@@ -54,10 +54,13 @@ function swat.PlayerSpawn(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon,teamID == 1 and 8 or 2)
 
 	if teamID == 1 then
+		local color = Color(65,65,65):ToVector()
 		ply:SetPlayerColor(Color(255,255,255):ToVector())
-		JMod.EZ_Equip_Armor(ply,"swat-Helmet",Color(65,65,65))
-		local r = math.random(1,2)
-		JMod.EZ_Equip_Armor(ply,(r == 1 and "Medium-Light-Vest") or (r == 2 and "Light-Vest"),Color(65,65,65))
+		if math.random(1,3) == 3 then
+			ply:SetPlayerClass("dozer")
+		else
+			ply:SetPlayerClass("swat")
+		end
 	else
 		if math.random(1,2) == 1 then
 			ply:SetPlayerColor(Color(150,0,0):ToVector())

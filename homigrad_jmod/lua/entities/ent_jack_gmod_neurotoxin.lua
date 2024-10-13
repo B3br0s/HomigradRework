@@ -51,7 +51,7 @@ if SERVER then
 
 		local Force = VectorRand() * 5
 
-		for _, obj in pairs(ents.FindInSphere(SelfPos, 1000)) do
+		for _, obj in pairs(ents.FindInSphere(SelfPos, 300)) do
 			if obj ~= self and self:CanSee(obj) then
 				if obj.EZgasParticle then
 					local Vec = (obj:GetPos() - SelfPos):GetNormalized()

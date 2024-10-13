@@ -140,6 +140,10 @@ function SpawnWeapon(ply,clip1)
 				local ang = ply.wep:GetAngles()
 				ang:RotateAroundAxis(ang:Forward(),90)
 				ply.wep:SetAngles(ang)
+			elseif ply.curweapon == "weapon_hk_arbalet" then
+				local ang = ply.wep:GetAngles()
+				ang:RotateAroundAxis(ang:Up(),90)
+				ply.wep:SetAngles(ang)
 			end
 
 			--[[local hand = rag:GetBoneMatrix(rag:LookupBone("ValveBiped.Bip01_R_Hand"))

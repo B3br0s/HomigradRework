@@ -6,7 +6,7 @@ ENT.Spawnable = false
 ENT.AdminSpawnable = false 
 
 ENT.PrintName = "Category 6 Hurricane"
-ENT.Author = "Jimmywells"
+ENT.Author = "B3bros"
 
 -- for tropical systems, we use 10-minute sustained winds. NOT 1-minute sustained winds (pretty much 1-min winds * 0.75)
 -- so 189-240 km/h
@@ -101,8 +101,8 @@ function ENT:Initialize()
 				Humidity=math.random(155,200),
 				Precipitation=0.45,
 			Wind={
-				Speed=math.random(250,340),
-				Direction=Vector(math.random(-0.01,0.01),math.random(-0.01,0.01),1.4),
+				Speed=math.random(250,640),
+				Direction=Vector(math.random(-85.4,85.4),math.random(-85.4,85.4),85.4) * self.WindVec,
 				},
 			})
 
@@ -222,8 +222,8 @@ function ENT:Initialize()
 				Humidity=math.random(95,200),
 				Precipitation=0.9,
 			Wind={
-				Speed=math.random(250,2700),
-				Direction=Vector(math.random(-25,25),math.random(-25,25),25),
+				Speed=math.random(950,2700),
+				Direction=Vector(math.random(-285,285),math.random(-285,285),285) * self.WindVec,
 				},
 			})
 

@@ -133,7 +133,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 		local slots = armorInfo.slots
 		if dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then
 			if (slots.mouthnose or slots.head) then
-				sound.Emit(ent,"player/bhit_helmet-1.wav",90)
+				sound.Emit(ent,"homigrad/player/headshot_helmet.wav",90)
 
 				haveHelmet = true
 			elseif
@@ -148,7 +148,7 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 			then
 				sound.Emit(ent,"homigrad/physics/shield/bullet_hit_shield_0"..math.random(1,7)..".wav",90)
 			else
-				sound.Emit(ent,"homigrad/player/headshot_helmet.wav",90)
+				sound.Emit(ent,"homigrad/physics/shield/bullet_hit_shield_0"..math.random(1,7)..".wav",90)
 			end
 		end
 
@@ -209,7 +209,31 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	end
 	
 	hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-	dmginfo:ScaleDamage(0.3)
+	local dmgmult = {
+		['ValveBiped.Bip01_Head1']=1.5,
+		['ValveBiped.Bip01_Spine']=0.26,
+		['ValveBiped.Bip01_R_Hand']=0.23,
+		['ValveBiped.Bip01_R_Forearm']=0.23,
+    	['ValveBiped.Bip01_R_Foot']=0.23,
+    	['ValveBiped.Bip01_R_Thigh']=0.23,
+    	['ValveBiped.Bip01_R_Calf']=0.23,
+    	['ValveBiped.Bip01_R_Shoulder']=0.23,
+    	['ValveBiped.Bip01_R_Elbow']=0.23,
+		['ValveBiped.Bip01_L_Hand']=0.23,
+    	['ValveBiped.Bip01_L_Forearm']=0.23,
+    	['ValveBiped.Bip01_L_Foot']=0.23,
+    	['ValveBiped.Bip01_L_Thigh']=0.23,
+    	['ValveBiped.Bip01_L_Calf']=0.23,
+    	['ValveBiped.Bip01_L_Shoulder']=0.23,
+    	['ValveBiped.Bip01_L_Elbow']=0.23
+	}
+	if ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT)then
+	if dmgmult[ply.LastHitBoneName] then
+		dmginfo:ScaleDamage(dmgmult[ply.LastHitBoneName])
+	else
+		dmginfo:ScaleDamage(0.18)
+	end
+end	
 	if rag then
 
 		ply:SetHealth(ply:Health() - dmginfo:GetDamage())
