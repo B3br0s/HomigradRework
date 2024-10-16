@@ -64,12 +64,12 @@ function swat.PlayerSpawn(ply,teamID)
 	else
 		if math.random(1,2) == 1 then
 			ply:SetPlayerColor(Color(150,0,0):ToVector())
-			JMod.EZ_Equip_Armor(ply,"Lower Half-Mask",Color(255,255,255))
-			JMod.EZ_Equip_Armor(ply,"Basmach Leather Cap",Color(255,255,255))
+			JMod.EZ_Equip_Armor(ply,"PDMASK"..math.random(1,4),Color(255,255,255))
+			JMod.EZ_Equip_Armor(ply,"Medium-Vest",Color(255,255,255))
 		else
 			ply:SetPlayerColor(Color(0,150,0):ToVector())
-			JMod.EZ_Equip_Armor(ply,"Ghost Half-Mask",Color(255,255,255))
-			JMod.EZ_Equip_Armor(ply,"Basmach Leather Cap",Color(255,255,255))
+			JMod.EZ_Equip_Armor(ply,"PDMASK"..math.random(1,4),Color(255,255,255))
+			JMod.EZ_Equip_Armor(ply,"Light-Vest",Color(255,255,255))
 		end
 	end
 

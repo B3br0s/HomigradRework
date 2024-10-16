@@ -3,7 +3,7 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Большой бинт"
+SWEP.PrintName = "Большой Бинт"
 SWEP.Author = "Homigrad"
 SWEP.Instructions = "Лечит большую кровопотерю"
 

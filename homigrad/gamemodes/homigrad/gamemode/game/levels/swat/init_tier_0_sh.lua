@@ -14,7 +14,7 @@ swat.blue = {"Боевики",Color(200,35,35),
 	weapons = {"weapon_hands","med_band_small","weapon_molotok"},
 	main_weapon = {"weapon_akm","weapon_xm1014","weapon_mp7","weapon_mk18"},
 	secondary_weapon = {"weapon_glock","weapon_hk_usp","weapon_deagle","weapon_p220","weapon_beretta","weapon_r8"},
-	models = tdm.models
+	models = {"models/player/Group01/male_04.mdl"}
 }
 
 swat.teamEncoder = {

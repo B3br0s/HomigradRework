@@ -209,6 +209,114 @@ JMod.ArmorTable = {
 			}
 		}
 	},
+	["PDMASK1"] = {
+		PrintName = "Dallas Mask",
+		mdl = "models/shaklin/payday2/masks/pd2_mask_dallas.mdl", -- payday2
+		slots = {
+			eyes = .8,
+			mouthnose = .8
+		},
+		def = BasicArmorProtectionProfile,
+		bon = "ValveBiped.Bip01_Head1",
+		siz = Vector(1, 1, 1),
+		pos = Vector(1.5, -2.85, 0),
+		ang = Angle(100, 180, 90),
+		wgt = 5,
+		dur = 200,
+		mskmat = "mats_jack_gmod_sprites/vignette.png",
+		sndlop = "snds_jack_gmod/mask_breathe.wav",
+		ent = "ent_jack_gmod_ezarmor_dalmask",
+		tgl = {
+			pos = Vector(6, 2.4, 0),
+			ang = Angle(170, 180, 90),
+			mskmat = "",
+			slots = {
+				eyes = 0,
+				mouthnose = 0
+			}
+		}
+	},
+	["PDMASK2"] = {
+		PrintName = "Hoxton Mask",
+		mdl = "models/shaklin/payday2/masks/pd2_mask_hoxton.mdl", -- payday2
+		slots = {
+			eyes = .8,
+			mouthnose = .8
+		},
+		def = BasicArmorProtectionProfile,
+		bon = "ValveBiped.Bip01_Head1",
+		siz = Vector(1, 1, 1),
+		pos = Vector(1.6, -3.4, 0),
+		ang = Angle(100, 180, 90),
+		wgt = 5,
+		dur = 200,
+		mskmat = "mats_jack_gmod_sprites/vignette.png",
+		sndlop = "snds_jack_gmod/mask_breathe.wav",
+		ent = "ent_jack_gmod_ezarmor_hoxmask",
+		tgl = {
+			pos = Vector(6, 2.4, 0),
+			ang = Angle(170, 180, 90),
+			mskmat = "",
+			slots = {
+				eyes = 0,
+				mouthnose = 0
+			}
+		}
+	},
+	["PDMASK3"] = {
+		PrintName = "Wolf Mask",
+		mdl = "models/shaklin/payday2/masks/pd2_mask_wolf.mdl", -- payday2
+		slots = {
+			eyes = .8,
+			mouthnose = .8
+		},
+		def = BasicArmorProtectionProfile,
+		bon = "ValveBiped.Bip01_Head1",
+		siz = Vector(1, 1, 1),
+		pos = Vector(1.5, -2.5, 0),
+		ang = Angle(100, 180, 90),
+		wgt = 5,
+		dur = 200,
+		mskmat = "mats_jack_gmod_sprites/vignette.png",
+		sndlop = "snds_jack_gmod/mask_breathe.wav",
+		ent = "ent_jack_gmod_ezarmor_wolmask",
+		tgl = {
+			pos = Vector(6, 2.4, 0),
+			ang = Angle(170, 180, 90),
+			mskmat = "",
+			slots = {
+				eyes = 0,
+				mouthnose = 0
+			}
+		}
+	},
+	["PDMASK4"] = {
+		PrintName = "Chains Mask",
+		mdl = "models/shaklin/payday2/masks/pd2_mask_chains.mdl", -- payday2
+		slots = {
+			eyes = .8,
+			mouthnose = .8
+		},
+		def = BasicArmorProtectionProfile,
+		bon = "ValveBiped.Bip01_Head1",
+		siz = Vector(1, 1, 1),
+		pos = Vector(1.5, -2.5, 0),
+		ang = Angle(100, 180, 90),
+		wgt = 5,
+		dur = 200,
+		mskmat = "mats_jack_gmod_sprites/vignette.png",
+		sndlop = "snds_jack_gmod/mask_breathe.wav",
+		ent = "ent_jack_gmod_ezarmor_chamask",
+		tgl = {
+			pos = Vector(6, 2.4, 0),
+			ang = Angle(170, 180, 90),
+			mskmat = "",
+			slots = {
+				eyes = 0,
+				mouthnose = 0
+			}
+		}
+	},
 	["NightVisionGoggles"] = {
 		PrintName = "Goggles-Night Vision",
 		mdl = "models/nvg.mdl", -- scp something

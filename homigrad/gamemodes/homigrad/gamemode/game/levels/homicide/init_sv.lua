@@ -36,11 +36,11 @@ local function makeT(ply)
         ply:Give("weapon_hg_t_vxpoison")
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
+        ply:Give("weapon_hg_fiberwire")
     elseif homicide.roundType == 3 then
         ply:Give("weapon_kabar")
-        ply:Give("weapon_hg_t_syringepoison")
-        ply:Give("weapon_hg_t_vxpoison")
-        print(player.GetCount())
+        ply:Give("weapon_hg_fiberwire")
+        --print(player.GetCount())
     elseif homicide.roundType == 5 then
         ply:SetModel("models/player/corpse1.mdl")
         if math.random(1,2) == 1 then
@@ -66,7 +66,7 @@ local function makeT(ply)
     AddNotificate( ply,"Вы предатель.")
 
     if #GetFriends(ply) >= 1 then
-        timer.Simple(1,function() AddNotificate( ply,"Ваши товарищи " .. GetFriends(ply)) end)
+        timer.Simple(1,function() ply:ChatPrint(ply,"Ваши товарищи " .. GetFriends(ply)) AddNotificate( ply,"Ваши товарищи " .. GetFriends(ply)) end)
     end
 end
 

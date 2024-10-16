@@ -605,6 +605,8 @@ if engine.ActiveGamemode() == "homigrad" then
 
 
 	concommand.Add("fake",function(ply)	
+		if ply.SuffocatingFiber then return nil end
+		if ply["Organs"].spine == 0 then return nil end
 		if timer.Exists("faketimer"..ply:EntIndex()) then return nil end
 		if timer.Exists("StunTime"..ply:EntIndex()) then return nil end
 		if ply.Paralizovan then return nil end
@@ -769,12 +771,17 @@ if engine.ActiveGamemode() == "homigrad" then
 		
 			local CustomWeightHard = {
 				["models/player/jesus/jesus.mdl"] = true,
+				["models/leygun/rfarmy/soilder_rf_07.mdl"] = true,
 				["models/olegun_remake/sso_ukr.mdl"] = true,
 				["models/player/kuma/taliban_rpg.mdl"] = true,
 				["models/catalina/lizardman.mdl"] = true
 			}
 		
 			local CustomWeightVeryHard = {
+			}
+
+			local CustomWeightUltraHard = {
+				["models/auditor/dying_light/characters/kyle_crane.mdl"] = true
 			}
 		
 			for i = 1, 6 do
@@ -825,6 +832,12 @@ if engine.ActiveGamemode() == "homigrad" then
 				self:SetNWFloat("BackArrive", backarrivetime * 3)
 				self:SetNWFloat("ForwardArrive", forwardarrivetime * 3)
 				self:SetNWFloat("HandsArrive", handsarrivetime * 2.7)
+			elseif CustomWeightUltraHard[model] == true then
+				self:SetNWFloat("Status", "UltraHard")
+				self:ChatPrint("E")
+				self:SetNWFloat("BackArrive", backarrivetime * 7)
+				self:SetNWFloat("ForwardArrive", forwardarrivetime * 7)
+				self:SetNWFloat("HandsArrive", handsarrivetime * 3)
 			elseif CustomWeight[model] == true then
 				self:SetNWFloat("Status", "Medium")
 				self:ChatPrint("B")
@@ -1279,6 +1292,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				end
 
 				if(ply:KeyDown(IN_ATTACK2))then
+					if ply.Organs["artery"]!=0 then
 					local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 					local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
 					local ang=ply:EyeAngles()
@@ -1356,6 +1370,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						end
 					end
 				end
+				end
 				if(ply:KeyDown(IN_USE))then
 					local phys = head
 					local phys2 = spinemain
@@ -1417,7 +1432,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
 				if ply.Organs["artery"] == 0 and !TwoHandedOrNo[ply.curweapon] then
 					local shadowparams = {
-					secondstoarrive=0.15,
+					secondstoarrive=0.01,
 					pos=head:GetPos(),
 					angle=angs,
 					maxangulardamp=10,
@@ -1453,7 +1468,7 @@ if engine.ActiveGamemode() == "homigrad" then
 							output=trace,
 						}
 						local trace = util.TraceLine(traceinfo)
-						if(trace.Hit and !trace.HitSky)then
+						if(trace.Hit and !trace.HitSky and not ply.holdingartery)then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
 								ply:SetNWBool("LeftArmm",true)
@@ -1478,6 +1493,26 @@ if engine.ActiveGamemode() == "homigrad" then
 				local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 				if(!IsValid(rag.ZacConsRH) and (!rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
+					if ply.Organs["artery"] == 0 then
+						local shadowparams = {
+						secondstoarrive=0.01,
+						pos=head:GetPos(),
+						angle=angs,
+						maxangulardamp=10,
+						maxspeeddamp=10,
+						maxangular=370,
+						maxspeed=1120,
+						teleportdistance=0,
+						deltatime=deltatime,
+						}
+						phys:Wake()
+						phys:ComputeShadowControl(shadowparams)
+						ply.holdingartery=true
+						if(IsValid(rag.ZacConsLH))then
+							rag.ZacConsRH:Remove()
+							rag.ZacConsRH=nil
+						end
+					end
 					rag.ZacNextGrRH=CurTime()+0.1
 					for i=1,3 do
 						local offset = phys:GetAngles():Up()*5
@@ -1494,7 +1529,7 @@ if engine.ActiveGamemode() == "homigrad" then
 							output=trace,
 						}
 						local trace = util.TraceLine(traceinfo)
-						if(trace.Hit and !trace.HitSky)then
+						if(trace.Hit and !trace.HitSky and ply.Organs["artery"] != 0 )then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
 								ply:SetNWBool("RightArmm",true)

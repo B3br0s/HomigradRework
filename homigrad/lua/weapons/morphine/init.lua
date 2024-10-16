@@ -1,7 +1,7 @@
 if engine.ActiveGamemode() == "homigrad" then
 include("shared.lua")
 
-local healsound = Sound("Underwater.BulletImpact")
+local healsound = Sound("weapons/arc_vm_medshot/adrenaline_needle_in.wav")
 
 function SWEP:Heal(ply)
     if not ply or not ply:IsPlayer() then sound.Play(healsound,ply:GetPos(),75,100,0.5) return true end

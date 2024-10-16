@@ -1135,7 +1135,7 @@ function SWEP:Step()
 
     ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,0,0))
     ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),Angle(0,0,0))
-    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),Angle(15,5,-90))
+    ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),Angle(15,15,-90))
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0))
 end
 end

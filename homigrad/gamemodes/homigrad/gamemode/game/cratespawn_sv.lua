@@ -104,8 +104,8 @@ local crateTypes = {
 
 local function PopulateSpawns()
 	spawns = {}
-	if ReadDataMap("boxspawn") then
-		table.insert(spawns, ReadDataMap("boxspawn")[math.random(1,#ReadDataMap("boxspawn"))][1])
+	if #ReadDataMap("boxspawn") > 0 then
+		table.insert(spawns, ReadDataMap("boxspawn")[math.random(1,#ReadDataMap("boxspawn"))][3])
 	else
 		for _, ent in pairs(ents.FindByClass("info_*")) do
 			table.insert(spawns, ent:GetPos())

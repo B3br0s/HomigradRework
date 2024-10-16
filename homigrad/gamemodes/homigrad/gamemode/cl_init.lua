@@ -400,6 +400,27 @@ hook.Add("OnEntityCreated", "homigrad-colorragdolls", function(ent)
 	end
 end)
 
+hook.Add("Think", "SpecatorSpeedHandler", function()
+    local ply = LocalPlayer()
+    
+    if not ply:Alive() and ply:GetMoveType() == MOVETYPE_NOCLIP then
+        if input.IsKeyDown(KEY_LCONTROL) then
+            net.Start("SetNoclipSpeed")
+            net.WriteFloat(0.2)
+            net.SendToServer()
+		elseif input.IsKeyDown(KEY_LSHIFT) then
+			net.Start("SetNoclipSpeed")
+			net.WriteFloat(3)
+			net.SendToServer()
+		else
+            net.Start("SetNoclipSpeed")
+            net.WriteFloat(1)
+            net.SendToServer()
+        end
+    end
+end)
+
+
 local function GetClipForCurrentWeapon( ply )
 	if ( !IsValid( ply ) ) then return -1 end
 
@@ -493,6 +514,28 @@ hook.Add("Think", "NeurotoxinMouseShake", function()
 			shakeIntensity = 3--3 * ply:Health() / 80
 		else
 			shakeIntensity = 1--1.5 * ply:Health() / 99
+		end
+        local x = math.random(-shakeIntensity, shakeIntensity)
+        local y = math.random(-shakeIntensity, shakeIntensity)
+
+        local angles = ply:EyeAngles()
+        angles.pitch = angles.pitch + y
+        angles.yaw = angles.yaw + x
+
+        ply:SetEyeAngles(angles)
+    end
+end)
+
+hook.Add("Think", "Tremor", function()
+    local ply = LocalPlayer()
+
+    if not IsValid(ply) then return end
+
+    if ply:GetNWBool("tremor", false) and ply:Alive() then
+		if ply:GetNWBool("fake") then
+			shakeIntensity = 5
+		else
+			shakeIntensity = 0.1
 		end
         local x = math.random(-shakeIntensity, shakeIntensity)
         local y = math.random(-shakeIntensity, shakeIntensity)

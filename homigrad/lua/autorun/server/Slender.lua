@@ -1,4 +1,4 @@
-local DAMAGE_AMOUNT = 5
+--[[local DAMAGE_AMOUNT = 5
 local DAMAGE_INTERVAL = 0.1
 local VIEW_ANGLE_THRESHOLD = 67
 
@@ -50,3 +50,4 @@ hook.Add("Think", "CheckPlayersLookingAtSlenderman", function()
         end
     end
 end)
+]]

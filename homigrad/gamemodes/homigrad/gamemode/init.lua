@@ -44,12 +44,22 @@ function GM:PlayerSpawn(ply)
 	ply:SetNWBool("InTeam",false)
 	ply:SetNWFloat("pain",0)
 	ply:SetNWFloat("painlosing",0)
+	ply:SetNWBool("tremor",false)
+	ply.tremor = false
 	ply:SetNWFloat("Bloodlosing",0)
 	ply:SetNWFloat("Blood",5000)
 	ply:SetNWBool("paraliz",false)
 	ply:SetNWFloat("adrenaline",0)
+	ply.SuffocatingFiber = false
+	ply.SuffocatingFiberTime = 0
+	ply:SetNWBool("SuffocatingFiber",false)
 	ply:SetNWFloat("PosaVistrela",1)
 	ply.isDOZER = false
+	ply.KilledByKnifeThrow = false
+	ply.MULE = false
+	ply.P22 = false
+	ply.CanSpawn = false
+	ply:SetNWBool("CanSpawn",false)
 	ply.informedaboutneuro = false
 
 	if ply:IsAdmin() then
@@ -104,6 +114,7 @@ function GM:PlayerSpawn(ply)
 
 		ply:Give("weapon_hands")
 		ply:Give("weapon_physgun")
+		ply:Give("gmod_tool")
 
 		return
 	end
@@ -115,8 +126,12 @@ end
 
 function GM:PlayerDeath(ply,inf,att)
 	ply.Paralizovan = false
+
+	ply.CanSpawn = false
 	ply:SetNWBool("neurotoxinshake",false)
 	ply:SetNWBool("neurotoxinpripadok",false)
+	ply.tremor = false
+	ply:SetNWBool("tremor",fals)
 	if not roundActive then return end
 
 	if att == ply then att = ply.Attacker2 end
@@ -128,6 +143,26 @@ end
 
 hook.Add("HandlePlayerLanding","ebalgmods",function()
 	return true
+end)
+
+hook.Add("Player Think","Player Respawn Huy",function (ply)
+	if ply.CanSpawn == true and not ply:Alive() and roundActiveName == "construct" then
+		if ply:KeyDown(IN_JUMP) then
+			ply.CanSpawn = false
+
+			ply:Spawn()
+
+			local aviable2 = ReadDataMap("spawnpointsct")
+			local aviable1 = ReadDataMap("spawnpointst")
+			if #aviable2 > 0 then
+			if math.random(1,2) == 1 then
+				ply:SetPos(aviable1[math.random(1,#aviable)][3])
+			else
+				ply:SetPos(aviable2[math.random(1,#aviable)][3])
+			end
+		end
+		end
+	end
 end)
 
 function GM:PlayerInitialSpawn(ply)
@@ -147,6 +182,8 @@ function GM:PlayerInitialSpawn(ply)
 
 	SendSpawnPoint(ply)
 end
+
+util.AddNetworkString("SetNoclipSpeed")
 
 function GM:PlayerDeathThink(ply)
 	local tbl = {}
@@ -196,7 +233,16 @@ function GM:PlayerDeathThink(ply)
 	else
 		ply:UnSpectate()
 		ply:SetMoveType(MOVETYPE_NOCLIP)
-		ply:SetNWEntity("HeSpectateOn",false)
+		ply:SetNWEntity("HeSpectateOn", false)
+
+		net.Receive("SetNoclipSpeed", function(len, ply)
+		    local speed = net.ReadFloat()
+		
+		    if ply:IsValid() and ply:GetMoveType() == MOVETYPE_NOCLIP then
+		        ply:SetLaggedMovementValue(speed)
+		    end
+		end)
+		
 
 		if ply:KeyDown(IN_ATTACK) then
 			local tr = {}
@@ -251,8 +297,7 @@ COMMANDS.forceartery = {function(ply,args)
 					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
 					sound.Play("artery.wav", ply:GetPos())
 					ply.Organs['artery']=0
-					ply.Organs['spine']=0
-					ply:TakeDamage(50)
+					ply:TakeDamage(25)
 	end
 end
 end}
@@ -374,19 +419,34 @@ votemap2:defaultAccess( ULib.ACCESS_ADMIN )
 votemap2:help( "Starts a public map vote." )
 
 hook.Add("Player Think","HasGodMode Rep",function(ply) 
-	 ply:SetNWBool("HasGodMode",ply:HasGodMode()) 
-	 ply:SetNWFloat("painlosing",ply.painlosing) 
-	 ply:SetNWFloat("pain",ply.pain) 
-	 ply:SetNWFloat("Blood",ply.Blood)
-	 ply:SetNWEntity("InviterToTeam",ply.InviterToTeam) 
-	 ply:SetNWFloat("Bloodlosing",ply.Bloodlosing) 
-	 ply:SetNWFloat("o2",ply.o2)
-	 ply:SetNWBool("paraliz",ply.Paralizovan)
-	 ply:SetNWFloat("Metabolizm",ply.Metabolizm)
-	 ply:SetNWFloat("spid",ply.speeed)
-	 ply:SetNWBool("Suffocating",ply.Suffocating)
-	 ply:SetNWBool("informedaboutneuro",ply.informedaboutneuro)
-	 ply:SetNWBool("DOZER",ply.isDOZER)
+	ply:SetNWBool("HasGodMode",ply:HasGodMode()) 
+	ply:SetNWFloat("painlosing",ply.painlosing) 
+	ply:SetNWFloat("pain",ply.pain) 
+	ply:SetNWFloat("Blood",ply.Blood)
+	ply:SetNWFloat("adrenaline",ply.adrenaline)
+	ply:SetNWEntity("InviterToTeam",ply.InviterToTeam) 
+	ply:SetNWFloat("Bloodlosing",ply.Bloodlosing) 
+	ply:SetNWFloat("o2",ply.o2)
+	ply:SetNWBool("paraliz",ply.Paralizovan)
+	ply:SetNWFloat("Metabolizm",ply.Metabolizm)
+	ply:SetNWBool("CanSpawn",ply.CanSpawn)
+	ply:SetNWFloat("CanSpawnTime",ply.CanSpawnTime)
+	if not ply:Alive() then
+	if ply:GetNWFloat("AccurateTimeToSpawn") > 0 then
+	ply:SetNWFloat("AccurateTimeToSpawn",ply.CanSpawnTime - CurTime())
+	elseif ply:GetNWFloat("AccurateTimeToSpawn") <= 0 then
+	ply.CanSpawnTime = 0
+	ply.CanSpawn = true
+	end
+	else
+	ply.CanSpawn = false
+	ply:SetNWFloat("AccurateTimeToSpawn",CurTime() + 30)
+	end
+	ply:SetNWFloat("spid",ply.speeed)
+	ply:SetNWBool("Suffocating",ply.Suffocating)
+	ply:SetNWBool("SuffocatingFiber",ply.SuffocatingFiber)
+	ply:SetNWBool("informedaboutneuro",ply.informedaboutneuro)
+	ply:SetNWBool("DOZER",ply.isDOZER)
 end)
 
 hook.Add("PlayerCanHearPlayersVoice", "PreventParalyzedPlayersFromTalking", function(listener, talker)

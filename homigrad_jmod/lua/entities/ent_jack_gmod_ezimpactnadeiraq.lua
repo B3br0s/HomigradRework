@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.Category = "JMod - EZ Explosives"
-ENT.PrintName = "EZ Impact Grenade"
+ENT.PrintName = "COCA COLA ESPUMA"
 ENT.Spawnable = true
 ENT.Model = "models/foodnhouseholditems/sodacan01.mdl"
 local BaseClass = baseclass.Get(ENT.Base)

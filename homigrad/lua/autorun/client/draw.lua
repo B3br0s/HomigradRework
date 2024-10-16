@@ -25,6 +25,7 @@ local function drawStates(ply,x,y,align)
 	draw.SimpleText("suffocating: " .. tostring(ply:GetNWBool("Suffocating",false)),"ChatFont",x,y + 25 * 19,white,align)
 	draw.SimpleText("pose: " .. tostring(ply:GetNWFloat("PosaVistrela",false)),"ChatFont",x,y + 25 * 20,white,align)
 	draw.SimpleText("statusfake: " .. tostring(ply:GetNWFloat("Status",false)),"ChatFont",x,y + 25 * 21,white,align)
+	draw.SimpleText("canspawn: " .. tostring(ply:GetNWBool("CanSpawn",false)),"ChatFont",x,y + 25 * 22,white,align)
 	end
 end
 

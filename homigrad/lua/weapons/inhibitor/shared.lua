@@ -13,8 +13,8 @@ SWEP.Category = "Медицина"
 SWEP.Slot = 3
 SWEP.SlotPos = 3
 
-SWEP.ViewModel = "models/Items/combine_rifle_ammo01.mdl"
-SWEP.WorldModel = "models/Items/combine_rifle_ammo01.mdl"
+SWEP.ViewModel = "models/weapons/w_arc_vm_medshot_used.mdl"
+SWEP.WorldModel = "models/weapons/w_arc_vm_medshot_used.mdl"
 
 SWEP.dwsPos = Vector(7,7,7)
 SWEP.dwsItemPos = Vector(2,0,2)
@@ -24,12 +24,12 @@ SWEP.vbwAng = Angle(0,0,0)
 SWEP.vbwModelScale = 1
 
 SWEP.dwmModeScale = 1
-SWEP.dwmForward = 4
-SWEP.dwmRight = 4
-SWEP.dwmUp = -8
+SWEP.dwmForward = 3
+SWEP.dwmRight = 2
+SWEP.dwmUp = 0
 
 
-SWEP.dwmAUp = 0
-SWEP.dwmARight = 0
-SWEP.dwmAForward = 0
+SWEP.dwmAUp = 90
+SWEP.dwmARight = 90
+SWEP.dwmAForward = 90
 end

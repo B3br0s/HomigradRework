@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 ENT.Type = "anim"
-ENT.PrintName = "Обычный Ящик"
+ENT.PrintName = "Ящик"
 ENT.Author = "Homigrad"
 ENT.Spawnable = true
 ENT.BeingLooted = false
@@ -10,15 +10,20 @@ ENT.OpenedBefore = false
 
 local items = {
     {item = "Empty", icon = "null.vmt", rarity = "None"},
-    {item = "weapon_glock", icon = "vgui/weapon_csgo_glock.png", rarity = "Ultra Rare"},
-    {item = "weapon_r8", icon = "vgui/weapon_csgo_revolver.png", rarity = "Ultra Rare"},
+    --{item = "weapon_glock", icon = "vgui/weapon_csgo_glock.png", rarity = "Ultra Rare"},
+    --{item = "weapon_r8", icon = "vgui/weapon_csgo_revolver.png", rarity = "Ultra Rare"},
     {item = "painkiller", icon = "vgui/pills.png", rarity = "UnCommon"},
     {item = "weapon_t", icon = "vgui/tomahawk.png", rarity = "Rare"},
     {item = "food_fishcan", icon = "vgui/fishcan.png", rarity = "Common"},
     {item = "food_lays", icon = "vgui/chips.png", rarity = "Common"},
-    {item = "weapon_de", icon = "vgui/weapon_csgo_deagle.png", rarity = "Ultra Rare"},
+    --{item = "weapon_de", icon = "vgui/weapon_csgo_deagle.png", rarity = "Ultra Rare"},
     {item = "weapon_fnp", icon = "vgui/weapon_csgo_tec9.png", rarity = "Ultra Rare"},
     {item = "weapon_c4", icon = "vgui/weapon_csgo_c4.png", rarity = "Rare"},
+    {item = "stim1", icon = "entities/arc_medshot_5.png", rarity = "Rare"},
+    {item = "stim4", icon = "entities/arc_medshot_5.png", rarity = "Rare"},
+    {item = "stim3", icon = "entities/arc_medshot_9.png", rarity = "Common"},
+    {item = "stim6", icon = "entities/arc_medshot_11.png", rarity = "Common"},
+    {item = "antidote", icon = "entities/arc_medshot_5.png", rarity = "Rare"},
     {item = "Empty", icon = "null.vmt", rarity = "None"},
     {item = "Empty", icon = "null.vmt", rarity = "None"}
 }
@@ -34,6 +39,8 @@ if SERVER then
         self:PhysicsInit(SOLID_VPHYSICS)
         self:SetMoveType(MOVETYPE_VPHYSICS)
         self:SetSolid(SOLID_VPHYSICS)
+        self.typecrate = math.random(1,2)
+        self:SetNWFloat("CrateType","Обычный Ящик")
 
         self.R1 = math.random(1, #items)
         self.R2 = math.random(1, #items)
@@ -160,7 +167,6 @@ if CLIENT then
                 self:Close()
             end
         end
-
         local receivedItems = {R1, R2, R3, R4}
         local itemData = {}
 

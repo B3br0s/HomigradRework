@@ -49,7 +49,7 @@ showRoundInfoColor = Color(255,255,255)
 local yellow = Color(255,255,0)
 
 hook.Add("HUDPaint","homigrad-roundstate",function()
-	draw.SimpleText("Homigrad Rework V 0.4.6 (Release)","HomigradFont",10,ScrH()-10,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+	draw.SimpleText("Homigrad Rework V 0.4.7 (Release)","HomigradFont",10,ScrH()-10,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 	if roundActive then
 		if roundActiveName == "swat" then
 			local time = math.Round(roundTimeStart + roundTimeSWAT - CurTime())
@@ -59,7 +59,17 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 			draw.SimpleText("ДО ПРИБЫТИЯ SWAT: "..acurcetime,"HomigradFontBig",ScrW()/10,ScrH()-50,Color(0,50,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			else
 			draw.SimpleText("SWAT ПРИБЫЛ","HomigradFontBig",ScrW()/10,ScrH()-50,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-		end
+			end
+			elseif roundActiveName == "construct" and not LocalPlayer():Alive() then
+
+				local timeaccurate = math.Round(LocalPlayer():GetNWFloat("AccurateTimeToSpawn"))
+				--local acurcetime = string.FormattedTime(time,"%02i")
+
+				if timeaccurate < 1 then
+					draw.SimpleText("Нажмите ПРОБЕЛ чтобы зареспавниться.","HomigradFont",ScrW()/2,ScrH()/2 + 400,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)	
+				else
+					draw.SimpleText("Респавн через "..timeaccurate,"HomigradFont",ScrW()/2,ScrH()/2 + 400,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)	
+				end
 		end
 
 		local func = TableRound().HUDPaint_RoundLeft
@@ -99,7 +109,9 @@ hook.Add("HUDPaint","homigrad-roundstate",function()
 			--elseif roundActiveName == "scp" then
 				--draw.SimpleText("До прибытия МОГ: " .. math.Round(scp.spawnMOG),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 			else
-				if roundActiveName != "zombieinfection" and not LocalPlayer():Alive() then
+				if roundActiveName == "zombieinfection" and not LocalPlayer():Alive() then
+					draw.SimpleText("До конца раунда: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
+				elseif roundActiveName != "zombieinfection" and roundActiveName != "homicide" then
 					draw.SimpleText("До конца раунда: " .. math.Round(roundTimeStart + roundTime - CurTime()),"HomigradFont",ScrW() - 15, ScrH() - 60, showRoundInfoColor, TEXT_ALIGN_RIGHT)
 				end
 			end

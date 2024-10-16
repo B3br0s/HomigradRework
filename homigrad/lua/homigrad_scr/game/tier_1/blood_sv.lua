@@ -60,7 +60,7 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 	ply.heartstop = heartstop
 	ply.nextPulse = not heartstop and nextPulse or Lerp(0.1,(ply.nextPulse or 0),5)
 
-	if (ply.CPRThink or 0) < time and !ply.Suffocating then
+	if (ply.CPRThink or 0) < time and !ply.Suffocating and !ply.Zhgut and !ply.SuffocatingFiber then
 		ply.CPRThink = time + 1
 		ply.CPR = math.max((ply.CPR or 0) - 5,0)
 		ply.o2 = (ply.heartstop) and math.max((ply.o2 or 1) - 0.1,-3) or math.min((ply.o2 or 1) + 0.1,1)
@@ -71,12 +71,13 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 	local neck = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Neck1")):GetTranslation()
 	
 	if ply.Organs["artery"] == 0 and (ply.arteriaThink or 0) < time and ply.Blood > 0 then
-		ply.arteriaThink = time + 0.07
 		if not ply.holdingartery then
+			ply.arteriaThink = time + 0.03
 			ply.Blood = math.max(ply.Blood - 10,0)
 			BloodParticle(neck,ent:GetAttachment(ent:LookupAttachment("eyes")).Ang:Forward() * 200)
 		else
-			ply.Blood = math.max(ply.Blood - 2,0)
+			ply.arteriaThink = time + 0.2
+			ply.Blood = math.max(ply.Blood - 3,0)
 			BloodParticle(neck,ent:GetAttachment(ent:LookupAttachment("eyes")).Ang:Forward() * 50)
 		end
 	end

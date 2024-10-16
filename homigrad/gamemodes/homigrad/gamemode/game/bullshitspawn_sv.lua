@@ -235,8 +235,12 @@ end)
 
 local spawns = {}
 
-for i, ent in pairs(ents.FindByClass("info_*")) do
-	table.insert(spawns,ent:GetPos())
+if #ReadDataMap("boxspawn") > 0 then
+	table.insert(spawns, ReadDataMap("boxspawn")[math.random(1,#ReadDataMap("boxspawn"))][3])
+else
+	for _, ent in pairs(ents.FindByClass("info_*")) do
+		table.insert(spawns, ent:GetPos())
+	end
 end
 
 local hook_Run = hook.Run

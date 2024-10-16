@@ -1,6 +1,8 @@
-function slovopacana.SpawnsTwoCommand()
+function gangrazborki.SpawnsTwoCommand()
 	local spawnsT = ReadDataMap("spawnpointst")
 	local spawnsCT = ReadDataMap("spawnpointsct")
+
+	gangrazborki.police = false
 
 	if #spawnsT == 0 then
 		for i, ent in RandomPairs(ents.FindByClass("info_player_terrorist")) do
@@ -17,7 +19,7 @@ function slovopacana.SpawnsTwoCommand()
 	return spawnsT,spawnsCT
 end
 
-function slovopacana.SpawnCommand(tbl,aviable,func,funcShould)
+function gangrazborki.SpawnCommand(tbl,aviable,func,funcShould)
 	for i,ply in RandomPairs(tbl) do
 		if funcShould and funcShould(ply) ~= nil then continue end
 
@@ -37,7 +39,7 @@ function slovopacana.SpawnCommand(tbl,aviable,func,funcShould)
 	end
 end
 
-function slovopacana.DirectOtherTeam(start,min,max)
+function gangrazborki.DirectOtherTeam(start,min,max)
 	if not max then max = min end
 
 	for i = start,team.MaxTeams do
@@ -47,7 +49,7 @@ function slovopacana.DirectOtherTeam(start,min,max)
 	end
 end
 
-function slovopacana.GetListMul(list,mul,func,max)
+function gangrazborki.GetListMul(list,mul,func,max)
 	local newList = {}
 	mul = math.Round(#list * mul)
 	if max then mul = math.max(mul,max) end
@@ -64,7 +66,7 @@ function slovopacana.GetListMul(list,mul,func,max)
 	return newList
 end
 
-function slovopacana.RemoveItems()
+function gangrazborki.RemoveItems()
 	for i,ent in pairs(ents.GetAll()) do
 		if ent:GetName() == "biboran" then
 			ent:Remove()
@@ -72,25 +74,25 @@ function slovopacana.RemoveItems()
 	end
 end
 
-function slovopacana.StartRoundSV()
-    slovopacana.RemoveItems()
+function gangrazborki.StartRoundSV()
+    gangrazborki.RemoveItems()
 
 	roundTimeStart = CurTime()
-	roundTime = 60 * (2 + math.min(#player.GetAll() / 8,2))
+	roundTime = 90 * (2 + math.min(#player.GetAll() / 8,2))
 
 	for i,ply in pairs(team.GetPlayers(3)) do ply:SetTeam(math.random(1,2)) end
 
 	OpposingAllTeam()
 	AutoBalanceTwoTeam()
 
-	local spawnsT,spawnsCT = slovopacana.SpawnsTwoCommand()
-	slovopacana.SpawnCommand(team.GetPlayers(1),spawnsT)
-	slovopacana.SpawnCommand(team.GetPlayers(2),spawnsCT)
+	local spawnsT,spawnsCT = gangrazborki.SpawnsTwoCommand()
+	gangrazborki.SpawnCommand(team.GetPlayers(1),spawnsT)
+	gangrazborki.SpawnCommand(team.GetPlayers(2),spawnsCT)
 
-	slovopacana.CenterInit()
+	gangrazborki.CenterInit()
 end
 
-function slovopacana.GetCountLive(list,func)
+function gangrazborki.GetCountLive(list,func)
 	local count = 0
 	local result
 
@@ -105,12 +107,31 @@ function slovopacana.GetCountLive(list,func)
 	return count
 end
 
-function slovopacana.RoundEndCheck()
-	slovopacana.Center()
+function SpawnNigErmany()
+	if not gangrazborki.police then
+	gangrazborki.police = true
+	PrintMessage(3,"На звуки выстрелов приехала полиция.")
+	for i, ply in ipairs( player.GetAll() ) do
+		if not ply:Alive() then
+			ply:Spawn()
 
-	if roundTimeStart + roundTime - CurTime() <= 0 then EndRound() end
-	local TAlive = slovopacana.GetCountLive(team.GetPlayers(1))
-	local CTAlive = slovopacana.GetCountLive(team.GetPlayers(2))
+			ply:SetPlayerClass("police")	
+
+			ply:Give("weapon_mp5")
+
+			ply:GiveAmmo(180,"9х19 mm Parabellum",true)
+		end
+			sound.Play("snd_jack_hmcd_policesiren.wav",ply:GetPos(),100,100,10)
+    end
+end
+end
+
+function gangrazborki.RoundEndCheck()
+	gangrazborki.Center()
+
+	if roundTimeStart + roundTime - CurTime() <= 0 then SpawnNigErmany() end
+	local TAlive = gangrazborki.GetCountLive(team.GetPlayers(1))
+	local CTAlive = gangrazborki.GetCountLive(team.GetPlayers(2))
 
 	if TAlive == 0 and CTAlive == 0 then EndRound() return end
 
@@ -118,22 +139,23 @@ function slovopacana.RoundEndCheck()
 	if CTAlive == 0 then EndRound(1) end
 end
 
-function slovopacana.EndRoundMessage(winner,textNobody)
+function gangrazborki.EndRoundMessage(winner,textNobody)
 	local tbl = TableRound()
-	if winner == 1 and tbl.red[1] then
-	PrintMessage(3,"Октябрьские спросили за базар.")
-	elseif winner == 2 and tbl.blue[1] then
-	PrintMessage(3,"Шароваровы постояли за себя.")
+	if winner == 2 and not gangrazborki.police and tbl.blue[1] then
+	PrintMessage(3,"Bloods Захватили территорию Crips.")
+	elseif winner == 1 and not gangrazborki.police and tbl.red[1] then
+	PrintMessage(3,"Crips отстояли свою территорию.")
+	elseif gangrazborki.police then
+	PrintMessage(3,"Обе банды отступают из за приезда полиции")
 	else
-	PrintMessage(3,"Раздача пиздюлей окончилась шухером.")
 	end
 end
 
-function slovopacana.EndRound(winner) slovopacana.EndRoundMessage(winner) end
+function gangrazborki.EndRound(winner) gangrazborki.EndRoundMessage(winner) end
 
 --
 
-function slovopacana.GiveSwep(ply,list,mulClip1)
+function gangrazborki.GiveSwep(ply,list,mulClip1)
 	if not list then return end
 
 	local wep = ply:Give(type(list) == "table" and list[math.random(#list)] or list)
@@ -146,21 +168,21 @@ function slovopacana.GiveSwep(ply,list,mulClip1)
     end
 end
 
-function slovopacana.PlayerSpawn(ply,teamID)
-	local teamTbl = slovopacana[slovopacana.teamEncoder[teamID]]
+function gangrazborki.PlayerSpawn(ply,teamID)
+	local teamTbl = gangrazborki[gangrazborki.teamEncoder[teamID]]
 	local color = teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
     ply:SetPlayerColor(color:ToVector())
 
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
 
-	slovopacana.GiveSwep(ply,teamTbl.main_weapon)
-	slovopacana.GiveSwep(ply,teamTbl.secondary_weapon)
+	gangrazborki.GiveSwep(ply,teamTbl.main_weapon)
+	gangrazborki.GiveSwep(ply,teamTbl.secondary_weapon)
 end
 
-function slovopacana.PlayerInitialSpawn(ply) ply:SetTeam(math.random(2)) end
+function gangrazborki.PlayerInitialSpawn(ply) ply:SetTeam(math.random(2)) end
 
-function slovopacana.PlayerCanJoinTeam(ply,teamID)
+function gangrazborki.PlayerCanJoinTeam(ply,teamID)
     if teamID == 3 then ply:ChatPrint("Иди нахуй") return false end
 end
 
@@ -179,4 +201,4 @@ function riot.ShouldSpawnLoot()
 	end
 end
 
-function slovopacana.PlayerDeath(ply,inf,att) return false end
+function gangrazborki.PlayerDeath(ply,inf,att) return false end

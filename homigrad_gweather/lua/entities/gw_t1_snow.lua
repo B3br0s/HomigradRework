@@ -47,7 +47,7 @@ function ENT:Initialize()
 	if (SERVER) then
 	
 		gWeather:SetAtmosphere({
-			Temperature=math.random(-2,-10),
+			Temperature=math.random(-10,-17),
 			Humidity=math.random(90,100),
 			Precipitation = 0.6,
 			Wind={
@@ -98,7 +98,7 @@ function ENT:ScreenParticleEffects()
 				net.Start("gw_screeneffects")
 				net.WriteString("hud/snow") -- texture
 				net.WriteFloat(math.random(128,256)) -- size
-				net.WriteFloat(math.random(0.2,0.4)) -- lifetime (in seconds)
+				net.WriteFloat(math.random(1)) -- lifetime (in seconds)
 				net.WriteFloat(1) -- movement speed
 				net.WriteColor(color_white,false) -- color
 			net.Send(ply)

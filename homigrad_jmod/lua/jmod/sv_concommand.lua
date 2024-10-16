@@ -93,10 +93,10 @@ concommand.Add("jmod_insta_upgrade", function(ply)
 	end
 end, nil, "Instantly upgrades upgradable machines you are looking at.")
 
-concommand.Add("jmod_ez_inv", function(ply, cmd, args)
+--[[concommand.Add("jmod_ez_inv", function(ply, cmd, args)
 	if not (IsValid(ply) and ply:Alive()) then return end
 	JMod.EZ_Open_Inventory(ply)
-end, nil, "Opens your EZ inventory to manage your armour.")
+end, nil, "Opens your EZ inventory to manage your armour.")]]
 
 concommand.Add("jmod_ez_bombdrop", function(ply, cmd, args)
 	JMod.EZ_BombDrop(ply)

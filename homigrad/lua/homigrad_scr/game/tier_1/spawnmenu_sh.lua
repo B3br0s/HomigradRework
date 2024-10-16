@@ -155,6 +155,7 @@ if engine.ActiveGamemode() == "homigrad" then
             "remover",
             "nocollide",
             "balloon",
+            "winch",
             "physprop",
             "weight_improved",
             "light",

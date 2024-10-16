@@ -265,6 +265,8 @@ local reasons = {
 	["blood"] = "Вы умерли от кровопотери.",
 	["pain"] = "Вы умерли от болевого шока.",
 	["painlosing"] = "Вы умерли от передоза обезболивающим.",
+	["stimulator"] = "Вы умерли от передоза стимулятором.",
+	["obdolbos"] = "Вы умерли от стимулятора обдолбос.",
 	["adrenaline"] = "Вы умерли от передоза адреналином.",
 	["killyourself"] = "Вы совершили суицид.",
 	["killyourselfartery"] = "Вы совершили суицид пробив себе артерию.",
@@ -272,7 +274,8 @@ local reasons = {
 	["virus"] = "Вы умерли от заражения.",
 	["ntoxin"] = "Вы умерли от заражения нейро-токсином.",
 	["water"] = "Вы захлебнулись.",
-	["poison"] = "Вы были отравлены."
+	["poison"] = "Вы были отравлены.",
+	["instant"] = "Вы умерли от смертельного попадания."
 }
 
 hook.Add("PlayerDeath","plymessage",function(ply,hitgroup,dmginfo)
@@ -284,6 +287,7 @@ hook.Add("PlayerDeath","plymessage",function(ply,hitgroup,dmginfo)
 	local reason = ply.KillReason
 	local dmgInfo = dmgInfo or ply.LastDMGInfo
 
+	if ply.KilledByKnifeThrow then ply:ChatPrint(reasons["instant"]) return end
 	if ply == att and reasons["killyourself"] then
 		ply:ChatPrint("Вы совершили суицид" .. add)	
 	elseif reason then

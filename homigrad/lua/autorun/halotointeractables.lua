@@ -4,8 +4,6 @@ local usableEntities = {
     ["func_movelinear"] = true,
     ["func_door_rotating"] = true,
     ["class C_BaseEntity"] = true,
-    ["weapon_crate"] = true,
-    ["explosive_crate"] = true,
     ["ent_ammo_.45rubber"] = true,
     ["ent_ammo_.44magnum"] = true,
     ["ent_ammo_.50action"] = true,
@@ -25,7 +23,6 @@ local usableEntities = {
     ["ent_ammo_9х19mm"] = true,
     ["ent_ammo_airsoftballs"] = true,
     ["ent_ammo_tasercartridge"] = true,
-    ["melee_crate"] = true,
     ["prop_door"] = true,
     ["prop_door_rotating"] = true,
     ["prop_effect"] = true
@@ -41,8 +38,6 @@ local entityNames = {
     ["prop_door_rotating"] = "Дверь",
     ["prop_effect"] = "Эффект",
     ["base_crate"] = "Обычный Ящик",
-    ["weapon_crate"] = "Обычный Ящик",
-    ["explosive_crate"] = "Ящик Со Взрывчаткой",
     ["ent_ammo_.45rubber"] = "Патроны .45 Резиновые",
     ["ent_ammo_.50action"] = "Патроны .50 Action Express",
     ["ent_ammo_.44magnum"] = "Патроны .44 Магнум",
@@ -60,8 +55,7 @@ local entityNames = {
     ["ent_ammo_9x39mm"] = "Патроны 9x39мм",
     ["ent_ammo_9х19mm"] = "Патроны 9x19мм",
     ["ent_ammo_airsoftballs"] = "Шары от страйкбола",
-    ["ent_ammo_tasercartridge"] = "Заряды Для Электрошокера",
-    ["melee_crate"] = "Ящик с холодным оружием"
+    ["ent_ammo_tasercartridge"] = "Заряды Для Электрошокера"
 }
 
 local haloDistance = 113
@@ -114,7 +108,10 @@ hook.Add("HUDPaint", "DrawUsableEntityName", function()
 
         local entityName = entityNames[currentEntity:GetClass()]
 
-
-        draw.SimpleText(entityName, "HomigradFont", ScrW() / 2, ScrH() / 2 + 50, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        if currentEntity:GetClass() == "base_crate" then
+            draw.SimpleText(currentEntity:GetNWFloat("CrateType"), "HomigradFont", ScrW() / 2, ScrH() / 2 + 50, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)  
+        else
+            draw.SimpleText(entityName, "HomigradFont", ScrW() / 2, ScrH() / 2 + 50, Color(255, 255, 255, textAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)  
+        end
     end
 end)

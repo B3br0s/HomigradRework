@@ -53,7 +53,7 @@ function construct.PlayerSpawn(ply,teamID)
 	ply.allowFlashlights = true
 end
 
-function construct.PlayerInitialSpawn(ply) ply:SetTeam(2) end
+function construct.PlayerInitialSpawn(ply) ply:SetTeam(1) end
 
 function construct.PlayerCanJoinTeam(ply,teamID)
 	ply.constructForceT = nil
@@ -90,16 +90,19 @@ function construct.ShouldSpawnLoot()
 	end
 end
 
-function construct.PlayerDeath(ply,inf,att) timer.Simple(1,function ()
-	ply:Spawn()
-	local aviable2 = ReadDataMap("spawnpointsct")
+function construct.PlayerDeath(ply,inf,att)
+	ply.CanSpawn = false
+	ply.CanSpawnTime = CurTime() + 30
+	--[[local aviable2 = ReadDataMap("spawnpointsct")
 	local aviable1 = ReadDataMap("spawnpointst")
+	if #aviable2 > 0 then
 	if math.random(1,2) == 1 then
-		ply:SetPos(aviable1[math.random(1,#aviable)][1])
+		ply:SetPos(aviable1[math.random(1,#aviable)][3])
 	else
-		ply:SetPos(aviable2[math.random(1,#aviable)][1])
+		ply:SetPos(aviable2[math.random(1,#aviable)][3])
 	end
-end) end
+	end]]
+end
 
 function construct.GuiltLogic(ply,att,dmgInfo)
 	if att.isContr and ply:Team() == 2 then return dmgInfo:GetDamage() * 3 end

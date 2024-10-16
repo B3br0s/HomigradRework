@@ -1,4 +1,4 @@
-function slovopacana.KCenter(pos,point)
+function gangrazborki.KCenter(pos,point)
 	local dis = 0
 
 	for i,point in pairs(point) do
@@ -16,7 +16,7 @@ local grtoup = Material( "vgui/gradient-d" )
 local grtoright = Material( "vgui/gradient-l" )
 local grtoleft = Material( "vgui/gradient-r" )
 
-slovopacana.SupportCenter = true
+gangrazborki.SupportCenter = true
 
 hook.Add("HUDPaint","bahmut",function()
     local lply = LocalPlayer()
@@ -27,7 +27,7 @@ hook.Add("HUDPaint","bahmut",function()
 
     local point = SpawnPointsList.center[3]
     if #point == 0 then return end
-    local dis = slovopacana.KCenter(lply:GetPos(),point)
+    local dis = gangrazborki.KCenter(lply:GetPos(),point)
 
     local w,h = ScrW(),ScrH()
     local k = 1 - math.cos(CurTime() * 2) / 2

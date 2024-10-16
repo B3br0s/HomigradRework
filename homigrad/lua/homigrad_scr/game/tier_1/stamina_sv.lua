@@ -53,7 +53,7 @@ if engine.ActiveGamemode() == "homigrad" then
 			ent:EmitSound("snds_jack_hmcd_breathing/m" .. math.random(1,6) .. ".wav",60,100,0.6,CHAN_AUTO)
 		end
 	
-		if ply.stamina < 100 and not ply:IsSprinting() and ply:WaterLevel() <= 2  then
+		if ply.stamina < 100 and not ply:IsSprinting() and ply:WaterLevel() <= 2 and not ply.Zhgut == true then
 			ply.stamina = ply.stamina + 3 + (ply.hungryregen / 2)
 			ply:SetNWInt("stamina",ply.stamina)
 		end

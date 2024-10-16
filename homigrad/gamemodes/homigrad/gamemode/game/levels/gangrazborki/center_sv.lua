@@ -1,8 +1,8 @@
-function slovopacana.CenterInit()
+function gangrazborki.CenterInit()
 	for i,ply in pairs(player.GetAll()) do ply.delayKill = nil end
 end
 
-function slovopacana.Center()
+function gangrazborki.Center()
 	if not GetGlobalVar("Center") then return end
 
 	local point = ReadDataMap("center")
@@ -11,7 +11,7 @@ function slovopacana.Center()
 	for i,ply in pairs(player.GetAll()) do
 		if not ply:Alive() or ply:Team() == 1002 or ply:HasGodMode() then continue end
 
-		if slovopacana.KCenter(ply:GetPos(),point) >= 1 then
+		if gangrazborki.KCenter(ply:GetPos(),point) >= 1 then
 			if not ply.delayKill then
 				ply.delayKill = CurTime() + 10
 				ply:ChatPrint("Ты умрёшь, покинь запретную зону в течении 10 секунд.")
