@@ -57,8 +57,8 @@ function bahmut.SpawnSimfphys(list,name,func)
 end
 
 function bahmut.SpawnVehicle()
-    bahmut.SpawnSimfphys(ReadDataMap("car_red"),"sim_fphys_pwvolga")
-    bahmut.SpawnSimfphys(ReadDataMap("car_blue"),"sim_fphys_pwhatchback")
+    bahmut.SpawnSimfphys(ReadDataMap("car_red"),"sim_fphys_van")
+    bahmut.SpawnSimfphys(ReadDataMap("car_blue"),"sim_fphys_pwtrabant")
 
 	--bahmut.SpawnEnt(ReadDataMap("sim_fphys_tank3"),"sim_fphys_tank3")
 	--bahmut.SpawnEnt(ReadDataMap("sim_fphys_tank4"),"sim_fphys_tank4")
@@ -263,21 +263,6 @@ function bahmut.PlayerSpawn(ply,teamID)
 	local color = teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
 
-	if teamID == 1 then
-		ply:SetBodygroup(1,2)
-		ply:SetBodygroup(2,1)
-		ply:SetBodygroup(4,1)
-		ply:SetBodygroup(5,1)
-		ply:SetBodygroup(6,1)
-		ply:SetBodygroup(7,1)
-		ply:SetBodygroup(9,2)
-    elseif teamID == 2 then
-        ply:SetBodygroup(1,1)
-        ply:SetBodygroup(2,1)
-        ply:SetBodygroup(3,5)
-        ply:SetBodygroup(4,1)
-	end
-
     ply:SetPlayerColor(color:ToVector())
 
 	for i,weapon in pairs(teamTbl.weapons) do ply:Give(weapon) end
@@ -286,8 +271,39 @@ function bahmut.PlayerSpawn(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon)
 	
     if teamID == 1 then
-        JMod.EZ_Equip_Armor(ply,"Osprey MK4A A",Color(255,255,255):ToVector())
+        ply:SetNWFloat("FMChastota",149.55)
+        ply:SetNWFloat("MainFM",2)
+
+        JMod.EZ_Equip_Armor(ply,"Smoke Balaclava")
+        JMod.EZ_Equip_Armor(ply,"Gascan Glasses")
+        JMod.EZ_Equip_Armor(ply,"6B47 Cover")
+        JMod.EZ_Equip_Armor(ply,"6B43 Vest")
+        JMod.EZ_Equip_Armor(ply,"6B43 Pelvis")
+        JMod.EZ_Equip_Armor(ply,"BSS-MK1")
+
+        ply:SetBodygroup(2,1)
+		ply:SetBodygroup(3,1)
+		ply:SetBodygroup(4,1)
+		ply:SetBodygroup(5,1)
+		ply:SetBodygroup(6,0)
+        ply:SetBodygroup(7,1)
     elseif teamID == 2 then
+        ply:SetNWFloat("FMChastota",91.22)
+        ply:SetNWFloat("MainFM",3)
+
+        JMod.EZ_Equip_Armor(ply,"Dundukk sunglasses")
+        JMod.EZ_Equip_Armor(ply,"TW EXFIL C")
+        JMod.EZ_Equip_Armor(ply,"RBAV-AF")
+
+        ply:SetBodygroup(3,0)
+        ply:SetBodygroup(4,3)
+        ply:SetBodygroup(5,1)
+        ply:SetBodygroup(6,1)
+        ply:SetBodygroup(7,1)
+        ply:SetBodygroup(8,1)
+        ply:SetBodygroup(9,1)
+        ply:SetBodygroup(10,1)
+        ply:SetBodygroup(11,1)
     end
 
 	if roundStarter then

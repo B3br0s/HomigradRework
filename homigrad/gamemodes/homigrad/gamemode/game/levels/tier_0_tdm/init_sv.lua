@@ -196,6 +196,14 @@ function tdm.PlayerSpawn(ply,teamID)
 
 	if math.random(1,4) == 4 then ply:Give("morphine") end
 
+	if teamID == 1 then
+		ply:SetNWFloat("FMChastota",149.55)
+        ply:SetNWFloat("MainFM",2)
+	elseif teamID == 2 then
+		ply:SetNWFloat("FMChastota",91.22)
+        ply:SetNWFloat("MainFM",3)
+	end
+
 	--local r = math.random(1,3)
 	--ply:Give(r == 1 and "food_fishcan" or r == 2 and "food_spongebob_home" or r == 3 and "food_lays")
 

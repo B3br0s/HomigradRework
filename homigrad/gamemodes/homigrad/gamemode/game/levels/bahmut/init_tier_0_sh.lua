@@ -2,18 +2,18 @@ table.insert(LevelList,"bahmut")
 bahmut = {}
 bahmut.Name = "Конфликт Хомиграда"
 
-bahmut.red = {"ЧВК\"ВАГНЕР\"",Color(60,75,60),
+bahmut.red = {"ВСРФ",Color(60,75,60),
 	weapons = {"weapon_radio","weapon_hands","weapon_hg_rgd5","medkit"},
 	main_weapon = {"weapon_ak74u","weapon_akm"},
-	secondary_weapon = {"weapon_p220", "weapon_deagle","weapon_glock"},
-	models = {"models/Knyaje Pack/SSO_PolitePeople/SSO_PolitePeople.mdl"}
+	secondary_weapon = {"weapon_makarov"},
+	models = {"models/arty/squad/faction/vdv/squadleader/leader_2 - arc9_pm.mdl"}
 }
 
 bahmut.blue = {"ВСУ",Color(125,125,60),
 	weapons = {"weapon_radio","weapon_hands","weapon_hg_f1","medkit"},
-	main_weapon = {"weapon_ar15"},
-	secondary_weapon = {"weapon_beretta","weapon_fiveseven","weapon_hk_usp"},
-	models = {"models/olegun_remake/sso_ukr.mdl"}
+	main_weapon = {"weapon_ar15","weapon_m4a1"},
+	secondary_weapon = {"weapon_beretta","weapon_hk_usp"},
+	models = {"models/ukrainearm/ukraine_sold.mdl"}
 }
 
 bahmut.teamEncoder = {

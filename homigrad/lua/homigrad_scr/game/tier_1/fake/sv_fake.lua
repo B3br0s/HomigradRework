@@ -762,15 +762,18 @@ if engine.ActiveGamemode() == "homigrad" then
 		rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 		if IsValid(rag:GetPhysicsObject()) then
 			local CustomWeight = {
+				["models/arty/squad/faction/vdv/squadleader/leader_2 - arc9_pm.mdl"] = true
 				["models/player/combine_super_soldier.mdl"] = true,
 				["models/player/combine_soldier_prisonguard.mdl"] = true,
 				["models/player/combine_soldier.mdl"] = true,
 				["models/player_hl2_combine_ordinal.mdl"] = true,
-				["models/hlvr/characters/combine/grunt/combine_beta_grunt_hlvr_player.mdl"] = true
+				["models/hlvr/characters/combine/grunt/combine_beta_grunt_hlvr_player.mdl"] = true,
+				["models/ukrainearm/ukraine_sold.mdl"] = true
 			}
 		
 			local CustomWeightHard = {
 				["models/player/jesus/jesus.mdl"] = true,
+				["models/dejtriyev/smo/ukr_soldier.mdl"] = true,
 				["models/leygun/rfarmy/soilder_rf_07.mdl"] = true,
 				["models/olegun_remake/sso_ukr.mdl"] = true,
 				["models/player/kuma/taliban_rpg.mdl"] = true,
@@ -809,7 +812,7 @@ if engine.ActiveGamemode() == "homigrad" then
 			rag:GetPhysicsObject():SetMass(20)
 		
 			local model = rag:GetModel()
-			if CustomWeightVeryHard[model] then
+			--[[if CustomWeightVeryHard[model] then
 				print("Model found in CustomWeightVeryHard: " .. model)
 			elseif CustomWeightHard[model] then
 				print("Model found in CustomWeightHard: " .. model)
@@ -817,30 +820,38 @@ if engine.ActiveGamemode() == "homigrad" then
 				print("Model found in CustomWeight: " .. model)
 			else
 				print("Model not found in any table: " .. model)
-			end
+			end]]
 			
 			--PrintTable(CustomWeight)
 			if CustomWeightVeryHard[model] == true then
 				self:SetNWFloat("Status", "Very-Hard")
+				if self:IsSuperAdmin() then
 				self:ChatPrint("D")
+				end
 				self:SetNWFloat("BackArrive", backarrivetime * 4)
 				self:SetNWFloat("ForwardArrive", forwardarrivetime * 4)
 				self:SetNWFloat("HandsArrive", handsarrivetime * 3.3)
 			elseif CustomWeightHard[model] == true then
 				self:SetNWFloat("Status", "Hard")
+				if self:IsSuperAdmin() then
 				self:ChatPrint("C")
+				end
 				self:SetNWFloat("BackArrive", backarrivetime * 3)
 				self:SetNWFloat("ForwardArrive", forwardarrivetime * 3)
 				self:SetNWFloat("HandsArrive", handsarrivetime * 2.7)
 			elseif CustomWeightUltraHard[model] == true then
 				self:SetNWFloat("Status", "UltraHard")
+				if self:IsSuperAdmin() then
 				self:ChatPrint("E")
+				end
 				self:SetNWFloat("BackArrive", backarrivetime * 7)
 				self:SetNWFloat("ForwardArrive", forwardarrivetime * 7)
 				self:SetNWFloat("HandsArrive", handsarrivetime * 3)
 			elseif CustomWeight[model] == true then
 				self:SetNWFloat("Status", "Medium")
+				if self:IsSuperAdmin() then
 				self:ChatPrint("B")
+				end
 				self:SetNWFloat("BackArrive", backarrivetime * 2)
 				self:SetNWFloat("ForwardArrive", forwardarrivetime * 2)
 				self:SetNWFloat("HandsArrive", handsarrivetime * 2.3)

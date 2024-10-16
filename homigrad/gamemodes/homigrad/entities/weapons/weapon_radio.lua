@@ -66,8 +66,10 @@ if SERVER then
         end
     end]]--
 
-    function SWEP:BippSound(ent,pitch)
-        ent:EmitSound("buttons/button16.wav",75,pitch)
+    function SWEP:BippSound(ent,pitch,ending)
+        if ending then
+            ent:EmitSound("buttons/button16.wav",75,pitch)    
+        end
     end
 
     function SWEP:CanLisen(output,input,isChat)
@@ -78,11 +80,23 @@ if SERVER then
 
         if output:GetActiveWeapon() ~= self or (not isChat and not self.Transmit) then return end
 
-        if output:Team() == input:Team() or output:Team() == 1002 then return true end
+        if output:GetNWFloat("FMChastota") == input:GetNWFloat("FMChastota") then return true end
+        --if output:Team() == input:Team() or output:Team() == 1002 then return true end
     end
 
     local CurTime = CurTime
     local GetAll = player.GetAll
+
+    function SWEP:PrimaryAttack()
+        local chastoti = {144.62,149.55,91.22}
+        if self:GetOwner():GetNWFloat("MainFM") > 2 then
+        self:GetOwner():SetNWFloat("MainFM",1)
+        else
+        self:GetOwner():SetNWFloat("MainFM",self:GetOwner():GetNWFloat("MainFM") + 1)   
+        end
+        self:GetOwner():SetNWFloat("FMChastota",chastoti[self:GetOwner():GetNWFloat("MainFM")])
+        self:GetOwner():ChatPrint("Ты сменил частоту на "..self:GetOwner():GetNWFloat("FMChastota").." МГц")
+    end
 
     function SWEP:CanTransmit()
         local owner = self:GetOwner()
@@ -106,7 +120,11 @@ if SERVER then
                     end
                 elseif not lisens[input] then
                     lisens[input] = true
+                    if output:Team() == input:Team() then
                     input:ChatPrint("Вещает : " .. output:Nick())
+                    else
+                    input:ChatPrint("Вещает : Неизвестно")
+                    end
                     self:BippSound(input,100)
                 end
             end
