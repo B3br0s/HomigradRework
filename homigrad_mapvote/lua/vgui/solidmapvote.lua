@@ -72,88 +72,113 @@ function PANEL:PauseLayout( bool )
     self.layoutPaused = bool
 end
 
-function PANEL:PerformLayout( w, h )
+function PANEL:PerformLayout(w, h)
     if self.layoutPaused then return end -- Pause the layout when buttons are animating
 
-    local buttonWidth = w*0.12
-    local buttonHeight = SolidMapVote[ 'Config' ][ 'Map Button Size' ] == 1 and h*0.6 or buttonWidth
-    local startPosX = (w*0.5) - ((buttonWidth+20)*#self.maps)*0.5
-    local startPosY = h*0.5 - buttonHeight*0.5
+    local buttonWidth = w * 0.12
+    local buttonHeight = SolidMapVote['Config']['Map Button Size'] == 1 and h * 0.6 or buttonWidth
+    local spacing = 20
+    local buttonsPerRow = math.floor((w * 0.8) / (buttonWidth + spacing)) -- Calculate how many buttons fit in a row
 
-    -- Fix sizing and position of map buttons
-    local lastBtn = nil
-    for k, btn in pairs( self.mapButtons ) do
-        btn:SetSize( buttonWidth, buttonHeight )
-        btn:SetPos( startPosX, startPosY )
+    -- Center the grid horizontally
+    local startX = (w - (buttonsPerRow * (buttonWidth + spacing)) + spacing) * 0.5
+    local startY = h * 0.2 -- Starting Y position a little below the top
 
-        if lastBtn then btn:MoveRightOf( lastBtn, 20 ) end
-        lastBtn = btn
+    local currentRow = 0
+    local currentColumn = 0
 
-        -- Set some return values for the animation after positioning
-        local x, y = btn:GetPos()
-        btn:SetOriginalSize( buttonWidth, buttonHeight )
-        btn:SetOriginalPos( x, y )
-    end
+    -- Position map buttons
+    for k, btn in ipairs(self.mapButtons) do
+        btn:SetSize(buttonWidth, buttonHeight)
 
-    local buttonXPos = startPosX + ((buttonWidth+20)*(#self.maps-1))
-    local buttonYPos = (h*0.5 + buttonHeight*0.5) + 20
-    local buttonSize = SolidMapVote[ 'Config' ][ 'Map Button Size' ] == 1 and buttonHeight*0.1 or buttonHeight*0.3
+        -- Calculate position for this button in the grid
+        local posX = startX + currentColumn * (buttonWidth + spacing)
+        local posY = startY + currentRow * (buttonHeight + spacing)
+        btn:SetPos(posX, posY)
 
-    -- Reposition and size the extend button
-    if SolidMapVote[ 'Config' ][ 'Enable Extend' ] then
-        self.extend:SetPos( buttonXPos, buttonYPos )
-        self.extend:SetSize( buttonWidth, buttonSize )
+        -- Move to the next column
+        currentColumn = currentColumn + 1
 
-        -- Set some return values for the animation after positioning
-        self.extend:SetOriginalSize( buttonWidth, buttonSize )
-        self.extend:SetOriginalPos( buttonXPos, buttonYPos )
-    end
-
-    -- Reposition and size the random button
-    if SolidMapVote[ 'Config' ][ 'Enable Random' ] then
-        self.random:SetPos( buttonXPos, buttonYPos )
-        self.random:SetSize( buttonWidth, buttonSize )
-
-        -- if the extend button is there, move this one to the left of it
-        if ValidPanel( self.extend ) then
-            self.random:MoveLeftOf( self.extend, 20 )
+        -- If we've reached the maximum number of buttons per row, move to the next row
+        if currentColumn >= buttonsPerRow then
+            currentColumn = 0
+            currentRow = currentRow + 1
         end
 
-        -- Set some return values for the animation after positioning
-        local x, y = self.random:GetPos()
-        self.random:SetOriginalSize( buttonWidth, buttonSize )
-        self.random:SetOriginalPos( x, y )
+        -- Store original size and position for animations
+        local x, y = btn:GetPos()
+        btn:SetOriginalSize(buttonWidth, buttonHeight)
+        btn:SetOriginalPos(x, y)
+    end
+
+    -- Bottom button (RANDOM and EXTEND) size and positioning
+    local buttonSize = SolidMapVote['Config']['Map Button Size'] == 1 and buttonHeight * 0.1 or buttonHeight * 0.3
+    local bottomButtonYPos = h - (buttonSize + 40) -- Fixed position at the bottom
+
+    -- Place the EXTEND button
+    if SolidMapVote['Config']['Enable Extend'] then
+        local extendButtonXPos = w - (buttonWidth + 220) -- Align right with 40px padding
+        self.extend:SetSize(buttonWidth, buttonSize)
+        self.extend:SetPos(extendButtonXPos, bottomButtonYPos)
+
+        -- Store original size and position for animations
+        self.extend:SetOriginalSize(buttonWidth, buttonSize)
+        self.extend:SetOriginalPos(extendButtonXPos, bottomButtonYPos)
+    end
+
+    -- Place the RANDOM button
+    if SolidMapVote['Config']['Enable Random'] then
+        local randomButtonXPos = w - (2 * buttonWidth + 246) -- Place left of the EXTEND button with 20px spacing
+        self.random:SetSize(buttonWidth, buttonSize)
+        self.random:SetPos(randomButtonXPos, bottomButtonYPos)
+
+        -- Store original size and position for animations
+        self.random:SetOriginalSize(buttonWidth, buttonSize)
+        self.random:SetOriginalPos(randomButtonXPos, bottomButtonYPos)
     end
 end
 
-function PANEL:Paint( w, h )
-    local timeRemainingDelta = (self.endTime - RealTime()) / SolidMapVote[ 'Config' ][ 'Length' ]
-    local timeRemainingFormatted = string.FormattedTime( math.max( math.Round( self.endTime - RealTime(), 2 ), 0 ), '%02i:%02i:%02i' )
 
-    local startY = SolidMapVote[ 'Config' ][ 'Map Button Size' ] == 1 and h*0.135 or h*0.335
+function PANEL:Paint(w, h)
+    local timeRemainingDelta = (self.endTime - RealTime()) / SolidMapVote['Config']['Length'] / 1.2
+    local timeRemainingFormatted = string.FormattedTime(math.max(math.Round(self.endTime - RealTime(), 2), 0), '%02i:%02i:%02i')
 
-    local titleW, titleH =
-    draw.SimpleTextOutlined( 'MAPVOTE', 'SolidMapVote.Title', w*0.11, startY, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, 15 ) )
-    draw.SimpleTextOutlined( 'MAPVOTE', 'SolidMapVote.Title', w*0.11, startY, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 30 ) )
+    local startY = SolidMapVote['Config']['Map Button Size'] == 1 and h * 0.135 or h * 0.335
 
-    local timeW, timeH =
-    draw.SimpleTextOutlined( timeRemainingFormatted, 'SolidMapVote.Time', w*0.11 + titleW + 10, startY + titleH*0.12, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, 15 ) )
-    draw.SimpleTextOutlined( timeRemainingFormatted, 'SolidMapVote.Time', w*0.11 + titleW + 10, startY + titleH*0.12, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 30 ) )
+    -- Draw MAPVOTE title at the top left
+    local titleX, titleY = w * 0.11, ScrH() - 1035
+    local titleW, titleH = draw.SimpleTextOutlined('MAPVOTE', 'SolidMapVote.Title', titleX, titleY, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color(0, 0, 0, 15))
+    draw.SimpleTextOutlined('MAPVOTE', 'SolidMapVote.Title', titleX, titleY, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 30))
 
-    draw.SimpleTextOutlined( self.subTitleText, 'SolidMapVote.SubTitle', w*0.11 + titleW + 10, startY + titleH*0.12 + timeH*0.9, Color( 233, 212, 96 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color( 0, 0, 0, 15 ) )
-    draw.SimpleTextOutlined( self.subTitleText, 'SolidMapVote.SubTitle', w*0.11 + titleW + 10, startY + titleH*0.12 + timeH*0.9, Color( 233, 212, 96 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0, 30 ) )
+    -- Adjust X for the time to be next to the title, with a small offset
+    local timeX = titleX + titleW + 20
+    local timeY = ScrH() - 1005 -- Vertical alignment with the title (slightly lower than the title)
+    local timeW, timeH = draw.SimpleTextOutlined(timeRemainingFormatted, 'SolidMapVote.Time', timeX, timeY, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color(0, 0, 0, 15))
+    draw.SimpleTextOutlined(timeRemainingFormatted, 'SolidMapVote.Time', timeX, timeY, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 30))
 
+    -- Draw subtitle text just below the time
+    local subTitleX = timeX -- Align subtitle with the time
+    local subTitleY = ScrH() - 1035 -- Spacing under the time
+    draw.SimpleTextOutlined(self.subTitleText, 'SolidMapVote.SubTitle', subTitleX, subTitleY, Color(233, 212, 96), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, Color(0, 0, 0, 15))
+    draw.SimpleTextOutlined(self.subTitleText, 'SolidMapVote.SubTitle', subTitleX, subTitleY, Color(233, 212, 96), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 30))
+
+    -- Skip the progress bar if the voting has finished
     if self.finished then return end
 
-    -- localizing so I can make the shadows easier
-    local boxWidth = Lerp( timeRemainingDelta, 0, w - (w*0.23) - (titleW+10) )
-    local boxHeight = titleH - timeH - 20
-    local boxX, boxY = w*0.11 + titleW + 10, startY + h*0.027
+    -- Draw progress bar (timer) properly under the content
+    local progressBarX = w * 0.11 -- Set the X position further from the left
+    local progressBarY = ScrH() - 970--h - 40 -- Set the Y position near the bottom
+    local progressBarWidth = Lerp(timeRemainingDelta, 0, w * 0.9) -- Full width for the progress bar, adjusting by time remaining
+    local progressBarHeight = 20 -- Set a fixed height for the progress bar
 
-    draw.RoundedBox( 0, boxX-2, boxY-2, boxWidth+4, boxHeight+4, Color( 0, 0, 0, 30 ) )
-    draw.RoundedBox( 0, boxX-1, boxY-1, boxWidth+2, boxHeight+2, Color( 0, 0, 0, 60 ) )
-    draw.RoundedBox( 0, boxX, boxY, boxWidth, boxHeight, color_white )
+    -- Draw the progress bar background (shadow)
+    draw.RoundedBox(0, progressBarX - 2, progressBarY - 2, progressBarWidth + 2, progressBarHeight + 4, Color(0, 0, 0, 30))
+    draw.RoundedBox(0, progressBarX - 1, progressBarY - 1, progressBarWidth + 4, progressBarHeight + 2, Color(0, 0, 0, 60))
+
+    -- Draw the progress bar foreground (actual progress)
+    draw.RoundedBox(0, progressBarX, progressBarY, progressBarWidth, progressBarHeight, color_white)
 end
+
 
 function PANEL:Think()
     gui.EnableScreenClicker( true )

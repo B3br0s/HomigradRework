@@ -51,7 +51,7 @@ hook.Add("HomigradDamage","PlayerPainGrowth",function(ply,hitGroup,dmginfo,rag,a
 	
 	dmg = dmg / ply.painlosing
 	dmg = ply.nopain and 1 or dmg
-	ply.pain = ply.pain + dmg
+	ply.pain = ply.pain + dmg / 2
 end)
 
 local empty = {}
@@ -89,7 +89,7 @@ hook.Add("Player Think","homigrad-pain",function(ply,time)
 		--ply:Kill()
 	end
 	--PrintMessage(3,tostring(ply.Otrub)..ply:Name())
-	ply.pain = math.max(ply.pain - ply.painlosing * 1 + ply.adrenalineNeed * k,0)
+	ply.pain = math.max(ply.pain - ply.painlosing * 1 * ply.Metabolizm + ply.adrenalineNeed * k,0)
 	if !ply.Suffocating then
 		ply.painlosing = math.max(ply.painlosing - 0.01,1)	
 	else

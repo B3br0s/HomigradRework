@@ -73,7 +73,7 @@ hook.Add( 'PlayerSay', 'SolidMapVote.PlayerCommands', function( ply, text, tChat
     if table.HasValue( SolidMapVote[ 'Config' ][ 'Force Vote Commands' ], command ) and not SolidMapVote.isOpen then
         if SolidMapVote[ 'Config' ][ 'Force Vote Permission' ]( ply ) then
             SolidMapVote.start()
-        --    SolidMapVote.sendMessage( { Color( 0, 177, 106 ), name, color_white, ' has forced the mapvote!' }, true )
+            --SolidMapVote.sendMessage( { Color( 0, 177, 106 ), name, color_white, ' has forced the mapvote!' }, true )
             return ''
         end
     end
@@ -185,12 +185,12 @@ function SolidMapVote.postMapVoteChange()
                 SolidMapVote.close()
                 SolidMapVote.reset()
             else
-                RunConsoleCommand( 'changelevel', game.GetMap() )
+                RunConsoleCommand( 'ulx','map', game.GetMap() )
             end
         elseif SolidMapVote.realWinner == 'random' then
-            RunConsoleCommand( 'changelevel', SolidMapVote.fixedWinner )
+            RunConsoleCommand( 'ulx','map', SolidMapVote.fixedWinner )
         else
-            RunConsoleCommand( 'changelevel', SolidMapVote.realWinner )
+            RunConsoleCommand( 'ulx','map', SolidMapVote.realWinner )
         end
     end
 end

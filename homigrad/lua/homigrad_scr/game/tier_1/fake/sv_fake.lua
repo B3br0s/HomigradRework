@@ -762,7 +762,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 		if IsValid(rag:GetPhysicsObject()) then
 			local CustomWeight = {
-				["models/arty/squad/faction/vdv/squadleader/leader_2 - arc9_pm.mdl"] = true
+				["models/arty/squad/faction/vdv/squadleader/leader_2 - arc9_pm.mdl"] = true,
 				["models/player/combine_super_soldier.mdl"] = true,
 				["models/player/combine_soldier_prisonguard.mdl"] = true,
 				["models/player/combine_soldier.mdl"] = true,
@@ -777,7 +777,8 @@ if engine.ActiveGamemode() == "homigrad" then
 				["models/leygun/rfarmy/soilder_rf_07.mdl"] = true,
 				["models/olegun_remake/sso_ukr.mdl"] = true,
 				["models/player/kuma/taliban_rpg.mdl"] = true,
-				["models/catalina/lizardman.mdl"] = true
+				["models/catalina/lizardman.mdl"] = true,
+				["models/payday2/units/splinter_cell_cloaker_player.mdl"] = true
 			}
 		
 			local CustomWeightVeryHard = {
@@ -836,8 +837,8 @@ if engine.ActiveGamemode() == "homigrad" then
 				if self:IsSuperAdmin() then
 				self:ChatPrint("C")
 				end
-				self:SetNWFloat("BackArrive", backarrivetime * 3)
-				self:SetNWFloat("ForwardArrive", forwardarrivetime * 3)
+				self:SetNWFloat("BackArrive", backarrivetime * 5)
+				self:SetNWFloat("ForwardArrive", forwardarrivetime * 5)
 				self:SetNWFloat("HandsArrive", handsarrivetime * 2.7)
 			elseif CustomWeightUltraHard[model] == true then
 				self:SetNWFloat("Status", "UltraHard")
@@ -857,7 +858,9 @@ if engine.ActiveGamemode() == "homigrad" then
 				self:SetNWFloat("HandsArrive", handsarrivetime * 2.3)
 			else
 				self:SetNWFloat("Status", "Light")
+				if self:IsSuperAdmin() then
 				self:ChatPrint("A")
+				end
 				self:SetNWFloat("BackArrive", backarrivetime)
 				self:SetNWFloat("ForwardArrive", forwardarrivetime)
 				self:SetNWFloat("HandsArrive", handsarrivetime)
@@ -1089,7 +1092,7 @@ if engine.ActiveGamemode() == "homigrad" then
 			if !ply.Suffocating == true then
 			ply:SetNWFloat("NextThinkGay",CurTime() + 0.1)
 			else
-			ply:SetNWFloat("NextThinkGay",CurTime() + 1)
+			ply:SetNWFloat("NextThinkGay",CurTime() + 5)
 			end
 			if ply.Suffocating == true then
 				ply:GetNWEntity("Ragdoll"):EmitSound("homigrad/suffocation_rope.wav")
@@ -1244,7 +1247,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						end
 						
 						Ropes[1].Constraint:Remove()
-						rag:EmitSound("snd_jack_hmcd_ducttape.wav", 90, 50, 0.5, CHAN_AUTO)
+						rag:EmitSound("rust/handcuffs/handcuffs-admire-0"..math.random(1,4)..".ogg", 90, 50, 0.5, CHAN_AUTO)
 					else
 						ply:ChatPrint("Неудачная попытка.")
 					end

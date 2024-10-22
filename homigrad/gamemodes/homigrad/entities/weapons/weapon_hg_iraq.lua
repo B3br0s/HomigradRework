@@ -11,6 +11,7 @@ SWEP.RequiresPin = true
 SWEP.PinOut = false
 SWEP.PinSound = "weapons/tfa_csgo/flashbang/pinpull.wav"
 SWEP.Leveractivatedonce = false
+SWEP.AdminOnly = true
 SWEP.a = 1
 SWEP.LeverProebal = false
 

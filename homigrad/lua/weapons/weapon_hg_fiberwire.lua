@@ -26,7 +26,7 @@ SWEP.Secondary.Ammo = "none"
 SWEP.DrawAmmo = false
 SWEP.DrawCrosshair = true
 
-local CHOKE_DISTANCE = 120
+local CHOKE_DISTANCE = 80
 local BACKSTAB_ANGLE = 60
 
 function SWEP:Initialize()
@@ -135,7 +135,7 @@ if SERVER then
                         choker:Freeze(false)
                     end
                     ply.SuffocatingFiberTime = nil
-                    print("AASDASDDASADSADSADSADSSADDDDDDDDDDDDDDDDDDD")
+                    --print("AASDASDDASADSADSADSADSSADDDDDDDDDDDDDDDDDDD")
                 elseif ply.SuffocatingFiber and ply.SuffocatingFiberTime and CurTime() > ply.SuffocatingFiberTime then
                     ply:SetNWBool("SuffocatingFiber", true)
                     ply.SuffocatingFiber = true

@@ -59,7 +59,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	["weapon_sks"]=Vector(0,0,1),
 	["weapon_svd"]=Vector(0,0,1),
 	["weapon_saiga12"]=Vector(12,0,5),
-	["weapon_m1garand"]=Vector(0,0,1),
+	["weapon_m1garand"]=Vector(13,0,4),
 	["weapon_pkm"]=Vector(0,-2,2),
 	}
 	
@@ -98,7 +98,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	["weapon_hk_arbalet"]=Vector(15,-3,-3),
 	["weapon_vector"]=Vector(12,-1,-4),
 	["weapon_sks"]=Vector(18,0,-5),
-	["weapon_m1garand"]=Vector(13,0,-5),
+	["weapon_m1garand"]=Vector(17,-1,-1),
 	}
 	
 	vecZero = Vector(0,0,0)
@@ -447,7 +447,6 @@ if engine.ActiveGamemode() == "homigrad" then
 		--wep:EmitSound( wep.GetSound, 75, 100, 1, CHAN_WEAPON)
 		if SERVER then
 			net.Start("huysound")
-			net.WriteEntity(wep)
 			net.WriteVector(wep:GetPos())
 			net.WriteString(weptable.Primary.Sound)
 			net.WriteString(weptable.Primary.SoundFar)

@@ -584,17 +584,6 @@ JMod.ArmorTable = {
 		ent = "ent_jack_gmod_ezarmor_vapemouth",
 		bdg = {
 			[1] = 0
-		},
-		tgl = {
-			mskmat = "",
-			slots = {
-				head = 0.8,
-				eyes = 0,
-				mouthnose = 0	
-			},
-			bdg = {
-				[1] = 1
-			}
 		}
 	},
 	["Ultra-Heavy-Helmet"] = {

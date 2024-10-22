@@ -192,6 +192,8 @@ end
 
 function EndRound(winner)
 
+	SetGlobalBool("AccessSpawn",false)
+
 	roundStarter = nil
 
 	if ulx.voteInProgress and ulx.voteInProgress.title == "Закончить раунд?" then

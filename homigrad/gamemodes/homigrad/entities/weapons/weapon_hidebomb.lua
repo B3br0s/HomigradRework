@@ -181,7 +181,7 @@ if SERVER then
         timer.Simple(1,function ()
             Bomb(self:GetOwner().bomb)   
             self:GetOwner().bomb = nil
-            self:GetOWner():SelectWeapon("weapon_hands")
+            self:GetOwner():SelectWeapon("weapon_hands")
             self:Remove()
         end)
         --cyka[self:GetOwner()] = nil

@@ -71,7 +71,7 @@ function ENT:Initialize()
 		gWeather:CreateSky()
 		gWeather:SetSkyParameters(tbl)
 	
-		local fog = { FogColor=col,FogStart=0,FogEnd={Outside=500,Inside=1000},FogDensity={Outside=0.5,Inside=0.6} }
+		local fog = { FogColor=col,FogStart=0,FogEnd={Outside=5000,Inside=10000},FogDensity={Outside=0.5,Inside=0.6} }
 		gWeather:CreateFog(fog)	
 
 		gWeather.SetMapLight("g")

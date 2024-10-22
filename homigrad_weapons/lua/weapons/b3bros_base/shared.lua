@@ -53,8 +53,6 @@ SWEP.UVAdjust = {0, 0}
 SWEP.UVScale = {1, 1}
 SWEP.Recoil = 0
 
-
-
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
@@ -176,7 +174,16 @@ function SWEP:GetBulletSourcePos()
 	return pos, ang
 end
 
+if CLIENT then
+    hg_hint = CreateClientConVar("hg_hint","1",true,false)
+end
+
 function SWEP:DrawHUD()
+    if self.shotgun and !self.Pumped  and self.Type == "Pump" then
+        if hg_hint:GetBool() then
+        draw.SimpleText("Чтобы передёрнуть затвор нажми R","DebugFixedSmall",ScrW()/2,ScrH()/2 + 300,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        end
+    end
 	show = math.Clamp(self.AmmoChek or 0, 0, 1)
 	self.AmmoChek = Lerp(2 * FrameTime(), self.AmmoChek or 0, 0)
 	color_gray = Color(200,200,200, 190 * show)
@@ -445,39 +452,31 @@ function SWEP:CanFireBullet()
 	return true
 end
 
-if SERVER then
-	util.AddNetworkString("huysound")
-end
-
+if SERVER then util.AddNetworkString("huysound") end
 if CLIENT then
-	net.Receive("huysound",function(len)
-		local entwep = net.ReadEntity()
+	net.Receive("huysound", function(len)
 		local pos = net.ReadVector()
 		local sound = net.ReadString()
 		local farsound = net.ReadString() or "m9/m9_dist.wav"
 		local ent = net.ReadEntity()
-
 		if ent == LocalPlayer() then return end
-
 		local dist = LocalPlayer():EyePos():Distance(pos)
 		if ent:IsValid() and dist < 1100 then
-			if entwep:GetNWBool("Suppressor", false) != true then
-				ent:EmitSound(sound,125,math.random(100,120),1,CHAN_WEAPON,0,0)
-			else
-				ent:EmitSound(entwep.Primary.SoundSupresor,125,math.random(100,120),1,CHAN_WEAPON,0,0)
-			end
+			ent:EmitSound(sound, ent.Supressed and 35 or 125, math.random(100, 120), 1, CHAN_WEAPON, 0, 0)
 		elseif ent:IsValid() then
-			ent:EmitSound(farsound,ent.Supressed and 35 or 125,math.random(100,120),1,CHAN_WEAPON,0,0)
+			ent:EmitSound(farsound, ent.Supressed and 35 or 125, math.random(100, 120), 1, CHAN_WEAPON, 0, 0)
 		end
 	end)
 end
 
 function SWEP:PrimaryAttack()
 	if self.CanManipulatorKuklovodAngle then
+		if CLIENT then
 		self:ManipulateSlideBoneForAng()
 		timer.Simple(0.2,function ()
 			self:ManipulateSlideBoneBacAng()
 		end)
+		end
 	end
 
 	self.ShootNext = self.NextShot or NextShot
@@ -508,51 +507,26 @@ function SWEP:PrimaryAttack()
 	
 	if SERVER then
 		net.Start("huysound")
-		net.WriteEntity(self)
 		net.WriteVector(self:GetPos())
 		net.WriteString(self.Primary.Sound)
 		net.WriteString(self.Primary.SoundFar)
 		net.WriteEntity(self:GetOwner())
 		net.Broadcast()
 	else
-		if self:GetNWBool("Suppressor", false) != true then
-			self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
-			if self:Clip1() != 0 then
-				if self.CanManipulatorKuklovod and not self.shotgun then
-					self:ManipulateSlideBoneFor()
-					timer.Simple(0.05,function ()
-						self:ManipulateSlideBoneBac()
-					end)
-				elseif self.CanManipulatorKuklovod and self.shotgun then
-					timer.Simple(0.3,function ()
-					self:ManipulateSlideBoneFor()
-					timer.Simple(0.2,function ()
-						self:ManipulateSlideBoneBac()
-					end)
-				end)
-				end
-				end
-		
-			if self.Primary.PumpSound then
-				timer.Simple(0.2,function ()
-					sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
-				end)
-			end
-		else
-			self.Efect = "PhyscannonImpact"
-			self:EmitSound(self.Primary.SoundSupresor,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)
-			if self.CanManipulatorKuklovod then
+			if self.CanManipulatorKuklovod and not self.shotgun then
 				self:ManipulateSlideBoneFor()
-				timer.Simple(0.01,function ()
+				timer.Simple(0.05,function ()
 					self:ManipulateSlideBoneBac()
 				end)
-			end
-			if self.Primary.PumpSound then
+			elseif self.CanManipulatorKuklovod and self.shotgun then
+				timer.Simple(0.3,function ()
+				self:ManipulateSlideBoneFor()
 				timer.Simple(0.2,function ()
-					sound.Play(self.Primary.PumpSound,self:GetOwner():GetPos(),1000,100)
+					self:ManipulateSlideBoneBac()
 				end)
+			end)
 			end
-		end
+		self:EmitSound(self.Primary.Sound, 511, math.random(100, 120), 1, CHAN_VOICE_BASE, 0, 0)
 	end
 	
 	local dmg = self.Primary.Damage
@@ -1077,6 +1051,28 @@ function SWEP:Step()
 	forearm:Add(closeAng)]]
 
 	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
+	if self.Pumping then
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
+	
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),Angle(10,-45,-10))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0)) 
+		return 
+	else
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_UpperArm"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
+	
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"),Angle(0,0,0))
+		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0)) 
+	end
 	if ply.suiciding then ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),forearm,false)
 		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"),forearmL,false)
 		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"),handL,false)
@@ -1185,3 +1181,36 @@ function SWEP:ShouldDropOnDie()
 	return true
 end
 end
+if SERVER then
+	util.AddNetworkString("RifleShellVFX")
+	
+	util.AddNetworkString("PumpVFX")
+	
+	net.Receive("PumpVFX",function ()
+		local ply = net.ReadEntity()
+	
+		local boneIndex = ply:LookupBone("ValveBiped.Bip01_R_Hand")
+		if boneIndex then
+			local bonePos, boneAng = ply:GetBonePosition(boneIndex)
+	
+			local effectdata = EffectData()
+			effectdata:SetOrigin(bonePos)
+			effectdata:SetAngles(boneAng)
+			util.Effect("ShotgunShellEject", effectdata)
+		end
+	end)
+	
+	net.Receive("RifleShellVFX",function ()
+		local ply = net.ReadEntity()
+	
+		local boneIndex = ply:LookupBone("ValveBiped.Bip01_R_Hand")
+		if boneIndex then
+			local bonePos, boneAng = ply:GetBonePosition(boneIndex)
+	
+			local effectdata = EffectData()
+			effectdata:SetOrigin(bonePos)
+			effectdata:SetAngles(boneAng)
+			util.Effect("RifleShellEject", effectdata)
+		end
+	end)
+	end

@@ -257,7 +257,7 @@ function SWEP:SecondaryAttack()
 			local Dist = (self:GetOwner():GetShootPos() - tr.HitPos):Length()
 
 			if Dist < self.ReachDistance then
-				sound.Play("Flesh.ImpactSoft", self:GetOwner():GetShootPos(), 65, math.random(90, 110))
+				sound.Play("homigrad/player/hand_movement"..tostring(math.random(3))..".wav", self:GetOwner():GetShootPos(), 65, math.random(90, 110))
 				self:SetCarrying(tr.Entity, tr.PhysicsBone, tr.HitPos, Dist)
 				tr.Entity.Touched = true
 				self:ApplyForce()
@@ -266,7 +266,7 @@ function SWEP:SecondaryAttack()
 			local Dist = (self:GetOwner():GetShootPos() - tr.HitPos):Length()
 
 			if Dist < self.ReachDistance then
-				sound.Play("Flesh.ImpactSoft", self:GetOwner():GetShootPos(), 65, math.random(90, 110))
+				sound.Play("homigrad/player/hand_movement"..tostring(math.random(3))..".wav", self:GetOwner():GetShootPos(), 65, math.random(90, 110))
 				self:GetOwner():SetVelocity(self:GetOwner():GetAimVector() * 20)
 				tr.Entity:SetVelocity(-self:GetOwner():GetAimVector() * 50)
 				self:SetNextSecondaryFire(CurTime() + .25)
@@ -338,7 +338,7 @@ function SWEP:ApplyForce()
 						ply.CPR = math.max(ply.CPR + 50,0)
 						
 						ply.o2 = math.min(ply.o2 + 0.5,1)
-						self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft"..tostring(math.random(7))..".wav")
+						self.CarryEnt:EmitSound("homigrad/player/hand_movement"..tostring(math.random(3))..".wav")
 					end
 				else
 					if not ply and self.CarryEnt:GetClass() == "prop_ragdoll" then
@@ -346,7 +346,7 @@ function SWEP:ApplyForce()
 						self.firstTimePrint = false
 						if (self.CPRThink or 0) < CurTime() then
 							self.CPRThink = CurTime() + 1
-							self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft"..tostring(math.random(7))..".wav")
+							self.CarryEnt:EmitSound("homigrad/player/hand_movement"..tostring(math.random(3))..".wav")
 						end
 					end
 				end

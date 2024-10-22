@@ -3,15 +3,15 @@ bahmut = {}
 bahmut.Name = "Конфликт Хомиграда"
 
 bahmut.red = {"ВСРФ",Color(60,75,60),
-	weapons = {"weapon_radio","weapon_hands","weapon_hg_rgd5","medkit"},
-	main_weapon = {"weapon_ak74u","weapon_akm"},
+	weapons = {"weapon_radio","weapon_hands","weapon_hg_rgd5","medkit","weapon_binokle"},
+	main_weapon = {"weapon_ak74u","weapon_akm","weapon_m1garand"},
 	secondary_weapon = {"weapon_makarov"},
 	models = {"models/arty/squad/faction/vdv/squadleader/leader_2 - arc9_pm.mdl"}
 }
 
 bahmut.blue = {"ВСУ",Color(125,125,60),
-	weapons = {"weapon_radio","weapon_hands","weapon_hg_f1","medkit"},
-	main_weapon = {"weapon_ar15","weapon_m4a1"},
+	weapons = {"weapon_radio","weapon_hands","weapon_hg_f1","medkit","weapon_binokle"},
+	main_weapon = {"weapon_m4a1","weapon_mk18","weapon_m1garand"},
 	secondary_weapon = {"weapon_beretta","weapon_hk_usp"},
 	models = {"models/ukrainearm/ukraine_sold.mdl"}
 }

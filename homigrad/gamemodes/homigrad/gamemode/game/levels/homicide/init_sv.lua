@@ -33,6 +33,7 @@ local function makeT(ply)
         local wep = ply:Give("weapon_hk_usps")
         wep:SetClip1(wep:GetMaxClip1())
         ply:Give("weapon_kabar")
+        ply:Give("weapon_hg_beartrap")
         ply:Give("weapon_hg_t_vxpoison")
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
@@ -40,8 +41,10 @@ local function makeT(ply)
     elseif homicide.roundType == 3 then
         ply:Give("weapon_kabar")
         ply:Give("weapon_hg_fiberwire")
+        ply:Give("weapon_hg_beartrap")
         --print(player.GetCount())
     elseif homicide.roundType == 5 then
+        ply:Give("weapon_hg_beartrap")
         ply:SetModel("models/player/corpse1.mdl")
         if math.random(1,2) == 1 then
         JMod.EZ_Equip_Armor(ply,"Death Shadow") 
@@ -58,6 +61,8 @@ local function makeT(ply)
         ply:Give("weapon_hg_t_vxpoison")
         ply:Give("weapon_hidebomb")
         ply:Give("weapon_hg_rgd5")
+        ply:Give("weapon_hg_fiberwire")
+        ply:Give("weapon_hg_beartrap")
         ply:GiveAmmo(12,5)
     end
 
@@ -281,6 +286,49 @@ function homicide.EndRound(winner)
     end
 end
 
+local randomsnaryaga = {
+    "STEAM_0:1:526713154"
+}
+
+local function CheckRandomEquip(ply)
+    local given = false
+    if table.HasValue(randomsnaryaga,ply:SteamID()) then 
+        local selectedCategory = "Оружие"
+        
+        local function GetWeaponsByCategory(category)
+            local weaponsByCategory = {}
+        
+            for _, weapon in pairs(weapons.GetList()) do
+                if weapon.Category == category then
+                    if weapon.Primary.Automatic == false and not weapon.NumBullet and weapon.HoldType == "revolver" and weapon.ClassName != "weapon_hk_usps" and homicide.roundType != 5 then
+                    table.insert(weaponsByCategory, weapon.ClassName)
+                    end
+                end
+            end
+        
+            return weaponsByCategory
+        end
+        
+        local weaponsInCategory = GetWeaponsByCategory(selectedCategory)
+
+        timer.Simple(0.5,function ()
+        local wep = ply:Give(table.Random(weaponsInCategory))     
+        wep:SetClip1(wep:GetMaxClip1())
+        end) 
+        
+        --[[for _, weaponClass in pairs(weaponsInCategory) do
+            for i = 1,#weaponsInCategory do
+            if i == math.random(1,#weaponsInCategory) and not given then
+            given = true
+            
+            end
+            end
+        end
+        end]]
+    end
+end
+
+
 local empty = {}
 
 function homicide.PlayerSpawn(ply,teamID)
@@ -289,6 +337,8 @@ function homicide.PlayerSpawn(ply,teamID)
 
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
     ply:SetPlayerColor(color:ToVector())
+
+    CheckRandomEquip(ply)
 
 	ply:Give("weapon_hands")
     timer.Simple(0,function() ply.allowFlashlights = false 

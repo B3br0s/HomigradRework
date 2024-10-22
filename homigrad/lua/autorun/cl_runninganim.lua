@@ -1,4 +1,4 @@
-local hg_new_run = CreateClientConVar("hg_anims","0",true,false,"CHTOOOO?",0,1)
+--[[local hg_new_run = CreateClientConVar("hg_anims","0",true,false,"CHTOOOO?",0,1)
 
 local TwoHandedHoldTypes = {
     ar2 = true,
@@ -26,4 +26,4 @@ hook.Add("CalcMainActivity", "AnimatedImmersiveSprinting_Hook", function(ply)
             end
         end
     end
-end)
+end)]]

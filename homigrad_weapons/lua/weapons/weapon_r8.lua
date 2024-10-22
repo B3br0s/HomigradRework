@@ -224,12 +224,11 @@ function SWEP:PrimaryAttack()
                 self:ManipulateSlideBoneForAng()
                 if SERVER then
                     net.Start("huysound")
-                    net.WriteEntity(self)
-                    net.WriteVector(self:GetPos())
-                    net.WriteString(self.Primary.Sound)
-                    net.WriteString(self.Primary.SoundFar)
-                    net.WriteEntity(self:GetOwner())
-                    net.Broadcast()
+		            net.WriteVector(self:GetPos())
+		            net.WriteString(self.Primary.Sound)
+		            net.WriteString(self.Primary.SoundFar)
+		            net.WriteEntity(self:GetOwner())
+		            net.Broadcast()
                 else
                     if self:GetNWBool("Suppressor", false) != true then
                         self:EmitSound(self.Primary.Sound,511,math.random(100,120),1,CHAN_VOICE_BASE,0,0)

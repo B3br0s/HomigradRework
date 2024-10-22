@@ -73,7 +73,7 @@ function GuiltCheck(att,ply)
 		att.Guilt = 0
 		
 		if not att.noguilt and not att:HasGodMode() then
-			if roundActiveName == "SandBox" or roundActiveName == "construct" or roundActiveName == "homicide" or roundActiveName == "slovopacana" then return end
+			if roundActiveName == "SandBox" or roundActiveName == "construct" or roundActiveName == "homicide" or roundActiveName == "gangrazborki" then return end
 			att:DropWeapon1()
 			if att.informedaboutneuro then return end
 			att:ChatPrint("Удачи выжить.")

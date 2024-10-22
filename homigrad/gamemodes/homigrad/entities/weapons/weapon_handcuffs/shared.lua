@@ -3,7 +3,7 @@ AddCSLuaFile()
 SWEP.Base = "medkit"
 
 SWEP.PrintName = "Стяжки"
-SWEP.Author = "z"
+SWEP.Author = "Homigrad"
 SWEP.Instructions = "Связать человека"
 SWEP.Category = "Разное"
 
@@ -38,11 +38,13 @@ function SWEP:PrimaryAttack()
         tr.endpos = tr.start + dir * 45
         tr.filter = owner
 
+        owner:EmitSound("rust/handcuffs/handcuffs-deploy-locked-01.ogg")    
+
         local traceResult = util.TraceLine(tr)
         local ent = traceResult.Entity
 
         local ply = RagdollOwner(ent) and ent
-
+        
         if IsValid(ent) and ply then
             self.CuffPly = ply
             self.CuffTime = CurTime()
@@ -55,7 +57,7 @@ function SWEP:PrimaryAttack()
     end
 end
 
-local cuffTime = 0.25
+local cuffTime = 0.3
 function SWEP:Think()
     if SERVER then
         if self.CuffPly then

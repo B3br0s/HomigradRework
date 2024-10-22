@@ -141,7 +141,7 @@ local ammos = {
 }
 
 hook.Add("PropBreak","homigrad",function(att,ent)
-	if not newTbl[ent:GetModel()] then return end
+	if not newTbl[ent:GetModel()] and roundActiveName != "construct" then return end
 
 	local func = TableRound().ShouldSpawnLoot
 	if not func then return end

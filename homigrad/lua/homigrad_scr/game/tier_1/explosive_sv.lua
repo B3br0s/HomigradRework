@@ -100,17 +100,18 @@ local function BoomSmall(ent)
 end
 
 local modelsbig = {
-    ["models/props_c17/oildrum001_explosive.mdl"] = false
+    ["models/props_c17/oildrum001_explosive.mdl"] = true
 }
 
 local modelssmall = {
-    ["models/props_junk/gascan001a.mdl"] = false,
-	["models/props_junk/propane_tank001a.mdl"] = false,
-	["models/props_junk/PropaneCanister001a.mdl"] = false,
+    ["models/props_junk/gascan001a.mdl"] = true,
+	["models/props_junk/propane_tank001a.mdl"] = true,
+	["models/props_junk/PropaneCanister001a.mdl"] = true,
 }
 
 hook.Add("PropBreak","PropVengeance",function(client,prop)
     local model = prop:GetModel()
+    if roundActiveName == "construct" or roundActiveName == "hl2coop" or roundActiveName == "deathrun" then return end
 
         if modelsbig[model] then BoomBig(prop) end
 	    if modelssmall[model] then BoomSmall(prop) end

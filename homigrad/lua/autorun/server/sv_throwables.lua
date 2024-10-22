@@ -38,6 +38,9 @@ net.Receive("ThrowKnife", function ()
 
     ent:AddCallback("PhysicsCollide", function(ent, data)
         local hitEntity = data.HitEntity
+        if hitEntity:GetClass() == "func_breakable" then
+            hitEntity:TakeDamage(99999)
+        end
         if hitEntity and (hitEntity:IsWorld() or hitEntity:IsValid()) and not hitEntity:IsPlayer() and ent.Hitted == false and not hitEntity:IsNPC() then
             ent.Hitted = true
             local hitPos = data.HitPos
@@ -57,7 +60,9 @@ net.Receive("ThrowKnife", function ()
             droppedknife:Spawn()
             local physdk = droppedknife:GetPhysicsObject()
             if IsValid(physdk) then
+                if hitEntity:GetClass() != "func_breakable" then
                 physdk:EnableMotion(false)
+                end
             end
             ent:Remove()
             droppedknife.Spawned = true
@@ -105,10 +110,6 @@ net.Receive("ThrowKnife", function ()
             droppedknife.Spawned = true
 
             timer.Simple(0.05, function()
-
-                for i, weap in ipairs(hitEntity:GetWeapons()) do
-                    if weap:GetClass() == throwedknife then return end
-                end
                 if throwedknife == "weapon_kabar" or throwedknife == "weapon_gurkha" or throwedknife == "weapon_throwknife" then
                 local ragdoll = hitEntity:GetNWEntity("Ragdoll")
                 
@@ -135,7 +136,6 @@ net.Receive("ThrowKnife", function ()
                                 droppedknife.Spawned = true
                                 if hitEntity["Organs"].artery != 0 then
                                 hitEntity["Organs"].artery = 0
-                                hitEntity["Organs"].spine = 0
                                 hitEntity:EmitSound("physics/body/body_medium_break4.wav")
                                 hitEntity:EmitSound("artery.wav")
                                 hitEntity:EmitSound("physics/flesh/flesh_bloody_impact_hard1.wav")

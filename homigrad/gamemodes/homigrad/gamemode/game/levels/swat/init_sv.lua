@@ -57,7 +57,7 @@ function swat.PlayerSpawn(ply,teamID)
 		local color = Color(65,65,65):ToVector()
 		ply:SetPlayerColor(Color(255,255,255):ToVector())
 		if math.random(1,3) == 3 then
-			ply:SetPlayerClass("dozer")
+			ply:SetPlayerClass("cloaker")
 		else
 			ply:SetPlayerClass("swat")
 		end

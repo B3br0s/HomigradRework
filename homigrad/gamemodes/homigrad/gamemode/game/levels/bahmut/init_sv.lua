@@ -41,8 +41,8 @@ function bahmut.SelectRandomPlayers(list,div,func)
 end
 
 function bahmut.GiveMimomet(ply)
-    ply:Give("weapon_gredmimomet")
-    ply:Give("weapon_gredammo")
+    --ply:Give("weapon_gredmimomet")
+    --ply:Give("weapon_gredammo")
 end
 
 function bahmut.GiveAidPhone(ply)

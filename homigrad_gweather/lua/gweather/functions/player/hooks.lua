@@ -34,12 +34,15 @@ end
 
 if (CLIENT) then
 
+	local cvar = CreateClientConVar("hg_gwinfo","0",true,false,"Обэмэ",0,1)
+
 	local color_red = Color(255,0,0)
 	local color_blue = Color(100,100,255)
 
 	hook.Add( "HUDPaint", "gWeather.DebugAtmosphere", function()
 		if not LocalPlayer():IsSuperAdmin() then return end
 		if gWeather.Atmosphere==nil then return end
+		if not cvar:GetBool() then return end
 
 		local temp,localtemp,tempunit=gWeather:GetTemperature(),LocalPlayer():GetNWFloat("gWeatherLocalTemperature")," °C"
 		local wind,localwind,windunit=gWeather:GetWindSpeed(),LocalPlayer():GetNWFloat("gWeatherLocalWind")," km/h"

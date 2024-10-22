@@ -7,7 +7,7 @@ SWEP.Author = "Homigrad"
 SWEP.Category = "Разное"
 
 SWEP.Spawnable = true
-SWEP.AdminOnly = false
+SWEP.AdminOnly = true
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1

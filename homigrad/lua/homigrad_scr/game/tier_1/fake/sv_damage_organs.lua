@@ -11,7 +11,7 @@ hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,ar
         if not haveHelmet and dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then
 
             dmginfo:ScaleDamage(inf.RubberBullets and 0.1 or 1)
-            ply.pain = ply.pain + (ply.nopain and 1 or (inf.RubberBullets and 100 or 350))
+            ply.pain = ply.pain + (ply.nopain and 1 or (inf.RubberBullets and 50 or 130))
             
             ply:SetDSP(37)
 

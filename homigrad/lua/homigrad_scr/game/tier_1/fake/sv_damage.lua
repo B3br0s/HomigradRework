@@ -172,6 +172,55 @@ hook.Add("EntityTakeDamage","ragdamage",function(ent,dmginfo) --урон по р
 	rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
 
 	ply.LastDMGInfo = rubatPidor
+	if ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_BURN+DMG_BLAST+DMG_SLOWBURN)then
+		if ply.Explosive then
+			ply.Explosive = false
+			for i = 1,30 do
+			local FireVec = ( VectorRand() * .3 + Vector(math.random(-10,10), math.random(-10,10), .3)):GetNormalized()
+            FireVec.z = FireVec.z / 2
+            local Flame = ents.Create("ent_jack_gmod_eznapalm")
+            Flame:SetPos(ply:GetPos() + Vector(math.random(-10,10), math.random(-10,10), 50))
+            Flame:SetAngles(FireVec:Angle())
+            Flame:SetOwner(game.GetWorld())
+            JMod.SetOwner(Flame, game.GetWorld())
+            Flame.SpeedMul = 0.25
+            Flame.Creator = game.GetWorld()
+            Flame.HighVisuals = true
+            Flame:Spawn()
+            Flame:Activate()
+			end
+			local dinfo = DamageInfo()
+			dinfo:SetDamage(999999)
+			dinfo:SetDamageType(DMG_BLAST)
+			ply:TakeDamageInfo(dinfo)
+			ply:ChatPrint("Ты взорвался от пропана в твоём организме.")
+			local effectdata = EffectData()
+			effectdata:SetOrigin(ply:GetPos())
+			effectdata:SetAngles(Angle(math.random(360),math.random(360),math.random(360)))
+			effectdata:SetScale(75)
+			util.Effect("Explosion", effectdata)
+			util.Effect("HelicopterMegaBomb", effectdata)
+			util.Effect("Explosion", effectdata)
+			util.Effect("ElectricSpark", effectdata)
+			util.Effect("HelicopterImpact", effectdata)
+			JMod.Sploom(ply,ply:GetPos(),150)
+			JMod.Sploom(ply,ply:GetPos(),150)
+			sound.Play("explosions/doi_panzerschreck_02_close.wav",ply:GetPos())
+			ply:EmitSound("explosions/doi_ty_03_water.wav")
+			JMod.WreckBuildings(ply, ply:GetPos(), 3)
+			JMod.BlastDoors(ply, ply:GetPos(), 3)
+
+			timer.Simple(.01, function()
+				for i = 1, 5 do
+					timer.Simple(.02 * i,function ()
+						ParticleEffect("50lb_air", ply:GetPos() * math.random(1,5), Angle(math.random(360),math.random(360),math.random(360)))
+						ParticleEffect("50lb_air", ply:GetPos() * math.random(1,3), Angle(math.random(360),math.random(360),math.random(360)))
+						ParticleEffect("50lb_air", ply:GetPos() * math.random(1,4), Angle(math.random(360),math.random(360),math.random(360)))
+					end)	
+				end
+			end)
+		end
+	end
 	if ply.LastDMGInfo:IsDamageType(DMG_CRUSH+DMG_FALL)then
 	--print(rag:GetVelocity():Length())
 	--print(rubatPidor:GetDamageType())

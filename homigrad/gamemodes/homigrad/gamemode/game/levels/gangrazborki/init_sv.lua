@@ -112,7 +112,7 @@ function SpawnNigErmany()
 	gangrazborki.police = true
 	PrintMessage(3,"На звуки выстрелов приехала полиция.")
 	for i, ply in ipairs( player.GetAll() ) do
-		if not ply:Alive() then
+		if not ply:Alive() and ply:Team() != 1002 then
 			ply:Spawn()
 
 			ply:SetPlayerClass("police")	

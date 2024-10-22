@@ -5,7 +5,7 @@ SWEP.PrintName = "Бензопила"
 SWEP.Category = "Ближний Бой"
 SWEP.Instructions = "Зачем другие оружия если есть бензопила которая делает БРБРБРБРБРБРБРБРБРБР"
 
-SWEP.Spawnable= true
+SWEP.Spawnable= false
 SWEP.AdminSpawnable= true
 SWEP.AdminOnly = false
 

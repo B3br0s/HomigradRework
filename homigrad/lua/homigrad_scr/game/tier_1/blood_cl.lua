@@ -39,6 +39,20 @@ hook.Add("RenderScreenspaceEffects","ToyssssnssssEffect",function()
 --	DrawColorModify(tab)
 end)
 
+hook.Add("RenderScreenspaceEffects","DrunkFX",function()
+	if not LocalPlayer():Alive() then return end
+
+	local blurstat1 = LocalPlayer():GetNWFloat("Drunk") / 2
+
+	local blurstat2 = LocalPlayer():GetNWFloat("Drunk") / 5
+
+	DrawMotionBlur(blurstat2,blurstat1,0.03)
+
+	if LocalPlayer():GetNWFloat("Drunk") > 0 then
+	LocalPlayer().EZvisionBlur = LocalPlayer():GetNWFloat("Drunk") / 6
+	end
+end)
+
 --[[concommand.Add("hg_organisminfo",function(ply)
 	if not ply:IsAdmin() then return end
 

@@ -10,8 +10,8 @@ SWEP.Slot = 4
 SWEP.SlotPos = 2
 SWEP.Spawnable = true
 
-SWEP.ViewModel = "models/w_models/weapons/w_eq_molotov.mdl"
-SWEP.WorldModel = "models/w_models/weapons/w_eq_molotov.mdl"
+SWEP.ViewModel = "models/weapons/arccw_go/w_eq_molotov_thrown.mdl"
+SWEP.WorldModel = "models/weapons/arccw_go/w_eq_molotov_thrown.mdl"
 
 SWEP.Granade = "ent_hgjack_molotov"
 local angBack = Angle(0,0,180)

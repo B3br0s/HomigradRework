@@ -38,7 +38,7 @@ SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = true
 SWEP.Primary.Recoil = 0.5
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Delay = 0.4
 SWEP.Primary.Force = 150
 
 SWEP.Secondary.ClipSize = 0

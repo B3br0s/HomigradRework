@@ -53,7 +53,7 @@ function construct.PlayerSpawn(ply,teamID)
 	ply.allowFlashlights = true
 end
 
-function construct.PlayerInitialSpawn(ply) ply:SetTeam(1) end
+function construct.PlayerInitialSpawn(ply) ply:SetTeam(1) ply.CanSpawn = false ply.CanSpawnTime = CurTime() + 5 end
 
 function construct.PlayerCanJoinTeam(ply,teamID)
 	ply.constructForceT = nil
@@ -92,7 +92,7 @@ end
 
 function construct.PlayerDeath(ply,inf,att)
 	ply.CanSpawn = false
-	ply.CanSpawnTime = CurTime() + 30
+	ply.CanSpawnTime = CurTime() + 15
 	--[[local aviable2 = ReadDataMap("spawnpointsct")
 	local aviable1 = ReadDataMap("spawnpointst")
 	if #aviable2 > 0 then

@@ -32,7 +32,7 @@ SWEP.DrawAmmo = true
 SWEP.Base = "weapon_base"
 
 SWEP.Primary.Sound = Sound( "Weapon_Knife.Single" )
-SWEP.Primary.Damage = 1.7 * 30
+SWEP.Primary.Damage = 1.7 * 15
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = true

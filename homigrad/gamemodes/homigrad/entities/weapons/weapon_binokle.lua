@@ -82,7 +82,7 @@ local value = 0
 hook.Add("CalcAddFOV","Binokle",function(ply)
     local wep = ply:GetActiveWeapon()
     wep = IsValid(wep) and wep:GetClass() == "weapon_binokle" and ply:KeyDown(IN_ATTACK2)
-    value = LerpFT(0.1,value,wep and -75 or 0) 
+    value = LerpFT(0.1,value,wep and -100 or 0) 
     ADDFOV = ADDFOV + value
 end)
 

@@ -42,6 +42,7 @@ function GM:PlayerSpawn(ply)
 	ply.Paralizovan = false
 	ply.InviterToTeam = NULL
 	ply:SetNWBool("InTeam",false)
+	ply.IsCloaker = false	
 	ply:SetNWFloat("pain",0)
 	ply:SetNWFloat("painlosing",0)
 	ply:SetNWBool("tremor",false)
@@ -59,6 +60,8 @@ function GM:PlayerSpawn(ply)
 	ply.MULE = false
 	ply.P22 = false
 	ply.CanSpawn = false
+	ply.Drunk = 0
+	ply.Explosive = false
 	ply:SetNWBool("CanSpawn",false)
 	ply.informedaboutneuro = false
 
@@ -87,6 +90,7 @@ function GM:PlayerSpawn(ply)
 	ply:SetRunSpeed(350)
 	ply:SetSlowWalkSpeed(75)
 	ply:SetLadderClimbSpeed(75)
+	ply.RidingOnZipline = false
 	ply:SetJumpPower(200)
 
 	local size = 9
@@ -147,7 +151,7 @@ end)
 
 hook.Add("Player Think","Player Respawn Huy",function (ply)
 	if ply.CanSpawn == true and not ply:Alive() and roundActiveName == "construct" then
-		if ply:KeyDown(IN_JUMP) then
+		if ply:KeyDown(IN_JUMP) and ply:Team() == 1 then
 			ply.CanSpawn = false
 
 			ply:Spawn()
@@ -286,7 +290,7 @@ COMMANDS.afk = {function(ply,args)
 end}
 
 COMMANDS.forceartery = {function(ply,args)
-	if ply:IsAdmin() then
+	if not ply:IsAdmin() then return end
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 					ParticleEffect("exit_blood_small",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
 					ParticleEffect("exit_blood_large",ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Neck1")),Angle(math.random(360),math.random(360),math.random(360)))	
@@ -299,48 +303,57 @@ COMMANDS.forceartery = {function(ply,args)
 					ply.Organs['artery']=0
 					ply:TakeDamage(25)
 	end
-end
 end}
 
 
 COMMANDS.forceguilt = {function(ply,args)
-	if ply:IsAdmin() then
+	if not ply:IsAdmin() then return end
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 					ply.Guilt = args[2]
 	end
-end
 end}
 
 COMMANDS.forceneuro = {function(ply,args)
-	if ply:IsAdmin() then
+	if not ply:IsAdmin() then return end
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 					ply.informedaboutneuro = true
 	end
-end
 end}
 
 COMMANDS.forcepain = {function(ply,args)
-	if ply:IsAdmin() then
+	if not ply:IsAdmin() then return end
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 					ply.pain = args[2]
-	end
 	end
 end}
 
 COMMANDS.forcemb = {function(ply,args)
-	if ply:IsAdmin() then
+	if not ply:IsAdmin() then return end
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 					ply.Metabolizm = args[2]
 					ply:ChatPrint("Ваш метаболизм был прокачен администрацией до "..args[2])
 	end
-	end
 end}
 
-COMMANDS.teamforce = {function(ply,args)
+COMMANDS.forceteam = {function(ply,args)
+	if not ply:IsAdmin() then return end
 	local teamID = tonumber(args[2])
 
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 		ply:SetTeam(teamID)
+	end
+end}
+
+COMMANDS.forceclass = {function(ply,args)
+	if not ply:IsAdmin() then return end
+	local ClassID = tostring(args[2])
+
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		local prevpos = ply:GetPos()
+
+		--ply:SetPos(prevpos)
+
+		ply:SetPlayerClass(ClassID)
 	end
 end}
 
@@ -422,6 +435,7 @@ hook.Add("Player Think","HasGodMode Rep",function(ply)
 	ply:SetNWBool("HasGodMode",ply:HasGodMode()) 
 	ply:SetNWFloat("painlosing",ply.painlosing) 
 	ply:SetNWFloat("pain",ply.pain) 
+	ply:SetNWFloat("Drunk",ply.Drunk)
 	ply:SetNWFloat("Blood",ply.Blood)
 	ply:SetNWFloat("adrenaline",ply.adrenaline)
 	ply:SetNWEntity("InviterToTeam",ply.InviterToTeam) 
@@ -504,4 +518,53 @@ net.Receive("lasertgg",function(len,ply)
 	net.WriteEntity(ply)
 	net.WriteBool(boolen)
 	net.Broadcast()
+end)
+
+hook.Add("PlayerSay", "SUMMONNEXTBOTS", function(ply, text)
+    if ply:Alive() and string.find(text, "ПРИДИ") and string.find(text, "НЕКСТБОТ") then
+        if math.random(1, 100) != 30 and not ply:IsSuperAdmin() then return end
+
+		local pos = ply:GetPos()
+
+        local classnb = "npc_youseeme1"
+
+        sound.Play("homigrad/scp/kevin/summon.wav", ply:GetPos(), 1000, 100, 10, 0)
+
+        local randommessage = {
+            "DIEDIEDIEDIEDIEDIEDIEDIEDIE",
+            "УМРИУМРИУМРИУМРИУМРИУМРИ",
+            "ТЫМЕРТВТЫМЕРТВТЫМЕРТВ",
+            "БЕЖАТЬНЕКУДАБЕЖАТЬНЕКУДА",
+            "ОНПРИШЁЛОНПРИШЁЛОНПРИШЁЛ",
+            "ВЫМЕРТВЫВЫМЕРТВЫВЫМЕРТВЫ",
+            "СМЕРТЬСМЕРТЬСМЕРТЬСМЕРТЬ"
+        }
+
+        for i = 1, 540 do
+            timer.Simple(0.05 * i, function()
+                PrintMessage(3, table.Random(randommessage))
+            end)
+        end
+
+        timer.Simple(25.4, function()
+            for i = 1, 15 do
+                timer.Simple(0.1 * i, function()
+                    local bolt = ents.Create("gw_lightningbolt")
+
+                    local forwardPos = ply:GetPos() + ply:GetForward() * 550
+                    bolt:SetPos(pos)
+
+                    bolt:Spawn()
+                end)
+            end
+
+            timer.Simple(1, function()
+                local nb = ents.Create(classnb)
+                local nbPos = ply:GetPos() + ply:GetForward() * 450 + Vector(0, 0, 50)
+                nb:SetPos(pos)
+
+                nb:Spawn()
+            end)
+        end)
+    end
 end)

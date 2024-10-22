@@ -64,7 +64,6 @@ changeClass = {
 	["prop_vehicle_airboat"]="vehicle_van",
 	["weapon_crowbar"]="weapon_hg_shovel",
 	["weapon_frag"]="weapon_hg_hl2",
-	["weapon_crossbow"]="weapon_hk_arbalet",
 
 
 	["item_ammo_ar2_altfire"]="ent_ammo_762x39mm",

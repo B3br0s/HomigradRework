@@ -7,7 +7,7 @@ ENT.Category = "JModHomigrad"
 ENT.Spawnable = true
 ENT.Material = ""
 ENT.MiniNadeDamage = 35
-ENT.Model = "models/w_models/weapons/w_eq_molotov.mdl"
+ENT.Model = "models/weapons/arccw_go/w_eq_molotov_thrown.mdl"
 
 ENT.Hints = {"mininade"}
 
