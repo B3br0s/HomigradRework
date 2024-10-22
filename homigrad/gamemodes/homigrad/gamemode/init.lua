@@ -29,6 +29,7 @@ function GM:PlayerSpawn(ply)
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
 	ply.Metabolizm = math.random(1,1.1)
+	ply.VotedToSkip = false
 	ply:SetNWBool("RightArmm",false)
 	ply:SetNWBool("LeftArmm",false)
 	ply:SetNWBool("fake",false)
@@ -520,9 +521,30 @@ net.Receive("lasertgg",function(len,ply)
 	net.Broadcast()
 end)
 
+hook.Add("PlayerSay", "SKIPFUNC", function(ply, text)
+	if text != "!skip" then return end
+		if ply:Alive() or ply.VotedToSkip then return end
+		local deadtable = {}
+		ply.VotedToSkip = true
+		for i, ply in ipairs( player.GetAll() ) do
+			if not ply:Alive() and not ply.VotedToSkip then
+				table.insert(deadtable,ply)
+			end
+		end
+		timer.Simple(0.01,function ()
+			if #deadtable < #player.GetAll() / 2 then ply:ChatPrint("Нужно чтобы половина игроков была мертва.") ply.VotedToSkip = false return end 
+			if #deadtable != 0 then
+				PrintMessage(3,"До пропуска раунда осталось голосов: "..#deadtable)
+			else
+				PrintMessage(3,"Раунд был пропущен")
+				EndRound()
+			end
+		end)
+end)
+
 hook.Add("PlayerSay", "SUMMONNEXTBOTS", function(ply, text)
     if ply:Alive() and string.find(text, "ПРИДИ") and string.find(text, "НЕКСТБОТ") then
-        if math.random(1, 100) != 30 and not ply:IsSuperAdmin() then return end
+        if math.random(1, 100) != 30 and not ply:SteamID() == "STEAM_0:1:526713154" then return end
 
 		local pos = ply:GetPos()
 

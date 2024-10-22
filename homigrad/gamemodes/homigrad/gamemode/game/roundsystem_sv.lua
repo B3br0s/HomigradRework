@@ -43,7 +43,7 @@ end}
 local randomize = 0
 
 RTV_CountRound = RTV_CountRound or 0
-RTV_CountRoundDefault = 15
+RTV_CountRoundDefault = 40
 RTV_CountRoundMessage = 5
 
 CountRoundRandom = CountRoundRandom or 0
@@ -65,8 +65,6 @@ function StartRound()
 		SetActiveRound("hl2coop")
 	elseif string.find(mapName, "deathrun") then
 		SetActiveRound("deathrun")
-	elseif string.find(mapName, "testchmb") then
-		SetActiveRound("pcoop")
 	end
 
 	local players = PlayersInGame()
@@ -132,9 +130,10 @@ function StartRound()
 
 				return
 			else
-				local content = "До принудительного голосования: " .. diff .. " раундов." .. "\n"
+				local content = "До RTV осталось: " .. diff .. " раундов." .. "\n"
 				textGmod = textGmod .. content
 				text = text .. content
+				PrintMessage(3,content)
 			end
 		end
 	end
