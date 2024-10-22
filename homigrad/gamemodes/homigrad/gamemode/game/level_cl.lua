@@ -49,7 +49,7 @@ showRoundInfoColor = Color(255,255,255)
 local yellow = Color(255,255,0)
 
 hook.Add("HUDPaint","homigrad-roundstate",function()
-	draw.SimpleText("Homigrad Rework V 0.5.0 (IN-DEV)","HomigradFont",10,ScrH()-10,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+	draw.SimpleText("Homigrad Rework V 0.5.0-B","HomigradFont",10,ScrH()-10,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 	if roundActive then
 		if roundActiveName == "swat" then
 			local time = math.Round(roundTimeStart + roundTimeSWAT - CurTime())
