@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 if SERVER then
 	AddCSLuaFile()
 	SWEP.Weight = 5

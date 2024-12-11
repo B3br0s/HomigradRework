@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 Guns = {
 "weapon_glock18",
 "weapon_mag7",
@@ -33,8 +33,8 @@ Guns = {
 "weapon_xm1014",
 "bandage",
 "morphine",
-"medkit",
-"painkiller",
+"med_ifak",
+"med_ibuprofen",
 "weapon_physgun",
 "weapon_kabar",
 "weapon_bat",
@@ -111,8 +111,8 @@ GunsModel = {
 ["food_spongebob_home"]="models/jordfood/can.mdl",
 ["food_monster"]="models/jorddrink/mongcan1a.mdl",
 ["morphine"]="models/bloocobalt/l4d/items/w_eq_adrenaline.mdl",
-["medkit"]="models/w_models/weapons/w_eq_medkit.mdl",
-["painkiller"]="models/w_models/weapons/w_eq_painpills.mdl",
+["med_ifak"]="models/w_models/weapons/w_eq_medkit.mdl",
+["med_ibuprofen"]="models/w_models/weapons/w_eq_painpills.mdl",
 ["weapon_physgun"]="models/weapons/w_physics.mdl",
 ["weapon_kabar"]="models/weapons/insurgency/w_marinebayonet.mdl",
 ["weapon_bat"]="models/weapons/w_knije_t.mdl",

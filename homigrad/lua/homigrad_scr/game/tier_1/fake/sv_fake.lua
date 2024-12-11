@@ -1,40 +1,68 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
 
-	local handsarrivetime = 0.22
-	local forwardarrivetime = 0.3
-	local backarrivetime = 0.005
-	local velocititouebat = 35
-	-- угол
-	local handsangup = 100
+	local handsarrivetime = 0.34 --rule34
+	local forwardarrivetime = 2
+	local backarrivetime = 1
+	local velocititouebat = 40
 
-	util.AddNetworkString("FlingNahuy")
+	util.AddNetworkString("SyncAttsFake")
+
+	local handsangup = 0
+
+	util.AddNetworkString("KubegRubeg")
+
+	local mul = 1
+	local FrameTime,TickInterval = FrameTime,engine.TickInterval
+
+	hook.Add("Think","Mul lerp",function()
+		mul = FrameTime() / TickInterval()
+	end)
+
+	local Lerp,LerpVector,LerpAngle = Lerp,LerpVector,LerpAngle
+	local math_min = math.min
+
+	function LerpFT(lerp,source,set)
+		return Lerp(math_min(lerp * mul,1),source,set)
+	end
+
+	function LerpVectorFT(lerp,source,set)
+		return LerpVector(math_min(lerp * mul,1),source,set)
+	end
+
+	function LerpAngleFT(lerp,source,set)
+		return LerpAngle(math_min(lerp * mul,1),source,set)
+	end
 
 	Organs = {
-		['brain']=2,
-		['lungs']=5,
-		['liver']=10,
-		['stomach']=3,
-		['intestines']=10,
-		['heart']=2,
-		['artery']=0.1,
-		['spine']=2
+		['brain']=5,
+        ['lungs']=40,
+        ['liver']=10,
+        ['stomach']=30,
+        ['intestines']=30,
+        ['heart']=20,
+        ['carotidartery']=1,
+        ['spine']=5,
+        ['kidney'] = 2,
+        ['spleen'] = 4,
+        ['rartery'] = 1,
+        ['lartery'] = 1
 	}
 
 	RagdollDamageBoneMul={		--Умножения урона при попадании по регдоллу
-		[HITGROUP_LEFTLEG]=0.5,
-		[HITGROUP_RIGHTLEG]=0.5,
+		[HITGROUP_LEFTLEG]=1,
+		[HITGROUP_RIGHTLEG]=1,
 
 		[HITGROUP_GENERIC]=1,
 
-		[HITGROUP_LEFTARM]=0.5,
-		[HITGROUP_RIGHTARM]=0.5,
+		[HITGROUP_LEFTARM]=1,
+		[HITGROUP_RIGHTARM]=1,
 
-		[HITGROUP_CHEST]=1,
-		[HITGROUP_STOMACH]=1,
+		[HITGROUP_CHEST]=1.5,
+		[HITGROUP_STOMACH]=1.5,
 
-		[HITGROUP_HEAD]=2,
+		[HITGROUP_HEAD]=3,
 	}
 
 	bonetohitgroup={ --Хитгруппы костей
@@ -55,35 +83,23 @@ if engine.ActiveGamemode() == "homigrad" then
 		["ValveBiped.Bip01_R_Foot"]=7
 	}
 
-	--[[if SERVER then
-		net.Receive("FlingNahuy",function ()
+	if SERVER then
+		net.Receive("KubegRubeg",function()
 			local ply = net.ReadEntity()
-			local rag = ply:GetNWEntity("Ragdoll")
-			local isfake = ply:GetNWBool("fake")
 
-			if isfake and ply:Alive() and not ply.Paralizovan and not ply.Otrub then
-			if math.random(1,320) < 30 then
-	Faking(ply)
-				local dmg = DamageInfo()
-                dmg:SetDamage(9999)
-                dmg:SetDamageType(DMG_CRUSH)
-                dmg:SetAttacker(ply)
-                dmg:SetInflictor(ply)
-				ply:TakeDamageInfo(dmg)
-			else
-				rag:GetPhysicsObjectNum(0):ApplyForceCenter(ply:EyeAngles():Forward()*math.random(-9999999,9999999)*2*999999999*52525+ply:EyeAngles():Right()*math.random(-9999999,9999999)*2*999999999*52525+ply:EyeAngles():Up()*math.random(-9999999,9999999)*2*999999999*52525)
-				if math.random(1,30) == math.random(15,20) then
-				Faking(ply)
-				local dmg = DamageInfo()
-                dmg:SetDamage(9999)
-                dmg:SetDamageType(DMG_CRUSH)
-                dmg:SetAttacker(ply)
-                dmg:SetInflictor(ply)
-				ply:TakeDamageInfo(dmg)
-			end
-			end
+			ply.KillReason = "tooloud"
+			local dmgInfo = DamageInfo()
+			dmgInfo:SetAttacker(ply)
+			dmgInfo:SetInflictor(ply)
+			dmgInfo:SetDamage(50022)
+			dmgInfo:SetDamageType(DMG_BUCKSHOT)
+			dmgInfo:SetDamagePosition(ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1")))
+			ply:TakeDamageInfo(dmgInfo)
+
+			ply.LastDMGInfo = dmgInfo
+			ply.LastHitBoneName = "ValveBiped.Bip01_Head1"
 		end)
-	end]]
+	end
 
 
 	function GetFakeWeapon(ply)
@@ -97,7 +113,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		info.HasSuit = ply:IsSuitEquipped()
 		info.SuitPower = ply:GetSuitPower()
 		info.Ammo = ply:GetAmmo()
-		info.ActiveWeapon = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() or nil
+ 		info.ActiveWeapon = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() or nil
 		info.ActiveWeapon2 = ply:GetActiveWeapon()
 		GetFakeWeapon(ply)
 		info.Weapons={}
@@ -105,7 +121,8 @@ if engine.ActiveGamemode() == "homigrad" then
 			info.Weapons[wep:GetClass()]={
 				Clip1=wep:Clip1(),
 				Clip2=wep:Clip2(),
-				AmmoType=wep:GetPrimaryAmmoType()
+				AmmoType=wep:GetPrimaryAmmoType(),
+				Atts = wep.CurrentAtt or nil
 			}
 		end
 		info.Weapons2={}
@@ -133,11 +150,13 @@ if engine.ActiveGamemode() == "homigrad" then
 
 	function SavePlyInfoPreSpawn(ply) -- Сохранение игрока перед вставанием
 		ply.Info = ply.Info or {}
+		ply.AllowSpawn = true
 		local info = ply.Info
 		info.Hp = ply:Health()
 		info.Armor = ply:Armor()
 		ply:SetNWBool("LeftArmm",false)
 		ply:SetNWBool("RightArmm",false)
+		ply.AllowSpawn = false	
 		return info
 	end
 
@@ -146,6 +165,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		ply:SetSuppressPickupNotices(true)
 		local info = ply.Info
 		if(!info)then return end
+
+		ply.AllowSpawn = true
 
 		ply:StripWeapons()
 		ply:StripAmmo()
@@ -157,6 +178,15 @@ if engine.ActiveGamemode() == "homigrad" then
 			if IsValid(weapon) and wepinfo.Clip1!=nil and wepinfo.Clip2!=nil then
 				weapon:SetClip1(wepinfo.Clip1)
 				weapon:SetClip2(wepinfo.Clip2)
+				if weapon.PossibleAtt and wepinfo.Atts != nil then
+					weapon.CurrentAtt = wepinfo.Atts	
+					timer.Simple(0.05,function()
+						net.Start("SyncAttsFake")
+						net.WriteTable(wepinfo.Atts)
+						net.WriteEntity(weapon)
+						net.Broadcast()
+					end)
+				end
 			end
 		end
 		for ammo, amt in pairs(info.Ammo or {}) do
@@ -174,6 +204,71 @@ if engine.ActiveGamemode() == "homigrad" then
 		ply:SetHealth(info.Hp)
 		ply:SetArmor(info.Armor)
 
+
+		ply.AllowSpawn = false
+	end
+
+	function UnFaking(ply,force)
+		if not ply:Alive() then return end
+		local rag = ply:GetNWEntity("Ragdoll")
+		if IsValid(rag) then
+			if IsValid(rag.bull) then
+				rag.bull:Remove()
+			end
+			ply.GotUp = CurTime()
+			if hook.Run("Fake Up",ply,rag) ~= nil then return end
+
+			ply.fake = false
+			ply:SetNWBool("fake",ply.fake)
+
+			ply.fakeragdoll=nil
+			SavePlyInfoPreSpawn(ply)
+			local pos=rag:GetPos()
+			local vel=rag:GetVelocity()
+			--ply:UnSpectate()
+			PLYSPAWN_OVERRIDE = true
+			ply:SetNWBool("unfaked",PLYSPAWN_OVERRIDE)
+			local eyepos=ply:EyeAngles()
+			local health = ply:Health()
+			JMod.Иди_Нахуй = true
+			ply:Spawn()
+			JMod.Иди_Нахуй = nil
+			ReturnPlyInfo(ply)
+			ply:SetHealth(health)
+			ply.FakeShooting=false
+			ply:SetNWInt("FakeShooting",false)
+			ply:SetVelocity(vel)
+			ply:SetEyeAngles(eyepos)
+			PLYSPAWN_OVERRIDE = nil
+			ply:SetNWBool("unfaked",PLYSPAWN_OVERRIDE)
+
+
+			local trace = {start = pos,endpos = pos - Vector(0,0,64),filter = {ply,rag}}
+			local tracea = util.TraceLine(trace)
+			if tracea.Hit then
+				pos:Add(Vector(0,0,64) * (tracea.Fraction))
+			end
+
+			local trace = {start = pos,endpos = pos + Vector(0,0,64),filter = {ply,rag}}
+			local tracea = util.TraceLine(trace)
+			if tracea.Hit then
+				pos:Add(-Vector(0,0,64) * (1 - tracea.Fraction))
+			end
+			
+			local targetPos = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Spine4"))):GetPos()
+
+			local forwardOffset = ply:EyeAngles():Forward() * -10
+
+			ply:SetPos(targetPos + forwardOffset - Vector(0, 0, 60))
+
+
+			ply:DrawViewModel(true)
+			ply:DrawWorldModel(true)
+			ply:SetModel(ply:GetNWEntity("Ragdoll"):GetModel())
+			ply:GetNWEntity("Ragdoll").huychlen = true
+			ply:GetNWEntity("Ragdoll"):Remove()
+			ply:SetNWEntity("Ragdoll",nil)
+		end
 	end
 
 	function Faking(ply,force) -- функция падения
@@ -208,7 +303,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				ply.fake = true
 				local wep = ply:GetActiveWeapon()
 
-				if IsValid(wep) and table.HasValue(Guns,wep:GetClass())then
+				if IsValid(wep) and wep.Base == 'b3bros_base' then
 					SpawnWeapon(ply)
 				end
 
@@ -233,73 +328,108 @@ if engine.ActiveGamemode() == "homigrad" then
 				ply:DropObject()
 
 				timer.Create("faketimer"..ply:EntIndex(), 2, 1, function() end)
-
-				--[[if table.HasValue(Guns,ply.curweapon) then
-					ply.FakeShooting=true
-					ply:SetNWInt("FakeShooting",true)
-				else
-					ply.FakeShooting=false
-					ply:SetNWInt("FakeShooting",false)
-				end]]--
 			end
 		else
-			local rag = ply:GetNWEntity("Ragdoll")
-			if IsValid(rag) then
-				if IsValid(rag.bull) then
-					rag.bull:Remove()
-				end
-				ply.GotUp = CurTime()
-				if hook.Run("Fake Up",ply,rag) ~= nil then return end
+    local rag = ply:GetNWEntity("Ragdoll")
+    if not IsValid(rag) then return end
+	local eyeangs = ply:EyeAngles()
+	local penis = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Pelvis" )) )
+	local noska3 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Calf" )) )
+	local noska4 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Calf" )) )
+    local targetPos = penis:GetPos()+Vector(0,0,90)+eyeangs:Right()*10+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)) + Vector(0,0,40)
+    local targetPos2 = rag:GetPos() - Vector(0, 0, 40)
+    local spine = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Spine4")))
+    local n1 = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Toe0")))
+    local n2 = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Toe0")))
+	local head = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Head1" )) )
 
-				ply.fake = false
-				ply:SetNWBool("fake",ply.fake)
+    if ply.LeftLeg < 0.65 and ply.RightLeg < 0.65 then
+        net.Start("TextOnScreen")
+        net.WriteString("Вы не можете встать, если у вас сломаны две ноги.")
+        net.Send(ply)
+        return
+    end
 
-				ply.fakeragdoll=nil
-				SavePlyInfoPreSpawn(ply)
-				local pos=rag:GetPos()
-				local vel=rag:GetVelocity()
-				--ply:UnSpectate()
-				PLYSPAWN_OVERRIDE = true
-				ply:SetNWBool("unfaked",PLYSPAWN_OVERRIDE)
-				local eyepos=ply:EyeAngles()
-				local health = ply:Health()
-				JMod.Иди_Нахуй = true
-				ply:Spawn()
-				JMod.Иди_Нахуй = nil
-				ReturnPlyInfo(ply)
-				ply:SetHealth(health)
-				ply.FakeShooting=false
-				ply:SetNWInt("FakeShooting",false)
-				ply:SetVelocity(vel)
-				ply:SetEyeAngles(eyepos)
-				PLYSPAWN_OVERRIDE = nil
-				ply:SetNWBool("unfaked",PLYSPAWN_OVERRIDE)
+    local transitionTime = 0
+    local startTime = CurTime()
 
+	    hook.Add("Think", "GetUpRagdoll" .. ply:SteamID(), function()
+    	local elapsedTime = CurTime() - startTime
+    	local progress = math.Clamp(elapsedTime / transitionTime, 0, 1)
+    	local easedProgress = math.ease.InOutQuad(progress)
 
-				local trace = {start = pos,endpos = pos - Vector(0,0,64),filter = {ply,rag}}
-				local tracea = util.TraceLine(trace)
-				if tracea.Hit then
-					--ply:ChatPrint(tostring(tracea.Fraction).." 1")
-					pos:Add(Vector(0,0,64) * (tracea.Fraction))
-				end
+    	local shadowparams1 = {
+    	    secondstoarrive = 2.4,
+    	    pos = targetPos + Vector(0, 0, 20),
+    	    angle = Angle(0,ply:EyeAngles()[2],ply:EyeAngles()[3]),
+    	    maxangulardamp = 30,
+    	    maxspeeddamp = 30,
+    	    maxangular = 90,
+    	    maxspeed = 130,
+    	    teleportdistance = 0,
+    	    deltatime = FrameTime(),
+    	}
+		local shadowparams4 = {
+    	    secondstoarrive = 2.4,
+    	    pos = head:GetPos(),
+    	    angle = Angle(0,ply:EyeAngles()[2],ply:EyeAngles()[3]),
+    	    maxangulardamp = 30,
+    	    maxspeeddamp = 30,
+    	    maxangular = 90,
+    	    maxspeed = 130,
+    	    teleportdistance = 0,
+    	    deltatime = FrameTime(),
+    	}
+    	local shadowparams2 = {
+    	    secondstoarrive = 0.4,
+    	    pos = targetPos - Vector(0,0,200) + ply:EyeAngles():Forward()*-20,
+    	    angle = spine:GetAngles(),
+    	    maxangulardamp = 30,
+    	    maxspeeddamp = 30,
+    	    maxangular = 90,
+    	    maxspeed = 400,
+    	    teleportdistance = 0,
+    	    deltatime = FrameTime(),
+    	}
+    	local shadowparams3 = {
+    	    secondstoarrive = 0.5,
+    	    pos = targetPos - Vector(0,0,200) + ply:EyeAngles():Forward()*20,
+    	    angle = spine:GetAngles(),
+    	    maxangulardamp = 30,
+    	    maxspeeddamp = 30,
+    	    maxangular = 90,
+    	    maxspeed = 250,
+    	    teleportdistance = 0,
+    	    deltatime = FrameTime(),
+    	}
 
-				local trace = {start = pos,endpos = pos + Vector(0,0,64),filter = {ply,rag}}
-				local tracea = util.TraceLine(trace)
-				if tracea.Hit then
-					--ply:ChatPrint(tostring(1 - tracea.Fraction).." 2")
-					pos:Add(-Vector(0,0,64) * (1 - tracea.Fraction))
-				end
-				
-				ply:SetPos(pos)
+    	spine:Wake()
+    	spine:ComputeShadowControl(shadowparams1)
+		head:Wake()
+    	head:ComputeShadowControl(shadowparams4)
+		penis:Wake()
+    	penis:ComputeShadowControl(shadowparams1)
+    	n1:Wake()
+    	n2:Wake()
+    	n1:ComputeShadowControl(shadowparams2)
+    	n2:ComputeShadowControl(shadowparams2)
+    	noska3:Wake()
+    	noska3:ComputeShadowControl(shadowparams3)
+    	noska4:Wake()
+    	noska4:ComputeShadowControl(shadowparams3)
 
-				ply:DrawViewModel(true)
-				ply:DrawWorldModel(true)
-				ply:SetModel(ply:GetNWEntity("Ragdoll"):GetModel())
-				ply:GetNWEntity("Ragdoll").huychlen = true
-				ply:GetNWEntity("Ragdoll"):Remove()
-				ply:SetNWEntity("Ragdoll",nil)
-			end
-		end
+    	if progress >= 1 then
+    	    hook.Remove("Think", "GetUpRagdoll" .. ply:SteamID())
+    	end
+	end)
+
+	    timer.Simple(transitionTime, function()
+	        if IsValid(ply) then
+	            UnFaking(ply)
+	            hook.Remove("Think", "GetUpRagdoll" .. ply:SteamID())
+	        end
+	    end)
+	end
 	end
 	end
 
@@ -325,7 +455,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				end
 			end
 		end
-		timer.Simple(0,function()
+		--timer.Simple(0.3,function()
 			if not IsValid(ent) then return end
 
 			local pos,ang = ent:GetPos(),ent:GetAngles()
@@ -334,13 +464,14 @@ if engine.ActiveGamemode() == "homigrad" then
 				local entr = type(exchangeEnt) == "table" and table.Random(exchangeEnt) or exchangeEnt
 				local ent2 = ents.Create(entr)
 
+				if not pos then return end
 				ent2:SetPos(pos)
 				ent2:SetAngles(ang)
 				ent2:Spawn()
 
 				ent:Remove()
 			end
-		end)
+		--end)
 	end)
 
 	hook.Add("Think","FakedShoot",function() --функция стрельбы лежа
@@ -450,9 +581,6 @@ if engine.ActiveGamemode() == "homigrad" then
 
 		rag:SetEyeTarget(Vector(0,0,0))
 		local phys = rag:GetPhysicsObject()
-		if IsValid(phys) then
-			phys:SetMass(12)
-		end
 
 		net.Start("pophead")
 		net.WriteEntity(rag)
@@ -605,6 +733,17 @@ if engine.ActiveGamemode() == "homigrad" then
 
 
 	concommand.Add("fake",function(ply)	
+		if ply:GetActiveWeapon().Somethingidk then
+			if SERVER then
+				AddCSLuaFile("weapons/b3bros_base/cl_drawworld.lua")
+			end
+			
+			if CLIENT then
+				include("weapons/b3bros_base/cl_drawworld.lua")
+			ply:GetActiveWeapon():RemoveClientsideModel()
+			end
+		end
+		if ply.Dushat then return end
 		if ply.SuffocatingFiber then return nil end
 		if ply["Organs"].spine == 0 then return nil end
 		if timer.Exists("faketimer"..ply:EntIndex()) then return nil end
@@ -623,8 +762,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		--if IsValid(ply:GetNWEntity("Ragdoll")) and table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Weld' ))>0 then return nil end
 
 		if ply.pain>(250*(ply.Blood/5000))+(ply:GetNWInt("SharpenAMT")*5) or ply.Blood<3000 then return end
-
-		timer.Create("faketimer"..ply:EntIndex(), 2, 1, function() end)
+		ply.AllowSpawn = true
+		timer.Create("faketimer"..ply:EntIndex(), 2, 1, function() ply.AllowSpawn = false end)
 
 		if ply:Alive() then
 			if not GetGlobalBool("NoFake") then
@@ -638,7 +777,7 @@ if engine.ActiveGamemode() == "homigrad" then
 
 	hook.Add("PreCleanupMap","cleannoobs",function() --все игроки встают после очистки карты
 		for i, v in pairs(player.GetAll()) do
-			if v.fake then Faking(v) end
+			if v.fake then UnFaking(v) end
 		end
 
 		BleedingEntities = {}
@@ -760,112 +899,74 @@ if engine.ActiveGamemode() == "homigrad" then
 		end)
 		
 		rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
-		if IsValid(rag:GetPhysicsObject()) then
-			local CustomWeight = {
-				["models/arty/squad/faction/vdv/squadleader/leader_2 - arc9_pm.mdl"] = true,
-				["models/player/combine_super_soldier.mdl"] = true,
-				["models/player/combine_soldier_prisonguard.mdl"] = true,
-				["models/player/combine_soldier.mdl"] = true,
-				["models/player_hl2_combine_ordinal.mdl"] = true,
-				["models/hlvr/characters/combine/grunt/combine_beta_grunt_hlvr_player.mdl"] = true,
-				["models/ukrainearm/ukraine_sold.mdl"] = true
-			}
-		
-			local CustomWeightHard = {
-				["models/player/jesus/jesus.mdl"] = true,
-				["models/dejtriyev/smo/ukr_soldier.mdl"] = true,
-				["models/leygun/rfarmy/soilder_rf_07.mdl"] = true,
-				["models/olegun_remake/sso_ukr.mdl"] = true,
-				["models/player/kuma/taliban_rpg.mdl"] = true,
-				["models/catalina/lizardman.mdl"] = true,
-				["models/payday2/units/splinter_cell_cloaker_player.mdl"] = true
-			}
-		
-			local CustomWeightVeryHard = {
-			}
+		CustomWeight = {}
 
-			local CustomWeightUltraHard = {
-				["models/auditor/dying_light/characters/kyle_crane.mdl"] = true
-			}
-		
-			for i = 1, 6 do
-				CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = true
+		NoAffect = {
+				["models/chs_community/asix.mdl"] = true,
+                ["models/chs_community/blinked.mdl"] = true,
+                ["models/chs_community/cyborg_alex.mdl"] = true,
+                ["models/chs_community/deka_zcity.mdl"] = true,
+                ["models/chs_community/dick_jones.mdl"] = true,
+                ["models/chs_community/doctorkeks.mdl"] = true,
+                ["models/chs_community/emil_kms.mdl"] = true,
+                ["models/chs_community/f_dutchman.mdl"] = true,
+                ["models/chs_community/down.mdl"] = true,
+                ["models/chs_community/dozen_zcity.mdl"] = true,
+                ["models/chs_community/ghost_acceleron.mdl"] = true,
+                ["models/chs_community/gleb.mdl"] = true,
+                ["models/chs_community/golyb.mdl"] = true,
+                ["models/chs_community/griggs.mdl"] = true,
+                ["models/chs_community/hank_md.mdl"] = true,
+                ["models/chs_community/justik.mdl"] = true,
+                ["models/chs_community/mannytko.mdl"] = true,
+                ["models/chs_community/narik_zcity.mdl"] = true,
+                ["models/chs_community/necollins.mdl"] = true,
+                ["models/chs_community/patrick_kane.mdl"] = true,
+                ["models/chs_community/propka.mdl"] = true,
+                ["models/chs_community/sadsalat.mdl"] = true,
+                ["models/chs_community/tea.mdl"] = true,
+                ["models/chs_community/yahet.mdl"] = true,
+                ["models/chs_community/zac90.mdl"] = true,
+                ["models/chs_community/soda.mdl"] = true,
+                ["models/chs_community/soler.mdl"] = true,
+                ["models/chs_community/stanley.mdl"] = true,
+				["models/chs_community/cat.mdl"] = true,
+				["models/chs_community/distac_zcity.mdl"] = true
+		}
+	
+		for modelName, modelPath in pairs(list.Get("PlayerOptionsModel")) do
+			if not CustomWeight[modelPath] and not NoAffect[modelPath] then
+				CustomWeight[modelPath] = true
 			end
-		
-			for i = 1, 6 do
-				CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = true
-			end
-		
-			for i = 1, 6 do
-				CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = true
-			end
-		
-			for i = 1, 6 do
-				CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = true
-			end
-		
-			for modelName, modelPath in pairs(list.Get("PlayerOptionsModel")) do
-				if not CustomWeight[modelPath] and not CustomWeightHard[modelPath] and not CustomWeightVeryHard[modelPath] then
-					CustomWeight[modelPath] = true
-				end
-			end
-		
-			rag:GetPhysicsObject():SetMass(20)
+		end
+
+		for i = 1, 6 do
+			CustomWeight["models/monolithservers/mpd/male_0"..i.."_2.mdl"] = true
+			CustomWeight["models/monolithservers/mpd/female_0"..i..".mdl"] = true
+		end
+
+		for i = 1, 9 do
+			CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = true
+			CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = true
+		end
+	
+		if rag and IsValid(rag) then
+			rag:GetPhysicsObject():SetMass(25)
 		
 			local model = rag:GetModel()
-			--[[if CustomWeightVeryHard[model] then
-				print("Model found in CustomWeightVeryHard: " .. model)
-			elseif CustomWeightHard[model] then
-				print("Model found in CustomWeightHard: " .. model)
-			elseif CustomWeight[model] then
-				print("Model found in CustomWeight: " .. model)
+
+			if CustomWeight[model] == true and not NoAffect[model] then
+				--self:ChatPrint("B")
+				self:SetNWFloat("BackArrive", backarrivetime * 8.2)
+				self:SetNWFloat("ForwardArrive", forwardarrivetime * 8.2)
+				self:SetNWFloat("HandsArrive", handsarrivetime * 1.2)
 			else
-				print("Model not found in any table: " .. model)
-			end]]
-			
-			--PrintTable(CustomWeight)
-			if CustomWeightVeryHard[model] == true then
-				self:SetNWFloat("Status", "Very-Hard")
-				if self:IsSuperAdmin() then
-				self:ChatPrint("D")
-				end
-				self:SetNWFloat("BackArrive", backarrivetime * 4)
-				self:SetNWFloat("ForwardArrive", forwardarrivetime * 4)
-				self:SetNWFloat("HandsArrive", handsarrivetime * 3.3)
-			elseif CustomWeightHard[model] == true then
-				self:SetNWFloat("Status", "Hard")
-				if self:IsSuperAdmin() then
-				self:ChatPrint("C")
-				end
-				self:SetNWFloat("BackArrive", backarrivetime * 5)
-				self:SetNWFloat("ForwardArrive", forwardarrivetime * 5)
-				self:SetNWFloat("HandsArrive", handsarrivetime * 2.7)
-			elseif CustomWeightUltraHard[model] == true then
-				self:SetNWFloat("Status", "UltraHard")
-				if self:IsSuperAdmin() then
-				self:ChatPrint("E")
-				end
-				self:SetNWFloat("BackArrive", backarrivetime * 7)
-				self:SetNWFloat("ForwardArrive", forwardarrivetime * 7)
-				self:SetNWFloat("HandsArrive", handsarrivetime * 3)
-			elseif CustomWeight[model] == true then
-				self:SetNWFloat("Status", "Medium")
-				if self:IsSuperAdmin() then
-				self:ChatPrint("B")
-				end
-				self:SetNWFloat("BackArrive", backarrivetime * 2)
-				self:SetNWFloat("ForwardArrive", forwardarrivetime * 2)
-				self:SetNWFloat("HandsArrive", handsarrivetime * 2.3)
-			else
-				self:SetNWFloat("Status", "Light")
-				if self:IsSuperAdmin() then
-				self:ChatPrint("A")
-				end
+				--self:ChatPrint("A")
 				self:SetNWFloat("BackArrive", backarrivetime)
 				self:SetNWFloat("ForwardArrive", forwardarrivetime)
 				self:SetNWFloat("HandsArrive", handsarrivetime)
 			end
-		end		
+		end
 		
 		rag:Activate()
 		rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -913,42 +1014,43 @@ if engine.ActiveGamemode() == "homigrad" then
 		self:SetNWEntity("Ragdoll", rag )
 
 		if not self:Alive() then
-			net.Start("pophead")
-			net.WriteEntity(rag)
-			net.Send(self)
-			rag.Info=self.Info
-			if IsValid(self:GetActiveWeapon()) then
-				self.curweapon=nil
-				if table.HasValue(Guns,self:GetActiveWeapon():GetClass()) then
-					self.curweapon=self:GetActiveWeapon():GetClass()
-					SpawnWeapon(self,self:GetActiveWeapon():Clip1()).rag = rag
-				end
-				rag.curweapon = self.curweapon
-			end
-			SavePlyInfo(self)
-			rag.Info=self.Info
-			rag.curweapon=self.curweapon
-			rag:SetEyeTarget(Vector(0,0,0))
-			rag:SetFlexWeight(9,0)
-			if self.IsBleeding or (self.BloodLosing or 0) > 0 then
-				rag.IsBleeding=true
-				rag.bloodNext = CurTime()
-				rag.Blood = self.Blood
-				table.insert(BleedingEntities,rag)
-			end
-			if IsValid(rag.bull) then
-				rag.bull:Remove()
-			end
-			rag.deadbody = true
-			self.fakeragdoll = nil
+			self:DropWeapon1()
+			--net.Start("pophead")
+			--net.WriteEntity(rag)
+			--net.Send(self)
+			--rag.Info=self.Info
+			--if IsValid(self:GetActiveWeapon()) then
+			--	self.curweapon=nil
+			--	if self:GetActiveWeapon().Base == 'b3bros_base' then
+			--		self.curweapon=self:GetActiveWeapon():GetClass()
+			--		SpawnWeapon(self,self:GetActiveWeapon():Clip1()).rag = rag
+			--	end
+			--	rag.curweapon = self.curweapon
+			--end
+			--SavePlyInfo(self)
+			--rag.Info=self.Info
+			--rag.curweapon=self.curweapon
+			--rag:SetEyeTarget(Vector(0,0,0))
+			--rag:SetFlexWeight(9,0)
+			--if self.IsBleeding or (self.BloodLosing or 0) > 0 then
+			--	rag.IsBleeding=true
+			--	rag.bloodNext = CurTime()
+			--	rag.Blood = self.Blood
+			--	table.insert(BleedingEntities,rag)
+			--end
+			--if IsValid(rag.bull) then
+			--	rag.bull:Remove()
+			--end
+			--rag.deadbody = true
+			--self.fakeragdoll = nil
 			net.Start("ebal_chellele")
 			net.WriteEntity(rag)
-			net.WriteString(rag.curweapon)
+			net.WriteString(rag.curweapon or " ")
 			net.Broadcast()
 		else
 			net.Start("ebal_chellele")
 			net.WriteEntity(self)
-			net.WriteString(self.curweapon)
+			net.WriteString(self.curweapon or " ")
 			net.Broadcast()
 		end
 
@@ -989,7 +1091,7 @@ if engine.ActiveGamemode() == "homigrad" then
 			(not gg:GetBool() and not ply:HasGodMode() and data.Speed >= 5 / hitEnt:GetPhysicsObject():GetMass() * 10 and not ply.fake and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > velocititouebat)  --сбитие с ног
 		then 
 			if hitEnt:GetClass() == "prop_physics" or hitEnt:GetClass() == "prop_physics_multiplayer" then
-				if hitEnt:GetVelocity():Length() > velocititouebat + 70 then
+				if hitEnt:GetVelocity():Length() > velocititouebat then
 					timer.Simple(0,function()
 						if not IsValid(ply) or ply.fake then return end
 		
@@ -1041,7 +1143,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						end
 					end
 				else
-					rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+					rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)	
 				end
 			end
 		end
@@ -1069,17 +1171,40 @@ if engine.ActiveGamemode() == "homigrad" then
 
 	hook.Add("Player Think","FakeCheckArms",function(ply)
 		if CLIENT then return end
-		if ply:GetNWBool("fake") then
+		if ply:GetNWBool("fake") and ply:Alive() then
 			local rag = ply:GetNWEntity("Ragdoll")
+			if not IsValid(rag) then return end
 			if IsValid(rag.ZacConsLH) then
-				return
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger0"),Angle(0,10,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger01"),Angle(0,20,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"),Angle(0,-10,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger11"),Angle(0,-40,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"),Angle(0,-10,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger21"),Angle(0,-40,0))
 			else
 				ply:SetNWBool("LeftArmm",false)
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger0"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger01"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger11"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger21"),Angle(0,0,0))
 			end
 			if IsValid(rag.ZacConsRH) then
-				return
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger0"),Angle(0,10,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger01"),Angle(0,20,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger1"),Angle(0,-10,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger11"),Angle(0,-40,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger2"),Angle(0,-10,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger21"),Angle(0,-40,0))
 			else
 				ply:SetNWBool("RightArmm",false)
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger0"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger01"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger1"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger11"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger2"),Angle(0,0,0))
+				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger21"),Angle(0,0,0))
 			end
 		end
 	end)
@@ -1122,7 +1247,8 @@ if engine.ActiveGamemode() == "homigrad" then
 								ply.painlosing = 0
 								ply:SetHealth(ply:Health() - 1)	
 								if ply.o2 < 0.2 and ply.o2 > 0.19 then
-									ply:ChatPrint("У тебя нехватка воздуха.")	
+									--ply:ChatPrint("У тебя нехватка воздуха.")	
+									ply:ChatPrint("You're short of breath.")	
 									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_voice_idle"..math.random(1,12)..".wav")
 								end
 								--ply:ChatPrint(ply.stamina)
@@ -1149,7 +1275,8 @@ if engine.ActiveGamemode() == "homigrad" then
 								ply.painlosing = 0
 								ply:SetHealth(ply:Health() - 1)	
 								if ply.o2 < 0.2 and ply.o2 > 0.19 then
-									ply:ChatPrint("У тебя нехватка воздуха.")	
+									--ply:ChatPrint("У тебя нехватка воздуха.")	
+									ply:ChatPrint("You're short of breath.")	
 									ply:GetNWEntity("Ragdoll"):EmitSound("npc/zombie/zombie_voice_idle"..math.random(1,12)..".wav")
 								end
 								--ply:ChatPrint(ply.stamina)
@@ -1172,6 +1299,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		end)
 
 	hook.Add("Player Think","FakeControl",function(ply,time) --управление в фейке
+		if ply.Dushat and !ply.PenisDushilin.fake then return end
 		if !ply.Paralizovan then
 		ply.holdingartery = false
 		if not ply:Alive() then return end
@@ -1196,7 +1324,8 @@ if engine.ActiveGamemode() == "homigrad" then
 		local noska2 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Thigh" )) )
 		local noska3 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Calf" )) )
 		local noska4 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Calf" )) )
-		local spinemain = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine2" )) )
+		local spinenan = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine1" )) )
+		local spinemain = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine4" )) )
 		rag:SetFlexWeight(9,0)
 		local dist = (rag:GetAttachment(rag:LookupAttachment( "eyes" )).Ang:Forward()*10000):Distance(ply:GetAimVector()*10000)
 		local distmod = math.Clamp(1-(dist/20000),0.1,1)
@@ -1238,34 +1367,38 @@ if engine.ActiveGamemode() == "homigrad" then
 								ply:ChatPrint("Осталось: " .. RopeCount - 1)
 							end
 							if (rag.IsWeld or 0) > 0 then
-								ply:ChatPrint("Осталось отбить гвоздей: " .. tostring(math.ceil(rag.IsWeld)))
+								--ply:ChatPrint("Осталось отбить гвоздей: " .. tostring(math.ceil(rag.IsWeld)))
+								ply:ChatPrint("Nails left: " .. tostring(math.ceil(rag.IsWeld)))
 								ply.Bloodlosing = ply.Bloodlosing + 10
 								ply.pain = ply.pain + 20
 							end
 						else
-							ply:ChatPrint("Ты развязался")
+							--ply:ChatPrint("Ты развязался")
+							ply:ChatPrint("You're untied.")
 						end
 						
 						Ropes[1].Constraint:Remove()
 						rag:EmitSound("rust/handcuffs/handcuffs-admire-0"..math.random(1,4)..".ogg", 90, 50, 0.5, CHAN_AUTO)
 					else
-						ply:ChatPrint("Неудачная попытка.")
+						--ply:ChatPrint("Неудачная попытка.")
+						ply:ChatPrint("Failed attempt.")
 					end
 				end				
 
 				if(ply:KeyDown(IN_ATTACK))then
 					local pos = ply:EyePos()
 					pos[3] = head:GetPos()[3]
-					if !ply.FakeShooting and ply.Organs["artery"]!=0 then
+					if !ply.FakeShooting and ply.Organs["carotidartery"]!=0 then
 						local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
+						local phys2 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Forearm" )) )
 						local ang=ply:EyeAngles()
 						ang:RotateAroundAxis(eyeangs:Forward(),90)
 						ang:RotateAroundAxis(eyeangs:Right(),75)
-						ang:RotateAroundAxis(ang:Up(),handsangup)
+						ang:RotateAroundAxis(ang:Up(),100)
 
 						local shadowparams = {
 							secondstoarrive=ply:GetNWFloat("HandsArrive"),
-							pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
+							pos=head:GetPos()+eyeangs:Forward()*65+eyeangs:Right()*-15,
 							angle=ang,
 							maxangular=670,
 							maxangulardamp=600,
@@ -1275,8 +1408,30 @@ if engine.ActiveGamemode() == "homigrad" then
 							deltatime=0.01,
 						}
 						local shadowparams1 = {
-							secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.6,
-							pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
+							secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.3,
+							pos=head:GetPos()+eyeangs:Forward()*65+eyeangs:Right()*-15,
+							angle=ang,
+							maxangular=670,
+							maxangulardamp=600,
+							maxspeeddamp=50,
+							maxspeed=3000,
+							teleportdistance=0,
+							deltatime=0.01,
+						}
+						local shadowparams3 = {
+							secondstoarrive=ply:GetNWFloat("HandsArrive") * 1.3,
+							pos=head:GetPos()+eyeangs:Forward()*60+eyeangs:Right()*-25,
+							angle=ang,
+							maxangular=670,
+							maxangulardamp=600,
+							maxspeeddamp=50,
+							maxspeed=3000,
+							teleportdistance=0,
+							deltatime=0.01,
+						}
+						local shadowparams2 = {
+							secondstoarrive=ply:GetNWFloat("HandsArrive"),
+							pos=head:GetPos()+eyeangs:Forward()*60+eyeangs:Right()*-25,
 							angle=ang,
 							maxangular=670,
 							maxangulardamp=600,
@@ -1295,7 +1450,7 @@ if engine.ActiveGamemode() == "homigrad" then
 					end
 				end
 
-				if ply.curweapon and weapons.Get(ply.curweapon).Primary.Automatic then
+				if ply.curweapon and weapons.Get(ply.curweapon) and weapons.Get(ply.curweapon).Primary.Automatic then
 					if ply:KeyDown(IN_ATTACK) then
 						if ply.FakeShooting then FireShot(ply.wep) end
 					end
@@ -1306,72 +1461,54 @@ if engine.ActiveGamemode() == "homigrad" then
 				end
 
 				if(ply:KeyDown(IN_ATTACK2))then
-					if ply.Organs["artery"]!=0 then
 					local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 					local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
 					local ang=ply:EyeAngles()
 					ang:RotateAroundAxis(eyeangs:Forward(),90)
 					ang:RotateAroundAxis(eyeangs:Right(),75)
-					ang:RotateAroundAxis(ang:Up(),handsangup)
+					ang:RotateAroundAxis(ang:Up(),90)
 					local pos = ply:EyePos()
 					pos[3] = head:GetPos()[3]
 					local shadowparams = {
-						secondstoarrive=ply:GetNWFloat("HandsArrive"),
-						pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*15,
+						secondstoarrive=ply:GetNWEntity("HandsArrive"),
+						pos=head:GetPos()+eyeangs:Forward()*60+eyeangs:Right()*15,
 						angle=ang,
 						maxangular=670,
 						maxangulardamp=100,
 						maxspeeddamp=50,
-						maxspeed=3000,
-						teleportdistance=0,
-						deltatime=0.01,
-					}
-					local shadowparams1 = {
-						secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.6,
-						pos=head:GetPos()+eyeangs:Forward()*50+eyeangs:Right()*-5,
-						angle=ang,
-						maxangular=670,
-						maxangulardamp=600,
-						maxspeeddamp=50,
-						maxspeed=3000,
+						maxspeed=600,
 						teleportdistance=0,
 						deltatime=0.01,
 					}
 					physa:Wake()
-					if (!ply.suiciding or TwoHandedOrNo[ply.curweapon]) then
-						if TwoHandedOrNo[ply.curweapon] and IsValid(ply.wep) then
+					if (!ply.suiciding or ply.curweapon and weapons.Get(ply.curweapon).TwoHands) then
+						if IsValid(ply.wep) and weapons.Get(ply.curweapon).TwoHands  then
 							local ang = ply:EyeAngles()
 							ang:RotateAroundAxis(ang:Forward(),90)
 							ang:RotateAroundAxis(ang:Up(),20)
 							ang:RotateAroundAxis(ang:Right(),10)
 							shadowparams.angle = ang
-
+	
 							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
-
+	
 							shadowparams.pos=shadowparams.pos
 							phys:ComputeShadowControl(shadowparams)
 							shadowparams.pos=shadowparams.pos+eyeangs:Forward()*-50+eyeangs:Right()*-15
 							physa:ComputeShadowControl(shadowparams)
-
+	
 						elseif IsValid(ply.wep) and IsValid(ply.wep:GetPhysicsObject())then
-
+	
 							ang:RotateAroundAxis(ply:EyeAngles():Forward(),90)
 							ang:RotateAroundAxis(ply:EyeAngles():Up(),110)
 							ang:RotateAroundAxis(eyeangs:Right(),-30)
-
+	
 							shadowparams.angle=ang
 							shadowparams.pos=shadowparams.pos+eyeangs:Right()*-15
-
+	
 							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
 							physa:ComputeShadowControl(shadowparams)
 						else
-							if ply:GetNWBool("LeftArmm") == true then
-								physa:Wake()
-								physa:ComputeShadowControl(shadowparams1)
-							else
-								physa:Wake()
-								physa:ComputeShadowControl(shadowparams)
-							end
+							physa:ComputeShadowControl(shadowparams)
 						end
 					else
 						if ply.FakeShooting and IsValid(ply.wep) then
@@ -1384,26 +1521,56 @@ if engine.ActiveGamemode() == "homigrad" then
 						end
 					end
 				end
-				end
+				
 				if(ply:KeyDown(IN_USE))then
 					local phys = head
 					local phys2 = spinemain
 					local angs = ply:EyeAngles()
-					angs:RotateAroundAxis(angs:Forward(),90)
-					local shadowparams3	 = {
-						secondstoarrive=4,
-						pos=Vector(spinemain:GetPos().X,spinemain:GetPos().Y,spinemain:GetPos().Z + 50),
-						angle=-angs:Forward()*250,
+					local angs2 = ply:EyeAngles()
+					if not firstnigger then
+						firstnigger = 0
+					end
+					if angs[1] > -85 and angs[1] < 85 then
+					firstnigger = Lerp(0.05,firstnigger,90)
+					angs:RotateAroundAxis(angs:Right(),firstnigger)
+					elseif angs[1] < -85 then
+					firstnigger = Lerp(0.05,firstnigger,150)
+					angs:RotateAroundAxis(angs:Right(),firstnigger)
+					elseif angs[1] > 85 then
+					firstnigger = Lerp(0.05,firstnigger,0)
+					angs:RotateAroundAxis(angs:Right(),firstnigger)
+					end
+					--ply:ChatPrint(firstnigger)
+					angs:RotateAroundAxis(angs:Forward(),-90)
+					angs2:RotateAroundAxis(angs:Forward(),-90)
+					angs2:RotateAroundAxis(angs:Right(),120)
+					angs2:RotateAroundAxis(angs:Up(),-150)
+					--ply:ChatPrint(ply:EyeAngles()[1])
+					local shadowparams3	 = { --зажать е и крутица
+						secondstoarrive=0.15,
+						pos=spinemain:GetPos(),
+						angle=angs,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
 						maxangular=370,
-						maxspeed=40,
+						maxspeed=120,
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
-					local shadowparams = {
-						secondstoarrive=0.001,
-						pos=head:GetPos()+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+					--local shadowparams3Forward	 = {
+					--	secondstoarrive=0.4,
+					--	pos=spinemain:GetPos(),
+					--	angle=angs - Angle(-55,0,0),
+					--	maxangulardamp=2.5,
+					--	maxspeeddamp=10,
+					--	maxangular=370,
+					--	maxspeed=120,
+					--	teleportdistance=0,
+					--	deltatime=deltatime,
+					--}
+					local shadowparams4	 = {
+						secondstoarrive=1.2,
+						pos=spinemain:GetPos() + angs2:Right() * 3.5,
 						angle=angs,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
@@ -1412,10 +1579,32 @@ if engine.ActiveGamemode() == "homigrad" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
+					local shadowparams = {
+						secondstoarrive=0.2,
+						pos=head:GetPos()+ply:EyeAngles():Forward()*-5+ply:EyeAngles():Up()*5+vector_up*(400/math.Clamp(rag:GetVelocity():Length()/300,1,12)) + ply:EyeAngles():Up() * 4,
+						angle=angs2,
+						maxangulardamp=2.5,
+						maxspeeddamp=10,
+						maxangular=370,
+						maxspeed=80,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
 					local shadowparams2 = {
-						secondstoarrive=1.5,
-						pos=penis:GetPos()+eyeangs:Forward()*Vector(-50,-50,-50)+eyeangs:Right()*-5+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
-						angle=-angs:Forward()*250,
+						secondstoarrive=3,
+						pos=penis:GetPos()+eyeangs:Forward()*Vector(50,50,50)+eyeangs:Right()*-10+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+						angle=angs,
+						maxangulardamp=10,
+						maxspeeddamp=10,
+						maxangular=370,
+						maxspeed=40,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
+					local shadowparams2fix = {
+						secondstoarrive=4,
+						pos=penis:GetPos()+eyeangs:Forward()*Vector(50,50,50)+eyeangs:Right()*-10+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
+						angle=angs,
 						maxangulardamp=10,
 						maxspeeddamp=10,
 						maxangular=370,
@@ -1425,26 +1614,19 @@ if engine.ActiveGamemode() == "homigrad" then
 					}
 					head:Wake()
 					head:ComputeShadowControl(shadowparams)
-					if rag:GetVelocity():Length() < 20 then
-						spinemain:Wake()
-						spinemain:ComputeShadowControl(shadowparams3)	
-					end
-					if ply:GetNWBool("LeftArmm") and ply:GetNWBool("RightArmm") and ply:KeyDown(IN_BACK) then
-					ohhspina:Wake()
-					ohhspina:ComputeShadowControl(shadowparams2)
-					penis:Wake()
-					penis:ComputeShadowControl(shadowparams2)
-					noska3:Wake()
-					noska3:ComputeShadowControl(shadowparams2)
-					noska4:Wake()
-					noska4:ComputeShadowControl(shadowparams2)
+					if ply:GetNWBool("LeftArmm") and ply:GetNWBool("RightArmm") then
+					spinemain:Wake()
+					spinemain:ComputeShadowControl(shadowparams4)
+					else
+					spinemain:Wake()
+					spinemain:ComputeShadowControl(shadowparams3)	
 					end
 				end
 			end
 			if(ply:KeyDown(IN_SPEED)) and (RagdollOwner(rag) and !RagdollOwner(rag).Otrub) and !timer.Exists("StunTime"..ply:EntIndex()) then
 				local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" ))
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
-				if ply.Organs["artery"] == 0 and !TwoHandedOrNo[ply.curweapon] then
+				if ply.Organs["carotidartery"] == 0 and !weapons.Get(ply.curweapon).TwoHands then
 					local shadowparams = {
 					secondstoarrive=0.01,
 					pos=head:GetPos(),
@@ -1486,7 +1668,7 @@ if engine.ActiveGamemode() == "homigrad" then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
 								ply:SetNWBool("LeftArmm",true)
-								rag:EmitSound("grabhand.wav",500,100,0.5,CHAN_AUTO)
+								rag:EmitSound("grabhand.wav",500,100,0.3,CHAN_AUTO)
 								rag.ZacConsLH=cons
 							end
 							break
@@ -1507,7 +1689,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 				if(!IsValid(rag.ZacConsRH) and (!rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
-					if ply.Organs["artery"] == 0 then
+					if ply.Organs["carotidartery"] == 0 then
 						local shadowparams = {
 						secondstoarrive=0.01,
 						pos=head:GetPos(),
@@ -1543,12 +1725,12 @@ if engine.ActiveGamemode() == "homigrad" then
 							output=trace,
 						}
 						local trace = util.TraceLine(traceinfo)
-						if(trace.Hit and !trace.HitSky and ply.Organs["artery"] != 0 )then
+						if(trace.Hit and !trace.HitSky and ply.Organs["carotidartery"] != 0 )then
 							local cons = constraint.Weld(rag,trace.Entity,bone,trace.PhysicsBone,0,false,false)
 							if(IsValid(cons))then
 								ply:SetNWBool("RightArmm",true)
 								rag.ZacConsRH=cons
-								rag:EmitSound("grabhand.wav",500,100,0.5,CHAN_AUTO)
+								rag:EmitSound("grabhand.wav",500,100,0.3,CHAN_AUTO)
 							end
 							break
 						elseif(trace.Hit and trace.HitSky)then
@@ -1573,8 +1755,8 @@ if engine.ActiveGamemode() == "homigrad" then
 
 				if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 					local shadowparams1 = {
-						secondstoarrive=ply:GetNWFloat("ForwardArrive"),
-						pos=lh:GetPos(),
+						secondstoarrive=ply:GetNWFloat("ForwardArrive") / 1.1,
+						pos=lh:GetPos() + ply:EyeAngles():Forward() * 80 + ply:EyeAngles():Up() * 30,
 						angle=phys:GetAngles(),
 						maxangulardamp=10,
 						maxspeeddamp=10,
@@ -1583,55 +1765,22 @@ if engine.ActiveGamemode() == "homigrad" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
-					local shadowparams2 = {
-						secondstoarrive=ply:GetNWFloat("ForwardArrive") * 1.5,
-						pos=lh:GetPos(),
-						angle=phys:GetAngles(),
-						maxangulardamp=10,
-						maxspeeddamp=10,
-						maxangular=50,
-						maxspeed=speed,
-						teleportdistance=0,
-						deltatime=deltatime,
-					}
-					local shadowparams3 = {
-						secondstoarrive=ply:GetNWFloat("ForwardArrive") / 5,
-						pos=lh:GetPos(),
-						angle=phys:GetAngles(),
-						maxangulardamp=10,
-						maxspeeddamp=10,
-						maxangular=50,
-						maxspeed=speed,
-						teleportdistance=0,
-						deltatime=deltatime,
-					}
-					if ply:GetNWBool("LeftArmm") == true and ply:GetNWBool("RightArmm") == false then
 					phys:Wake()
 					phys:ComputeShadowControl(shadowparams1)
-					elseif ply:GetNWBool("LeftArmm") == false and ply:GetNWBool("RightArmm") == true then
-					phys:Wake()
-					phys:ComputeShadowControl(shadowparams1)
-					elseif ply:GetNWBool("LeftArmm") == true and ply:GetNWBool("RightArmm") == true then
-					phys:Wake()
-					phys:ComputeShadowControl(shadowparams3)
-					elseif ply:GetNWBool("LeftArmm") == false and ply:GetNWBool("RightArmm") == false then
-					phys:Wake()
-					phys:ComputeShadowControl(shadowparams2)
-					end
 				end
 			end
 			if(ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsRH))then
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
-				local rh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
+				local lh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 				local angs = ply:EyeAngles()
 				angs:RotateAroundAxis(angs:Forward(),90)
 				angs:RotateAroundAxis(angs:Up(),90)
 				local speed = 50
-				
-				if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
-					local shadowparams = {
-						secondstoarrive=ply:GetNWFloat("ForwardArrive"),
-						pos=rh:GetPos(),
+
+				if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000) then
+					local shadowparams1 = {
+						secondstoarrive=ply:GetNWFloat("ForwardArrive") / 1.1,
+						pos=lh:GetPos() + ply:EyeAngles():Forward() * 80 + ply:EyeAngles():Up() * 30,
 						angle=phys:GetAngles(),
 						maxangulardamp=10,
 						maxspeeddamp=10,
@@ -1641,7 +1790,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						deltatime=deltatime,
 					}
 					phys:Wake()
-					phys:ComputeShadowControl(shadowparams)
+					phys:ComputeShadowControl(shadowparams1)
 				end
 			end
 			if(ply:KeyDown(IN_BACK) and IsValid(rag.ZacConsLH))then
@@ -1650,12 +1799,12 @@ if engine.ActiveGamemode() == "homigrad" then
 				local angs = ply:EyeAngles()
 				angs:RotateAroundAxis(angs:Forward(),90)
 				angs:RotateAroundAxis(angs:Up(),90)
-				local speed = 30
+				local speed = 50
 				
 				if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000)then
 					local shadowparams = {
 						secondstoarrive=ply:GetNWFloat("BackArrive"),
-						pos=chst:GetPos(),
+						pos=chst:GetPos() + ply:EyeAngles():Forward() * -80 + ply:EyeAngles():Up() * 30,
 						angle=phys:GetAngles(),
 						maxangulardamp=10,
 						maxspeeddamp=10,
@@ -1674,12 +1823,12 @@ if engine.ActiveGamemode() == "homigrad" then
 				local angs = ply:EyeAngles()
 				angs:RotateAroundAxis(angs:Forward(),90)
 				angs:RotateAroundAxis(angs:Up(),90)
-				local speed = 30
+				local speed = 50
 				
 				if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 					local shadowparams = {
-						secondstoarrive=0.4,
-						pos=chst:GetPos(),
+						secondstoarrive=ply:GetNWFloat("BackArrive"),
+						pos=chst:GetPos() + ply:EyeAngles():Forward() * -50  + ply:EyeAngles():Up() * 10,
 						angle=phys:GetAngles(),
 						maxangulardamp=10,
 						maxspeeddamp=10,
@@ -1699,7 +1848,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	hook.Add("Player Think","VelocityPlayerFallOnPlayerCheck",function(ply,time)
 		local speed = ply:GetVelocity():Length()
 		if ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply.fake and not ply:HasGodMode() and ply:Alive() then
-			if speed < 700 then return end
+			if speed < 400 then return end
 			if hook.Run("Should Fake Velocity",ply,speed) ~= nil then return end
 				Faking(ply)
 		end
@@ -1714,7 +1863,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				ply:SetAmmo((ply.wep.Amt or 0), (ply.wep.AmmoType or 0))
 			end
 
-			if table.HasValue(Guns,newwep:GetClass()) then
+			if newwep.Base == 'b3bros_base' then
 				if IsValid(ply.wep) then DespawnWeapon(ply) end
 				ply:SetActiveWeapon(newwep)
 				ply.Info.ActiveWeapon=newwep
@@ -1853,33 +2002,10 @@ if engine.ActiveGamemode() == "homigrad" then
 				return ""
 			end
 		end
-
-		if string.lower(text)=="!viptest" then
-			if !ply.fake then
-			ply:SetVelocity( Vector(0,0,50000) )
-			timer.Simple( 5, function()
-				ply:Ban(1,false)
-				ply:Kick("Ну как тебе ВИП ТЕСТ!!! минутка бана))))")
-
-			end)
-			else
-			ply:GetNWEntity("Ragdoll"):GetPhysicsObjectNum(0):SetVelocity( Vector(0,0,50000) )
-			timer.Simple( 5, function()
-				ply:Ban(1,false)
-				ply:Kick("Ну как тебе ВИП ТЕСТ!!! хи фейк не поможет, жди минуту")
-			end)
-			end
-		end
 	end)
 
 	hook.Add("UpdateAnimation","huy",function(ply,event,data)
 		ply:RemoveGesture(ACT_GMOD_NOCLIP_LAYER)
-	end)
-
-	hook.Add("Player Think","holdentity",function(ply,time)
-		--[[if IsValid(ply.holdEntity) then
-
-		end--]]
 	end)
 
 	end

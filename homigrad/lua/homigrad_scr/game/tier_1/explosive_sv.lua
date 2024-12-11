@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "homigradcom" then return end
 local function BoomBig(ent)
     local SelfPos,PowerMult = ent:LocalToWorld(ent:OBBCenter()),4
 
@@ -21,20 +21,20 @@ local function BoomBig(ent)
             end
         end)
 
-		for i = 1, 10 do
-			local FireVec = ( VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
-			FireVec.z = FireVec.z / 2
-			local Flame = ents.Create("ent_jack_gmod_eznapalm")
-			Flame:SetPos(SelfPos + Vector(0, 0, 80))
-			Flame:SetAngles(FireVec:Angle())
-			Flame:SetOwner(game.GetWorld())
-			JMod.SetOwner(Flame, game.GetWorld())
-			Flame.SpeedMul = 0.2
-			Flame.Creator = game.GetWorld()
-			Flame.HighVisuals = true
-			Flame:Spawn()
-			Flame:Activate()
-		end
+		--for i = 1, 10 do
+		--	local FireVec = ( VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
+		--	FireVec.z = FireVec.z / 2
+		--	local Flame = ents.Create("ent_jack_gmod_eznapalm")
+		--	Flame:SetPos(SelfPos + Vector(0, 0, 80))
+		--	Flame:SetAngles(FireVec:Angle())
+		--	Flame:SetOwner(game.GetWorld())
+		--	JMod.SetOwner(Flame, game.GetWorld())
+		--	Flame.SpeedMul = 0.2
+		--	Flame.Creator = game.GetWorld()
+		--	Flame.HighVisuals = true
+		--	Flame:Spawn()
+		--	Flame:Activate()
+		--end
 
         JMod.WreckBuildings(ent, SelfPos, PowerMult/2)
         JMod.BlastDoors(ent, SelfPos, PowerMult)
@@ -111,7 +111,7 @@ local modelssmall = {
 
 hook.Add("PropBreak","PropVengeance",function(client,prop)
     local model = prop:GetModel()
-    if roundActiveName == "construct" or roundActiveName == "hl2coop" or roundActiveName == "deathrun" then return end
+    if roundActiveName == "zombieinfection" or roundActiveName == "hl2coop" or roundActiveName == "deathrun" then return end
 
         if modelsbig[model] then BoomBig(prop) end
 	    if modelssmall[model] then BoomSmall(prop) end

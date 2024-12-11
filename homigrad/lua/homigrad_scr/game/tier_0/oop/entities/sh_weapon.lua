@@ -89,7 +89,7 @@ function SWEP:TranslateActivity(act)
 	return self.ActivityTranslate[act] or -1
 end
 
-SWEP:Event_Add("Construct","register",function(class)
+SWEP:Event_Add("zombieinfection","register",function(class)
     local content = class[1]
     if content.NonRegisterGMOD or class.NonRegisterGMOD then return end
 

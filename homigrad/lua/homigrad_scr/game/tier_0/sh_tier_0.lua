@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 local queue = {}
 hg.prechachesound = hg.prechachesound or {}
 

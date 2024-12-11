@@ -1,14 +1,14 @@
 if SERVER then
-local webhookURL = "https://discord.com/api/webhooks/1278109545218048000/vMLHJ-VBJJMGRrj9fB6gGlcmbGAGwECLpLSApIm-4XGke3lC040mkZ4xG_LGDv4hwmZP"
+local webhookURL = "https://discord.com/api/webhooks/1314702884549427272/WebQ4yS9QzFqDOnzh71IXGvICXmwX0E3Kvt8BFnYCWHglhG9Kvfs8VaOYw07MVqCCuti"
 
 local function sendToDiscord(message, logType)
     if not webhookURL or webhookURL == "" then return end
 
     local payload = {
         ["content"] = nil,
-        ["username"] = "Сервер #1 ",
+        ["username"] = "Homigrad:Rework",
         ["embeds"] = {{
-            ["title"] = "Лог",
+            ["title"] = "Homigrad:Rework LOG",
             ["description"] = message,
             ["color"] = logType == "Error" and 15158332 or logType == "Warning" and 16747008 or 11534591,
             ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")

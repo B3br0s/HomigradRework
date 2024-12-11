@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 if CLIENT then
 	local vecUp = Vector(0,0,50)
 
@@ -73,7 +73,7 @@ if CLIENT then
 		for i = 1,#tbl do
 			ply = tbl[i]
 
-			ply.flashlightMdl = ply.flashlightMdl or ClientsideModel("models/maxofs2d/lamp_flashlight.mdl")
+			ply.flashlightMdl = ply.flashlightMdl or ClientsideModel("models/raviool/flashlight.mdl")
 			if IsValid(ply.flashlightMdl) then
 				ply.flashlightMdl:SetNoDraw(true)
 			end
@@ -97,10 +97,10 @@ if CLIENT then
 						ply.flashlightMdl:SetPos(pos)
 						ply.flashlightMdl:SetAngles(angla)
 						ply.flashlightMdl:SetNoDraw(false)
-						ply.flashlightMdl:SetModelScale(0.5)
+						ply.flashlightMdl:SetModelScale(1)
 						cam.Start3D()
 							render.SetMaterial( material ) -- Tell render what material we want, in this case the flash from the gravgun
-							render.DrawSprite( pos + angla:Forward()*5,32, 32, color_white)
+							render.DrawSprite( pos + angla:Forward()*5 + angla:Right() * 0 + angla:Up() * 1.3,18, 18, color_white)
 						cam.End3D()
 					end
 				end
@@ -118,7 +118,11 @@ else
 		
 		local bool = ply:GetNWBool("DynamicFlashlight")
 		ply:SetNWBool("DynamicFlashlight",not bool)
-		ply:EmitSound("items/flashlight1.wav", 60, 100)
+		if bool then
+		ply:EmitSound("nvg/nvg_off1.wav", 50, 100)
+		else
+		ply:EmitSound("nvg/nvg_off2.wav", 50, 100)
+		end
 		
 		return false
 	end)

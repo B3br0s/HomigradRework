@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 local PANEL = ents.Get("v_panel")
 if not PANEL then return end
 

@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "homigradcom" then return end
 local virus = 0
 local zombieoverlay = Material( "hud/infection" )
 local zombueoverlay2 = Material("hud/scp_infection")

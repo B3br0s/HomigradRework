@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 

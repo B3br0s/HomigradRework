@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 local meta = FindMetaTable("Entity")
 
 local GetOwner = meta.GetOwner

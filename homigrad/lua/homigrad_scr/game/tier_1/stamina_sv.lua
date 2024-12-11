@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 	hook.Add("Move","move.speed",function(ply,movedata)
 		if ply:Alive() then
 			if roundActiveName == "nextbots" or roundActiveName == "deathrun" or roundActiveName == "eft" then
@@ -101,11 +101,11 @@ if engine.ActiveGamemode() == "homigrad" then
 		ply.staminamul = k
 	end)
 	
-	hook.Add("PlayerFootstep","CustomFootstep1",function(ply,pos,foot,sound,volume,rf)
+	hook.Add("PlayerFootstep","FootStepBroken",function(ply,pos,foot,sound,volume,rf)
 		if ply:IsSprinting() then
 			if foot == 0 then
 				if ply.LeftLeg < 1 then
-					ply.pain = ply.pain + 5
+					ply.pain = ply.pain + 100
 					if ply.firstTimeNotifiedLeftLeg then
 						ply:ChatPrint("Вы чувствуете невыносимую боль от бега на сломанной левой ноге. ")
 						ply.firstTimeNotifiedLeftLeg = false
@@ -115,7 +115,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	
 			if foot == 1 then
 				if ply.RightLeg < 1 then
-					ply.pain = ply.pain + 5
+					ply.pain = ply.pain + 100
 					if ply.firstTimeNotifiedRightLeg then
 						ply:ChatPrint("Вы чувствуете невыносимую боль от бега на сломанной правой ноге. ")
 						ply.firstTimeNotifiedRightLeg = false

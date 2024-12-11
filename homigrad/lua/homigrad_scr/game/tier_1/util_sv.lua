@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "homigradcom" then return end
 COMMANDS = COMMANDS or {}
 
 local explosions = {
@@ -38,20 +38,20 @@ local function BoomSmall(ent)
             JMod.WreckBuildings(ent, SelfPos, PowerMult/2)
             JMod.BlastDoors(ent, SelfPos, PowerMult * 500)
             if roundActiveName != "hl2coop" or roundActiveName != "deathrun" then
-            for i = 1, 3 do
-                local FireVec = ( VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
-                FireVec.z = FireVec.z / 2
-                local Flame = ents.Create("ent_jack_gmod_eznapalm")
-                Flame:SetPos(SelfPos + Vector(0, 0, 50))
-                Flame:SetAngles(FireVec:Angle())
-                Flame:SetOwner(game.GetWorld())
-                JMod.SetOwner(Flame, game.GetWorld())
-                Flame.SpeedMul = 0.25
-                Flame.Creator = game.GetWorld()
-                Flame.HighVisuals = true
-                Flame:Spawn()
-                Flame:Activate()
-            end
+            --for i = 1, 3 do
+            --    local FireVec = ( VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
+            --    FireVec.z = FireVec.z / 2
+            --    local Flame = ents.Create("ent_jack_gmod_eznapalm")
+            --    Flame:SetPos(SelfPos + Vector(0, 0, 50))
+            --    Flame:SetAngles(FireVec:Angle())
+            --    Flame:SetOwner(game.GetWorld())
+            --    JMod.SetOwner(Flame, game.GetWorld())
+            --    Flame.SpeedMul = 0.25
+            --    Flame.Creator = game.GetWorld()
+            --    Flame.HighVisuals = true
+            --    Flame:Spawn()
+            --    Flame:Activate()
+            --end
         end
     
             timer.Simple(0,function()

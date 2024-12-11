@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 hg = hg or {}
 
 include("homigrad_scr/loader.lua")

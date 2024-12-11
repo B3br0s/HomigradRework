@@ -6,7 +6,7 @@ CLASS.NonRegisterGMOD = true
 ENT.Base = "base_nextbot"
 ENT.Type = "nextbot"
 
-ENT:Event_Add("Construct","register",function(class)
+ENT:Event_Add("zombieinfection","register",function(class)
     local content = class[1]
     if content.NonRegisterGMOD or class.NonRegisterGMOD then return end
 

@@ -1,8 +1,9 @@
-	if engine.ActiveGamemode() == "homigrad" then
 local vecZero = Vector(0,0,0)
+local vecInf = Vector(0,0,0) / 0
 
 local function removeBone(rag,bone,phys_bone)
 	rag:ManipulateBoneScale(bone,vecZero)
+	--rag:ManipulateBonePosition(bone,vecInf) -- Thanks Rama (only works on certain graphics cards!)
 
 	if rag.gibRemove[phys_bone] then return end
 
@@ -39,7 +40,6 @@ function Gib_RemoveBone(rag,bone,phys_bone)
 end
 
 concommand.Add("removebone",function(ply)
-	if ply:IsAdmin() then
 	local trace = ply:GetEyeTrace()
 	local ent = trace.Entity
 	if not IsValid(ent) then return end
@@ -48,7 +48,6 @@ concommand.Add("removebone",function(ply)
 	if not phys_bone or phys_bone == 0 then return end
 
 	Gib_RemoveBone(ent,ent:TranslatePhysBoneToBone(phys_bone),phys_bone)
-	end
 end)
 
 gib_ragdols = gib_ragdols or {}
@@ -57,6 +56,9 @@ local gib_ragdols = gib_ragdols
 local validHitGroup = {
 	[HITGROUP_LEFTARM] = true,
 	[HITGROUP_RIGHTARM] = true,
+	[HITGROUP_STOMACH] = true,
+	[HITGROUP_CHEST] = true,
+	[HITGROUP_HEAD] = true,
 	[HITGROUP_LEFTLEG] = true,
 	[HITGROUP_RIGHTLEG] = true,
 }
@@ -80,77 +82,69 @@ local validBone = {
 }
 
 local function razrivtela(pos)
-			local propModels = {
-	"models/Gibs/HGIBS_rib.mdl",
-	"models/Gibs/HGIBS_rib.mdl",
-	"models/Gibs/HGIBS_scapula.mdl",
-	"models/Gibs/HGIBS_scapula.mdl",
-	"models/Gibs/HGIBS_scapula.mdl",
-	"models/Gibs/HGIBS_scapula.mdl",
-	"models/Gibs/HGIBS_spine.mdl",
-	"models/Gibs/HGIBS_rib.mdl",
-	"models/Gibs/HGIBS_rib.mdl",
-	"models/Gibs/HGIBS_rib.mdl",
-	"models/Gibs/HGIBS_rib.mdl",
-	"models/Gibs/HGIBS_spine.mdl",
-	"models/Gibs/HGIBS.mdl",
-	"models/Gibs/HGIBS_rib.mdl",
-	"models/Gibs/HGIBS_spine.mdl",
-	"models/Gibs/HGIBS_spine.mdl",
-	"models/Gibs/HGIBS_spine.mdl",
-}
+    local propModels = {
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_scapula.mdl",
+        "models/Gibs/HGIBS_scapula.mdl",
+        "models/Gibs/HGIBS_scapula.mdl",
+        "models/Gibs/HGIBS_scapula.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+        "models/Gibs/HGIBS.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+    }
 
+    for i = 1, #propModels do
+        timer.Simple(0.1, function()
+            local prop = ents.Create("prop_physics")
+            if not IsValid(prop) then return end
 
-for i = 1, #propModels do
-timer.Simple(0.1, function()
-	local prop = ents.Create("prop_physics")
-    if not IsValid(prop) then return end
+            prop:SetModel(propModels[i])
+            prop:SetPos(pos)
+            prop:Spawn()
 
-    prop:SetModel(propModels[i])
-    prop:SetPos(pos)
-    prop:Spawn()
+            prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
-	prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-
-    local randomVelocity = Vector(math.random(-500, 500), math.random(-500, 500), math.random(-500, 500))
-    prop:GetPhysicsObject():SetVelocity(randomVelocity)
---[[	timer.Simple(20,function()
-		prop:Remove()
-		end)]]
-end )
+            local randomVelocity = Vector(math.random(-500, 500), math.random(-500, 500), math.random(-500, 500))
+            prop:GetPhysicsObject():SetVelocity(randomVelocity)
+        end)
+    end
 end
-end
+
 local function headshotblyat(pos)
-local propModels = {
-	"models/mosi/fnv/props/gore/gorehead03.mdl",
-	"models/mosi/fnv/props/gore/gorehead02.mdl",
-	"models/mosi/fnv/props/gore/gorehead06.mdl",
-	"models/mosi/fnv/props/gore/gorehead05.mdl",
-	"models/mosi/fnv/props/gore/gorehead04.mdl"
-}
+    local propModels = {
+        "models/mosi/fnv/props/gore/gorehead03.mdl",
+        "models/mosi/fnv/props/gore/gorehead02.mdl",
+        "models/mosi/fnv/props/gore/gorehead06.mdl",
+        "models/mosi/fnv/props/gore/gorehead05.mdl",
+        "models/mosi/fnv/props/gore/gorehead04.mdl"
+    }
 
-timer.Simple(0.1, function()
-for i = 1, #propModels do
-    local prop = ents.Create("prop_physics")
-    if not IsValid(prop) then return end
+    timer.Simple(0.1, function()
+        for i = 1, #propModels do
+            local prop = ents.Create("prop_physics")
+            if not IsValid(prop) then return end
 
-    prop:SetModel(propModels[i])
-    prop:SetPos(pos)
-	prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-    prop:Spawn()
+            prop:SetModel(propModels[i])
+            prop:SetPos(pos)
+            prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+            prop:Spawn()
 
-    local randomVelocity = Vector(math.random(-150,150), math.random(-500, 500), math.random(-150, 150))
-    prop:GetPhysicsObject():SetVelocity(randomVelocity)
-
---[[	timer.Simple(20,function()
-		prop:Remove()
-		end)]]
-end
-end )
+            local randomVelocity = Vector(math.random(-70, 70), math.random(-500, 500), math.random(-150, 150))
+            prop:GetPhysicsObject():SetVelocity(randomVelocity)
+        end
+    end)
 end
 
-
-function Gib_Input(rag,bone,dmgInfo,player)
+function Gib_Input(rag,bone,dmgInfo)
 	if not IsValid(rag) then return end
 
 	local hitgroup = bonetohitgroup[rag:GetBoneName(bone)]
@@ -169,140 +163,49 @@ function Gib_Input(rag,bone,dmgInfo,player)
 		end
 	end
 
-	ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(math.random(-90),math.random(130),math.random(130)))	
-
 	local phys_bone = rag:TranslateBoneToPhysBone(bone)
 
 	local dmgPos = dmgInfo:GetDamagePosition()
 
-	if dmgInfo:IsDamageType(DMG_BLAST) then
-			dmgInfo:ScaleDamage(5000)
-			sound.Emit(rag,"physics/body/body_medium_break4.wav")
-			sound.Emit(rag,"physics/body/body_medium_break2.wav")
-			sound.Emit(rag,"physics/body/body_medium_break3.wav")
-		--[[if player != nil then
-			player:ChatPrint("Тебя разорвало на части.")
-			end]]
-			
-	
-			
-		--	if GetGlobalBool("GoreEnabled") then
-		if dmgInfo:GetDamage() >= 2000 then
-				razrivtela(rag:GetPos())
-		--	end
-		end
+	if dmgInfo:GetDamage() >= 600 and dmgInfo:IsDamageType(DMG_CRUSH + DMG_VEHICLE) or rag:GetVelocity():Length() > 925 and dmgInfo:IsDamageType(DMG_CRUSH + DMG_BLAST + DMG_VEHICLE + DMG_FALL) or math.random(1, 200) == 52 and dmgInfo:IsDamageType(DMG_CRUSH + DMG_BLAST + DMG_VEHICLE + DMG_FALL) or dmgInfo:IsDamageType(DMG_BLAST) then
+        dmgInfo:ScaleDamage(5000)
+        sound.Play("homigrad/player/headshot" .. math.random(1, 2) .. ".wav", rag:GetPos(), 75, 85)
+        sound.Play("homigrad/headshoot.wav", rag:GetPos(), 100)
+        sound.Play("physics/flesh/flesh_strider_impact_bullet2.wav", rag:GetPos(), 75, 75)
 
-		--	if GetGlobalBool("BloodGoreEnabled") then
-				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
-		--	end
+        razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
 
-			rag:Remove()
-	end
+        BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(), dmgInfo:GetDamageForce() * 2)
 
-	if hitgroup == HITGROUP_HEAD and dmgInfo:GetDamage() >= 300 and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
-		sound.Emit(rag,"homigrad/headshoot.wav")
-		sound.Emit(rag,"homigrad/player/headshot" .. math.random(1,2) .. ".wav")
+        rag:Remove()
+    end
 
-		timer.Simple(0.05,function()
-			if not IsValid(rag) then return end
-
-		--	rag:EmitSound("physics/flesh/flesh_bloody_break.wav",90,75,2)
-		end)
-
-	--	if GetGlobalBool("GoreEnabled") then
-	--	end
-
-	--	if GetGlobalBool("BloodGoreEnabled") then
-				BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
-
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(phys_bone):GetPos(),Angle(-90,0,0))	
-	--	end
-	if dmgInfo:GetDamage() > 500 then
-		headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
+	if hitgroup == HITGROUP_HEAD and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
+		sound.Emit(rag, "homigrad/headshoot.wav")
+        sound.Emit(rag, "homigrad/player/headshot" .. math.random(1, 2) .. ".wav")
 
 		Gib_RemoveBone(rag,bone,phys_bone)
-end
-		
+
+		BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
+
+        headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
 	end
-	--крута🎈 когда взрываеца от прикосновения да?
-	--да
-	if dmgInfo:GetDamage() >= 1200 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_VEHICLE) or rag:GetVelocity():Length() > 740 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) or math.random(1,152) == 52 and dmgInfo:IsDamageType(DMG_CRUSH+DMG_BLAST+DMG_VEHICLE+DMG_FALL) then
-			dmgInfo:ScaleDamage(5000)
-			--sound.Emit(rag,"physics/body/body_medium_break4.wav")
-			--sound.Emit(rag,"physics/body/body_medium_break2.wav")
-			sound.Emit(rag,"homigrad/blood_splash.wav")
-			sound.Emit(rag,"homigrad/headshoot.wav")
-			sound.Emit(rag,"homigrad/headshoot.wav")
-			sound.Emit(rag,"homigrad/blood_splash.wav")
-			sound.Emit(rag,"homigrad/blood_splash.wav")
-			sound.Emit(rag,"physics/flesh/flesh_bloody_impact_hard1.wav")
-		--[[if player != nil then
-			player:ChatPrint("Тебя разорвало на части.")
-			end]]
-			
-		--	if GetGlobalBool("GoreEnabled") then
-			razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
-		--	end
 
-		--	if GetGlobalBool("BloodGoreEnabled") then
-				local a0oapidor = rag:LookupBone("ValveBiped.Bip01_Pelvis")
-				local a0oapidor2 = rag:LookupBone("ValveBiped.Bip01_Spine")
-
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_small",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-				ParticleEffect("exit_blood_large",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(-90,0,0))	
-
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() * 1.01,Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() / 1.01,Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor2):GetPos(),Angle(math.random(360),math.random(360),math.random(360)))
-
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor):GetPos() / 1.01,Angle(math.random(360),math.random(360),math.random(360)))
-				ParticleEffect("impact0_smoke",rag:GetPhysicsObject(a0oapidor2):GetPos() * 1.01,Angle(math.random(360),math.random(360),math.random(360)))
-
-				BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
-		--	end
-
-			rag:Remove()
-	end
-	rag:GetPhysicsObject():SetMass(20)
+	rag:GetPhysicsObject():SetMass(10)
 end
 
 hook.Add("PlayerDeath","Gib",function(ply)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
-
-	--разве это не смешно когда ножом башка взрывается?
-	--нет
 	
-	if dmgInfo:GetDamage() >= 30 then
+	if dmgInfo:GetDamage() >= 50 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)
 
-			if not IsValid(rag) or not bone then return end--бу
+			if not IsValid(rag) or not bone then return end
 
-			Gib_Input(rag,bone,dmgInfo,player)
+			Gib_Input(rag,bone,dmgInfo)
 		end)
 	end
 end)
@@ -325,7 +228,7 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 
 	local mul = RagdollDamageBoneMul[hitgroup]
 	
-	if dmgInfo:GetDamage() * mul > 200 then return end
+	if dmgInfo:GetDamage() * (mul or 30) < 350 then return end
 	
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)
@@ -355,7 +258,7 @@ hook.Add("Think","Gib",function()
 
 				local traceResult = util_TraceLine(tr)
 				if traceResult.Hit then
-					ent:EmitSound("homigrad/player/blooddrip" .. math.random(1,4) .. ".wav", 60,math.random(230,240),0.1,CHAN_AUTO)
+					ent:EmitSound("ambient/water/drip" .. math.random(1,4) .. ".wav", 60,math.random(230,240),0.1,CHAN_AUTO)
 
 					util_Decal("Blood",traceResult.HitPos + traceResult.HitNormal,traceResult.HitPos - traceResult.HitNormal,ply)
 				else
@@ -377,4 +280,3 @@ hook.Add("Think","Gib",function()
 		end
 	end
 end)
-end

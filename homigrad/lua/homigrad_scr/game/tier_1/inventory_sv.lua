@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "homigradcom" then return end
 util.AddNetworkString("inventory")
 util.AddNetworkString("ply_take_item")
 util.AddNetworkString("ply_take_ammo")
@@ -88,7 +88,7 @@ net.Receive("ply_take_item",function(len,ply)
 	
 	if not wepInfo then return end
 
-	if prekol[wep] and not ply:IsAdmin() and not roundActiveName == "construct" then ply:Kick("xd))00") return end
+	if prekol[wep] and not ply:IsAdmin() and not roundActiveName == "zombieinfection" then ply:Kick("xd))00") return end
 
 	if ply:HasWeapon(wep) then
 		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end

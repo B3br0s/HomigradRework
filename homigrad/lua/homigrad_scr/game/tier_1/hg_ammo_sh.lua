@@ -1,4 +1,3 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
 local ammotypes = {
     ["556x45mm"] = {
         name = "5.56x45 mm",
@@ -11,14 +10,13 @@ local ammotypes = {
         minsplash = 10,
         maxsplash = 5
     },
-
-    ["airsoftballs"] = {
-        name = "Airsoft Balls",
+    ["22lr"] = {
+        name = ".22 Long Rifle",
         dmgtype = DMG_BULLET, 
         tracer = TRACER_LINE,
         plydmg = 0,
         npcdmg = 0,
-        force = 200,
+        force = 400,
         maxcarry = 120,
         minsplash = 10,
         maxsplash = 5
@@ -84,8 +82,8 @@ local ammotypes = {
         maxsplash = 5
     },
 
-    [".45rubber"] = {
-        name = ".45 Rubber",
+    [".45acp"] = {
+        name = ".45 Acp",
         dmgtype = DMG_BULLET, 
         tracer = TRACER_LINE,
         plydmg = 0,
@@ -198,7 +196,7 @@ local ammoents = {
         Scale = 1.2
     },
 
-    ["airsoftballs"] = {
+    ["22lr"] = {
         Material = "models/hmcd_ammobox_556",
         Scale = 1.2
     },
@@ -304,7 +302,7 @@ end
 
 timer.Simple(1,function()
     game.BuildAmmoTypes()
---PrintTable(game.GetAmmoTypes()) -- no you don't do that. I hate that spam.
+    PrintTable(game.GetAmmoTypes()) -- no you don't do that. I hate that spam.
 end)
 
 if CLIENT then
@@ -312,7 +310,8 @@ if CLIENT then
         local ammodrop = 0
         if !ply:Alive() then return end
         local Frame = vgui.Create( "DFrame" )
-        Frame:SetTitle( "Амуниция" )
+        --Frame:SetTitle( "Амуниция" )
+        Frame:SetTitle( "Ammunition" )
         Frame:SetSize( 200,300 )
         Frame:Center()			
         Frame:MakePopup()
@@ -348,7 +347,7 @@ if CLIENT then
         DermaNumSlider:SetSize( 210, 25 )			
         DermaNumSlider:SetText( "Кол-во" )	
         DermaNumSlider:SetMin( 0 )				 	
-        DermaNumSlider:SetMax( 60 )				
+        DermaNumSlider:SetMax( 120 )				
         DermaNumSlider:SetDecimals( 0 )				
 
         -- If not using convars, you can use this hook + Panel.SetValue()
@@ -386,7 +385,8 @@ if CLIENT then
         end
         local DLabel = vgui.Create( "DLabel", Frame )
         DLabel:SetPos( 10, 270 )
-        DLabel:SetText( "ЛКМ - Скинуть Кол-во\nПКМ - Скинуть все" )
+        --DLabel:SetText( "ЛКМ - Скинуть Кол-во\nПКМ - Скинуть все" )
+        DLabel:SetText( "LMB - Drop amount\nRMB - Drop All" )
         DLabel:SizeToContents()
 
     end
@@ -397,21 +397,21 @@ if CLIENT then
 end
 
 local ammolistent = {
-    [38] = ".44magnum",
-    [39] = ".45rubber",
-    [40] = ".50action",
-    [41] = "12/70beanbag",
-    [42] = "12/70gauge",
-    [43] = "46×30mm",
-    [45] = "545×39mm",
-    [46] = "556x45mm",
-    [47] = "57×28mm",
-    [48] = "762x39mm",
-    [49] = "762x54mm",
-    [50] = "9x18mmrubber",
-    [51] = "9x39mm",
-    [52] = "9х19mm",
-    [53] = "airsoftballs",
+    [38] = "22lr",
+    [39] = ".44magnum",
+    [40] = ".45acp",
+    [41] = ".50action",
+    [42] = "12/70beanbag",
+    [43] = "12/70gauge",
+    [45] = "46×30mm",
+    [46] = "545×39mm",
+    [47] = "556x45mm",
+    [48] = "57×28mm",
+    [49] = "762x39mm",
+    [50] = "762x54mm",
+    [51] = "9x18mmrubber",
+    [52] = "9x39mm",
+    [53] = "9х19mm",
     [70] = "tasercartridge",
 }
 
@@ -423,9 +423,12 @@ if SERVER then
         local ammotype = net.ReadFloat()
         local count = net.ReadFloat()
         local pos = ply:EyePos()+ply:EyeAngles():Forward()*15
-        if ply:GetAmmoCount(ammotype)-count < 0 then ply:ChatPrint("У тебя столько нет пулек") return end
-        if count < 1 then ply:ChatPrint("Ноль пулек не скинуть") return end
-        if not ammolistent[ammotype] then ply:ChatPrint("Нету ентити этих патрон...") return end
+        --if ply:GetAmmoCount(ammotype)-count < 0 then ply:ChatPrint("У тебя столько нет пулек") return end
+        if ply:GetAmmoCount(ammotype)-count < 0 then ply:ChatPrint("You doesn't have that amount of ammo.") return end
+        --if count < 1 then ply:ChatPrint("Ноль пулек не скинуть") return end
+        if count < 1 then ply:ChatPrint("You cant drop 0 bullets") return end
+        --if not ammolistent[ammotype] then ply:ChatPrint("Нету ентити этих патрон...") return end
+        if not ammolistent[ammotype] then ply:ChatPrint("There is no entity of that type ammo...") return end
         local AmmoEnt = ents.Create( "ent_ammo_"..ammolistent[ammotype] )
         AmmoEnt:SetPos( pos )
         AmmoEnt:Spawn()

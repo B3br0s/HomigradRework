@@ -17,7 +17,7 @@ concommand.Add("hg_vgui_removeall",function()
     end
 end)
 
-PANEL:Event_Add("Construct","register",function(class)
+PANEL:Event_Add("zombieinfection","register",function(class)
     local content = class[1]
     if content.NonRegisterGMOD or class.NonRegisterGMOD then return end
 

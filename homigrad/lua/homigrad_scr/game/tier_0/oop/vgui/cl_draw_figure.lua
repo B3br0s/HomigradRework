@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 local SetMaterial = surface.SetMaterial
 local DrawTexturedRect = surface.DrawTexturedRect
 

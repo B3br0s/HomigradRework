@@ -6,11 +6,11 @@ net.Receive("ThrowKnife", function ()
     local ply = net.ReadEntity()
     local throwedknife = ply:GetActiveWeapon():GetClass()
 
+    ply:StripWeapon(throwedknife)
+
     ply:EmitSound("weapons/crowbar/crowbar_swing"..math.random(1,3)..".wav")
 
     if not IsValid(ply) then return end
-
-    ply:GetActiveWeapon():Remove()
 
     ply:SelectWeapon("weapon_hands")
 

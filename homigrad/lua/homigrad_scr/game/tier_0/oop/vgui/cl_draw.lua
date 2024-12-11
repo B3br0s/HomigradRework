@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 local gradient_left = Material("homigrad/vgui/gradient_left.png")
 local gradient_right = Material("homigrad/vgui/gradient_right.png")
 local gradient_up = Material("homigrad/vgui/gradient_up.png")

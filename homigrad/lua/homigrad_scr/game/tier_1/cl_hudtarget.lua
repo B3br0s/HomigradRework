@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "homigradcom" then return end
 nodraw_players = nodraw_players or {}
 
 local pressedalredi = false
@@ -44,7 +44,7 @@ hook.Add("HUDPaint","homigrad-huynyui",function()
 
 	if not lply:Alive() then return end
 	
-	if roundActiveName == "construct" then
+	if roundActiveName == "zombieinfection" then
 		local text
 
 		local ply = lply

@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 local grtodown = Material( "vgui/gradient-u" )
 local grtoup = Material( "vgui/gradient-d" )
 local grtoright = Material( "vgui/gradient-l" )
@@ -21,8 +21,8 @@ hook.Add("HUDPaint","PainEffect",function()
     if not LocalPlayer():Alive() then return end
     
     local w,h = ScrW(),ScrH()
-    k = Lerp(0.1,k,math_Clamp(pain / 450,0,15))
-    k1337 = Lerp(0.1,k,math_Clamp(pain / 50,0,15))
+    k = Lerp(0.1,k,math_Clamp(pain / 350,0,15))
+    k1337 = Lerp(0.1,k,math_Clamp(pain / 150,0,15))
 --[[
     surface.SetMaterial(grtodown)
     surface.SetDrawColor(0,0,0,255)

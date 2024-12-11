@@ -1,5 +1,20 @@
 local vec = Vector(1,1,1)
 
+if CLIENT then
+    net.Receive("SyncAttsFake", function()
+        local receivedAtts = net.ReadTable()
+        local receivedWepClass = net.ReadString()
+
+        local player = LocalPlayer()
+        for _, weapon in ipairs(player:GetWeapons()) do
+            if weapon:GetClass() == receivedWepClass then
+                weapon.CurrentAtt = receivedAtts
+                break
+            end
+        end
+    end)
+end
+
 hook.Add("InitPostEntity","PlyColor",function()
     matproxy.Add({
         name = "PlayerColor",
@@ -13,7 +28,7 @@ hook.Add("InitPostEntity","PlyColor",function()
             if ent.GetPlayerColor then
                 mat:SetVector(resultTo,ent:GetPlayerColor() or vec)
             elseif ent.GetNW2Vector then
-                mat:SetVector(resultTo,ent:GetNW2Vector("modelcolor",vec))--и чо мы ебались...?
+                mat:SetVector(resultTo,ent:GetNW2Vector("modelcolor",vec))
             end
        end 
     })
@@ -55,10 +70,18 @@ event.Add("Death","RemoveNPClientRagdoll",function(dmgTab)
     end)
 end)
 
-local math_hand1 = Material("vgui/iconright.png")
-local math_hand2 = Material("vgui/iconleft.png")
+local math_hand1 = Material("icon32/hand_point_090.png")
+local math_hand2 = Material("icon32/hand_point_180.png")
 
 local Clamp = math.Clamp
+
+net.Receive("SyncAttsFake",function()
+    local atts = net.ReadTable()
+    local wep = net.ReadEntity()
+    timer.Simple(0.01,function()
+        wep.CurrentAtt = atts
+    end)
+end)
 
 hook.Add("HUDPaint","Fake",function()
     local ply = LocalPlayer()
@@ -78,7 +101,7 @@ hook.Add("HUDPaint","Fake",function()
         pos.y = Clamp(pos.y,h / 2 - h / 4,h / 2 + h / 4)
 
         surface.SetMaterial(math_hand2)
-        surface.DrawTexturedRectRotated(pos.x,pos.y,64,64,0)
+        surface.DrawTexturedRectRotated(pos.x,pos.y,64,64,-90)
     end
 
     if ply:GetNWBool("RightArmm") then

@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "homigradcom" then return end
 COMMANDS = COMMANDS or {}
 
 
@@ -192,13 +192,9 @@ concommand.Add( "hg_blevota", function( ply, cmd, args )
                 ply["Organs"].artery = 0
                 ply:ChatPrint("Ты не можешь остановиться блевать.")
             end]]
-            for i = 1,50 do
-                timer.Simple(0.01 * i,function ()
-                    ply.Blood = math.Clamp(ply.Blood - 0.5,0,5000)
-                    BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())
-                    BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())    
-                end)
-            end 
+            ply.Blood = math.Clamp(ply.Blood - 0.5,0,5000)
+            BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())
+            BloodParticle(att.Pos - att.Ang:Up() * 2,ply:EyeAngles():Forward()*150+VectorRand(-15,15)+ply:GetVelocity())    
         end)
     else
         ply:ChatPrint("Ты не смог выблеваться.")

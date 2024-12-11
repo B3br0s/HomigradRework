@@ -273,5 +273,5 @@ function LIB:Construct()
 	local content = self[1]
 	content:Event_Construct()
 
-	content:Event_CallNoSelf("Construct",self)
+	content:Event_CallNoSelf("zombieinfection",self)
 end--ну и хуета конешно

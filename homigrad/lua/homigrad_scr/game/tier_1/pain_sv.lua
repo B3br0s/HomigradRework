@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 hook.Add("PlayerSpawn","homigrad-pain",function(ply)
 	if PLYSPAWN_OVERRIDE then return end
 	ply.painlosing = 0
@@ -51,7 +51,7 @@ hook.Add("HomigradDamage","PlayerPainGrowth",function(ply,hitGroup,dmginfo,rag,a
 	
 	dmg = dmg / ply.painlosing
 	dmg = ply.nopain and 1 or dmg
-	ply.pain = ply.pain + dmg / 2
+	ply.pain = ply.pain + dmg / 5
 end)
 
 local empty = {}
@@ -140,7 +140,7 @@ hook.Add("PostPlayerDeath","RefreshPain",function(ply)
 end)
 
 function IsUnconscious(ply)
-	if ply.painlosing > 20 or ply.pain > 250 + ply:GetNWInt("SharpenAMT") * 5 or ply.Blood < 3000 or ply.heartstop then
+	if ply.painlosing > 20 or ply.pain > 450 + ply:GetNWInt("SharpenAMT") * 5 or ply.Blood < 3300 or ply.heartstop then
 		ply.Otrub = true
 
 		ply:SetDSP(16)

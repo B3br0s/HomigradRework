@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "homigradcom" then return end
 --[[hook.Add("EntityTakeDamage","GainImpulse",function(ply,dmginfo)
 	local ply = RagdollOwner(ply) or ply
 	local dmg=dmginfo:GetDamage()
@@ -12,7 +12,7 @@ hook.Add("HomigradDamage","ImpulseShock",function(ply,hitGroup,dmginfo)
 	if dmginfo:IsDamageType(DMG_BLAST) then
 		dmg = dmg * 4
 	elseif dmginfo:IsDamageType(DMG_VEHICLE+DMG_CRUSH) and dmg > 5 then
-		dmg = dmg * 0.05
+		dmg = dmg
 	elseif dmginfo:IsDamageType(DMG_BURN+DMG_SHOCK+DMG_BUCKSHOT) then
 		dmg = dmg * 6
 	elseif dmginfo:IsDamageType(DMG_BLAST+DMG_CLUB+DMG_GENERIC+DMG_SLASH) then
@@ -20,7 +20,6 @@ hook.Add("HomigradDamage","ImpulseShock",function(ply,hitGroup,dmginfo)
 	elseif dmginfo:IsDamageType(DMG_NERVEGAS+DMG_DROWN) then
 		dmg = 0
 	else
-		dmg = dmg
 	end
 
 	dmg = ply.nopain and 0.01 or dmg

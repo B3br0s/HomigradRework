@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "hgrework" then return end
 local value,gg
 
 if CLIENT then
@@ -28,7 +28,7 @@ gg = function(ply,mv,value)
 	if roundActiveName == "deathrun" or roundActiveName == "nextbots" or roundActiveName == "eft" then
 	else
 		if ply.isDOZER == true then return end
-		ply:SetRunSpeed(Lerp((ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 0.05 or 1,ply:GetRunSpeed(),(ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 450 or ply:GetWalkSpeed()) + 3.5)
+		ply:SetRunSpeed(Lerp((ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 0.05 or 1,ply:GetRunSpeed(),(ply:IsSprinting()) and 350 or ply:GetWalkSpeed()) + 3.5)
 	end
 
 	mv:SetMaxSpeed(value)

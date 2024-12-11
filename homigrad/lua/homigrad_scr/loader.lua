@@ -1,4 +1,4 @@
-if engine.ActiveGamemode("homigrad") then
+if engine.ActiveGamemode() == "homigradcom" then
 AddCSLuaFile()
 
 hg = hg or {} --homigrad global table hihi

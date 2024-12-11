@@ -1,4 +1,4 @@
-if not engine.ActiveGamemode() == "homigrad" then return end
+if not engine.ActiveGamemode() == "homigradcom" then return end
 local blackListedWeps = {
 	["weapon_hands"] = true
 }
@@ -44,8 +44,8 @@ Gunshuy = {
 	"weapon_xm1014",
 	"bandage",
 	"morphine",
-	"medkit",
-	"painkiller",
+	"med_ifak",
+	"med_ibuprofen",
 	"weapon_physgun",
 	"weapon_kabar",
 	"weapon_bat",

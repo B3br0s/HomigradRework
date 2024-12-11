@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 local PANEL = ents.Reg("v_panel","lib_event",true)
 if not PANEL then return INCLUDE_BREAK end
 
@@ -12,7 +12,7 @@ local CreatePanels = vgui.CreatePanels
 
 PANEL.IsX = true--мы люди икс
 
-PANEL:Event_Add("Construct","register",function(class)
+PANEL:Event_Add("zombieinfection","register",function(class)
     local content = class[1]
     if content.NonRegisterGMOD or class.NonRegisterGMOD then return end
 

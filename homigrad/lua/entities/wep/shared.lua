@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
 

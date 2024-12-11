@@ -53,7 +53,7 @@ function OBJ:Remove(...)
     list[self.ID] = nil
 end
 
-OBJ:Event_Add("Construct","register",function(class)
+OBJ:Event_Add("zombieinfection","register",function(class)
     local content = class[1]
     local className = content.ClassName
 

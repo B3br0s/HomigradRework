@@ -1,11 +1,19 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 util.AddNetworkString("blood particle")
+util.AddNetworkString("blood particleartery")
 util.AddNetworkString("blood particle more")
 util.AddNetworkString("blood particle explode")
 util.AddNetworkString("blood particle headshoot")
+util.AddNetworkString("blood particleHead")
 
 function BloodParticle(pos,vel)
 	net.Start("blood particle")
+	net.WriteVector(pos)
+	net.WriteVector(vel)
+	net.Broadcast()
+end
+function BloodParticleartery(pos,vel)
+	net.Start("blood particleartery")
 	net.WriteVector(pos)
 	net.WriteVector(vel)
 	net.Broadcast()
@@ -26,7 +34,7 @@ function BloodParticleExplode(pos)
 end
 
 function BloodParticleHeadshoot(pos,vel)
-	net.Start("blood particle headshoot")
+	net.Start("blood particleHead")
 	net.WriteVector(pos)
 	net.WriteVector(vel)
 	net.Broadcast()

@@ -1,5 +1,5 @@
 COMMANDS = COMMANDS or {}
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 function COMMAND_FAKEPLYCREATE()
 	local fakePly = {}
 

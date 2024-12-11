@@ -1,0 +1,466 @@
+local function GetFriends(play)
+    
+    local huy = ""
+
+    for i, ply in pairs(homicide.t) do
+        if play == ply then continue end
+        huy = huy .. ply:Name() .. ", "
+    end
+
+    return huy
+end
+
+util.AddNetworkString("SelectedTraitorClass")
+util.AddNetworkString("ClassTraitor")
+
+net.Receive("SelectedTraitorClass",function(len,ply)
+    local Class = net.ReadString()
+
+    ply.TClass = Class
+
+    ply:StripWeapons()
+
+    ply.AllowSpawn = true
+    ply:Give("weapon_hands")
+    ply.AllowSpawn = false
+
+    ply:SelectWeapon("weapon_hands")
+
+    if Class == "Defoko" then
+    ply.AllowSpawn = true
+    local wep = ply:Give("weapon_p22",true)
+    wep:SetClip1(wep:GetMaxClip1())
+    ply:GiveAmmo(wep:GetMaxClip1(),wep.Primary.Ammo,true)
+    ply:Give("weapon_sog",true)
+    ply:Give("weapon_hg_t_vxpoison",true)
+    ply:Give("weapon_hg_t_syringepoison",true)
+    ply:Give("weapon_hidebomb",true)
+    ply:Give("weapon_rgd5",true)
+    ply:Give("weapon_saltsmoke",true)
+    ply.AllowSpawn = false
+    elseif Class == "Assassin" then
+    ply.AllowSpawn = true
+    ply:Give("weapon_fiberwire",true)
+    ply:Give("weapon_hg_t_syringepoison",true)
+    ply.CanSvoratSheu = true
+    ply.AllowSpawn = false
+    elseif Class == "Specter" then
+    ply.AllowSpawn = true
+    local wep = ply:Give("weapon_hk_usps",true)
+    wep:SetClip1(wep:GetMaxClip1())
+    ply:GiveAmmo(wep:GetMaxClip1(),wep.Primary.Ammo,true)
+    ply:Give("weapon_saltsmoke",true)
+    ply:Give("weapon_taiga",true)
+    ply.AllowSpawn = false
+    elseif Class == "Hunter" then 
+    ply.AllowSpawn = true
+    local wep = ply:Give("weapon_kar98k",true)
+    wep:SetClip1(wep:GetMaxClip1())
+    ply:GiveAmmo(wep:GetMaxClip1(),wep.Primary.Ammo,true)
+    ply:Give("weapon_hatchet",true)  
+    ply:Give("weapon_sog",true)
+    ply:Give("weapon_hg_t_vxpoison",true)
+    ply:Give("weapon_hg_t_syringepoison",true)
+    ply:Give("weapon_hg_beartrap",true) 
+    ply.AllowSpawn = false
+    end
+end)
+
+COMMANDS.homicide_get = {function(ply,args)
+    if not ply:IsAdmin() then return end
+
+    local role = {{},{}}
+
+    for i,ply in pairs(team.GetPlayers(1)) do
+        if ply.roleT then table.insert(role[1],ply) end
+        if ply.roleCT then table.insert(role[2],ply) end
+    end
+
+    net.Start("homicide_roleget")
+    net.WriteTable(role)
+    net.Send(ply)
+end}
+
+local function makeT(ply)
+    ply.roleT = true --Игрока не существует. Выдаёт из-за этого ошибку в первый раз.
+    table.insert(homicide.t,ply)
+    ply.TClass = " "
+
+    if homicide.roundType < 3 then
+    net.Start("ClassTraitor")
+    net.Send(ply)
+    end
+
+    timer.Simple(5,function() ply.allowFlashlights = true end)
+
+    AddNotificate( ply,"Вы предатель.")
+
+    if #GetFriends(ply) >= 1 then
+        timer.Simple(1,function() ply:ChatPrint(ply,"Ваши товарищи " .. GetFriends(ply)) AddNotificate( ply,"Ваши товарищи " .. GetFriends(ply)) end)
+    end
+end
+
+local function makeCT(ply)
+    ply.roleCT = true
+    table.insert(homicide.ct,ply)
+    if homicide.roundType == 1 then
+        if math.random(1,2) == 1 then
+            wep = ply:Give("weapon_r870",true)
+        else
+            wep = ply:Give("weapon_kar98k",true)
+        end
+        wep:SetClip1(wep:GetMaxClip1())
+        AddNotificate( ply,"Вы невиновный с крупногабаритным огнестрельным оружием.")
+    elseif homicide.roundType == 2 then
+        wep = ply:Give("weapon_px4",true)
+        wep:SetClip1(wep:GetMaxClip1())
+        AddNotificate( ply,"Вы невиновный со скрытым огнестрельным оружием.")
+    elseif homicide.roundType == 3 then
+        ply:Give("weapon_pbat",true)
+        ply:Give("weapon_handcuffs",true)
+        AddNotificate( ply,"Вы полицейский под прикрытием. Вам выдана дубинка\nВаша задача: связать преступника.")
+    elseif homicide.roundType == 4 then
+        local wep = ply:Give("weapon_r8",true)
+        wep:SetClip1(wep:GetMaxClip1())
+        AddNotificate( ply,"Вы невиновный ковбой с R8 в кобуре.")
+    elseif homicide.roundType == 5 then
+        local wep = ply:Give("weapon_phonehomigx",true)
+        AddNotificate( ply,"Вы невиновный с телефоном.")
+    else
+    end
+
+end
+
+COMMANDS.russian_roulette = {function(ply,args)
+    if not ply:IsAdmin() then return end
+
+	for i,plya in pairs(player.GetListByName(args[1]) or {ply}) do
+		local wep = plya:Give("weapon_r8",true)
+        wep:SetClip1(1)
+        wep:RollDrum()
+	end
+end}
+
+function homicide.Spawns()
+    local aviable = {}
+
+    for i,ent in pairs(ents.FindByClass("info_player*")) do
+        table.insert(aviable,ent:GetPos())
+    end
+
+    for i,ent in pairs(ents.FindByClass("info_node*")) do
+        table.insert(aviable,ent:GetPos())
+    end
+
+    for i,point in pairs(ReadDataMap("spawnpointst")) do
+        table.insert(aviable,point)
+    end
+
+    for i,point in pairs(ReadDataMap("spawnpointsct")) do
+        table.insert(aviable,point)
+    end
+
+    return aviable
+end
+
+sound.Add({
+	name = "police_arrive",
+	channel = CHAN_STATIC,
+	volume = 1.0,
+	level = 80,
+	pitch = 100,
+	sound = "snd_jack_hmcd_policesiren.wav"
+})
+
+function homicide.StartRoundSV()
+    tdm.RemoveItems()
+    tdm.DirectOtherTeam(2,1,1)
+
+    homicide.police = false
+	roundTimeStart = CurTime()
+	roundTime = math.max(math.ceil(#player.GetAll() / 2),1) * 60
+
+    if homicide.roundType == 3 then
+        roundTime = roundTime * 1.25
+    end
+
+    roundTimeLoot = 5
+
+    for i,ply in pairs(team.GetPlayers(2)) do ply:SetTeam(1) end
+    --for i,ply in pairs(team.GetPlayers(2)) do ply:SetTeam(1) end
+
+    homicide.ct = {}
+    homicide.t = {}
+
+    local countT = 0
+    local countCT = 0
+
+    local available = homicide.Spawns()
+    tdm.SpawnCommand(PlayersInGame(), available, function(ply)
+        ply.roleT = false
+        ply.roleCT = false
+
+        if ply.forceT then
+            ply.forceT = nil
+            countT = countT + 1
+            makeT(ply)
+        end
+
+        if ply.forceCT then
+            ply.forceCT = nil
+            countCT = countCT + 1
+            makeCT(ply)
+        end
+    end)
+
+    local players = PlayersInGame()
+    local count = math.max(math.random(1, math.ceil(#players / 16)), 1) - countT
+
+    for i = 1, count do
+        local ply = table.Random(players)
+        table.RemoveByValue(players, ply)
+        makeT(ply)
+    end
+
+    count = math.max(math.random(1, math.ceil(#players / 16)), 1) - countCT
+
+    for i = 1, count do
+        local ply = table.Random(players)
+        table.RemoveByValue(players, ply)
+        makeCT(ply)
+    end
+
+
+    timer.Simple(0,function()
+        for i,ply in pairs(homicide.t) do
+            if not IsValid(ply) then table.remove(homicide.t,i) continue end
+
+            homicide.SyncRole(ply,1)
+        end
+
+        for i,ply in pairs(homicide.ct) do
+            if not IsValid(ply) then table.remove(homicide.ct,i) continue end
+
+            homicide.SyncRole(ply,2)
+        end
+    end)
+
+    tdm.CenterInit()
+
+    return {roundTimeLoot = roundTimeLoot}
+end
+
+local aviable = ReadDataMap("spawnpointsct")
+
+COMMANDS.forcepolice = {function(ply)
+    if not ply:IsAdmin() then PrintMessage(3,"Пошел нахуй, ОПку не взломал еще.") return end
+    homicide.police = false
+
+    roundTime = 0
+end}
+
+function homicide.RoundEndCheck()
+    tdm.Center()
+
+	local TAlive = tdm.GetCountLive(homicide.t)
+	local Alive = tdm.GetCountLive(team.GetPlayers(1),function(ply) if ply.roleT or ply.isContr then return false end end)
+
+    if roundTimeStart + roundTime < CurTime() then
+		if not homicide.police then
+			homicide.police = true
+            if homicide.roundType == 1 then
+                --PrintMessage(3,"Спецназ приехал.")
+                PrintMessage(3,"SWAT Arrived.")
+            else
+                --PrintMessage(3,"Полиция приехала.")
+                PrintMessage(3,"Police Arrived.")
+            end
+
+			local aviable = ReadDataMap("spawnpointsct")
+            local ctPlayers = tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() and not ply.roleT and ply:Team() ~= 1002 end)
+			
+            local playsound = true
+            tdm.SpawnCommand(ctPlayers,aviable,function(ply)
+                timer.Simple(0,function()
+                    if homicide.roundType == 1 then
+                        ply:SetPlayerClass("contr")
+                    else
+                        ply:SetPlayerClass("police")
+                    end
+                    if playsound then
+                        ply:EmitSound("police_arrive")
+                        playsound = false
+                    end
+                end)
+            end)
+			
+		end
+	end
+
+	if TAlive == 0 and Alive == 0 then EndRound(1) return end
+
+	if TAlive == 0 then EndRound(2) end
+	if Alive == 0 then EndRound(1) end
+end
+
+function homicide.EndRound(winner)
+    --if homicide.t and #homicide.t > 0 and homicide.roundType != 5 then
+    --    PrintMessage(3,(winner == 1 and "Победа предателей." or winner == 2 and "Победа невиновых." or "Ничья"))
+    --    PrintMessage(3,#homicide.t > 1 and ("Трейторами были: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("Трейтором был: " .. homicide.t[1]:Name()))
+    --elseif homicide.t and #homicide.t > 0 and homicide.roundType == 5 then
+    --    PrintMessage(3,(winner == 1 and "Победа Серийных Убийц." or winner == 2 and "Победа невиновых." or "Ничья"))
+    --end
+    if homicide.t and #homicide.t > 0 and homicide.roundType != 5 then
+        PrintMessage(3,(winner == 1 and "Traitors Wins." or winner == 2 and "All traitors were stopped." or "Tie"))
+        PrintMessage(3,#homicide.t > 1 and ("The traitors were: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("Traitor was: " .. homicide.t[1]:Name()))
+    elseif homicide.t and #homicide.t > 0 and homicide.roundType == 5 then
+        PrintMessage(3,(winner == 1 and "Serial Killers Wins." or winner == 2 and "Serial Killer was stopped." or "Tie"))
+    end
+end
+
+local randomsnaryaga = {
+    "STEAM_0:1:526713154"
+}
+
+local function Randomiza(ply)
+        local given = false
+        local selectedCategory = "Оружие: Ближний Бой"
+        
+        local function GetWeaponsByCategory(category)
+            local weaponsByCategory = {}
+        
+            for _, weapon in pairs(weapons.GetList()) do
+                if weapon.Category == category then
+                    table.insert(weaponsByCategory, weapon.ClassName)
+                end
+            end
+        
+            return weaponsByCategory
+        end
+        
+        local weaponsInCategory = GetWeaponsByCategory(selectedCategory)
+
+        timer.Simple(0.5,function ()
+        local wep = ply:Give(table.Random(weaponsInCategory))     
+        wep:SetClip1(wep:GetMaxClip1())
+        end) 
+end
+
+local function CheckRandomEquip(ply)
+    local given = false
+    if table.HasValue(randomsnaryaga,ply:SteamID()) then 
+        local selectedCategory = "Оружие: Пистолеты"
+        
+        local function GetWeaponsByCategory(category)
+            local weaponsByCategory = {}
+        
+            for _, weapon in pairs(weapons.GetList()) do
+                if weapon.Category == category then
+                    if weapon.Primary.Automatic == false and not weapon.NumBullet and weapon.HoldType == "revolver" and weapon.ClassName != "weapon_p22" and homicide.roundType != 5 then
+                    table.insert(weaponsByCategory, weapon.ClassName)
+                    end
+                end
+            end
+        
+            return weaponsByCategory
+        end
+        
+        local weaponsInCategory = GetWeaponsByCategory(selectedCategory)
+
+        timer.Simple(0.5,function ()
+        local wep = ply:Give(table.Random(weaponsInCategory))     
+        wep:SetClip1(wep:GetMaxClip1())
+        end) 
+    end
+end
+
+
+
+local empty = {}
+
+function homicide.PlayerSpawn(ply,teamID)
+    local teamTbl = homicide[homicide.teamEncoder[teamID]]
+    local color = teamID == 1 and Color(math.random(55,165),math.random(55,165),math.random(55,165)) or teamTbl[2]
+
+	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
+    ply:SetPlayerColor(color:ToVector())
+
+    --CheckRandomEquip(ply)
+
+    --Randomiza(ply)
+
+    ply.allowFlashlights = false
+
+	ply:Give("weapon_hands")
+    timer.Simple(0,function() 
+        ply.allowFlashlights = false
+    if homicide.roundType == 4 then
+        local wep = ply:Give("weapon_r8")
+        ply:GiveAmmo(3*8, ".44 Remington Magnum", true)
+        wep:SetClip1(8)
+    end end)
+end
+
+function homicide.PlayerInitialSpawn(ply)
+    ply:SetTeam(1)
+end
+
+function homicide.PlayerCanJoinTeam(ply,teamID)
+    if ply:IsAdmin() then
+        if teamID == 2 then ply.forceCT = nil ply.forceT = true ply:ChatPrint("You will be traitor next round.") return false end
+        if teamID == 3 then ply.forceT = nil ply.forceCT = true ply:ChatPrint("You will be innocent with a firearm.") return false end
+    else
+        if teamID == 2 or teamID == 3 then ply:ChatPrint("no :3") return false end
+    end
+
+    return true
+end
+
+util.AddNetworkString("homicide_roleget")
+
+function homicide.SyncRole(ply,teamID)
+    local role = {{},{}}
+
+    for i,ply in pairs(team.GetPlayers(1)) do
+        if teamID ~= 2 and ply.roleT then table.insert(role[1],ply) end
+        if teamID ~= 1 and ply.roleCT then table.insert(role[2],ply) end
+    end
+
+    net.Start("homicide_roleget")
+    net.WriteTable(role)
+    net.Send(ply)
+end
+
+function homicide.PlayerDeath(ply,inf,att) return false end
+
+local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
+local uncommon = {"medkit","weapon_hammer","weapon_per4ik","painkiller"}
+local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_r8","weapon_minu14"}
+
+function homicide.ShouldSpawnLoot()
+if roundTimeStart + roundTimeLoot - CurTime() > 0 then return false end
+local chance = math.random(100)
+if chance < 3 and not homicide.roundType == 3 then
+    return true,rare[math.random(#rare)],"legend"
+elseif chance < 20 then
+    return true,uncommon[math.random(#uncommon)],"veryrare"
+elseif chance < 60 then
+    return true,common[math.random(#common)],"common"
+else
+    return false
+end
+--else
+    --return true
+end
+
+function homicide.ShouldDiscordOutput(ply,text)
+    if ply:Team() ~= 1002 and ply:Alive() then return false end
+end
+
+function homicide.ShouldDiscordInput(ply,text)
+    if not ply:IsAdmin() then return false end
+end
+
+function homicide.KarmaLogic(ply,att,dmgInfo)
+    return ply.roleT == att.roleT
+end

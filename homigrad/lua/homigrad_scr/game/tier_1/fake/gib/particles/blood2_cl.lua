@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
     bloodparticels2 = bloodparticels2 or {}
     local bloodparticels = bloodparticels2
     

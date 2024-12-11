@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() == "homigradcom" then
 PickTable = {}
 PickLerp = {}
 --[[hook.Add( "HUDWeaponPickedUp", "WeaponPickedUp", function( weapon )
