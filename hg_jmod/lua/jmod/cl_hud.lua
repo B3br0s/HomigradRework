@@ -21,7 +21,7 @@ hook.Add("HUDPaintBackground", "JMOD_HUDBG", function()
 	if ply.EZarmor then
 
 		local ArmorMaskmats = ply.EZarmor.mskmats
-		if ArmorMaskmats and not(table.IsEmpty(ArmorMaskmats)) and Alive and not ThirdPerson then
+		if ArmorMaskmats and not(table.IsEmpty(ArmorMaskmats)) and Alive then
 
 			local Col = render.GetLightColor(EyePos())
 			for id, maskMat in pairs(ArmorMaskmats) do -- TODO: Sort by slot relevance

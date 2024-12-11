@@ -30,12 +30,12 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Slot					= 2
     SWEP.SlotPos				= 1
 
-    SWEP.Reload1 = "csgo/weapons/tec9/tec9_clipout.wav"
-    SWEP.Reload2 = "csgo/weapons/tec9/tec9_clipin.wav"
-    SWEP.Reload3 = "csgo/weapons/tec9/tec9_boltpull.wav"
-    SWEP.Reload4 = "csgo/weapons/tec9/tec9_boltrelease.wav"
+    SWEP.Reload1 = "arccw_go/tec9/tec9_clipout.wav"
+    SWEP.Reload2 = "arccw_go/tec9/tec9_clipin.wav"
+    SWEP.Reload3 = "arccw_go/tec9/tec9_boltpull.wav"
+    SWEP.Reload4 = "arccw_go/tec9/tec9_boltrelease.wav"
 
-    SWEP.DeploySound = "csgo/weapons/usp/usp_draw.wav"
+    SWEP.DeploySound = "arccw_go/usp/usp_draw.wav"
 
     SWEP.SlideBone = "Bone02"
     SWEP.SlideVector = Vector(-5.7, 0, 0.5)

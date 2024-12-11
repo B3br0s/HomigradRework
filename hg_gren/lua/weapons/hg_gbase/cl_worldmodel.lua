@@ -55,38 +55,6 @@ if CLIENT then
         end
     end
 
-    function SWEP:DrawClientModel()
-        if not IsValid(self.ClientModel) or not IsValid(self:GetOwner()) then return end
-        local owner = self:GetOwner()
-        
-        if owner:GetActiveWeapon() ~= self or owner:GetMoveType() == MOVETYPE_NOCLIP then
-            self.ClientModel:SetNoDraw(true)
-            return
-        end
-
-        local attachmentIndex = owner:LookupAttachment("anim_attachment_rh")
-        if attachmentIndex == 0 then return end
-
-        local attachment = owner:GetAttachment(attachmentIndex)
-        if not attachment then return end
-
-        local Pos = attachment.Pos
-        local Ang = attachment.Ang
-
-        Pos:Add(Ang:Forward() * (self.CorrectPosX or 0))
-        Pos:Add(Ang:Right() * (self.CorrectPosY or 0))
-        Pos:Add(Ang:Up() * (self.CorrectPosZ or 0))
-
-        Ang:RotateAroundAxis(Ang:Right(), self.CorrectAngPitch or 0)
-        Ang:RotateAroundAxis(Ang:Up(), self.CorrectAngYaw or 0)
-        Ang:RotateAroundAxis(Ang:Forward(), self.CorrectAngRoll or 0)
-
-        self.ClientModel:SetPos(Pos)
-        self.ClientModel:SetAngles(Ang)
-        self.ClientModel:SetModelScale(self.CorrectSize or 1)
-        self.ClientModel:SetNoDraw(false)
-
-        self:SetNoDraw(true)
-        self.ClientModel:DrawModel()
+    function SWEP:DrawClientModel()    
     end
 end

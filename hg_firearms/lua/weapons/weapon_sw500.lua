@@ -34,7 +34,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
     SWEP.HammerSound = "zcitysnd/sound/weapons/revolver/handling/revolver_cock_hammer_ready.wav"
 
-    SWEP.Reload1 = "csgo/weapons/revolver/revolver_siderelease.wav"
+    SWEP.Reload1 = "arccw_go/revolver/revolver_siderelease.wav"
     SWEP.Reload2 = "zcitysnd/sound/weapons/revolver/handling/revolver_dump_rounds_03.wav"
     SWEP.Reload3 = "zcitysnd/sound/weapons/revolver/handling/revolver_speed_loader_insert_01.wav"
     SWEP.Reload4 = "zcitysnd/sound/weapons/revolver/handling/revolver_close_chamber.wav"

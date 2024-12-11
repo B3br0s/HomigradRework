@@ -14,7 +14,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Automatic		= false
     SWEP.Primary.Ammo			= "12/70 beanbag"
     SWEP.Primary.Cone = 0.01
-    SWEP.Primary.Damage = 3
+    SWEP.Primary.Damage = 15
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = {"zcitysnd/sound/weapons/mosin/mosin_fp.wav"}
     SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/mosin/mosin_dist.wav"

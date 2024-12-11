@@ -1230,6 +1230,8 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	if ply:GetNWBool("Suiciding") then
 		if SERVER then
 			ply.KillReason = "killyourself"
+			ply.LastDMGInfo = dmgInfo
+			ply.LastHitBoneName = "ValveBiped.Bip01_Head1"
 			ply:DropWeapon1()
 			local dmgInfo = DamageInfo()
 			dmgInfo:SetAttacker(ply)
@@ -1238,10 +1240,9 @@ function SWEP:FireBullet(dmg, numbul, spread)
 			dmgInfo:SetDamageType(DMG_BULLET)
 			dmgInfo:SetDamageForce(shootDir * 1024)
 			dmgInfo:SetDamagePosition(ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1")))
-			ply:TakeDamageInfo(dmgInfo)
-
 			ply.LastDMGInfo = dmgInfo
 			ply.LastHitBoneName = "ValveBiped.Bip01_Head1"
+			ply:TakeDamageInfo(dmgInfo)
 			
 		end
 	elseif not self:GetOwner():IsNPC() then
@@ -1444,14 +1445,17 @@ function SWEP:IsReloaded()
 end
 
 function SWEP:IsScope()
-	local ply = self:GetOwner()
-	if ply:IsNPC() then return end
+    local ply = self:GetOwner()
+    
+    if not IsValid(ply) or ply:IsNPC() then return end
 
-	if self:IsLocal() or SERVER then
-		return not ply:IsSprinting() and ply:KeyDown(IN_ATTACK2) and not self:IsReloaded()
-	else
-		return self:GetNWBool("IsScope")
-	end
+    if not ply:Alive() then return end
+
+    if self:IsLocal() or SERVER then
+        return not ply:IsSprinting() and ply:KeyDown(IN_ATTACK2) and not self:IsReloaded()
+    else
+        return self:GetNWBool("IsScope")
+    end
 end
 
 if SERVER then
@@ -1869,7 +1873,7 @@ function SWEP:Holster( wep )
 		self:GetOwner():EmitSound("homigrad/player/holster"..math.random(1,3)..".wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
 	end
 
-	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
+	if not IsValid(ply) or not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Hand" ), Angle( 0,0,0 ) )
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_Forearm" ), Angle( 0,0,0 ))
 	ply:ManipulateBoneAngles( ply:LookupBone( "ValveBiped.Bip01_R_UpperArm" ),Angle( 0,0,0 ))

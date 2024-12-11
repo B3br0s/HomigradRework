@@ -7,8 +7,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Category 				= "Оружие: Пулемёты"
     SWEP.Spawnable 				= true
     SWEP.AdminOnly 				= false
-    SWEP.ViewModel				= "models/weapons/csgo/weapons/v_mach_negev.mdl"
-    SWEP.WorldModel				= "models/weapons/csgo/weapons/v_mach_negev.mdl"
+    SWEP.ViewModel				= "models/weapons/arccw_go/v_mach_negev.mdl"
+    SWEP.WorldModel				= "models/weapons/arccw_go/v_mach_negev.mdl"
     
     SWEP.Primary.ClipSize		= 100
     SWEP.Primary.DefaultClip	= 100
@@ -17,8 +17,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 35
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"csgo/weapons/negev/negev_01.wav","csgo/weapons/negev/negev_02.wav","csgo/weapons/negev/negev_05.wav"}
-    SWEP.Primary.SoundFar = "csgo/weapons/negev/negev-1-distant.wav"
+    SWEP.Primary.Sound = {"arccw_go/negev/negev_01.wav","arccw_go/negev/negev_02.wav","arccw_go/negev/negev_05.wav"}
+    SWEP.Primary.SoundFar = "arccw_go/negev/negev-1-distant.wav"
     SWEP.ReloadTime = 2.4
     SWEP.TwoHands = true
     SWEP.ReloadEmpty = true
@@ -34,11 +34,11 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.SlotPos				= 0
 
     SWEP.Reload1 = "homigrad/france/ineedabullets2.wav"
-    SWEP.Reload2 = "csgo/weapons/m249/m249_coverdown.wav"
-    SWEP.Reload3 = "csgo/weapons/m249/m249_coverup.wav"
-    SWEP.Reload4 = "csgo/weapons/negev/negev_pump.wav"
+    SWEP.Reload2 = "arccw_go/m249/m249_coverdown.wav"
+    SWEP.Reload3 = "arccw_go/m249/m249_coverup.wav"
+    SWEP.Reload4 = "arccw_go/negev/negev_pump.wav"
 
-    SWEP.DeploySound = "csgo/weapons/negev/negev_draw.wav"
+    SWEP.DeploySound = "arccw_go/negev/negev_draw.wav"
 
     SWEP.SlideBone = "v_weapon.chargehandle"
     SWEP.SlideVector = Vector(0, 0, -6)  

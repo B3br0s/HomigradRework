@@ -110,8 +110,7 @@ end
 function SpawnNigErmany()
 	if not gangrazborki.police then
 	gangrazborki.police = true
-	--PrintMessage(3,"На звуки выстрелов приехала полиция.")
-	PrintMessage(3,"Police arrived at the sound of gunshots.")
+	PrintMessage(3,"На звуки выстрелов приехала полиция.")
 	for i, ply in ipairs( player.GetAll() ) do
 		if not ply:Alive() and ply:Team() != 1002 then
 			ply:Spawn()
@@ -143,11 +142,11 @@ end
 function gangrazborki.EndRoundMessage(winner,textNobody)
 	local tbl = TableRound()
 	if winner == 2 and not gangrazborki.police and tbl.blue[1] then
-	PrintMessage(3,"Bloods Have Taken Over Crips Territory.")
+	PrintMessage(3,"Bloods захватили территорию Crips.")
 	elseif winner == 1 and not gangrazborki.police and tbl.red[1] then
-	PrintMessage(3,"The Crips have defended their turf.")
+	PrintMessage(3,"Crips отстояли свою территорию")
 	elseif gangrazborki.police then
-	PrintMessage(3,"Both gangs retreat as police arrive.")
+	PrintMessage(3,"Обе банды отступают из за прибытия полиции.")
 	else
 	end
 end

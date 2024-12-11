@@ -16,8 +16,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 35
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"csgo/weapons/m249/m249-1.wav"}
-    SWEP.Primary.SoundFar = "csgo/weapons/negev/negev-1-distant.wav"
+    SWEP.Primary.Sound = {"arccw_go/m249/m249-1.wav"}
+    SWEP.Primary.SoundFar = "arccw_go/negev/negev-1-distant.wav"
     SWEP.ReloadTime = 2.4
     SWEP.TwoHands = true
     SWEP.ReloadEmpty = true
@@ -36,7 +36,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Reload3 = "zcitysnd/sound/weapons/m249/handling/m249_boltback.wav"
     SWEP.Reload4 = "zcitysnd/sound/weapons/m249/handling/m249_boltrelease.wav"
 
-    SWEP.DeploySound = "csgo/weapons/negev/negev_draw.wav"
+    SWEP.DeploySound = "arccw_go/negev/negev_draw.wav"
 
     SWEP.SlideBone = nil  
     

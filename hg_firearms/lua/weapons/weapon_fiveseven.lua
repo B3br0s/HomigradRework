@@ -16,8 +16,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 65
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"csgo/weapons/fiveseven/fiveseven_01.wav"}
-    SWEP.Primary.SoundFar = "csgo/weapons/fiveseven/fiveseven-1-distant.wav"
+    SWEP.Primary.Sound = {"arccw_go/fiveseven/fiveseven_01.wav"}
+    SWEP.Primary.SoundFar = "arccw_go/fiveseven/fiveseven-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = false
     SWEP.ShootWait = 0.1
@@ -30,12 +30,12 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Slot					= 2
     SWEP.SlotPos				= 1
 
-    SWEP.Reload1 = "csgo/weapons/fiveseven/fiveseven_clipout.wav"
-    SWEP.Reload2 = "csgo/weapons/fiveseven/fiveseven_clipin.wav"
-    SWEP.Reload3 = "csgo/weapons/fiveseven/fiveseven_slideback.wav"
-    SWEP.Reload4 = "csgo/weapons/fiveseven/fiveseven_sliderelease.wav"
+    SWEP.Reload1 = "arccw_go/fiveseven/fiveseven_clipout.wav"
+    SWEP.Reload2 = "arccw_go/fiveseven/fiveseven_clipin.wav"
+    SWEP.Reload3 = "arccw_go/fiveseven/fiveseven_slideback.wav"
+    SWEP.Reload4 = "arccw_go/fiveseven/fiveseven_sliderelease.wav"
 
-    SWEP.DeploySound = "csgo/weapons/fiveseven/fiveseven_draw.wav"
+    SWEP.DeploySound = "arccw_go/fiveseven/fiveseven_draw.wav"
 
     SWEP.SlideBone = "v_weapon.fiveSeven_slide"
     SWEP.SlideVector = Vector(0, 0, -3)

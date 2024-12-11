@@ -256,11 +256,11 @@ if SERVER then
 
             if sounds then
                 local soundPath = sounds[math.random(#sounds)]
-                ply:EmitSound(soundPath, 50, 100, 1, CHAN_BODY)
+                ply:EmitSound(soundPath, 50, 100, 0.4, CHAN_BODY)
             else
                 local fallbackSounds = footstepSounds["concrete"]
                 local soundPath = fallbackSounds[math.random(#fallbackSounds)]
-                ply:EmitSound(soundPath, 50, 100, 1, CHAN_BODY)
+                ply:EmitSound(soundPath, 50, 100, 0.4, CHAN_BODY)
             end
         end
     end

@@ -262,7 +262,7 @@ function JMod.LocationalDmgHandling(ply, hitgroup, dmg)
 			end
 		end
 
-		Mul = (Mul * (1 - Protection)) / JMod.Config.ArmorProtectionMult
+		Mul = (Mul * (1 - Protection)) / (JMod.Config.ArmorProtectionMult or 1.2)
 
 		-- if there's no armor on the struck bodypart
 		if NoProtection and JMod.Config.QoL.RealisticLocationalDamage then
@@ -435,7 +435,7 @@ function JMod.RemoveArmorByID(ply, ID, broken)
 	timer.Simple(math.Rand(0, .5), function()
 		if broken then
 			ply:EmitSound("snds_jack_gmod/armorbreak.ogg", 60, math.random(80, 120))
-			ply:PrintMessage(HUD_PRINTTALK, Info.name .. " has been destroyed")
+			ply:PrintMessage(HUD_PRINTTALK, Info.name .. " был сломан.")
 		else
 			if Specs.snds and Specs.snds.uneq then
 				ply:EmitSound(Specs.snds.uneq, 60, math.random(80, 120))

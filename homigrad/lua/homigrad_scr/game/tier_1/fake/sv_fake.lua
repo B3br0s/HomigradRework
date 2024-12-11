@@ -3,7 +3,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 	local EntityMeta = FindMetaTable("Entity")
 
 	local handsarrivetime = 0.34 --rule34
-	local forwardarrivetime = 2
+	local forwardarrivetime = 2.2
 	local backarrivetime = 1
 	local velocititouebat = 40
 
@@ -66,21 +66,21 @@ if engine.ActiveGamemode() == "homigradcom" then
 	}
 
 	bonetohitgroup={ --Хитгруппы костей
-		["ValveBiped.Bip01_Head1"]=1,
-		["ValveBiped.Bip01_R_UpperArm"]=5,
-		["ValveBiped.Bip01_R_Forearm"]=5,
-		["ValveBiped.Bip01_R_Hand"]=5,
-		["ValveBiped.Bip01_L_UpperArm"]=4,
-		["ValveBiped.Bip01_L_Forearm"]=4,
-		["ValveBiped.Bip01_L_Hand"]=4,
-		["ValveBiped.Bip01_Pelvis"]=3,
-		["ValveBiped.Bip01_Spine2"]=2,
-		["ValveBiped.Bip01_L_Thigh"]=6,
-		["ValveBiped.Bip01_L_Calf"]=6,
-		["ValveBiped.Bip01_L_Foot"]=6,
-		["ValveBiped.Bip01_R_Thigh"]=7,
-		["ValveBiped.Bip01_R_Calf"]=7,
-		["ValveBiped.Bip01_R_Foot"]=7
+		["ValveBiped.Bip01_Head1"]=HITGROUP_HEAD,
+		["ValveBiped.Bip01_R_UpperArm"]=HITGROUP_RIGHTARM,
+		["ValveBiped.Bip01_R_Forearm"]=HITGROUP_RIGHTARM,
+		["ValveBiped.Bip01_R_Hand"]=HITGROUP_RIGHTARM,
+		["ValveBiped.Bip01_L_UpperArm"]=HITGROUP_LEFTARM,
+		["ValveBiped.Bip01_L_Forearm"]=HITGROUP_LEFTARM,
+		["ValveBiped.Bip01_L_Hand"]=HITGROUP_LEFTARM,
+		["ValveBiped.Bip01_Pelvis"]=HITGROUP_STOMACH,
+		["ValveBiped.Bip01_Spine2"]=HITGROUP_CHEST,
+		["ValveBiped.Bip01_L_Thigh"]=HITGROUP_LEFTLEG,
+		["ValveBiped.Bip01_L_Calf"]=HITGROUP_LEFTLEG,
+		["ValveBiped.Bip01_L_Foot"]=HITGROUP_LEFTLEG,
+		["ValveBiped.Bip01_R_Thigh"]=HITGROUP_RIGHTLEG,
+		["ValveBiped.Bip01_R_Calf"]=HITGROUP_RIGHTLEG,
+		["ValveBiped.Bip01_R_Foot"]=HITGROUP_RIGHTLEG
 	}
 
 	if SERVER then
@@ -439,11 +439,6 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 	function FakeBullseyeTrigger(rag,owner)
 		if not IsValid(rag.bull) then return end
-		--[[for i,ent in pairs(ents.GetAll())do
-			if(ent:IsNPC() and ent:Disposition(owner)==D_HT)then
-				ent:AddEntityRelationship(rag.bull,D_HT,0)
-			end
-		end--]]
 	end
 
 	hook.Add("OnEntityCreated","hg-bullseye",function(ent)
@@ -455,7 +450,6 @@ if engine.ActiveGamemode() == "homigradcom" then
 				end
 			end
 		end
-		--timer.Simple(0.3,function()
 			if not IsValid(ent) then return end
 
 			local pos,ang = ent:GetPos(),ent:GetAngles()
@@ -471,7 +465,6 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 				ent:Remove()
 			end
-		--end)
 	end)
 
 	hook.Add("Think","FakedShoot",function() --функция стрельбы лежа
@@ -491,30 +484,8 @@ if engine.ActiveGamemode() == "homigradcom" then
 			local ent = ply:GetEyeTrace().Entity
 			if ent:IsPlayer() then
 				ply:ChatPrint(ent:Nick(),ent:EntIndex())
-				--[[PrintMessage(HUD_PRINTTALK,tostring(ply:Name()).." связал "..tostring(ent:Name()))
-				ent:StripWeapons()
-				ent:Give("weapon_hands")
-				Faking(ent)
-				timer.Simple(0,function()
-					local enta = ent:GetNWEntity("Ragdoll")
-					enta:GetPhysicsObjectNum(5):SetPos(enta:GetPhysicsObjectNum(7):GetPos())
-					for i=1,3 do
-						constraint.Rope(enta,enta,5,7,Vector(0,0,0),Vector(0,0,0),-2,2,0,4,"cable/rope.vmt",false,Color(255,255,255))
-					end
-				end)
-				--ent.Hostage = true--]]
 			elseif ent:IsRagdoll() then
 				ply:ChatPrint(IsValid(RagdollOwner(ent)) and RagdollOwner(ent):Name())
-				--[[--ent:StripWeapons()
-				--ent:Give("weapon_hands")
-				--Faking(ent)
-				timer.Simple(0,function()
-					local enta = ent
-					enta:GetPhysicsObjectNum(5):SetPos(enta:GetPhysicsObjectNum(7):GetPos())
-					for i=1,3 do
-						constraint.Rope(enta,enta,5,7,Vector(0,0,0),Vector(0,0,0),-2,2,0,4,"cable/rope.vmt",false,Color(255,255,255))
-					end
-				end)--]]
 			end
 			return ""
 		end
@@ -592,7 +563,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 		if ply.IsBleeding or ply.Bloodlosing > 0 or ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER+DMG_BUCKSHOT) then
 			rag.IsBleeding=true
-			rag.bloodNext = CurTime()
+			rag.bloodNext = 0
 			rag.Blood = ply.Blood
 			table.insert(BleedingEntities,rag)
 		end
@@ -865,10 +836,8 @@ if engine.ActiveGamemode() == "homigradcom" then
 	end)
 
 	function PlayerMeta:CreateRagdoll(attacker,dmginfo,force) --изменение функции регдолла
-		--if not self:Alive() then return end
 		local rag=self:GetNWEntity("Ragdoll")
 		rag.ExplProof = true
-		--debug.Trace()
 		if IsValid(rag) then
 			if(IsValid(rag.ZacConsLH))then
 				rag.ZacConsLH:Remove()
@@ -885,7 +854,6 @@ if engine.ActiveGamemode() == "homigradcom" then
 		local rag = ents.Create( "prop_ragdoll" )
 		duplicator.DoGeneric( rag, Data )
 		rag:SetModel(self:GetModel())
-		--rag:SetColor(self:GetColor()) --huy sosi garry
 		rag:SetNWVector("plycolor",self:GetPlayerColor())
 		rag:SetSkin(self:GetSkin())
 		rag:Spawn()
@@ -1531,13 +1499,13 @@ if engine.ActiveGamemode() == "homigradcom" then
 						firstnigger = 0
 					end
 					if angs[1] > -85 and angs[1] < 85 then
-					firstnigger = Lerp(0.05,firstnigger,90)
+					firstnigger = Lerp(0.025,firstnigger,90)
 					angs:RotateAroundAxis(angs:Right(),firstnigger)
 					elseif angs[1] < -85 then
-					firstnigger = Lerp(0.05,firstnigger,150)
+					firstnigger = Lerp(0.025,firstnigger,150)
 					angs:RotateAroundAxis(angs:Right(),firstnigger)
 					elseif angs[1] > 85 then
-					firstnigger = Lerp(0.05,firstnigger,0)
+					firstnigger = Lerp(0.025,firstnigger,0)
 					angs:RotateAroundAxis(angs:Right(),firstnigger)
 					end
 					--ply:ChatPrint(firstnigger)
@@ -1547,7 +1515,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					angs2:RotateAroundAxis(angs:Up(),-150)
 					--ply:ChatPrint(ply:EyeAngles()[1])
 					local shadowparams3	 = { --зажать е и крутица
-						secondstoarrive=0.15,
+						secondstoarrive=0.2,
 						pos=spinemain:GetPos(),
 						angle=angs,
 						maxangulardamp=2.5,
@@ -1954,6 +1922,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 	end)
 
 	hook.Add("PlayerUse","nouseinfake",function(ply,ent)
+		if not ply.fake then return end
 		local class = ent:GetClass()
 
 		if class == "prop_physics" or class=="prop_physics_multiplayer" or class == "func_physbox" then

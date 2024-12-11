@@ -71,7 +71,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
             Suppress = true,
 
-            AttModel = "models/weapons/csgo/weapons/atts/supp_monolith.mdl"
+            AttModel = "models/weapons/arccw_go/atts/supp_monolith.mdl"
         },
         ["Eotech553"] = {
             name = "eotech553",

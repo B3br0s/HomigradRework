@@ -16,11 +16,11 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 45
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"csgo/weapons/sg556/sg556_01.wav","csgo/weapons/sg556/sg556_02.wav","csgo/weapons/sg556/sg556_03.wav"}
+    SWEP.Primary.Sound = {"arccw_go/sg556/sg556_01.wav","arccw_go/sg556/sg556_02.wav","arccw_go/sg556/sg556_03.wav"}
     SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/m16a4/m16a4_dist.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = true
-    SWEP.ShootWait = 0.11
+    SWEP.ShootWait = 0.09
     SWEP.HoldType = "ar2"
     SWEP.EmptyBoltOut = false
     SWEP.ShellType = "Rifle"
@@ -31,10 +31,10 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Slot					= 2
     SWEP.SlotPos				= 0
 
-    SWEP.Reload1 = "csgo/weapons/sg556/sg556_clipout.wav"
-    SWEP.Reload2 = "csgo/weapons/sg556/sg556_clipin.wav"
-    SWEP.Reload3 = "csgo/weapons/sg556/sg556_boltforward.wav"
-    SWEP.Reload4 = "csgo/weapons/sg556/sg556_boltback.wav"
+    SWEP.Reload1 = "arccw_go/sg556/sg556_clipout.wav"
+    SWEP.Reload2 = "arccw_go/sg556/sg556_clipin.wav"
+    SWEP.Reload3 = "arccw_go/sg556/sg556_boltforward.wav"
+    SWEP.Reload4 = "arccw_go/sg556/sg556_boltback.wav"
 
     SWEP.DeploySound = "zcitysnd/sound/weapons/ak47/handling/ak47_rattle.wav"
 

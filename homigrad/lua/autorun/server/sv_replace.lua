@@ -11,6 +11,24 @@ local blockedWeapons = {
     ["weapon_crowbar"] = "weaponn_crowbar"
 }
 
+if SERVER then
+    hook.Add("PlayerUse", "Limit Weight", function(ply, ent)
+        local MAX_PICKUP = 80
+        if ent:IsValid() and ent:GetPhysicsObject():IsValid() then
+        if ent:GetClass() == "prop_physics" or ent:GetClass() == "prop_physics_multiplayer" then
+            local phys = ent:GetPhysicsObject()
+            local weight = phys:GetMass()
+
+            if weight > MAX_PICKUP * (ply.Metabolizm or 1) then
+                return false
+            elseif weight < MAX_PICKUP * (ply.Metabolizm or 1) then
+                return true
+            end
+        end
+        end
+    end)
+end
+
 hook.Add("PlayerCanPickupWeapon", "BlockSpecificWeaponsPickup", function(ply, weapon)
     if not IsValid(ply) or not IsValid(weapon) then return end
 

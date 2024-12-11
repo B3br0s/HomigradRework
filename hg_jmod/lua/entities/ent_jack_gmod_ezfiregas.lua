@@ -79,11 +79,11 @@ if SERVER then
 
 					if obj:IsPlayer() then
 						JMod.TryCough(obj)
-						obj.o2 = math.Max(obj.o2-0.15,0)
+						obj.o2 = math.Max(obj.o2-0.4,0)
 					end
 					if obj:IsRagdoll() and RagdollOwner(obj) then
 						JMod.TryCough(RagdollOwner(obj))
-						RagdollOwner(obj).o2 = math.Max(RagdollOwner(obj).o2-0.15,0)
+						RagdollOwner(obj).o2 = math.Max(RagdollOwner(obj).o2-0.4,0)
 					end
 				end
 			end

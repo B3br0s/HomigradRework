@@ -14,10 +14,10 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Automatic		= true
     SWEP.Primary.Ammo			= "9х19 mm Parabellum"
     SWEP.Primary.Cone = 0
-    SWEP.Primary.Damage = 1.5 * 55
+    SWEP.Primary.Damage = 1.5 * 25
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"weapons/mp5k/mp5k_fp.wav"}
-    SWEP.Primary.SoundFar = "weapons/mp5k/mp5k_dist.wav"
+    SWEP.Primary.Sound = {"arccw_go/mp7/mp7_01.wav","arccw_go/mp7/mp7_02.wav","arccw_go/mp7/mp7_03.wav"}
+    SWEP.Primary.SoundFar = "arccw_go/ump45/ump45-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = true
     SWEP.ShootWait = 0.08
@@ -26,8 +26,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.EmptyBoltOut = false
     SWEP.ShellType = "Pistol"
 
-    SWEP.CameraPos = Vector(6.30,6,1)
-    SWEP.CameraAng = Angle(0,15,0)
+    SWEP.CameraPos = Vector(6.30,3,1)
+    SWEP.CameraAng = Angle(0,0,0)
     
     SWEP.Slot					= 2
     SWEP.SlotPos				= 0

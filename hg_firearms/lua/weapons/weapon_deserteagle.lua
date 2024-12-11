@@ -19,8 +19,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Spread = 0
     SWEP.Recoil = 5
     SWEP.Primary.Sound = {"homicide_weapons/hndg_sw686/revolver_fire_01.wav"}
-    SWEP.Primary.SoundFar = "csgo/weapons/elite/elite-1-distant.wav"
-    SWEP.Primary.SuppressedSound = "weapons/galil/galil_suppressed_fp.wav"
+    SWEP.Primary.SoundFar = "arccw_go/elite/elite-1-distant.wav"
+    SWEP.Primary.SuppressedSound = "weapons/darsu_eft/sr25/sr25_fire_outdoor_silenced_close.ogg"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = false
     SWEP.ShootWait = 0.2
@@ -38,7 +38,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Reload3 = "tasty/d50-sliderelease.wav"
     SWEP.Reload4 = ""
 
-    SWEP.DeploySound = "csgo/weapons/usp/usp_draw.wav"
+    SWEP.DeploySound = "arccw_go/usp/usp_draw.wav"
 
     SWEP.SlideBone = "slide"
     SWEP.SlideVector = Vector(0, 0, -3)
@@ -71,7 +71,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
             Suppress = true,
 
-            AttModel = "models/weapons/csgo/weapons/atts/supp_monster.mdl"
+            AttModel = "models/weapons/arccw_go/atts/supp_monster.mdl"
         }
     }
 end

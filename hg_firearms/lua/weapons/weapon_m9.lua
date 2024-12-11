@@ -17,8 +17,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 35
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"csgo/weapons/elite/elite-1.wav"}
-    SWEP.Primary.SoundFar = "csgo/weapons/elite/elite-1-distant.wav"
+    SWEP.Primary.Sound = {"arccw_go/elite/elite-1.wav"}
+    SWEP.Primary.SoundFar = "arccw_go/elite/elite-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = false
     SWEP.ShootWait = 0.1
@@ -31,12 +31,12 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Slot					= 2
     SWEP.SlotPos				= 1
 
-    SWEP.Reload1 = "csgo/weapons/elite/elite_clipout.wav"
-    SWEP.Reload2 = "csgo/weapons/elite/elite_rightclipin.wav"
-    SWEP.Reload3 = "csgo/weapons/elite/elite_sliderelease.wav"
+    SWEP.Reload1 = "arccw_go/elite/elite_clipout.wav"
+    SWEP.Reload2 = "arccw_go/elite/elite_rightclipin.wav"
+    SWEP.Reload3 = "arccw_go/elite/elite_sliderelease.wav"
     SWEP.Reload4 = ""
 
-    SWEP.DeploySound = "csgo/weapons/usp/usp_draw.wav"
+    SWEP.DeploySound = "arccw_go/usp/usp_draw.wav"
 
     SWEP.SlideBone = "Slide"
     SWEP.SlideVector = Vector(0, 2.3, 0)

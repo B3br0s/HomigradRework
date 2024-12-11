@@ -14,7 +14,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Automatic		= false
     SWEP.Primary.Ammo			= "7.62x54 mm"
     SWEP.Primary.Cone = 0
-    SWEP.Primary.Damage = 1.5 * 145
+    SWEP.Primary.Damage = 1.5 * 65
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = {"sounds_zcity/svd/close.wav"}
     SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/m40a1/m40a1_dist.wav"
@@ -26,7 +26,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.ShellType = "Rifle"
 
     SWEP.CameraPos = Vector(5.2,4,0)
-    SWEP.CameraAng = Angle(-5,-20,0)
+    SWEP.CameraAng = Angle(-5,-10,0)
     
     SWEP.Slot					= 2
     SWEP.SlotPos				= 0
@@ -39,7 +39,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.DeploySound = "zcitysnd/sound/weapons/ak47/handling/ak47_rattle.wav"
 
     SWEP.SlideBone = "W_BOLT"
-    SWEP.SlideVector = Vector(-7, 0, 0)
+    SWEP.SlideVector = Vector(-6.5, 0, -0.2)
     
     SWEP.CorrectPosX = 5
     SWEP.CorrectPosY = 1.25
@@ -86,7 +86,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
             LocalPos = Vector(20, 0.5, 0.5),
 
-            OffsetPos = Vector(7, 0, 0.772),
+            OffsetPos = Vector(7,10,1),
 
             Optic = true,
 

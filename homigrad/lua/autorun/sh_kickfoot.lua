@@ -13,9 +13,9 @@ if SERVER then
 
         ply.LastKickTime = CurTime()
 
-        if ply.KickedTimes == 7 then
+        if ply.KickedTimes == 5 then
             ply:ChatPrint("BIG BROTHER IS WATCHING YOU.")
-        elseif ply.KickedTimes > 7 then
+        elseif ply.KickedTimes > 5 then
             Faking(ply)
 
             timer.Simple(0.1, function()
@@ -28,8 +28,8 @@ if SERVER then
                     end)
                 end
                 timer.Simple(1.5, function()
-                    UnFaking(ply)
-                    timer.Simple(0.01, function()
+                    Faking(ply)
+                    timer.Simple(0.02, function()
                         local EffData = EffectData()
                         EffData:SetOrigin(ply:GetPos())
                         util.Effect("eff_jack_gmod_firework", EffData, true, true)
@@ -37,9 +37,10 @@ if SERVER then
                         sound.Play("snd_jack_fireworkpop1.ogg", ply:GetPos(), 100, 100, 1)
                         sound.Play("snds_jack_gmod/firework_pop_crackle.ogg", ply:GetPos(), 100, 100, 1)
                         local dmgay = DamageInfo()
-                        dmgay:SetDamage(1e8)
+                        dmgay:SetDamage(1e8 * 1e8)
                         dmgay:SetDamageType(DMG_CRUSH)
                         dmgay:SetAttacker(ply)
+                        ply.LastHitBoneName = "ValveBiped.Bip01_Spine"
                         ply:TakeDamageInfo(dmgay)
                     end)
                 end)

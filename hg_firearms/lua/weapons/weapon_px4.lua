@@ -35,7 +35,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Reload3 = "zcitysnd/sound/weapons/m9/handling/m9_boltback.wav"
     SWEP.Reload4 = "zcitysnd/sound/weapons/m9/handling/m9_boltrelease.wav"
 
-    SWEP.DeploySound = "csgo/weapons/usp/usp_draw.wav"
+    SWEP.DeploySound = "arccw_go/usp/usp_draw.wav"
 
     SWEP.SlideBone = "ValveBiped.Slide"
     SWEP.SlideVector = Vector(0, 0, -2)

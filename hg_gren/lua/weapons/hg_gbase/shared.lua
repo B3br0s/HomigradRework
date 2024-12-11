@@ -76,21 +76,54 @@ function SWEP:GetPosAng()
 end
 
 function SWEP:DrawWorldModel()
-	if IsValid(self:GetOwner()) then
-		if IsValid(self.ClientModel) then
-			self.ClientModel:SetNoDraw(false)
-			local pos, ang = self:GetPosAng()
-			self.ClientModel:SetPos(pos)
-			self.ClientModel:SetAngles(ang)
-			self.ClientModel:DrawModel()
-		end
-	else
-		if IsValid(self.ClientModel) then
-			self.ClientModel:SetNoDraw(true)
-		end
-		self:DrawModel()
-        self:SetModel(self.ThrownModel)
-	end
+	local owner = self:GetOwner()
+    if IsValid(owner) then
+        if not IsValid(self.ClientModel) then
+            self:CreateClientsideModel()
+            return
+        end
+
+        if owner:GetActiveWeapon() ~= self or owner:GetMoveType() == MOVETYPE_NOCLIP then
+            self.ClientModel:SetNoDraw(true)
+            return
+        end
+
+        local attachmentIndex = owner:LookupAttachment("anim_attachment_rh")
+        if attachmentIndex == 0 then return end
+
+        local attachment = owner:GetAttachment(attachmentIndex)
+        if not attachment then return end
+
+        local Pos = attachment.Pos
+        local Ang = attachment.Ang
+
+        Pos:Add(Ang:Forward() * (self.CorrectPosX or 0))
+        Pos:Add(Ang:Right() * (self.CorrectPosY or 0))
+        Pos:Add(Ang:Up() * (self.CorrectPosZ or 0))
+
+        Ang:RotateAroundAxis(Ang:Right(), self.CorrectAngPitch or 0)
+        Ang:RotateAroundAxis(Ang:Up(), self.CorrectAngYaw or 0)
+        Ang:RotateAroundAxis(Ang:Forward(), self.CorrectAngRoll or 0)
+
+        Ang:Normalize()
+
+        self.ClientModel:SetPos(Pos)
+        self.ClientModel:SetAngles(Ang)
+        self.ClientModel:SetModelScale(self.CorrectSize or 1)
+        self.ClientModel:SetNoDraw(false)
+
+        if self.BodyGroup then
+            for i = 1, #self.BodyGroup do
+                self.ClientModel:SetBodygroup(i, self.BodyGroup[i])
+            end
+        end
+        self.ClientModel:DrawModel()
+    else
+        if IsValid(self.ClientModel) then
+            self.ClientModel:SetNoDraw(true)
+        end
+        self:DrawModel()
+    end
 end
 
 local function getPos(ply,ent)
@@ -155,8 +188,28 @@ end
 function SWEP:ThrowGrenade(ply,force)
     if CLIENT then
     self.ClientModel:Remove()
+    timer.Simple(0.1,function()
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"), Angle(0,0,0), true)
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"), Angle(0,0,0), true)
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"), Angle(0,0,0), true)
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_Spine4"), Angle(0,0, 0), true)
+        
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"), Angle(0,0,0), true)
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"), Angle(0,0,0), true)
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"), Angle(0,0,0), true) 
+    end)
     end
     if SERVER then
+        timer.Simple(0.1,function()
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"), Angle(0,0,0), true)
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"), Angle(0,0,0), true)
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"), Angle(0,0,0), true)
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_Spine4"), Angle(0,0, 0), true)
+            
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"), Angle(0,0,0), true)
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Forearm"), Angle(0,0,0), true)
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"), Angle(0,0,0), true) 
+        end)
         if not self.LeverOut then
         if not self.LeverOut and self.TypeGren != "Smoke" then
         sound.Play("weapons/darsu_eft/grenades/gren_fuze1.ogg",self:GetPos())
@@ -195,9 +248,10 @@ function SWEP:OwnerChanged()
 end
 
 function SWEP:Reload()
+    local ply = self:GetOwner()
     if self.Delay and self.Delay > CurTime() or self.LeverOut or !self.RequiresPin then return end
-    if self:GetOwner():KeyDown(IN_ATTACK2) and not self.PinOut and self.RequiresPin and self.TypeGren != "Flash" then self.Mode = not self.Mode self.ModeText = (self.Mode and "Door Trap" or "Grenade") self.Delay = CurTime() + 1 if CLIENT then self:GetOwner():ChatPrint(self.ModeText) end end
-    if self:GetOwner():KeyDown(IN_ATTACK2) or self.Mode == true then return end
+    if ply:KeyDown(IN_ATTACK2) and not self.PinOut and self.RequiresPin and self.TypeGren != "Flash" then self.Mode = not self.Mode self.ModeText = (self.Mode and "Door Trap" or "Grenade") self.Delay = CurTime() + 1 if CLIENT then ply:ChatPrint(self.ModeText) end end
+    if ply:KeyDown(IN_ATTACK2) or self.Mode == true then return end
     self.Delay = CurTime() + 0.9
     if !self.PinOut then
         self.PinOut = true
@@ -209,11 +263,11 @@ function SWEP:Reload()
             self.Anim1 = false
             self.Anim2 = true
             self.Anim3 = false
-            self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Finger1"),Angle(0,-50,0))
-            self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Finger11"),Angle(0,-40,0))
-            self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Finger12"),Angle(0,-40,0))
-            self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Finger2"),Angle(0,-90,0))
-            self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Finger21"),Angle(0,-40,0))
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Finger1"),Angle(0,-50,0))
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Finger11"),Angle(0,-40,0))
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Finger12"),Angle(0,-40,0))
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Finger2"),Angle(0,-90,0))
+            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Finger21"),Angle(0,-40,0))
             if CLIENT then
                 self:PinOutFunc()
             end
@@ -225,12 +279,12 @@ function SWEP:Reload()
         end)
     else
         if self.TypeGren == "Impact" or self.TypeGren == "Inc" or self.TypeGren == "Smoke" then return end
-        self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Finger1"),Angle(0,70,0))
-        self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Finger11"),Angle(0,30,0))
-        self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Finger12"),Angle(0,20,0))
-        self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Finger2"),Angle(0,70,0))
-        self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Finger21"),Angle(0,30,0))
-        self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Finger22"),Angle(0,20,0))
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger1"),Angle(0,70,0))
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger11"),Angle(0,30,0))
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger12"),Angle(0,20,0))
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger2"),Angle(0,70,0))
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger21"),Angle(0,30,0))
+        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger22"),Angle(0,20,0))
         self:EmitSound("weapons/darsu_eft/grenades/rgd_lever.ogg")
         sound.Play("weapons/darsu_eft/grenades/gren_fuze1.ogg",self:GetPos())
         self.LeverOut = true
@@ -244,7 +298,7 @@ end
 
 function SWEP:PrimaryAttack()
     if CLIENT then return end
-    if self.PinOut and self.RequiresPin then
+    if self.PinOut and self.RequiresPin and not self.Anim1 and not self.Anim2 then
         self:GetOwner():SetAnimation(PLAYER_ATTACK1)
         self:ThrowGrenade(self:GetOwner(),750)
         sound.Play(self.ThrowSound,self:GetPos())
@@ -292,7 +346,7 @@ end
 
 function SWEP:SecondaryAttack()
     if CLIENT then return end
-    if self.PinOut and self.RequiresPin and not self.Mode then
+    if self.PinOut and self.RequiresPin and not self.Mode and not self.Anim1 and not self.Anim2 then
         self:GetOwner():SetAnimation(PLAYER_ATTACK1)
         self:ThrowGrenade(self:GetOwner(),250)
         self:Remove()

@@ -121,7 +121,6 @@ function homicide.Scoreboard_Status(ply)
 end
 
 local red,blue = Color(200,0,10),Color(4, 138, 247)
---local roundTypes = {"Чрезвычайное Положение", "Обычный", "Безоружная Зона", "Дикий Запад","Серийный Убийца"}
 local roundTypes = {"State Of Emergency", "Standart", "Gun-Free Zone", "Wild West","Serial Killer"}
 local roundSound = {"snd_jack_hmcd_disaster.mp3","snd_jack_hmcd_shining.mp3","snd_jack_hmcd_panic.mp3","snd_jack_hmcd_wildwest.mp3","snd_jack_hmcd_halloween.mp3"}
 
@@ -140,17 +139,10 @@ function homicide.HUDPaint_RoundLeft(white2)
         end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),3,0.5)
 
-
-        --[[surface.SetFont("HomigradFontBig")
-        surface.SetTextColor(color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255)
-        surface.SetTextPos(ScrW() / 2 - 40,ScrH() / 2)
-
-        surface.DrawText("Вы " .. name)]]--
         draw.DrawText( "Вы " .. name, "MersText2", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         if lply.roleT and lply.TClass then
         draw.DrawText(lply.TClass, "MersText2", ScrW() / 2, ScrH() / 2 + 50, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         end
-        --draw.DrawText( "Вы " .. name, "HomigradFontBig", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "Homicide | "..roundTypes[roundType], "MersHead1", ScrW() / 2, ScrH() / 8, Color( 16, 168, 250,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
 
         if lply.roleT then --Traitor
@@ -192,22 +184,6 @@ function homicide.HUDPaint_RoundLeft(white2)
     end
 
     local lply_pos = lply:GetPos()
-
-    --[[for i,ply in pairs(player.GetAll()) do
-        local color = ply.roleT and red or ply.roleCT and blue
-        if not color or ply == lply or not ply:Alive() then continue end
-
-        local pos = ply:GetPos() + ply:OBBCenter()
-        local dis = lply_pos:Distance(pos)
-        if dis > 350 then continue end
-
-        local pos = pos:ToScreen()
-        if not pos.visible then continue end
-
-        color.a = 255 * (1 - dis / 350)
-        draw.SimpleText(roundTimeStart, "HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-        draw.SimpleText(ply:Nick(),"HomigradFont",pos.x,pos.y,color,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-    end]]
 end
 
 function homicide.VBWHide(ply,list)

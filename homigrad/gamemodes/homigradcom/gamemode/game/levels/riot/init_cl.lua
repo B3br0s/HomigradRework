@@ -15,9 +15,9 @@ function riot.HUDPaint_RoundLeft(white)
         if playsound then
         end
         lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,255),0.5,0.5)
-        draw.DrawText( "You are an " .. name, "MersText2", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
+        draw.DrawText( "Вы " .. name, "MersText2", ScrW() / 2, ScrH() / 2, Color( color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         draw.DrawText( "RIOT", "MersHead1", ScrW() / 2, ScrH() / 8, Color( 0, 89, 255,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
-        if name == "Police" then
+        if name == "Полиция" then
             draw.DrawText( "Нейтрализуйте беспорядки, старайтесь не убивать людей", "MersRadial", ScrW() / 2, ScrH() / 1.2, Color( 136,155,172,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
             draw.DrawText( "Сохраняйте свои права! Уничтожьте всех тех, кто вас замедлит!", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color(168,94,94,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )

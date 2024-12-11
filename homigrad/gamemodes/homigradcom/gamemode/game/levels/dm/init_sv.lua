@@ -44,7 +44,7 @@ end
 function dm.EndRound(winner)
     for i, ply in ipairs( player.GetAll() ) do
 	    if ply:Alive() then
-            PrintMessage(3,ply:GetName() .. " wins.")
+            PrintMessage(3,ply:GetName() .. " остался один.")
         end
     end
 end

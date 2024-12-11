@@ -1,35 +1,37 @@
-SWEP.Base = "med_ifak"
+SWEP.Base = "hg_medbase"
 SWEP.PrintName = "Электрошокер"
-SWEP.Author = "Homigrad"
+SWEP.Author = "V-City"
 SWEP.Instructions = "Электрическое возбуждение передается нервным клеткам, вызывая в основном болевой шок, а также кратковременные судороги и состояние «ошарашенности», дезориентации."
 SWEP.Slot = 2
 SWEP.SlotPos = 4
 SWEP.Spawnable = true
-SWEP.Category = "Разное"
+SWEP.Category = "Оружие: Разное"
 
-SWEP.ViewModel = "models/realistic_police/taser/w_taser.mdl"
-SWEP.WorldModel = "models/realistic_police/taser/w_taser.mdl"
+SWEP.ViewModel = "models/weapons/arccw_go/v_eq_taser.mdl"
+SWEP.WorldModel = "models/weapons/arccw_go/v_eq_taser.mdl"
 
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.DefaultClip = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "Taser Cartridge"
+SWEP.Uses = 1
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
+SWEP.HoldType = "revolver"
+
+SWEP.CorrectPosX =     -18.5
+SWEP.CorrectPosY =     6.4
+SWEP.CorrectPosZ =     -7
+
+SWEP.CorrectAngPitch = 180
+SWEP.CorrectAngYaw =   180
+SWEP.CorrectAngRoll =  0
 
 SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
-
-SWEP.dwmUp = 0.5
-SWEP.dwmRight = 0
-SWEP.dwmForward = 0
-
-SWEP.dwmARight = 180
-SWEP.dwmAUp = 200
-SWEP.dwmAForward = 0
 
 
 function SWEP:Initialize()
@@ -47,7 +49,7 @@ function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
 	local att = self:GetAttachment(1)
 	
-	ply:EmitSound("ambient/energy/zap3.wav")
+	ply:EmitSound("arccw_go/taser/taser_shoot.wav")
 
 	local dir = ply:EyeAngles():Forward()
 
@@ -74,8 +76,18 @@ function SWEP:PrimaryAttack()
 	if ent and ent:Alive() then
 		ent:EmitSound("hostage/hpain/hpain" .. math.random(1,6) .. ".wav")
 
+		ent:EmitSound("arccw_go/taser/taser_hit.wav")
+
 		Stun(ent)
 	end
+end
+
+function SWEP:SecondaryAttack()
+
+end
+
+function SWEP:DrawHUD()
+
 end
 
 function SWEP:Reload()

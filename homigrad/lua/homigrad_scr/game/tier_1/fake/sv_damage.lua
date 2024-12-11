@@ -221,24 +221,24 @@ if engine.ActiveGamemode() == "homigradcom" then
                 end)
             end
         end
-        if ply.LastDMGInfo:IsDamageType(DMG_CRUSH+DMG_FALL)then
-        if rag:GetVelocity():Length() > 2 and rag:GetVelocity():Length() < 150 then
+        if ply.LastDMGInfo:IsDamageType(DMG_CRUSH+DMG_FALL) then
+        if rag:GetVelocity():Length() > 2 and rag:GetVelocity():Length() < 170 then
             dmginfo:ScaleDamage(0)
-        elseif rag:GetVelocity():Length() > 150 and rag:GetVelocity():Length() < 350 then
-            dmginfo:ScaleDamage(0.1)
+        elseif rag:GetVelocity():Length() > 170 and rag:GetVelocity():Length() < 350 then
+            dmginfo:ScaleDamage(0.08)
         elseif rag:GetVelocity():Length() > 350 and rag:GetVelocity():Length() < 460 then
-            dmginfo:ScaleDamage(0.2)
+            dmginfo:ScaleDamage(0.12)
         elseif rag:GetVelocity():Length() > 460 and rag:GetVelocity():Length() < 550 then
-            dmginfo:ScaleDamage(0.3)
+            dmginfo:ScaleDamage(0.2)
         elseif rag:GetVelocity():Length() > 550 and rag:GetVelocity():Length() < 600 then
-            dmginfo:ScaleDamage(0.4)
+            dmginfo:ScaleDamage(0.3)
         elseif rag:GetVelocity():Length() > 600 and rag:GetVelocity():Length() < 700 then
-            dmginfo:ScaleDamage(0.5)
+            dmginfo:ScaleDamage(0.4)
         elseif rag:GetVelocity():Length() > 700 and rag:GetVelocity():Length() < 800 then
-            dmginfo:ScaleDamage(0.6)
+            dmginfo:ScaleDamage(0.5)
         end
         else
-            dmginfo:ScaleDamage(1)
+            dmginfo:ScaleDamage(0.5)
         end
         
         hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)

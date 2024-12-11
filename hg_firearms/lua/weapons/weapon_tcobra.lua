@@ -17,7 +17,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Damage = 1.5 * 75
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = {"homicide_weapons/hndg_colt1911/colt_1911_fire1.wav"}
-    SWEP.Primary.SoundFar = "csgo/weapons/revolver/revolver-1_distant.wav"
+    SWEP.Primary.SoundFar = "arccw_go/revolver/revolver-1_distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = false
     SWEP.ShootWait = 0.1
@@ -33,14 +33,14 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Slot					= 2
     SWEP.SlotPos				= 1
 
-    SWEP.HammerSound = "csgo/weapons/revolver/revolver_prepare.wav"
+    SWEP.HammerSound = "arccw_go/revolver/revolver_prepare.wav"
 
-    SWEP.Reload1 = "csgo/weapons/revolver/revolver_siderelease.wav"
-    SWEP.Reload2 = "csgo/weapons/revolver/revolver_clipout.wav"
-    SWEP.Reload3 = "csgo/weapons/revolver/revolver_clipin.wav"
-    SWEP.Reload4 = "csgo/weapons/revolver/revolver_sideback.wav"
+    SWEP.Reload1 = "arccw_go/revolver/revolver_siderelease.wav"
+    SWEP.Reload2 = "arccw_go/revolver/revolver_clipout.wav"
+    SWEP.Reload3 = "arccw_go/revolver/revolver_clipin.wav"
+    SWEP.Reload4 = "arccw_go/revolver/revolver_sideback.wav"
 
-    SWEP.DeploySound = "csgo/weapons/revolver/revolver_draw.wav"
+    SWEP.DeploySound = "arccw_go/revolver/revolver_draw.wav"
 
     SWEP.SlideBone = "shooter"
     SWEP.Delay = 0  

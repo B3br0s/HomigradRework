@@ -391,12 +391,12 @@ if engine.ActiveGamemode() == "homigradcom" then
 				local ply = RagdollOwner(self.CarryEnt)
 				if self:GetOwner():KeyPressed( IN_RELOAD ) then
 					if not ply then
-						self:GetOwner():ChatPrint("He has no pulse.")
+						self:GetOwner():ChatPrint("У него нет пульса.")
 					else
 						if ply.heartstop then
-							self:GetOwner():ChatPrint("He has no pulse.")
+							self:GetOwner():ChatPrint("У него нет пульса.")
 						else
-							self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "He's got a strong pulse" or (ply.nextPulse <= 1.5 and "His pulse is normal.") or (ply.nextPulse < 2 and "His pulse is weak") or (ply.nextPulse >= 2 and "He has a barely perceptible pulse."))
+							self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "У него сильный пульс." or (ply.nextPulse <= 1.5 and "У него нормальный пульс") or (ply.nextPulse < 2 and "У него слабый пульс.") or (ply.nextPulse >= 2 and "У него нет пульса."))
 						end
 					end
 				end
@@ -473,7 +473,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 	
 	function SWEP:SetCarrying(ent, bone, pos, dist)
 		if IsValid(ent) then
-			self:GetOwner():ChatPrint(pos:Distance(self:GetOwner():GetPos()))
+			--self:GetOwner():ChatPrint(pos:Distance(self:GetOwner():GetPos()))
 			self:SetNWBool( "Pickup", true )
 			self.CarryEnt = ent
 			self.CarryBone = bone

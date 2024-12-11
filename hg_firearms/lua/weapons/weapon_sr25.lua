@@ -125,7 +125,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
             LocalPos = Vector(20, -0.5, 0.5),
 
-            OffsetPos = Vector(9, 0, -1.275),
+            OffsetPos = Vector(10.2,10,0),
 
             Optic = true,
 

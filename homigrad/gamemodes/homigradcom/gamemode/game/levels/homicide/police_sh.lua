@@ -278,7 +278,7 @@ if SERVER then
 end
 
 function CLASS:TeamName()
-	return "Police",CLASS.color
+	return "Полиция",CLASS.color
 end
 
 local nigger = Color(0,0,0,200)

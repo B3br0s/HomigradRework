@@ -18,7 +18,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Spread = 0
     SWEP.Recoil = -0.3
     SWEP.Primary.Sound = {"zcitysnd/sound/weapons/mp5k/mp5k_suppressed_fp.wav"}
-    SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/mp5k/mp5k_dist.wav"
+    SWEP.Primary.SoundFar = "zcitysnd/sound/arccw_go/ump45/ump45-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = true
     SWEP.ShootWait = 0.08

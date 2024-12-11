@@ -16,8 +16,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0.1
     SWEP.Primary.Damage = 1.5 * 55
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"csgo/weapons/xm1014/xm1014-1.wav"}
-    SWEP.Primary.SoundFar = "csgo/weapons/xm1014/xm1014-1-distant.wav"
+    SWEP.Primary.Sound = {"arccw_go/xm1014/xm1014-1.wav"}
+    SWEP.Primary.SoundFar = "arccw_go/xm1014/xm1014-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = true
     SWEP.ShootWait = 0.2
@@ -35,10 +35,10 @@ if engine.ActiveGamemode() == "homigradcom" then
 
     SWEP.Reload1 = ""
     SWEP.Reload2 = ""
-    SWEP.Reload3 = "csgo/weapons/nova/nova_pump.wav"
+    SWEP.Reload3 = "arccw_go/nova/nova_pump.wav"
     SWEP.Reload4 = ""
 
-    SWEP.DeploySound = "csgo/weapons/xm1014/xm1014_draw.wav"
+    SWEP.DeploySound = "arccw_go/xm1014/xm1014_draw.wav"
 
     SWEP.SlideBone = "W_BOLT_SHOT"
     SWEP.SlideVector = Vector(0, 4, 0)
@@ -62,9 +62,9 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.PossibleAtt = {
         ["HoloSun"] = {
             name = "holosun",
-            CorrectPosX = 18,
-            CorrectPosY = -4.45,
-            CorrectPosZ = 9.5,
+            CorrectPosX = 2,
+            CorrectPosY = 0.96,
+            CorrectPosZ = 8.5,
 
             CorrectAngPitch = 200,
             CorrectAngYaw = 180,
@@ -72,11 +72,11 @@ if engine.ActiveGamemode() == "homigradcom" then
 
             ChangesCamera = true,
 
-            CameraPos = Vector(4.7,3.5,0.805),
+            CameraPos = Vector(5,4.2,1.164),
 
             ReticleMaterial = "vgui/arc9_eft_shared/reticles/scope_base_aimpoint_micro_t1_mark.png",
 
-            ReticleUp = 4.5,
+            ReticleUp = 5.5,
             ReticleRight = 1.2,
             ReticleSize = 8,
 

@@ -25,7 +25,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             end
         end
     
-        if dmginfo:GetDamage() >= 100 or (dmginfo:GetDamageType() == DMG_CRUSH and dmginfo:GetDamage() >= 6 and ent:GetVelocity():Length() > 600) then
+        if dmginfo:GetDamage() >= 40 or (dmginfo:GetDamageType() == DMG_CRUSH and dmginfo:GetDamage() >= 6 and ent:GetVelocity():Length() > 500) then
             local brokenLeftLeg = hitgroup == HITGROUP_LEFTLEG
             local brokenRightLeg = hitgroup == HITGROUP_RIGHTLEG
             local brokenLeftArm = hitgroup == HITGROUP_LEFTARM
@@ -34,7 +34,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             local sub = dmginfo:GetDamage() / 120 * armorMul
     
             if brokenLeftArm then
-                ply.LeftArm = math.min(0.6,ply.LeftArm - sub)
+                ply.LeftArm = 0.2
                 if ply.msgLeftArm < CurTime() then
                     ply.msgLeftArm = CurTime() + 1
                     ply:ChatPrint("Правая рука сломана.")
@@ -43,7 +43,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             end
     
             if brokenRightArm then
-                ply.RightArm = math.max(0.6,ply.RightArm - sub)
+                ply.RightArm = 0.2
                 if ply.msgRightArm < CurTime() then
                     ply.msgRightArm = CurTime() + 1
                     ply:ChatPrint("Левая рука сломана.")
@@ -52,7 +52,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             end
     
             if brokenLeftLeg then
-                ply.LeftLeg = math.max(0.6,ply.LeftLeg - sub)
+                ply.LeftLeg = 0.5
                 if ply.msgLeftLeg < CurTime() then
                     ply.msgLeftLeg = CurTime() + 1
                     ply:ChatPrint("Левая нога сломана.")
@@ -61,7 +61,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             end
     
             if brokenRightLeg then
-                ply.RightLeg = math.max(0.6,ply.RightLeg - sub)
+                ply.RightLeg = 0.5
                 if ply.msgRightLeg < CurTime() then
                     ply.msgRightLeg = CurTime() + 1
                     ply:ChatPrint("Правая нога сломана.")

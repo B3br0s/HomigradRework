@@ -6,8 +6,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Category 				= "Оружие: Пистолеты Пулемёты"
     SWEP.Spawnable 				= true
     SWEP.AdminOnly 				= false
-    SWEP.ViewModel				= "models/weapons/csgo/weapons/v_smg_ump45.mdl"
-    SWEP.WorldModel				= "models/weapons/csgo/weapons/v_smg_ump45.mdl"
+    SWEP.ViewModel				= "models/weapons/arccw_go/v_smg_ump45.mdl"
+    SWEP.WorldModel				= "models/weapons/arccw_go/v_smg_ump45.mdl"
     
     SWEP.Primary.ClipSize		= 45
     SWEP.Primary.DefaultClip	= 45
@@ -16,8 +16,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 55
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"weapons/mp5k/mp5k_fp.wav"}
-    SWEP.Primary.SoundFar = "weapons/mp5k/mp5k_dist.wav"
+    SWEP.Primary.Sound = {"arccw_go/ump45/ump45_02.wav"}
+    SWEP.Primary.SoundFar = "arccw_go/ump45/ump45-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = true
     SWEP.ShootWait = 0.08

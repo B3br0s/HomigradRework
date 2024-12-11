@@ -316,63 +316,68 @@ end)
 net.Receive("JMod_ArmorColor", function()
 	local Ent, NextColorCheck = net.ReadEntity(), 0
 	if not IsValid(Ent) then return end
-	local Frame = vgui.Create("DFrame")
-	Frame:SetSize(200, 300)
-	Frame:SetPos(ScrW() * .4 - 200, ScrH() * .5)
-	Frame:SetDraggable(true)
-	Frame:ShowCloseButton(true)
-	Frame:SetTitle("EZ Armor")
-	Frame:MakePopup()
-	local Picker
-
-	function Frame:Paint()
-		BlurBackground(self)
-		local Time = CurTime()
-
-		if NextColorCheck < Time then
-			if not IsValid(Ent) then
-				Frame:Close()
-
-				return
-			end
-
-			NextColorCheck = Time + .25
-			local Col = Picker:GetColor()
-			Col.r = math.max(Col.r, 50)
-			Col.g = math.max(Col.g, 50)
-			Col.b = math.max(Col.b, 50)
-			net.Start("JMod_ArmorColor")
-			net.WriteEntity(Ent)
-			net.WriteColor(Color(Col.r, Col.g, Col.b))
-			net.WriteBit(false)
-			net.SendToServer()
-		end
-	end
-
-	Picker = vgui.Create("DColorMixer", Frame)
-	Picker:SetPos(5, 25)
-	Picker:SetSize(190, 215)
-	Picker:SetAlphaBar(false)
-	Picker:SetWangs(false)
-	Picker:SetPalette(true)
-	Picker:SetColor(Ent:GetColor())
-	local Butt = vgui.Create("DButton", Frame)
-	Butt:SetPos(5, 245)
-	Butt:SetSize(190, 50)
-	Butt:SetText("EQUIP")
-
-	function Butt:DoClick()
-		local Col = Picker:GetColor()
-		Col.r = math.max(Col.r, 50)
-		Col.g = math.max(Col.g, 50)
-		Col.b = math.max(Col.b, 50)
-		net.Start("JMod_ArmorColor")
-		net.WriteEntity(Ent)
-		net.WriteColor(Color(Col.r, Col.g, Col.b))
-		net.WriteBit(true)
-		net.SendToServer()
-		Frame:Close()
-	end
+	--local Frame = vgui.Create("DFrame")
+	net.Start("JMod_ArmorColor")
+	net.WriteEntity(Ent)
+	net.WriteColor(Color(255,255,255))
+	net.WriteBit(true)
+	net.SendToServer()
+	--Frame:SetSize(200, 300)
+	--Frame:SetPos(ScrW() * .4 - 200, ScrH() * .5)
+	--Frame:SetDraggable(true)
+	--Frame:ShowCloseButton(true)
+	--Frame:SetTitle("EZ Armor")
+	--Frame:MakePopup()
+	--local Picker
+--
+	--function Frame:Paint()
+	--	BlurBackground(self)
+	--	local Time = CurTime()
+--
+	--	if NextColorCheck < Time then
+	--		if not IsValid(Ent) then
+	--			Frame:Close()
+--
+	--			return
+	--		end
+--
+	--		NextColorCheck = Time + .25
+	--		local Col = Picker:GetColor()
+	--		Col.r = math.max(Col.r, 50)
+	--		Col.g = math.max(Col.g, 50)
+	--		Col.b = math.max(Col.b, 50)
+	--		net.Start("JMod_ArmorColor")
+	--		net.WriteEntity(Ent)
+	--		net.WriteColor(Color(Col.r, Col.g, Col.b))
+	--		net.WriteBit(false)
+	--		net.SendToServer()
+	--	end
+	--end
+--
+	--Picker = vgui.Create("DColorMixer", Frame)
+	--Picker:SetPos(5, 25)
+	--Picker:SetSize(190, 215)
+	--Picker:SetAlphaBar(false)
+	--Picker:SetWangs(false)
+	--Picker:SetPalette(true)
+	--Picker:SetColor(Ent:GetColor())
+	--local Butt = vgui.Create("DButton", Frame)
+	--Butt:SetPos(5, 245)
+	--Butt:SetSize(190, 50)
+	--Butt:SetText("EQUIP")
+--
+	--function Butt:DoClick()
+	--	local Col = Picker:GetColor()
+	--	Col.r = math.max(Col.r, 50)
+	--	Col.g = math.max(Col.g, 50)
+	--	Col.b = math.max(Col.b, 50)
+	--	net.Start("JMod_ArmorColor")
+	--	net.WriteEntity(Ent)
+	--	net.WriteColor(Color(Col.r, Col.g, Col.b))
+	--	net.WriteBit(true)
+	--	net.SendToServer()
+	--	Frame:Close()
+	--end
 end)
 
 -- local FavIcon=Material("white_star_64.png")

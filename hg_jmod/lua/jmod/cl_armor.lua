@@ -45,7 +45,7 @@ function JMod.ArmorPlayerModelDraw(ply, nomerge)
 				local Mdl = ply.EZarmorModels[id]
 				local MdlName = string.lower(Mdl:GetModel())
 
-				if MdlName == ArmorInfo.mdl and ArmorInfo.bon then
+				if MdlName == ArmorInfo.mdl and ArmorInfo.bon and not ply != LocalPlayer() then
 					-- render it
 					local Index = ply:LookupBone(ArmorInfo.bon)
 
@@ -92,7 +92,13 @@ function JMod.ArmorPlayerModelDraw(ply, nomerge)
 							local NoDraw = hook.Run("JModHookArmorModelDraw", ply, Mdl, armorData, ArmorInfo)
 
 							if not(NoDraw) and (not(ArmorInfo.merge) or nomerge) then
-								Mdl:DrawModel()
+								if ply == LocalPlayer() and ArmorInfo.bon == "ValveBiped.Bip01_Head1" and thirdperson then
+									Mdl:DrawModel()
+								elseif ply != LocalPlayer() then
+									Mdl:DrawModel()
+								elseif ply == LocalPlayer() and ArmorInfo.bon != "ValveBiped.Bip01_Head1" then
+										Mdl:DrawModel()
+								end
 							end
 							render.SetColorModulation(OldR, OldG, OldB)
 						end

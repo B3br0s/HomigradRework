@@ -18,7 +18,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = {"homicide_weapons/hndg_glock17/glock_fire_01.wav"}
     SWEP.Primary.SuppressedSound = "weapons/darsu_eft/usp/usp_fire_silenced_close.ogg"
-    SWEP.Primary.SoundFar = "csgo/weapons/glock18/glock18-1-distant.wav"
+    SWEP.Primary.SoundFar = "arccw_go/glock18/glock18-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = false
     SWEP.ShootWait = 0.1
@@ -36,7 +36,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Reload3 = "zcitysnd/sound/weapons/m1911/handling/m1911_boltback.wav"
     SWEP.Reload4 = "zcitysnd/sound/weapons/m1911/handling/m1911_boltrelease.wav"
 
-    SWEP.DeploySound = "csgo/weapons/usp/usp_draw.wav"
+    SWEP.DeploySound = "arccw_go/usp/usp_draw.wav"
 
     SWEP.SlideBone = "gatslide"
     SWEP.SlideVector = Vector(-0.5, 1.3, 2)

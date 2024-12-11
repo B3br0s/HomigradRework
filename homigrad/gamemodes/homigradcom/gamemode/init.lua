@@ -303,22 +303,6 @@ function GM:PlayerDeathThink(ply)
 	end
 end
 
-hook.Add("PlayerUse", "LimitWeight", function(ply, ent)
-    local MAX_PICKUP = 90
-    if ent:IsValid() and ent:GetPhysicsObject():IsValid() then
-        if ent:GetClass() == "prop_physics" or ent:GetClass() == "prop_physics_multiplayer" then
-            local phys = ent:GetPhysicsObject()
-            local weight = phys:GetMass()
-
-            if weight > MAX_PICKUP * (ply.Metabolizm or 1) then
-                return false
-            elseif weight < MAX_PICKUP * (ply.Metabolizm or 1) then
-                return true
-            end
-        end
-    end
-end)
-
 function GM:PlayerDisconnected(ply) end
 
 function GM:PlayerDeathSound() return true end

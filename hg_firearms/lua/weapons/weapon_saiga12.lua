@@ -17,7 +17,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Damage = 1.5 * 55
     SWEP.Primary.Spread = 0
     SWEP.Primary.Sound = {"weapons/darsu_eft/ak/fire_new/saiga_outdoor_close2.ogg","weapons/darsu_eft/ak/fire_new/saiga_outdoor_close1.ogg"}
-    SWEP.Primary.SoundFar = "csgo/weapons/xm1014/xm1014-1-distant.wav"
+    SWEP.Primary.SoundFar = "arccw_go/xm1014/xm1014-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = true
     SWEP.ShootWait = 0.2
@@ -38,7 +38,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Reload3 = "zcitysnd/sound/weapons/ak47/handling/ak47_boltback.wav"
     SWEP.Reload4 = "zcitysnd/sound/weapons/ak47/handling/ak47_boltrelease.wav"
 
-    SWEP.DeploySound = "csgo/weapons/xm1014/xm1014_draw.wav"
+    SWEP.DeploySound = "arccw_go/xm1014/xm1014_draw.wav"
 
     SWEP.SlideBone = nil
     

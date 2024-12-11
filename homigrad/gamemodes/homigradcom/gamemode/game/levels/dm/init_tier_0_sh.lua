@@ -69,7 +69,7 @@ function dm.HUDPaint_RoundLeft(white)
         end
         lply:ScreenFade(SCREENFADE.IN, Color(0, 0, 0, 255), 0.5, 0.5)
 
-        draw.DrawText("You are " .. name, "MersText2", ScrW() / 2, ScrH() / 2, Color(color.r, color.g, color.b, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)
+        draw.DrawText("Вы " .. name, "MersText2", ScrW() / 2, ScrH() / 2, Color(color.r, color.g, color.b, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)
         draw.DrawText("Death Match", "MersHead1", ScrW() / 2, ScrH() / 8, Color(255, 0, 0, math.Clamp(startRound - 0.5, 0, 1) * 255), TEXT_ALIGN_CENTER)
         return
     end

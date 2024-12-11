@@ -66,7 +66,8 @@ function SWEP:DoRT()
 	localPos:Set(self.localScopePos)
 	localPos:Rotate(ang)
 	pos:Add(localPos)
-	pos2 = att.Pos + ang:Up() * self.OffsetDamnPricel[1] - ang:Forward() * self.OffsetDamnPricel[2] + ang:Right() * self.OffsetDamnPricel[3]
+	pos2 = att.Pos + att.Ang:Up() * self.OffsetDamnPricel[1] - att.Ang:Forward() * self.OffsetDamnPricel[2] + att.Ang:Right() * self.OffsetDamnPricel[3]
+	--pos2 = att.Pos + ang:Up() * self.OffsetDamnPricel[1] - ang:Forward() * self.OffsetDamnPricel[2] + ang:Right() * self.OffsetDamnPricel[3]
 	pos2:Add(localPos)
 	local view = render.GetViewSetup(true)
 	local diff, point = util.DistanceToLine(view.origin, view.origin + ang:Forward() * 50, pos)

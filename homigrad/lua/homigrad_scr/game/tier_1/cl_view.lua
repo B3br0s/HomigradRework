@@ -238,7 +238,6 @@ if engine.ActiveGamemode() == "homigradcom" then
 		local lply = LocalPlayer()
 	
 		if !ply:Alive() and timer.Exists("DeathCam") and IsValid(deathrag) then
-			--deathrag:ManipulateBoneScale(6,vecZero)
 			
 			local att = deathrag:GetAttachment(deathrag:LookupAttachment("eyes"))
 			

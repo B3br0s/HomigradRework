@@ -269,11 +269,9 @@ function homicide.RoundEndCheck()
 		if not homicide.police then
 			homicide.police = true
             if homicide.roundType == 1 then
-                --PrintMessage(3,"Спецназ приехал.")
-                PrintMessage(3,"SWAT Arrived.")
+                PrintMessage(3,"Спецназ приехал.")
             else
-                --PrintMessage(3,"Полиция приехала.")
-                PrintMessage(3,"Police Arrived.")
+                PrintMessage(3,"Полиция приехала.")
             end
 
 			local aviable = ReadDataMap("spawnpointsct")
@@ -304,17 +302,11 @@ function homicide.RoundEndCheck()
 end
 
 function homicide.EndRound(winner)
-    --if homicide.t and #homicide.t > 0 and homicide.roundType != 5 then
-    --    PrintMessage(3,(winner == 1 and "Победа предателей." or winner == 2 and "Победа невиновых." or "Ничья"))
-    --    PrintMessage(3,#homicide.t > 1 and ("Трейторами были: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("Трейтором был: " .. homicide.t[1]:Name()))
-    --elseif homicide.t and #homicide.t > 0 and homicide.roundType == 5 then
-    --    PrintMessage(3,(winner == 1 and "Победа Серийных Убийц." or winner == 2 and "Победа невиновых." or "Ничья"))
-    --end
     if homicide.t and #homicide.t > 0 and homicide.roundType != 5 then
-        PrintMessage(3,(winner == 1 and "Traitors Wins." or winner == 2 and "All traitors were stopped." or "Tie"))
-        PrintMessage(3,#homicide.t > 1 and ("The traitors were: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("Traitor was: " .. homicide.t[1]:Name()))
+        PrintMessage(3,(winner == 1 and "Победа предателей." or winner == 2 and "Победа невиновых." or "Ничья"))
+        PrintMessage(3,#homicide.t > 1 and ("Трейторами были: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("Трейтором был: " .. homicide.t[1]:Name()))
     elseif homicide.t and #homicide.t > 0 and homicide.roundType == 5 then
-        PrintMessage(3,(winner == 1 and "Serial Killers Wins." or winner == 2 and "Serial Killer was stopped." or "Tie"))
+        PrintMessage(3,(winner == 1 and "Победа Серийных Убийц." or winner == 2 and "Победа невиновых." or "Ничья"))
     end
 end
 

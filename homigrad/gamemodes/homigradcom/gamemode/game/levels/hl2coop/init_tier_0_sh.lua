@@ -2,7 +2,7 @@ table.insert(LevelList,"hl2")
 hl2 = {}
 hl2.Name = "Half Life"
 
-hl2.red = {"Rebel",Color(255,123,0),
+hl2.red = {"Повстанцы",Color(255,123,0),
     weapons = {"weapon_radio","weapon_sog","weapon_hands","med_band_big","med_band_small","medkit","painkiller"},
     main_weapon = {"weapon_akm_bw","weapon_aks74u"},
     secondary_weapon = {"weapon_glockp80"},

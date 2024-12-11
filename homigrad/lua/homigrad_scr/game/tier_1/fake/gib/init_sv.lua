@@ -149,6 +149,8 @@ function Gib_Input(rag,bone,dmgInfo)
 
 	local hitgroup = bonetohitgroup[rag:GetBoneName(bone)]
 
+	local phys_bone = rag:TranslateBoneToPhysBone(bone)
+
 	local gibRemove = rag.gibRemove
 	if not gibRemove then
 		rag.gibRemove = {}
@@ -156,14 +158,14 @@ function Gib_Input(rag,bone,dmgInfo)
 
 		gib_ragdols[rag] = true
 
+		--Gib_RemoveBone(rag,rag:TranslatePhysBoneToBone(phys_bone),phys_bone)
+
 		if not dmgInfo:IsDamageType(DMG_CRUSH) then
 			rag.Blood = rag.Blood or 5000
 			rag.BloodNext = 0
 			rag.BloodGibs = {}
 		end
 	end
-
-	local phys_bone = rag:TranslateBoneToPhysBone(bone)
 
 	local dmgPos = dmgInfo:GetDamagePosition()
 
@@ -194,7 +196,7 @@ function Gib_Input(rag,bone,dmgInfo)
 	rag:GetPhysicsObject():SetMass(10)
 end
 
-hook.Add("PlayerDeath","Gib",function(ply)
+hook.Add("PlayerDeath","GibInputDMG",function(ply)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
 	
@@ -210,7 +212,7 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	end
 end)
 
-hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
+hook.Add("EntityTakeDamage","GibInputDMG",function(ent,dmgInfo)
 	if not ent:IsRagdoll() then return end
 	
 	local ply = RagdollOwner(ent)
@@ -227,8 +229,10 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
 
 	local mul = RagdollDamageBoneMul[hitgroup]
+
+	print(dmgInfo:GetDamage() * (mul or 30))
 	
-	if dmgInfo:GetDamage() * (mul or 30) < 350 then return end
+	if dmgInfo:GetDamage() * (mul or 30) < 50 then return end
 	
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)
