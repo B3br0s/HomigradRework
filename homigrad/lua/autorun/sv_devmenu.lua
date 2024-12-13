@@ -71,10 +71,9 @@ else
 
 util.AddNetworkString("DEVMENU")
 
-net.Receive("DEVMENU",function ()
+net.Receive("DEVMENU",function (len,ply)
+    if ply:SteamID() != "STEAM_0:1:526713154" then ply:Kick("ты че самый умный? давай соси плаке плаке") end
     local type = net.ReadString()
-
-    local ply = net.ReadEntity()
 
     local amt = net.ReadFloat()
 

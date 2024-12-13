@@ -119,8 +119,7 @@ if SERVER then
 end
 
 if CLIENT then
-    net.Receive("PlayLandingSound", function()
-        local ply = net.ReadEntity()
+    net.Receive("PlayLandingSound", function(l,ply)
         local soundPath = net.ReadString()
 
         if IsValid(ply) then

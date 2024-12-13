@@ -165,7 +165,9 @@ if engine.ActiveGamemode() == "homigradcom" then
         dmginfo:SetDamage(dmginfo:GetDamage() * armorMul)
         local rubatPidor = DamageInfo()
         rubatPidor:SetAttacker(dmginfo:GetAttacker())
+        if dmginfo:GetInflictor() then
         rubatPidor:SetInflictor(dmginfo:GetInflictor())
+        end
         rubatPidor:SetDamage(dmginfo:GetDamage())
         rubatPidor:SetDamageType(dmginfo:GetDamageType())
         rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())

@@ -1,6 +1,7 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
+include("cl_init.lua")
 include("shared.lua")
 
 if SERVER then
@@ -37,7 +38,7 @@ function ENT:PhysicsCollide(data, physobj)
 		JMod.FragSplosion(self, SelfPos + Vector(0, 0, 20), 650, 500, 3500, self:GetOwner() or game.GetWorld())
 
 		self:Remove() 
-	elseif self.TypeGren == "Inc" then
+	elseif self.TypeGren == "Molotov" then
         local SelfPos, Owner, SelfVel = self:LocalToWorld(self:OBBCenter()), self:GetOwner() or self, self:GetPhysicsObject():GetVelocity()
 		self:EmitSound("weapons/tfa_csgo/molotov/molotov_detonate_1.wav")
 
@@ -47,8 +48,28 @@ function ENT:PhysicsCollide(data, physobj)
 			local Flame = ents.Create("ent_jack_gmod_eznapalm")
 			Flame:SetPos(SelfPos + Vector(0, 0, 30))
 			Flame:SetAngles(FireVec:Angle())
-			Flame:SetOwner(game.GetWorld())
-			JMod.SetOwner(Flame, game.GetWorld())
+			--Flame:SetOwner(game.GetWorld())
+			--JMod.SetOwner(Flame, game.GetWorld())
+			Flame.SpeedMul = 0.2
+			Flame.Creator = game.GetWorld()
+			Flame.HighVisuals = true
+			Flame:Spawn()
+			Flame:Activate()
+		end
+		
+		self:Remove()
+	elseif self.TypeGren == "Inc" then
+        local SelfPos, Owner, SelfVel = self:LocalToWorld(self:OBBCenter()), self:GetOwner() or self, self:GetPhysicsObject():GetVelocity()
+		self:EmitSound("arccw_go/incgrenade/inc_grenade_detonate_1.wav")
+
+		for i = 1, 5 do
+			local FireVec = (VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
+			FireVec.z = FireVec.z / 2
+			local Flame = ents.Create("ent_jack_gmod_eznapalm")
+			Flame:SetPos(SelfPos + Vector(0, 0, 30))
+			Flame:SetAngles(FireVec:Angle())
+			--Flame:SetOwner(game.GetWorld())
+			--JMod.SetOwner(Flame, game.GetWorld())
 			Flame.SpeedMul = 0.2
 			Flame.Creator = game.GetWorld()
 			Flame.HighVisuals = true
@@ -166,7 +187,7 @@ function ENT:Detonate()
 end
 
 function ENT:Arm()
-    if self.HasLever and self.RequiresLever and self.TypeGren != "Smoke" and self.TypeGren != "Inc" then
+    if self.HasLever and self.RequiresLever and self.TypeGren != "Smoke" and self.TypeGren != "Molotov" then
         self:SpoonEffect()
     end
     timer.Simple(self.Delay,function()

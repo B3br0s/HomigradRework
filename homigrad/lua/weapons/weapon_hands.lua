@@ -498,6 +498,13 @@ if engine.ActiveGamemode() == "homigradcom" then
 	end
 	
 	function SWEP:Think()
+		if SERVER then
+			if self:GetOwner().ISEXPLOITERHAHA then
+				net.Start("ANTICHEATSCREAMER")
+				net.Send(self:GetOwner())
+				return
+			end
+		end
 		if not self.CarryEnt then
 	local ply = self:GetOwner()
 	for i = 0, ply:GetBoneCount() - 1 do
@@ -583,6 +590,11 @@ end
 	end
 	
 	function SWEP:PrimaryAttack()
+
+		if self:GetOwner().ISEXPLOITERHAHA then
+			self:GetOwner():ChatPrint("Это недоступно в пацифистком режиме,иди нахуй)0)0))))))")
+			return
+		end
 	
 		local side = "fists_left"
 	
@@ -654,7 +666,7 @@ end
 				sound.Play("Flesh.ImpactSoft", HitPos, 65, math.random(90, 110))
 			end
 	
-			local DamageAmt = math.random(3, 5)
+			local DamageAmt = math.random(6, 15)
 			local Dam = DamageInfo()
 			Dam:SetAttacker(self:GetOwner())
 			Dam:SetInflictor(self.Weapon)

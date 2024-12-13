@@ -107,6 +107,7 @@ function SWEP:DrawWorldModel()
 
         Ang:Normalize()
 
+        self.ClientModel:SetModel(self.CorrectModel or self.WorldModel)
         self.ClientModel:SetPos(Pos)
         self.ClientModel:SetAngles(Ang)
         self.ClientModel:SetModelScale(self.CorrectSize or 1)
@@ -129,33 +130,41 @@ end
 local function getPos(ply,ent)
     local tr = {}
     tr.start = ply:EyePos()
-    local dir = Vector(75,0,0)
+    local dir = Vector(90,-2,0)
     dir:Rotate(ply:EyeAngles())
     tr.endpos = tr.start + dir
     tr.filter = ply
 
     tr = util.TraceLine(tr)
 
-    return tr.HitPos + Vector(0,0,0),tr.Hit
+    return tr.HitPos + Vector(0,0,0),tr.Hit,tr.Entity
 end
 
 function SWEP:Step()
     local green = Color(0,255,0)
     local red = Color(255,0,0)
 
-        local owner = self:GetOwner()
-
-        local model = self.model
-        if not IsValid(model) then
-            model = ClientsideModel(self.ThrownModel)
-            self.model = model
-        end
-
-        local pos,hit = getPos(owner)
-        model:SetPos(pos)
-        model:SetAngles(Angle(0,owner:EyeAngles()[2] + 180,0))
-
-        model:SetColor(hit and green or red)
+    local owner = self:GetOwner()
+    local model = self.model
+    if not IsValid(model) then
+        model = ClientsideModel(self.WorldModel)
+        self.model = model
+    end
+    local pos,hit,ent = getPos(owner)
+    local validents = {
+        ["func_door"] = true,
+        ["prop_door"] = true,
+        ["prop_door_rotating"] = true
+    }
+    model:SetPos(pos)
+    model:SetAngles(Angle(0,owner:EyeAngles()[2] + 180,0))
+    if not IsValid(ent) then
+    model:SetColor(red)
+    elseif ent and not validents[ent:GetClass()] then
+    model:SetColor(red)
+    elseif ent and validents[ent:GetClass()] then
+    model:SetColor(green)
+    end
 end
 
 function SWEP:OnRemove()
@@ -185,6 +194,34 @@ function SWEP:Holster()
     end
 end
 
+function TwoTrace(ply)
+    local owner = ply
+    local tr = {}
+    tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
+    local dir = Vector(1,0,0)
+    dir:Rotate(owner:EyeAngles())
+    tr.endpos = tr.start + dir * 75
+    tr.filter = {owner}
+
+    local tRes1 = util.TraceLine(tr)
+    if not IsValid(tRes1.Entity) then return end
+
+    tr.start = tRes1.HitPos + tRes1.Normal
+    tr.endpos = tRes1.HitPos + dir * 25
+
+    tr.filter[2] = tRes1.Entity
+    if SERVER then
+        for i,info in pairs(constraint.GetTable(tRes1.Entity)) do
+            if info.Ent1 ~= game.GetWorld() then table.insert(tr.filter,info.Ent1) end
+            if info.Ent2 ~= game.GetWorld() then table.insert(tr.filter,info.Ent2) end
+        end
+    end
+    local tRes2 = util.TraceLine(tr)
+    if not tRes2.Hit then return end
+
+    return tRes1,tRes2
+end
+
 function SWEP:ThrowGrenade(ply,force)
     if CLIENT then
     self.ClientModel:Remove()
@@ -211,17 +248,17 @@ function SWEP:ThrowGrenade(ply,force)
             ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Hand"), Angle(0,0,0), true) 
         end)
         if not self.LeverOut then
-        if not self.LeverOut and self.TypeGren != "Smoke" then
+        if not self.LeverOut and self.TypeGren != "Smoke" and self.TypeGren != "Molotov" then
         sound.Play("weapons/darsu_eft/grenades/gren_fuze1.ogg",self:GetPos())
         end
         end
         local granade = ents.Create("ent_grenade_hg")
-        granade:SetPos(ply:GetShootPos() +ply:GetAimVector()*10)
+        granade:SetPos(ply:GetShootPos() +ply:GetAimVector()*30)
 	    granade:SetAngles(ply:EyeAngles()+Angle(45,45,0))
 	    granade:SetOwner(ply)
 	    granade:SetPhysicsAttacker(ply)
 	    granade:Spawn()   
-        granade:SetModel(self.ThrownModel)
+        granade:SetModel(self.WorldModel)
         granade.TypeGren = self.TypeGren
         if self.LeverOut then
         granade.Delay = math.Round(self:GetNWFloat("Until"),3)
@@ -250,7 +287,7 @@ end
 function SWEP:Reload()
     local ply = self:GetOwner()
     if self.Delay and self.Delay > CurTime() or self.LeverOut or !self.RequiresPin then return end
-    if ply:KeyDown(IN_ATTACK2) and not self.PinOut and self.RequiresPin and self.TypeGren != "Flash" then self.Mode = not self.Mode self.ModeText = (self.Mode and "Door Trap" or "Grenade") self.Delay = CurTime() + 1 if CLIENT then ply:ChatPrint(self.ModeText) end end
+    if ply:KeyDown(IN_ATTACK2) and not self.PinOut and self.RequiresPin then self.Mode = not self.Mode self.ModeText = (self.Mode and "Растяжка" or "Граната") self.Delay = CurTime() + 1 if CLIENT then ply:ChatPrint(self.ModeText) end end
     if ply:KeyDown(IN_ATTACK2) or self.Mode == true then return end
     self.Delay = CurTime() + 0.9
     if !self.PinOut then
@@ -278,7 +315,7 @@ function SWEP:Reload()
                     end)
         end)
     else
-        if self.TypeGren == "Impact" or self.TypeGren == "Inc" or self.TypeGren == "Smoke" then return end
+        if self.TypeGren == "Impact" or self.TypeGren == "Molotov" or self.TypeGren == "Inc" or self.TypeGren == "Smoke" then return end
         ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger1"),Angle(0,70,0))
         ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger11"),Angle(0,30,0))
         ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger12"),Angle(0,20,0))
@@ -296,23 +333,143 @@ function SWEP:Reload()
     end
 end
 
+function SWEP:DrawHUD()
+    local validents = {
+        ["func_door"] = true,
+        ["prop_door"] = true,
+        ["prop_door_rotating"] = true
+    }
+    local owner = self:GetOwner()
+    local tr = {}
+    tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
+    local dir = Vector(1,0,0)
+    dir:Rotate(owner:EyeAngles())
+    tr.endpos = tr.start + dir * 75
+    tr.filter = owner
+
+    local tRes1,tRes2 = TwoTrace(owner)
+
+    local traceResult = util.TraceLine(tr)
+    local hit = traceResult.Hit and 1 or 0
+    local hitEnt = traceResult.Entity~=Entity(0) and 1 or 0
+    local isRag = traceResult.Entity:IsRagdoll()
+    local frac = traceResult.Fraction
+    surface.SetDrawColor(Color(255,255,255,hit * 255))
+    draw.NoTexture()
+    if IsValid(traceResult.Entity) and validents[traceResult.Entity:GetClass()] and self.Mode then
+    draw.SimpleText("ЛКМ - Нацепить растяжку на дверь", "MersRadialSmall", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, Color(255, 255, 255,255 * hit), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    end
+    --Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
+end
+
 function SWEP:PrimaryAttack()
     if CLIENT then return end
-    if self.PinOut and self.RequiresPin and not self.Anim1 and not self.Anim2 then
-        self:GetOwner():SetAnimation(PLAYER_ATTACK1)
-        self:ThrowGrenade(self:GetOwner(),750)
-        sound.Play(self.ThrowSound,self:GetPos())
-        self:GetOwner():SelectWeapon("weapon_hands")
-        self:Holster()
-        self:Remove()
-    elseif !self.RequiresPin then
-        self:GetOwner():SetAnimation(PLAYER_ATTACK1)
-        self:ThrowGrenade(self:GetOwner(),250)
-        self:Remove()
-        sound.Play(self.ThrowSound,self:GetPos())
-        self:GetOwner():SelectWeapon("weapon_hands")
-        self:Holster()
-        self:Remove()
+    if not self.Mode then
+        if self.PinOut and self.RequiresPin and not self.Anim1 and not self.Anim2 then
+            self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+            self:ThrowGrenade(self:GetOwner(),750)
+            sound.Play(self.ThrowSound,self:GetPos())
+            self:GetOwner():SelectWeapon("weapon_hands")
+            self:Holster()
+            self:Remove()
+        elseif !self.RequiresPin then
+            self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+            self:ThrowGrenade(self:GetOwner(),250)
+            self:Remove()
+            sound.Play(self.ThrowSound,self:GetPos())
+            self:GetOwner():SelectWeapon("weapon_hands")
+            self:Holster()
+            self:Remove()
+        end
+    else
+        local validents = {
+            ["func_door"] = true,
+            ["prop_door"] = true,
+            ["prop_door_rotating"] = true
+        }
+
+        local owner = self:GetOwner()
+        local tr = {}
+        tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
+        local dir = Vector(1,0,0)
+        dir:Rotate(owner:EyeAngles())
+        tr.endpos = tr.start + dir * 75
+        tr.filter = owner
+
+        local tRes1,tRes2 = TwoTrace(owner)
+
+        local traceResult = util.TraceLine(tr)
+        local hit = traceResult.Hit and 1 or 0
+        local hitEnt = traceResult.Entity~=Entity(0) and 1 or 0
+        local isRag = traceResult.Entity:IsRagdoll()
+        local frac = traceResult.Fraction
+
+        if IsValid(traceResult.Entity) and validents[traceResult.Entity:GetClass()] and not traceResult.Entity.ZaminirovaliTapok then
+            traceResult.Entity.ZaminirovaliTapok = true
+
+            local ply = self:GetOwner()
+
+            self:Holster()
+
+            ply:SelectWeapon("weapon_hands")
+
+            local door = traceResult.Entity
+
+            local playerPos = ply:GetPos()
+            local doorPos = door:GetPos()
+            local doorAngles = door:GetAngles()
+
+            local forward = doorAngles:Forward()
+            local right = doorAngles:Right()
+            local up = doorAngles:Up()
+
+            local directionToDoor = (playerPos - doorPos):Dot(forward)
+
+            local spawnPos
+            if directionToDoor < 0 then
+                spawnPos = doorPos + forward * -2 + right * -43 + up * -14
+            else
+                spawnPos = doorPos + forward * 2 + right * -43 + up * -14
+            end
+
+            local doortrapent = ents.Create("ent_grenade_hg")
+            doortrapent:SetPos(spawnPos)
+            doortrapent:SetAngles(doorAngles)
+            doortrapent:SetOwner(ply)
+            doortrapent:Spawn()
+            if self.TypeGren != "Impact" then
+                doortrapent.Delay = self.TimeUntilExplode / 2
+            end
+            doortrapent:SetModel(self.WorldModel)
+            doortrapent.TypeGren = self.TypeGren
+            door.Bomba = doortrapent
+
+
+            doortrapent:EmitSound("rust/handcuffs/handcuffs-struggle-pull-soft-03.ogg", 100, 100, 1, CHAN_AUTO)
+
+            constraint.Weld(door, doortrapent, 0, 0, 0, true, false)
+
+            timer.Simple(0.3, function()
+                doortrapent:EmitSound("rust/handcuffs/handcuffs-lock-01.ogg", 100, 100, 1, CHAN_AUTO)
+            end)
+
+            hook.Add("PlayerUse", "DoorTrap" .. door:EntIndex(), function(ply, ent)
+                if ent.ZaminirovaliTapok and ent.Bomba then
+                    hook.Remove("PlayerUse", "DoorTrap" .. ent:EntIndex())
+                    ent.ZaminirovaliTapok = false
+                    timer.Simple(0.7,function()
+                        if not ent.Bomba then return end
+                        ent:EmitSound("rust/handcuffs/handcuffs-break-01.ogg")
+                        constraint.RemoveConstraints(ent, "Weld")
+                        ent.Bomba:Arm()
+                        ent.Bomba = nil
+                    end)
+                end
+            end)
+            
+            
+            self:Remove()
+        end
     end
 end
 

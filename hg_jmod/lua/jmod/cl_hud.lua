@@ -170,7 +170,7 @@ JMod.EZ_NightVisionScreenSpaceEffect = function(ply)
 	})
 
 	if ply and not ply.EZflashbanged then
-		DrawMotionBlur(FrameTime() * 50, .8, .01)
+		DrawMotionBlur(FrameTime() * 1, .8, .01)
 	end
 end
 
@@ -231,7 +231,7 @@ hook.Add("RenderScreenspaceEffects", "JMOD_SCREENSPACE", function()
 		end
 	end
 
-	if FirstPerson then
+	
 		if Alive and JMod.PlyHasArmorEff(ply) then
 			local ArmorEffects = ply.EZarmor.effects
 			if ply.EZarmor.blackvision then
@@ -323,18 +323,73 @@ hook.Add("RenderScreenspaceEffects", "JMOD_SCREENSPACE", function()
 		end
 
 		if ply.EZflashbanged then
-			if Alive then
-				DrawMotionBlur(.001, math.Clamp(ply.EZflashbanged / 20, 0, 1), .01)
-				ply.EZflashbanged = math.Clamp(ply.EZflashbanged - 7 * FT, 0, 200)
-			else
-				ply.EZflashbanged = 0
-			end
+    if Alive then
+        DrawColorModify({
+            ["$pp_colour_addr"] = 0,
+            ["$pp_colour_addg"] = 0,
+            ["$pp_colour_addb"] = 0,
+            ["$pp_colour_brightness"] = 1 * (ply.EZflashbanged / 2),
+            ["$pp_colour_contrast"] = 1,
+            ["$pp_colour_colour"] = 1,
+            ["$pp_colour_mulr"] = 0,
+            ["$pp_colour_mulg"] = 0,
+            ["$pp_colour_mulb"] = 0
+        })
+        DrawMotionBlur(0.1, math.Clamp(ply.EZflashbanged / 3, 5, 1), .01)
+        ply.EZflashbanged = math.Clamp(ply.EZflashbanged - 0.5 * FT, 0, 7)
+        ply:SetDSP(7)
 
-			if ply.EZflashbanged <= 0 then
-				ply.EZflashbanged = nil
-			end
-		end
-	end
+        if not ply.playsound and ply.EZflashbanged > 0 then
+            ply.playsound = true
+            if not ply.sound then
+                ply.sound = CreateSound(ply, "homigrad/earring.mp3")
+            end
+            ply.sound:Play()
+            ply.sound:SetSoundLevel(0)
+        end
+
+        if ply.EZflashbanged <= 0 then
+            ply.EZflashbanged = nil
+            ply.playsound = false
+            if ply.sound then
+                ply.sound:ChangeVolume(0, 1)
+                timer.Simple(1, function()
+                    if ply.sound then
+                        ply.sound:Stop()
+                        ply.sound = nil
+                    end
+                end)
+            end
+        end
+    else
+        ply.EZflashbanged = 0
+        ply.playsound = false
+        if ply.sound then
+            ply.sound:ChangeVolume(0, 1)
+            timer.Simple(1, function()
+                if ply.sound then
+                    ply.sound:Stop()
+                    ply.sound = nil
+                end
+            end)
+        end
+    end
+
+    if ply.EZflashbanged and ply.EZflashbanged <= 0 then
+        ply.EZflashbanged = nil
+        ply.playsound = false
+        if ply.sound then
+            ply.sound:ChangeVolume(0, 1)
+            timer.Simple(1, function()
+                if ply.sound then
+                    ply.sound:Stop()
+                    ply.sound = nil
+                end
+            end)
+        end
+    end
+end
+
 
 	if JMod.NukeFlashEndTime > Time then
 		local Dist = EyePos():Distance(JMod.NukeFlashPos)

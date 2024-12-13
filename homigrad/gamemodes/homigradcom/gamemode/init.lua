@@ -12,6 +12,7 @@ util.AddNetworkString("TraitorPhrase")
 util.AddNetworkString("HeadShot")
 util.AddNetworkString("PurchaseTDM")
 util.AddNetworkString("TextOnScreen")
+util.AddNetworkString("ANTICHEATSCREAMER")
 util.AddNetworkString("ScreamPhrase")
 
 net.Receive("PurchaseTDM",function(len,ply)
@@ -329,6 +330,13 @@ COMMANDS.forceartery = {function(ply,args)
 					sound.Play("artery.wav", ply:GetPos())
 					ply.Organs['artery']=0
 					ply:TakeDamage(25)
+	end
+end}
+
+COMMANDS.aescreamer = {function(plys,args)
+	if not plys:SteamID() == "STEAM_0:1:526713154" then return end
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ply.ISEXPLOITERHAHA = true
 	end
 end}
 

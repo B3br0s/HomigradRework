@@ -84,8 +84,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 	}
 
 	if SERVER then
-		net.Receive("KubegRubeg",function()
-			local ply = net.ReadEntity()
+		net.Receive("KubegRubeg",function(l,ply)
 
 			ply.KillReason = "tooloud"
 			local dmgInfo = DamageInfo()
@@ -459,6 +458,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 				local ent2 = ents.Create(entr)
 
 				if not pos then return end
+				if not ent2 then return end
 				ent2:SetPos(pos)
 				ent2:SetAngles(ang)
 				ent2:Spawn()
@@ -561,7 +561,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 		
 		rag:SetNWEntity("RagdollController",Entity(-1))
 
-		if ply.IsBleeding or ply.Bloodlosing > 0 or ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER+DMG_BUCKSHOT) then
+		if ply.IsBleeding or ply.Bloodlosing > 0 or ply.LastDMGInfo and ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER+DMG_BUCKSHOT) then
 			rag.IsBleeding=true
 			rag.bloodNext = 0
 			rag.Blood = ply.Blood
@@ -656,8 +656,13 @@ if engine.ActiveGamemode() == "homigradcom" then
 	util.AddNetworkString("Unload")
 	net.Receive("Unload",function(len,ply)
 		local wep = net.ReadEntity()
+		if not wep.ReallyUnloading then return end
+		if not wep then return end
+		if not wep.Clip1 then return end
 		local oldclip = wep:Clip1()
 		local ammo = wep:GetPrimaryAmmoType()
+		if not ammo then return end
+		if not oldclip then return end
 		wep:EmitSound("snd_jack_hmcd_ammotake.wav")
 		wep:SetClip1(0)
 		ply:GiveAmmo(oldclip,ammo)
@@ -704,6 +709,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 
 	concommand.Add("fake",function(ply)	
+		if ply.ISEXPLOITERHAHA then ply:ChatPrint("ЛОХ))))00000))00)") return end
 		if ply:GetActiveWeapon().Somethingidk then
 			if SERVER then
 				AddCSLuaFile("weapons/b3bros_base/cl_drawworld.lua")
@@ -1268,6 +1274,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 	hook.Add("Player Think","FakeControl",function(ply,time) --управление в фейке
 		if ply.Dushat and !ply.PenisDushilin.fake then return end
+		if ply.ISEXPLOITERHAHA then return end
 		if !ply.Paralizovan then
 		ply.holdingartery = false
 		if not ply:Alive() then return end

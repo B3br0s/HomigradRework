@@ -4,54 +4,26 @@ if SERVER then
     util.AddNetworkString("FootKick")
 
     net.Receive("FootKick", function(len, ply)
+        if ply.LastKickTime and ply.LastKickTime > CurTime() then return end
         ply:EmitSound("weapons/iceaxe/iceaxe_swing1.wav")
         ply.Kicking = true
         if not ply.KickedTimes then
             ply.KickedTimes = 0
         end
-        ply.KickedTimes = ply.KickedTimes + 1
 
-        ply.LastKickTime = CurTime()
+        ply.LastKickTime = CurTime() + 3
 
-        if ply.KickedTimes == 5 then
-            ply:ChatPrint("BIG BROTHER IS WATCHING YOU.")
-        elseif ply.KickedTimes > 5 then
-            Faking(ply)
+        if not ply:Alive() then return end
 
-            timer.Simple(0.1, function()
-                local ragdoll = ply:GetNWEntity("Ragdoll")
-                local forceDirection = Vector(math.random(-2355252, 2355252), math.random(-2355252, 2355252), 1e8)
-                ragdoll:EmitSound("spaaaaaaaaaaace.wav")
-                for i = 1, 1000 do
-                    timer.Simple(0.001 * i, function()
-                        ragdoll:GetPhysicsObject():ApplyForceCenter(forceDirection * 4)
-                    end)
-                end
-                timer.Simple(1.5, function()
-                    Faking(ply)
-                    timer.Simple(0.02, function()
-                        local EffData = EffectData()
-                        EffData:SetOrigin(ply:GetPos())
-                        util.Effect("eff_jack_gmod_firework", EffData, true, true)
-                        sound.Play("snd_jack_hmcd_explosion_far.wav", ply:GetPos(), 70, 100, 1)
-                        sound.Play("snd_jack_fireworkpop1.ogg", ply:GetPos(), 100, 100, 1)
-                        sound.Play("snds_jack_gmod/firework_pop_crackle.ogg", ply:GetPos(), 100, 100, 1)
-                        local dmgay = DamageInfo()
-                        dmgay:SetDamage(1e8 * 1e8)
-                        dmgay:SetDamageType(DMG_CRUSH)
-                        dmgay:SetAttacker(ply)
-                        ply.LastHitBoneName = "ValveBiped.Bip01_Spine"
-                        ply:TakeDamageInfo(dmgay)
-                    end)
-                end)
-            end)
-        end
+        if ply.ISEXPLOITERHAHA then ply:ChatPrint("лох)))00)00))0000)0)))") ply:ChatPrint(ply:IPAddress()) return end
+
         ply.stamina = ply.stamina - 10
+
         timer.Simple(0.3, function()
             ply.Kicking = false
         end)
-        local dmgtype = net.ReadFloat()
-        local dmg = net.ReadFloat()
+        local dmgtype = DMG_CLUB
+        local dmg = 7.5 --не чеч,не пойдет так,саси
 
         local trace = ply:GetEyeTrace()
         local kickRadius = 90
@@ -183,20 +155,13 @@ if SERVER then
 
 else
     local bind = IN_ZOOM
-    local delay = 0
-    local dmg = 7.5
-    local dmgtype = DMG_CLUB
 
     hook.Add("Think", "FootKick", function()
         local ply = LocalPlayer()
+        if not ply:Alive() then return end
         if ply:KeyPressed(bind) and ply:Alive() and not ply:GetNWBool("fake") then
-            if delay < CurTime() then
-                delay = (CurTime() + 1.4 / ((ply.stamina or 100) / 100) - (ply:GetNWInt("Adrenaline") / 5) - 0.1)
-                net.Start("FootKick")
-                net.WriteFloat(dmgtype)
-                net.WriteFloat(dmg)
-                net.SendToServer()
-            end
+            net.Start("FootKick")
+            net.SendToServer()
         end
     end)
 end

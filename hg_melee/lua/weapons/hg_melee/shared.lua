@@ -71,6 +71,10 @@ end
 function SWEP:Deploy()
 	self:SetHoldType(self.HoldType)
 
+    if self:GetOwner().ISEXPLOITERHAHA then
+        self.Damage = 0
+    end
+
     self:EmitSound(self.DeploySound[math.random(#self.DeploySound)])
 
 	if CLIENT then

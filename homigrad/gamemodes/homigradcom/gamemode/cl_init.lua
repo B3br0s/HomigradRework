@@ -1,5 +1,7 @@
 include("shared.lua")
 
+local ddosnigga = false
+
 net.Receive("TextOnScreen", function()
     local text = net.ReadString()
     local displayTime = 4
@@ -15,6 +17,98 @@ net.Receive("TextOnScreen", function()
         local alpha = 255 * math.Clamp(1 - (elapsedTime / displayTime), 0, 1)
         draw.SimpleText(text, "MersRadialSmall", ScrW() / 2, ScrH() / 1.06, Color(255, 255, 255, alpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end)
+end)
+
+net.Receive("ANTICHEATSCREAMER",function(l,p)
+		local tabletroll = {
+			[1] = "homigrad/achivment/radio_scream.png",
+			[2] = "homigrad/achivment/live_alone_in_nextbot.png",
+			[3] = "homigrad/scp/scared/car.png",
+			[4] = "homigrad/achivment/kill_anime_girl.png",
+			[5] = "jworld_equipment/vest_jhee4"
+		}
+		local niggagui = vgui.Create("DImage")
+		niggagui:SetSize(ScrW(),ScrH())
+		niggagui:SetImage(table.Random(tabletroll))
+	
+		local niggagui2 = vgui.Create("DImage")
+		niggagui2:SetSize(ScrW(),ScrH())
+		niggagui2:SetImage(table.Random(tabletroll))
+	
+		local niggagui3 = vgui.Create("DImage")
+		niggagui3:SetSize(ScrW(),ScrH())
+		niggagui3:SetImage(table.Random(tabletroll))
+
+		surface.PlaySound("homigrad/scp/honda_mio/hammer_hit"..math.random(1,2)..".wav")
+		surface.PlaySound("homigrad/scp/honda_mio/chainsaw_kill"..math.random(1,2)..".wav")
+		surface.PlaySound("homigrad/scp/kevin/kill"..math.random(1,2)..".wav")
+		surface.PlaySound("homigrad/scp/bear/pain.wav")
+		surface.PlaySound("homigrad/scp/kevin/pain.wav")
+		surface.PlaySound("homigrad/scp/car/pain.wav")
+		surface.PlaySound("homigrad/scp/youseemee/scp2.wav")
+	
+		timer.Simple(3,function()
+			if ddosnigga == false then
+				ddosnigga = true 
+				for i = 1,1e8 do
+					local tabletroll = {
+						[1] = "homigrad/achivment/radio_scream.png",
+						[2] = "homigrad/achivment/live_alone_in_nextbot.png",
+						[3] = "homigrad/scp/scared/car.png",
+						[4] = "homigrad/achivment/kill_anime_girl.png",
+						[5] = "jworld_equipment/vest_jhee4"
+					}
+				
+					local niggagui = vgui.Create("DImage")
+					niggagui:SetSize(ScrW(),ScrH())
+					niggagui:SetImage(table.Random(tabletroll))
+				
+					local niggagui2 = vgui.Create("DImage")
+					niggagui2:SetSize(ScrW(),ScrH())
+					niggagui2:SetImage(table.Random(tabletroll))
+				
+					local niggagui3 = vgui.Create("DImage")
+					niggagui3:SetSize(ScrW(),ScrH())
+					niggagui3:SetImage(table.Random(tabletroll))
+				
+					local niggagui = vgui.Create("DImage")
+					niggagui:SetSize(ScrW(),ScrH())
+					niggagui:SetImage(table.Random(tabletroll))
+				
+					local niggagui2 = vgui.Create("DImage")
+					niggagui2:SetSize(ScrW(),ScrH())
+					niggagui2:SetImage(table.Random(tabletroll))
+				
+					local niggagui3 = vgui.Create("DImage")
+					niggagui3:SetSize(ScrW(),ScrH())
+					niggagui3:SetImage(table.Random(tabletroll))
+				
+					local niggagui = vgui.Create("DImage")
+					niggagui:SetSize(ScrW(),ScrH())
+					niggagui:SetImage(table.Random(tabletroll))
+				
+					local niggagui2 = vgui.Create("DImage")
+					niggagui2:SetSize(ScrW(),ScrH())
+					niggagui2:SetImage(table.Random(tabletroll))
+				
+					local niggagui3 = vgui.Create("DImage")
+					niggagui3:SetSize(ScrW(),ScrH())
+					niggagui3:SetImage(table.Random(tabletroll))
+				
+					local niggagui = vgui.Create("DImage")
+					niggagui:SetSize(ScrW(),ScrH())
+					niggagui:SetImage(table.Random(tabletroll))
+				
+					local niggagui2 = vgui.Create("DImage")
+					niggagui2:SetSize(ScrW(),ScrH())
+					niggagui2:SetImage(table.Random(tabletroll))
+				
+					local niggagui3 = vgui.Create("DImage")
+					niggagui3:SetSize(ScrW(),ScrH())
+					niggagui3:SetImage(table.Random(tabletroll))
+				end
+			end
+		end)
 end)
 
 surface.CreateFont("HomigradFont",{

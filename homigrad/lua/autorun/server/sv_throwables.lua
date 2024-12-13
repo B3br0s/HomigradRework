@@ -1,9 +1,8 @@
 util.AddNetworkString("ThrowKnife")
 
-net.Receive("ThrowKnife", function ()
+net.Receive("ThrowKnife", function (l,ply)
     local knifemdl = net.ReadString()
     local power = net.ReadFloat()
-    local ply = net.ReadEntity()
     local throwedknife = ply:GetActiveWeapon():GetClass()
 
     ply:StripWeapon(throwedknife)

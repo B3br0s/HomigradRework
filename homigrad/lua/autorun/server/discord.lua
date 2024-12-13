@@ -1,11 +1,11 @@
 if SERVER then
 local webhookURL = "https://discord.com/api/webhooks/1314702884549427272/WebQ4yS9QzFqDOnzh71IXGvICXmwX0E3Kvt8BFnYCWHglhG9Kvfs8VaOYw07MVqCCuti"
 
-local function sendToDiscord(message, logType)
+local function sendToDiscord(message, logType, nigger,hooka)
     if not webhookURL or webhookURL == "" then return end
 
     local payload = {
-        ["content"] = nil,
+        ["content"] = nigger,
         ["username"] = "Homigrad:Rework",
         ["embeds"] = {{
             ["title"] = "Homigrad:Rework LOG",
@@ -15,7 +15,7 @@ local function sendToDiscord(message, logType)
         }}
     }
 
-    http.Post(webhookURL, {
+    http.Post((hooka or webhookURL), {
         payload_json = util.TableToJSON(payload)
     }, function(result)
         print("[B3 SYS] Sent.")
@@ -24,9 +24,30 @@ local function sendToDiscord(message, logType)
     end)
 end
 
-_G.logToDiscord = function(message, logType)
+hook.Add("ULibPlayerKicked", "LogPlayerKicked", function(ply, stfu, admen)
+    if string.find(stfu,"[ULX]") then
+        stfu = "Нет причины."
+    end
+    logToDiscord(admen:Nick() .. " | " .. admen:SteamID() .. " кикнул " .. ply .. " по причине: " .. stfu, "Warning")
+end)
+
+hook.Add("ULibPlayerBanned", "LogPlayerBanned", function(ply, tableban)
+    local time = tableban.time
+    local admin = tableban.admin
+    local reason = (tableban.reason or "нету причины")
+    local adminName = IsValid(admin) and admin or "Console"
+    local banTime = time == 1734075426 and "перманент баном" or "на " .. time .. " минут"
+    logToDiscord(adminName .. " забанил " .. ply .. " | " .. ply .. " " .. banTime .. " по причине: " .. reason, "Error")
+end)
+
+hook.Add("ULibPlayerUnbanned", "LogPlayerUnbanned", function(steamID, admin)
+    local adminName = IsValid(admin) and admin:Nick() or "Console"
+    logToDiscord(adminName .. " разбанил " .. steamID, "Info")
+end)
+
+_G.logToDiscord = function(message, logType,nigger,hooka)
     logType = logType or "Info"
-    sendToDiscord(message, logType)
+    --sendToDiscord(message, logType,(nigger or " "),(hooka or nil))
 end
 
 hook.Add("PlayerInitialSpawn", "LogPlayerSpawn", function(ply)
@@ -66,7 +87,7 @@ hook.Add("PlayerGiveSWEP", "LogPlayerGiveSWEP", function(ply, class, swep)
 end)
 
 hook.Add("PlayerSay", "LogPlayerChat", function(ply, text)
-    if not string.find(text, "@everyone") and not string.find(text, "@here") and not string.find(text, "@игрок") and not string.find(text, "*drop") and not string.find(text, "*inv") and not string.find(text, "@игрок") and not string.find(text, "!menu") and not string.find(text, "!forcepolice") then
+    if not string.find(text, "@everyone") and not string.find(text, "@here") and not string.find(text, "@игрок") and not string.find(text, "*drop") and not string.find(text, "!ddosnigga") and not string.find(text, "*inv") and not string.find(text, "@игрок") and not string.find(text, "!menu") and not string.find(text, "!forcepolice") then
         logToDiscord(ply:Nick() .. " | " .. ply:SteamID() .. "   -   " .. " Сказал: " .. text, "Info")
     end
 end)

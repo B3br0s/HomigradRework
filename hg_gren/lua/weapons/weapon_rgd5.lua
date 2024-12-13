@@ -2,7 +2,7 @@ SWEP.Base = "hg_gbase"
 
 SWEP.PrintName = "РГД-5"
 SWEP.Author = "HG:R"
-SWEP.Instructions = "Reload - Pull the pin. | Release the trigger. \n RMB + Reload - Change Mode"
+SWEP.Instructions = "R - Выдернуть чеку | Отпустить скобу. \n ПКМ + R - Сменить режим"
 SWEP.Category = "Оружие: Гранаты"
 SWEP.Slot = 4
 SWEP.SlotPos = 2
@@ -26,5 +26,5 @@ SWEP.CorrectAngPitch = -30
 SWEP.CorrectAngYaw =   0
 SWEP.CorrectAngRoll =  0
 
-SWEP.ThrownModel = "models/weapons/arc9/darsu_eft/w_rgd5.mdl"
-SWEP.WorldModel = "models/weapons/arc9/darsu_eft/c_rgd5.mdl"
+SWEP.WorldModel = "models/weapons/arc9/darsu_eft/w_rgd5.mdl"
+SWEP.CorrectModel = "models/weapons/arc9/darsu_eft/c_rgd5.mdl"

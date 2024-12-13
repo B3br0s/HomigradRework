@@ -2,7 +2,7 @@ SWEP.Base = "hg_gbase"
 
 SWEP.PrintName = "M7920"
 SWEP.Author = "HG:R"
-SWEP.Instructions = "Reload - Pull the pin. | Release the trigger."
+SWEP.Instructions = "R - Выдернуть чеку | Отпустить скобу."
 SWEP.Category = "Оружие: Гранаты"
 SWEP.Slot = 4
 SWEP.SlotPos = 2
@@ -26,5 +26,5 @@ SWEP.CorrectAngPitch = -30
 SWEP.CorrectAngYaw =   0
 SWEP.CorrectAngRoll =  0
 
-SWEP.ThrownModel = "models/weapons/arc9/darsu_eft/w_m7920.mdl"
-SWEP.WorldModel = "models/weapons/arc9/darsu_eft/c_m7920.mdl"
+SWEP.WorldModel = "models/weapons/arc9/darsu_eft/w_m7920.mdl"
+SWEP.CorrectModel = "models/weapons/arc9/darsu_eft/c_m7920.mdl"

@@ -27,5 +27,5 @@ SWEP.CorrectAngPitch = 0
 SWEP.CorrectAngYaw =   0
 SWEP.CorrectAngRoll =  0
 
-SWEP.ThrownModel = "models/props_junk/jlare.mdl"
+SWEP.WorldModel = "models/props_junk/jlare.mdl"
 SWEP.WorldModel = "models/props_junk/jlare.mdl"

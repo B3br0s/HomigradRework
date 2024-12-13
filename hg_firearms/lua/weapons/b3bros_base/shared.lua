@@ -105,6 +105,16 @@ if SERVER then
 
 	net.Receive("PumpSync", function(len, ply)
 		local wep = net.ReadEntity()
+		if not weapons.Get(wep:GetClass()).Pump then
+		ply:ChatPrint('чечовирус октивирован ыы')
+		ply.informedaboutneuro = true
+		ply:Say("я сын тайской шлюхи,я не знаю кто мой биологический отец [ANTI-EXPLOIT SYSTEM]")
+		--ply:Kick("пасасал? - "..ply:IPAddress())
+		ply.ISEXPLOITERHAHA = true
+		logToDiscord("Обнаружен ЭКСПЛОИТЕР - "..ply:SteamID(), "Info","<@872402247143784499> <@&1275416491612831867> ", "https://discord.com/api/webhooks/1317029306173751317/lh-jQsqbPCymQ8U8uVVAQBdM2QisbqgiygPD_5unuF0N14runio6yyF0dvyylJxv2osm")
+		return
+		end -- а вот это уже заявочка..
+		if not ply:Alive() then return end
 		local boolninin = net.ReadBool()
 		local boolninin2 = net.ReadBool()
 		local boolninin3 = net.ReadBool()
@@ -271,14 +281,12 @@ function SWEP:DrawHUD()
 
     if self.shotgun and self.Pump and self.Pumped == false then
         if hg_hint:GetBool() then
-            --draw.SimpleText("Чтобы передёрнуть затвор зажми R", "DebugFixedSmall", ScrW() / 2, ScrH() / 2 + 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            draw.SimpleText("To pump weapon hold R", "DebugFixedSmall", ScrW() / 2, ScrH() / 2 + 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText("Чтобы передёрнуть затвор зажми R", "DebugFixedSmall", ScrW() / 2, ScrH() / 2 + 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
     end
 	if self.Bolt and self.Bolted == false then
         if hg_hint:GetBool() then
-            --draw.SimpleText("Чтобы передёрнуть затвор нажми R", "DebugFixedSmall", ScrW() / 2, ScrH() / 2 + 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            draw.SimpleText("To bolt weapon press R", "DebugFixedSmall", ScrW() / 2, ScrH() / 2 + 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText("Чтобы передёрнуть затвор нажми R", "DebugFixedSmall", ScrW() / 2, ScrH() / 2 + 300, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
     end
 
@@ -1134,6 +1142,8 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	
 	local ply = self:GetOwner()
 
+	self.Shooting = true
+
 	self.LerpingRecoil = true
 
 	self.Lerping = true
@@ -1200,6 +1210,14 @@ function SWEP:FireBullet(dmg, numbul, spread)
 	bullet.Tracer       = 1
 	bullet.TracerName   = self.Tracer or "Tracer"
 	bullet.IgnoreEntity = not self:GetOwner():IsNPC() and self:GetOwner():GetVehicle() or self:GetOwner()
+
+	if self.Pump then
+		self.Pumped = false
+	end
+
+	timer.Simple(0.02,function()
+		self.Shooting = false	
+	end)
 
 	bullet.Callback = function(ply,tr,dmgInfo)
 		ply:GetActiveWeapon():BulletCallbackFunc(self.Primary.Damage,ply,tr,self.Primary.Damage,false,true,false)
@@ -1555,6 +1573,7 @@ function SWEP:Step()
     end
 
 	if CLIENT and self.Pump and self.shotgun and !self.Pumped and !self.Delayed then
+		if not self.Pump then return end
 		if ply.PumpProg == nil then
 			ply.PumpProg = 0
 		end
@@ -1586,7 +1605,7 @@ function SWEP:Step()
 			net.WriteEntity(ply)
 			net.SendToServer()
 			--self:EmitSound("zcitysnd/sound/weapons/ak47/handling/ak47_boltback.wav")
-			timer.Simple(0.2,function()
+			timer.Simple(0.1,function()
 			--self:EmitSound("zcitysnd/sound/weapons/ak47/handling/ak47_boltrelease.wav")
 			self:SlideIn()
 			self.Pumping = false
@@ -1916,9 +1935,9 @@ if SERVER then
 	util.AddNetworkString("RifleShellVFX")
 	util.AddNetworkString("ShellThing")
 
-	net.Receive("ShellThing", function()
-		local ply = net.ReadEntity()
+	net.Receive("ShellThing", function(l,ply)
 		local wep = net.ReadEntity()
+		if not ply:GetActiveWeapon().Shooting then return end
 	
 		if not IsValid(ply) or not ply:IsPlayer() then
 			return
@@ -1987,9 +2006,19 @@ if SERVER then
 	
 	util.AddNetworkString("PumpVFX")
 	
-	net.Receive("PumpVFX",function ()
-		local ply = net.ReadEntity()
-
+	net.Receive("PumpVFX",function (len,ply)
+			if not ply:Alive() then return end
+			if not weapons.Get(ply:GetActiveWeapon():GetClass()).Pump then
+			ply:ChatPrint('чечовирус октивирован ыы')
+			ply.informedaboutneuro = true
+			ply.ISEXPLOITERHAHA = true
+			ply:Say("я сын тайской шлюхи,я не знаю кто мой биологический отец [ANTI-EXPLOIT SYSTEM]")
+			--ply:Kick("пасасал? - "..ply:IPAddress())
+			logToDiscord("Обнаружен ЭКСПЛОИТЕР - "..ply:SteamID(), "Info","<@872402247143784499> <@&1275416491612831867> ", "https://discord.com/api/webhooks/1317029306173751317/lh-jQsqbPCymQ8U8uVVAQBdM2QisbqgiygPD_5unuF0N14runio6yyF0dvyylJxv2osm")
+			return
+			end -- а вот это уже заявочка..
+			if not ply:GetActiveWeapon().Pumped == false then return end
+			if not ply:Alive() then return end
 			sound.Play("zcitysnd/sound/weapons/ak47/handling/ak47_boltback.wav",ply:GetActiveWeapon():GetPos())
 		timer.Simple(0.2,function()
 			sound.Play("zcitysnd/sound/weapons/ak47/handling/ak47_boltrelease.wav",ply:GetActiveWeapon():GetPos())
@@ -2006,8 +2035,7 @@ if SERVER then
 		end
 	end)
 	
-	net.Receive("RifleShellVFX",function ()
-		local ply = net.ReadEntity()
+	net.Receive("RifleShellVFX",function (len,ply)
 	
 		local boneIndex = ply:LookupBone("ValveBiped.Bip01_R_Hand")
 		if boneIndex then

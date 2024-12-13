@@ -1,8 +1,7 @@
 if SERVER then
 	util.AddNetworkString("ChangePos")
 	
-	net.Receive("ChangePos",function ()
-		local ply = net.ReadEntity()
+	net.Receive("ChangePos",function (len,ply)
 		if ply:GetNWFloat("PosaVistrela") and not ply.fake then
 			if ply:GetNWFloat("PosaVistrela") > 4 then
 				ply:SetNWFloat("PosaVistrela",1)
