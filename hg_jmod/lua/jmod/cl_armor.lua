@@ -179,7 +179,7 @@ end)
 
 net.Receive("JMod_EZarmorSync", function()
 	local ply = net.ReadEntity()
-	ply.EZarmor = net.ReadTable()
+	ply.EZarmor = net.ReadTable() or {}
 
 	if ply.EZarmorModels then
 		for k, v in pairs(ply.EZarmorModels) do

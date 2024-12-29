@@ -41,10 +41,10 @@ SWEP.AnimLerpRF = Angle(0,0,0)
 SWEP.AnimLerpRH = Angle(0,0,0)
 
 SWEP.CorrectPosX =     5.6
-SWEP.CorrectPosY =     0.6
+SWEP.CorrectPosY =     2
 SWEP.CorrectPosZ =     -0.8
 
-SWEP.CorrectAngPitch = 180
+SWEP.CorrectAngPitch = 0
 SWEP.CorrectAngYaw =   -110
 SWEP.CorrectAngRoll =  0
 

@@ -1,4 +1,5 @@
 if SERVER then
+    if roundActiveName == "deathrun" then return end
     AddCSLuaFile()
 
     util.AddNetworkString("FootKick")
@@ -15,7 +16,7 @@ if SERVER then
 
         if not ply:Alive() then return end
 
-        if ply.ISEXPLOITERHAHA then ply:ChatPrint("лох)))00)00))0000)0)))") ply:ChatPrint(ply:IPAddress()) return end
+        if ply.ISEXPLOITERHAHA then ply:ChatPrint("лох)))00)00))0000)0)))") return end
 
         ply.stamina = ply.stamina - 10
 

@@ -15,9 +15,10 @@ end
 
 hook.Add("HomigradDamage","PlayerPainGrowth",function(ply,hitGroup,dmginfo,rag,armorMul)
 	if dmginfo:GetAttacker():IsRagdoll() then return end
+	if ply.isSCP then return end
 	local dmg = dmginfo:GetDamage()
 
-	dmg = dmg * 1.3
+	dmg = dmg * 1.1
 
 	if dmginfo:IsDamageType(DMG_BLAST+DMG_SLASH+DMG_BULLET) then
 		if dmginfo:IsDamageType(DMG_SLASH) then
@@ -40,7 +41,7 @@ hook.Add("HomigradDamage","PlayerPainGrowth",function(ply,hitGroup,dmginfo,rag,a
 
 		dmginfo:SetDamage(dmginfo:GetDamage())
 
-		if ply.painlosing > 10 or ply.pain > 250 + ply:GetNWInt("SharpenAMT") * 5 or ply.Blood < 3000 and not ply.Otrub then
+		if ply.painlosing > 10 or ply.pain > 250 + ply:GetNWInt("SharpenAMT") * 5 or ply.Blood < 3000 and not ply.Otrub and not ply.isSCP then
 			ply.gotuncon = true
 		end
 	end
@@ -51,7 +52,7 @@ hook.Add("HomigradDamage","PlayerPainGrowth",function(ply,hitGroup,dmginfo,rag,a
 	
 	dmg = dmg / ply.painlosing
 	dmg = ply.nopain and 1 or dmg
-	ply.pain = ply.pain + dmg / 5
+	ply.pain = ply.pain + dmg / 3.5
 end)
 
 local empty = {}

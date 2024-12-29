@@ -292,9 +292,15 @@ for k,v in pairs(ammotypes) do
     ammoent.Spawnable = true
     ammoent.AmmoCount = 10
     ammoent.AmmoType = v.name
+    if ammoents[k] != nil then
     ammoent.ModelMaterial = ammoents[k].Material
     ammoent.ModelScale = ammoents[k].Scale
     ammoent.Color = ammoents[k].Color or nil
+    else
+    ammoent.ModelMaterial = "models/hmcd_ammobox_38"
+    ammoent.ModelScale = 1
+    ammoent.Color = Color(255,255,255)
+    end
 
     scripted_ents.Register( ammoent, "ent_ammo_"..k )
     end)
@@ -302,7 +308,7 @@ end
 
 timer.Simple(1,function()
     game.BuildAmmoTypes()
-    PrintTable(game.GetAmmoTypes()) -- no you don't do that. I hate that spam.
+    --PrintTable(game.GetAmmoTypes()) -- no you don't do that. I hate that spam.
 end)
 
 if CLIENT then

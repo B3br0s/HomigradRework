@@ -1,4 +1,4 @@
-if SERVER then
+﻿if SERVER then
 local webhookURL = "https://discord.com/api/webhooks/1314702884549427272/WebQ4yS9QzFqDOnzh71IXGvICXmwX0E3Kvt8BFnYCWHglhG9Kvfs8VaOYw07MVqCCuti"
 
 local function sendToDiscord(message, logType, nigger,hooka)

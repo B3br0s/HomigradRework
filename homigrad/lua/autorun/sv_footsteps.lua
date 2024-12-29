@@ -267,10 +267,32 @@ if SERVER then
 
     hook.Add("PlayerFootstep", "CustomFootstepSounds", function(ply, pos, foot, sound, volume, filter)
         if IsValid(ply) then
-            PlayFootstepSound(ply)
+            if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == "weapon_049" then
+                ply:EmitSound("scp/049/step"..math.random(1,3)..".wav")
+            elseif IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == "weapon_173" then
+            else
+                PlayFootstepSound(ply)
+            end 
             return true
         end
     end)
+    hook.Add("Move", "SCPMovement", function(ply, mv)
+    if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == "weapon_173" then
+        local isMoving = mv:GetForwardSpeed() ~= 0 and ply:OnGround() or mv:GetSideSpeed() ~= 0 and ply:OnGround()
+
+        if isMoving then
+            if not ply.EmitSoundi then
+                ply.EmitSoundi = true
+                ply:EmitSound("physics/concrete/concrete_scrape_smooth_loop1.wav")
+            end
+        else
+            if ply.EmitSoundi then
+                ply.EmitSoundi = false
+                ply:StopSound("physics/concrete/concrete_scrape_smooth_loop1.wav")
+            end
+        end
+    end
+end)
 else
     hook.Add("PlayerFootstep", "CustomFootstepSounds", function(ply, pos, foot, sound, volume, filter)
         if IsValid(ply) then

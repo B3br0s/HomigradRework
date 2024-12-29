@@ -87,10 +87,10 @@ if SERVER then
                         GuiltLogic(ent,owner,dmgInfo)
 
                         net.Start("JMod_VisionBlur")
-                        net.WriteFloat(5)
+                        net.WriteFloat(15)
                         net.Send(ent)
 
-                        ent.pain = math.min(ent.pain + 15,190)
+                        ent.pain = math.min(ent.pain + 15,300)
                     end
                 end
             end

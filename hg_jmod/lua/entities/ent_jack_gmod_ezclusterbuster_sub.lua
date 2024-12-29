@@ -110,17 +110,23 @@ if SERVER then
 		JMod.Sploom(Att, Pos, 10)
 		local Dir = Angle(0, 0, 0)
 
-		for i = 1, 8 do
+		for i = 1, 15 do
 			local DirVec = Dir:Forward()
 			local Pos = self:LocalToWorld(self:OBBCenter())
 			local Skeet = ents.Create("ent_jack_gmod_ezclusterbuster_skeet")
 			JMod.SetEZowner(Skeet, Att)
-			Skeet:SetPos(Pos + DirVec * 30)
+			Skeet:SetPos(Pos + DirVec * 155)
 			Skeet:SetAngles(Angle(0, 0, 0))
 			Skeet:Spawn()
 			Skeet:Activate()
-			Skeet:GetPhysicsObject():SetVelocity(Vel + DirVec * 600 + Vector(0, 0, math.random(-200, 200)))
-			Dir:RotateAroundAxis(vector_up, 45)
+			for is = 1,100 do
+				if i > 7 then
+					timer.Simple(0.01 * i,function()
+						Skeet:GetPhysicsObject():ApplyForceCenter(Vel + DirVec * 1600 + Vector(math.random(-1700, 1700), math.random(-1700, 1700), math.random(-1700, 1700)))
+					end)
+				end
+			end
+			Dir:RotateAroundAxis(vector_up, 85)
 		end
 	end
 
@@ -145,7 +151,7 @@ if SERVER then
 			Eff:SetNormal(Right)
 			Eff:SetScale(1)
 			util.Effect("eff_jack_gmod_rocketthrust", Eff, true, true)
-			Phys:ApplyForceCenter(Vector(0, 0, 4500))
+			Phys:ApplyForceCenter(Vector(0, 0, 24500))
 		end
 
 		--Phys:AddAngleVelocity(Vector(0,0,9e9))

@@ -1,16 +1,15 @@
-if engine.ActiveGamemode() == "homigradcom" then
     hook.Add("PlayerSpawn","Damage",function(ply)
         if PLYSPAWN_OVERRIDE then return end
     
         ply.Organs = {
-            ['brain']=2,
-            ['lungs']=5,
+            ['brain']=5,
+            ['lungs']=40,
             ['liver']=10,
-            ['stomach']=3,
-            ['intestines']=10,
-            ['heart']=2,
-            ['artery']=0.1,
-            ['spine']=2
+            ['stomach']=30,
+            ['intestines']=30,
+            ['heart']=20,
+            ['artery']=1,
+            ['spine']=5
         }
     
         ply.InternalBleeding=nil
@@ -47,7 +46,7 @@ if engine.ActiveGamemode() == "homigradcom" then
         local pos = dmgInfo:GetDamagePosition()
         local dir = dmgInfo:GetDamageForce():GetNormalized()
     
-        dir:Mul(1024 * 16)
+        dir:Mul(1024 * 8)
     
         local tr = {}
         tr.start = pos
@@ -133,7 +132,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             local slots = armorInfo.slots
             if dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then
                 if (slots.mouthnose or slots.head) then
-                    sound.Emit(ent,"homigrad/player/headshot_helmet.wav",90)
+                    sound.Emit(ent,"player/bhit_helmet-1.wav",90)
     
                     haveHelmet = true
                 elseif
@@ -146,9 +145,9 @@ if engine.ActiveGamemode() == "homigradcom" then
                     slots.leftcalf or
                     slots.rightcalf
                 then
-                    sound.Emit(ent,"homigrad/physics/shield/bullet_hit_shield_0"..math.random(1,7)..".wav",90)
+                    sound.Emit(ent,"snd_jack_hmcd_ricochet_"..math.random(1,2)..".wav",90)
                 else
-                    sound.Emit(ent,"homigrad/physics/shield/bullet_hit_shield_0"..math.random(1,7)..".wav",90)
+                    sound.Emit(ent,"player/kevlar" .. math.random(1,6) .. ".wav",90)
                 end
             end
     
@@ -165,116 +164,21 @@ if engine.ActiveGamemode() == "homigradcom" then
         dmginfo:SetDamage(dmginfo:GetDamage() * armorMul)
         local rubatPidor = DamageInfo()
         rubatPidor:SetAttacker(dmginfo:GetAttacker())
-        if dmginfo:GetInflictor() then
-        rubatPidor:SetInflictor(dmginfo:GetInflictor())
-        end
+        --rubatPidor:SetInflictor(dmginfo:GetInflictor())
         rubatPidor:SetDamage(dmginfo:GetDamage())
         rubatPidor:SetDamageType(dmginfo:GetDamageType())
         rubatPidor:SetDamagePosition(dmginfo:GetDamagePosition())
         rubatPidor:SetDamageForce(dmginfo:GetDamageForce())
     
         ply.LastDMGInfo = rubatPidor
-        if ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_BURN+DMG_BLAST+DMG_SLOWBURN)then
-            if ply.Explosive then
-                ply.Explosive = false
-                for i = 1,30 do
-                local FireVec = ( VectorRand() * .3 + Vector(math.random(-10,10), math.random(-10,10), .3)):GetNormalized()
-                FireVec.z = FireVec.z / 2
-                local Flame = ents.Create("ent_jack_gmod_eznapalm")
-                Flame:SetPos(ply:GetPos() + Vector(math.random(-10,10), math.random(-10,10), 50))
-                Flame:SetAngles(FireVec:Angle())
-                Flame:SetOwner(game.GetWorld())
-                JMod.SetOwner(Flame, game.GetWorld())
-                Flame.SpeedMul = 0.25
-                Flame.Creator = game.GetWorld()
-                Flame.HighVisuals = true
-                Flame:Spawn()
-                Flame:Activate()
-                end
-                local dinfo = DamageInfo()
-                dinfo:SetDamage(999999)
-                dinfo:SetDamageType(DMG_BLAST)
-                ply:TakeDamageInfo(dinfo)
-                ply:ChatPrint("Ты взорвался от пропана в твоём организме.")
-                local effectdata = EffectData()
-                effectdata:SetOrigin(ply:GetPos())
-                effectdata:SetAngles(Angle(math.random(360),math.random(360),math.random(360)))
-                effectdata:SetScale(75)
-                util.Effect("Explosion", effectdata)
-                util.Effect("HelicopterMegaBomb", effectdata)
-                util.Effect("Explosion", effectdata)
-                util.Effect("ElectricSpark", effectdata)
-                util.Effect("HelicopterImpact", effectdata)
-                JMod.Sploom(ply,ply:GetPos(),150)
-                JMod.Sploom(ply,ply:GetPos(),150)
-                sound.Play("explosions/doi_panzerschreck_02_close.wav",ply:GetPos())
-                ply:EmitSound("explosions/doi_ty_03_water.wav")
-                JMod.WreckBuildings(ply, ply:GetPos(), 3)
-                JMod.BlastDoors(ply, ply:GetPos(), 3)
-    
-                timer.Simple(.01, function()
-                    for i = 1, 5 do
-                        timer.Simple(.02 * i,function ()
-                            ParticleEffect("50lb_air", ply:GetPos() * math.random(1,5), Angle(math.random(360),math.random(360),math.random(360)))
-                            ParticleEffect("50lb_air", ply:GetPos() * math.random(1,3), Angle(math.random(360),math.random(360),math.random(360)))
-                            ParticleEffect("50lb_air", ply:GetPos() * math.random(1,4), Angle(math.random(360),math.random(360),math.random(360)))
-                        end)	
-                    end
-                end)
-            end
-        end
+
         if ply.LastDMGInfo:IsDamageType(DMG_CRUSH+DMG_FALL) then
-        if rag:GetVelocity():Length() > 2 and rag:GetVelocity():Length() < 170 then
-            dmginfo:ScaleDamage(0)
-        elseif rag:GetVelocity():Length() > 170 and rag:GetVelocity():Length() < 350 then
-            dmginfo:ScaleDamage(0.08)
-        elseif rag:GetVelocity():Length() > 350 and rag:GetVelocity():Length() < 460 then
-            dmginfo:ScaleDamage(0.12)
-        elseif rag:GetVelocity():Length() > 460 and rag:GetVelocity():Length() < 550 then
-            dmginfo:ScaleDamage(0.2)
-        elseif rag:GetVelocity():Length() > 550 and rag:GetVelocity():Length() < 600 then
-            dmginfo:ScaleDamage(0.3)
-        elseif rag:GetVelocity():Length() > 600 and rag:GetVelocity():Length() < 700 then
-            dmginfo:ScaleDamage(0.4)
-        elseif rag:GetVelocity():Length() > 700 and rag:GetVelocity():Length() < 800 then
-            dmginfo:ScaleDamage(0.5)
-        end
+                dmginfo:ScaleDamage(1 / 40 / 15)
         else
-            dmginfo:ScaleDamage(0.5)
+                dmginfo:ScaleDamage(ply.isSCP and 0.01 or 0.5)
         end
-        
+    
         hook.Run("HomigradDamage",ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
-        local dmgmult = {
-            ['ValveBiped.Bip01_Head1']=1.5,
-            ['ValveBiped.Bip01_Spine']=0.26,
-            ['ValveBiped.Bip01_R_Hand']=0.23,
-            ['ValveBiped.Bip01_R_Forearm']=0.23,
-            ['ValveBiped.Bip01_R_Foot']=0.23,
-            ['ValveBiped.Bip01_R_Thigh']=0.23,
-            ['ValveBiped.Bip01_R_Calf']=0.23,
-            ['ValveBiped.Bip01_R_Shoulder']=0.23,
-            ['ValveBiped.Bip01_R_Elbow']=0.23,
-            ['ValveBiped.Bip01_L_Hand']=0.23,
-            ['ValveBiped.Bip01_L_Forearm']=0.23,
-            ['ValveBiped.Bip01_L_Foot']=0.23,
-            ['ValveBiped.Bip01_L_Thigh']=0.23,
-            ['ValveBiped.Bip01_L_Calf']=0.23,
-            ['ValveBiped.Bip01_L_Shoulder']=0.23,
-            ['ValveBiped.Bip01_L_Elbow']=0.23
-        }
-        if ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT)then
-        if dmgmult[ply.LastHitBoneName] then
-            dmginfo:ScaleDamage(dmgmult[ply.LastHitBoneName])
-        else
-            dmginfo:ScaleDamage(0.18)
-        end
-    end	
-        if rag then
-    
-            ply:SetHealth(ply:Health() - dmginfo:GetDamage())
-    
-            if ply:Health() <= 0 then ply:Kill() end
-        end
     end)
     
     local bonenames = {
@@ -300,17 +204,11 @@ if engine.ActiveGamemode() == "homigradcom" then
         ["blood"] = "Вы умерли от кровопотери.",
         ["pain"] = "Вы умерли от болевого шока.",
         ["painlosing"] = "Вы умерли от передоза обезболивающим.",
-        ["stimulator"] = "Вы умерли от передоза стимулятором.",
-        ["obdolbos"] = "Вы умерли от стимулятора обдолбос.",
         ["adrenaline"] = "Вы умерли от передоза адреналином.",
         ["killyourself"] = "Вы совершили суицид.",
-        ["killyourselfartery"] = "Вы совершили суицид пробив себе артерию.",
         ["hungry"] = "Вы умерли от голода.",
         ["virus"] = "Вы умерли от заражения.",
-        ["ntoxin"] = "Вы умерли от заражения нейро-токсином.",
-        ["water"] = "Вы захлебнулись.",
-        ["poison"] = "Вы были отравлены.",
-        ["instant"] = "Вы умерли от смертельного попадания."
+        ["poison"] = "Вы были отравлены."
     }
     
     hook.Add("PlayerDeath","plymessage",function(ply,hitgroup,dmginfo)
@@ -322,11 +220,10 @@ if engine.ActiveGamemode() == "homigradcom" then
         local reason = ply.KillReason
         local dmgInfo = dmgInfo or ply.LastDMGInfo
     
-        if ply.KilledByKnifeThrow then ply:ChatPrint(reasons["instant"]) return end
-        if ply == att and reasons["killyourself"] then
-            ply:ChatPrint("Вы совершили суицид" .. add)	
+        if ply == att then
+            ply:ChatPrint("Вы совершили суицид" .. add)
         elseif reason then
-            ply:ChatPrint(reasons[reason])
+            ply:ChatPrint(reasons[reason] or "Вы умерли при загадочных обстоятельствах.")
         elseif att then
             local dmgtype = "от ранения"
         
@@ -340,6 +237,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             ply:ChatPrint("Вас убил игрок " .. att:Name())
         
             player.EventPoint(att:GetPos(),"hitgroup killed",512,att,ply)
+        else
+            ply:ChatPrint("Вы умерли при загадочных обстоятельствах")
         end
     end)
-    end

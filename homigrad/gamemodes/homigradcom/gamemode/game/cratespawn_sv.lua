@@ -66,7 +66,7 @@ KOROBKA_HUYNYI = {
 local newTbl = {}
 for i, mdl in pairs(KOROBKA_HUYNYI) do newTbl[mdl] = true end
 
-weaponscommon = { "weapon_binokle", "weapon_molotok", "ent_drop_flashlight", "weapon_knife", "weapon_pipe", "med_bandagesmall", "med_bandagebig", "blood_bag" }
+weaponscommon = { "weapon_binokle", "weapon_hammer", "ent_drop_flashlight", "weapon_knife", "weapon_pipe", "med_bandagesmall", "med_bandagebig", "blood_bag" }
 weaponsuncommon = { "weapon_glock18", "weapon_per4ik", "weapon_hg_crowbar", "weapon_hg_fubar", "weapon_bat", "weapon_hg_metalbat", "weapon_hg_hatchet", "*ammo*", "ent_jack_gmod_ezarmor_respirator", "ent_jack_gmod_ezarmor_lhead", "med_ifak" }
 weaponsrare = { "weapon_beretta", "weapon_remington870", "weapon_glock", "weapon_t", "weapon_hg_molotov", "*ammo*", "weapon_hg_sleagehammer", "weapon_hg_fireaxe", "ent_jack_gmod_ezarmor_gasmask", "ent_jack_gmod_ezarmor_mltorso" }
 weaponsveryrare = { "weapon_m3super", "ent_jack_gmod_ezarmor_mtorso", "ent_jack_gmod_ezarmor_mhead" }

@@ -3,8 +3,8 @@ SWEP.Category = "Оружие: Ближний Бой"
 SWEP.Spawnable = true
 SWEP.Base = 'hg_melee'
 
-SWEP.WorldModel = "models/weapons/tfa_nmrih/w_me_pipe_lead.mdl"
-SWEP.ViewModel =  "models/weapons/tfa_nmrih/w_me_pipe_lead.mdl"
+SWEP.WorldModel = "models/weapons/me_pipe_lead/w_me_pipe_lead.mdl"
+SWEP.ViewModel =  "models/weapons/me_pipe_lead/w_me_pipe_lead.mdl"
 
 SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 0
@@ -40,20 +40,19 @@ SWEP.AnimLerpRC = Angle(0,0,0)
 SWEP.AnimLerpRF = Angle(0,0,0)
 SWEP.AnimLerpRH = Angle(0,0,0)
 
-SWEP.CorrectPosX =     4
+SWEP.CorrectPosX =     2
 SWEP.CorrectPosY =     1.4
-SWEP.CorrectPosZ =     -8
+SWEP.CorrectPosZ =     -2
 
-SWEP.CorrectAngPitch = 10
-SWEP.CorrectAngYaw =   0
-SWEP.CorrectAngRoll =  180
+SWEP.CorrectAngPitch = 0
+SWEP.CorrectAngYaw =   180
+SWEP.CorrectAngRoll =  90
 
 SWEP.CorrectSize = 1
 
 function SWEP:Think()
-self:SetHoldType(self.HoldType)
+    self:SetHoldType(self.HoldType)
 
-if CLIENT and IsValid(self:GetOwner()) then
     if self.Anim1 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)
@@ -89,6 +88,4 @@ if CLIENT and IsValid(self:GetOwner()) then
     self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Hand"), Angle(30, -20, 0) + self.AnimLerpLH, true)
     
     self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_Spine4"), Angle(0,-20,0), true)
-
-    end
 end

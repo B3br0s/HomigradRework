@@ -1,7 +1,7 @@
 local rtsize = 512
 local rtmat = GetRenderTarget("huy-glass", rtsize, rtsize, false)
-local mat = Material("effects/arc9/rt")
-local mat2 = Material("effects/arc9/rt")
+mat = Material("effects/arc9/rt")
+mat2 = Material("effects/arc9/rt")
 SWEP.scopemat = Material("decals/scope.png")
 SWEP.perekrestie = Material("decals/perekrestie3.png")
 local limit = 1
@@ -113,7 +113,7 @@ function SWEP:DoRT()
 	render.PushRenderTarget(rtmat, 0, 0, rtsize, rtsize)
 	--render.Clear(1, 1, 1, 1)
 	local old = DisableClipping(true)
-	if diff < 1.0 * (rtsize / 512) / (self.scope_blackout / 400) then
+	if diff < 2.0 * (rtsize / 512) / (self.scope_blackout / 400) then
 		render.RenderView(rt)
 		cam.Start3D()
 			local aimWay = ang:Forward() * 10000000000

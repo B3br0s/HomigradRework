@@ -155,6 +155,9 @@ function SWEP:DrawWorldModel()
 
         self.ClientModel:SetPos(Pos)
         self.ClientModel:SetAngles(Ang)
+        if self.Skin then
+            self.ClientModel:SetSkin(self.Skin)
+        end
         self.ClientModel:SetModelScale(self.CorrectSize or 1)
         self.ClientModel:SetNoDraw(false)
 
@@ -164,6 +167,9 @@ function SWEP:DrawWorldModel()
     else
         if IsValid(self.ClientModel) then
             self.ClientModel:SetNoDraw(true)
+        end
+        if self.Skin then
+            self:SetSkin(self.Skin)
         end
         self:DrawModel()
     end

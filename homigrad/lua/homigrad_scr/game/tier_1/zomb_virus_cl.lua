@@ -1,7 +1,7 @@
 if not engine.ActiveGamemode() == "homigradcom" then return end
 local virus = 0
-local zombieoverlay = Material( "hud/infection" )
-local zombueoverlay2 = Material("hud/scp_infection")
+local zombieoverlay = Material( "fusion4" )
+local zombueoverlay2 = Material("fusion4")
 local viruslerp,viruslerp2 = 0,0
 local plysound = true
 
@@ -12,13 +12,13 @@ end)
 hook.Add("HUDPaint","VirusEffect",function()
     local w,h = ScrW(),ScrH()
     if virus > 5 then
-        if virus > 40 and plysound then
+        if virus > 10 and plysound then
             surface.PlaySound("gbombs_5/tvirus_infection/ply_infection.mp3")
             plysound = false
         end
         local pulse = math.sin(CurTime()*2)
         local pulse2 = math.sin(-CurTime()*2)
-        if virus > 70 then
+        if virus > 20 then
             viruslerp2 = Lerp(0.005,viruslerp2,(virus*1.5)+pulse*15)
             surface.SetMaterial(zombueoverlay2)
             surface.SetDrawColor(0,0,0,viruslerp2)

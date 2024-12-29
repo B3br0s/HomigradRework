@@ -48,6 +48,7 @@ if SERVER then
 
 		---
 		timer.Simple(.01, function()
+			if not self:GetPhysicsObject() then return end
 			self:GetPhysicsObject():SetMass(6)
 			self:GetPhysicsObject():Wake()
 		end)

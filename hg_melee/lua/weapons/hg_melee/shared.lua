@@ -24,7 +24,7 @@ SWEP.DamageType = DMG_SLASH
 SWEP.Delay = 1
 SWEP.StaminaCost = 4
 SWEP.CustomAnim = false
-SWEP.HoldType = "melee2"
+SWEP.HoldType = "knife"
 SWEP.TimeUntilHit = 0.2
 SWEP.TwoHanded = false
 SWEP.ShouldDecal = true
@@ -159,6 +159,38 @@ function SWEP:DrawHUD()
     surface.SetDrawColor(Color(255,255,255,hit * 255))
     draw.NoTexture()
     Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
+end
+
+function SWEP:CreateClientsideModel()
+    if self:GetClass() == "weapon_096" or self:GetClass() == "weapon_173" or self:GetClass() == "weapon_049" then return end
+    if not IsValid(self.ClientModel) then
+        self.ClientModel = ClientsideModel(self.WorldModel, RENDER_GROUP_OPAQUE_ENTITY)
+        self.ClientModel:SetNoDraw(true)
+
+        if not self.ACHO then
+            local boneName = self.SlideBone
+            if boneName == nil then return end
+            local boneIndex = self.ClientModel:LookupBone(boneName)
+            self.ACHO = 1
+            self.ClientModel:ManipulateBonePosition(boneIndex, Vector(0, 0, 0))
+        end
+
+        local hookName = "DrawSWEPWorldModel_" .. self:EntIndex()
+        hook.Add("PostDrawOpaqueRenderables", hookName, function()
+            if not IsValid(self) or not IsValid(self.ClientModel) then
+                hook.Remove("PostDrawOpaqueRenderables", hookName)
+                return
+            end
+            self:DrawClientModel()
+        end)
+    end
+end
+
+function SWEP:OnRemove()
+    if IsValid(self.ClientModel) then
+        self.ClientModel:Remove()
+        self.ClientModel = nil
+    end
 end
 
 function SWEP:DrawWorldModel()
@@ -332,7 +364,7 @@ timer.Simple(self.TimeUntilHit, function()
 
 				tr.Entity:TakeDamage(self.Damage)
 
-				print(tr.Entity:GetClass())
+				--print(tr.Entity:GetClass())
 
                 sound.Play(self.HitSound[1], self:GetPos(), 75, math.random(95, 105), 1)
             end

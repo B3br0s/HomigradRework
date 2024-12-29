@@ -104,27 +104,38 @@ if SERVER then
 	util.AddNetworkString("PumpSync")
 
 	net.Receive("PumpSync", function(len, ply)
-		local wep = net.ReadEntity()
-		if not weapons.Get(wep:GetClass()).Pump then
-		ply:ChatPrint('чечовирус октивирован ыы')
-		ply.informedaboutneuro = true
-		ply:Say("я сын тайской шлюхи,я не знаю кто мой биологический отец [ANTI-EXPLOIT SYSTEM]")
-		--ply:Kick("пасасал? - "..ply:IPAddress())
-		ply.ISEXPLOITERHAHA = true
-		logToDiscord("Обнаружен ЭКСПЛОИТЕР - "..ply:SteamID(), "Info","<@872402247143784499> <@&1275416491612831867> ", "https://discord.com/api/webhooks/1317029306173751317/lh-jQsqbPCymQ8U8uVVAQBdM2QisbqgiygPD_5unuF0N14runio6yyF0dvyylJxv2osm")
-		return
-		end -- а вот это уже заявочка..
 		if not ply:Alive() then return end
+		
+		local wep = net.ReadEntity()
+		
+		if not IsValid(wep) or wep:GetOwner() ~= ply then
+			return
+		end
+		
+		local weaponClass = wep:GetClass()
+		local weaponData = weapons.Get(weaponClass)
+		
+		if not weaponData or not weaponData.Pump then
+			--ply.ISEXPLOITERHAHA = true
+			return
+		end
+		
 		local boolninin = net.ReadBool()
 		local boolninin2 = net.ReadBool()
 		local boolninin3 = net.ReadBool()
-
+		
+		if ply.NextPumpSync and ply.NextPumpSync > CurTime() then
+			return
+		end
+		ply.NextPumpSync = CurTime() + 0.2
+	
 		if IsValid(wep) and wep:GetOwner() == ply then
 			wep.Pumping = boolninin
 			wep.Pumped = boolninin2
 			wep.Delayed = boolninin3
 		end
 	end)
+	
 
 	util.AddNetworkString("BroadcastAttachments")
 	util.AddNetworkString("BoltThing")
@@ -428,6 +439,20 @@ function SWEP:DrawWorldModel()--заместо drawclientmodel
        			attModel:SetModelScale(self.CorrectSize or 1)
        			attModel:SetNoDraw(true)
 				attModel:DrawModel()
+				attModel:SetParent(self.ClientModel)
+				if att.RemoveMat ~= nil and type(att.RemoveMat) == "number" then
+				    if att.RemoveMat then
+				        self.ClientModel:SetSubMaterial(att.RemoveMat, "null")
+				    else
+				        local worldModel = weapons.Get(self:GetClass()).WorldModel
+				        if worldModel then
+				            local subMaterial = worldModel:GetSubMaterial(att.RemoveMat)
+				            if subMaterial then
+				                self.ClientModel:SetSubMaterial(att.RemoveMat, subMaterial)
+				            end
+				        end
+				    end
+				end
        			if att.Holo or att.Optic then
        			    self.SightModel = attModel
 					if att.Optic then
@@ -595,6 +620,8 @@ if CLIENT then
 end
 
 function SWEP:PrimaryAttack()
+
+	if self.Delayed then return end
 
 	if CLIENT and self.SlideBone and self.Delay then
 		self:SlideRotate()
@@ -1071,7 +1098,13 @@ function SWEP:Reload()
         if self:GetOwner():IsSprinting() then return nil end
         if self.NextShot > CurTime() then return end
         self:GetOwner():SetAnimation(PLAYER_RELOAD)
-        self:EmitReload()
+		local reloaddelay = GetReloadDelay(self:GetHoldType())
+		if self:Clip1() > 0 then
+			timer.Simple(reloaddelay[2], function()
+				self:GetOwner():SetAnimation(PLAYER_IDLE)
+			end)
+		end
+		self:EmitReload()
         self:GetOwner():SetNWFloat("PosaVistrela", 1)
 		if CLIENT and self.Breaking then
 			if self:Clip1() == 0 then
@@ -1144,6 +1177,8 @@ function SWEP:FireBullet(dmg, numbul, spread)
 
 	self.Shooting = true
 
+	self.NextShootTime = CurTime() + 1
+
 	self.LerpingRecoil = true
 
 	self.Lerping = true
@@ -1215,9 +1250,10 @@ function SWEP:FireBullet(dmg, numbul, spread)
 		self.Pumped = false
 	end
 
-	timer.Simple(0.02,function()
+	if self.NextShootTime < CurTime() then
+		self.NextShootTime = nil
 		self.Shooting = false	
-	end)
+	end
 
 	bullet.Callback = function(ply,tr,dmgInfo)
 		ply:GetActiveWeapon():BulletCallbackFunc(self.Primary.Damage,ply,tr,self.Primary.Damage,false,true,false)
@@ -1278,7 +1314,7 @@ function SWEP:FireBullet(dmg, numbul, spread)
 		local effectdata = EffectData()
 		effectdata:SetOrigin(shootOriginFX)
 		effectdata:SetAngles(shootAngles)
-		effectdata:SetScale(self:IsScope() and 0.1 or 1)
+		effectdata:SetScale(self:IsScope() and 0.1 or 0.4)
 		effectdata:SetNormal(shootDir)
 		local hassupp = self:GetSuppressor()
 		if hassupp then return end
@@ -1552,6 +1588,7 @@ function SWEP:Step()
 		self.Lerping = false
 	end
 	
+	if ply:LookupBone("ValveBiped.Bip01_R_Finger1") then
 	if ply:KeyDown(IN_ATTACK) then
 		if not self.LerpPalchik then
 			self.LerpPalchik = Angle(0,0,0)
@@ -1571,6 +1608,7 @@ function SWEP:Step()
         ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger1"),self.LerpPalchik)
 		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Finger11"),self.LerpPalchik)
     end
+	end
 
 	if CLIENT and self.Pump and self.shotgun and !self.Pumped and !self.Delayed then
 		if not self.Pump then return end
@@ -1604,9 +1642,7 @@ function SWEP:Step()
 			net.Start("PumpVFX")
 			net.WriteEntity(ply)
 			net.SendToServer()
-			--self:EmitSound("zcitysnd/sound/weapons/ak47/handling/ak47_boltback.wav")
 			timer.Simple(0.1,function()
-			--self:EmitSound("zcitysnd/sound/weapons/ak47/handling/ak47_boltrelease.wav")
 			self:SlideIn()
 			self.Pumping = false
 			self.Pumped = true
@@ -1616,7 +1652,7 @@ function SWEP:Step()
 			net.WriteBool(self.Pumped)
 			net.WriteBool(self.Delayed)
 			net.SendToServer()
-			timer.Simple(0.5,function()
+			timer.Simple(0.3,function()
 			self.Delayed = false
 			net.Start("PumpSync")
 			net.WriteEntity(self)
@@ -1937,6 +1973,7 @@ if SERVER then
 
 	net.Receive("ShellThing", function(l,ply)
 		local wep = net.ReadEntity()
+
 		if not ply:GetActiveWeapon().Shooting then return end
 	
 		if not IsValid(ply) or not ply:IsPlayer() then
@@ -1950,7 +1987,7 @@ if SERVER then
 			["Rifle"] = "RifleShellEject"
 		}
 	
-		local shellEffect = shellEffectMap[wep.ShellType]
+		local shellEffect = shellEffectMap[ply:GetActiveWeapon().ShellType]
 		if shellEffect then
 			local boneIndex = ply:LookupAttachment("anim_attachment_rh")
 			if not boneIndex then
@@ -1967,7 +2004,7 @@ if SERVER then
 				return
 			end
 			
-			if wep.ShellType == "Pistol" then
+			if ply:GetActiveWeapon().ShellType == "Pistol" then
 				local offset = boneAng:Forward() * 5 + boneAng:Right() * 2 + boneAng:Up() * 3
 				local effectPos = bonePos + offset
 				local effectdata = EffectData()
@@ -1975,7 +2012,7 @@ if SERVER then
 				effectdata:SetAngles(boneAng + Angle(-40, -90, 180))
 				effectdata:SetScale(0.1)
 				util.Effect(shellEffect, effectdata)
-			elseif wep.ShellType == "Rifle" then
+			elseif ply:GetActiveWeapon().ShellType == "Rifle" then
 				local offset = boneAng:Forward() * 5 + boneAng:Right() * 3 + boneAng:Up() * 3
 				local effectPos = bonePos + offset
 				local effectdata = EffectData()
@@ -1983,7 +2020,7 @@ if SERVER then
 				effectdata:SetAngles(boneAng + Angle(0, -90, 180))
 				effectdata:SetScale(0.1)
 				util.Effect(shellEffect, effectdata)
-			elseif wep.ShellType == "ShotGun" then
+			elseif ply:GetActiveWeapon().ShellType == "ShotGun" then
 				local offset = boneAng:Forward() * 9 + boneAng:Right() * 3 + boneAng:Up() * 3
 				local effectPos = bonePos + offset
 				local effectdata = EffectData()
@@ -1991,7 +2028,7 @@ if SERVER then
 				effectdata:SetAngles(boneAng + Angle(0, -90, 180))
 				effectdata:SetScale(0.1)
 				util.Effect(shellEffect, effectdata)
-			elseif wep.ShellType == "ShotGunBreaking" then
+			elseif ply:GetActiveWeapon().ShellType == "ShotGunBreaking" then
 				local offset = boneAng:Forward() * 9 + boneAng:Right() * 3 + boneAng:Up() * 3
 				local effectPos = bonePos + offset
 				local effectdata = EffectData()
@@ -2006,31 +2043,35 @@ if SERVER then
 	
 	util.AddNetworkString("PumpVFX")
 	
-	net.Receive("PumpVFX",function (len,ply)
-			if not ply:Alive() then return end
-			if not weapons.Get(ply:GetActiveWeapon():GetClass()).Pump then
-			ply:ChatPrint('чечовирус октивирован ыы')
-			ply.informedaboutneuro = true
-			ply.ISEXPLOITERHAHA = true
-			ply:Say("я сын тайской шлюхи,я не знаю кто мой биологический отец [ANTI-EXPLOIT SYSTEM]")
-			--ply:Kick("пасасал? - "..ply:IPAddress())
-			logToDiscord("Обнаружен ЭКСПЛОИТЕР - "..ply:SteamID(), "Info","<@872402247143784499> <@&1275416491612831867> ", "https://discord.com/api/webhooks/1317029306173751317/lh-jQsqbPCymQ8U8uVVAQBdM2QisbqgiygPD_5unuF0N14runio6yyF0dvyylJxv2osm")
+	net.Receive("PumpVFX", function(len, ply)
+		if not ply:Alive() then return end
+	
+		local activeWeapon = ply:GetActiveWeapon()
+		
+		if not IsValid(activeWeapon) or not (weapons.Get(activeWeapon:GetClass()).Pump or activeWeapon.Pump) then
+		--	ply.ISEXPLOITERHAHA = true
 			return
-			end -- а вот это уже заявочка..
-			if not ply:GetActiveWeapon().Pumped == false then return end
-			if not ply:Alive() then return end
-			sound.Play("zcitysnd/sound/weapons/ak47/handling/ak47_boltback.wav",ply:GetActiveWeapon():GetPos())
-		timer.Simple(0.2,function()
-			sound.Play("zcitysnd/sound/weapons/ak47/handling/ak47_boltrelease.wav",ply:GetActiveWeapon():GetPos())
+		end
+	
+		if ply.NextPumpVFX and ply.NextPumpVFX > CurTime() then
+			return
+		end
+		ply.NextPumpVFX = CurTime() + 0.2
+	
+		local weaponPos = activeWeapon:GetPos()
+		sound.Play("zcitysnd/sound/weapons/ak47/handling/ak47_boltback.wav", weaponPos)
+	
+		timer.Simple(0.2, function()
+			sound.Play("zcitysnd/sound/weapons/ak47/handling/ak47_boltrelease.wav", weaponPos)
 		end)
 	
 		local boneIndex = ply:LookupBone("ValveBiped.Bip01_R_Hand")
 		if boneIndex then
 			local bonePos, boneAng = ply:GetBonePosition(boneIndex)
-	
+
 			local effectdata = EffectData()
 			effectdata:SetOrigin(bonePos)
-			effectdata:SetAngles(boneAng + Angle(0,-40,0))
+			effectdata:SetAngles(boneAng + Angle(0, -40, 0))
 			util.Effect("ShotgunShellEject", effectdata)
 		end
 	end)

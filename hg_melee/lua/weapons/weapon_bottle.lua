@@ -17,7 +17,7 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Ammo = "none"
 
 SWEP.HardAttack = false
-SWEP.Damage = 25
+SWEP.Damage = 95
 SWEP.DamageType = DMG_CLUB
 SWEP.Delay = 1
 SWEP.StaminaCost = 1

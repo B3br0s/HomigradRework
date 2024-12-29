@@ -492,8 +492,10 @@ function SWEP:AttackFront()
 		Dam:SetDamageForce(AimVec * Mul ^ 2)
 		Dam:SetDamageType(DMG_CLUB)
 		Dam:SetDamagePosition(HitPos)
+		if not Ent.isSCP then
 		Ent:TakeDamageInfo(Dam)
 		Ent.Bloodlosing = 5
+		end
 		local Phys = Ent:GetPhysicsObject()
 
 		if IsValid(Phys) then

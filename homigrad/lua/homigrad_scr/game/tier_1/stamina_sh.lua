@@ -24,12 +24,13 @@ end
 gg = function(ply,mv,value)
 	value = mv:GetMaxSpeed() * value
 
-
-	if roundActiveName == "deathrun" or roundActiveName == "nextbots" or roundActiveName == "eft" then
-	else
-		if ply.isDOZER == true then return end
-		ply:SetRunSpeed(Lerp((ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 0.05 or 1,ply:GetRunSpeed(),(ply:IsSprinting()) and 350 or ply:GetWalkSpeed()) + 3.5)
+	if ply.isSCP or ply:GetNWBool("isSCP") then
+		value = value / 20
 	end
+
+	if roundActiveName == "deathrun" or roundActiveName == "nextbots" or roundActiveName == "eft" then return end
+
+	ply:SetRunSpeed(Lerp((ply:IsSprinting() and mv:GetForwardSpeed() > 1) and 0.05 or 1,ply:GetRunSpeed(),(ply:IsSprinting()) and (ply.CustomRunSpeed or 350) or ply:GetWalkSpeed()) + (ply.CustomRunSpeed and 0 or 3.5))
 
 	mv:SetMaxSpeed(value)
 	mv:SetMaxClientSpeed(value)

@@ -57,7 +57,7 @@ net.Receive("SelectedTraitorClass",function(len,ply)
     local wep = ply:Give("weapon_kar98k",true)
     wep:SetClip1(wep:GetMaxClip1())
     ply:GiveAmmo(wep:GetMaxClip1(),wep.Primary.Ammo,true)
-    ply:Give("weapon_hatchet",true)  
+    ply:Give("weapon_axe",true)  
     ply:Give("weapon_sog",true)
     ply:Give("weapon_hg_t_vxpoison",true)
     ply:Give("weapon_hg_t_syringepoison",true)
@@ -453,6 +453,6 @@ function homicide.ShouldDiscordInput(ply,text)
     if not ply:IsAdmin() then return false end
 end
 
-function homicide.KarmaLogic(ply,att,dmgInfo)
+function homicide.GuiltLogic(ply,att,dmgInfo)
     return ply.roleT == att.roleT
 end

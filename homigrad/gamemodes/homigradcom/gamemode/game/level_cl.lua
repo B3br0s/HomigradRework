@@ -50,7 +50,7 @@ local yellow = Color(255,255,0)
 local roundTypes = {"State Of Emergency", "Standart", "Gun-Free Zone", "Wild West","Serial Killer"}
 
 hook.Add("HUDPaint","homigrad-roundstate",function()
-	draw.SimpleText("HG:R | "..TableRound().Name..(roundActiveName == "homicide" and " | " or " ")..(roundActiveName == "homicide" and roundTypes[TableRound().roundType] or " "),"HomigradFont",10,ScrH()-10,Color(255,255,255,50),TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+	draw.SimpleText(LocalPlayer():SteamID().." | HG:R [RESTORED] | "..TableRound().Name..(roundActiveName == "homicide" and " | " or " ")..(roundActiveName == "homicide" and roundTypes[TableRound().roundType] or " "),"HomigradFont",10,ScrH()-10,Color(255,255,255,50),TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 	if roundActive then
 		if roundActiveName == "swat" then
 			local time = math.Round(roundTimeStart + roundTimeSWAT - CurTime())

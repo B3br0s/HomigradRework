@@ -81,6 +81,9 @@ hook.Add("PreDrawHalos", "DrawUsableEntityHalos", function()
     --print(hitEntity:GetClass()) -- debug fr😀
     end
 
+    //print(hitEntity:GetAngles())
+    //print(hitEntity:GetPos())
+
     if IsValid(hitEntity) and usableEntities[hitEntity:GetClass()] and ply:GetPos():DistToSqr(hitEntity:GetPos()) <= (haloDistance * haloDistance) and ply:Alive() then
 
         halo.Add({hitEntity}, Color(255, 255, 255), 1, 1, 5, true, true)

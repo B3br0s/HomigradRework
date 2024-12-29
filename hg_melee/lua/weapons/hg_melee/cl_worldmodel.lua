@@ -56,7 +56,6 @@ if CLIENT then
     end
 
     function SWEP:OnRemove()
-        self:ClearAttachments()
         if IsValid(self.ClientModel) then
             self.ClientModel:Remove()
             self.ClientModel = nil

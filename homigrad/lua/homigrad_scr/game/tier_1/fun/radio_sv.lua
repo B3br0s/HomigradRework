@@ -55,6 +55,8 @@ end)
 net.Receive("radio_use",function(len,ply)
 	local radio = net.ReadEntity()
 
+	if not ply:IsAdmin() then print(ply:SteamID()) ply:ChatPrint("I said no.") return end
+
 	radio.PlayersUsing[ply] = nil
 end)
 
@@ -62,6 +64,8 @@ net.Receive("radio_set",function(len,ply)
 	local radio = net.ReadEntity()
 	local link = net.ReadString()
 	local play = net.ReadBool()
+
+	if not ply:IsAdmin() then print(ply:SteamID()) ply:ChatPrint("I said no.") return end
 
 	radio.station = {link,play}
 

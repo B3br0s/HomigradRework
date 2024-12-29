@@ -27,11 +27,11 @@ end
 
 local validUserGroupSuperAdmin = {
 	superadmin = true,
+	megapenis = true,
 	admin = true
 }
 
 local validUserGroup = {
-	megapenis = true,
 	ZvezdaTiktoka = false,
 	meagsponsor = true
 }
@@ -176,6 +176,26 @@ COMMANDS.help = {function(ply,args)
 
 	ply:ChatPrint(text)
 end,0}
+
+COMMANDS.enforcerage = {function(ply, args)
+    if not ply:IsSuperAdmin() then return end
+
+    if ply.isSCP and ply:GetActiveWeapon():GetClass() == "weapon_096" then
+        ply.RageSCP = true
+        ply.TargetsToKill = ply.TargetsToKill or {}
+        for abc, plytarget in ipairs(player.GetAll()) do
+            if not plytarget.isSCP and plytarget:Alive() then
+				plytarget.Target096 = true
+                ply.TargetsToKill[abc] = plytarget
+            end
+        end
+        timer.Simple(1, function()
+            net.Start("SCPTargetsWH")
+            net.WriteTable(ply.TargetsToKill)
+            net.Send(ply)
+        end)
+    end
+end}
 
 COMMANDS.viptest = {function(ply,args)
 	ply:Kick("xd")

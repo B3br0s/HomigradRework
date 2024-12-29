@@ -17,7 +17,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 35
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"arccw_go/elite/elite-1.wav"}
+    SWEP.Primary.Sound = {"zcitysnd/sound/weapons/firearms/hndg_beretta92fs/beretta92_fire1.wav"}  
     SWEP.Primary.SoundFar = "arccw_go/elite/elite-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = false
@@ -54,5 +54,5 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.addAng = Angle(0.4,-0.15,0)
     SWEP.addPos = Vector(0,-0.5,3.8)
 
-    SWEP.Fake1 = Vector(-13,-4.3,-5)--X(Вперед),Y(Вправо),Z(Вверх)
+    SWEP.Fake1 = Vector(0,0,0)--X(Вперед),Y(Вправо),Z(Вверх)
 end

@@ -56,7 +56,7 @@ function hl2.PlayerCanJoinTeam(ply,teamID)
 end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
-local uncommon = {"medkit","weapon_molotok","painkiller"}
+local uncommon = {"medkit","weapon_hammer","painkiller"}
 local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_per4ik"}
 
 function hl2.ShouldSpawnLoot()

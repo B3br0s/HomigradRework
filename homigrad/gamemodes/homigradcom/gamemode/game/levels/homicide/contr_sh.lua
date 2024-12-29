@@ -1,7 +1,7 @@
 local CLASS = player.RegClass("contr")
 
 CLASS.weapons = {"weapon_radio","weapon_pbat","weapon_handcuffs","weapon_taser"}
-CLASS.main_weapon = {"weapon_m4a4","weapon_ar15","weapon_r870police"}
+CLASS.main_weapon = {"weapon_m4a1","weapon_ar15","weapon_r870police"}
 CLASS.secondary_weapon = {"weapon_m9","weapon_fiveseven"}
 CLASS.models = {"models/monolithservers/mpd/male_04_2.mdl","models/monolithservers/mpd/male_06_2.mdl","models/monolithservers/mpd/male_07_2.mdl","models/monolithservers/mpd/male_08_2.mdl","models/monolithservers/mpd/male_09_2.mdl"}
 CLASS.color = Color(75,75,75)
@@ -15,12 +15,12 @@ function CLASS:Off()
 		return
 	end
 
-	/*local Karma = (self.contrKarma or 0)
+	/*local Guilt = (self.contrGuilt or 0)
 
-	if Karma >= 40 then
-		self.Karma = self.Karma + Karma
+	if Guilt >= 40 then
+		self.Guilt = self.Guilt + Guilt
 
-		KarmaCheck(ply)
+		GuiltCheck(ply)
 	end*/
 
 	self.isContr = nil
@@ -52,6 +52,7 @@ function CLASS:On()
 
 	for i,weapon in pairs(CLASS.weapons or empty) do self:Give(weapon) end
 
+	tdm.GiveSwep(self,CLASS.main_weapon)
 	tdm.GiveSwep(self,CLASS.secondary_weapon)
 
 	JMod.EZ_Equip_Armor(self,"Medium-Helmet",color)
@@ -167,7 +168,7 @@ function CLASS:VCityDMG(hitGroup,dmgInfo,rag)
 	Message(self,"help",7)
 end
 
-function CLASS:KarmaLogic(ply,dmgInfo)
+function CLASS:GuiltLogic(ply,dmgInfo)
 	if ply.isContr then return 20 end
 end
 

@@ -1,4 +1,4 @@
-SWEP.PrintName = "SOG Нож"
+SWEP.PrintName = "SOG Knife"
 SWEP.Category = "Оружие: Ближний Бой"
 SWEP.Spawnable = true
 SWEP.Base = 'hg_melee'
@@ -59,8 +59,8 @@ function SWEP:Think()
         self.AnimLerpLH = Angle(0,0,0)
 
         self.AnimLerpRC = LerpAngleFT(0.1,self.AnimLerpRC,Angle(-80,60,0))
-        self.AnimLerpRF = LerpAngleFT(0.1,self.AnimLerpRF,Angle(70,30,50))
-        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(-30,0,-50))
+        self.AnimLerpRF = LerpAngleFT(0.1,self.AnimLerpRF,Angle(70,0,50))
+        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(-30,-0,0))
     elseif self.Anim2 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)
@@ -68,7 +68,7 @@ function SWEP:Think()
 
         self.AnimLerpRC = LerpAngleFT(0.6,self.AnimLerpRC,Angle(0,0,-70))
         self.AnimLerpRF = LerpAngleFT(0.6,self.AnimLerpRF,Angle(0,30,0))
-        self.AnimLerpRH = LerpAngleFT(0.6,self.AnimLerpRH,Angle(-20,40,0))
+        self.AnimLerpRH = LerpAngleFT(0.6,self.AnimLerpRH,Angle(90,0,0))
     elseif self.Anim3 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)
@@ -81,11 +81,7 @@ function SWEP:Think()
 
     self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Clavicle"), Angle(20,20, 30) + self.AnimLerpRC, true)
     self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Forearm"), Angle(0,-30,0) + self.AnimLerpRF, true)
-    self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand"), Angle(0,20,10) + self.AnimLerpRH, true)
-
-	--self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Clavicle"), Angle(20,20, 30) + self.AnimLerpRC, true)
-	--self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Forearm"), Angle(0,0,0) + self.AnimLerpRF, true)
-	--self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand"), Angle(0,20,30) + self.AnimLerpRH, true)
+    self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Hand"), Angle(0,30,30) + self.AnimLerpRH, true)
 
     self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Finger0"),Angle(0,0,0))
     self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_L_Finger01"),Angle(0,20,0))

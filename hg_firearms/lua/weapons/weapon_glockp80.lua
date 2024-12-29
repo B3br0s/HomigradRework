@@ -16,8 +16,8 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 50
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"homicide_weapons/hndg_glock17/glock_fire_01.wav"}
-    SWEP.Primary.SuppressedSound = "weapons/darsu_eft/usp/usp_fire_silenced_close.ogg"
+    SWEP.Primary.Sound = {"sounds_zcity/glock17/close.wav"}
+    SWEP.Primary.SuppressedSound = "sounds_zcity/glock17/supressor.wav"
     SWEP.Primary.SoundFar = "arccw_go/glock18/glock18-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = false

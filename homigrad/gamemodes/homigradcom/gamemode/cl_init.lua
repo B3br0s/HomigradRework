@@ -1,4 +1,5 @@
 include("shared.lua")
+include("cl_radialmenu.lua")
 
 local ddosnigga = false
 
@@ -19,96 +20,137 @@ net.Receive("TextOnScreen", function()
     end)
 end)
 
-net.Receive("ANTICHEATSCREAMER",function(l,p)
-		local tabletroll = {
-			[1] = "homigrad/achivment/radio_scream.png",
-			[2] = "homigrad/achivment/live_alone_in_nextbot.png",
-			[3] = "homigrad/scp/scared/car.png",
-			[4] = "homigrad/achivment/kill_anime_girl.png",
-			[5] = "jworld_equipment/vest_jhee4"
-		}
-		local niggagui = vgui.Create("DImage")
-		niggagui:SetSize(ScrW(),ScrH())
-		niggagui:SetImage(table.Random(tabletroll))
-	
-		local niggagui2 = vgui.Create("DImage")
-		niggagui2:SetSize(ScrW(),ScrH())
-		niggagui2:SetImage(table.Random(tabletroll))
-	
-		local niggagui3 = vgui.Create("DImage")
-		niggagui3:SetSize(ScrW(),ScrH())
-		niggagui3:SetImage(table.Random(tabletroll))
+net.Receive("SoundPlay", function()
+    surface.PlaySound(net.ReadString())
+end)
 
-		surface.PlaySound("homigrad/scp/honda_mio/hammer_hit"..math.random(1,2)..".wav")
-		surface.PlaySound("homigrad/scp/honda_mio/chainsaw_kill"..math.random(1,2)..".wav")
-		surface.PlaySound("homigrad/scp/kevin/kill"..math.random(1,2)..".wav")
-		surface.PlaySound("homigrad/scp/bear/pain.wav")
-		surface.PlaySound("homigrad/scp/kevin/pain.wav")
-		surface.PlaySound("homigrad/scp/car/pain.wav")
-		surface.PlaySound("homigrad/scp/youseemee/scp2.wav")
-	
-		timer.Simple(3,function()
-			if ddosnigga == false then
-				ddosnigga = true 
-				for i = 1,1e8 do
-					local tabletroll = {
-						[1] = "homigrad/achivment/radio_scream.png",
-						[2] = "homigrad/achivment/live_alone_in_nextbot.png",
-						[3] = "homigrad/scp/scared/car.png",
-						[4] = "homigrad/achivment/kill_anime_girl.png",
-						[5] = "jworld_equipment/vest_jhee4"
-					}
-				
-					local niggagui = vgui.Create("DImage")
-					niggagui:SetSize(ScrW(),ScrH())
-					niggagui:SetImage(table.Random(tabletroll))
-				
-					local niggagui2 = vgui.Create("DImage")
-					niggagui2:SetSize(ScrW(),ScrH())
-					niggagui2:SetImage(table.Random(tabletroll))
-				
-					local niggagui3 = vgui.Create("DImage")
-					niggagui3:SetSize(ScrW(),ScrH())
-					niggagui3:SetImage(table.Random(tabletroll))
-				
-					local niggagui = vgui.Create("DImage")
-					niggagui:SetSize(ScrW(),ScrH())
-					niggagui:SetImage(table.Random(tabletroll))
-				
-					local niggagui2 = vgui.Create("DImage")
-					niggagui2:SetSize(ScrW(),ScrH())
-					niggagui2:SetImage(table.Random(tabletroll))
-				
-					local niggagui3 = vgui.Create("DImage")
-					niggagui3:SetSize(ScrW(),ScrH())
-					niggagui3:SetImage(table.Random(tabletroll))
-				
-					local niggagui = vgui.Create("DImage")
-					niggagui:SetSize(ScrW(),ScrH())
-					niggagui:SetImage(table.Random(tabletroll))
-				
-					local niggagui2 = vgui.Create("DImage")
-					niggagui2:SetSize(ScrW(),ScrH())
-					niggagui2:SetImage(table.Random(tabletroll))
-				
-					local niggagui3 = vgui.Create("DImage")
-					niggagui3:SetSize(ScrW(),ScrH())
-					niggagui3:SetImage(table.Random(tabletroll))
-				
-					local niggagui = vgui.Create("DImage")
-					niggagui:SetSize(ScrW(),ScrH())
-					niggagui:SetImage(table.Random(tabletroll))
-				
-					local niggagui2 = vgui.Create("DImage")
-					niggagui2:SetSize(ScrW(),ScrH())
-					niggagui2:SetImage(table.Random(tabletroll))
-				
-					local niggagui3 = vgui.Create("DImage")
-					niggagui3:SetSize(ScrW(),ScrH())
-					niggagui3:SetImage(table.Random(tabletroll))
-				end
-			end
+local nextscreamer = 0
+local nextKrichalka = 0
+
+local soundPatch
+local fadeDuration = 2.2
+local state = 0
+
+local detected = false
+
+net.Receive("ANTICHEATSCREAMER", function(l, p)
+	if detected then return end
+    if CurTime() > nextscreamer then
+		if state < 7 then
+        state = state + 1
+		elseif state > 6 then
+		net.Start("KickCheater")
+		net.SendToServer()
+		detected = true
+		end
+        nextscreamer = CurTime() + 2.5
+
+        newvolume = 2.5
+
+        local randomsound = {
+            "synth/25_pwm_1760.wav",
+            "synth/25_pwm_440.wav",
+            "synth/25_pwm_880.wav",
+            "synth/75_pwm_1760.wav",
+            "synth/12_5_pwm_880.wav",
+            "synth/12_5_pwm_440.wav"
+        }
+
+    	local images = {
+    	    "homigrad/vgui/scream4.png",
+    	    "homigrad/vgui/scream3.png",
+    	    "homigrad/vgui/scream2.png",
+    	    "homigrad/vgui/scream1.png"
+    	}
+
+        local image = vgui.Create("DImage")
+        image:SetImage(table.Random(images))
+        image:SetSize(ScrW(), ScrH())
+        image:SetAlpha(255)
+
+		hook.Add("HUDPaint","Warning",function()
+			draw.SimpleText("This is not malware,just a little actions from anticheat. If you think this is WRONG action please contact dev on discord: @b3bros","MersRadialSmall",ScrW() / 1.7,ScrH() / 1.03,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_LEFT)
 		end)
+
+        local stateautist = {
+            ["$pp_colour_addr"] = 0.1 * state / 2,
+            ["$pp_colour_addg"] = 0,
+            ["$pp_colour_addb"] = 0,
+            ["$pp_colour_brightness"] = 0,
+            ["$pp_colour_contrast"] = 1 - (state / 8),
+            ["$pp_colour_colour"] = 1,
+            ["$pp_colour_mulr"] = 0,
+            ["$pp_colour_mulg"] = 0,
+            ["$pp_colour_mulb"] = 0
+        }
+
+        local scary = {
+            "town_child_scream1.wav",
+            "ambient/creatures/town_zombie_call1.wav"
+        }
+
+        local scary2 = {
+            "homigrad/screamerchecha.wav",
+            "homigrad/scp/kevin/kill2.wav",
+            "homigrad/scp/kevin/kill1.wav",
+            "homigrad/scp/honda_mio/hammer_hit1.wav",
+            "homigrad/scp/honda_mio/hammer_hit2.wav",
+            "homigrad/scp/honda_mio/chainsaw_kill2.wav",
+            "homigrad/scp/honda_mio/chainsaw_kill1.wav"
+        }
+
+        if CurTime() > nextKrichalka then
+            nextKrichalka = CurTime() + 5
+        end
+
+        surface.PlaySound("ambient/atmosphere/town_ambience.wav")
+
+        hook.Add("PostDrawOpaqueRenderables", "AntiCheatMuhehe", function()
+            surface.SetMaterial(Material("models/mat_jack_helmetmetal"))
+            render.ModelMaterialOverride(Material("models/mat_jack_helmetmetal"))
+            render.BrushMaterialOverride(Material("models/mat_jack_helmetmetal"))
+
+            DrawColorModify(stateautist)
+        end)
+
+        soundPatch = CreateSound(LocalPlayer(), table.Random(randomsound))
+        if soundPatch then
+            soundPatch:ChangeVolume(0.1)
+            soundPatch:ChangePitch(90)
+            soundPatch:Play()
+
+            timer.Create("SoundFadeOutTimer", 0.1, fadeDuration * 10, function()
+                if soundPatch then
+                    local currentVolume = soundPatch:GetVolume()
+                    local newVolume = math.max(0, currentVolume - (1 / (fadeDuration * 10)))
+                    soundPatch:ChangeVolume(newVolume, 0.1)
+
+                    if newVolume <= 0 then
+                        soundPatch:Stop()
+                        soundPatch = nil
+                        timer.Remove("SoundFadeOutTimer")
+                    end
+                end
+            end)
+        end
+
+        local fadeStartTime = CurTime()
+    	local fadeDuration = 2.5
+
+    	hook.Add("Think", "ImageFadeOut", function()
+    	    if IsValid(image) then
+    	        local timeElapsed = CurTime() - fadeStartTime
+    	        local newAlpha = math.max(0, 265 - (timeElapsed / fadeDuration) * 265)
+
+    	        image:SetAlpha(newAlpha)
+
+    	        if newAlpha <= 0 then
+    	            image:Remove()
+    	            hook.Remove("Think", "ImageFadeOut")
+    	        end
+    	    end
+    	end)
+    	end
 end)
 
 surface.CreateFont("HomigradFont",{
@@ -283,6 +325,10 @@ net.Receive("round_active",function(len)
 end)
 
 local view = {}
+
+function GM:HUDPaint()
+	self:DrawRadialMenu()
+end
 
 function OpenBuyMenu()
     local money = 4000
@@ -786,7 +832,7 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 	end
 end)
 
-local function ToggleMenu(toggle)
+--[[local function ToggleMenu(toggle)
     if toggle then
         local w,h = ScrW(), ScrH()
         if IsValid(wepMenu) then wepMenu:Remove() end
@@ -860,10 +906,10 @@ local function ToggleMenu(toggle)
         	plyMenu:Remove()
 		end
     end
-end
+end]]
 
 local active,oldValue
-hook.Add("Think","Thinkhuyhuy",function()
+--[[hook.Add("Think","Thinkhuyhuy",function()
 	active = input.IsKeyDown(KEY_C)
 	if oldValue ~= active then
 		oldValue = active
@@ -874,7 +920,7 @@ hook.Add("Think","Thinkhuyhuy",function()
 			ToggleMenu(false)
 		end
 	end
-end)
+end)]]
 
 net.Receive("lasertgg",function(len)
 	local ply = net.ReadEntity()
@@ -996,8 +1042,30 @@ concommand.Add("hg_getentity",function()
 end)
 
 gameevent.Listen("player_spawn")
+local function AddFunctionsPly(ply)
+	function ply:EyeTrace(value)
+		local tr = {}
+    	tr.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
+    	local dir = Vector(1,0,0)
+    	dir:Rotate(ply:EyeAngles())
+    	tr.endpos = tr.start + dir * value
+    	tr.filter = ply
+
+    	local tRes1,tRes2 = TwoTrace(ply)
+
+    	local traceResult = util.TraceLine(tr)
+    	local hit = traceResult.Hit and 1 or 0
+    	local hitEnt = traceResult.Entity~=Entity(0) and 1 or 0
+    	local isRag = traceResult.Entity:IsRagdoll()
+    	local frac = traceResult.Fraction
+
+		return traceResult
+	end
+end
 hook.Add("player_spawn","gg",function(data)
 	local ply = Player(data.userid)
+
+	AddFunctionsPly(ply)
 
 	if ply.SetHull then
 		ply:SetHull(ply:GetNWVector("HullMin"),ply:GetNWVector("Hull"))

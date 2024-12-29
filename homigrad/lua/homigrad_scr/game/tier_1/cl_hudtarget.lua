@@ -62,7 +62,7 @@ hook.Add("HUDPaint","homigrad-huynyui",function()
  
 	if IsValid(ent) then
 		if ent:GetClass() == "player" then
-		if IsValid(lply:GetActiveWeapon()) and lply:GetActiveWeapon():GetClass() != "weapon_hands" then
+		if IsValid(lply:GetActiveWeapon()) and lply:GetActiveWeapon():GetClass() != "weapon_hands" and lply:GetActiveWeapon():GetClass() != "weapon_096" then
 			surface.SetDrawColor(Color(255, 255, 255, 255 * Size/0.5))
 			Circle(Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y, 105 * Size, 32)
 			Circle(Tr.HitPos:ToScreen().x, Tr.HitPos:ToScreen().y, 75 * Size, 32)
@@ -84,7 +84,7 @@ hook.Add("HUDPaint","homigrad-huynyui",function()
 	end
 	end
 
-	if IsValid(lply:GetActiveWeapon()) and lply:GetActiveWeapon():GetClass() != "weapon_hands" then
+	if IsValid(lply:GetActiveWeapon()) and lply:GetActiveWeapon():GetClass() != "weapon_hands" and lply:GetActiveWeapon():GetClass() != "weapon_096" then
 		local ply = lply
 		local t = {}
 		local eye = ply:GetAttachment(ply:LookupAttachment("eyes"))

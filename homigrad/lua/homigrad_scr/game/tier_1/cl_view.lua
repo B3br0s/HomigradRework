@@ -2,7 +2,6 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 	local t = {}
 	local n, e, r, o
-	local d = Material('materials/scopes/scope_dbm.png')
 	CameraSetFOV = 120
 	
 	CreateClientConVar("hg_fov","120",true,false,nil,90,120)
@@ -86,61 +85,50 @@ if engine.ActiveGamemode() == "homigradcom" then
 	
 	local hg_disable_stoprenderunfocus = CreateClientConVar("hg_disable_stoprenderunfocus","0",true)
 	
-	local prekols = {
-		"HG:R"
-	}
-	
 	local developer = GetConVar("developer")
 	local CalcView--fuck
 	local vel = 0
 	local diffang = Vector(0,0,0)
 	local diffpos = Vector(0,0,0)
+
+	hook.Add("RenderScene", "octoweapons", function(pos, angle, fov)
+		local text = "HG:R"
+	    local focus = HasFocus()
 	
-	hook.Add("RenderScene","octoweapons",function(pos,angle,fov)
-		local focus = HasFocus()
-		if focus ~= oldFocus then
-			oldFocus = focus
-	
-			if not focus then
-				text = table.Random(prekols)
-			end
-		end
-	
-		hook.Run("Frame",pos,angle)
-		
-		STOPRENDER = not hg_disable_stoprenderunfocus:GetBool() and not developer:GetBool() and not focus
-	
-		if STOPRENDER then
-			cam.Start2D()
-				draw.SimpleText(text,"DebugFixedSmall",ScrW() / 2,ScrH() / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-			cam.End2D()
-	
-			return true
-		end
-	
-		RENDERSCENE = true
-		local _view = CalcView(LocalPlayer(),pos,angle,fov)
-	
-		if not _view then RENDERSCENE = nil return end
-	
-		view.fov = fov
-		view.origin = _view.origin
-		view.angles = _view.angles
-		view.znear = _view.znear
-		view.drawviewmodel = _view.drawviewmodel
-	
-		if CAMERA_ZFAR then
-			view.zfar = CAMERA_ZFAR + 300--cl_fog in homigrad gamemode
-		else
-			view.zfar = nil
-		end
-	
-		render_Clear(0,0,0,255,true,true,true)
-		render_RenderView(view)
-	
-		RENDERSCENE = nil
-	
-		return true
+	    if focus ~= oldFocus then
+	        oldFocus = focus
+	        if not focus then
+	            text = "HG:R"
+	        end
+	    end
+
+	    if focus then
+	        hook.Run("Frame", pos, angle)
+	    end
+
+	    local stopRender = not hg_disable_stoprenderunfocus:GetBool() and not developer:GetBool() and not focus
+
+	    if stopRender then
+	        cam.Start2D()
+	        draw.SimpleText(text, "DebugFixedSmall", ScrW() / 2, ScrH() / 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	        cam.End2D()
+	        return true
+	    end
+
+	    local _view = CalcView(LocalPlayer(), pos, angle, fov)
+	    if not _view then return end
+
+	    view.fov = fov
+	    view.origin = _view.origin
+	    view.angles = _view.angles
+	    view.znear = _view.znear
+	    view.drawviewmodel = _view.drawviewmodel
+	    view.zfar = CAMERA_ZFAR and (CAMERA_ZFAR + 300) or nil
+
+	    render_Clear(0, 0, 0, 255, true, true, true)
+	    render_RenderView(view)
+
+	    return true
 	end)
 	
 	local ply = LocalPlayer()
@@ -151,7 +139,18 @@ if engine.ActiveGamemode() == "homigradcom" then
 		["weapon_physcannon"] = true,
 		["gmod_camera"] = true,
 		["drgbase_possessor"] = true,
-		["weapon_rpg"] = true
+		["weapon_rpg"] = true,
+		["css_57"] = true,
+		["css_ak47"] = true,
+		["css_deagle"] = true,
+		["css_glock"] = true,
+		["css_m3"] = true,
+		["css_m4a1"] = true,
+		["css_m249"] = true,
+		["css_mac10"] = true,
+		["css_mp5"] = true,
+		["css_tmp"] = true,
+		["css_knife"] = true
 	}
 	
 	function RagdollOwner(rag)
@@ -175,7 +174,11 @@ if engine.ActiveGamemode() == "homigradcom" then
 	local function scopeAiming()
 		local wep = LocalPlayer():GetActiveWeapon()
 	
+		if wep.Base == 'b3bros_base' then
 		return IsValid(wep) and wep.Base == 'b3bros_base' and LocalPlayer():KeyDown(IN_ATTACK2) and not LocalPlayer():KeyDown(IN_SPEED)
+		else
+		return IsValid(wep) and wep:GetClass() == 'weapon_taser' and LocalPlayer():KeyDown(IN_ATTACK2) and not LocalPlayer():KeyDown(IN_SPEED)
+		end
 	end
 	
 	LerpEyeRagdoll = Angle(0,0,0)
@@ -232,6 +235,9 @@ if engine.ActiveGamemode() == "homigradcom" then
 	end)
 	
 	function CalcView(ply,vec,ang,fov,znear,zfar)
+		if ply:GetActiveWeapon() == "weapon_173" then
+			return
+		end
 		if STOPRENDER then return end
 
 		local fov = CameraSetFOV + ADDFOV
@@ -296,7 +302,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 			local matrix = ragdoll:GetBoneMatrix(body)
 			local bodypos = matrix:GetTranslation()
 			local bodyang = matrix:GetAngles()
-			att.Pos = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 20 - bodyang:Right() * Vector(2, 2, 2)) or lply:EyePos()
+			att.Pos = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 20 - bodyang:Right() * 2) or lply:EyePos()
 			local anghook = 0 --Камера в фейке
 			LerpEyeRagdoll = LerpAngleFT(0.08,LerpEyeRagdoll,LerpAngle(anghook,eyeAngs,att.Ang))
 	
@@ -339,7 +345,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 	
 		angRecoil[3] = 0
 		
-		if wep and wep.Base == 'b3bros_base' then
+		if wep and wep.Base == 'b3bros_base'or wep and wep:GetClass() == "weapon_taser" then
 			local weaponClass = wep:GetClass()
 			local att = wep.Attachments
 	
@@ -399,7 +405,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 	
 		if lply:InVehicle() or not firstPerson then return end
 	
-		if not lply:Alive() or (IsValid(wep) and whitelistweps[wep:GetClass()]) or lply:GetMoveType() == MOVETYPE_NOCLIP then
+		if not lply:Alive() or (IsValid(wep) and whitelistweps[wep:GetClass()]) or lply:GetMoveType() == MOVETYPE_NOCLIP or IsValid(lply:GetActiveWeapon()) and lply:GetActiveWeapon():GetClass() == "weapon_173" then
 			view.origin = ply:EyePos()
 			view.angles = ply:EyeAngles()
 			view.drawviewer = false
@@ -624,8 +630,8 @@ if engine.ActiveGamemode() == "homigradcom" then
 			LocalPlayer():SetDSP(1)
 		end
 	
-		if LocalPlayer():Alive() and not LocalPlayer():GetNWBool("DOZER") then
-			tab2["$pp_colour_colour"] = LocalPlayer():Health() / 90
+		if LocalPlayer():Alive() and not LocalPlayer():GetNWBool("isSCP") then
+			tab2["$pp_colour_colour"] = LocalPlayer():Health() / 85
 			DrawColorModify(tab2)
 		end
 	

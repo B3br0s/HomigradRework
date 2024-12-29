@@ -90,14 +90,14 @@ local function addBloodPartCrazy(pos,vel,mat,w,h)
 end
 
 net.Receive("bleed artery",function()
-	blood_BleedArtery(net.ReadVector(),net.ReadVector())
+	addBloodPartartery(net.ReadVector(),net.ReadVector())
 end)
 
 net.Receive("blood particle more",function()
 	local pos,vel = net.ReadVector(),net.ReadVector()
 
 	for i = 1,random(10,15) do
-		blood_Bleed(pos,vel + Vector(Rand(-15,15),Rand(-15,15)))
+		addBloodPart(pos,vel + Vector(Rand(-15,15),Rand(-15,15)))
 	end
 end)
 

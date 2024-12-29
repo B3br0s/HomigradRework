@@ -2,10 +2,11 @@ if engine.ActiveGamemode() == "homigradcom" then
 	local PlayerMeta = FindMetaTable("Player")
 	local EntityMeta = FindMetaTable("Entity")
 
-	local handsarrivetime = 0.34 --rule34
-	local forwardarrivetime = 2.2
-	local backarrivetime = 1
-	local velocititouebat = 40
+	local handsarrivetime = 0.3
+	local forwardarrivetime = 3
+	local backarrivetime = 1.6
+	local velocititouebat = 185
+	local maxweightpidaras = 100
 
 	util.AddNetworkString("SyncAttsFake")
 
@@ -273,6 +274,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 	function Faking(ply,force) -- функция падения
 		if not GetGlobalBool("NoFake") then
 		if not ply:Alive() then return end
+		if ply.isSCP then return end
 
 		if not ply.fake then
 			if hook.Run("Fake",ply) ~= nil then return end
@@ -459,6 +461,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 				if not pos then return end
 				if not ent2 then return end
+				if ent2 == NULL then return end
 				ent2:SetPos(pos)
 				ent2:SetAngles(ang)
 				ent2:Spawn()
@@ -503,7 +506,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 		wep = wep or ply:GetActiveWeapon()
 		if !IsValid(wep) then return end
 
-		if wep:GetClass() == "weapon_hands" or wep:GetClass() == "weapon_handsinfected" then return end
+		if wep:GetClass() == "weapon_hands" or wep:GetClass() == "weapon_handsinfected" or wep:GetClass() == "weapon_049"  or wep:GetClass() == "weapon_096" or wep:GetClass() == "weapon_173" then return end
 		if wep.Base == "b3bros_base" then
 			if wep.TwoHands then
 				ply.slots[3] = nil
@@ -656,7 +659,10 @@ if engine.ActiveGamemode() == "homigradcom" then
 	util.AddNetworkString("Unload")
 	net.Receive("Unload",function(len,ply)
 		local wep = net.ReadEntity()
-		if not wep.ReallyUnloading then return end
+		if wep:GetOwner() != ply then
+			logToDiscord("Обнаружен Эксплойтер попытавшийся разрядить оружие другим - "..ply:SteamID(),"Error"," ","https://discord.com/api/webhooks/1318195645047111762/FjRrrG9DX7eQsv1ZRw1WwsIb-oWWr3uFPtPUPNrggEwkQyV7GfDbNa6SwiykbUyZAqym")
+			ply:Kick("ХУЕСОС НЕ ИГРАЙ С ЧИТАМИ)))000)))")
+		end
 		if not wep then return end
 		if not wep.Clip1 then return end
 		local oldclip = wep:Clip1()
@@ -722,6 +728,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 		end
 		if ply.Dushat then return end
 		if ply.SuffocatingFiber then return nil end
+		if ply.isSCP then return end
 		if ply["Organs"].spine == 0 then return nil end
 		if timer.Exists("faketimer"..ply:EntIndex()) then return nil end
 		if timer.Exists("StunTime"..ply:EntIndex()) then return nil end
@@ -923,6 +930,12 @@ if engine.ActiveGamemode() == "homigradcom" then
 			CustomWeight["models/monolithservers/mpd/male_0"..i..".mdl"] = true
 			CustomWeight["models/monolithservers/mpd/female_0"..i.."_2.mdl"] = true
 		end
+
+		for i = 2, 9 do
+			if i != 3 then
+			CustomWeight["models/scp_mtf_russian/mtf_rus_0"..i..".mdl"] = true
+			end
+		end
 	
 		if rag and IsValid(rag) then
 			rag:GetPhysicsObject():SetMass(25)
@@ -930,12 +943,10 @@ if engine.ActiveGamemode() == "homigradcom" then
 			local model = rag:GetModel()
 
 			if CustomWeight[model] == true and not NoAffect[model] then
-				--self:ChatPrint("B")
-				self:SetNWFloat("BackArrive", backarrivetime * 8.2)
-				self:SetNWFloat("ForwardArrive", forwardarrivetime * 8.2)
+				self:SetNWFloat("BackArrive", backarrivetime * 24)
+				self:SetNWFloat("ForwardArrive", forwardarrivetime * 24)
 				self:SetNWFloat("HandsArrive", handsarrivetime * 1.2)
 			else
-				--self:ChatPrint("A")
 				self:SetNWFloat("BackArrive", backarrivetime)
 				self:SetNWFloat("ForwardArrive", forwardarrivetime)
 				self:SetNWFloat("HandsArrive", handsarrivetime)
@@ -1148,6 +1159,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 		if ply:GetNWBool("fake") and ply:Alive() then
 			local rag = ply:GetNWEntity("Ragdoll")
 			if not IsValid(rag) then return end
+			if not rag:LookupBone("ValveBiped.Bip01_R_Finger0") then return end
 			if IsValid(rag.ZacConsLH) then
 				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger0"),Angle(0,10,0))
 				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger01"),Angle(0,20,0))
@@ -1281,8 +1293,12 @@ if engine.ActiveGamemode() == "homigradcom" then
 		local rag = ply:GetNWEntity("Ragdoll")
 
 		if not IsValid(rag) or not ply:Alive() then return end
+		if timer.Exists("StunEffect"..rag:EntIndex()) then return end
 		local bone = rag:LookupBone("ValveBiped.Bip01_Head1")
 		if not bone then return end
+		if rag.Blood then
+			ply.Blood = rag.Blood
+		end
 		if IsValid(ply.bull) then
 			ply.bull:SetPos(rag:GetPos())
 		end
@@ -1300,6 +1316,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 		local noska3 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Calf" )) )
 		local noska4 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Calf" )) )
 		local spinenan = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine1" )) )
+		local spine2 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine2" )) )
 		local spinemain = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine4" )) )
 		rag:SetFlexWeight(9,0)
 		local dist = (rag:GetAttachment(rag:LookupAttachment( "eyes" )).Ang:Forward()*10000):Distance(ply:GetAimVector()*10000)
@@ -1318,7 +1335,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					local RopeCount = table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope'))
 					local Ropes = constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), 'Rope')
 					local Try = math.random(1, 10 * RopeCount)
-					ply.stamina = ply.stamina - 20
+					ply.stamina = ply.stamina - 7
 									
 					local phys = rag:GetPhysicsObjectNum(1)
 					local speed = 1500
@@ -1342,14 +1359,14 @@ if engine.ActiveGamemode() == "homigradcom" then
 								ply:ChatPrint("Осталось: " .. RopeCount - 1)
 							end
 							if (rag.IsWeld or 0) > 0 then
-								--ply:ChatPrint("Осталось отбить гвоздей: " .. tostring(math.ceil(rag.IsWeld)))
-								ply:ChatPrint("Nails left: " .. tostring(math.ceil(rag.IsWeld)))
+								ply:ChatPrint("Осталось отбить гвоздей: " .. tostring(math.ceil(rag.IsWeld)))
 								ply.Bloodlosing = ply.Bloodlosing + 10
 								ply.pain = ply.pain + 20
 							end
 						else
-							--ply:ChatPrint("Ты развязался")
-							ply:ChatPrint("You're untied.")
+							ply:ChatPrint("Ты развязался")
+							rag.Cuffed = false
+							rag:GetNWBool("Cuffed")
 						end
 						
 						Ropes[1].Constraint:Remove()
@@ -1373,29 +1390,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 						local shadowparams = {
 							secondstoarrive=ply:GetNWFloat("HandsArrive"),
-							pos=head:GetPos()+eyeangs:Forward()*65+eyeangs:Right()*-15,
-							angle=ang,
-							maxangular=670,
-							maxangulardamp=600,
-							maxspeeddamp=50,
-							maxspeed=3000,
-							teleportdistance=0,
-							deltatime=0.01,
-						}
-						local shadowparams1 = {
-							secondstoarrive=ply:GetNWFloat("HandsArrive") / 1.3,
-							pos=head:GetPos()+eyeangs:Forward()*65+eyeangs:Right()*-15,
-							angle=ang,
-							maxangular=670,
-							maxangulardamp=600,
-							maxspeeddamp=50,
-							maxspeed=3000,
-							teleportdistance=0,
-							deltatime=0.01,
-						}
-						local shadowparams3 = {
-							secondstoarrive=ply:GetNWFloat("HandsArrive") * 1.3,
-							pos=head:GetPos()+eyeangs:Forward()*60+eyeangs:Right()*-25,
+							pos=head:GetPos()+eyeangs:Forward()*45+eyeangs:Right()*-12,
 							angle=ang,
 							maxangular=670,
 							maxangulardamp=600,
@@ -1405,8 +1400,8 @@ if engine.ActiveGamemode() == "homigradcom" then
 							deltatime=0.01,
 						}
 						local shadowparams2 = {
-							secondstoarrive=ply:GetNWFloat("HandsArrive"),
-							pos=head:GetPos()+eyeangs:Forward()*60+eyeangs:Right()*-25,
+							secondstoarrive=0.01,
+							pos=head:GetPos()+eyeangs:Forward()*25+eyeangs:Right()*-12+eyeangs:Up()*5,
 							angle=ang,
 							maxangular=670,
 							maxangulardamp=600,
@@ -1415,13 +1410,10 @@ if engine.ActiveGamemode() == "homigradcom" then
 							teleportdistance=0,
 							deltatime=0.01,
 						}
-						if ply:GetNWBool("RightArmm") == true then
 						phys:Wake()
-						phys:ComputeShadowControl(shadowparams1)
-						else
-						phys:Wake()
-						phys:ComputeShadowControl(shadowparams)
-						end
+						phys:ComputeShadowControl(shadowparams2)
+						phys2:Wake()
+						phys2:ComputeShadowControl(shadowparams)
 					end
 				end
 
@@ -1437,7 +1429,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
 				if(ply:KeyDown(IN_ATTACK2))then
 					local physa = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
-					local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) ) --rhand
+					local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Forearm" )) ) --rhand
 					local ang=ply:EyeAngles()
 					ang:RotateAroundAxis(eyeangs:Forward(),90)
 					ang:RotateAroundAxis(eyeangs:Right(),75)
@@ -1446,7 +1438,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					pos[3] = head:GetPos()[3]
 					local shadowparams = {
 						secondstoarrive=ply:GetNWEntity("HandsArrive"),
-						pos=head:GetPos()+eyeangs:Forward()*60+eyeangs:Right()*15,
+						pos=head:GetPos()+eyeangs:Forward()*45+eyeangs:Right()*15,
 						angle=ang,
 						maxangular=670,
 						maxangulardamp=100,
@@ -1455,44 +1447,57 @@ if engine.ActiveGamemode() == "homigradcom" then
 						teleportdistance=0,
 						deltatime=0.01,
 					}
+					local shadowparams2 = {
+						secondstoarrive=0.01,
+						pos=head:GetPos()+eyeangs:Forward()*25+eyeangs:Right()*19+eyeangs:Up()*1,
+						angle=ang,
+						maxangular=670,
+						maxangulardamp=600,
+						maxspeeddamp=50,
+						maxspeed=3000,
+						teleportdistance=0,
+						deltatime=0.01,
+					}
 					physa:Wake()
+					phys:Wake()
+					phys:ComputeShadowControl(shadowparams)
 					if (!ply.suiciding or ply.curweapon and weapons.Get(ply.curweapon).TwoHands) then
 						if IsValid(ply.wep) and weapons.Get(ply.curweapon).TwoHands  then
 							local ang = ply:EyeAngles()
 							ang:RotateAroundAxis(ang:Forward(),90)
 							ang:RotateAroundAxis(ang:Up(),20)
 							ang:RotateAroundAxis(ang:Right(),10)
-							shadowparams.angle = ang
+							shadowparams2.angle = ang
+
+							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams2)
 	
-							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
-	
-							shadowparams.pos=shadowparams.pos
+							shadowparams2.pos=shadowparams2.pos
 							phys:ComputeShadowControl(shadowparams)
-							shadowparams.pos=shadowparams.pos+eyeangs:Forward()*-50+eyeangs:Right()*-15
-							physa:ComputeShadowControl(shadowparams)
+							shadowparams2.pos=shadowparams2.pos+eyeangs:Forward()*-22+eyeangs:Right()*-22
+							physa:ComputeShadowControl(shadowparams2)
 	
 						elseif IsValid(ply.wep) and IsValid(ply.wep:GetPhysicsObject())then
 	
-							ang:RotateAroundAxis(ply:EyeAngles():Forward(),90)
-							ang:RotateAroundAxis(ply:EyeAngles():Up(),110)
-							ang:RotateAroundAxis(eyeangs:Right(),-30)
+							ang:RotateAroundAxis(ply:EyeAngles():Forward(),60)
+							ang:RotateAroundAxis(ply:EyeAngles():Up(),155)
+							ang:RotateAroundAxis(eyeangs:Right(),-20)
 	
-							shadowparams.angle=ang
-							shadowparams.pos=shadowparams.pos+eyeangs:Right()*-15
+							shadowparams2.angle=ang
+							shadowparams2.pos=shadowparams2.pos+eyeangs:Right()*-15
 	
-							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
-							physa:ComputeShadowControl(shadowparams)
+							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams2)
+							physa:ComputeShadowControl(shadowparams2)
 						else
-							physa:ComputeShadowControl(shadowparams)
+							physa:ComputeShadowControl(shadowparams2)
 						end
 					else
 						if ply.FakeShooting and IsValid(ply.wep) then
-							shadowparams.maxspeed=500
-							shadowparams.maxangular=500
-							shadowparams.pos=head:GetPos()-ply.wep:GetAngles():Forward()*12
-							shadowparams.angle=ply.wep:GetPhysicsObject():GetAngles()
-							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams)
-							physa:ComputeShadowControl(shadowparams)
+							shadowparams2.maxspeed=500
+							shadowparams2.maxangular=500
+							shadowparams2.pos=head:GetPos()-ply.wep:GetAngles():Forward()*12
+							shadowparams2.angle=ply.wep:GetPhysicsObject():GetAngles()
+							ply.wep:GetPhysicsObject():ComputeShadowControl(shadowparams2)
+							physa:ComputeShadowControl(shadowparams2)
 						end
 					end
 				end
@@ -1502,17 +1507,18 @@ if engine.ActiveGamemode() == "homigradcom" then
 					local phys2 = spinemain
 					local angs = ply:EyeAngles()
 					local angs2 = ply:EyeAngles()
+					local angs3 = ply:EyeAngles()
 					if not firstnigger then
 						firstnigger = 0
 					end
 					if angs[1] > -85 and angs[1] < 85 then
-					firstnigger = Lerp(0.025,firstnigger,90)
+					firstnigger = Lerp(0.0025,firstnigger,100)
 					angs:RotateAroundAxis(angs:Right(),firstnigger)
 					elseif angs[1] < -85 then
-					firstnigger = Lerp(0.025,firstnigger,150)
+					firstnigger = Lerp(0.0025,firstnigger,180)
 					angs:RotateAroundAxis(angs:Right(),firstnigger)
 					elseif angs[1] > 85 then
-					firstnigger = Lerp(0.025,firstnigger,0)
+					firstnigger = Lerp(0.0025,firstnigger,0)
 					angs:RotateAroundAxis(angs:Right(),firstnigger)
 					end
 					--ply:ChatPrint(firstnigger)
@@ -1522,8 +1528,8 @@ if engine.ActiveGamemode() == "homigradcom" then
 					angs2:RotateAroundAxis(angs:Up(),-150)
 					--ply:ChatPrint(ply:EyeAngles()[1])
 					local shadowparams3	 = { --зажать е и крутица
-						secondstoarrive=0.2,
-						pos=spinemain:GetPos(),
+						secondstoarrive=0.0001,
+						pos=spinemain:GetPos() - eyeangs:Forward()*(0.01*rag:GetVelocity():Length()),
 						angle=angs,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
@@ -1532,20 +1538,31 @@ if engine.ActiveGamemode() == "homigradcom" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
-					--local shadowparams3Forward	 = {
-					--	secondstoarrive=0.4,
-					--	pos=spinemain:GetPos(),
-					--	angle=angs - Angle(-55,0,0),
-					--	maxangulardamp=2.5,
-					--	maxspeeddamp=10,
-					--	maxangular=370,
-					--	maxspeed=120,
-					--	teleportdistance=0,
-					--	deltatime=deltatime,
-					--}
+					local shadowparams322 = {
+						secondstoarrive=0.0001,
+						pos=spine2:GetPos() - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length()),
+						angle=angs,
+						maxangulardamp=2.5,
+						maxspeeddamp=10,
+						maxangular=370,
+						maxspeed=120,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
 					local shadowparams4	 = {
-						secondstoarrive=1.2,
-						pos=spinemain:GetPos() + angs2:Right() * 3.5,
+						secondstoarrive=0.25,
+						pos=spinemain:GetPos() - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length()),
+						angle=angs,
+						maxangulardamp=2.5,
+						maxspeeddamp=10,
+						maxangular=370,
+						maxspeed=40,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
+					local shadowparams42	 = {
+						secondstoarrive=0.25,
+						pos=spine2:GetPos() - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length()),
 						angle=angs,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
@@ -1555,7 +1572,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 						deltatime=deltatime,
 					}
 					local shadowparams = {
-						secondstoarrive=0.2,
+						secondstoarrive=0.25,
 						pos=head:GetPos()+ply:EyeAngles():Forward()*-5+ply:EyeAngles():Up()*5+vector_up*(400/math.Clamp(rag:GetVelocity():Length()/300,1,12)) + ply:EyeAngles():Up() * 4,
 						angle=angs2,
 						maxangulardamp=2.5,
@@ -1565,40 +1582,24 @@ if engine.ActiveGamemode() == "homigradcom" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
-					local shadowparams2 = {
-						secondstoarrive=3,
-						pos=penis:GetPos()+eyeangs:Forward()*Vector(50,50,50)+eyeangs:Right()*-10+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
-						angle=angs,
-						maxangulardamp=10,
-						maxspeeddamp=10,
-						maxangular=370,
-						maxspeed=40,
-						teleportdistance=0,
-						deltatime=deltatime,
-					}
-					local shadowparams2fix = {
-						secondstoarrive=4,
-						pos=penis:GetPos()+eyeangs:Forward()*Vector(50,50,50)+eyeangs:Right()*-10+vector_up*(20/math.Clamp(rag:GetVelocity():Length()/300,1,12)),
-						angle=angs,
-						maxangulardamp=10,
-						maxspeeddamp=10,
-						maxangular=370,
-						maxspeed=40,
-						teleportdistance=0,
-						deltatime=deltatime,
-					}
 					head:Wake()
 					head:ComputeShadowControl(shadowparams)
-					if ply:GetNWBool("LeftArmm") and ply:GetNWBool("RightArmm") then
+				if rag:GetVelocity():Length() < 750 then
+					if ply:GetNWBool("LeftArmm") or ply:GetNWBool("RightArmm") then
 					spinemain:Wake()
 					spinemain:ComputeShadowControl(shadowparams4)
+					spine2:Wake()
+					spine2:ComputeShadowControl(shadowparams42)
 					else
 					spinemain:Wake()
 					spinemain:ComputeShadowControl(shadowparams3)	
+					spine2:Wake()
+					spine2:ComputeShadowControl(shadowparams322)		
 					end
 				end
+				end
 			end
-			if(ply:KeyDown(IN_SPEED)) and (RagdollOwner(rag) and !RagdollOwner(rag).Otrub) and !timer.Exists("StunTime"..ply:EntIndex()) then
+			if(ply:KeyDown(IN_SPEED)) and (RagdollOwner(rag) and !RagdollOwner(rag).Otrub) and !timer.Exists("StunTime"..ply:EntIndex()) and not rag.Cuffed then
 				local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" ))
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
 				if ply.Organs["carotidartery"] == 0 and !weapons.Get(ply.curweapon).TwoHands then
@@ -1660,7 +1661,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					ply:SetNWBool("LeftArmm",false)
 				end
 			end
-			if(ply:KeyDown(IN_WALK)) and !RagdollOwner(rag).Otrub and !timer.Exists("StunTime"..ply:EntIndex()) then
+			if(ply:KeyDown(IN_WALK)) and !RagdollOwner(rag).Otrub and !timer.Exists("StunTime"..ply:EntIndex()) and not rag.Cuffed then
 				local bone = rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 				if(!IsValid(rag.ZacConsRH) and (!rag.ZacNextGrRH || rag.ZacNextGrRH<=CurTime()))then
@@ -1724,19 +1725,29 @@ if engine.ActiveGamemode() == "homigradcom" then
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
 				local lh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
 				local angs = ply:EyeAngles()
-				angs:RotateAroundAxis(angs:Forward(),90)
-				angs:RotateAroundAxis(angs:Up(),90)
-				local speed = 50
+				angs:RotateAroundAxis(angs:Forward(),-90)
+				local speed = 70
 
 				if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 					local shadowparams1 = {
 						secondstoarrive=ply:GetNWFloat("ForwardArrive") / 1.1,
-						pos=lh:GetPos() + ply:EyeAngles():Forward() * 80 + ply:EyeAngles():Up() * 30,
-						angle=phys:GetAngles(),
+						pos=lh:GetPos() + ply:EyeAngles():Forward() * 130 + ply:EyeAngles():Up() * 60,
+						angle=angs,
 						maxangulardamp=10,
 						maxspeeddamp=10,
 						maxangular=50,
 						maxspeed=speed,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
+					local shadowparams1fix = {
+						secondstoarrive=ply:GetNWFloat("ForwardArrive"),
+						pos=lh:GetPos() + ply:EyeAngles():Forward() * 50 + ply:EyeAngles():Up() * 60,
+						angle=angs,
+						maxangulardamp=10,
+						maxspeeddamp=10,
+						maxangular=50,
+						maxspeed=speed / 2,
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
@@ -1748,15 +1759,15 @@ if engine.ActiveGamemode() == "homigradcom" then
 				local phys = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
 				local lh = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
 				local angs = ply:EyeAngles()
-				angs:RotateAroundAxis(angs:Forward(),90)
-				angs:RotateAroundAxis(angs:Up(),90)
-				local speed = 50
+
+				angs:RotateAroundAxis(angs:Forward(),-90)
+				local speed = 70
 
 				if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000) then
 					local shadowparams1 = {
 						secondstoarrive=ply:GetNWFloat("ForwardArrive") / 1.1,
-						pos=lh:GetPos() + ply:EyeAngles():Forward() * 80 + ply:EyeAngles():Up() * 30,
-						angle=phys:GetAngles(),
+						pos=lh:GetPos() + ply:EyeAngles():Forward() * 130 + ply:EyeAngles():Up() * 60,
+						angle=angs,
 						maxangulardamp=10,
 						maxspeeddamp=10,
 						maxangular=50,
@@ -1764,8 +1775,19 @@ if engine.ActiveGamemode() == "homigradcom" then
 						teleportdistance=0,
 						deltatime=deltatime,
 					}
+					local shadowparams1fix = {
+						secondstoarrive=ply:GetNWFloat("ForwardArrive"),
+						pos=lh:GetPos() + ply:EyeAngles():Forward() * 50 + ply:EyeAngles():Up() * 60,
+						angle=angs,
+						maxangulardamp=10,
+						maxspeeddamp=10,
+						maxangular=50,
+						maxspeed=speed / 2,
+						teleportdistance=0,
+						deltatime=deltatime,
+					}
 					phys:Wake()
-					phys:ComputeShadowControl(shadowparams1)
+					phys:ComputeShadowControl(shadowparams1)	
 				end
 			end
 			if(ply:KeyDown(IN_BACK) and IsValid(rag.ZacConsLH))then
@@ -1774,12 +1796,12 @@ if engine.ActiveGamemode() == "homigradcom" then
 				local angs = ply:EyeAngles()
 				angs:RotateAroundAxis(angs:Forward(),90)
 				angs:RotateAroundAxis(angs:Up(),90)
-				local speed = 50
+				local speed = 60
 				
 				if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000)then
 					local shadowparams = {
 						secondstoarrive=ply:GetNWFloat("BackArrive"),
-						pos=chst:GetPos() + ply:EyeAngles():Forward() * -80 + ply:EyeAngles():Up() * 30,
+						pos=chst:GetPos() + ply:EyeAngles():Forward() * -180 + ply:EyeAngles():Up() * 60,
 						angle=phys:GetAngles(),
 						maxangulardamp=10,
 						maxspeeddamp=10,
@@ -1798,12 +1820,12 @@ if engine.ActiveGamemode() == "homigradcom" then
 				local angs = ply:EyeAngles()
 				angs:RotateAroundAxis(angs:Forward(),90)
 				angs:RotateAroundAxis(angs:Up(),90)
-				local speed = 50
+				local speed = 60
 				
 				if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 					local shadowparams = {
 						secondstoarrive=ply:GetNWFloat("BackArrive"),
-						pos=chst:GetPos() + ply:EyeAngles():Forward() * -50  + ply:EyeAngles():Up() * 10,
+						pos=chst:GetPos() + ply:EyeAngles():Forward() * -180  + ply:EyeAngles():Up() * 60,
 						angle=phys:GetAngles(),
 						maxangulardamp=10,
 						maxspeeddamp=10,
@@ -1825,6 +1847,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 		if ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply.fake and not ply:HasGodMode() and ply:Alive() then
 			if speed < 400 then return end
 			if hook.Run("Should Fake Velocity",ply,speed) ~= nil then return end
+			if ply.isSCP then return end
 				Faking(ply)
 		end
 	end)

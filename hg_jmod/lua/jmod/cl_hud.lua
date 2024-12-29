@@ -412,7 +412,7 @@ end
 		end
 	end
 
-	if CurVisionBlur > 0 and FirstPerson then
+	if CurVisionBlur > 0 then
 		render.UpdateScreenEffectTexture()
 		blurMaterial:SetTexture("$BASETEXTURE", render.GetScreenEffectTexture())
 		blurMaterial:SetTexture("$DEPTHTEXTURE", render.GetResolvedFullFrameDepth())

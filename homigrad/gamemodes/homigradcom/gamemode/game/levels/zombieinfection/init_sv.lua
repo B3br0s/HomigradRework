@@ -48,6 +48,10 @@ function zombieinfection.StartRoundSV(data)
 			ply:SetNWBool("INFECTED",true)
 
    			sound.Play("homigrad/player/male/male_cough"..math.random(1,5)..".wav", ply:GetPos())
+
+			timer.Simple(math.random(1,3),function()
+				ply:Kill()
+			end)
 		end
 	end)
 
@@ -60,12 +64,6 @@ function zombieinfection.StartRoundSV(data)
 end
 
 function zombieinfection.RoundEndCheck()
-	if not zombieinfection.respawned then
-	for i,ply in pairs(tdm.GetListMul(player.GetAll(),1,function(ply) return not ply:Alive() and ply:Team() ~= 1002 end),1) do
-		zombieinfection.respawned = true
-		timer.Simple(math.random(1,4),function() ply:Spawn() ply:SetTeam(1) ply:Spawn() ply:StripWeapons() ply:Give("weapon_handsinfected") ply.virusvichblya = true ply.Blood = 50000 ply.adrenaline = math.random(1,2) ply.painlosing = 5 ply:ChatPrint("Не обращай внимания на сообщения о гилте.") zombieinfection.respawned = false end )
-	end
-end
     if roundTimeStart + roundTime < CurTime() then
 		if not zombieinfection.police then
 			zombieinfection.police = true
@@ -119,48 +117,7 @@ function zombieinfection.PlayerInitialSpawn(ply) ply:SetTeam(2) ply:SetNWBool("G
 function zombieinfection.PlayerCanJoinTeam(ply,teamID)
 	ply.zombieinfectionForceT = nil
 
-	if teamID == 3 then
-		if ply:IsAdmin() then
-			ply:ChatPrint("Милости прошу")
-			ply:Spawn()
-
-			return true
-		else
-			ply:ChatPrint("Иди нахуй")
-
-			return false
-		end
-	end
-
-    if teamID == 1 then
-		if ply:IsAdmin() then
-			ply.zombieinfectionForceT = true
-
-			ply:ChatPrint("Милости прошу")
-
-			return true
-		else
-			ply:ChatPrint("Пашол нахуй")
-
-			return false
-		end
-	end
-
-	if teamID == 2 then
-		if ply:Team() == 1 then
-			if ply:IsAdmin() then
-				ply:ChatPrint("ладно.")
-
-				return true
-			else
-				ply:ChatPrint("Просижовай жопу до конца раунда, лох.")
-
-				return false
-			end
-		end
-
-		return true
-	end
+	return true
 end
 
 local common = {"food_lays","weapon_pipe","weapon_bat","med_band_big","med_band_small","medkit","food_monster","food_fishcan","food_spongebob_home"}
@@ -169,9 +126,9 @@ local rare = {"weapon_glock18","weapon_gurkha","weapon_t","weapon_per4ik"}
 
 function zombieinfection.ShouldSpawnLoot() return false end
 
-function zombieinfection.PlayerDeath(ply,inf,att) return false end
+function zombieinfection.PlayerDeath(ply,inf,att) ply:SetTeam(1) net.Start("TextOnScreen") net.WriteString(ply:Name().." Был Заражён") net.Broadcast() return false end
 
-function zombieinfection.KarmaLogic(ply,att,dmgInfo)
+function zombieinfection.GuiltLogic(ply,att,dmgInfo)
 	if att.isContr and ply:Team() == 2 then return dmgInfo:GetDamage() * 3 end
 end
 

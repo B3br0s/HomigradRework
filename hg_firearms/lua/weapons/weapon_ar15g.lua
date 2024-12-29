@@ -16,7 +16,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 35
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"zcitysnd/sound/weapons/firearms/rifle_fnfal/fnfal_fire_01.wav"}
+    SWEP.Primary.Sound = {"sounds_zcity/ar_pistol/close.wav"}
     SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/m1a1/m1a1_dist.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = false
@@ -49,7 +49,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.CorrectAngYaw = 176
     SWEP.CorrectAngRoll = 0
 
-    SWEP.MuzzleFXPos = Vector(20,0,2)
+    SWEP.MuzzleFXPos = Vector(22,0,-1)
     SWEP.UsingVM = true
     SWEP.HasSight = true
     SWEP.addAng = Angle(-0.4,-4,0)

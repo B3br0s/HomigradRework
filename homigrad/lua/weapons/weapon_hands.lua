@@ -498,13 +498,6 @@ if engine.ActiveGamemode() == "homigradcom" then
 	end
 	
 	function SWEP:Think()
-		if SERVER then
-			if self:GetOwner().ISEXPLOITERHAHA then
-				net.Start("ANTICHEATSCREAMER")
-				net.Send(self:GetOwner())
-				return
-			end
-		end
 		if not self.CarryEnt then
 	local ply = self:GetOwner()
 	for i = 0, ply:GetBoneCount() - 1 do

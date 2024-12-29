@@ -1,11 +1,11 @@
 SWEP.Base = "hg_medbase"
 SWEP.PrintName = "Электрошокер"
-SWEP.Author = "V-City"
+SWEP.Author = "HG:R"
 SWEP.Instructions = "Электрическое возбуждение передается нервным клеткам, вызывая в основном болевой шок, а также кратковременные судороги и состояние «ошарашенности», дезориентации."
 SWEP.Slot = 2
 SWEP.SlotPos = 4
 SWEP.Spawnable = true
-SWEP.Category = "Оружие: Разное"
+SWEP.Category = "Предметы: Разное"
 
 SWEP.ViewModel = "models/weapons/arccw_go/v_eq_taser.mdl"
 SWEP.WorldModel = "models/weapons/arccw_go/v_eq_taser.mdl"
@@ -29,10 +29,36 @@ SWEP.CorrectPosZ =     -7
 SWEP.CorrectAngPitch = 180
 SWEP.CorrectAngYaw =   180
 SWEP.CorrectAngRoll =  0
+SWEP.sightyes = false
+
+SWEP.CameraPos = Vector(4.54,6,0.17)
 
 SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
 
+local timer_Exists = timer.Exists
+
+function SWEP:IsLocal()
+	return CLIENT and self:GetOwner() == LocalPlayer()
+end
+
+function SWEP:IsReloaded()
+	return timer_Exists("reload"..self:EntIndex())
+end
+
+function SWEP:IsScope()
+    local ply = self:GetOwner()
+    
+    if not IsValid(ply) or ply:IsNPC() then return end
+
+    if not ply:Alive() then return end
+
+    if self:IsLocal() or SERVER then
+        return not ply:IsSprinting() and ply:KeyDown(IN_ATTACK2) and not self:IsReloaded()
+    else
+        return self:GetNWBool("IsScope")
+    end
+end
 
 function SWEP:Initialize()
 	self:SetHoldType("revolver")
@@ -41,20 +67,45 @@ end
 local hull = Vector(10,10,10)
 
 function SWEP:PrimaryAttack()
+	if CLIENT then
+		if self:Clip1() <= 0 then return end
+		local ply = self:GetOwner()
+
+		local att = ply:GetAttachment(ply:LookupAttachment("anim_attachment_RH"))
+
+		local dir = ply:EyeAngles():Forward()
+
+		local trs = {
+			start = att.Pos + att.Ang:Forward() * 5 + att.Ang:Up() * 2,
+			endpos = att.Pos + dir * 250,
+			filter = ply,
+			mins = -hull,
+			maxs = hull,
+			mask = MASK_SHOT_HULL
+		}
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin(trs.start)
+		effectdata:SetMagnitude(0.2)
+		effectdata:SetScale(0.01)
+		effectdata:SetNormal(dir * 5)
+		util.Effect("Sparks",effectdata)
+	end
 	if CLIENT then return end
 
-	if self:Clip1() <= 0 then return nil end
+	local ply = self:GetOwner()
+
+	if self:Clip1() <= 0 then return end
 	self:TakePrimaryAmmo(1)
 
-	local ply = self:GetOwner()
-	local att = self:GetAttachment(1)
-	
-	ply:EmitSound("arccw_go/taser/taser_shoot.wav")
+	local att = ply:GetAttachment(ply:LookupAttachment("anim_attachment_RH"))
 
 	local dir = ply:EyeAngles():Forward()
 
-	local tr = {
-		start = att.Pos,
+	ply:EmitSound("arccw_go/taser/taser_shoot.wav")
+
+	local trs = {
+		start = att.Pos + att.Ang:Forward() * 5 + att.Ang:Up() * 2,
 		endpos = att.Pos + dir * 250,
 		filter = ply,
 		mins = -hull,
@@ -62,23 +113,28 @@ function SWEP:PrimaryAttack()
 		mask = MASK_SHOT_HULL
 	}
 
-	local trResult = util.TraceHull(tr)
+	local tr = ply:EyeTrace(325)
+    if not tr then return end
 
 	local effectdata = EffectData()
-	effectdata:SetOrigin(tr.start)
-	effectdata:SetMagnitude(5)
-	effectdata:SetNormal(dir * 50)
+	effectdata:SetOrigin(trs.start)
+	effectdata:SetMagnitude(0.2)
+	effectdata:SetScale(0.01)
+	effectdata:SetNormal(dir * 5)
 	util.Effect("Sparks",effectdata)
 
-	local ent = trResult.Entity
-	ent = (ent:IsPlayer() and ent) or RagdollOwner(ent)
+	local hit = tr.Hit and 1 or 0
 
-	if ent and ent:Alive() then
-		ent:EmitSound("hostage/hpain/hpain" .. math.random(1,6) .. ".wav")
+	if hit == 1 then
+		local hitted = tr.Entity
 
-		ent:EmitSound("arccw_go/taser/taser_hit.wav")
+		if hitted:GetClass() != "prop_ragdoll" and hitted:GetClass() != "player" then return end
 
-		Stun(ent)
+		hitted:EmitSound("hostage/hpain/hpain" .. math.random(1,6) .. ".wav")
+
+		hitted:EmitSound("arccw_go/taser/taser_hit.wav")
+
+		Stun(hitted)
 	end
 end
 
@@ -94,7 +150,6 @@ function SWEP:Reload()
 if timer.Exists("reload"..self:EntIndex()) or self:Clip1()>=self:GetMaxClip1() or self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )<=0 then return nil end
 	if self:GetOwner():IsSprinting() then return nil end
 	self:GetOwner():SetAnimation(PLAYER_RELOAD)
-	--self:EmitSound(self.ReloadSound,60,100,0.8,CHAN_AUTO)
 	timer.Create( "reload"..self:EntIndex(), 1.5, 1, function()
 		if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon()==self then
 			local oldclip = self:Clip1()
@@ -104,8 +159,3 @@ if timer.Exists("reload"..self:EntIndex()) or self:Clip1()>=self:GetMaxClip1() o
 		end
 	end)
 end
-
---[[function SWEP:SecondaryAttack()
-	SWEP.AimPosition = Vector(3.85,10,1.45)
-	SWEP.AimAngle = Angle(0,0,0)
-end]]

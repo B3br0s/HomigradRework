@@ -35,7 +35,7 @@ DEFAULT_MODELSCALE = 1
 local empty = {}
 
 hook.Add("Think","PlayerClass",function()
-    --[[local list = {}
+    local list = {}
 
     for i,ply in pairs(player.GetAll()) do
         local class = ply:GetPlayerClass()
@@ -55,10 +55,11 @@ hook.Add("Think","PlayerClass",function()
         for ply in pairs(list[class] or empty) do
             class.Think(ply,list)
         end
-    end]]--
+    end
 end)
 
 hook.Add("PlayerFootstep","PlayerClass",function(ply,...)
+    print("ABC ")
     return ply:PlayerClassEvent("PlayerFootstep",...)
 end)
 
@@ -107,4 +108,4 @@ end)
 
 hook.Add("HUDPaint","PlayerClass",function()
     LocalPlayer():PlayerClassEvent("HUDPaint")
-end)
+end)    

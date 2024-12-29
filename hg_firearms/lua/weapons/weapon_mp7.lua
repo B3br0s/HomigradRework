@@ -16,7 +16,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 25
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"arccw_go/mp7/mp7_01.wav","arccw_go/mp7/mp7_02.wav","arccw_go/mp7/mp7_03.wav"}
+    SWEP.Primary.Sound = {"sounds_zcity/mp7/close.wav"}
     SWEP.Primary.SoundFar = "zcitysnd/sound/arccw_go/ump45/ump45-1-distant.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = true

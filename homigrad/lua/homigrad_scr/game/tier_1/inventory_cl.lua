@@ -1,69 +1,14 @@
-if not engine.ActiveGamemode() == "homigradcom" then return end
 local blackListedWeps = {
-	["weapon_hands"] = true
+	["weapon_hands"] = true,
+	["weapon_173"] = true,
+	["weapon_049"] = true,
+	["weapon_096"] = true
 }
 
 local blackListedAmmo = {
 	[8] = true,
 	[9] = true,
 	[10] = true
-}
-
-Gunshuy = {
-	"weapon_glock18",
-	"weapon_p220",
-	"weapon_mp5",
-	"weapon_ar15",
-	"weapon_ak74",
-	"weapon_akm",
-	"weapon_fnp",
-	"weapon_fiveseven",
-	"weapon_hk_usp",
-	"weapon_deagle",
-	"weapon_beretta",
-	"weapon_ak74u",
-	"weapon_l1a1",
-	"weapon_fal",
-	"weapon_galil",
-	"weapon_galilsar",
-	"weapon_m14",
-	"weapon_m1a1",
-	"weapon_pkm",
-	"weapon_mk18",
-	"weapon_m249",
-	"weapon_m4a1",
-	"weapon_minu14",
-	"weapon_mp40",
-	"weapon_rpk",
-	"weapon_ump",
-	"weapon_hk_usps",
-	"weapon_m3super",
-	"weapon_glock",
-	"weapon_mp7",
-	"weapon_remington870",
-	"weapon_xm1014",
-	"bandage",
-	"morphine",
-	"med_ifak",
-	"med_ibuprofen",
-	"weapon_physgun",
-	"weapon_kabar",
-	"weapon_bat",
-	"weapon_gurkha",
-	"weapon_jmoddynamite",
-	"weapon_jmodflash",
-	"weapon_jmodnade",
-	"weapon_taser",
-	"weapon_t",
-	"weapon_knife",
-	"weapon_pipe",
-	"weapon_sar2",
-	"weapon_civil_famas",
-	"weapon_m1garand",
-	"weapon_saiga12",
-	"weapon_svd",
-	"weapon_de",
-	"weapon_sks"
 }
 
 local AmmoTypes = {
@@ -121,17 +66,21 @@ net.Receive("inventory",function()
 
 	if not success or not lootEnt then return end
 	
-	if items[lootEnt.curweapon] and table.HasValue(Gunshuy,lootEnt.curweapon) then items[lootEnt.curweapon] = nil end
+	if items[lootEnt.curweapon] then items[lootEnt.curweapon] = nil end
 
 	local items_ammo = net.ReadTable()
 
 	--if #items == 0 and #items_ammo == 0 then return end--wtf
 
 	items.weapon_hands = nil
+	items.weapon_handsinfected = nil
+	items.weapon_096 = nil
+	items.weapon_173 = nil
+	items.weapon_049 = nil
 
 	panel = vgui.Create("DFrame")
 	panel:SetAlpha(255)
-	panel:SetSize(430, 300)
+	panel:SetSize(500, 400)
 	panel:Center()
 	panel:SetDraggable(false)
 	panel:MakePopup()

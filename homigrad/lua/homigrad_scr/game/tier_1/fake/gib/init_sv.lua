@@ -1,6 +1,69 @@
 local vecZero = Vector(0,0,0)
 local vecInf = Vector(0,0,0) / 0
 
+local function razrivtela(pos)
+    local propModels = {
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_scapula.mdl",
+        "models/Gibs/HGIBS_scapula.mdl",
+        "models/Gibs/HGIBS_scapula.mdl",
+        "models/Gibs/HGIBS_scapula.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+        "models/Gibs/HGIBS.mdl",
+        "models/Gibs/HGIBS_rib.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+        "models/Gibs/HGIBS_spine.mdl",
+    }
+
+    for i = 1, #propModels do
+        timer.Simple(0.1, function()
+            local prop = ents.Create("prop_physics")
+            if not IsValid(prop) then return end
+
+            prop:SetModel(propModels[i])
+            prop:SetPos(pos)
+            prop:Spawn()
+
+            prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+
+            local randomVelocity = Vector(math.random(-1500, 1500), math.random(-1500, 1500), math.random(-1500, 1500))
+            prop:GetPhysicsObject():SetVelocity(randomVelocity)
+        end)
+    end
+end
+
+local function headshotblyat(pos)
+    local propModels = {
+        "models/mosi/fnv/props/gore/gorehead03.mdl",
+        "models/mosi/fnv/props/gore/gorehead02.mdl",
+        "models/mosi/fnv/props/gore/gorehead06.mdl",
+        "models/mosi/fnv/props/gore/gorehead05.mdl",
+        "models/mosi/fnv/props/gore/gorehead04.mdl"
+    }
+
+    timer.Simple(0.1, function()
+        for i = 1, #propModels do
+            local prop = ents.Create("prop_physics")
+            if not IsValid(prop) then return end
+
+            prop:SetModel(propModels[i])
+            prop:SetPos(pos)
+            prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+            prop:Spawn()
+
+            local randomVelocity = Vector(math.random(-70, 70), math.random(-500, 500), math.random(-150, 150))
+            prop:GetPhysicsObject():SetVelocity(randomVelocity)
+        end
+    end)
+end
+
 local function removeBone(rag,bone,phys_bone)
 	rag:ManipulateBoneScale(bone,vecZero)
 	--rag:ManipulateBonePosition(bone,vecInf) -- Thanks Rama (only works on certain graphics cards!)
@@ -56,14 +119,23 @@ local gib_ragdols = gib_ragdols
 local validHitGroup = {
 	[HITGROUP_LEFTARM] = true,
 	[HITGROUP_RIGHTARM] = true,
-	[HITGROUP_STOMACH] = true,
-	[HITGROUP_CHEST] = true,
-	[HITGROUP_HEAD] = true,
 	[HITGROUP_LEFTLEG] = true,
 	[HITGROUP_RIGHTLEG] = true,
 }
 
 local Rand = math.Rand
+
+_G.RemoveBoneGlobal = function(rag,bone,phys_bone)
+	gib_ragdols[rag] = true
+
+	rag.gibRemove = {}
+
+	rag.Blood = 	rag.Blood or 5000
+	rag.BloodNext = rag.BloodNext or 0
+	rag.BloodGibs = rag.BloodGibs or {}
+
+    Gib_RemoveBone(rag,bone,phys_bone)
+end
 
 local validBone = {
 	["ValveBiped.Bip01_R_UpperArm"] = true,
@@ -81,75 +153,10 @@ local validBone = {
 	["ValveBiped.Bip01_R_Foot"] = true
 }
 
-local function razrivtela(pos)
-    local propModels = {
-        "models/Gibs/HGIBS_rib.mdl",
-        "models/Gibs/HGIBS_rib.mdl",
-        "models/Gibs/HGIBS_scapula.mdl",
-        "models/Gibs/HGIBS_scapula.mdl",
-        "models/Gibs/HGIBS_scapula.mdl",
-        "models/Gibs/HGIBS_scapula.mdl",
-        "models/Gibs/HGIBS_spine.mdl",
-        "models/Gibs/HGIBS_rib.mdl",
-        "models/Gibs/HGIBS_rib.mdl",
-        "models/Gibs/HGIBS_rib.mdl",
-        "models/Gibs/HGIBS_rib.mdl",
-        "models/Gibs/HGIBS_spine.mdl",
-        "models/Gibs/HGIBS.mdl",
-        "models/Gibs/HGIBS_rib.mdl",
-        "models/Gibs/HGIBS_spine.mdl",
-        "models/Gibs/HGIBS_spine.mdl",
-        "models/Gibs/HGIBS_spine.mdl",
-    }
-
-    for i = 1, #propModels do
-        timer.Simple(0.1, function()
-            local prop = ents.Create("prop_physics")
-            if not IsValid(prop) then return end
-
-            prop:SetModel(propModels[i])
-            prop:SetPos(pos)
-            prop:Spawn()
-
-            prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-
-            local randomVelocity = Vector(math.random(-500, 500), math.random(-500, 500), math.random(-500, 500))
-            prop:GetPhysicsObject():SetVelocity(randomVelocity)
-        end)
-    end
-end
-
-local function headshotblyat(pos)
-    local propModels = {
-        "models/mosi/fnv/props/gore/gorehead03.mdl",
-        "models/mosi/fnv/props/gore/gorehead02.mdl",
-        "models/mosi/fnv/props/gore/gorehead06.mdl",
-        "models/mosi/fnv/props/gore/gorehead05.mdl",
-        "models/mosi/fnv/props/gore/gorehead04.mdl"
-    }
-
-    timer.Simple(0.1, function()
-        for i = 1, #propModels do
-            local prop = ents.Create("prop_physics")
-            if not IsValid(prop) then return end
-
-            prop:SetModel(propModels[i])
-            prop:SetPos(pos)
-            prop:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-            prop:Spawn()
-
-            local randomVelocity = Vector(math.random(-70, 70), math.random(-500, 500), math.random(-150, 150))
-            prop:GetPhysicsObject():SetVelocity(randomVelocity)
-        end
-    end)
-end
-
 function Gib_Input(rag,bone,dmgInfo)
 	if not IsValid(rag) then return end
 
 	local hitgroup = bonetohitgroup[rag:GetBoneName(bone)]
-
-	local phys_bone = rag:TranslateBoneToPhysBone(bone)
 
 	local gibRemove = rag.gibRemove
 	if not gibRemove then
@@ -158,8 +165,6 @@ function Gib_Input(rag,bone,dmgInfo)
 
 		gib_ragdols[rag] = true
 
-		--Gib_RemoveBone(rag,rag:TranslatePhysBoneToBone(phys_bone),phys_bone)
-
 		if not dmgInfo:IsDamageType(DMG_CRUSH) then
 			rag.Blood = rag.Blood or 5000
 			rag.BloodNext = 0
@@ -167,52 +172,69 @@ function Gib_Input(rag,bone,dmgInfo)
 		end
 	end
 
+	local phys_bone = rag:TranslateBoneToPhysBone(bone)
+
 	local dmgPos = dmgInfo:GetDamagePosition()
 
-	if dmgInfo:GetDamage() >= 600 and dmgInfo:IsDamageType(DMG_CRUSH + DMG_VEHICLE) or rag:GetVelocity():Length() > 925 and dmgInfo:IsDamageType(DMG_CRUSH + DMG_BLAST + DMG_VEHICLE + DMG_FALL) or math.random(1, 200) == 52 and dmgInfo:IsDamageType(DMG_CRUSH + DMG_BLAST + DMG_VEHICLE + DMG_FALL) or dmgInfo:IsDamageType(DMG_BLAST) then
-        dmgInfo:ScaleDamage(5000)
-        sound.Play("homigrad/player/headshot" .. math.random(1, 2) .. ".wav", rag:GetPos(), 75, 85)
-        sound.Play("homigrad/headshoot.wav", rag:GetPos(), 100)
-        sound.Play("physics/flesh/flesh_strider_impact_bullet2.wav", rag:GetPos(), 75, 75)
-
-        razrivtela(rag:GetPhysicsObject(phys_bone):GetPos())
-
-        BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos(), dmgInfo:GetDamageForce() * 2)
-
-        rag:Remove()
-    end
-
 	if hitgroup == HITGROUP_HEAD and not dmgInfo:IsDamageType(DMG_CRUSH) and not gibRemove[phys_bone] then
-		sound.Emit(rag, "homigrad/headshoot.wav")
-        sound.Emit(rag, "homigrad/player/headshot" .. math.random(1, 2) .. ".wav")
+		sound.Emit(rag,"player/headshot" .. math.random(1,2) .. ".wav")
+		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
+		sound.Emit(rag,"physics/body/body_medium_break3.wav")
+		sound.Emit(rag,"physics/glass/glass_sheet_step" .. math.random(1,4) .. ".wav",90,50,2)
+
+		timer.Simple(0.05,function()
+			if not IsValid(rag) then return end
+
+			rag:EmitSound("physics/flesh/flesh_bloody_break.wav",90,75,2)
+		end)
 
 		Gib_RemoveBone(rag,bone,phys_bone)
 
 		BloodParticleHeadshoot(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 2)
-
-        headshotblyat(rag:GetPhysicsObject(phys_bone):GetPos())
 	end
 
-	rag:GetPhysicsObject():SetMass(10)
+	if dmgInfo:GetDamage() >= 50 and dmgInfo:IsDamageType(DMG_BLAST) and not gibRemove[phys_bone] then
+		local access
+		for bonename in pairs(validBone) do
+			local bone = rag:LookupBone(bonename)
+			if not bone then continue end--lol???????????????
+
+			if rag:GetBonePosition(bone):Distance(dmgPos) <= 75 then access = true break end
+		end
+
+		if access then
+			sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
+			sound.Emit(rag,"physics/body/body_medium_break3.wav")
+			sound.Emit(rag,"physics/flesh/flesh_bloody_break.wav",nil,75)
+
+			Gib_RemoveBone(rag,bone,phys_bone)
+
+			BloodParticleMore(rag:GetPhysicsObject(phys_bone):GetPos(),dmgInfo:GetDamageForce() * 10)
+		end
+	end
+	rag:GetPhysicsObject():SetMass(20)
 end
 
-hook.Add("PlayerDeath","GibInputDMG",function(ply)
+hook.Add("PlayerDeath","Gib",function(ply)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
+
+	--разве это не смешно когда ножом башка взрывается?
+	--нет
 	
-	if dmgInfo:GetDamage() >= 50 then
+	if dmgInfo:GetDamage() >= 0 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)
 
-			if not IsValid(rag) or not bone then return end
+			if not IsValid(rag) or not bone then return end--неебу как пашол нахуй
 
 			Gib_Input(rag,bone,dmgInfo)
 		end)
 	end
 end)
 
-hook.Add("EntityTakeDamage","GibInputDMG",function(ent,dmgInfo)
+hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	if not ent:IsRagdoll() then return end
 	
 	local ply = RagdollOwner(ent)
@@ -229,11 +251,9 @@ hook.Add("EntityTakeDamage","GibInputDMG",function(ent,dmgInfo)
 	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
 
 	local mul = RagdollDamageBoneMul[hitgroup]
+	
+	--if dmgInfo:GetDamage() * mul < 50 then return end
 
-	print(dmgInfo:GetDamage() * (mul or 30))
-	
-	if dmgInfo:GetDamage() * (mul or 30) < 50 then return end
-	
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)
 

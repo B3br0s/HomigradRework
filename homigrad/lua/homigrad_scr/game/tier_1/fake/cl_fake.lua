@@ -128,7 +128,7 @@ hook.Add("HUDPaint","Fake",function()
 
     local size = math.max(dis * 32,6)
 
-    if IsValid(wep) and wep:GetClass() ~= "weapon_hands" then a = a * 0.35 end
+    if IsValid(wep) and wep:GetClass() ~= "weapon_hands" and wep:GetClass() != "weapon_096" then a = a * 0.35 end
 end)
 
 event.Add("Player Spawn","ARms",function(ply)

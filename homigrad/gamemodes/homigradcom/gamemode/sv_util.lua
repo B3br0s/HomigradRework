@@ -20,7 +20,7 @@ end
 
 function PlayerIsCuffs(ply)
 	if not ply:Alive() then return end
-	local ent = ply:GetNWEntity("DeathRagdoll")
+	local ent = ply:GetNWEntity("Ragdoll")
 	if not IsValid(ent) then return end
 
 	return constraint.FindConstraint(ent,"Rope")

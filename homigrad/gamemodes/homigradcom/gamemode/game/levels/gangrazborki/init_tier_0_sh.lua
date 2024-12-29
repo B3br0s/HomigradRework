@@ -12,7 +12,7 @@ gangrazborki.red = {"Crips",Color(66, 135, 245),
 	main_weapon = {
 		"weapon_sog",
 	},
-	secondary_weapon = {"weapon_ar15g","weapon_draco","weapon_deserteagle","weapon_p22","weapon_pm","weapon_fnp45"},
+	secondary_weapon = {"weapon_ar15g","weapon_draco","weapon_deserteaglexix","weapon_p22","weapon_fnp45"},
 	models = {
 		"models/player/Group01/male_01.mdl",
 		"models/player/Group01/male_03.mdl",
@@ -31,7 +31,7 @@ gangrazborki.blue = {"Bloods",Color(196, 65, 59),
 		"weapon_sog",
 	},
 
-	secondary_weapon = {"weapon_ar15g","weapon_draco","weapon_deserteagle","weapon_p22","weapon_pm","weapon_fnp45"},
+	secondary_weapon = {"weapon_ar15g","weapon_draco","weapon_deserteaglexix","weapon_p22","weapon_fnp45"},
 	models = {
 		"models/player/Group01/male_01.mdl",
 		"models/player/Group01/male_03.mdl",

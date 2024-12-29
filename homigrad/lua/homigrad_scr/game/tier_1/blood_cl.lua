@@ -40,7 +40,7 @@ hook.Add("RenderScreenspaceEffects","ToyssssnssssEffect",function()
 end)
 
 hook.Add("RenderScreenspaceEffects","DrunkFX",function()
-	if not LocalPlayer():Alive() then return end
+	if not LocalPlayer():Alive() or LocalPlayer():GetNWBool("isSCP") then return end
 
 	local blurstat1 = LocalPlayer():GetNWFloat("Drunk") / 2
 

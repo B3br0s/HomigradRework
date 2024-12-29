@@ -120,6 +120,22 @@ if engine.ActiveGamemode() == "homigradcom" then
             Suppress = true,
 
             AttModel = "models/weapons/arc9/darsu_eft/mods/silencer_base_awc_thor_psr_xl_multi.mdl"
+        },
+        ["Molot"] = {
+            name = "molot",
+            CorrectPosX = 3.1,
+            CorrectPosY = -0.1,
+            CorrectPosZ = 3.75,
+
+            CorrectAngPitch = 190,
+            CorrectAngYaw = 90,
+            CorrectAngRoll = 0,
+
+            RemoveMat = 2,
+
+            AmmoExtend = 30,
+
+            AttModel = "models/mods/mag_ak_molot_rpk_drum_762x39_75.mdl"
         }
     }
 end

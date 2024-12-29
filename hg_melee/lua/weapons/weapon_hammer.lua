@@ -17,7 +17,7 @@ SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "ammo_crossbow"
 
 SWEP.HardAttack = false
-SWEP.Damage = 55
+SWEP.Damage = 95
 SWEP.DamageType = DMG_CLUB
 SWEP.Delay = 1
 SWEP.StaminaCost = 6
@@ -174,14 +174,14 @@ function SWEP:Think()
         self.AnimLerpLF = Angle(0,0,0)
         self.AnimLerpLH = Angle(0,0,0)
 
-        self.AnimLerpRC = LerpAngleFT(1,self.AnimLerpRC,Angle(0,0,-70))
+        self.AnimLerpRC = LerpAngleFT(1,self.AnimLerpRC,Angle(0,-20,-70))
         self.AnimLerpRF = LerpAngleFT(1,self.AnimLerpRF,Angle(0,0,0))
-        self.AnimLerpRH = LerpAngleFT(1,self.AnimLerpRH,Angle(-90,0,0))
+        self.AnimLerpRH = LerpAngleFT(1,self.AnimLerpRH,Angle(-40,-20,0))
     elseif self.Anim3 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)
         self.AnimLerpLH = Angle(0,0,0)
-
+            
         self.AnimLerpRC = LerpAngleFT(0.1,self.AnimLerpRC,Angle(0,0,0))
         self.AnimLerpRF = LerpAngleFT(0.6,self.AnimLerpRF,Angle(0,0,0))
         self.AnimLerpRH = LerpAngleFT(0.3,self.AnimLerpRH,Angle(0,0,0))
@@ -243,10 +243,10 @@ function SWEP:SecondaryAttack()
                 ply:TakeDamageInfo(dmg)
                 ply.Bloodlosing = ply.Bloodlosing + 10
 
-                if KarmaLogic(att,ply,dmg) then
-                    att.Karma = 10
+                if GuiltLogic(att,ply,dmg) then
+                    att.Guilt = 10
 
-                    KarmaCheck(att)
+                    GuiltCheck(att)
                 end
             end
 
@@ -294,8 +294,8 @@ function SWEP:SecondaryAttack()
 
                 ply.Bloodlosing = ply.Bloodlosing + 10
 
-                if KarmaLogic(att,ply,dmg,true) then
-                    att.Karma = math.max(att.Karma - 2,0)
+                if GuiltLogic(att,ply,dmg,true) then
+                    att.Guilt = math.max(att.Guilt - 2,0)
                 end
             end
         end

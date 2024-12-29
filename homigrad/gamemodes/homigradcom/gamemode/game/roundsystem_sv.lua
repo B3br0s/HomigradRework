@@ -4,6 +4,12 @@ util.AddNetworkString("round_state")
 roundTimeStart = roundTimeStart or 0
 roundTime = roundTime or 0
 
+local validUserGroupSuperAdmin = {
+	superadmin = true,
+	megapenis = true,
+	admin = true
+}
+
 function RoundTimeSync(ply)
 	net.Start("round_time")
 	net.WriteFloat(roundTimeStart)
@@ -50,6 +56,7 @@ CountRoundRandom = CountRoundRandom or 0
 RoundRandomDefalut = 1
 
 function StartRound()
+	--print(levelrandom .. " GARRY KYS PLS MF,MQ")
 	if SERVER and pointPagesRandom then
 		SpawnPointsPage = math.random(1,GetMaxDataPages("spawnpointst"))
 
@@ -63,8 +70,13 @@ function StartRound()
 	end
 	if string.find(mapName, "d1_") or string.find(mapName, "d2_") or string.find(mapName, "d3_") then
 		SetActiveRound("hl2")
+		SetActiveNextRound("hl2")
 	elseif string.find(mapName, "deathrun") then
 		SetActiveRound("deathrun")
+		SetActiveNextRound("deathrun")
+	elseif string.find(mapName, "site19") then
+		SetActiveRound("scpcb")
+		SetActiveNextRound("scpcb")
 	end
 
 	local players = PlayersInGame()
@@ -73,7 +85,7 @@ function StartRound()
 	end
 	if not GetGlobalBool("closedondev") then
 		logToDiscord("Режим сменился на "..TableRound().Name, "Info")
-		RunConsoleCommand("hostname","Homigrad Rework | "..TableRound().Name)
+		RunConsoleCommand("hostname","Homigrad Rework [RESTORED] | "..TableRound().Name)
 	end
 
 	if SERVER then
@@ -103,7 +115,7 @@ function StartRound()
 		func = func and func() or true
 		
 		if func and diff <= 0 then
-			local name = LevelRandom()
+			local name = levelrandom()
 
 			SetActiveNextRound(name)
 			text = text .. "Следующий режим	: " .. tostring(TableRound(roundActiveNameNext).Name).. "\n"
@@ -147,7 +159,7 @@ function StartRound()
 	RoundStateSync(nil,RoundData)
 end
 
-function LevelRandom()
+function levelrandom()
 	for i,name in pairs(LevelList) do
 		local func = TableRound(name).CanRoundNext
 		
@@ -251,7 +263,7 @@ end
 
 hook.Add("Think","hg-roundcheckthink",function() RoundEndCheck() end)
 
-local function donaterVoteLevelEnd(t,argv,calling_ply,args)
+local function donaterVotelvlend(t,argv,calling_ply,args)
 	local results = t.results
 	local winner
 	local winnernum = 0
@@ -275,7 +287,7 @@ local function donaterVoteLevelEnd(t,argv,calling_ply,args)
 	calling_ply.canVoteNext = CurTime() + 300
 end
 
-COMMANDS.levelend = {function(ply,args)
+COMMANDS.lvlend = {function(ply,args)
 	if ply:IsAdmin() then
 		if roundActiveName == "SandBox" then
 			SetGlobalBool("AccessSpawn",false)
@@ -288,7 +300,7 @@ COMMANDS.levelend = {function(ply,args)
 	else
 		local calling_ply = ply
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
-			ulx.doVote( "Закончить раунд?", { "No", "Yes" }, donaterVoteLevelEnd, 15, _, _, argv, calling_ply, args)
+			ulx.doVote( "Закончить раунд?", { "No", "Yes" }, donaterVotelvlend, 15, _, _, argv, calling_ply, args)
 		end
 	end
 end}
@@ -300,28 +312,6 @@ COMMANDS.fakedisabled = {function(ply,args)
 			PrintMessage(3,"Фейк теперь выключен")
 		else
 			PrintMessage(3,"Фейк теперь включен")
-		end
-	end
-end}
-
-COMMANDS.goreenabled = {function(ply,args)
-	if ply:IsAdmin() then
-	SetGlobalBool("GoreEnabled",tonumber(args[1]) > 0)
-		if GetGlobalBool("GoreEnabled") then
-			PrintMessage(3,"Расчлененка теперь включена")
-		else
-			PrintMessage(3,"Расчлененка теперь выключена")
-		end
-	end
-end}
-
-COMMANDS.bloodenabled = {function(ply,args)
-	if ply:IsAdmin() then
-	SetGlobalBool("BloodGoreEnabled",tonumber(args[1]) > 0)
-		if GetGlobalBool("BloodGoreEnabled") then
-			PrintMessage(3,"Кровь от расчленения теперь включена")
-		else
-			PrintMessage(3,"Кровь от расчленения теперь выключена")
 		end
 	end
 end}
@@ -350,8 +340,8 @@ local function donaterVoteLevel(t,argv,calling_ply,args)
 	calling_ply.canVoteNext = CurTime() + 300
 end
 
-COMMANDS.levelnext = {function(ply,args)
-	if ply:IsAdmin() then
+COMMANDS.lvlnext = {function(ply,args)
+	if validUserGroupSuperAdmin[ply:GetUserGroup()] then
 		if not SetActiveNextRound(args[1]) then ply:ChatPrint("ты еблан, такого режима нет.") return end
 	else
 		local calling_ply = ply

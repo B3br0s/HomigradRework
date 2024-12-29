@@ -49,10 +49,10 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.CorrectAngYaw = 4
     SWEP.CorrectAngRoll = 180
 
-    SWEP.MuzzleFXPos = Vector(46,0,2)
+    SWEP.MuzzleFXPos = Vector(42,0,0)
     SWEP.UsingVM = true
-    SWEP.addAng = Angle(-5.3,-3.9,0)
-    SWEP.addPos = Vector(0,-0.7,5.4)
+    SWEP.addAng = Angle(-5.2,-4.02,0)
+    SWEP.addPos = Vector(0,-0.25,5.3)
 
     SWEP.Fake1 = Vector(2,0,0)
     SWEP.Fake2 = Vector(17,0,0)
@@ -86,7 +86,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 
             LocalPos = Vector(20, 0.5, 0.5),
 
-            OffsetPos = Vector(7,10,1),
+            OffsetPos = Vector(8.5,10.5,1),
 
             Optic = true,
 

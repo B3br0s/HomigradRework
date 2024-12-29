@@ -52,9 +52,7 @@ SWEP.CorrectSize = 1.3
 
 function SWEP:Think()
     self:SetHoldType(self.HoldType)
-
     
-
     if self.Anim1 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)
@@ -62,7 +60,7 @@ function SWEP:Think()
 
         self.AnimLerpRC = LerpAngleFT(0.1,self.AnimLerpRC,Angle(-80,60,0))
         self.AnimLerpRF = LerpAngleFT(0.1,self.AnimLerpRF,Angle(70,30,50))
-        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(60,0,-50))
+        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(60,-0,30))
     elseif self.Anim2 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)

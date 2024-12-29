@@ -25,11 +25,11 @@ hook.Add("HomigradDamage","phildcorn",function(ply,hitGroup,dmginfo,rag,armorMul
 end)
 
 hook.Add("EntityTakeDamage","asdsdads",function(ent,dmginfo)
-	--[[if ent and not ent.IsBleeding and dmginfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER) then
+	if ent and not ent.IsBleeding and dmginfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER) then
 		table.insert(BleedingEntities,ent)
 		ent.bloodNext = CurTime()
 		ent.Blood = ent.Blood or 5000--wtf
-	end]]--
+	end
 end)
 
 local tr = {filter = {}}
@@ -52,7 +52,7 @@ function homigradPulse(ply)
 end
 
 hook.Add("Player Think","homigrad-blood",function(ply,time)
-	if not ply:Alive() or ply:HasGodMode() then return end
+	if not ply:Alive() or ply:HasGodMode() or ply.isSCP then return end
 	ply.Organs = ply.Organs or {}
 
 	local nextPulse,heartstop = homigradPulse(ply)
@@ -68,7 +68,11 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 
 	local ent = IsValid(ply.fakeragdoll) and ply.fakeragdoll or ply
 
-	local neck = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Neck1")):GetTranslation()
+	if ent:LookupBone("ValveBiped.Bip01_Neck1") then
+
+	neck = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Neck1")):GetTranslation()
+
+	end
 	
 	if ply.Organs["artery"] == 0 and (ply.arteriaThink or 0) < time and ply.Blood > 0 then
 		if not ply.holdingartery then

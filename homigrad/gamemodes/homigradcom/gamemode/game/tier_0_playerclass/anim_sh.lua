@@ -68,7 +68,7 @@ concommand.Add("hg_getanim",function()
 end)
 
 function GM:GrabEarAnimation(pl)
-	if pl:IsTyping() or (pl:GetNWBool("DynamicFlashlight") and IsValid(pl:GetActiveWeapon()) and pl:GetActiveWeapon():GetClass() == "weapon_hands") then
+	if pl:IsTyping() or (pl:GetNWBool("DynamicFlashlight") and IsValid(pl:GetActiveWeapon()) and pl:GetActiveWeapon():GetClass() == "weapon_hands" and pl:GetActiveWeapon() != "weapon_173" and pl:GetActiveWeapon() != "weapon_049" and pl:GetActiveWeapon() != "weapon_096") then
 	--if pl:IsTyping() then
 		pl.ChatGestureWeight = math.Approach(pl.ChatGestureWeight or 0, 1, FrameTime() * 5)
 	elseif pl.ChatGestureWeight and pl.ChatGestureWeight > 0 then

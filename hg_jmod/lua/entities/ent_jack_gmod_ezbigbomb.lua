@@ -107,24 +107,8 @@ if SERVER then
 	function ENT:PhysicsCollide(data, physobj)
 		if not IsValid(self) then return end
 
-		if data.DeltaTime > 0.2 then
-			if data.Speed > 50 then
-				self:EmitSound("Canister.ImpactHard")
-			end
-
-			if (data.Speed > self.DetSpeed) and (self:GetState() == STATE_ARMED) then
-				timer.Simple(0, function() 
-					if IsValid(self) then 
-						self:Detonate() 
-					end 
-				end)
-
-				return
-			end
-
-			if data.Speed > self.Durability * 10 then
-				self:Break()
-			end
+		if data.DeltaTime > 0.2 and data.Speed > 180 and self:GetState() == STATE_ARMED then
+			self:Detonate() 
 		end
 	end
 
@@ -151,7 +135,7 @@ if SERVER then
 		if JMod.LinCh(dmginfo:GetDamage(), self.Durability * .5, self.Durability) then
 			local Pos, State = self:GetPos(), self:GetState()
 
-			if State == STATE_ARMED and not(dmginfo:IsBulletDamage()) then
+			if State == STATE_ARMED then
 				JMod.SetEZowner(self, dmginfo:GetAttacker())
 				self:Detonate()
 			else

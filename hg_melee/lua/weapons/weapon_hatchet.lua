@@ -3,8 +3,8 @@ SWEP.Category = "Оружие: Ближний Бой"
 SWEP.Spawnable = true
 SWEP.Base = 'hg_melee'
 
-SWEP.WorldModel = "models/weapons/tfa_nmrih/w_me_hatchet.mdl"
-SWEP.ViewModel =  "models/weapons/tfa_nmrih/w_me_hatchet.mdl"
+SWEP.WorldModel = "models/weapons/arc9/darsu_eft/w_melee_wycc_axe.mdl"
+SWEP.ViewModel =  "models/weapons/arc9/darsu_eft/w_melee_wycc_axe.mdl"
 
 SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 0
@@ -42,13 +42,13 @@ SWEP.AnimLerpRH = Angle(0,0,0)
 
 SWEP.CorrectPosX =     3.5
 SWEP.CorrectPosY =     1
-SWEP.CorrectPosZ =     -1
+SWEP.CorrectPosZ =     3
 
 SWEP.CorrectAngPitch = 180
 SWEP.CorrectAngYaw =   180
 SWEP.CorrectAngRoll =  0
 
-SWEP.CorrectSize = 1.3
+SWEP.CorrectSize = 1
 
 function SWEP:Think()
     self:SetHoldType(self.HoldType)
@@ -60,7 +60,7 @@ function SWEP:Think()
 
         self.AnimLerpRC = LerpAngleFT(0.1,self.AnimLerpRC,Angle(-80,60,0))
         self.AnimLerpRF = LerpAngleFT(0.1,self.AnimLerpRF,Angle(70,30,50))
-        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(60,0,-50))
+        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(60,-30,90))
     elseif self.Anim2 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)

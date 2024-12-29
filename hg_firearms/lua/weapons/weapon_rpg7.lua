@@ -79,16 +79,16 @@ if engine.ActiveGamemode() == "homigradcom" then
         local shotpos = self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_RH")).Pos
 
         if SERVER then 
-            local rocket = ents.Create( "gb_rocket_rp3" )
+            local rocket = ents.Create( "ent_jack_gmod_rpg7rocket" )
             rocket:SetPos(shotpos)
-            rocket:SetAngles(self:GetOwner():EyeAngles()-Angle(-7,0,0))
+            rocket:SetAngles(self:GetOwner():GetAttachment(self:GetOwner():LookupAttachment("anim_attachment_RH")).Ang - Angle(0,90,0))
             rocket:Spawn()
-            rocket:Launch()
+            rocket:TriggerInput("Launch",2)
             --rocket:SetAngles(self:GetOwner():EyeAngles()+Angle(-7,0,0))
-            rocket:SetNoDraw(true)
-            timer.Simple(0.23,function()
-                rocket:SetNoDraw(false)
-            end)
+            --rocket:SetNoDraw(true)
+            --timer.Simple(0.23,function()
+            --    rocket:SetNoDraw(false)
+            --end)
         end
         self:TakePrimaryAmmo(1)
     end

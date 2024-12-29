@@ -11,6 +11,7 @@ hook.Add("player_activate","Bamhut_SendData",function(data)
     bahmut.WinPoints = {}
 
     for i = 1, 2 do
+        if roundActiveName != "bahmut" then return end
         bahmut.WinPoints[i] = GetGlobalInt("Bahmut_Winpoints" .. i)
     end
 

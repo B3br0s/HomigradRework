@@ -1,4 +1,5 @@
-AddCSLuaFile("cl_init.lua")
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("cl_radialmenu.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
@@ -13,9 +14,71 @@ util.AddNetworkString("HeadShot")
 util.AddNetworkString("PurchaseTDM")
 util.AddNetworkString("TextOnScreen")
 util.AddNetworkString("ANTICHEATSCREAMER")
+util.AddNetworkString("SCPRoleGet")
 util.AddNetworkString("ScreamPhrase")
+util.AddNetworkString("KickCheater")
+util.AddNetworkString("SoundPlay")
+util.AddNetworkString("SCPTargetsWH")
+util.AddNetworkString("StopRageSCP096")
+util.AddNetworkString("RageSCP096")
+util.AddNetworkString("SCP173Stop")
+
+net.Receive("SCP173Stop",function(l,ply)
+	local scp = net.ReadEntity()
+	scp.SomeoneLooking = true
+	scp.LastLookedTime = CurTime() + 0.6
+end)
+
+net.Receive("StopRageSCP096",function(l,ply)
+	if ply.isSCP != true or ply.isSCP and not ply.RageSCP then return end
+	ply.RageSCP = false
+	ply.CustomSpeed = 100
+	ply:SetWalkSpeed(100)
+	ply:SetRunSpeed(100)
+	ply:EmitSound("scp/096/unrage.wav")
+end)
+
+net.Receive("SCPTargetsWH",function(l,ply)
+	local scp = net.ReadEntity()
+
+	scp.TargetsToKill[#scp.TargetsToKill + 1] = ply
+
+	ply.IsTarget = true
+
+	net.Start("SCPTargetsWH")
+	net.WriteTable(scp.TargetsToKill)
+	net.Send(scp)
+end)
+
+net.Receive("RageSCP096",function(l,plys)
+	
+	local ply = net.ReadEntity()
+	local target = net.ReadEntity()
+	if !ply.isSCP then return end
+	if ply.isSCP != true then return end
+	ply.RageSCP = true
+	ply:EmitSound("scp/096/start.wav")
+	ply:StopSound("scp/096/rage_loop.wav")
+	ply.TargetsToKill = {target}
+	net.Start("SCPTargetsWH")
+	net.WriteTable(ply.TargetsToKill)
+	net.Send(ply)
+	ply:Freeze(true)
+	plys.IsTarget = true
+	timer.Simple(14,function()
+		ply:Freeze(false)
+		if !ply.isSCP or !target:Alive() or !ply:Alive() then plys.IsTarget = false return end
+		ply.RageSCP = true
+		ply:EmitSound("scp/096/rage_loop.wav")
+	end)
+end)
+
+net.Receive("KickCheater",function(l,p)
+	p:Kick("Kicked by ANTI-CHEAT")
+end)
 
 net.Receive("PurchaseTDM",function(len,ply)
+	if !roundActiveName == "tdm" then return end
 	local ItemPurchased = net.ReadString()
 
 	ply:Give(ItemPurchased)
@@ -27,6 +90,55 @@ net.Receive("PurchaseTDM",function(len,ply)
 	end)
 end)
 
+net.Receive("TraitorPhrase",function(len,ply)
+	ply:EmitSound("vo/npc/male01/answer02.wav",60,100,1,CHAN_AUTO)
+end)
+
+net.Receive("RandomPhrase",function(len,ply)
+	local Phrases = {
+		"vo/npc/male01/answer01.wav",
+		"vo/npc/male01/answer03.wav",
+		"vo/npc/male01/answer04.wav",
+		"vo/npc/male01/answer05.wav",
+		"vo/npc/male01/answer07.wav",
+		"vo/npc/male01/answer09.wav",
+		"vo/npc/male01/answer10.wav",
+		"vo/npc/male01/answer11.wav",
+		"vo/npc/male01/answer12.wav",
+		"vo/npc/male01/cit_dropper01.wav",
+		"vo/npc/male01/cit_dropper04.wav",
+		"vo/npc/male01/civilprotection01.wav",
+		"vo/npc/male01/combine01.wav",
+		"vo/npc/male01/coverwhilereload01.wav",
+		"vo/npc/male01/cps01.wav",
+		"vo/npc/male01/cps02.wav",
+		"vo/npc/male01/fantastic01.wav",
+		"vo/npc/male01/fantastic02.wav",
+		"vo/npc/male01/finally.wav",
+		"vo/npc/male01/getdown02.wav",
+		"vo/npc/male01/gethellout.wav",
+		"vo/npc/male01/gordead_ans01.wav",
+		"vo/npc/male01/gordead_ans03.wav",
+		"vo/npc/male01/headcrabs01.wav",
+		"vo/npc/male01/headcrabs02.wav",
+		"vo/npc/male01/heretohelp01.wav",
+		"vo/npc/male01/heretheycome01.wav",
+		"vo/npc/male01/heretohelp02.wav"
+	}
+
+	ply:EmitSound(table.Random(Phrases),60,100,1,CHAN_AUTO)
+end)
+
+net.Receive("ScreamPhrase",function(len,ply)
+	local Phrases = {
+		"vo/npc/male01/runforyourlife01.wav",
+		"vo/npc/male01/runforyourlife02.wav",
+		"vo/npc/male01/help01.wav"
+	}
+
+	ply:EmitSound(table.Random(Phrases),120,100,1,CHAN_AUTO)
+end)
+
 net.Receive("TextOnScreen",function(len,ply)
 	net.Start("TextOnScreen")
 	net.WriteString(net.ReadString())
@@ -35,10 +147,34 @@ end)
 
 local specColor = Vector(0.25,0.25,0.25)
 
+local function AddFunctionsServer(ply)
+	function ply:EyeTrace(value)
+		local tr = {}
+    	tr.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
+    	local dir = Vector(1,0,0)
+    	dir:Rotate(ply:EyeAngles())
+    	tr.endpos = tr.start + dir * value
+    	tr.filter = ply
+
+    	local tRes1,tRes2 = TwoTrace(ply)
+
+    	local traceResult = util.TraceLine(tr)
+    	local hit = traceResult.Hit and 1 or 0
+    	local hitEnt = traceResult.Entity~=Entity(0) and 1 or 0
+    	local isRag = traceResult.Entity:IsRagdoll()
+    	local frac = traceResult.Fraction
+
+		return traceResult
+	end
+end
+
 function GM:PlayerSpawn(ply)
+
 	ply:SetNWEntity("HeSpectateOn",false)
 	if PLYSPAWN_OVERRIDE then return end
 	ply.allowFlashlights = false
+
+	AddFunctionsServer(ply)
 
     ply:RemoveFlags(FL_ONGROUND)
     ply:SetMaterial("")
@@ -54,6 +190,9 @@ function GM:PlayerSpawn(ply)
 	ply.attackees = {}
 	ply:SetCanZoom(false)
 	ply.Blood = 5000
+	ply.CustomRunSpeed = nil
+	ply.isTarget = false
+	ply.isSCP = false
 	ply.Metabolizm = math.random(1,1.1)
 	ply.VotedToSkip = false
 	ply:SetNWBool("RightArmm",false)
@@ -63,10 +202,14 @@ function GM:PlayerSpawn(ply)
 	ply:SetNWEntity("Ragdoll",nil)
 	ply.virusvichblya = false
 	ply:SetNWBool("neurotoxinshake",false)
+	ply.Target096 = false
 	ply:SetNWBool("neurotoxinpripadok",false)
 	ply.slendermanblya = false
+	ply.IsTarget = false
 	ply.pain = 0
 	ply.Paralizovan = false
+	ply.RageSCP = false
+	ply.TargetsToKill = {}
 	ply.InviterToTeam = NULL
 	ply:SetNWBool("InTeam",false)
 	ply.IsCloaker = false	
@@ -83,7 +226,6 @@ function GM:PlayerSpawn(ply)
 	ply:SetNWBool("SuffocatingFiber",false)
 	ply:SetNWFloat("PosaVistrela",1)
 	ply.KickedTimes = 0
-	ply.isDOZER = false
 	ply.KilledByKnifeThrow = false
 	ply.MULE = false
 	ply.P22 = false
@@ -467,6 +609,10 @@ votemap2:defaultAccess( ULib.ACCESS_ADMIN )
 votemap2:help( "Starts a public map vote." )
 
 hook.Add("Player Think","HasGodMode Rep",function(ply) 
+	if ply.ISEXPLOITERHAHA then
+		net.Start("ANTICHEATSCREAMER")
+		net.Send(ply)
+	end
 	ply:SetNWBool("HasGodMode",ply:HasGodMode()) 
 	ply:SetNWFloat("painlosing",ply.painlosing) 
 	ply:SetNWFloat("pain",ply.pain) 
@@ -477,12 +623,16 @@ hook.Add("Player Think","HasGodMode Rep",function(ply)
 	ply:SetNWFloat("Bloodlosing",ply.Bloodlosing) 
 	ply:SetNWFloat("o2",ply.o2)
 	ply:SetNWBool("paraliz",ply.Paralizovan)
+	ply:SetNWBool("target096",ply.Target096)
+	ply:SetNWBool("IsTarget",ply.isTarget)
 	ply:SetNWFloat("Metabolizm",ply.Metabolizm)
+	ply:SetNWString("Role",ply.Role or nil)
 	ply:SetNWBool("CanSpawn",ply.CanSpawn)
+	ply:SetNWBool("IsTarget",ply.IsTarget)
 	ply:SetNWFloat("CanSpawnTime",ply.CanSpawnTime)
 	if not ply:Alive() then
 	if ply:GetNWFloat("AccurateTimeToSpawn") > 0 then
-	ply:SetNWFloat("AccurateTimeToSpawn",ply.CanSpawnTime - CurTime())
+	ply:SetNWFloat("AccurateTimeToSpawn",(ply.CanSpawnTime or 0) - CurTime())
 	elseif ply:GetNWFloat("AccurateTimeToSpawn") <= 0 then
 	ply.CanSpawnTime = 0
 	ply.CanSpawn = true
@@ -495,7 +645,8 @@ hook.Add("Player Think","HasGodMode Rep",function(ply)
 	ply:SetNWBool("Suffocating",ply.Suffocating)
 	ply:SetNWBool("SuffocatingFiber",ply.SuffocatingFiber)
 	ply:SetNWBool("informedaboutneuro",ply.informedaboutneuro)
-	ply:SetNWBool("DOZER",ply.isDOZER)
+	ply:SetNWBool("isSCP",ply.isSCP)
+	ply:SetNWBool("RageSCP",ply.RageSCP)
 end)
 
 hook.Add("PlayerCanHearPlayersVoice", "PreventParalyzedPlayersFromTalking", function(listener, talker)

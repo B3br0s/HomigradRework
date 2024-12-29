@@ -8,7 +8,7 @@ for i = 1,9 do table.insert(models,"models/player/group01/male_0" .. i .. ".mdl"
 
 tdm.models = models
 tdm.red = {
-	"Red",Color(255,75,75),
+	"Красные",Color(255,75,75),
 	weapons = {"weapon_radio","weapon_sog","weapon_hands","med_ifak"},
 	main_weapon = {"weapon_glockp80"},
 	secondary_weapon = {},
@@ -17,7 +17,7 @@ tdm.red = {
 
 
 tdm.blue = {
-	"Blue",Color(75,75,255),
+	"Синие",Color(75,75,255),
 	weapons = {"weapon_radio","weapon_hands","weapon_sog","med_ifak"},
 	main_weapon = {"weapon_hk_usps"},
 	secondary_weapon = {},

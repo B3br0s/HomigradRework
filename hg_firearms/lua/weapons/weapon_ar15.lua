@@ -8,7 +8,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.AdminOnly 				= false
     SWEP.ViewModel				= "models/weapons/weapons_hmgd/v_ar15_tac.mdl"
     SWEP.CorrectModel           = "models/weapons/weapons_hmgd/v_ar15_tac.mdl"
-    SWEP.WorldModel				= "models/weapons/weapons_hmgd/w_notmicro_saigry.mdl"
+    SWEP.WorldModel				= "models/pwb2/weapons/w_m4a1.mdl"
     
     SWEP.Primary.ClipSize		= 10
     SWEP.Primary.DefaultClip	= 10
@@ -17,7 +17,7 @@ if engine.ActiveGamemode() == "homigradcom" then
     SWEP.Primary.Cone = 0
     SWEP.Primary.Damage = 1.5 * 55
     SWEP.Primary.Spread = 0
-    SWEP.Primary.Sound = {"zcitysnd/sound/weapons/m4a1/m4a1_fp.wav"}
+    SWEP.Primary.Sound = {"sounds_zcity/ar15/close.wav"}
     SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/m4a1/m4a1_dist.wav"
     SWEP.ReloadTime = 2
     SWEP.TwoHands = true

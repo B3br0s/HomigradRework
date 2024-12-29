@@ -29,12 +29,12 @@ function CLASS:Off()
 		return
 	end
 
-	/*local Karma = (self.contrKarma or 0)
+	/*local Guilt = (self.contrGuilt or 0)
 
-	if Karma >= 40 then
-		self.Karma = self.Karma + Karma
+	if Guilt >= 40 then
+		self.Guilt = self.Guilt + Guilt
 
-		KarmaCheck(ply)
+		GuiltCheck(ply)
 	end*/
 
 	self.isContr = nil
@@ -175,7 +175,7 @@ function CLASS:VCityDMG(hitGroup,dmgInfo,rag)
 	Message(self,"help",7)
 end
 
-function CLASS:KarmaLogic(ply,dmgInfo)
+function CLASS:GuiltLogic(ply,dmgInfo)
 	if ply.isContr then return 20 end
 end
 

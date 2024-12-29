@@ -1,4 +1,3 @@
-if engine.ActiveGamemode() == "homigradcom" then
     hook.Add("HomigradDamage","Organs",function(ply,hitgroup,dmginfo,rag,armorMul,armorDur,haveHelmet)
         local ent = rag or ply
         local inf = dmginfo:GetInflictor()
@@ -7,7 +6,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             if not haveHelmet and dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then
     
                 dmginfo:ScaleDamage(inf.RubberBullets and 0.1 or 1)
-                ply.pain = ply.pain + (ply.nopain and 1 or (inf.RubberBullets and 50 or 130))
+                ply.pain = ply.pain + (ply.nopain and 1 or (inf.RubberBullets and 100 or 350))
                 
                 ply:SetDSP(37)
     
@@ -16,57 +15,13 @@ if engine.ActiveGamemode() == "homigradcom" then
             if
                 dmginfo:GetDamageType() == DMG_CRUSH and
                 dmginfo:GetDamage() >= 6 and
-                ent:GetVelocity():Length() > 180
+                ent:GetVelocity():Length() > 500
             then
                 ply:ChatPrint("Твоя шея была сломана")
-                ent:EmitSound("homigrad/player/neck_snap_01.wav",100,100,0.4,CHAN_ITEM)
-                ply:Kill()
+                ent:EmitSound("homigrad/player/neck_snap_01.wav",511,200,1,CHAN_ITEM)
+                dmginfo:ScaleDamage(5000 * 5)
+    
                 return
-            end
-        end
-    
-        if dmginfo:GetDamage() >= 40 or (dmginfo:GetDamageType() == DMG_CRUSH and dmginfo:GetDamage() >= 6 and ent:GetVelocity():Length() > 500) then
-            local brokenLeftLeg = hitgroup == HITGROUP_LEFTLEG
-            local brokenRightLeg = hitgroup == HITGROUP_RIGHTLEG
-            local brokenLeftArm = hitgroup == HITGROUP_LEFTARM
-            local brokenRightArm = hitgroup == HITGROUP_RIGHTARM
-    
-            local sub = dmginfo:GetDamage() / 120 * armorMul
-    
-            if brokenLeftArm then
-                ply.LeftArm = 0.2
-                if ply.msgLeftArm < CurTime() then
-                    ply.msgLeftArm = CurTime() + 1
-                    ply:ChatPrint("Правая рука сломана.")
-                    ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
-                end
-            end
-    
-            if brokenRightArm then
-                ply.RightArm = 0.2
-                if ply.msgRightArm < CurTime() then
-                    ply.msgRightArm = CurTime() + 1
-                    ply:ChatPrint("Левая рука сломана.")
-                    ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
-                end
-            end
-    
-            if brokenLeftLeg then
-                ply.LeftLeg = 0.5
-                if ply.msgLeftLeg < CurTime() then
-                    ply.msgLeftLeg = CurTime() + 1
-                    ply:ChatPrint("Левая нога сломана.")
-                    ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
-                end
-            end
-    
-            if brokenRightLeg then
-                ply.RightLeg = 0.5
-                if ply.msgRightLeg < CurTime() then
-                    ply.msgRightLeg = CurTime() + 1
-                    ply:ChatPrint("Правая нога сломана.")
-                    ent:EmitSound("NPC_Barnacle.BreakNeck",70,65,0.4,CHAN_ITEM)
-                end
             end
         end
     
@@ -115,8 +70,8 @@ if engine.ActiveGamemode() == "homigradcom" then
                 if ply.Organs['brain']!=0 and dmginfo:IsDamageType(DMG_BULLET) and not inf.RubberBullets then
                     ply.Organs['brain']=math.max(ply.Organs['brain']-dmg,0)
                     if ply.Organs["brain"] == 0 then
-                        ply:ChatPrint("Твой мозг был уничтожен.")
                         ply:Kill()
+                        
                         return
                     end
                 end
@@ -129,7 +84,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             if huy then --ply:ChatPrint("You were hit in the liver.")
                 if ply.Organs['liver']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                     ply.Organs['liver']=math.max(ply.Organs['liver']-dmg,0)
-                    if ply.Organs['liver']==0 then ply:ChatPrint("Твоя печень была уничтожена.") end
+                    --if ply.Organs['liver']==0 then ply:ChatPrint("Твоя печень была уничтожена.") end
                 end
             end
             --liver
@@ -151,7 +106,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             if huy then --ply:ChatPrint("You were hit in the intestines.")
                 if ply.Organs['intestines']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                     ply.Organs['intestines']=math.max(ply.Organs['intestines']-dmg,0)
-                    if ply.Organs['intestines']==0 then ply:ChatPrint("Твои кишечник был уничтожен.")end
+                    --if ply.Organs['intestines']==0 then ply:ChatPrint("Твои кишечник был уничтожен.")end
                 end
             end
     
@@ -161,7 +116,7 @@ if engine.ActiveGamemode() == "homigradcom" then
             if huy then --ply:ChatPrint("You were hit in the heart.")
                 if ply.Organs['heart']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                     ply.Organs['heart']=math.max(ply.Organs['heart']-dmg,0)
-                    if ply.Organs['heart']==0 then ply:ChatPrint("Ты чувствуешь очень сильную боль в сердце.") end
+                    --if ply.Organs['heart']==0 then ply:ChatPrint("Ты чувствоешь очень сильную боль в сердце.") end
                 end
             end
     
@@ -174,7 +129,6 @@ if engine.ActiveGamemode() == "homigradcom" then
                 if huy or huy2 then --ply:ChatPrint("You were hit in the artery.")
                     if ply.Organs['artery']!=0 and !dmginfo:IsDamageType(DMG_CLUB) then
                         ply.Organs['artery']=math.max(ply.Organs['artery']-dmg,0)
-                        ply:ChatPrint("Твоя артерия была пробита.")
                     end
                 end
             end
@@ -199,7 +153,6 @@ if engine.ActiveGamemode() == "homigradcom" then
                         ply.brokenspine=true 
                         ply:ChatPrint("Твоя спина была сломана.")
                         ent:EmitSound("NPC_Barnacle.BreakNeck",70,125,0.7,CHAN_ITEM)
-                        ent:EmitSound("homigrad/player/neck_snap_01.wav",100,100,10,CHAN_ITEM)
                     end
                 end
             end
@@ -212,4 +165,3 @@ if engine.ActiveGamemode() == "homigradcom" then
             dmginfo:ScaleDamage( 5 )
         end
     end)
-    end

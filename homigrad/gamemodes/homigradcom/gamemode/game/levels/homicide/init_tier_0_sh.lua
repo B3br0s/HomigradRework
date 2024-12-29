@@ -117,7 +117,7 @@ function homicide.Scoreboard_Status(ply)
     local lply = LocalPlayer()
     if not lply:Alive() or lply:Team() == 1002 then return true end
 
-    return "Unknown",ScoreboardSpec
+    return "Неизвестно",ScoreboardSpec
 end
 
 local red,blue = Color(200,0,10),Color(4, 138, 247)

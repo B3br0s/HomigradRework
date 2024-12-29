@@ -1,4 +1,3 @@
-
 hook.Add( 'InitPostEntity', 'SolidMapVote.Init', function()
     SolidMapVote.votes = {}
     SolidMapVote.isOpen = false
@@ -73,7 +72,7 @@ hook.Add( 'PlayerSay', 'SolidMapVote.PlayerCommands', function( ply, text, tChat
     if table.HasValue( SolidMapVote[ 'Config' ][ 'Force Vote Commands' ], command ) and not SolidMapVote.isOpen then
         if SolidMapVote[ 'Config' ][ 'Force Vote Permission' ]( ply ) then
             SolidMapVote.start()
-            --SolidMapVote.sendMessage( { Color( 0, 177, 106 ), name, color_white, ' has forced the mapvote!' }, true )
+            SolidMapVote.sendMessage( { Color( 0, 177, 106 ), name, color_white, ' has forced the mapvote!' }, true )
             return ''
         end
     end
@@ -157,7 +156,7 @@ function SolidMapVote.checkForRTV()
         not SolidMapVote.startVoteAfterRound then
             SolidMapVote.startVoteAfterRound = true
             SolidMapVote.RTVCompleted = true
-            SolidMapVote.sendMessage( { color_white, 'The map vote will open after the current round!' }, true )
+            SolidMapVote.sendMessage( { color_white, 'Следующий раунд - финальный' }, true )
 
         elseif not SolidMapVote.startVoteAfterRound then
             SolidMapVote.RTVCompleted = true
@@ -177,7 +176,25 @@ end
 function SolidMapVote.postMapVoteChange()
     if SolidMapVote.changeTime < RealTime() and SolidMapVote.finished then
         SolidMapVote.isOpen = false
-
+        local config = {
+            API_URL = "http://45.147.177.85:8080", -- Replace with your actual server IP
+            SEND_INTERVAL = 5, -- How often to send logs (seconds)
+            DEBUG = false -- Enable debug prints
+        }
+        local function SendRequest_players(endpoint, data)
+            HTTP({
+                url = config.API_URL .. endpoint.."?player_list="..data,
+                method = "GET",
+                success = function(code, body, headers)
+                    if config.DEBUG then
+                        print("[Logger] Successfully sent data to " .. endpoint)
+                    end
+                end,
+                failed = function(err)
+                    print("[Logger Error] Failed to send data: " .. err)
+                end
+            })
+        end
         if SolidMapVote.realWinner == 'extend' then
             if SolidMapVote[ 'Config' ][ 'Enable Vote Autostart' ] then
                 -- If were using autostart, close the vote and restart the timer
@@ -185,12 +202,18 @@ function SolidMapVote.postMapVoteChange()
                 SolidMapVote.close()
                 SolidMapVote.reset()
             else
-                RunConsoleCommand( 'ulx','map', game.GetMap() )
+                SendRequest_players("/api_rework/map_change_current/", game.GetMap() )
+                RunConsoleCommand( 'ulx','map',game.GetMap() )
             end
         elseif SolidMapVote.realWinner == 'random' then
-            RunConsoleCommand( 'ulx','map', SolidMapVote.fixedWinner )
+
+            SendRequest_players("/api_rework/map_change_current/", SolidMapVote.fixedWinner)
+            RunConsoleCommand( 'ulx','map',SolidMapVote.fixedWinner )
+            RunConsoleCommand( 'restart' )
         else
-            RunConsoleCommand( 'ulx','map', SolidMapVote.realWinner )
+            SendRequest_players("/api_rework/map_change_current/", SolidMapVote.realWinner )
+            RunConsoleCommand('ulx','map',SolidMapVote.realWinner)
+            RunConsoleCommand( 'restart' )
         end
     end
 end

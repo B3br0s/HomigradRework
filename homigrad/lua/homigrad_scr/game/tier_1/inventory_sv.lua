@@ -1,8 +1,7 @@
-if not engine.ActiveGamemode() == "homigradcom" then return end
-util.AddNetworkString("inventory")
+﻿util.AddNetworkString("inventory")
 util.AddNetworkString("ply_take_item")
 util.AddNetworkString("ply_take_ammo")
-
+local maxDistance = 300 -- in units
 local function send(ply,lootEnt,remove)
 	if ply then
 		net.Start("inventory")
@@ -12,6 +11,7 @@ local function send(ply,lootEnt,remove)
 		net.WriteTable(lootEnt.Info.Ammo)
 		net.Send(ply)
 	else
+		if lootEnt.UsersInventory == nil then return end
 		for ply in pairs(lootEnt.UsersInventory) do
 			if not IsValid(ply) or not ply:Alive() or remove then lootEnt.UsersInventory[ply] = nil continue end
 
@@ -30,7 +30,6 @@ hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
 end)
 
 hook.Add("Player Think","Looting",function(ply)
-	if ply.virusvichblya != true then
 	local key = ply:KeyDown(IN_USE)
 
 	if not ply.fake and ply:Alive() and ply:KeyDown(IN_ATTACK2) then
@@ -56,7 +55,6 @@ hook.Add("Player Think","Looting",function(ply)
 			hitEnt:CallOnRemove("fuckoff",function() send(nil,hitEnt,true) end)
 		end
 	end
-end
 
 	ply.okeloot = key
 end)
@@ -69,17 +67,19 @@ local prekol = {
 net.Receive("inventory",function(len,ply)
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
-
+	if lootEnt.fake == nil then return end
+	if ply:GetPos():Distance(lootEnt:GetPos()) >= maxDistance then return end
+	
 	lootEnt.UsersInventory[ply] = nil
 	player.Event(ply,"inventory close",lootEnt)
 end)
 
 net.Receive("ply_take_item",function(len,ply)
 	--if ply:Team() ~= 1002 then return end
-
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
-
+	if lootEnt.fake == nil then return end
+	if ply:GetPos():Distance(lootEnt:GetPos()) >= maxDistance then return end
 	local wep = net.ReadString()
 	--local takeammo = net.ReadBool()
 
@@ -88,7 +88,7 @@ net.Receive("ply_take_item",function(len,ply)
 	
 	if not wepInfo then return end
 
-	if prekol[wep] and not ply:IsAdmin() and not roundActiveName == "zombieinfection" then ply:Kick("xd))00") return end
+	if prekol[wep] and not ply:IsAdmin() then ply:Kick("xd))00") return end
 
 	if ply:HasWeapon(wep) then
 		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end
@@ -139,6 +139,8 @@ net.Receive("ply_take_ammo",function(len,ply)
 
 	local lootEnt = net.ReadEntity()
 	if not IsValid(lootEnt) then return end
+	if lootEnt.fake == nil then return end
+	if ply:GetPos():Distance(lootEnt:GetPos()) >= maxDistance then return end
 	local ammo = net.ReadFloat()
 	local lootInfo = lootEnt.Info
 	if not lootInfo.Ammo[ammo] then return end

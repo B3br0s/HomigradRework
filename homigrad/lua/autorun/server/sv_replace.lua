@@ -1,33 +1,15 @@
 local blockedWeapons = {
-    ["weapon_ar2"] = "weapon_akm_bw",
-    ["weapon_smg1"] = "weapon_mp7",
-    ["weapon_crossbow"] = "weapon_kar98k",
-    ["weapon_shotgun"] = "weapon_xm1014",
-    ["weapon_pistol"] = "weapon_hk_usps",
-    ["weapon_357"] = "weapon_tcobra",
+    ["weapon_ar2"] = "",
+    ["weapon_smg1"] = "",
+    ["weapon_crossbow"] = "",
+    ["weapon_shotgun"] = "",
+    ["weapon_pistol"] = "",
+    ["weapon_357"] = "",
     ["weapon_bugbait"] = "",
-    ["weapon_stunstick"] = "weapon_metalbat",
+    ["weapon_stunstick"] = "",
     ["weapon_slam"] = "",
     ["weapon_crowbar"] = "weaponn_crowbar"
 }
-
-if SERVER then
-    hook.Add("PlayerUse", "Limit Weight", function(ply, ent)
-        local MAX_PICKUP = 80
-        if ent:IsValid() and ent:GetPhysicsObject():IsValid() then
-        if ent:GetClass() == "prop_physics" or ent:GetClass() == "prop_physics_multiplayer" then
-            local phys = ent:GetPhysicsObject()
-            local weight = phys:GetMass()
-
-            if weight > MAX_PICKUP * (ply.Metabolizm or 1) then
-                return false
-            elseif weight < MAX_PICKUP * (ply.Metabolizm or 1) then
-                return true
-            end
-        end
-        end
-    end)
-end
 
 hook.Add("PlayerCanPickupWeapon", "BlockSpecificWeaponsPickup", function(ply, weapon)
     if not IsValid(ply) or not IsValid(weapon) then return end
@@ -67,19 +49,11 @@ hook.Add("PlayerCanPickupWeapon", "BlockSpecificWeaponsPickup", function(ply, we
 end)
 
 hook.Add( "Think", "ReplaceShit", function()
-    local CratesReplace = {
-        "models/props_junk/wood_crate001a.mdl",
-        "models/props_c17/FurnitureDrawer003a.mdl",
-        "models/props_c17/FurnitureDrawer001a.mdl",
-        "models/props_c17/FurnitureDresser001a.mdl",
-        "models/props_interiors/Furniture_Desk01a.mdl",
-        "models/props_interiors/Furniture_Vanity01a.mdl",
-        "models/props_c17/FurnitureDrawer002a.mdl"
-    }
     for id, ent in ipairs( ents.GetAll() ) do
-        if weapons.Get(ent:GetClass()) then
-            ent.Spawned = true
-        end
+            if IsValid(ent) and weapons.Get(ent:GetClass()) then
+                ent.Spawned = true
+            end
+        if not IsValid(ent) then continue end
 		if ent:GetClass() == "prop_physics" or ent:GetClass() == "prop_physics_multiplayer" then
             if ent:GetModel() == 'models/props_c17/metalpot002a.mdl' then
                 local pos = ent:GetPos()

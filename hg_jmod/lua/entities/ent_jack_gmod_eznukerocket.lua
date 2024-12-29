@@ -172,135 +172,40 @@ if SERVER then
 	end
 
 	function ENT:Detonate()
-		if self.Exploded then return end
-		self.Exploded = true
-		local SelfPos, Att, Power, Range = self:GetPos() + Vector(0, 0, 100), JMod.GetEZowner(self), JMod.Config.Explosives.Nuke.PowerMult, JMod.Config.Explosives.Nuke.RangeMult
+    if self.Exploded then return end
+    self.Exploded = true
+    local SelfPos = self:GetPos() + Vector(0, 0, 100)
+    local Range = 3000 * JMod.Config.Explosives.Nuke.RangeMult
 
-		--JMod.Sploom(Att,SelfPos,500)
-		timer.Simple(.1, function()
-			JMod.BlastDamageIgnoreWorld(SelfPos, Att, nil, 1200 * Power, 3000 * Range)
-		end)
+    local entities = ents.FindInSphere(SelfPos, Range)
 
-		---
-		SendClientNukeEffect(SelfPos, 12000)
-		util.ScreenShake(SelfPos, 1000, 10, 10, 2000 * Range)
-		local Eff = "pcf_jack_nuke_ground"
+    for _, ent in pairs(entities) do
+        if ent:IsValid() and ent:GetPhysicsObject():IsValid() then
+            local phys = ent:GetPhysicsObject()
+            local direction = (ent:GetPos() - SelfPos):GetNormalized()
+            local forceMagnitude = 10000
+            phys:ApplyForceCenter(direction * forceMagnitude)
+        end
+    end
 
-		if not util.QuickTrace(SelfPos, Vector(0, 0, -300), {self}).HitWorld then
-			Eff = "pcf_jack_nuke_air"
-		end
+    SendClientNukeEffect(SelfPos, 12000)
+    util.ScreenShake(SelfPos, 1000, 10, 10, 2000 * Range)
+    local Eff = "pcf_jack_nuke_ground"
 
-		for i = 1, 19 do
-			sound.Play("ambient/explosions/explode_" .. math.random(1, 9) .. ".wav", SelfPos + VectorRand() * 1000, 150, math.random(80, 110))
-		end
+    if not util.QuickTrace(SelfPos, Vector(0, 0, -300), {self}).HitWorld then
+        Eff = "pcf_jack_nuke_air"
+    end
 
-		---
-		if (JMod.Config.QoL.NukeFlashLightEnabled) then
-			local NukeFlash = ents.Create("ent_jack_gmod_nukeflash")
-			NukeFlash:SetPos(SelfPos + Vector(0, 0, 32))
-			NukeFlash.LifeDuration = 10
-			NukeFlash.MaxAltitude = 500
-			NukeFlash:Spawn()
-			NukeFlash:Activate()
-		end
+    for i = 1, 19 do
+        sound.Play("ambient/explosions/explode_" .. math.random(1, 9) .. ".wav", SelfPos + VectorRand() * 1000, 150, math.random(80, 110))
+    end
 
-		---
-		for h = 1, 50 do
-			timer.Simple(h / 10, function()
-				local ThermalRadiation = DamageInfo()
-				ThermalRadiation:SetDamageType(DMG_BURN)
-				ThermalRadiation:SetDamage((50 / h) * Power)
-				ThermalRadiation:SetAttacker(Att)
-				ThermalRadiation:SetInflictor(game.GetWorld())
-				util.BlastDamageInfo(ThermalRadiation, SelfPos, 20000 * Range)
-			end)
-		end
+    self:Remove()
 
-		---
-		for k, ply in player.Iterator() do
-			local Dist = ply:GetPos():Distance(SelfPos)
-
-			if Dist > 1000 then
-				timer.Simple(Dist / 6000, function()
-					ply:EmitSound("snds_jack_gmod/nuke_far.ogg", 55, 100)
-					util.ScreenShake(ply:GetPos(), 1000, 10, 10, 100)
-				end)
-			end
-		end
-
-		---
-		for i = 1, 20 do
-			timer.Simple(i / 4, function()
-				SelfPos = SelfPos + Vector(0, 0, 100)
-				---
-				local powa, renj = 10 + i * 2.5 * Power, 1 + i / 10 * Range
-
-				---
-				if i == 1 then
-					JMod.EMP(SelfPos, renj * 20000)
-
-					for k, ent in pairs(ents.FindInSphere(SelfPos, renj)) do
-						if ent:GetClass() == "npc_helicopter" then
-							ent:Fire("selfdestruct", "", math.Rand(0, 2))
-						end
-					end
-				end
-
-				---
-				util.BlastDamage(game.GetWorld(), Att, SelfPos, 1600 * i * Range, 300 / i * Power)
-
-				---
-				JMod.WreckBuildings(nil, SelfPos, powa, renj, i < 3)
-				JMod.BlastDoors(nil, SelfPos, powa, renj, i < 3)
-				---
-				SendClientNukeEffect(SelfPos, 2000 * renj)
-
-				---
-				if i == 10 then
-					JMod.DecalSplosion(SelfPos + Vector(0, 0, 500) + Vector(0, 0, 1000), "GiantScorch", 8000, 40)
-				end
-
-				---
-				if i == 20 then
-					for j = 1, 10 do
-						timer.Simple(j / 10, function()
-							for k = 1, 20 * JMod.Config.Particles.NuclearRadiationMult do
-								local Gas = ents.Create("ent_jack_gmod_ezfalloutparticle")
-								Gas:SetPos(SelfPos + Vector(math.random(-500, 500), math.random(-500, 500), math.random(0, 100)))
-								JMod.SetEZowner(Gas, Att)
-								Gas:Spawn()
-								Gas:Activate()
-								Gas.CurVel = (Vector(math.random(-500, 500), math.random(-500, 500), math.random(800, 1200)) * JMod.Config.Particles.NuclearRadiationMult)
-							end
-						end)
-					end
-				end
-			end)
-		end
-
-		---
-		self:Remove()
-
-		timer.Simple(0, function()
-			ParticleEffect(Eff, SelfPos, Angle(0, 0, 0))
-		end)
-
-		---
-		timer.Simple(5, function()
-			for j = 1, 5 do
-				timer.Simple(j / 5, function()
-					for k = 1, 5 * JMod.Config.Particles.NuclearRadiationMult do
-						local Gas = ents.Create("ent_jack_gmod_ezfalloutparticle")
-						Gas:SetPos(SelfPos)
-						JMod.SetEZowner(Gas, Att)
-						Gas:Spawn()
-						Gas:Activate()
-						Gas.CurVel = (VectorRand() * math.random(1, 250) + Vector(0, 0, 500 * JMod.Config.Particles.NuclearRadiationMult))
-					end
-				end)
-			end
-		end)
-	end
+    timer.Simple(0, function()
+        ParticleEffect(Eff, SelfPos, Angle(0, 0, 0))
+    end)
+end
 
 	function ENT:OnRemove()
 	end
@@ -324,7 +229,7 @@ if SERVER then
 
 		---
 		for i = 1, 4 do
-			util.BlastDamage(self, JMod.GetEZowner(self), self:GetPos() + self:GetRight() * i * 40, 50, 50)
+			--util.BlastDamage(self, JMod.GetEZowner(self), self:GetPos() + self:GetRight() * i * 40, 50, 50)
 		end
 
 		util.ScreenShake(self:GetPos(), 20, 255, .5, 300)

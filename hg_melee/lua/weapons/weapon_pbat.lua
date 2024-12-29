@@ -17,7 +17,7 @@ SWEP.Secondary.DefaultClip = 0
 SWEP.Secondary.Ammo = "none"
 
 SWEP.HardAttack = false
-SWEP.Damage = 28
+SWEP.Damage = 58
 SWEP.DamageType = DMG_CLUB
 SWEP.Delay = 1
 SWEP.StaminaCost = 3
@@ -62,23 +62,23 @@ function SWEP:Think()
 
         self.AnimLerpRC = LerpAngleFT(0.1,self.AnimLerpRC,Angle(-80,60,0))
         self.AnimLerpRF = LerpAngleFT(0.1,self.AnimLerpRF,Angle(70,30,50))
-        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(-30,0,-50))
+        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(-30,40,-50))
     elseif self.Anim2 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)
         self.AnimLerpLH = Angle(0,0,0)
 
-        self.AnimLerpRC = LerpAngleFT(1,self.AnimLerpRC,Angle(0,0,-70))
-        self.AnimLerpRF = LerpAngleFT(1,self.AnimLerpRF,Angle(0,0,0))
-        self.AnimLerpRH = LerpAngleFT(1,self.AnimLerpRH,Angle(-90,0,0))
+        self.AnimLerpRC = LerpAngleFT(0.56,self.AnimLerpRC,Angle(0,0,-70))
+        self.AnimLerpRF = LerpAngleFT(0.56,self.AnimLerpRF,Angle(0,0,0))
+        self.AnimLerpRH = LerpAngleFT(0.56,self.AnimLerpRH,Angle(-90,0,0))
     elseif self.Anim3 then
         self.AnimLerpLC = Angle(0,0,0)
         self.AnimLerpLF = Angle(0,0,0)
         self.AnimLerpLH = Angle(0,0,0)
 
         self.AnimLerpRC = LerpAngleFT(0.1,self.AnimLerpRC,Angle(0,0,0))
-        self.AnimLerpRF = LerpAngleFT(0.6,self.AnimLerpRF,Angle(0,0,0))
-        self.AnimLerpRH = LerpAngleFT(0.3,self.AnimLerpRH,Angle(0,0,0))
+        self.AnimLerpRF = LerpAngleFT(0.1,self.AnimLerpRF,Angle(0,0,0))
+        self.AnimLerpRH = LerpAngleFT(0.1,self.AnimLerpRH,Angle(0,0,0))
     end
 
     self:GetOwner():ManipulateBoneAngles(self:GetOwner():LookupBone("ValveBiped.Bip01_R_Clavicle"), Angle(20,20, 30) + self.AnimLerpRC, true)

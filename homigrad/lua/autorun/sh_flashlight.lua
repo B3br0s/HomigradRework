@@ -82,7 +82,7 @@ if CLIENT then
 				local fake = ply:GetNWEntity("Ragdoll")
 
 				if ply:Alive() then
-					if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() != "weapon_hands" then continue end
+					if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() != "weapon_hands" and ply:GetActiveWeapon():GetClass() != "weapon_096" and ply:GetActiveWeapon():GetClass() != "weapon_173"  and ply:GetActiveWeapon():GetClass() != "weapon_049" then continue end
 
 					local plya = IsValid(fake) and fake or ply
 					local bone = plya:LookupBone("ValveBiped.Bip01_L_Hand")

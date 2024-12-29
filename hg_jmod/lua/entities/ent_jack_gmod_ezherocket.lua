@@ -24,7 +24,7 @@ if SERVER then
 	function ENT:SpawnFunction(ply, tr)
 		local SpawnPos = tr.HitPos + tr.HitNormal * 40
 		local ent = ents.Create(self.ClassName)
-		ent:SetAngles(Angle(180, 0, 0))
+		--ent:SetAngles(Angle(180, 0, 0))
 		ent:SetPos(SpawnPos)
 		JMod.SetEZowner(ent, ply)
 		ent:Spawn()
