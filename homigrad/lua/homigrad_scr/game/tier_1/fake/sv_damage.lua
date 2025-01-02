@@ -173,7 +173,7 @@
         ply.LastDMGInfo = rubatPidor
 
         if ply.LastDMGInfo:IsDamageType(DMG_CRUSH+DMG_FALL) then
-                dmginfo:ScaleDamage(1 / 40 / 15)
+                dmginfo:ScaleDamage(1 / 4)
         else
                 dmginfo:ScaleDamage(ply.isSCP and 0.01 or 0.5)
         end

@@ -1529,7 +1529,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					--ply:ChatPrint(ply:EyeAngles()[1])
 					local shadowparams3	 = { --зажать е и крутица
 						secondstoarrive=0.0001,
-						pos=spinemain:GetPos() - eyeangs:Forward()*(0.01*rag:GetVelocity():Length()),
+						pos=spinemain:GetPos()--[[ - eyeangs:Forward()*(0.01*rag:GetVelocity():Length())]],
 						angle=angs,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
@@ -1540,7 +1540,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					}
 					local shadowparams322 = {
 						secondstoarrive=0.0001,
-						pos=spine2:GetPos() - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length()),
+						pos=spine2:GetPos()--[[ - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length())]],
 						angle=angs,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
@@ -1551,7 +1551,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					}
 					local shadowparams4	 = {
 						secondstoarrive=0.25,
-						pos=spinemain:GetPos() - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length()),
+						pos=spinemain:GetPos()--[[ - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length())]],
 						angle=angs,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
@@ -1562,7 +1562,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					}
 					local shadowparams42	 = {
 						secondstoarrive=0.25,
-						pos=spine2:GetPos() - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length()),
+						pos=spine2:GetPos()--[[ - eyeangs:Forward()*(0.0035*rag:GetVelocity():Length())]],
 						angle=angs,
 						maxangulardamp=2.5,
 						maxspeeddamp=10,
@@ -1584,7 +1584,7 @@ if engine.ActiveGamemode() == "homigradcom" then
 					}
 					head:Wake()
 					head:ComputeShadowControl(shadowparams)
-				if rag:GetVelocity():Length() < 750 then
+				if rag:GetVelocity():Length() < 550 then
 					if ply:GetNWBool("LeftArmm") or ply:GetNWBool("RightArmm") then
 					spinemain:Wake()
 					spinemain:ComputeShadowControl(shadowparams4)

@@ -57,6 +57,8 @@ if engine.ActiveGamemode() == "homigradcom" then
 	
 	function SpawnWeapon(ply,clip1)
 	
+		if ply.curweapon == nil then return end
+		if ply.wep == nil then return end
 		if !IsValid(ply.wep) and weapons.Get(ply.curweapon).Base == 'b3bros_base' then
 			local rag = ply:GetNWEntity("Ragdoll")
 	

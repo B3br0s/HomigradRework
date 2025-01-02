@@ -14,12 +14,13 @@
     
             if
                 dmginfo:GetDamageType() == DMG_CRUSH and
-                dmginfo:GetDamage() >= 6 and
-                ent:GetVelocity():Length() > 500
+                dmginfo:GetDamage() >= 3 and
+                ent:GetVelocity():Length() > 300
             then
                 ply:ChatPrint("Твоя шея была сломана")
                 ent:EmitSound("homigrad/player/neck_snap_01.wav",511,200,1,CHAN_ITEM)
                 dmginfo:ScaleDamage(5000 * 5)
+                ply:Kill()
     
                 return
             end
