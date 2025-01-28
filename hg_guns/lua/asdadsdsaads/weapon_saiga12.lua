@@ -1,0 +1,50 @@
+-- weapon_saiga12.lua"
+
+SWEP.Base = "homigrad_base"
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
+SWEP.PrintName = "Сайга-12"
+SWEP.Author = "Ижевский машиностроительный завод"
+SWEP.Instructions = "Полуавтоматический дробовик под калибр 12/70"
+SWEP.Category = "Оружие - Дробовики"
+SWEP.Slot = 2
+SWEP.SlotPos = 2
+SWEP.ViewModel = ""
+SWEP.WorldModel = "models/pwb/weapons/w_saiga_12.mdl"
+
+SWEP.WepSelectIcon2 = Material("pwb/sprites/saiga_12.png")
+SWEP.IconOverride = "entities/weapon_pwb_saiga_12.png"
+
+SWEP.weaponInvCategory = 1
+SWEP.Primary.ClipSize = 5
+SWEP.Primary.DefaultClip = 5
+SWEP.Primary.Automatic = false
+SWEP.Primary.Ammo = "12/70 gauge"
+SWEP.Primary.Cone = 0
+SWEP.Primary.Damage = 8
+SWEP.Primary.Spread = Vector(0.05, 0.05, 0.05)
+SWEP.Primary.Force = 8
+SWEP.Primary.Sound = {"toz_shotgun/toz_fp.wav", 80, 70, 75}
+SWEP.Primary.Wait = 0.2
+SWEP.NumBullet = 8
+SWEP.AnimShootMul = 3
+SWEP.AnimShootHandMul = 10
+SWEP.ReloadTime = 2
+SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.DeploySnd = {"homigrad/weapons/draw_hmg.mp3", 55, 100, 110}
+SWEP.HolsterSnd = {"homigrad/weapons/hmg_holster.mp3", 55, 100, 110}
+SWEP.HoldType = "ar2"
+SWEP.ZoomPos = Vector(-2, 0.21, 31)
+SWEP.RHandPos = Vector(-15, -2, 4)
+SWEP.LHandPos = Vector(7, -2, -2)
+SWEP.ShellEject = "ShotgunShellEject"
+SWEP.SprayRand = {Angle(-0.2, -0.4, 0), Angle(-0.4, 0.4, 0)}
+SWEP.Ergonomics = 0.75
+SWEP.Penetration = 7
+SWEP.WorldPos = Vector(13, -1, 4)
+SWEP.WorldAng = Angle(0, 0, 0)
+SWEP.UseCustomWorldModel = true
+SWEP.attPos = Vector(0, 0, 0)
+SWEP.attAng = Angle(0.05, -0.6, 0)
+SWEP.lengthSub = 20
+SWEP.DistSound = "toz_shotgun/toz_dist.wav"

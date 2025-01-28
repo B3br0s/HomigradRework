@@ -1,0 +1,7 @@
+"hgrework"
+{
+	"base"		"sandbox"
+	"title"		"Homigrad Rework"
+	"maps"		""
+	"menusystem"	"1"
+}
