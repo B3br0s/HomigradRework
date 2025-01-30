@@ -163,7 +163,7 @@ function Glide.RagdollPlayer( ply, velocity, unragdollTime )
     end
 
     if not ply.Fake then
-    Faking(ply,Vector(0,0,0) - vehicle:GetAngles():Right() * math.random(600,1200))
+    Faking(ply,velocity)
     end
 
     velocity = velocityOverride or velocity

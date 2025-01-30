@@ -6,6 +6,11 @@ hook.Add("PhysgunPickup", "homigrad-weapons", function(ply, ent) if ent:GetNWBoo
 SWEP.WorldPos = Vector(13, -0.3, 3.4)
 SWEP.WorldAng = Angle(5, 0, 180)
 SWEP.UseCustomWorldModel = false
+local ValidWeaponBases = {
+    ["weapon_m4super"] = true,
+    ["weapon_870"] = true,
+    ["homigrad_base"] = true,
+}
 if SERVER then
 	util.AddNetworkString("give-me-guns")
 
@@ -25,18 +30,31 @@ if SERVER then
 	end)
 end
 
+if CLIENT then
+	concommand.Add("wm_getbones",function(ply)
+		local self = ply:GetActiveWeapon()
+		if !ValidWeaponBases[self.Base] then return end
+		if self.worldModel then
+			for boneID = 0, self.worldModel:GetBoneCount() - 1 do
+				local boneName = self.worldModel:GetBoneName(boneID)
+				print(boneName)
+			end
+		end
+	end)
+end
+
 SWEP.weaponAng = Angle(0, 0, 0)
 local angZero = Angle(0, 0, 0)
 local math_max, math_Clamp = math.max, math.Clamp
 function SWEP:GetAnimPos_Shoot2(time, timeSpan, timeAddEnd)
 	local timeSpan = timeSpan or 0.2
 	local timeAddEnd = timeAddEnd or 0
-	local shootAnim = (timeSpan / 2 - math_Clamp(math.abs(CurTime() - (time + timeAddEnd)), 0, timeSpan / 2)) / 1.3
+	local shootAnim = (timeSpan / 2 - math_Clamp(math.abs(CurTime() - (time + timeAddEnd)), 0, timeSpan / 2))
 	return shootAnim
 end
 
 function SWEP:GetAnimShoot2()
-	local animpos = self:GetAnimPos_Shoot2(self:LastShootTime(), 0.4, 0) * 2
+	local animpos = self:GetAnimPos_Shoot2(self:LastShootTime(), 0.3, 0)
 	--if animpos > 0 and CLIENT then print(animpos) end
 	animpos = math.ease.OutQuart(animpos)
 	if animpos > 0 then
@@ -103,7 +121,7 @@ function SWEP:ChangeGunPos()
 		angPosture4[1] = 30 * (ply:EyeAngles()[1] > 60 and (90 - ply:EyeAngles()[1]) / 30 or 1)
 		angPosture4[2] = 20 * (ply:EyeAngles()[1] > 60 and (90 - ply:EyeAngles()[1]) / 30 or 1)
 		self.weaponAng:Add(ply.posture ~= 3 and self:IsSprinting() and angPosture4 or angZero)
-		if ply.suiciding then self.weaponAng:Add(ply.suiciding and angSuicide or angZero) end
+		--if ply.suiciding then self.weaponAng:Add(ply.suiciding and angSuicide or angZero) end
 	end
 
 	if ply.posture == 4 or ply.posture == 3 or ply.posture == 1 then ply.posture = (self:KeyDown(IN_ATTACK2) or (ply.posture ~= 1 and self:KeyDown(IN_ATTACK))) and 0 or ply.posture end
@@ -113,7 +131,7 @@ function SWEP:ChangeGunPos()
 	local trace = self:GetTrace()
 	local way = trace.HitNormal:Dot(self:GetWeaponEntity():GetAngles():Up())
 	self.weaponAng[1] = self.weaponAng[1] - 60 * (closeanim > 0.5 and (closeanim - 0.5) * (way > 0 and 1 or -1) or 0)
-	local brokenArm = SERVER and ((ply.organism.larm or 0) + (ply.organism.rarm or 0)) or CLIENT and ((ply.organism.larm or 0) + (ply.organism.rarm or 0))
+	local brokenArm = SERVER and ((ply.larm or 0) + (ply.rarm or 0)) or CLIENT and ((ply.larm or 0) + (ply.rarm or 0))
 	self.weaponAng[1] = self.weaponAng[1] + (brokenArm >= 1 and (math.sin(CurTime()) + 1) * brokenArm or 0)
 	if CLIENT and self:IsLocal() then
 		self.weaponAng[3] = self.weaponAng[3] + diffang2[2] * -4
@@ -163,7 +181,7 @@ function SWEP:WorldModel_Transform()
 	if IsValid(owner) then
 		local matrix = owner:GetBoneMatrix(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
 		if not matrix then return end
-		local ang = owner:EyeAngles()
+		local ang = (!owner.suiciding and owner:EyeAngles() or owner:GetAttachment(owner:LookupAttachment("anim_attachment_RH")).Ang)
 		ang[3] = ang[3] + 180
 		local pos = vecZero
 		pos:Set(self.WorldPos)

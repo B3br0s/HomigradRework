@@ -2,16 +2,30 @@ AddCSLuaFile()
 -- THX 123d_255
 if SERVER then
 	util.AddNetworkString("muzzlenormalizator")
+	util.AddNetworkString("hg_boltanim")
 	net.Receive("muzzlenormalizator", function(STROKI, debil)
 		local pos = net.ReadVector()
        	local weaponxd = net.ReadEntity()
     	local ang = net.ReadAngle()
+
+		if weaponxd == NULL then return end
+		if debil == NULL then return end
 
         if not debil == weaponxd:GetOwner() then 
         else
         	weaponxd:Setmuzzlepos(pos) 
         	weaponxd:Setmuzzleang(ang)
         end
+	end)
+else
+	CreateClientConVar("hg_boltanims","0",true,false,"Переключает анимации затворов",0,1)
+	
+	net.Receive("hg_boltanim",function()
+		if GetConVar("hg_boltanims"):GetBool() != true then return end
+		local wep = net.ReadEntity()
+		local name = net.ReadString()
+
+		wep:BoltAnim(name)
 	end)
 end
 local surface_hardness = {
@@ -234,8 +248,39 @@ local vecZero = Vector(0, 0, 0)
 local image_distort = "sprites/heatwave"
 
 function SWEP:FireBullet()
-	if CLIENT then
-		FovAdd = (FovAdd and FovAdd - 8 or -8)
+	local owner = self:GetOwner()
+	if SERVER then
+		if owner.suiciding then
+			local Pos,Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_Head1"))
+
+			net.Start("bp headshoot explode")
+            net.WriteVector(Pos)
+            net.WriteVector(Vector(0,0,0) + (owner:GetAngles():Up() * 10) * math.random(10,30))
+            net.Broadcast()
+            net.Start("bp buckshoot")
+            net.WriteVector(Pos)
+            net.WriteVector(Vector(0,0,0) + (owner:GetAngles():Up() * 10) * math.random(10,30))
+            net.Broadcast()
+
+			local dmginfo = DamageInfo()
+			dmginfo:SetAttacker(owner)
+			dmginfo:SetInflictor(self)
+			dmginfo:SetDamage(self.Primary.Damage * (self.NumBullet or 1) * 10 or 25)
+
+			owner:TakeDamageInfo(dmginfo)
+
+			return
+		end
+	end
+	if CLIENT and self:GetOwner() == LocalPlayer() then
+		FovAdd = (FovAdd and FovAdd - 6 or -6)
+	elseif SERVER then
+		if not self.CustomAnim then
+			net.Start("hg_boltanim")
+			net.WriteEntity(self)
+			net.WriteString("shoot")
+			net.Broadcast()
+		end
 	end
 	local gun = self:GetWeaponEntity()
 	local att = self:GetMuzzleAtt(gun, true)
@@ -324,7 +369,14 @@ function SWEP:RejectShell(shell)
 	local att = gun:GetAttachment(gun:LookupAttachment("ejectbrass")) or gun:GetAttachment(gun:LookupAttachment("shell"))
 	local pos, ang
 	if not att then
-		pos, ang = gun:GetPos(), gun:GetAngles()
+		pos, ang = gun:GetPos()
+		 + gun:GetAngles():Forward() * self.EjectPos[1]
+		 + gun:GetAngles():Right() * self.EjectPos[2]
+		 + gun:GetAngles():Up() * self.EjectPos[3], gun:GetAngles()
+
+		 ang:RotateAroundAxis(ang:Forward(),self.EjectAng[1])
+		 ang:RotateAroundAxis(ang:Right(),self.EjectAng[2])
+		 ang:RotateAroundAxis(ang:Up(),self.EjectAng[3])
 	else
 		pos, ang = att.Pos, att.Ang
 	end

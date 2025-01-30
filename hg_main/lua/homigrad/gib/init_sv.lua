@@ -105,7 +105,7 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
     }
     return
     end
-    if dmginfo:GetDamage() > 15 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) then
+    if dmginfo:GetDamage() > 30 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) then
         if hitgroup == HITGROUP_HEAD and not rag.gib["Head"] then
             local bonePos, boneAng = rag:GetBonePosition(physbone)
             rag.gib["Head"] = true
@@ -117,30 +117,18 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
 	        phys_obj:EnableCollisions(false)
 	        phys_obj:SetMass(0.1)
             constraint.RemoveAll(phys_obj)
-            if rag.organism and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
+            if rag and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
                 rag:GetNWEntity("RagdollOwner"):Kill()
             end
             local Pos,Ang = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_Head1"))
             net.Start("bp headshoot explode")
             net.WriteVector(Pos)
-            net.WriteVector(Pos + VectorRand() + (IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * -10 or Ang:Forward() * 10) * math.random(10,30))
+            net.WriteVector(Vector(0,0,0) + VectorRand() + (IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * -10 or Ang:Forward() * 10) * math.random(10,30))
             net.Broadcast()
             net.Start("bp buckshoot")
             net.WriteVector(Pos)
-            net.WriteVector(dmginfo:GetAttacker():EyeAngles():Forward())
+            net.WriteVector(Vector(0,0,0) + dmginfo:GetAttacker():EyeAngles():Forward())
             net.Broadcast()
-
-            for i = 1,5 do
-                net.Start("bp hit")
-                net.WriteVector(bonePos)
-                net.WriteVector(Vector(0, 0, 0) + (IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * -10 or boneAng:Forward() * 10))
-                net.Broadcast()
-                net.Start("blood particle")
-                net.WriteVector(bonePos)
-                net.WriteVector(Vector(0, 0, 0) + (IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * -10 or boneAng:Forward() * 10))
-                net.Broadcast()
-            end
-            
         end
     end
     if dmginfo:GetDamage() > 350 and rag:GetVelocity():Length() > 450 or rag:GetVelocity():Length() > 1250 then
@@ -149,7 +137,7 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
                 hg.Gibbed[rag:GetNWEntity("RagdollOwner")] = true
             end
             rag.gib["Full"] = true
-            if rag.organism and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
+            if rag and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
                 timer.Simple(0,function()
                     rag:GetNWEntity("RagdollOwner"):Kill()
                 end)

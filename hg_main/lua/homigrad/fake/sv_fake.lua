@@ -12,7 +12,9 @@ hg.ragdollFake = {}
 hg.DeadBodies = {}
 
 net.Receive("fake",function(len,ply)
+	if !ply:Alive() then return end
     Faking(ply)
+	
 end)
 
 function PlayerMeta:RagView()
@@ -30,6 +32,7 @@ function PlayerMeta:Notify(string)
 end
 
 function PlayerMeta:CreateFake(force)
+	self:SelectWeapon("weapon_hands")
     local rag = ents.Create("prop_ragdoll")
     rag:SetPos(self:GetPos() - Vector(0, 0, 128))
     rag:SetModel(self:GetModel())
@@ -55,9 +58,23 @@ function PlayerMeta:CreateFake(force)
     rag.IsBleeding = self.IsBleeding or false
     rag.NextBlood = 0
 
-    if self.organism then
-        rag.blood = self.organism.blood
+    if self then
+        rag.blood = self.blood
     end
+
+	local armors = {}
+
+	if self.EZarmor then
+		for id,info in pairs(self.EZarmor.items) do
+			local ent = hg.CreateArmor(rag,info)
+			ent.armorID = id
+			ent.ragdoll = rag
+			ent.Owner = self
+			armors[id] = ent
+	
+			ent:CallOnRemove("Fake",Remove,self)
+		end
+	end
 
     self:SetNWEntity("FakeRagdoll", rag)
 
@@ -87,7 +104,7 @@ end
 hook.Add("Think","VelocityFakeHitPlyCheck",function()
 	for i,rag in pairs(ents.FindByClass("prop_ragdoll")) do
 		if IsValid(rag) then
-			if rag:GetVelocity():Length() > 50 then
+			if rag:GetVelocity():Length() > 300 then
 				rag:SetCollisionGroup(COLLISION_GROUP_NONE)
 			else
 				rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -108,12 +125,6 @@ hook.Add("PlayerSpawn","ResetFake",function(ply) --обнуление регдо
 	if PLYSPAWN_OVERRIDE then return end
 	
 	ply.slots = {}
-	--if ply.Slots ~= nil then
-	--	for plys,bool in pairs(ply.Slots) do
-	--		ply.Slots[plys] = nil
-	--		send(plys,lootEnt,true)
-	--	end
-	--end
 	ply:SetNWEntity("Ragdoll",nil)
 end)
 
@@ -126,10 +137,16 @@ hook.Add("Player Think","VelocityPlayerFallOnPlayerCheck",function(ply,time)
 	end
 end)
 
+hook.Add("PlayerSwitchWeapon","Homigrad_Fake_Guns",function(ply,wep,oldwep)
+	if not IsValid(ply) then return end
+	if not ply.Fake then return false end
+	if ply.Fake then ply.CurWeapon = wep:GetClass() return true end
+end)
+
 function Faking(ply,force)
     if not IsValid(ply) then return end
 
-	if ply:Alive() and !ply.organism.CanMove then return end
+	if ply:Alive() and !ply.CanMove then return end
 
     if ply.LastRagdollTime and ply.LastRagdollTime > CurTime() then
         return
@@ -138,6 +155,7 @@ function Faking(ply,force)
     ply.LastRagdollTime = CurTime() + 1.5
 
     if not ply.Fake then
+		ply:SelectWeapon("weapon_hands")
         ply.Fake = true
         ply:CreateFake((force != nil and force or Vector(0,0,0)))
         --hg.AppearanceRagdoll(ply.FakeRagdoll, ply)
@@ -156,11 +174,15 @@ function Faking(ply,force)
 			return
 		end
 
-		if not IsValid(ply) or not ply:Alive() or (ply.organism and ply.brokenspine) then
+		if ply.FakeRagdoll:GetVelocity():Length() > 500 then
+			return
+		end
+
+		if not IsValid(ply) or not ply:Alive() or (ply and ply.brokenspine) then
 		    return
 		end
 
-		if ply.organism.pain>(50*(ply.organism.blood/5000))+(ply:GetNWInt("SharpenAMT")*5) or ply.organism.blood<3000 then return end
+		if ply.pain>(50*(ply.blood/5000))+(ply:GetNWInt("SharpenAMT")*5) or ply.blood<3000 then return end
 
         local health = ply:Health()
         local eyeAngles = ply:EyeAngles()
@@ -174,19 +196,22 @@ function Faking(ply,force)
 		end
         PLYSPAWN_OVERRIDE = true
         ply:Spawn()
-        ply.organism.CanMove = false
+        ply.CanMove = false
         ply:SetHealth(health)
         ply:SetEyeAngles(eyeAngles)
         if JMod then
 		JMod.Иди_Нахуй = nil
 		end
         ply:SetPos(spawnPos)
+		if ply.CurWeapon then
+			ply:SelectWeapon(ply.CurWeapon)
+		end
         PLYSPAWN_OVERRIDE = false
 
 		ply.FakeRagdoll:Remove()
 
         ply.Fake = false
-		ply.organism.CanMove = true
+		ply.CanMove = true
         hg.ragdollFake[ply] = NULL
 
 		if not ply:IsBot() then
@@ -261,6 +286,8 @@ function hg.CreateArmor(ragdoll,info)
 
 	if IsValid(ent:GetPhysicsObject()) then
 		ent:GetPhysicsObject():SetMaterial("plastic")
+		ent:GetPhysicsObject():EnableCollisions(false)
+		ent:GetPhysicsObject():SetMass(0)
 	end
 
 	timer.Simple(0.1,function()
@@ -294,18 +321,18 @@ hook.Add("DoPlayerDeath", "DeathRagdoll", function(ply, att, dmginfo)
 	if hg.Gibbed[ply] then return end
 	if IsValid(ply.FakeRagdoll) then
 	local rag = ply.FakeRagdoll
-	rag.organism = ply.organism
+	rag = ply
 
 	rag.Items = {}
 
-	rag.organism.CantCheckPulse = false
-	rag.organism.alive = false
-	rag.organism.o2 = 0
-	rag.organism.pulse = 0
-	rag.organism.heartstop = true
+	rag.CantCheckPulse = false
+	rag.alive = false
+	rag.o2 = 0
+	rag.pulse = 0
+	rag.heartstop = true
 
 	constraint.RemoveAll(rag)
-	--rag.organism.otrub = true
+	--rag.otrub = true
 	if not ply:IsBot() then
 	net.Start("fake")
 	net.WriteBool(ply.Fake)
@@ -321,18 +348,18 @@ hook.Add("DoPlayerDeath", "DeathRagdoll", function(ply, att, dmginfo)
 
 	local rag = ply.FakeRagdoll
 
-	rag.organism = ply.organism or {}
+	rag = ply or {}
 
-	--print(rag.organism)
+	--print(rag)
 
     rag.Items = {}
 
-	rag.organism.CantCheckPulse = false
-	rag.organism.alive = false
-	rag.organism.o2 = 0
-	rag.organism.pulse = 0
-	rag.organism.heartstop = true
-	--rag.organism.otrub = true
+	rag.CantCheckPulse = false
+	rag.alive = false
+	rag.o2 = 0
+	rag.pulse = 0
+	rag.heartstop = true
+	--rag.otrub = true
 
 	if not ply:IsBot() then
 	net.Start("fake")
@@ -365,19 +392,19 @@ hook.Add("Player Think","FakeControl",function(ply,time)
     if not ply.Fake or not ply:Alive() then ply:SetNWBool("RightArm",false) ply:SetNWBool("LeftArm",false) return end
     local rag = ply.FakeRagdoll
 	if not IsValid(rag) then ply:Kill() ply.Fake = false ply.FakeRagdoll = NULL return end
-	rag.organism = ply.organism
+	rag = ply.FakeRagdoll
 
 	if ply:InVehicle() then
 		ply:ExitVehicle()
 	end
-	if ply.organism.otrub then return end
+	if ply.otrub then return end
     local AddVecRag = Vector(0,0,-64)
     local Head = rag:LookupBone("ValveBiped.Bip01_Head1")
 	if not Head then return end
     local HeadPos = rag:GetBonePosition(Head) + AddVecRag
 	ply:SetNWBool("Fake",ply.Fake)
 	ply:SetPos(HeadPos)
-    if ply.organism.otrub then return end
+    if ply.otrub then return end
 	rag:SetNetVar("Inventory",ply:GetNetVar("Inventory"))
     rag:SetFlexWeight(9,0)
 	local dist = (rag:GetAttachment(rag:LookupAttachment( "eyes" )).Ang:Forward()*10000):Distance(ply:GetAimVector()*10000)
@@ -397,7 +424,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 	local FArmR = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Forearm" )) )
 	--print(Head:GetAngles())
     local eyeangs = ply:EyeAngles()
-	if !ply.organism.otrub then rag:SetEyeTarget( LocalPos ) else rag:SetEyeTarget( Vector(0,0,0) ) end
+	if !ply.otrub then rag:SetEyeTarget( LocalPos ) else rag:SetEyeTarget( Vector(0,0,0) ) end
 	
 	if not ply.NextFakeBcst then
 		ply.NextFakeBcst = 0
@@ -624,8 +651,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 65
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 0.8,
-				pos = lh:GetPos() + ply:EyeAngles():Forward() * 55 + ply:EyeAngles():Up() * 40,
+				secondstoarrive = 0.5,
+				pos = lh:GetPos() + ply:EyeAngles():Forward() * 55 + ply:EyeAngles():Up() * 70,
 				angle = phys:GetAngles(),
 				maxangulardamp = 10,
 				maxspeeddamp = 10,
@@ -649,8 +676,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 65
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 0.8,
-				pos = rh:GetPos() + ply:EyeAngles():Forward() * 55 + ply:EyeAngles():Up() * 40,
+				secondstoarrive = 0.5,
+				pos = rh:GetPos() + ply:EyeAngles():Forward() * 55 + ply:EyeAngles():Up() * 70,
 				angle = phys:GetAngles(),
 				maxangulardamp = 10,
 				maxspeeddamp = 10,

@@ -77,9 +77,9 @@ hg.armor.head = {
 		norender = true
 	},]]
 if SERVER then
-	hg.organism = hg.organism or {}
-	hg.organism.input_list = hg.organism.input_list or {}
-	hg.organism.input_list.armor1 = function(org, bone, dmg, dmgInfo)
+	hg = hg or {}
+	hg.input_list = hg.input_list or {}
+	hg.input_list.armor1 = function(org, bone, dmg, dmgInfo)
 		if org.owner.armors["torso"] ~= "vest1" then return 0 end
 		local prot = hg.armor["torso"]["vest1"].protection - (dmgInfo:GetInflictor().Penetration or 1)
 		if prot < 0 then return 0 end
@@ -87,7 +87,7 @@ if SERVER then
 		return 1
 	end
 
-	hg.organism.input_list.helmet1 = function(org, bone, dmg, dmgInfo)
+	hg.input_list.helmet1 = function(org, bone, dmg, dmgInfo)
 		if org.owner.armors["head"] ~= "helmet1" then return 0 end
 		local prot = hg.armor["head"]["helmet1"].protection - (dmgInfo:GetInflictor().Penetration or 1)
 		if org.owner:IsPlayer() and not IsValid(org.owner.FakeRagdoll) then org.owner:EmitSound("homigrad/player/headshot_helmet.wav") end
@@ -97,7 +97,7 @@ if SERVER then
 		return 1
 	end
 
-	hg.organism.input_list.helmet2 = function(org, bone, dmg, dmgInfo)
+	hg.input_list.helmet2 = function(org, bone, dmg, dmgInfo)
 		if org.owner.armors["head"] ~= "helmet2" then return 0 end
 		local prot = hg.armor["head"]["helmet2"].protection - (dmgInfo:GetInflictor().Penetration or 1)
 		if org.owner:IsPlayer() and not IsValid(org.owner.FakeRagdoll) then end
@@ -107,7 +107,7 @@ if SERVER then
 		return 1
 	end
 
-	hg.organism.input_list.helmet3 = function(org, bone, dmg, dmgInfo)
+	hg.input_list.helmet3 = function(org, bone, dmg, dmgInfo)
 		if org.owner.armors["head"] ~= "helmet3" then return 0 end
 		local prot = hg.armor["head"]["helmet3"].protection - (dmgInfo:GetInflictor().Penetration or 1)
 		if org.owner:IsPlayer() and not IsValid(org.owner.FakeRagdoll) then end
@@ -117,14 +117,14 @@ if SERVER then
 		return 1
 	end
 
-	hg.organism.input_list.armor2 = function(org, bone, dmg, dmgInfo)
+	hg.input_list.armor2 = function(org, bone, dmg, dmgInfo)
 		if org.owner.armors["torso"] ~= "vest2" then return 0 end
 		local prot = hg.armor["torso"]["vest2"].protection - (dmgInfo:GetInflictor().Penetration or 1)
 		if prot < 0 then return 0 end
 		dmgInfo:ScaleDamage(0)
 		return 1
 	end
-	--[[hg.organism.input_list.mask1 = function(org, bone, dmg, dmgInfo)
+	--[[hg.input_list.mask1 = function(org, bone, dmg, dmgInfo)
 		if org.owner.armors["head"] ~= "mask1" then return 0 end
 		local prot = hg.armor["head"]["mask1"].protection - (dmgInfo:GetInflictor().Penetration or 1)
 		if org.owner:IsPlayer() and not IsValid(org.owner.FakeRagdoll) then org.owner:EmitSound("homigrad/player/headshot_helmet.wav") end

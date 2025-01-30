@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
-SWEP.PrintName = "АК-47"
+SWEP.PrintName = "AK-47"
 SWEP.Author = "Homigrad"
 SWEP.Instructions = "\n10 выстрелов в секунду\n45 Урона\n0.0025 Разброс"
 SWEP.Category = "Оружие - Винтовки"
@@ -30,6 +30,9 @@ SWEP.RHandPos = Vector(-12, -1, 4)
 SWEP.LHandPos = Vector(7, -2, -2)
 SWEP.attPos = Vector(5, 1, 40)
 SWEP.attAng = Angle(0.5,-0.12,0)
+SWEP.IconAng = Angle(-25,0,0)
+SWEP.IconPos = Vector(-0.5,55,-8)
+SWEP.TwoHanded = true
 SWEP.Spray = {}
 for i = 1, 75 do
 	SWEP.Spray[i] = Angle(-0.04 - math.cos(i) * 0.03, math.cos(i * i) * 0.05, 0) * 2
@@ -47,3 +50,8 @@ SWEP.DistSound = "ak74/ak74_dist.wav"
 SWEP.holsteredBone = "ValveBiped.Bip01_Spine2"
 SWEP.holsteredPos = Vector(29,-2.5, 10)
 SWEP.holsteredAng = Angle(-10, 180, 0)
+SWEP.EjectPos = Vector(17,6,-3.5)
+SWEP.EjectAng = Angle(0,0,-60)
+
+SWEP.BoltBone = "v_weapon.AK47_bolt"
+SWEP.BoltMul = Vector(0,0,-5.5)

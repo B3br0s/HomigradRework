@@ -68,8 +68,8 @@ hg.ammotypes = {
 		minsplash = 10,
 		maxsplash = 5
 	},
-	[".45rubber"] = {
-		name = ".45 Rubber",
+	[".45acp"] = {
+		name = ".45 ACP",
 		dmgtype = DMG_BULLET,
 		tracer = TRACER_LINE,
 		plydmg = 0,
@@ -194,7 +194,7 @@ name = "12/70 beanbag",
 
 name = "9x19 mm Parabellum",
 
-name = ".45 Rubber",
+name = ".45 ACP",
 
 name = "4.6×30 mm",
 
@@ -247,7 +247,7 @@ local ammoents = {
 		Material = "models/hmcd_ammobox_9",
 		Scale = 0.8,
 	},
-	[".45rubber"] = {
+	[".45acp"] = {
 		Model = "models/ammo/beanbag9_ammo.mdl",
 		Scale = 1
 	},
@@ -413,14 +413,14 @@ if CLIENT then
         AmmoMenu(ply)
     end )
 
-	hook.Add("radialOptions", "hg-ammomenu", function() if not LocalPlayer().organism.otrub then hg.radialOptions[#hg.radialOptions + 1] = {function() RunConsoleCommand("hg_ammomenu") end, "Drop Ammo"} end end)
+	hook.Add("radialOptions", "hg-ammomenu", function() if not LocalPlayer().otrub then hg.radialOptions[#hg.radialOptions + 1] = {function() RunConsoleCommand("hg_ammomenu") end, "Drop Ammo"} end end)
 end
 
 if SERVER then
     util.AddNetworkString( "drop_ammo" )
 
     net.Receive( "drop_ammo", function( len, ply )
-        if !ply:Alive() or ply.organism.otrub then return end
+        if !ply:Alive() or ply.otrub then return end
         local ammotype = net.ReadFloat()
         local count = net.ReadFloat()
         local pos = ply:EyePos()+ply:EyeAngles():Forward()*15

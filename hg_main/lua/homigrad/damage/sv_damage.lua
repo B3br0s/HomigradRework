@@ -5,7 +5,7 @@ DamageMultipliers = {
     [DMG_BULLET] = 0.8,
     [DMG_SLASH] = 0.3,
     [DMG_BLAST] = 3,
-    [DMG_CRUSH] = 1 / 16,--а почему бы и нет?
+    [DMG_CRUSH] = 1 / 32,--а почему бы и нет?
 }
 
 hook.Add("Player Think","Player_Health",function(ply,time)
@@ -84,7 +84,7 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 
 	dmginfo:ScaleDamage((DamageMultipliers[dmginfo:GetDamageType()] and DamageMultipliers[dmginfo:GetDamageType()] or 0.7))
 
-    ply.organism.pain = math.Clamp(ply.organism.pain + dmginfo:GetDamage() * 1.5,0,400)
+    ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage(),0,400)
 
-	ply:SetHealth(ply:Health() - dmginfo:GetDamage())
+	ply:SetHealth(ply:Health() - dmginfo:GetDamage() / (ply.Fake and 1 or 8))
 end)

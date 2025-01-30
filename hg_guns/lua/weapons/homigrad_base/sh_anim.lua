@@ -90,7 +90,7 @@ if CLIENT then
 
 	hook.Add("radialOptions", "hg-change-posture", function()
 		local wep = LocalPlayer():GetActiveWeapon()
-		if wep and hg.weapons[wep] and not LocalPlayer().organism.otrub then
+		if wep and hg.weapons[wep] and not LocalPlayer().otrub then
 			local tbl = {changePosture, "Change Posture"}
 			hg.radialOptions[#hg.radialOptions + 1] = tbl
 			local tbl = {resetPosture, "Reset Posture"}
@@ -145,7 +145,80 @@ local plyAng, handAng, handPos, addAng, _ = Angle(0, 0, 0), Angle(0, 0, 0), Vect
 --render.DrawLine(handPos,handPos + (handAng - addAng):Forward() * 10,color_white)
 --cam.End3D()
 --end
+
+function SWEP:BoltAnim(TypeOfAnim)
+	if self.BoltBone == false then return end
+    if TypeOfAnim == "shoot" then
+        local hookName = "bolt_anim_" .. self:EntIndex() .. math.random(-1e8,1e8)
+        hook.Remove("Think", hookName)
+        hook.Add("Think", hookName, function()
+            if not IsValid(self) then
+                hook.Remove("Think", hookName)
+                return
+            end
+
+            local model = self.worldModel
+            local bone = self.BoltBone
+            local amt = self.BoltMul
+			self.back = self.back or false
+
+            self.prog = self.prog or 0
+			if not self.back then
+            self.prog = LerpFT(0.5	, self.prog, 1)
+			else
+			self.prog = LerpFT(0.55, self.prog, 0.0001)
+			if self.prog < 0.01 then
+			self.back = false
+			hook.Remove("Think", hookName)
+			end
+			end
+
+			model:ManipulateBonePosition(model:LookupBone(bone),amt * self.prog)
+
+            if self.prog >= 0.8 then
+				self.back = true
+			elseif self.prog == 0 then
+				self.back = false
+            end
+        end)
+	elseif TypeOfAnim == "cock" then
+        local hookName = "bolt_anim_" .. self:EntIndex()
+        hook.Remove("Think", hookName)
+        hook.Add("Think", hookName, function()
+            if not IsValid(self) then
+                hook.Remove("Think", hookName)
+                return
+            end
+
+            local model = self.worldModel
+            local bone = self.BoltBone
+            local amt = self.BoltMul
+			self.back = self.back or false
+
+            self.prog = self.prog or 0
+			if not self.back then
+            self.prog = LerpFT(0.1, self.prog, 1)
+			else
+			self.prog = LerpFT(0.1, self.prog, 0.0001)
+			if self.prog < 0.01 then
+			self.back = false
+			hook.Remove("Think", hookName)
+			end
+			end
+
+			model:ManipulateBonePosition(model:LookupBone(bone),amt * self.prog)
+
+            if self.prog >= 0.8 then
+				self.back = true
+			elseif self.prog == 0 then
+				self.back = false
+            end
+        end)
+    end
+end
+
 function SWEP:SuicideAnim()
+	local owner = self:GetOwner()
 	if self.HoldType == "ar2" or self.HoldType == "smg" then
 		self:SetHold("normal")
 		local crouching = self:KeyDown(IN_DUCK)
@@ -162,6 +235,10 @@ function SWEP:SuicideAnim()
 		self:BoneSetAdd(1, "r_forearm", Vector(0, 0, 0), Angle(0, crouching and -25 or -120, 0))
 		self:BoneSetAdd(1, "r_upperarm", Vector(0, 0, 0), Angle(10, 0, 0))
 		self:BoneSetAdd(1, "r_hand", Vector(0, 0, 0), Angle(crouching and 40 or 40, crouching and 0 or -30, crouching and 15 or 30))
+
+		self:BoneSetAdd(1, "l_forearm", Vector(0, 0, 0), Angle(0, 0, 0))
+		self:BoneSetAdd(1, "l_upperarm", Vector(0, 0, 0),Angle(0, 0, 0))
+		self:BoneSetAdd(1, "l_hand", Vector(1, 1, 0), Angle(0, 0, 0))
 	end
 end
 
@@ -273,6 +350,7 @@ end
 local angLookUp1 = Angle(0, 0, 0)
 function SWEP:AnimLookUp()
 	local owner = self:GetOwner()
+	if owner.suiciding then return end
 	local eyeAng = owner:EyeAngles()
 	if self:IsLocal() then
 		angLookUp1[1] = -eyeAng[1] - 53
@@ -282,6 +360,7 @@ end
 
 function SWEP:AnimLookDown()
 	local owner = self:GetOwner()
+	if owner.suiciding then return end
 	local eyeAng = owner:EyeAngles()
 	if self:IsLocal() then
 		if self.HoldType == "ar2" or self.HoldType == "smg" then

@@ -342,7 +342,7 @@ hook.Add("ScalePlayerDamage", "JMod_ScalePlayerDamage", function(ply, hitgroup, 
 end)
 
 hook.Add("ScaleNPCDamage", "JMod_ScaleNPCdamage", function(npc, hitgroup, dmginfo)
-	LocationalDmgHandling(npc, hitgroup, dmginfo)
+	JMod.LocationalDmgHandling(npc, hitgroup, dmginfo)
 end)
 
 hook.Add("EntityTakeDamage", "JMod_EntityTakeDamage", function(victim, dmginfo)
@@ -465,6 +465,11 @@ function JMod.RemoveArmorByID(ply, ID, broken)
 		end
 
 		Ent.EZID = ID
+		print(3,Specs.IsBackpack) -- я дурак секу
+		if Specs.IsBackpack then
+			Ent.items_bp = table.FullCopy(Info.items_bp)
+			Ent.BackpackSlots = Info.BackpackSlots
+		end
 		Ent:SetColor(Info.col)
 		Ent:Spawn()
 		Ent:Activate()
@@ -482,7 +487,7 @@ function JMod.RemoveArmorByID(ply, ID, broken)
 		ply.EZarmor.bodygroups = nil
 	end
 
-	ply.EZarmor.items[ID] = nil
+	ply.EZarmor.items[ID] = nil -- это не то что нам надо
 	
 	local StowItems = not(broken) and Specs.storage and IsValid(Ent)
 
@@ -535,9 +540,10 @@ end
 
 function JMod.EZ_Equip_Armor(ply, nameOrEnt)
 	local NewArmorName = nameOrEnt
-	local NewArmorID, NewArmorDurability, NewArmorColor, NewArmorSpecs, NewArmorCharges
+	local NewArmorID, NewArmorDurability, NewArmorColor, NewArmorSpecs, NewArmorCharges, NewItemsBP_ITEMS, BackpackSlots
 
 	if type(nameOrEnt) ~= "string" then
+		print(1)
 		if not IsValid(nameOrEnt) then return end
 		NewArmorName = nameOrEnt.ArmorName
 		NewArmorSpecs = JMod.ArmorTable[NewArmorName]
@@ -545,6 +551,20 @@ function JMod.EZ_Equip_Armor(ply, nameOrEnt)
 		NewArmorDurability = nameOrEnt.ArmorDurability or NewArmorSpecs.dur
 		NewArmorColor = nameOrEnt:GetColor()
 		NewArmorCharges = nameOrEnt.ArmorCharges
+		
+		if NewArmorSpecs.IsBackpack == true then
+			BackpackSlots = nameOrEnt.BackpackSlots
+			NewItemsBP_ITEMS = nameOrEnt.items_bp or nil
+			
+			if NewItemsBP_ITEMS == nil then
+				NewItemsBP_ITEMS = {}
+				BackpackSlots = NewArmorSpecs.BackpackSlots
+				for i = 1, NewArmorSpecs.BackpackSlots do
+					NewItemsBP_ITEMS[i] = NULL 
+				end
+			end
+			PrintTable(NewItemsBP_ITEMS)
+		end
 		nameOrEnt:Remove()
 	else
 		NewArmorSpecs = JMod.ArmorTable[NewArmorName]
@@ -555,6 +575,14 @@ function JMod.EZ_Equip_Armor(ply, nameOrEnt)
 		if NewArmorSpecs.chrg then
 			NewArmorCharges = table.FullCopy(NewArmorSpecs.chrg)
 		end
+		if NewArmorSpecs.IsBackpack == true then
+			NewItemsBP_ITEMS = {}
+			BackpackSlots = NewArmorSpecs.BackpackSlots
+			for i = 1, BackpackSlots do
+				NewItemsBP_ITEMS[i] = NULL 
+			end
+			PrintTable(NewItemsBP_ITEMS)
+		end
 	end
 
 	local AreSlotsClear, ConflictingItemID = GetAreSlotsClear(ply.EZarmor.items, NewArmorName)
@@ -563,15 +591,31 @@ function JMod.EZ_Equip_Armor(ply, nameOrEnt)
 		JMod.RemoveArmorByID(ply, ConflictingItemID)
 		AreSlotsClear, ConflictingItemID = GetAreSlotsClear(ply.EZarmor.items, NewArmorName)
 	end
+	print(NewArmorSpecs.IsBackpack)
+	local NewVirtualArmorItem
+	if NewArmorSpecs.IsBackpack == true then
+		NewVirtualArmorItem = {
+			name = NewArmorName,
+			dur = NewArmorDurability,
+			col = NewArmorColor,
+			chrg = NewArmorCharges,
+			items_bp = NewItemsBP_ITEMS,
+			BackpackSlots = BackpackSlots,
+			id = NewArmorID,
+			tgl = false
+		}
+	else
+		NewVirtualArmorItem = {
+			name = NewArmorName,
+			dur = NewArmorDurability,
+			col = NewArmorColor,
+			chrg = NewArmorCharges,
+			id = NewArmorID,
+			tgl = false
+		}
+	end
 
-	local NewVirtualArmorItem = {
-		name = NewArmorName,
-		dur = NewArmorDurability,
-		col = NewArmorColor,
-		chrg = NewArmorCharges,
-		id = NewArmorID,
-		tgl = false
-	}
+	--PrintTable(NewItemsBP_ITEMS) -- тут еррор / знаю это из за того что NewItemsBP_ITEMS == nil
 
 	ply.EZarmor.items[NewArmorID] = NewVirtualArmorItem
 

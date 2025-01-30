@@ -1,0 +1,57 @@
+SWEP.Base = "homigrad_base"
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
+SWEP.PrintName = "UMP 45"
+SWEP.Author = "Homigrad"
+SWEP.Instructions = "\n11 выстрелов в секунду\n30 Урона\n0.075 Разброс"
+SWEP.Category = "Оружие - ПП"
+SWEP.Slot = 2
+SWEP.SlotPos = 2
+SWEP.ViewModel = ""
+SWEP.WorldModel = "models/weapons/arccw_go/v_smg_ump45.mdl"
+
+SWEP.ShellEject = "EjectBrass_9mm"
+SWEP.weaponInvCategory = 1
+SWEP.Primary.ClipSize = 45
+SWEP.Primary.DefaultClip = 45
+SWEP.Primary.Automatic = true
+SWEP.Primary.Ammo = ".45 ACP"
+SWEP.Primary.Cone = 0
+SWEP.Primary.Damage = 30
+SWEP.Primary.Spread = 0.0025
+SWEP.Primary.Force = 50
+SWEP.Primary.Sound = {"arccw_go/ump45/ump45_02.wav", 85, 100, 100}
+SWEP.Primary.Wait = 1 / 11
+SWEP.DeploySnd = {"homigrad/weapons/draw_hmg.mp3", 55, 100, 110}
+SWEP.HolsterSnd = {"homigrad/weapons/hmg_holster.mp3", 55, 100, 110}
+SWEP.ReloadTime = 2
+SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.HoldType = "ar2"
+SWEP.ZoomPos = Vector(0.25,-0.07,31)
+SWEP.RHandPos = Vector(-12, -1, 4)
+SWEP.LHandPos = Vector(7, -2, -2)
+SWEP.attPos = Vector(5, 1, 40)
+SWEP.attAng = Angle(0.5,-0.12,0)
+SWEP.TwoHanded = true
+SWEP.IconAng = Angle(-25,0,0)
+SWEP.IconPos = Vector(-2.3,60,-7)
+SWEP.Spray = {}
+for i = 1, 45 do
+	SWEP.Spray[i] = Angle(-0.04 - math.cos(i) * 0.03, math.cos(i * i) * 0.05, 0) * 2
+end
+
+SWEP.Ergonomics = 0.75
+SWEP.Penetration = 15
+SWEP.EjectAng = Angle(180, 0, 0)
+SWEP.WorldPos = Vector(-15, -5.5, -7)
+SWEP.WorldAng = Angle(0, 2, 0)
+SWEP.UseCustomWorldModel = true
+SWEP.lengthSub = 15
+SWEP.DistSound = "arccw_go/ump45/ump45-1-distant.wav"
+SWEP.holsteredBone = "ValveBiped.Bip01_Spine2"
+SWEP.holsteredPos = Vector(29,-2.5, 10)
+SWEP.holsteredAng = Angle(-10, 180, 0)
+SWEP.EjectPos = Vector(24,6,-3.5)
+SWEP.EjectAng = Angle(0,0,-60)
+
+SWEP.BoltBone = false

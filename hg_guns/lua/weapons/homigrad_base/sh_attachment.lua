@@ -107,7 +107,7 @@ if CLIENT then
 	end
 
 	hook.Add("radialOptions", "attachments", function()
-		if not LocalPlayer().organism.otrub then
+		if not LocalPlayer().otrub then
 			local tbl = {attachmentMenu, "Attachments Menu"}
 			hg.radialOptions[#hg.radialOptions + 1] = tbl
 		end

@@ -1,5 +1,3 @@
--- \lua\\homigrad\\cl_hud.lua"
-
 hide = {
 	["CHudHealth"] = true,
 	["CHudBattery"] = true,
@@ -8,6 +6,8 @@ hide = {
 	["CHudCrosshair"] = true
 }
 
+hook.Add("HUDDrawPickupHistory","homigrad",function() return true end)
+hook.Add("HUDItemPickedUp","homigrad",function() return true end)
 hook.Add("HUDShouldDraw", "homigrad", function(name) if hide[name] then return false end end)
 hook.Add("HUDDrawTargetID", "homigrad", function() return false end)
 hook.Add("DrawDeathNotice", "homigrad", function() return false end)
@@ -91,8 +91,22 @@ local function dropWeapon()
 	RunConsoleCommand("say", "*drop")
 end
 
+hook.Add( "HUDShouldDraw", "RemoveThatShit", function( name ) 
+    if ( name == "CHudDamageIndicator" ) then 
+       return false 
+    end
+end )
+
+net.Receive("SyncRound",function()
+	ROUND_NAME = net.ReadString()
+	ROUND_STATE = net.ReadFloat()
+	ROUND_ACTIVE = net.ReadBool()
+	StartTime = CurTime()
+	PlaySound = false
+end)
+
 hook.Add("radialOptions", "!Main", function()
-	if not LocalPlayer().organism.otrub then
+	if not LocalPlayer().otrub then
 		local tbl = {dropWeapon, "Drop Weapon"}
 		hg.radialOptions[#hg.radialOptions + 1] = tbl
 	end

@@ -11,3 +11,6 @@ hg = hg or {}
 
 hg.IncludeDir("hgrework/gamemode/game")
 hg.IncludeDir("homigrad")
+
+include("loader.lua")
+AddCSLuaFile("loader.lua")

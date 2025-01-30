@@ -2,7 +2,7 @@
 hg.Appearance = hg.Appearance or {}
 local SubMaterials = {
     -- Male
-    ["models/player/group01/male_01.mdl"] = 4,
+    ["models/player/group01/male_01.mdl"] = 3,
     ["models/player/group01/male_02.mdl"] = 2,
     ["models/player/group01/male_03.mdl"] = 4,
     ["models/player/group01/male_04.mdl"] = 4,
@@ -22,14 +22,14 @@ local SubMaterials = {
 
 hg.Appearance.SubMaterials = SubMaterials
 
-local Clothes = {
-    ["Normal"] = { [1] = "models/humans/male/group01/normal", [2] = "models/humans/female/group01/normal" },
-    ["Formal"] = { [1] = "models/humans/male/group01/formal", [2] = "models/humans/female/group01/formal" },
-    ["Plaid"] = { [1] = "models/humans/male/group01/plaid", [2] = "models/humans/female/group01/plaid" },
-    ["Striped"] = { [1] = "models/humans/male/group01/striped", [2] = "models/humans/female/group01/striped" },
-    ["Young"] = { [1] = "models/humans/male/group01/young", [2] = "models/humans/female/group01/young" },
-    ["Cold"] = { [1] = "models/humans/male/group01/cold", [2] = "models/humans/female/group01/cold" },
-    ["Casual"] = { [1] = "models/humans/male/group01/casual", [2] = "models/humans/female/group01/casual" }
+local Clothes = {--еее русификатор
+    ["Нормальный"] = { [1] = "models/humans/male/group01/normal", [2] = "models/humans/female/group01/normal" },
+    ["Формальный"] = { [1] = "models/humans/male/group01/formal", [2] = "models/humans/female/group01/formal" },
+    ["Клетчатый"] = { [1] = "models/humans/male/group01/plaid", [2] = "models/humans/female/group01/plaid" },
+    ["Полоски"] = { [1] = "models/humans/male/group01/striped", [2] = "models/humans/female/group01/striped" },
+    ["Молодой"] = { [1] = "models/humans/male/group01/young", [2] = "models/humans/female/group01/young" },
+    ["Куртка"] = { [1] = "models/humans/male/group01/cold", [2] = "models/humans/female/group01/cold" },
+    ["Казуал"] = { [1] = "models/humans/male/group01/casual", [2] = "models/humans/female/group01/casual" }
 }
 hg.Appearance.Clothes = Clothes
 
@@ -116,13 +116,13 @@ function ApplyAppearance(ent,AppearanceTable)
     ent:SetModel(AppearanceTable.Model or ent:GetModel())
     ent:SetPlayerColor(Vector(AppearanceTable.Color.r / 255,AppearanceTable.Color.g / 255,AppearanceTable.Color.b / 255))
     ent:SetSubMaterial()
-    ent:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.FEMKA and 2 or 1])
+    ent:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.Gender])
 end
 
 function ApplyAppearanceEntity(ent,AppearanceTable)
     if not AppearanceTable then return end
     ent:SetSubMaterial()
-    ent:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.FEMKA and 2 or 1])
+    ent:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.Gender])
 end
 else
 
@@ -152,7 +152,7 @@ function CreateRandomAppearance()--создание случайного апи�
     local mdl = table.Random(AllModels)
     local isfemale = ThatPlyIsFemale(mdl)
     local plyname = (isfemale and table.Random(RandomNames[2]) or table.Random(RandomNames[1]))
-    local clothes = "Formal"
+    local clothes = "Нормальный"
 
     local AppTable = {
         Model = mdl,
@@ -181,7 +181,7 @@ function OpenAppMenu()
     local gradient_d = Material("vgui/gradient-d")
     local blurMat = Material("pp/blurscreen")
     local Dynamic = 0
-    local red = Color(150,0,0)
+    local red = Color(34,34,34)
     if open then
         local menuappearance = vgui.Create("DFrame")
         menuappearance:SetSize( 500, 600 )
@@ -201,7 +201,7 @@ function OpenAppMenu()
             draw.RoundedBox( 0, 2.5, 2.5, w-5, h-5, Color( 0, 0, 0, 140) )
             surface.SetMaterial(gradient_d)
             surface.DrawTexturedRect( 0, 0, w, h )
-            surface.SetDrawColor( 162, 0, 255, 128)
+            surface.SetDrawColor( 34,34,34, 128)
             surface.DrawOutlinedRect( 0, 0, w, h, 2.5 )
         end
 
@@ -237,7 +237,7 @@ function OpenAppMenu()
             Entity:SetNWVector("PlayerColor",Vector(AppearanceTable.Color.r / 255, AppearanceTable.Color.g / 255, AppearanceTable.Color.b / 255))
             Entity:SetAngles(Entity.Angles)
             Entity:SetSubMaterial()
-            Entity:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.FEMKA and 2 or 1])
+            Entity:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.Gender])
         end
 
         function PlayerModel.Entity:GetPlayerColor() return Vector(AppearanceTable.Color.r / 255, AppearanceTable.Color.g / 255, AppearanceTable.Color.b / 255) end
@@ -289,6 +289,7 @@ function OpenAppMenu()
         ModelSelector.OnSelect = function( self, index, value )
             PlayerModel:SetModel(value)
             AppearanceTable.Model = value
+            function PlayerModel.Entity:GetPlayerColor() return Vector(AppearanceTable.Color.r / 255, AppearanceTable.Color.g / 255, AppearanceTable.Color.b / 255) end
         end
 
         local GenderSelector = vgui.Create( "DComboBox", BasePanel )
@@ -311,9 +312,16 @@ function OpenAppMenu()
             ModelSelector:Clear()
             ModelSelector:SetValue( index == 1 and "models/player/group01/male_01.mdl" or index == 2 and "models/player/group01/female_01.mdl" )
             AppearanceTable.Gender = index
+            if index == 1 then
+                AppearanceTable.FEMKA = false
+            else
+                AppearanceTable.FEMKA = true
+            end
             AppearanceTable.Model = index == 1 and "models/player/group01/male_01.mdl" or index == 2 and "models/player/group01/female_01.mdl"
-            print(index)
-            AppearanceTable.ClothesStyle = Clothes[Style or "Normal"][index]
+            AppearanceTable.ClothesStyle = Style
+
+            function PlayerModel.Entity:GetPlayerColor() return Vector(AppearanceTable.Color.r / 255, AppearanceTable.Color.g / 255, AppearanceTable.Color.b / 255) end
+
             for k, v in ipairs(PlayerModels[index]) do
                 ModelSelector:AddChoice( v )
             end
@@ -326,24 +334,6 @@ function OpenAppMenu()
         ApplyButton:SetTextColor(color_white)
         ApplyButton:SetText("Установить внешний вид")
         ApplyButton.DoClick = function()
-            local trimmedName = string.Trim(AppearanceTable.Name)
-        
-            if trimmedName == "" then
-                LocalPlayer():ChatPrint("Имя не может быть пустым")
-                return
-            end
-        
-
-            if string.find(trimmedName, "ㅤ") then
-                LocalPlayer():ChatPrint("Имя не может содержать пробелы!")
-                return
-            end
-        
-
-            if #trimmedName < 2 then
-                LocalPlayer():ChatPrint("Имя должно быть больше двух букв")
-                return
-            end
         
             SetAppearance(AppearanceTable)  
             appearancemenu:Close()

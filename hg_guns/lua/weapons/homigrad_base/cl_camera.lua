@@ -29,6 +29,7 @@ local util_TraceLine = util.TraceLine
 local dof_zoom = 0
 function SWEP:Camera(eyePos, eyeAng, view, vecVel, angVel)
 	ply = self:GetOwner()
+	if ply:IsSprinting() then FovAim = Lerp(0.07,FovAim,(FovAim != 0 and 0 or 0)) return end
 	local wepPos, wepAng
 	if self.UseCustomWorldModel then
 		self:WorldModel_Transform()
@@ -36,6 +37,8 @@ function SWEP:Camera(eyePos, eyeAng, view, vecVel, angVel)
 	else
 		gun = self
 	end
+
+	FovAim = Lerp(0.04,FovAim,(IsAiming() and 35 or (FovAim != 0 and 0 or 0)))--чего нахуй
 
 	self.Anim_RecoilCameraZoom = LerpVector(0.05, self.Anim_RecoilCameraZoom, self.Anim_RecoilCameraZoomSet)
 	local primary = self.Primary
@@ -85,7 +88,7 @@ function SWEP:Camera(eyePos, eyeAng, view, vecVel, angVel)
 	local zoom = self:IsZoom() and self:CloseAnim() == 0
 	if zoom then
 		NeedAccarucyRender = true
-		k = LerpFT(0.15 * self.Ergonomics ^ 2, k, 1)
+		k = LerpFT(0.25 * self.Ergonomics ^ 2, k, 1)
 		k2 = LerpFT(0.25, k2, 1)
 		if larm == 1 or rarm == 1 then
 			local k = (larm + rarm) / 16

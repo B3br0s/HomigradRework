@@ -224,10 +224,10 @@ function ENT:PhysicsCollideFall( speed, speedNormal, data )
         speed = speed * 0.25
     end
 
-    if speed < 600 then return end
+    if speed < 300 then return end
 
-    local vel = data.OurOldVelocity * 0.5
-    vel[3] = vel[3] + 200
+    local vel = data.OurOldVelocity * 1.6
+    vel[3] = vel[3] + 400
 
     -- Timer to avoid the "likely crashes the game" warning in console
     timer.Simple( 0, function()

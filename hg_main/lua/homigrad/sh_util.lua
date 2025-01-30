@@ -208,14 +208,11 @@ function hg.hullCheck(startpos,endpos,ply)
 	return trace
 end
 
-local hg_tpik_distance = ConVarExists("hg_tpik_distance") and GetConVar("hg_tpik_distance") or CreateClientConVar("hg_tpik_distance",1024,true,false,"The distance (in hammer units) at which the third person inverse kinematics enables, 0 = inf",0,2048)
-
-function hg.ShouldTPIK(ply,wpn)
-	local int = hg_tpik_distance:GetInt()
-	if (int == 0 or ply == LocalPlayer() or ply == LocalPlayer():GetNWEntity("spect")) then return true end
-	local view = render.GetViewSetup(true)
-	if (ply:GetPos():DistToSqr(view.origin) > int*int) then return false end
-	return true
+if SERVER then
+	concommand.Add("suicide",function(ply,args)
+		ply.suiciding = not ply.suiciding
+		ply:SetNWBool("suiciding",ply.suiciding)
+	end)
 end
 
 function hg.eyeTrace(ply, dist, ent, aim_vector, startpos)
@@ -373,30 +370,35 @@ if SERVER then
 			end)
 		end
 		if organism then
-			ent.organism.owner = (ent:IsRagdoll() and RagdollOwner(ent))
-			ent.organism = organism
+			ent.owner = (ent:IsRagdoll() and RagdollOwner(ent))
 		else
-			ent.organism = organism_main
-			ent.organism.owner = ent
-			ent.organism.bloodtype = table.Random(hg.bloodtypes)
+			ent.owner = ent
+			ent.bloodtype = table.Random(hg.bloodtypes)
 		end
 	end
 end
 
-hook.Add("Think", "homigrad-player-thinker", function(ply)
+if SERVER then
+hook.Add("Think", "Homigrad_Player_Think", function(ply)
 	tbl = player.GetAll()
 	time = CurTime()
 
 	for _, ply in ipairs(tbl) do
+		ply.owner = ply --решение проблем,ура
         hook.Run("Player Think", ply, time)
-		hook.Run("PlayerThink", ply, time)
 	end
 end)
+end
 
 if SERVER then
     hook.Add("PlayerDeathSound", "DisableDeathSound", function()
         return true
     end)
+	hook.Add("Player Think","Homigrad_Organism",function(ply,time)
+	ply:SetNWFloat("pain",ply.pain)
+	ply:SetNWFloat("painlosing",ply.painlosing)
+	ply:SetNWBool("otrub",ply.otrub)
+	end)--ее без неток
 else
     hook.Add("DrawDeathNotice", "DisableKillFeed", function()
         return false
@@ -405,7 +407,6 @@ end
 
 hook.Add("PlayerInitialSpawn","Homigrad_KS",function(ply)
 	ply.KSILENT = true
-	ApplyOrganism(ply)
 end)
 
 gameevent.Listen("player_spawn")
@@ -432,6 +433,18 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
 	ply.lerp_rh = 0
 	ply.lerp_lh = 0
 
+	ply.larm = 0.2
+	ply.rarm = 0.2
+	ply.painlosing = 1
+	ply.pain = 0
+	ply.pulse = 80
+	ply.blood = 5000
+	ply.adrenaline = 0
+	ply.removespeed = 0
+	ply.stamina = 100
+	ply.otrub = false
+	ply.CanMove = true
+
 	ply.inventory = {}
 	ply.inventory.attachments = {}
 
@@ -440,18 +453,24 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
 		ApplyAppearance(ply,ply.Appearance)
 		ply:Give("weapon_hands")
 		ply:SetNetVar("Inventory",{})
-		ApplyOrganism(ply)
 	end
 end)
 
+if SERVER then
+	hook.Add("PlayerSpawn","Homigrad_Orgia_S_Negrami",function(ply)
+	if PLYSPAWN_OVERRIDE then return end
+	ApplyOrganism(ply)
+	end)
+end
+
 hook.Add("Move","Movement",function(ply,mv)
-    if not ply.organism then
+    if !ply then
         return
     end
 	local value = mv:GetMaxSpeed()
-	local adr = ply.organism.adrenaline * 50
+	local adr = ply.adrenaline * 50
 	if SERVER then
-		if ply.organism.CanMove == false then
+		if ply.CanMove == false then
 			value = 0
 			ply:SetCrouchedWalkSpeed(0)
 		end
@@ -464,13 +483,13 @@ hook.Add("Move","Movement",function(ply,mv)
 	ply:SetUnDuckSpeed(0.5)
 	ply:SetSlowWalkSpeed(30)
 	ply:SetCrouchedWalkSpeed(60)
-	ply:SetRunSpeed(Lerp(ply:IsSprinting() and 0.05 or 1,ply:GetRunSpeed(),ply:IsSprinting() and 350 + adr - ply.organism.removespeed * 2 or ply:GetWalkSpeed() - ply.organism.removespeed * 2))
+	ply:SetRunSpeed(Lerp(ply:IsSprinting() and 0.05 or 1,ply:GetRunSpeed(),ply:IsSprinting() and 350 + adr - ply.removespeed * 2 or ply:GetWalkSpeed() - ply.removespeed * 2))
 	ply:SetJumpPower(200)
 
 	if ply:IsSprinting() and mv:GetForwardSpeed() > 30 then
-	ply.organism.stamina = math.Clamp(ply.organism.stamina - 0.03,0,100)
+	ply.stamina = math.Clamp(ply.stamina - 0.03,0,100)
 	elseif ply:GetVelocity():Length() < 120 and not ply:IsSprinting() then
-	ply.organism.stamina = math.Clamp(ply.organism.stamina + 0.03 + adr / 15,0,100)
+	ply.stamina = math.Clamp(ply.stamina + 0.03 + adr / 15,0,100)
 	end
 
 	if not ply:Crouching() then
@@ -480,5 +499,5 @@ hook.Add("Move","Movement",function(ply,mv)
 end)
 
 function hg.GetCurrentCharacter(ent)
-    return (ent:IsPlayer() and ent or ent:IsRagdoll() and ent.organism.owner.FakeRagdoll == hg.RagdollOwner(ent) and ent)
+    return (ent:IsPlayer() and ent or ent:IsRagdoll() and ent.owner.FakeRagdoll == hg.RagdollOwner(ent) and ent)
 end

@@ -15,8 +15,7 @@ include("cl_optics.lua")
 
 net.Receive("SoundBCST",function()
 	local wep = net.ReadEntity()
-	local sdist = net.ReadString()
-	if LocalPlayer():EyePos():Distance(wep:GetPos()) > 500 then
+	if LocalPlayer():EyePos():Distance(wep:GetPos()) > 800 then
 		wep:EmitSound(wep.DistSound,125,100,1,CHAN_WEAPON,0,0)
 	end
 end)

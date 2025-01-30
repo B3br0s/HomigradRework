@@ -29,6 +29,7 @@ local util_TraceLine, util_TraceHull = util.TraceLine, util.TraceHull
 local math_Clamp = math.Clamp
 local Round, Max, abs = math.Round, math.max, math.abs
 local compression = 12
+FovAim = 0
 local AddPos = Vector(0,0,0)
 local traceBuilder = {
     filter = lply,
@@ -40,7 +41,7 @@ local traceBuilder = {
 
 hook.Add("Camera", "Weapon", function(pos, angles, view, vecVel, angVel)
     wep = lply:GetActiveWeapon()
-    if wep.Camera then return wep:Camera(pos, angles, view, vecVel, angVel) end
+    if wep.Camera then return wep:Camera(pos, angles, view, vecVel, angVel) else FovAim = 0 end
 end)
 
 local TickInterval = engine.TickInterval
@@ -81,6 +82,7 @@ end
 
 local ValidWeaponBases = {
     ["weapon_m4super"] = true,
+    ["weapon_870"] = true,
     ["homigrad_base"] = true,
 }
 
@@ -118,7 +120,7 @@ hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zf
 
     if ply:InVehicle() then return end
 
-	if not firstPerson then return end
+	if not firstPerson then FovAdd = 0 return end
 
     if ply.Fake then hook.Run("Fake-Think",ply,origin,angles,fov,znear,zfar) return GetFakeCamera(ply,origin,angles,fov,znear,zfar) end
 
@@ -138,7 +140,7 @@ hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zf
 
     if FovAdd != nil and FovAdd != 0 then
         FovAdd = LerpFT(0.05,FovAdd,0)
-        angles[3] = LerpFT(1, angles[3],math.random(-FovAdd / 1.5,FovAdd / 1.5))
+        angles[3] = LerpFT(1.5, angles[3],math.random(-FovAdd / 3,FovAdd / 3))
     end
 
     if not RENDERSCENE then
@@ -150,11 +152,11 @@ hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zf
 
         local different = -(eyeAngs:Forward() - (eyeAnglesOld or eyeAngs):Forward()) / 2
         local _, localAng = WorldToLocal(veczero, eyeAngs, veczero, eyeAnglesOld or eyeAngs)
-        diffpos = LerpVector(0.1 * (wep.Ergonomics or 1) ^ 2, diffpos, different / (FrameTime() / engine.TickInterval()))
-        diffang = LerpAngle(0.1, diffang, localAng / (FrameTime() / engine.TickInterval()) / 4)
-        diffang2 = LerpAngle(0.2, diffang2, localAng / (FrameTime() / engine.TickInterval()))
-        diffvec = LerpVector(0.15, diffvec, (oldorigin - ply:EyePos()) / (FrameTime() / engine.TickInterval()))
-        diffvec2 = LerpVector(0.8, diffvec2, (oldorigin - ply:EyePos()) / (FrameTime() / engine.TickInterval()))
+        --diffpos = LerpVector(0.1 * (wep.Ergonomics or 1) ^ 2, diffpos, different / (FrameTime() / engine.TickInterval()))
+        --diffang = LerpAngle(0.1, diffang, localAng / (FrameTime() / engine.TickInterval()) / 1488 / 1337) -- ээ ыы аа
+        --diffang2 = LerpAngle(0.2, diffang2, localAng / (FrameTime() / engine.TickInterval()))
+        --diffvec = LerpVector(0.15, diffvec, (oldorigin - ply:EyePos()) / (FrameTime() / engine.TickInterval()))
+        --diffvec2 = LerpVector(0.8, diffvec2, (oldorigin - ply:EyePos()) / (FrameTime() / engine.TickInterval()))
 
         table.CopyFromTo(view, oldview)
         originnew = ply:EyePos()
@@ -184,7 +186,7 @@ hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zf
 
     view.znear = 1
     view.zfar = zfar
-    view.fov = hg_fov:GetInt() + (FovAdd or 0)
+    view.fov = hg_fov:GetInt() + (FovAdd or 0) - (FovAim or 0)
     view.drawviewer = true
     view.origin = origin
     view.angles = angles
@@ -202,7 +204,7 @@ end)
 
 local function HGAddView(ply, origin, angles)
     if ply:Alive() then
-        local organism = ply.organism or {}
+        local organism = ply or {}
         local adrenaline = organism.adrenaline or 0
         local brain = organism.brain or 0
         local disorientation = organism.disorientation or 0

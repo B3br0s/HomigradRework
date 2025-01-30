@@ -12,9 +12,6 @@ end
 function GM:PlayerSpawn(ply)
     ply:UnSpectate()
     hg.Gibbed[ply] = false
-    ApplyOrganism(ply)
-
-    ply.organism.owner = ply
     if ply.KSILENT then
         ply:KillSilent()
         ply.KSILENT = false

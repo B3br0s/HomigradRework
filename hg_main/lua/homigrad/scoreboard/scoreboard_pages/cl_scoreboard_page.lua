@@ -10,15 +10,15 @@ function CheckPlyStatus(ply)
     local SpecColor = Color(255,255,255,70)
 
     if ply == LocalPlayer() then
-        return (ply:Alive() and AliveColor or DeadColor)
+        return (ply:Alive() and AliveColor or DeadColor),(ply:Alive() and "Живой" or "Мёртв")
     end
     if ply:Team() == 1002 then
-        return SpecColor
+        return SpecColor,"Наблюдает"
     end
     if LocalPlayer():Team() == 1002 or !LocalPlayer():Alive() then
-        return (ply:Alive() and AliveColor or DeadColor)
+        return (ply:Alive() and AliveColor or DeadColor),(ply:Alive() and "Живой" or "Мёртв")
     else
-        return SpecColor
+        return SpecColor,"Неизвестно"
     end
 end
 
@@ -55,11 +55,13 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             --PlayerAvatar:SetSize(60,60)
             --PlayerAvatar:SetPos(2,2)
 
+            local PlyColor,PlySText = CheckPlyStatus(ply)
+
             local StatusGradient = vgui.Create("DImage",PlayerButton)
             StatusGradient:SetPos(0,0)
             StatusGradient:SetSize(412,64)
             StatusGradient:SetImage("vgui/gradient-l")
-            StatusGradient:SetImageColor(CheckPlyStatus(ply))
+            StatusGradient:SetImageColor(PlyColor)
 
             local OtherGradient = vgui.Create("DImage",PlayerButton)
             OtherGradient:SetPos(PlayerButton:GetWide() * 14,0)
@@ -75,6 +77,8 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                 end
             
                 draw.SimpleText(ply:Name(), "H.18", w / 2, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                
+                draw.SimpleText(PlySText, "H.18", w / 19, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
                 surface.SetDrawColor(255,255,255,20)
 

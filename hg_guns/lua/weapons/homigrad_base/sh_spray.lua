@@ -29,11 +29,11 @@ end
 function SWEP:PrimarySpread()
 	local owner = self:GetOwner()
 	local mul = self:GetPrimaryMul()
-	self.SprayI = self.SprayI + 2
+	self.SprayI = self.SprayI + 1
 	local sprayI = self.SprayI
 	if CLIENT and owner == LocalPlayer() then
 		local force = self.Primary.Force / 100
-		mul = mul * ((owner.organism.larm or 0) + (owner.organism.rarm or 0) + 2) / 1
+		mul = mul * ((owner.larm or 0) + (owner.rarm or 0) + 2) / 1
 		mul = mul * (self.bipodPlacement and 0.25 or 1)
 		--отдача идёт более вверх,то что нужно.
 		ViewPunch(AngleRand(-force * 1.1, 0.1) * mul * 2 / (self.Primary.ClipSize / 2) * sprayI ^ ((not self.Primary.Automatic and 0.5 or 1) ))--* (1 / (self.Primary.Wait * 15))))

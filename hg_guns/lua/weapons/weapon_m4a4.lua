@@ -13,7 +13,7 @@ SWEP.weaponInvCategory = 1
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 30
 SWEP.Primary.Automatic = true
-SWEP.Primary.Ammo = "7.62x39 mm"
+SWEP.Primary.Ammo = "5.56x45 mm"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 35
 SWEP.Primary.Spread = 0.0025
@@ -36,10 +36,13 @@ SWEP.RHandPos = Vector(-12, -1, 4)
 SWEP.LHandPos = Vector(7, -2, -2)
 SWEP.attPos = Vector(5, 1, 40)
 SWEP.attAng = Angle(0.5,-0.12,0)
+SWEP.TwoHanded = true
 SWEP.Spray = {}
 for i = 1, 75 do
 	SWEP.Spray[i] = Angle(-0.04 - math.cos(i) * 0.03, math.cos(i * i) * 0.05, 0) * 2
 end
+SWEP.IconAng = Angle(-25,0,0)
+SWEP.IconPos = Vector(1.5,55,-7)
 
 SWEP.Ergonomics = 0.75
 SWEP.Penetration = 15
@@ -53,3 +56,7 @@ SWEP.DistSound = "ak74/ak74_dist.wav"
 SWEP.holsteredBone = "ValveBiped.Bip01_Spine2"
 SWEP.holsteredPos = Vector(29,-2.5, 10)
 SWEP.holsteredAng = Angle(-10, 180, 0)
+SWEP.EjectPos = Vector(17,6,-3.5)
+SWEP.EjectAng = Angle(0,0,-60)
+
+SWEP.BoltBone = false

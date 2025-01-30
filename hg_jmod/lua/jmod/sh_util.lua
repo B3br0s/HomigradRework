@@ -9,6 +9,17 @@ function VECTOR:GetCopy()
 	return Vector(self.x, self.y, self.z)
 end
 
+function GetItemInSlot(armorTable, slot)
+    if not (armorTable and armorTable.items) then return nil end
+    for id, armorData in pairs(armorTable.items) do
+        local ArmorInfo = JMod.ArmorTable[armorData.name]
+        if ArmorInfo and ArmorInfo.slots and ArmorInfo.slots[slot] then
+            return id, armorData, ArmorInfo
+        end
+    end
+    return nil
+end
+
 function table.FullCopy(tab)
 	if not tab then return nil end
 	local res = {}

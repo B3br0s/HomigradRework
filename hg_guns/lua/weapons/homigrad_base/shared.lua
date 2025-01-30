@@ -13,6 +13,7 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
+SWEP.RecoilAnim = 0.1
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
@@ -38,8 +39,8 @@ function SWEP:Initialize()
 
 	self:ClearAttachments()
 
-	game.AddParticles("particles/tfa_ins2_muzzlesmoke.pcf")
-	PrecacheParticleSystem("tfa_ins2_weapon_muzzle_smoke")
+	--game.AddParticles("particles/tfa_ins2_muzzlesmoke.pcf")
+	--PrecacheParticleSystem("tfa_ins2_weapon_muzzle_smoke")
 
 	hg.weapons[self] = true
 
@@ -62,9 +63,43 @@ end
 
 SWEP.WepSelectIcon2 = Material("null")
 SWEP.IconOverride = ""
+SWEP.IconPos = Vector(0,0,0)
+SWEP.IconAng = Angle(0,0,0)
 
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	
+	local WM = self.WorldModel
 
+	if not IsValid(DrawingModel) then
+		DrawingModel = ClientsideModel(self.WorldModel,RENDERGROUP_OPAQUE)
+		DrawingModel:SetNoDraw(true)
+	else
+		DrawingModel:SetModel(self.WorldModel)
+		local vec = Vector(18.7,150,-3)
+		local ang = Vector(0,-90,0):Angle()
+
+		cam.Start3D( vec, ang, 20, x, y+35, wide, tall, 5, 4096 )
+			cam.IgnoreZ( true )
+			render.SuppressEngineLighting( true )
+
+			render.SetLightingOrigin( self:GetPos() )
+			render.ResetModelLighting( 50/255, 50/255, 50/255 )
+			render.SetColorModulation( 1, 1, 1 )
+			render.SetBlend( 255 )
+
+			render.SetModelLighting( 4, 1, 1, 1 )
+
+			DrawingModel:SetRenderAngles( self.IconAng )
+			DrawingModel:SetRenderOrigin( self.IconPos)
+			DrawingModel:DrawModel()
+			DrawingModel:SetRenderAngles()
+
+			render.SetColorModulation( 1, 1, 1 )
+			render.SetBlend( 1 )
+			render.SuppressEngineLighting( false )
+			cam.IgnoreZ( false )
+		cam.End3D()
+	end
 
 	surface.SetDrawColor( 255, 255, 255, alpha )
 	surface.SetMaterial( self.WepSelectIcon2 )
@@ -236,7 +271,6 @@ function SWEP:EmitShoot()
 	sound.Play((not self.Primary.RandomSounds and self.Primary.Sound[1] or table.Random(self.Primary.RandomSounds)),self:GetPos(),75,self.Primary.Sound[3],1)
 	net.Start("SoundBCST")
 	net.WriteEntity(self)
-	net.WriteString(self.DistSound)
 	net.Broadcast()
 end
 
@@ -331,6 +365,15 @@ end
 if SERVER then
 	function SWEP:Think()
 		self:Step()
+		if self.AddThinkNigga then
+			self:AddThinkNigga()
+		end
+	end
+else
+	function SWEP:Think()
+		if self.AddThinkNigga then
+			self:AddThinkNigga()
+		end
 	end
 end
 
@@ -345,10 +388,10 @@ if CLIENT then
 		if time > 2 and self:Clip1() <= self:GetMaxClip1() / 2 or (self.particle and self.particle:IsValid()) then
 			local att = self:GetMuzzleAtt(nil, true, true)
 			if not self.particle or not self.particle:IsValid() then
-				self.particle = CreateParticleSystemNoEntity("tfa_ins2_weapon_muzzle_smoke", att.Pos, att.Ang)
+				--self.particle = CreateParticleSystemNoEntity("tfa_ins2_weapon_muzzle_smoke", att.Pos, att.Ang)
 			else
-				self.particle:SetControlPoint(0, att.Pos)
-				self.particle:SetControlPoint(1, vecSmoke)
+				--self.particle:SetControlPoint(0, att.Pos)
+				--self.particle:SetControlPoint(1, vecSmoke)
 			end
 
 			if time > 5 then if self.particle and self.particle:IsValid() then self.particle:StopEmission() end end

@@ -41,6 +41,10 @@ if CLIENT then
 			net.SendToServer()
 			wep:SetClip1(0)
 			wep.drawBullet = false
+			wep.dwr_reverbDisable = true
+			timer.Simple(0.08,function()
+				wep.dwr_reverbDisable = false
+			end)
 		end
 	end)
 
@@ -91,6 +95,7 @@ else
 	util.AddNetworkString("changeAmmoType")
 	net.Receive("unload_ammo", function(len, ply)
 		local wep = net.ReadEntity()
+		if wep:GetOwner() != ply then ply:ChatPrint("э?") ply:Kick("зочем юзаиш эхплоити дауннннн") return end
 		wep.drawBullet = false
 		if wep and hg.weapons[wep] and wep:Clip1() > 0 and wep:CanUse() then
 			ply:GiveAmmo(wep:Clip1(), wep:GetPrimaryAmmoType(), true)
