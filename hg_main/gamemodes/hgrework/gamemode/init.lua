@@ -11,6 +11,7 @@ end
 
 function GM:PlayerSpawn(ply)
     ply:UnSpectate()
+    ply:Give("weapon_hands")
     hg.Gibbed[ply] = false
     if ply.KSILENT then
         ply:KillSilent()

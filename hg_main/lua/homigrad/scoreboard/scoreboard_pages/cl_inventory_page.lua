@@ -1,7 +1,7 @@
 --Хеллоу хукер :3
 local open = false
 local panelka
-
+local restart_panel = false
 local armorSlots = {
     "head", "eyes", "mouthnose", "ears", "rightshoulder", "rightforearm", 
     "rightthigh", "rightcalf", "chest", "pelvis", "leftshoulder", "leftforearm", 
@@ -152,10 +152,11 @@ end
 
 --[[
 TODO:
-[1] - драггебейл слоты
-[2] - иконки оружий
+[1] - драггебейл слоты +
+[2] - иконки оружий + 
 [3] - Рюкзаки добавить к основному инвентарю(что бы можно было брать в них вещи)
-[4] - увеличить интерфейс и добавить лутание игроков
+[4] - увеличить интерфейс + и добавить лутание игроков
+60/100  
 ]]
 
 local BL = {
@@ -164,64 +165,168 @@ local BL = {
     ["homigrad_base"] = true,
 }
 
-local function createinvslot(slotid,parent,backpackid,x,y)--е,копипастим
-    local slot = vgui.Create("DPanel", parent)
-    slot:SetSize(ScrW()/(backpackid != nil and 30 or 20),ScrW()/(backpackid != nil and 30 or 20))
-    slot:SetPos(x,y)
-    slot.SlotItem = NULL
-    local ply = LocalPlayer()
+local function createinvslot(slotid, parent, backpackid, x, y)
 
-    if backpackid ~= nil then-- Если рюкзак то ищем в нём предмет если наоборот то в игроке 🔥🔥🔥🔥
-        --вывод:боглер нарик ебанный (b3bros) | правда ничего не отрицаю (thebogler)
+    local slot = vgui.Create("DPanel", parent)
+    slot:SetSize(ScrW() / (backpackid ~= nil and 30 or 20), ScrW() / (backpackid ~= nil and 30 or 20))
+    slot:SetPos(x, y)
+    slot.SlotItem = NULL
+    slot:SetMouseInputEnabled(false) 
+
+    local ply = LocalPlayer()
+    if backpackid ~= nil then
         local item
-        for id,info in pairs(ply.EZarmor.items) do
-            if info.IsBackpack then 
+        for id, info in pairs(ply.EZarmor.items) do
+            if info.IsBackpack then
                 item = info.BackpackSlots[slotid]
-                return 
+                break
             end
-        end
-        slot.Paint = function(self,w,h)
-            draw.RoundedBox(0, 2, 2, w - 4, h - 4, Color(31, 31, 31, 25))
-    
-            
-            surface.SetDrawColor(255,255,255,185)
-    
-            surface.DrawOutlinedRect(0,0,w,h,1)
         end
         slot.SlotItem = item
     else
-
-        local item = ply:GetNWEntity("Slot"..slotid)
-        if item ~= NULL and !BL[item.Base] then
-            local wepdata = (weapons.Get(item:GetClass()) or nil)
+        local item = ply:GetNWEntity("Slot" .. slotid)
+        if item ~= NULL and not BL[item.Base] then
+            local wepdata = weapons.Get(item:GetClass()) or nil
             if wepdata == nil then return end
             local wepmodel = wepdata.WorldModel 
         else
             item = NULL 
         end
+        slot.id = slotid
         slot.SlotItem = item
-        slot.Paint = function(self,w,h)
-            draw.RoundedBox(0, 2, 2, w - 4, h - 4, Color(31, 31, 31, 200))
-    
-            surface.SetDrawColor(255,255,255,185)
-    
-            surface.DrawOutlinedRect(0,0,w,h,1)
 
-            --draw.SimpleText(slot.SlotItem.PrintName,"HOS.18",w,h,Color(255,255,255,50),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+
+        slot.Paint = function(self, w, h)
+            draw.RoundedBox(0, 2, 2, w - 4, h - 4, Color(31, 31, 31, 186))
+            surface.SetDrawColor(255, 255, 255, 185)
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
         end
 
-        local SlotModel = vgui.Create("DModelPanel",slot)
-        SlotModel:SetModel(IsValid(item) and item.WorldModel or " ")
-        SlotModel:SetSize(slot:GetWide(),slot:GetTall())
-        SlotModel:SetLookAt(Vector(0,-17,0))
-        SlotModel:SetCamPos(Vector(40,-17,0))
 
-        function SlotModel:LayoutEntity(ent) ent:SetAngles(Angle(0,90,0)) end
-    
+        local SlotModel = vgui.Create("DModelPanel", parent)
+        SlotModel:SetModel(IsValid(item) and item.WorldModel or " ")
+        SlotModel:SetSize(slot:GetWide(), slot:GetTall())
+        SlotModel:SetPos(slot:GetPos())
+        SlotModel:SetLookAt(Vector(0, -17, 0))
+        SlotModel:SetCamPos(Vector(40, -17, 0))
+        local vec = Vector(20,112,-3)
+		local ang = Vector(0,-90,0):Angle()
+        SlotModel:SetLookAt(Vector(0,-25,0))
+        SlotModel:SetCamPos(vec)
+
+        SlotModel:SetZPos(1000)
+
+        if item == NULL then
+            SlotModel:Remove()
+        end
+
+        function SlotModel:LayoutEntity(ent)
+            ent:SetAngles(((item != NULL and weapons.Get(item:GetClass()) != nil) and weapons.Get(item:GetClass()).IconAng) or Angle(0,90,0))
+            ent:SetPos(((item != NULL and weapons.Get(item:GetClass()) != nil) and weapons.Get(item:GetClass()).IconPos) or Vector(0,0,0))
+        end
+        SlotModel:SetMouseInputEnabled(true)
+
+        local oldPaint = SlotModel.Paint
+        SlotModel.Paint = function(self, w, h)
+            oldPaint(self, w, h)
+            draw.RoundedBox(0, 2, 2, w - 4, h - 4, Color(31, 31, 31, 25))
+            surface.SetDrawColor(255, 255, 255, 185)
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+            if slot.SlotItem then
+            draw.SimpleText(slot.SlotItem.PrintName,"HS.8",5,5)
+            end
+        end
+
+
+        SlotModel.Dragging = false
+        SlotModel.DragOffsetX = 0
+        SlotModel.DragOffsetY = 0
+        SlotModel.id = slotid
+        SlotModel.SlotItem = item
+
+
+        SlotModel.OnMousePressed = function(self, mouseCode)
+            if mouseCode == MOUSE_LEFT then
+                self.Dragging = true
+                local cursorX, cursorY = gui.MousePos()
+                local panelX, panelY = self:GetPos()
+                self.DragOffsetX = cursorX - panelX
+                self.DragOffsetY = cursorY - panelY
+                self:MouseCapture(true)
+            end
+        end
+
+        SlotModel.OnMouseReleased = function(self, mouseCode)
+            if mouseCode == MOUSE_LEFT then
+                self.Dragging = false
+                self:MouseCapture(false)
+                local modelX, modelY = self:GetPos()
+                local modelW, modelH = self:GetSize()
+                local modelCenterX = modelX + modelW / 2
+                local modelCenterY = modelY + modelH / 2
+
+                local parentPanel = self:GetParent()
+                local nearestSlot = nil
+                local nearestDistance = math.huge
+                local threshold = 50
+                
+                for _, child in pairs(parentPanel:GetChildren()) do
+                    if child ~= self and child.SlotItem == NULL then
+                        local sx, sy = child:GetPos()
+                        local sw, sh = child:GetSize()
+                        local slotCenterX = sx + sw / 2
+                        local slotCenterY = sy + sh / 2
+                        local dx = modelCenterX - slotCenterX
+                        local dy = modelCenterY - slotCenterY
+                        local distance = math.sqrt(dx * dx + dy * dy)
+                        if distance < nearestDistance then
+                            nearestDistance = distance
+                            nearestSlot = child
+                        end
+                    end
+                end
+
+                if nearestSlot and nearestDistance <= threshold then
+                    self:SetPos(nearestSlot:GetPos())
+                    nearestSlot.SlotItem = self.SlotItem
+                    self.SlotItem = nil
+                    net.Start("ChangeInvSlot")
+                    net.WriteFloat(self.id)
+                    net.WriteFloat(nearestSlot.id)
+
+                    net.WriteEntity(nearestSlot.SlotItem)
+                    net.WriteEntity(self.SlotItem)
+                    net.SendToServer()
+
+                else
+                    if IsValid(slot.SlotItem) then
+                        net.Start("DropItemInv")
+                        net.WriteString(slot.SlotItem:GetClass())
+                        net.SendToServer()
+                    end
+                    self:Remove()
+                end
+            end
+        end
+
+
+        SlotModel.Think = function(self)
+            if self.Dragging then
+                local cursorX, cursorY = gui.MousePos()
+                local newX = cursorX - self.DragOffsetX
+                local newY = cursorY - self.DragOffsetY
+                self:SetPos(newX, newY)
+            end
+        end
+        SlotModel.Update_frame = function(self)
+            createinvslot(slotid,parent,backpackid,x,y)
+            slot:Remove()
+        end
     end
 
+    return slot
 end
-
 local function CreateSlot(slotName, parent,customsize)--ЕЕЕ СИСТЕМА СТАРАЯ!!!
     local slot = vgui.Create("DPanel", parent)
     local size = (customsize != nil and customsize or 64)
@@ -316,7 +421,6 @@ hook.Add("HUDPaint","InventoryPage",function()
         MainPanel:SetPos(0, MainPanel:GetY())
 
         local tip = table.Random(RandomTips)
-
         function MainPanel:Paint(w, h)
             draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 100))
 
@@ -446,8 +550,8 @@ hook.Add("HUDPaint","InventoryPage",function()
         end
                 
         local PlayerModelBG = vgui.Create("DFrame",panelka)
-        PlayerModelBG:SetSize(ScrW()/6,ScrH()/1.7)
-        PlayerModelBG:SetPos(ScrW()/13,ScrH()/10)
+        PlayerModelBG:SetSize(ScrW()/5,ScrH()/1.2)
+        PlayerModelBG:SetPos(ScrW()/16.5,ScrH()/25)
         PlayerModelBG:SetDraggable(false)
         PlayerModelBG:SetTitle(" ")
         PlayerModelBG:ShowCloseButton(false)

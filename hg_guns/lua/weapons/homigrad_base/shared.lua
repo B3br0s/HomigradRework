@@ -148,6 +148,7 @@ local owner
 local CurTime = CurTime
 function SWEP:IsZoom()
 	local owner = self:GetOwner()
+	if not IsValid(owner) then return end
 	return self:GetOwner():KeyDown(IN_ATTACK2)
 end
 

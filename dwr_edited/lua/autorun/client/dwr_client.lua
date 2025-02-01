@@ -279,7 +279,7 @@ local function calculateDelay(distance, speed)
 end
 
 local cl_dwr_soundspeed = 320
-local cl_dwr_volume = 50
+cl_dwr_volume = 50
 
 local function playReverb(src, ammotype, isSuppressed, weapon)
 	if weapon.dwr_reverbDisable then return end

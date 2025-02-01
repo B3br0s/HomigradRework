@@ -26,13 +26,14 @@ net.Receive("blood particle explode",function()
 
 	local emitter = ParticleEmitter(pos)
 
-	for i = 1,random(25,30) do
-		local part = emitter:Add(ParticleMatBlood[random(1,#ParticleMatBlood)],pos)
+	for i = 1,random(25,35) do
+		local part = emitter:Add(ParticleMatSmoke[random(1,#ParticleMatSmoke)],pos)
 		if not part then continue end
 
 		local dir = dir:Clone():Mul(1000)
 		dir:Rotate(Angle(Rand(-75,75),Rand(-125,125),0))
 
+		part:SetColor(Rand(125,205),0,0)
 		part:SetDieTime(Rand(0.5,1))
 
 		part:SetStartAlpha(random(125,155)) part:SetEndAlpha(0)
@@ -46,7 +47,7 @@ net.Receive("blood particle explode",function()
 		part:SetPos(pos)
 	end
 
-	for i = 1,random(5,7) do
+	for i = 1,random(8,15) do
 		local part = emitter:Add(ParticleMatBlood[random(1,#ParticleMatBlood)],pos)
 		if not part then continue end
 

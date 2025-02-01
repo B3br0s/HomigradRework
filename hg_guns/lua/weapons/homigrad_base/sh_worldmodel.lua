@@ -179,6 +179,7 @@ function SWEP:WorldModel_Transform()
 	local model, owner = self.worldModel, self:GetOwner()
 	if not IsValid(model) then model = self:CreateWorldModel() end
 	if IsValid(owner) then
+		if not owner:LookupBone("ValveBiped.Bip01_R_Hand") then return end
 		local matrix = owner:GetBoneMatrix(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
 		if not matrix then return end
 		local ang = (!owner.suiciding and owner:EyeAngles() or owner:GetAttachment(owner:LookupAttachment("anim_attachment_RH")).Ang)
@@ -243,6 +244,7 @@ function SWEP:WorldModel_Transform_Holstered()
 	end
 
 	if IsValid(owner) then
+		if not owner:LookupBone(self.holsteredBone) then return end
 		local matrix = owner:GetBoneMatrix(owner:LookupBone(self.holsteredBone))
 		if not matrix then return end
 		local localPos, localAng = self.holsteredPos + self.WorldPos, self.holsteredAng
@@ -260,6 +262,9 @@ end
 
 --what the fuck is that function name...
 function hg.WorldModel_Transform_Holstered_Ex(class, model, owner, self)
+	if self:GetNWBool("HideBack") then
+		model:SetNoDraw(true)
+	end
 	if IsValid(owner) then
 		local matrix = owner:GetBoneMatrix(owner:LookupBone(self.holsteredBone))
 		if not matrix then return end
@@ -306,6 +311,10 @@ end
 
 local function DrawWorldModel(self)
 	if not IsValid(self) then return end
+	if self:GetNWBool("HideBack") and self:GetOwner() != NULL and self:GetOwner():GetActiveWeapon() != self then
+		self.worldModel:SetNoDraw(true)
+		return
+	end
 	local owner = self:GetOwner()
 	if not IsValid(self.worldModel) then self.worldModel = self:CreateWorldModel() end
 	if ((not self.shouldTransmit) or (not owner.shouldTransmit)) and owner == nil then

@@ -27,7 +27,7 @@ SWEP.DeploySnd = {"homigrad/weapons/draw_pistol.mp3", 55, 100, 110}
 SWEP.HolsterSnd = {"homigrad/weapons/holster_pistol.mp3", 55, 100, 110}
 SWEP.HoldType = "revolver"
 SWEP.ZoomPos = Vector(0, -0.02, 20)
-SWEP.RHandPos = Vector(-5, -0.5, -1)
+SWEP.RHandPos = Vector(-12, -4.9, 5)
 SWEP.LHandPos = false
 SWEP.SprayRand = {Angle(-1.03, -0.03, 0), Angle(-1.05, 0.03, 0)}
 SWEP.Ergonomics = 1.2
@@ -69,6 +69,7 @@ end
 
 function SWEP:AddThinkNigga()
     local ply = self:GetOwner()
+    if ply.Fake then return end
     if SERVER then
         self:SetNWFloat("r8_progress",self.HammerProgress)
     else

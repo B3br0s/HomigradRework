@@ -2,6 +2,7 @@ util.AddNetworkString("round_state")
 util.AddNetworkString("SyncRound")
 
 function StartRound()
+    if true then return end--временно.
     if #player.GetAll() < 2 then return end
     RunConsoleCommand("hostname","Homigrad Rework "..TableRound().Name)
 

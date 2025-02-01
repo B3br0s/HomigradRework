@@ -17,7 +17,7 @@ end)
 
 hook.Add("HUDPaint","Homigrad_Pain_HUD",function()
     local ply = LocalPlayer()
-    --RunConsoleCommand("slot3")
+    --RunConsoleCommand("slot5")
     if not ply:Alive() then k = 0 ply:SetDSP(0) return end
     
     local painlosing = ply:GetNWFloat("painlosing")
@@ -36,7 +36,7 @@ hook.Add("HUDPaint","Homigrad_Pain_HUD",function()
     render.ClearStencil()
 
     local w,h = ScrW(),ScrH()
-    k = Lerp(0.02,k,math_Clamp(ply:GetNWFloat("pain")  / 45,0,15))
+    k = Lerp(0.02,k,math_Clamp(ply:GetNWFloat("pain")  / 50,0,15))
 
     surface.SetMaterial(graddown)
     surface.SetDrawColor(0,0,0,255)

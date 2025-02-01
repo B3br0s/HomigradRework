@@ -1,3 +1,5 @@
+SWEP.IgnoreAll = true
+
 if SERVER then
 	AddCSLuaFile()
 	SWEP.Weight = 5

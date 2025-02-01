@@ -439,6 +439,7 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
 	ply.pain = 0
 	ply.pulse = 80
 	ply.blood = 5000
+	ply.bleed = 0
 	ply.adrenaline = 0
 	ply.removespeed = 0
 	ply.stamina = 100
@@ -458,6 +459,13 @@ end)
 
 if SERVER then
 	hook.Add("PlayerSpawn","Homigrad_Orgia_S_Negrami",function(ply)
+	if SERVER then
+		ply:SetCanZoom(false)
+		ApplyAppearance(ply,ply.Appearance)
+		ply:Give("weapon_hands")
+		ply:SetNetVar("Inventory",{})
+	end
+	ply:Give("weapon_hands")
 	if PLYSPAWN_OVERRIDE then return end
 	ApplyOrganism(ply)
 	end)
@@ -467,6 +475,9 @@ hook.Add("Move","Movement",function(ply,mv)
     if !ply then
         return
     end
+	if !ply:Alive() then
+		return
+	end
 	local value = mv:GetMaxSpeed()
 	local adr = ply.adrenaline * 50
 	if SERVER then

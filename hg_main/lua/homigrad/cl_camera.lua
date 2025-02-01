@@ -83,6 +83,7 @@ end
 local ValidWeaponBases = {
     ["weapon_m4super"] = true,
     ["weapon_870"] = true,
+    ["weapon_r8"] = true,
     ["homigrad_base"] = true,
 }
 

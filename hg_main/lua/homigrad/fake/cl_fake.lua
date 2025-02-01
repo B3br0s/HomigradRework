@@ -17,7 +17,7 @@ net.Receive("fake",function()
 
 	if IsValid(rag) then
 		rag.GetPlayerColor = function()
-			return ply:GetPlayerColor()
+			return rag:GetNWVector("PlayerColor")
 		end
 	end
 

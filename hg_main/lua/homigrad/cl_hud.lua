@@ -105,6 +105,93 @@ net.Receive("SyncRound",function()
 	PlaySound = false
 end)
 
+local gradient_d = Material("vgui/gradient-d")
+hook.Add("HUDPaint", "spectate", function()
+	local lply = LocalPlayer()
+	local spec = lply:GetNWEntity("HeSpectateOn")
+	if lply:Alive() then
+		if IsValid(flashlight) then
+			flashlight:Remove()
+			flashlight = nil
+		end
+	end
+	if (((not lply:Alive() or lply:Team() == 1002 or spec and lply:GetObserverMode() ~= OBS_MODE_NONE) or lply:GetMoveType() == MOVETYPE_NOCLIP) and not lply:InVehicle()) or result or hook.Run("CanUseSpectateHUD") then
+		local ent = spec
+		if IsValid(ent) then
+			surface.SetFont("HomigradFont")
+			local tw = surface.GetTextSize(ent:GetName())
+			draw.SimpleText(ent:GetName(), "HomigradFont", ScrW() / 2 - tw / 2, ScrH() - 100, TEXT_ALING_CENTER, TEXT_ALING_CENTER)
+			tw = surface.GetTextSize("Здоровье: " .. ent:Health())
+			draw.SimpleText("Здоровье: " .. ent:Health(), "HomigradFont", ScrW() / 2 - tw / 2, ScrH() - 75, TEXT_ALING_CENTER, TEXT_ALING_CENTER)
+			local func = TableRound().HUDPaint_Spectate
+			if func then func(ent) end
+		end
+
+		local key = lply:KeyDown(IN_WALK)
+		if keyOld ~= key and key then
+			SpectateHideNick = not SpectateHideNick
+			--chat.AddText("Ники игроков: " .. tostring(not SpectateHideNick))
+		end
+
+		keyOld = key
+		draw.SimpleText("Отключение / Включение отображение ников на ALT", "HomigradFont", 15, ScrH() - 15, showRoundInfoColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		local key = input.IsButtonDown(KEY_F)
+		if not lply:Alive() and keyOld2 ~= key and key then
+			flashlightOn = not flashlightOn
+			if flashlightOn then
+				if not IsValid(flashlight) then
+					flashlight = ProjectedTexture()
+					flashlight:SetTexture("effects/flashlight001")
+					flashlight:SetFarZ(900)
+					flashlight:SetFOV(70)
+					flashlight:SetEnableShadows(false)
+				end
+			else
+				if IsValid(flashlight) then
+					flashlight:Remove()
+					flashlight = nil
+				end
+			end
+		end
+
+		keyOld2 = key
+		if flashlight then
+			flashlight:SetPos(EyePos())
+			flashlight:SetAngles(EyeAngles())
+			flashlight:Update()
+		end
+
+		if not SpectateHideNick then
+			local func = TableRound().HUDPaint_ESP
+			if func then func() end
+			for _, v in ipairs(player.GetAll()) do --ESP
+				if not v:Alive() or v == ent then continue end
+				local ent = IsValid(v:GetNWEntity("FakeRagdoll")) and v:GetNWEntity("FakeRagdoll") or v
+				local screenPosition = ent:GetPos():ToScreen()
+				local x, y = screenPosition.x, screenPosition.y
+				local teamColor = v:GetPlayerColor():ToColor()
+				local distance = lply:GetPos():Distance(v:GetPos())
+				local factor = 1 - math.Clamp(distance / 1024, 0, 1)
+				local size = math.max(10, 32 * factor)
+				local alpha = math.max(255 * factor, 80)
+				local text = v:Name()
+				surface.SetFont("Trebuchet18")
+				local tw, th = surface.GetTextSize(text)
+				surface.SetDrawColor(teamColor.r, teamColor.g, teamColor.b, alpha * 0.5)
+				surface.SetMaterial(gradient_d)
+				surface.DrawTexturedRect(x - size / 2 - tw / 2, y - th / 2, size + tw, th)
+				surface.SetTextColor(255, 255, 255, alpha)
+				surface.SetTextPos(x - tw / 2, y - th / 2)
+				surface.DrawText(text)
+				local barWidth = math.Clamp((v:Health() / 100) * (size + tw), 0, size + tw)
+				local healthcolor = v:Health() / 100 * 255
+				surface.SetDrawColor(255, healthcolor, healthcolor, alpha)
+				surface.DrawRect(x - barWidth / 2, y + th / 1.5, barWidth, ScreenScale(1))
+			end
+		end
+	end
+end)
+
 hook.Add("radialOptions", "!Main", function()
 	if not LocalPlayer().otrub then
 		local tbl = {dropWeapon, "Drop Weapon"}

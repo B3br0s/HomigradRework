@@ -131,7 +131,7 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
             net.Broadcast()
         end
     end
-    if dmginfo:GetDamage() > 350 and rag:GetVelocity():Length() > 450 or rag:GetVelocity():Length() > 1250 then
+    if dmginfo:GetDamage() > 350 and rag:GetVelocity():Length() > 450 or rag:GetVelocity():Length() > 1150 then-- we do a little trolling
         if not rag.gib["Full"] then
             if rag:GetNWEntity("RagdollOwner") != nil and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag or rag:GetNWEntity("RagdollOwner") != NULL and !rag:GetNWEntity("RagdollOwner"):Alive() then
                 hg.Gibbed[rag:GetNWEntity("RagdollOwner")] = true

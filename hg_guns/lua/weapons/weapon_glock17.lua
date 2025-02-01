@@ -27,7 +27,7 @@ SWEP.DeploySnd = {"homigrad/weapons/draw_pistol.mp3", 55, 100, 110}
 SWEP.HolsterSnd = {"homigrad/weapons/holster_pistol.mp3", 55, 100, 110}
 SWEP.HoldType = "revolver"
 SWEP.ZoomPos = Vector(-0.8, -0.08, 20)
-SWEP.RHandPos = Vector(-5, -0.5, -1)
+SWEP.RHandPos = Vector(-12, -4, 5)
 SWEP.LHandPos = false
 SWEP.SprayRand = {Angle(-0.03, -0.03, 0), Angle(-0.05, 0.03, 0)}
 SWEP.Ergonomics = 1.2
@@ -51,3 +51,11 @@ SWEP.IconPos = Vector(1.6,110,-7)
 SWEP.BoltBone = "v_weapon.glock_slide"
 SWEP.BoltMul = Vector(0,0,-2)
 SWEP.BoltEmpty = true
+
+--SWEP.availableAttachments = { --дописать надо сначала.
+--	barrel = {
+--		[1] = {"supressor4", Vector(0,0,0), {}},
+--		[2] = {"supressor6", Vector(0,0,0), {}},
+--		["mount"] = Vector(-0.5,0.3,0),
+--	},
+--}

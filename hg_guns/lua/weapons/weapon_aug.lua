@@ -3,7 +3,7 @@ SWEP.Spawnable = true
 SWEP.AdminOnly = false
 SWEP.PrintName = "AUG"
 SWEP.Author = "Homigrad"
-SWEP.Instructions = "\n10 выстрелов в секунду\n35 Урона\n0.0025 Разброс"
+SWEP.Instructions = "\n11 выстрелов в секунду\n35 Урона\n0.0025 Разброс"
 SWEP.Category = "Оружие - Винтовки"
 SWEP.Slot = 2
 SWEP.SlotPos = 2
@@ -25,7 +25,7 @@ SWEP.Primary.RandomSounds = {
 	"arccw_go/aug/aug_03.wav",
 	"arccw_go/aug/aug_04.wav"
 }
-SWEP.Primary.Wait = 1 / 10
+SWEP.Primary.Wait = 1 / 11
 SWEP.DeploySnd = {"homigrad/weapons/draw_hmg.mp3", 55, 100, 110}
 SWEP.HolsterSnd = {"homigrad/weapons/hmg_holster.mp3", 55, 100, 110}
 SWEP.ReloadTime = 2

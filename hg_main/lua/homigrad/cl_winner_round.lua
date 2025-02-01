@@ -38,9 +38,9 @@ function WinRound(color,text1,text2,winply)
     WinAvatar:SetPlayer(((winply != NULL and winply:IsPlayer()) and winply or table.Random(player.GetAll())),64)
 
     function WinAvatar:Paint(w,h)
-        surface.SetDrawColor(255,255,255,20)
+        surface.SetDrawColor(255,255,255,50)
 
-        surface.DrawOutlinedRect(0,0,w,h,1)
+        surface.DrawOutlinedRect(0,0,w,h,4)
     end
 
     hook.Add("HUDPaint","Homigrad_Win_Round",function()

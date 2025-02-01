@@ -39,6 +39,7 @@ function homicide.SetTraitor()
         local nigga = ply:Give(wep)
         if not IsValid(nigga) then continue end
         nigga:SetClip1(nigga:GetMaxClip1())
+        nigga:SetNWBool("HideBack",true)
     end
 end
 
