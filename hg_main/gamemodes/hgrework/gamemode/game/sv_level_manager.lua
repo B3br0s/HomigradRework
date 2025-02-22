@@ -3,7 +3,7 @@ util.AddNetworkString("SyncRound")
 
 RTV_ROUNDS = 20
 CURRENT_ROUND = (CURRENT_ROUND or 0)
-ROUNDS_ENABLED = false
+ROUNDS_ENABLED = true
 RTV_ACTIVE = (RTV_ACTIVE or false)
 
 function StartRound()
