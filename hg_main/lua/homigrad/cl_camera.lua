@@ -11,6 +11,8 @@ local hg_fov = ConVarExists("hg_fov") and GetConVar("hg_fov") or CreateClientCon
 local oldview = render.GetViewSetup()
 local breathingMul = 0
 local curTime = CurTime()
+local Recoill = 0
+local RecoilVert = 0
 local curTime2 = CurTime()
 diffpos = Vector(0, 0, 0)
 diffang = Angle(0, 0, 0)
@@ -73,7 +75,8 @@ function GetFakeCamera(ply,origin,angles,fov,znear,zfar)
 
     view.drawviewer = false
     view.origin = att.Pos + AddPos
-    view.angles = angles
+    view.angles = ((!ply:Alive() and IsValid(rag)) and att.Ang or angles)
+    view.fov = fov + 15
 
     rag:ManipulateBoneScale(6,Vector(0.0001,0.0001,0.0001))
 
@@ -106,7 +109,14 @@ function IsAiming()
     return false
 end
 
+local initialMouseY = nil
+local lastTimeChecked = 0
+
 hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zfar)
+    if LastDeathTime > CurTime() and !ply:Alive() then
+        hook.Run("Fake-Think",ply,origin,angles,fov,znear,zfar)
+        return GetFakeCamera(ply,origin,angles,fov,znear,zfar)
+    end
     if g_VR and g_VR.active then return end
     if not IsValid(ply) or not ply:Alive() then view.angles = angles view.angles[3] = 0 return end
 
@@ -123,7 +133,7 @@ hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zf
 
 	if not firstPerson then FovAdd = 0 return end
 
-    if ply.Fake then hook.Run("Fake-Think",ply,origin,angles,fov,znear,zfar) return GetFakeCamera(ply,origin,angles,fov,znear,zfar) end
+    if ply.Fake then hook.Run("Fake-Think",ply,origin,angles,fov,znear,zfar) ply:DrawViewModel(false) return GetFakeCamera(ply,origin,angles,fov,znear,zfar) end
 
     local eyePos, eyeAng = eye.Pos, eye.Ang
     eyePos = eyePos + eyeAng:Forward() * -1 + vector_up * -2
@@ -182,8 +192,18 @@ hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zf
         angles[3] = angles[3] + (ply.lean or 0) * 10
         local asdAng = -(-diffang)
         asdAng[3] = 0
-        if hg.weapons[ply:GetActiveWeapon()] then ply:SetEyeAngles(eyeAngs + asdAng / 3.5) end
+        --if hg.weapons[ply:GetActiveWeapon()] then ply:SetEyeAngles(eyeAngs + asdAng / 3.5) end
     end
+
+    Recoil = LerpFT(0.1,(Recoil or 0),0)
+    RecoilVert = LerpFT(0.1,(VertRecoil or 0),0)
+    VertRecoil = RecoilVert
+    Recoill = Recoil
+    angles[1] = angles[1] - RecoilVert * 1.2
+    angles[3] = Recoill
+
+    angles[1] = angles[1] - RecoilVert * 1.2
+    angles[3] = Recoill
 
     view.znear = 1
     view.zfar = zfar

@@ -270,3 +270,59 @@ end
 55      ValveBiped.Bip01_R_Finger02
 ]]
 --
+
+local function isMoving(ply)
+	return ply:GetVelocity():Length() > 30 and ply:OnGround()
+end
+
+local function isCrouching(ply)
+	return ply:KeyDown(IN_DUCK) and ply:OnGround()
+end
+
+local function keyDown(owner, key)
+	owner.keydown = owner.keydown or {}
+	local localKey
+	if CLIENT then
+		if owner == LocalPlayer() then
+			localKey = owner:KeyDown(key)
+		else
+			localKey = owner.keydown[key]
+		end
+	end
+	return SERVER and owner:KeyDown(key) or CLIENT and localKey
+end
+
+hook.Add("Bones", "homigrad-lean-bone", function(ply)
+	if IsValid(ply.FakeRagdoll) then
+		ply.lean = 0
+		return
+	end
+	if not keyDown(ply, IN_ALT1) and not keyDown(ply, IN_ALT2) and not keyDown(ply, IN_ZOOM) or (keyDown(ply, IN_ALT1) and keyDown(ply, IN_ALT2) and keyDown(ply, IN_ZOOM)) then ply.lean = math.Round(LerpFT(0.4, ply.lean or 0, 0), 3) end
+	if keyDown(ply, IN_ALT1) and not keyDown(ply, IN_ALT2) and not keyDown(ply, IN_ZOOM) then
+		ply.lean = math.Round(LerpFT(0.4, ply.lean or 0, -1), 3)
+		local self = ply:GetActiveWeapon()
+		if self.holdtype == "ar2" or self.holdtype == "smg" then
+			hg.bone.SetAdd(ply, 1, "r_upperarm", vecZero, Angle(0, -10, -20))
+			hg.bone.SetAdd(ply, 1, "spine1", vecZero, Angle(isCrouching(ply) and -45 or -33, -30, isCrouching(ply) and 0 or -10))
+			--elseif self.HoldType == "smg" then
+			--hg.bone.SetAdd(ply,1,"spine1",vecZero,Angle(isCrouching(ply) and -50 or -32,-30,isCrouching(ply) and -3 or -10))
+		else
+			hg.bone.SetAdd(ply, 1, "spine1", vecZero, Angle(isCrouching(ply) and -35 or -30, 10, isCrouching(ply) and -2 or -5))
+		end
+	end
+	if keyDown(ply, IN_ALT2) and not keyDown(ply, IN_ALT1) and not keyDown(ply, IN_ZOOM) then
+		ply.lean = math.Round(LerpFT(0.4, ply.lean or 0, 1), 3)
+		local self = ply:GetActiveWeapon()
+		if self.holdtype == "ar2" or self.holdtype == "smg" then
+			hg.bone.SetAdd(ply, 1, "r_upperarm", vecZero, Angle(10, 0, 10))
+			hg.bone.SetAdd(ply, 1, "spine1", vecZero, Angle(isCrouching(ply) and 35 or 20, 25, isCrouching(ply) and 18 or 18))
+			hg.bone.SetAdd(ply, 1, "r_forearm", vecZero, Angle(-10, -10, -10))
+			hg.bone.SetAdd(ply, 1, "head", vecZero, Angle(30, 0, 0))
+			--elseif self.HoldType == "smg" then
+			--hg.bone.SetAdd(ply,1,"spine1",vecZero,Angle(isCrouching(ply) and 32 or 20,30,22))
+			--hg.bone.SetAdd(ply,1,"head",vecZero,Angle(30,0,0))
+		else
+			hg.bone.SetAdd(ply, 1, "spine1", vecZero, Angle(35, -10, isCrouching(ply) and -5 or 0))
+		end
+	end
+end)

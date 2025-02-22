@@ -360,7 +360,7 @@ local organism_main = {
 	['adrenaline'] = 0,
 	['mannitol'] = 0,
     ['bloodtype'] = "A+",
-}
+}	
 
 if SERVER then
 	function ApplyOrganism(ent,organism)
@@ -378,7 +378,6 @@ if SERVER then
 	end
 end
 
-if SERVER then
 hook.Add("Think", "Homigrad_Player_Think", function(ply)
 	tbl = player.GetAll()
 	time = CurTime()
@@ -388,13 +387,13 @@ hook.Add("Think", "Homigrad_Player_Think", function(ply)
         hook.Run("Player Think", ply, time)
 	end
 end)
-end
 
 if SERVER then
     hook.Add("PlayerDeathSound", "DisableDeathSound", function()
         return true
     end)
 	hook.Add("Player Think","Homigrad_Organism",function(ply,time)
+	ply:GetViewModel():SetPlaybackRate(1.15) --а зачем? хз
 	ply:SetNWFloat("pain",ply.pain)
 	ply:SetNWFloat("painlosing",ply.painlosing)
 	ply:SetNWBool("otrub",ply.otrub)
@@ -408,6 +407,23 @@ end
 hook.Add("PlayerInitialSpawn","Homigrad_KS",function(ply)
 	ply.KSILENT = true
 end)
+
+Developers = {
+    ["STEAM_0:1:526713154"] = true
+}
+
+if SERVER then
+	concommand.Add("hg_hidetag",function(ply,args)
+		if Developers[ply:SteamID()] then
+			ply:SetNWBool("HideTag",true)
+		end
+	end)
+	concommand.Add("hg_showtag",function(ply,args)
+		if Developers[ply:SteamID()] then
+			ply:SetNWBool("HideTag",false)
+		end
+	end)
+end
 
 gameevent.Listen("player_spawn")
 hook.Add("player_spawn","PlayerAdditional",function(data)
@@ -428,7 +444,10 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
 
 	if PLYSPAWN_OVERRIDE then return end
 
+	ply.KillReason = " "
+	ply.LastHitBone = " "
 	ply.Fake = false 
+	ply:SetDSP(0)
 	ply.FakeRagdoll = NULL
 	ply.lerp_rh = 0
 	ply.lerp_lh = 0
@@ -494,7 +513,8 @@ hook.Add("Move","Movement",function(ply,mv)
 	ply:SetUnDuckSpeed(0.5)
 	ply:SetSlowWalkSpeed(30)
 	ply:SetCrouchedWalkSpeed(60)
-	ply:SetRunSpeed(Lerp(ply:IsSprinting() and 0.05 or 1,ply:GetRunSpeed(),ply:IsSprinting() and 350 + adr - ply.removespeed * 2 or ply:GetWalkSpeed() - ply.removespeed * 2))
+	ply:SetWalkSpeed(130)
+	ply:SetRunSpeed(Lerp(ply:IsSprinting() and 0.05 or 1,ply:GetRunSpeed(),ply:IsSprinting() and 280 + adr - ply.removespeed * 2 or ply:GetWalkSpeed() - ply.removespeed * 2))
 	ply:SetJumpPower(200)
 
 	if ply:IsSprinting() and mv:GetForwardSpeed() > 30 then

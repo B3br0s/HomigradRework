@@ -18,6 +18,10 @@ hook.Add("Player Think","Bleed_Homigrad",function(ply,time)
             net.WriteVector(ply.Fake and ply.FakeRagdoll:GetPos() or ply:GetPos() + Vector(0,0,32))
             net.WriteVector(Vector(0, 0, 0))
             net.Broadcast()
+            net.Start("bp hit")
+            net.WriteVector(ply.Fake and ply.FakeRagdoll:GetPos() or ply:GetPos() + Vector(0,0,32))
+            net.WriteVector(Vector(0, 0, -2))
+            net.Broadcast()
         else
             ply.blood = math.Clamp(ply.blood + 5,0,5000)
         end

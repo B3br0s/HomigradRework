@@ -1,40 +1,70 @@
 util.AddNetworkString("DropItemInv")
 util.AddNetworkString("ChangeInvSlot")-- :p
-util.AddNetworkString("ChangeInvSlot_ToClient")-- :p
---[[--боглер,твой код тут я на уроке сорри
-local Slots = net.ReadTable()
-    if Slots.backpack ~= nil then
-        
-    end
-]]
+util.AddNetworkString("ChangeInvSlot_ToClient")
 
 net.Receive("ChangeInvSlot",function(len,ply)
     local SlotID1 = net.ReadFloat()
     local SlotID2 = net.ReadFloat()
 
+    local Slot1Backpack = net.ReadBool()
+    local Slot2Backpack = net.ReadBool()
+
     local Slot1Item = net.ReadEntity()
     local Slot2Item = net.ReadEntity()
-    ply.Slots[SlotID1] = Slot1Item
-    ply.Slots[SlotID2] = Slot2Item
+    local backpackss
+    if Slot1Backpack or Slot2Backpack then
+        local armorid,ArmorTBL,ArmorTBL2 = GetItemInSlot(ply.EZarmor, "back")
+        
+        if ArmorTBL2 != nil and ArmorTBL2.IsBackpack then
+            backpackss = ArmorTBL
+        end
+    end
 
-    ply:SetNWEntity("Slot"..SlotID1,NULL)
-    ply:SetNWEntity("Slot"..SlotID2,Slot1Item)
+    if Slot1Backpack then
+        backpackss.items_bp[SlotID1] = NULL
+        --ply:PickupWeapon(Slot1Item) завтра -- какой нахуй пикап вепон
+    else
+        ply:SetNWEntity("Slot"..SlotID1,NULL)
+        ply.Slots[SlotID1] = NULL
+    end
 
-    --print(Slot1Item)
-    --print(Slot2Item)
-    
+    if Slot2Backpack then
+        backpackss.items_bp[SlotID2] = Slot1Item
+        --JMod.UpdateInventory_ToClient(ply) 
+        --[[Just a Bogler — Сегодня, в 16:28
+            убирай её нахуй
+            из кода
+            я забыл её вырезать
+            её нету как раз таки
+            я ее в полу бреду написал]]
+        --ply:StripWeapon(Slot1Item:GetClass()) завтра
+    else
+        ply:SetNWEntity("Slot"..SlotID2,Slot1Item)
+        ply.Slots[SlotID2] = Slot1Item
+    end
+    if Slot1Backpack or Slot2Backpack then
+    end
 end)
 
 
 net.Receive("DropItemInv",function(l,ply)
     local wepdrop = net.ReadString()
     local prevplywep = ply:GetActiveWeapon()
+    for i=1,ply.SlotsAvaible do
+        if ply.Slots[i] == nil or ply.Slots[i] == NULL then continue end
+        if ply.Slots[i]:GetClass() == wepdrop or ply.Slots[i]:GetClass() == 'worldspawn' then
+            ply.Slots[i] = NULL
+            ply:SetNWEntity("Slot"..i,NULL)
+        end
+    end
     if !ply:HasWeapon(wepdrop) then
         return
     end
+    
     ply:SelectWeapon(wepdrop)
     ply:Say("*drop")
     ply:SelectWeapon(prevplywep)
+
 end)
 
 local BlackList = {
@@ -72,48 +102,56 @@ function SlotsHaveWep(ply, wep)
     return false
 end
 
-hook.Add("Player Think", "SlotsHolder", function(ply, time)
-        --if true then return end
-        if #ply:GetWeapons() == 0 then return end
+function PlayerHasWeapon(ply,item)
+    for i=1,10 do
+        if ply.Slots[i] ~= NULL then
+            if item:EntIndex() == ply.Slots[i]:EntIndex() then
+                return true 
+            end
+        end
+    end
+    return false 
+end
 
-        ply:SetNWFloat("SlotsAvaible", ply.SlotsAvaible)
+hook.Add("Player Think", "SlotsHolder", function(ply, time)
+
+    if #ply:GetWeapons() == 0 then return end
+    ply:SetNWFloat("SlotsAvaible", ply.SlotsAvaible)
         
-        if not ply.Slots then
-            ply.Slots = {}
+    if not ply.Slots then
+        ply.Slots = {}
+    end
+    if not ply.NextINVThink then
+        ply.NextINVThink = 0
+    end
+    
+    if ply.NextINVThink > CurTime() then
+        ply.NextINVThink = CurTime() + 0.1
+    end
+    for i=1,ply.SlotsAvaible do 
+        if ply.Slots[i] ~= NULL and IsValid(ply.Slots[i]) then 
+            if !ply:HasWeapon(ply.Slots[i]:GetClass()) then
+                if not IsValid(ply.Slots[i]) or not weapons.Get(ply.Slots[i]) then
+                    ply.Slots[i] = NULL
+                    ply:SetNWEntity("Slot" .. i, NULL) 
+                end
+            end
         end
-        
-        if not ply.NextINVThink then
-            ply.NextINVThink = 0
-        end
-        
-        if ply.NextINVThink > CurTime() then
-            ply.NextINVThink = CurTime() + 0.1
-        end
-        
-        for i, wep in ipairs(ply:GetWeapons()) do
-        if IsValid(wep) and BlackList[wep:GetClass()] then continue end
-        if ply:HasWeapon(wep:GetClass()) and (not IsValid(ply.Slots[i]) or ply.Slots[i] == NULL) and SlotsHaveWep(ply,wep:GetClass()) == false then
-            ply.Slots[i - 1] = wep
-            ply:SetNWEntity("Slot" .. i, wep)
+    end
+    for ig, wep in pairs(ply:GetWeapons()) do
+        --print(IsValid(wep) and BlackList[wep:GetClass()])
+        if !PlayerHasWeapon(ply,wep) then
+            for i=1,10 do 
+                if IsValid(wep) and BlackList[wep:GetClass()] then continue end
+                if ply.Slots[i - 1] == NULL then 
+                    ply.Slots[i - 1] = wep
+                    ply:SetNWEntity("Slot" .. i - 1, wep)
+                    break 
+                end
+            end
         end
     end
     
-    for i = 1, ply.SlotsAvaible do
-        ply:SetNWEntity("Slot" .. i, ply.Slots[i])
-        
-        if IsValid(ply.Slots[i]) and weapons.Get(ply.Slots[i]:GetClass()) and 
-            weapons.Get(ply.Slots[i]) and
-            not BlackList[ply.Slots[i]:GetClass()] and 
-            not DoNotClaim[weapons.Get(ply.Slots[i]).Base] and 
-            ply.Slots[i]:GetClass() != NULL and 
-            not ply:HasWeapon(ply.Slots[i]:GetClass()) then
-            ply.Slots[i] = NULL
-        end
-        
-        if not IsValid(ply.Slots[i]) or not weapons.Get(ply.Slots[i]) then
-            ply.Slots[i] = NULL
-        end
-    end
 end)
 
 

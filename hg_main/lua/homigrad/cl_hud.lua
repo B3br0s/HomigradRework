@@ -103,19 +103,20 @@ net.Receive("SyncRound",function()
 	ROUND_ACTIVE = net.ReadBool()
 	StartTime = CurTime()
 	PlaySound = false
+	StartRoundMK()
 end)
 
 local gradient_d = Material("vgui/gradient-d")
 hook.Add("HUDPaint", "spectate", function()
 	local lply = LocalPlayer()
-	local spec = lply:GetNWEntity("HeSpectateOn")
 	if lply:Alive() then
 		if IsValid(flashlight) then
 			flashlight:Remove()
 			flashlight = nil
 		end
 	end
-	if (((not lply:Alive() or lply:Team() == 1002 or spec and lply:GetObserverMode() ~= OBS_MODE_NONE) or lply:GetMoveType() == MOVETYPE_NOCLIP) and not lply:InVehicle()) or result or hook.Run("CanUseSpectateHUD") then
+	if lply:Alive() then return end
+	if !lply:Alive() then
 		local ent = spec
 		if IsValid(ent) then
 			surface.SetFont("HomigradFont")
@@ -130,7 +131,7 @@ hook.Add("HUDPaint", "spectate", function()
 		local key = lply:KeyDown(IN_WALK)
 		if keyOld ~= key and key then
 			SpectateHideNick = not SpectateHideNick
-			--chat.AddText("Ники игроков: " .. tostring(not SpectateHideNick))
+			chat.AddText("Ники игроков: " .. tostring(not SpectateHideNick))
 		end
 
 		keyOld = key

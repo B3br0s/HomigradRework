@@ -2,6 +2,8 @@
 local open = false
 local panelka
 local restart_panel = false
+local lootent
+local slots_ply
 local armorSlots = {
     "head", "eyes", "mouthnose", "ears", "rightshoulder", "rightforearm", 
     "rightthigh", "rightcalf", "chest", "pelvis", "leftshoulder", "leftforearm", 
@@ -168,21 +170,155 @@ local BL = {
 local function createinvslot(slotid, parent, backpackid, x, y)
 
     local slot = vgui.Create("DPanel", parent)
-    slot:SetSize(ScrW() / (backpackid ~= nil and 30 or 20), ScrW() / (backpackid ~= nil and 30 or 20))
+    slot:SetSize(ScrW() / (30), ScrW() / (30))
     slot:SetPos(x, y)
     slot.SlotItem = NULL
     slot:SetMouseInputEnabled(false) 
 
     local ply = LocalPlayer()
+    --PrintTable(ply.EZarmor.items)
     if backpackid ~= nil then
-        local item
+        local item  
         for id, info in pairs(ply.EZarmor.items) do
-            if info.IsBackpack then
-                item = info.BackpackSlots[slotid]
+            if info.BackpackSlots then
+                item = info.items_bp[slotid] 
                 break
             end
         end
+        slot.backpack = true
+        slot.id = slotid
+        if item == nil or item:GetClass()=='worldspawn' then
+            item = NULL
+        end
+        --print(item)
         slot.SlotItem = item
+        slot.Paint = function(self, w, h)
+            draw.RoundedBox(0, 2, 2, w - 4, h - 4, Color(31, 31, 31, 186))
+            surface.SetDrawColor(255, 255, 255, 185)
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
+        end
+
+        local SlotModel = vgui.Create("DModelPanel", parent)
+        SlotModel:SetModel(IsValid(item) and item.WorldModel or " ")
+        SlotModel:SetSize(slot:GetWide(), slot:GetTall())
+        SlotModel:SetPos(slot:GetPos())
+        SlotModel:SetLookAt(Vector(0, -17, 0))
+        SlotModel:SetCamPos(Vector(40, -17, 0))
+        local vec = Vector(20,112,-3)
+		local ang = Vector(0,-90,0):Angle()
+        SlotModel:SetLookAt(Vector(0,-25,0))
+        SlotModel:SetCamPos(vec)
+
+        SlotModel:SetZPos(1000)
+
+        if item == NULL then
+            SlotModel:Remove()
+        end
+
+        function SlotModel:LayoutEntity(ent)
+            ent:SetAngles(((item != NULL and weapons.Get(item:GetClass()) != nil) and weapons.Get(item:GetClass()).IconAng) or Angle(0,90,0))
+            ent:SetPos(((item != NULL and weapons.Get(item:GetClass()) != nil) and weapons.Get(item:GetClass()).IconPos) or Vector(0,0,0))
+        end
+        SlotModel:SetMouseInputEnabled(true)
+
+        local oldPaint = SlotModel.Paint
+        SlotModel.Paint = function(self, w, h)
+            oldPaint(self, w, h)
+            draw.RoundedBox(0, 2, 2, w - 4, h - 4, Color(31, 31, 31, 25))
+            surface.SetDrawColor(255, 255, 255, 185)
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+            if slot.SlotItem then
+            draw.SimpleText(slot.SlotItem.PrintName,"HS.8",5,5)
+            end
+        end
+
+
+        SlotModel.Dragging = false
+        SlotModel.DragOffsetX = 0
+        SlotModel.DragOffsetY = 0
+        SlotModel.id = slotid
+        SlotModel.SlotItem = item
+
+        SlotModel.OnMousePressed = function(self, mouseCode)
+            if mouseCode == MOUSE_LEFT then
+                self.Dragging = true
+                local cursorX, cursorY = gui.MousePos()
+                local panelX, panelY = self:GetPos()
+                self.DragOffsetX = cursorX - panelX
+                self.DragOffsetY = cursorY - panelY
+                self:MouseCapture(true)
+            end
+        end
+
+        SlotModel.OnMouseReleased = function(self, mouseCode)
+            if mouseCode == MOUSE_LEFT then
+                self.Dragging = false
+                self:MouseCapture(false)
+                local modelX, modelY = self:GetPos()
+                local modelW, modelH = self:GetSize()
+                local modelCenterX = modelX + modelW / 2
+                local modelCenterY = modelY + modelH / 2
+
+                local parentPanel = self:GetParent()
+                local nearestSlot = nil
+                local nearestDistance = math.huge
+                local threshold = 50
+                
+                for _, child in pairs(parentPanel:GetChildren()) do
+                    if child ~= self and child.SlotItem == NULL then
+                        local sx, sy = child:GetPos()
+                        local sw, sh = child:GetSize()
+                        local slotCenterX = sx + sw / 2
+                        local slotCenterY = sy + sh / 2
+                        local dx = modelCenterX - slotCenterX
+                        local dy = modelCenterY - slotCenterY
+                        local distance = math.sqrt(dx * dx + dy * dy)
+                        if distance < nearestDistance then
+                            nearestDistance = distance
+                            nearestSlot = child
+                        end
+                    end
+                end
+
+                if nearestSlot and nearestDistance <= threshold then
+                    self:SetPos(nearestSlot:GetPos())
+                    nearestSlot.SlotItem = self.SlotItem
+                    net.Start("ChangeInvSlot")
+                    net.WriteFloat(self.id)
+                    net.WriteFloat(nearestSlot.id)
+                    net.WriteBool(true)
+                    --print('NEAREST SLOT > '..nearestSlot.backpack)
+                    if nearestSlot.backpack == true then net.WriteBool(true) else net.WriteBool(false) end
+
+                    net.WriteEntity(nearestSlot.SlotItem)
+                    net.WriteEntity(self.SlotItem)
+                    net.SendToServer()
+                    
+                else
+                    if IsValid(slot.SlotItem) then
+                        net.Start("DropItemInv")
+                        net.WriteString(slot.SlotItem:GetClass())
+                        net.SendToServer()
+                    end
+                    self:Remove()
+                end
+            end
+        end
+
+
+        SlotModel.Think = function(self)
+            if self.Dragging then
+                local cursorX, cursorY = gui.MousePos()
+                local newX = cursorX - self.DragOffsetX
+                local newY = cursorY - self.DragOffsetY
+                self:SetPos(newX, newY)
+            end
+        end
+        SlotModel.Update_frame = function(self)
+            createinvslot(slotid,parent,backpackid,x,y)
+            slot:Remove()
+        end
     else
         local item = ply:GetNWEntity("Slot" .. slotid)
         if item ~= NULL and not BL[item.Base] then
@@ -194,7 +330,6 @@ local function createinvslot(slotid, parent, backpackid, x, y)
         end
         slot.id = slotid
         slot.SlotItem = item
-
 
         slot.Paint = function(self, w, h)
             draw.RoundedBox(0, 2, 2, w - 4, h - 4, Color(31, 31, 31, 186))
@@ -295,10 +430,17 @@ local function createinvslot(slotid, parent, backpackid, x, y)
                     net.WriteFloat(self.id)
                     net.WriteFloat(nearestSlot.id)
 
+                    net.WriteBool(false)
+                    if nearestSlot.backpack == true then 
+                        net.WriteBool(true)
+                    else 
+                        net.WriteBool(false) 
+                    end
+                    
                     net.WriteEntity(nearestSlot.SlotItem)
                     net.WriteEntity(self.SlotItem)
                     net.SendToServer()
-
+                    nearestSlot.SlotItem = NULL
                 else
                     if IsValid(slot.SlotItem) then
                         net.Start("DropItemInv")
@@ -577,40 +719,33 @@ hook.Add("HUDPaint","InventoryPage",function()
         end
         
         PopulateArmorSlots()
-        local x_bg, y_bg = ScrW()/2.70,ScrH()/3.49
-        local xpl_bg, ypl_bg = ScrW()/5,ScrH()/1.097 
+        local x_bg, y_bg = ScrW()/2.70,ScrH()/3.50
+        local xpl_bg, ypl_bg = ScrW()/3.4,ScrH()/1.065
         local x, y = ScrW() / 4 - 415, ScrH() / 2 - 420
         local size = 64 -- Так инфа о рюкзаке находится в ArmorTBL | Ну так,о IsBackpack в тбл2 | а окей сорян
         
         if ArmorTBL2 != nil and ArmorTBL2.IsBackpack then
-            print()
             if ArmorTBL.BackpackSlots >= 6 then
                 local slotscoool = ArmorTBL.BackpackSlots/2
-                for i in pairs(ArmorTBL.items_bp) do
-                    for i = 1,slotscoool do
-                        print(i)
-                        createinvslot(i,MainPanel,10,x_bg+(i*64.13),y_bg)
-                    end
+                -- Первый ряд слотов
+                for i = 1, slotscoool do
+                    createinvslot(i, MainPanel, 10, x_bg+(i*64.13), y_bg)
                 end
-                for i in pairs(ArmorTBL.items_bp) do
-                    for i = slotscoool+1,ArmorTBL.BackpackSlots do
-                        print(i)
-                        createinvslot(i,MainPanel,10,(x_bg+(i*64.13))-(slotscoool*64.17),y_bg+62)
-                    end
+                -- Второй ряд слотов
+                for i = slotscoool+1, ArmorTBL.BackpackSlots do
+                    createinvslot(i, MainPanel, 10, (x_bg+(i*64.13))-(slotscoool*64.17), y_bg+64)
                 end
             else
-                for i in pairs(ArmorTBL.items_bp) do
-                    for i = 1,ArmorTBL.BackpackSlots do
-                        createinvslot(i,MainPanel,10,x_bg+(i*64.13),y_bg)
-                    end
+                -- Один ряд слотов
+                for i = 1, ArmorTBL.BackpackSlots do
+                    createinvslot(i, MainPanel, 10, x_bg+(i*64.13), y_bg)
                 end
             end
-
         end
         
         --PrintTable(ply)
         for i=1,ply:GetNWFloat("SlotsAvaible") do
-            createinvslot(i,MainPanel,nil,xpl_bg+(i*96),ypl_bg)
+            createinvslot(i,MainPanel,nil,xpl_bg+(i*64),ypl_bg)
         end
         
         CreateSlot("head", MainPanel):SetPos(x, y)
@@ -663,5 +798,7 @@ hook.Add("HUDPaint","InventoryPage",function()
         if IsValid(panelka) then
             panelka:Remove()
         end
+        lootent = nil
     end
 end)
+

@@ -37,7 +37,7 @@ hook.Add("HUDPaint","SettingsPage",function()
         local BOLT_ANIMS = vgui.Create("DCheckBox",MainPanel)
         BOLT_ANIMS:SetSize(MainPanel:GetTall() / 50,MainPanel:GetTall() / 50)
         BOLT_ANIMS:SetPos(MainPanel:GetWide() / 8.8,MainPanel:GetTall() / 14)
-        BOLT_ANIMS:SetChecked(GetConVar("hg_boltanims"):GetBool())
+        --BOLT_ANIMS:SetChecked(GetConVar("hg_boltanims"):GetBool())
 
         function BOLT_ANIMS:OnChange(value)
 

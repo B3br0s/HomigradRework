@@ -4,6 +4,7 @@ MAX_PAIN = 50 --я мокс пеи
 
 hook.Add("Player Think","Homigrad_Pain_Think",function(ply)
     if not ply:Alive() then return end
+    ply:SetNWFloat("pain",ply.pain)
     if ply.pain > MAX_PAIN then
         if not ply.Fake then
             Faking(ply)

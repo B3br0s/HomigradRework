@@ -163,7 +163,7 @@ function Glide.RagdollPlayer( ply, velocity, unragdollTime )
     end
 
     if not ply.Fake then
-    Faking(ply,velocity)
+    Faking(ply,velocity + Vector(0,0,200))
     end
 
     velocity = velocityOverride or velocity
@@ -178,7 +178,7 @@ function Glide.RagdollPlayer( ply, velocity, unragdollTime )
     local ragdoll = ply.FakeRagdoll
     if not IsValid(ragdoll) then return end
 
-    ragdoll:SetVelocity(velocity)
+    ragdoll:SetVelocity(velocity + Vector(0,0,200))
 
     ply.GlideRagdollStartPos = ply:GetPos()
 

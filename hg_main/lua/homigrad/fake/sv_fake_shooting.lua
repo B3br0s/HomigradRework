@@ -32,6 +32,8 @@ hook.Add("Player Think","Fake Shooting",function(ply,time)
         ply.FakeWepConstraint = nil
     end
 
+    if rag == NULL then return end
+
     local Pos,Ang = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
 
     --print(ply.CurWeapon)

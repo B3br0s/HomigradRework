@@ -48,7 +48,8 @@ function SWEP:Attack(ent,tr,dmgTab)
 	    phys_obj:EnableCollisions(false)
 	    phys_obj:SetMass(0.1)
         constraint.RemoveAll(phys_obj)
-        if rag and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
+        if rag and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag and rag:GetNWEntity("RagdollOwner"):Alive() then
+            rag:GetNWEntity("RagdollOwner").KillReasoun = "HeadSmash"
             rag:GetNWEntity("RagdollOwner"):Kill()
         end
         local Pos,Ang = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_Head1"))

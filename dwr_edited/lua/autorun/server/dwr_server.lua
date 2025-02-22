@@ -65,9 +65,9 @@ hook.Add("PlayerSpawn", "dwr_blacklist_sync", function()
 end)
 
 local function writeVectorUncompressed(vector)
-    net.WriteFloat(vector.x)
-    net.WriteFloat(vector.y)
-    net.WriteFloat(vector.z)
+    --net.WriteFloat(vector.x)
+    --net.WriteFloat(vector.y)
+    --net.WriteFloat(vector.z)
 end
 
 local function getSuppressed(weapon, weaponClass)
@@ -375,7 +375,7 @@ local arc9_bullet_physics = GetConVar("arc9_bullet_physics")
 local tacrp_physbullet = GetConVar("tacrp_physbullet")
 
 hook.Add("EntityFireBullets", "dwr_EntityFireBullets", function(attacker, data)
-    if data.Spread.z == 0.125 then return end -- for my blood decal workaround for mw sweps
+    --if data.Spread.z == 0.125 then return end -- for my blood decal workaround for mw sweps
     if data.AmmoType == "grenadeFragments" then return end -- rfs support
 
     local entity = NULL
@@ -404,7 +404,7 @@ hook.Add("EntityFireBullets", "dwr_EntityFireBullets", function(attacker, data)
         if weaponClass == "mg_sniper_bullet" and data.Spread == Vector(0,0,0) then return end -- physical bullets in mw2019
         if weaponClass == "mg_slug" and data.Spread == Vector(0,0,0) then return end -- physical bullets in mw2019
 
-        if data.Distance < 200 then return end -- melee
+        --if data.Distance < 200 then return end -- melee
 
         if string.StartWith(weaponClass, "arccw_") then
             if data.Distance == 20000 then -- grenade launchers in arccw

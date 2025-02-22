@@ -1,5 +1,3 @@
--- \lua\\effects\\eff_hg_fire.lua"
-
 function EFFECT:Init(data)
 	local SelfPos = data:GetOrigin()
 	local Radius = data:GetRadius()

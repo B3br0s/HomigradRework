@@ -18,7 +18,7 @@ end)
 hook.Add("HUDPaint","Homigrad_Pain_HUD",function()
     local ply = LocalPlayer()
     --RunConsoleCommand("slot5")
-    if not ply:Alive() then k = 0 ply:SetDSP(0) return end
+    if not ply:Alive() then if LastDeathTime < CurTime() then k = 0 ply:SetDSP(0) end return end
     
     local painlosing = ply:GetNWFloat("painlosing")
     local pain = ply:GetNWFloat("pain")

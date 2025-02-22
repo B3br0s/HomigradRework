@@ -188,7 +188,7 @@ net.Receive("bp headshoot explode",function()
 	local emitter = ParticleEmitter(pos)
 
 	for i = 1,r do//back smoke
-		local part = emitter:Add(ParticleMatBlood[random(1,#ParticleMatBlood)],pos)
+		local part = emitter:Add(ParticleMatSmoke[random(1,#ParticleMatSmoke)],pos)
 		if not part then continue end
 
 		part:SetDieTime(Rand(0.5,1))
@@ -293,7 +293,7 @@ net.Receive("bp buckshoot",function()
 		local emitter = ParticleEmitter(pos)
 		
 		for i = 1,r do//smokes
-			local part = emitter:Add(ParticleMatBlood[random(1,#ParticleMatBlood)],pos)
+			local part = emitter:Add(ParticleMatSmoke[random(1,#ParticleMatSmoke)],pos)
 			if not part then continue end
 
 			part:SetDieTime(Rand(0.5,1))
@@ -306,6 +306,8 @@ net.Receive("bp buckshoot",function()
 			local dir = dir:Clone():Mul(1000 * Rand(0.5,1.5))
 			dir:Rotate(Angle(Rand(-35,35) * Rand(0.9,1.1),Rand(-35,35) * Rand(0.9,1.1)))
 			dir:Mul(Rand(0.9,1.1))
+
+			part:SetColor(125,0,0)
 
 			part:SetRoll(Rand(-360,360))
 			part:SetVelocity(dir) part:SetAirResistance(225)
@@ -385,8 +387,9 @@ net.Receive("bp hit",function()
 	r = random(1,2)
 
 	for i = 1,r do
-		local part = emitter:Add(ParticleMatBlood[random(1,#ParticleMatBlood)],pos)
+		local part = emitter:Add(ParticleMatSmoke[random(1,#ParticleMatSmoke)],pos)
 		if not part then continue end
+		part:SetColor(75,0,0)
 
 		part:SetDieTime(Rand(0.5,1))
 
@@ -411,7 +414,7 @@ net.Receive("bp hit",function()
 	r = random(1,2)
 
 	for i = 1,r do
-		local part = emitter:Add(ParticleMatBlood[random(1,#ParticleMatBlood)],pos)
+		local part = emitter:Add(ParticleMatSmoke[random(1,#ParticleMatSmoke)],pos)
 		if not part then continue end
 
 		part:SetDieTime(Rand(0.5,1))
@@ -489,7 +492,7 @@ net.Receive("bp hit",function()
 	emitter:Finish()
 	
 	local ent = net.ReadEntity()
-	sound.Emit(nil,"physics/flesh/flesh_squishy_impact_hard" .. 1 .. ".wav",75,1,100,pos,nil,ent)
+	--sound.Emit(nil,"physics/flesh/flesh_squishy_impact_hard" .. 1 .. ".wav",75,1,100,pos,nil,ent)
 end)
 
 --
