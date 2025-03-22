@@ -1,38 +1,12 @@
 local veczero = Vector(0.001, 0.001, 0.001)
 local vecfull = Vector(1, 1, 1)
-local anglesYaw = Angle(0, 0, 0)
 local vecVel = Vector(0, 0, 0)
-local angVel = Angle(0, 0, 0)
 local limit = 4
-local sideMul = 5
-local eyeAngL = Angle(0, 0, 0)
-local IsValid = IsValid
-local hg_fov = ConVarExists("hg_fov") and GetConVar("hg_fov") or CreateClientConVar("hg_fov", "90", true, false, "changes fov to value", 75, 120)
-local oldview = render.GetViewSetup()
-local breathingMul = 0
-local curTime = CurTime()
-local Recoill = 0
-local RecoilVert = 0
-local curTime2 = CurTime()
-diffpos = Vector(0, 0, 0)
-diffang = Angle(0, 0, 0)
-diffang2 = Angle(0, 0, 0)
-diffvec = Vector(0, 0, 0)
-diffvec2 = Vector(0, 0, 0)
-diffvec3 = Vector(0, 0, 0)
-offsetView = offsetView or Angle(0, 0, 0)
-local swayAng = Angle(0, 0, 0)
+local view = render.GetViewSetup()
 local lply = LocalPlayer()
-local CameraTransformApply
-local hook_Run = hook.Run
-local LerpedValue = 0
-local result
-local util_TraceLine, util_TraceHull = util.TraceLine, util.TraceHull
-local math_Clamp = math.Clamp
-local Round, Max, abs = math.Round, math.max, math.abs
-local compression = 12
-FovAim = 0
-local AddPos = Vector(0,0,0)
+local hg_fov = ConVarExists("hg_fov") and GetConVar("hg_fov") or CreateClientConVar("hg_fov", "90", true, false, "changes fov to value", 75, 120)
+local diffvec3 = Vector(0, 0, 0)
+local offsetView = offsetView or Angle(0, 0, 0)
 local traceBuilder = {
     filter = lply,
     mins = Vector(-4, -4, -4),
@@ -41,19 +15,12 @@ local traceBuilder = {
     collisiongroup = COLLISION_GROUP_DEBRIS
 }
 
-hook.Add("Camera", "Weapon", function(pos, angles, view, vecVel, angVel)
-    wep = lply:GetActiveWeapon()
-    if wep.Camera then return wep:Camera(pos, angles, view, vecVel, angVel) else FovAim = 0 end
-end)
-
-local TickInterval = engine.TickInterval
 local function clamp(vecOrAng, val)
     vecOrAng[1] = math.Clamp(vecOrAng[1], -val, val)
     vecOrAng[2] = math.Clamp(vecOrAng[2], -val, val)
     vecOrAng[3] = math.Clamp(vecOrAng[3], -val, val)
 end
 
-local view = render.GetViewSetup()
 local whitelist = {
     ["weapon_physgun"] = true,
     ["gmod_tool"] = true,
@@ -64,25 +31,6 @@ local whitelist = {
     ["glide_homing_launcher"] = true
 }
 
-function GetFakeCamera(ply,origin,angles,fov,znear,zfar)
-    local rag = ply:GetNWEntity("FakeRagdoll",ply.FakeRagdoll or NULL)
-
-    if not IsValid(rag) then return end
-
-    local att = rag:GetAttachment(rag:LookupAttachment("eyes"))
-
-    local AddPos = angles:Forward() * -0
-
-    view.drawviewer = false
-    view.origin = att.Pos + AddPos
-    view.angles = ((!ply:Alive() and IsValid(rag)) and att.Ang or angles)
-    view.fov = fov + 15
-
-    rag:ManipulateBoneScale(6,Vector(0.0001,0.0001,0.0001))
-
-    return view
-end
-
 local ValidWeaponBases = {
     ["weapon_m4super"] = true,
     ["weapon_870"] = true,
@@ -90,35 +38,80 @@ local ValidWeaponBases = {
     ["homigrad_base"] = true,
 }
 
-function IsAiming()
-    local player = LocalPlayer()
-    local weapon = player:GetActiveWeapon()
+hook.Add("InputMouseApply", "Homigrad_Saltuxa", function(cmd, x, y, angle)
+    local attang = LocalPlayer():EyeAngles()
+    local view = render.GetViewSetup(true)
+    local anglea = view.angles
 
-    if weapon == NULL then
-        return false
+    if not lply:Alive() then
+        if angle[3] < -89 then
+            angle[3] = -89
+            angle.pitch = -89
+            anglea[3] = -89
+        elseif angle[3] > 89 then
+            angle[3] = 89
+            angle.pitch = 89
+            anglea[3] = 89
+        end
+        cmd:SetViewAngles(angle)
+    return
     end
 
-    local weaponClass = weapon:GetClass()
-    if weapons.Get(weaponClass) == nil then return end
-    local weaponBase = weapons.Get(weaponClass).Base
+    if lply.Fake then
+        local angRad = math.rad(angle[3])
+        local newX = x * math.cos(angRad) - y * math.sin(angRad)
+        local newY = x * math.sin(angRad) + y * math.cos(angRad)
 
-    if player:KeyDown(IN_ATTACK2) and player.Fake == false and ValidWeaponBases[weaponBase] ~= nil then
+        angle.pitch = math.Clamp(angle.pitch + newY / 50, -180, 180)
+        angle.yaw = angle.yaw - newX / 50
+        if math.abs(angle.pitch) > 89 then
+            angle.roll = angle.roll + 180
+            angle.yaw = angle.yaw + 180
+            angle.pitch = 89 * (angle.pitch / math.abs(angle.pitch))
+        end
+
+        cmd:SetViewAngles(angle)
         return true
+    else
+        Recoil = LerpFT(0.2,(Recoil or 0),0)
+        RecoilVert = LerpFT(0.2,(RecoilVert or 0),0)
+        RecoilHor = LerpFT(0.1,(RecoilHor or 0),0)
+        angle[1] = angle[1] + -RecoilVert * 0.4
+        angle[2] = angle[2] + RecoilHor * 0.1
+        angle[3] = math.random(-3,3) * Recoil
+        if angle[3] < -89 then
+            angle[3] = -89
+            angle.pitch = -89
+            anglea[3] = -89
+        elseif angle[3] > 89 then
+            angle[3] = 89
+            angle.pitch = 89
+            anglea[3] = 89
+        end
     end
+    cmd:SetViewAngles(angle)
+end)
 
-    return false
+function GetFakeCamera(ply, origin, angles, fov, znear, zfar)
+    local rag = ply:GetNWEntity("FakeRagdoll", ply.FakeRagdoll or NULL)
+
+    if not IsValid(rag) then return end
+
+    local att = rag:GetAttachment(rag:LookupAttachment("eyes"))
+    local AddPos = angles:Forward() * -0
+
+    view.drawviewer = false
+    view.origin = att.Pos + AddPos
+    view.angles = ((!ply:Alive() and IsValid(rag)) and att.Ang or angles)
+    view.fov = fov + 15
+
+    rag:ManipulateBoneScale(6, Vector(0.0001, 0.0001, 0.0001))
+
+    return view
 end
 
-local initialMouseY = nil
-local lastTimeChecked = 0
-
 hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zfar)
-    if LastDeathTime > CurTime() and !ply:Alive() then
-        hook.Run("Fake-Think",ply,origin,angles,fov,znear,zfar)
-        return GetFakeCamera(ply,origin,angles,fov,znear,zfar)
-    end
-    if g_VR and g_VR.active then return end
-    if not IsValid(ply) or not ply:Alive() then view.angles = angles view.angles[3] = 0 return end
+    if not IsValid(ply) or not ply:Alive() then return end
 
     local headBone = ply:LookupBone("ValveBiped.Bip01_Head1")
     if not headBone then return end
@@ -126,14 +119,16 @@ hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zf
     local firstPerson = GetViewEntity() == ply
     ply:ManipulateBoneScale(headBone, firstPerson and veczero or vecfull)
 
+    if !firstPerson then return end
+
     local eye = ply:GetAttachment(ply:LookupAttachment("eyes"))
     if not eye then return end
 
     if ply:InVehicle() then return end
 
-	if not firstPerson then FovAdd = 0 return end
-
-    if ply.Fake then hook.Run("Fake-Think",ply,origin,angles,fov,znear,zfar) ply:DrawViewModel(false) return GetFakeCamera(ply,origin,angles,fov,znear,zfar) end
+    if ply.Fake then
+        return GetFakeCamera(ply, origin, angles, fov, znear, zfar)
+    end
 
     local eyePos, eyeAng = eye.Pos, eye.Ang
     eyePos = eyePos + eyeAng:Forward() * -1 + vector_up * -2
@@ -146,80 +141,27 @@ hook.Add("CalcView", "Main_Camera", function(ply, origin, angles, fov, znear, zf
 
     traceBuilder.start = origin
     traceBuilder.endpos = eyePos
-    local trace = util_TraceHull(traceBuilder)
+    local trace = util.TraceHull(traceBuilder)
     local pos = origin - trace.HitPos
-
-    if FovAdd != nil and FovAdd != 0 then
-        FovAdd = LerpFT(0.05,FovAdd,0)
-        angles[3] = LerpFT(1.5, angles[3],math.random(-FovAdd / 3,FovAdd / 3))
-    end
-
-    if not RENDERSCENE then
-        local wep = ply:GetActiveWeapon()
-        local eyeAngs = ply:EyeAngles()
-        local oldviewa = oldview or view
-        local oldorigin = originnew or ply:EyePos()
-        oldviewa = not ply:Alive() and view or oldviewa
-
-        local different = -(eyeAngs:Forward() - (eyeAnglesOld or eyeAngs):Forward()) / 2
-        local _, localAng = WorldToLocal(veczero, eyeAngs, veczero, eyeAnglesOld or eyeAngs)
-        --diffpos = LerpVector(0.1 * (wep.Ergonomics or 1) ^ 2, diffpos, different / (FrameTime() / engine.TickInterval()))
-        --diffang = LerpAngle(0.1, diffang, localAng / (FrameTime() / engine.TickInterval()) / 1488 / 1337) -- ээ ыы аа
-        --diffang2 = LerpAngle(0.2, diffang2, localAng / (FrameTime() / engine.TickInterval()))
-        --diffvec = LerpVector(0.15, diffvec, (oldorigin - ply:EyePos()) / (FrameTime() / engine.TickInterval()))
-        --diffvec2 = LerpVector(0.8, diffvec2, (oldorigin - ply:EyePos()) / (FrameTime() / engine.TickInterval()))
-
-        table.CopyFromTo(view, oldview)
-        originnew = ply:EyePos()
-
-        diffvec3[1] = 0
-        diffvec3[3] = 0
-        diffvec3[2] = diffvec:Dot(angles:Right())
-        diffvec3:Rotate(view.angles)
-        clamp(diffvec, 5)
-        clamp(diffvec2, 1)
-        clamp(diffvec3, 1)
-        clamp(diffpos, 0.05)
-        clamp(diffang, 2)
-        clamp(diffang2, 5)
-        offsetView[1] = math_Clamp(offsetView[1] + diffang2[1] / 12, -2, 2)
-        offsetView[2] = math_Clamp(offsetView[2] + diffang2[2] / 12, -4, 4)
-        eyeAnglesOld = eyeAngs
-
-        local diffvecdot = diffvec:Dot(angles:Right()) * 2
-        angles[3] = angles[3] - diffang[2] * 2
-        angles[3] = angles[3] - diffvecdot
-        angles[3] = angles[3] + (ply.lean or 0) * 10
-        local asdAng = -(-diffang)
-        asdAng[3] = 0
-        --if hg.weapons[ply:GetActiveWeapon()] then ply:SetEyeAngles(eyeAngs + asdAng / 3.5) end
-    end
-
-    Recoil = LerpFT(0.1,(Recoil or 0),0)
-    RecoilVert = LerpFT(0.1,(VertRecoil or 0),0)
-    VertRecoil = RecoilVert
-    Recoill = Recoil
-    angles[1] = angles[1] - RecoilVert * 1.2
-    angles[3] = Recoill
-
-    angles[1] = angles[1] - RecoilVert * 1.2
-    angles[3] = Recoill
 
     view.znear = 1
     view.zfar = zfar
-    view.fov = hg_fov:GetInt() + (FovAdd or 0) - (FovAim or 0)
+    view.fov = hg_fov:GetInt()
     view.drawviewer = true
     view.origin = origin
     view.angles = angles
 
-    result = hook_Run("Camera", pos, angles, view, vecVel, angVel)
-    view.origin:Add(diffvec3 * 0.2)
-    if result == view then return view end
     view.origin = origin - pos
     view.angles = angles
 
-    wep = ply:GetActiveWeapon()
+    local wep = ply:GetActiveWeapon()
     if IsValid(wep) and whitelist[wep:GetClass()] then return end
+    if IsValid(wep) and weapons.Get(wep:GetClass()) and ValidWeaponBases[weapons.Get(wep:GetClass()).Base] and wep.Camera then
+        local pos,ang = wep:Camera(origin - pos,angles)
+        view.origin = pos
+        view.angles = ang
+        view.znear = 2
+    end
     return view
 end)
 

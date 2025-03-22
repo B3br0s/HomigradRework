@@ -12,6 +12,8 @@ function TableRound(name) return _G[name or ROUND_NAME] end
 timer.Simple(0,function()
     if ROUND_NAME == nil then
         ROUND_NAME = "homicide"
+        if SERVER then
         StartRound()
+        end
     end
 end)

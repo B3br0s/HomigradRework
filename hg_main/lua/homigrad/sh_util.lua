@@ -498,6 +498,7 @@ hook.Add("Move","Movement",function(ply,mv)
 		return
 	end
 	local value = mv:GetMaxSpeed()
+	if not ply.adrenaline then return end
 	local adr = ply.adrenaline * 50
 	if SERVER then
 		if ply.CanMove == false then
@@ -514,13 +515,13 @@ hook.Add("Move","Movement",function(ply,mv)
 	ply:SetSlowWalkSpeed(30)
 	ply:SetCrouchedWalkSpeed(60)
 	ply:SetWalkSpeed(130)
-	ply:SetRunSpeed(Lerp(ply:IsSprinting() and 0.05 or 1,ply:GetRunSpeed(),ply:IsSprinting() and 280 + adr - ply.removespeed * 2 or ply:GetWalkSpeed() - ply.removespeed * 2))
+	ply:SetRunSpeed(Lerp(ply:IsSprinting() and 0.05 or 1,ply:GetRunSpeed(),ply:IsSprinting() and (mv:GetForwardSpeed() > 1 and 240 or 200) + adr - ply.removespeed * 2 or ply:GetWalkSpeed() - ply.removespeed * 2))
 	ply:SetJumpPower(200)
 
 	if ply:IsSprinting() and mv:GetForwardSpeed() > 30 then
-	ply.stamina = math.Clamp(ply.stamina - 0.03,0,100)
+	ply.stamina = math.Clamp(ply.stamina - 0.01,0,100)
 	elseif ply:GetVelocity():Length() < 120 and not ply:IsSprinting() then
-	ply.stamina = math.Clamp(ply.stamina + 0.03 + adr / 15,0,100)
+	ply.stamina = math.Clamp(ply.stamina + 0.07 + adr / 15,0,100)
 	end
 
 	if not ply:Crouching() then

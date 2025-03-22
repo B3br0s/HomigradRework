@@ -14,7 +14,18 @@ PainMultipliers = {
     [DMG_BULLET] = 0.2,
     [DMG_SLASH] = 0.3,
     [DMG_BLAST] = 6,
-    [DMG_CRUSH] = 10,--а почему бы и нет?
+    [DMG_CRUSH] = 9,
+}
+
+local Reasons = {
+    [DMG_CRUSH] = "Crush",
+    [DMG_FALL] = "Crush",
+    [DMG_BULLET] = "Shot",
+    [DMG_BUCKSHOT] = "BuckShot",
+    [DMG_BLAST] = "Exploded",
+    [DMG_CLUB] = "Beated",
+    [DMG_SLASH] = "Stabbed",
+    [DMG_BURN] = "BurnedToDeath",
 }
 
 local BoneNames = {
@@ -192,13 +203,11 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 
 	ply.LastDMGInfo = LastDMGINFO
 
+    ply.KillReason = Reasons[dmginfo:GetDamageType()] or " "
+
 	dmginfo:ScaleDamage((DamageMultipliers[dmginfo:GetDamageType()] and DamageMultipliers[dmginfo:GetDamageType()] or 0.7))
 
     ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (PainMultipliers[dmginfo:GetDamageType()] and PainMultipliers[dmginfo:GetDamageType()] or 1.3),0,400)
-
-	if dmginfo:IsDamageType(DMG_CRUSH+DMG_FALL) then
-		ply.KillReason = "Crush"
-	end
 
 	ply:SetHealth(ply:Health() - dmginfo:GetDamage() / (ply.Fake and 1 or 8))
 

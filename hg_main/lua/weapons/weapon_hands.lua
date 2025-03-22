@@ -313,49 +313,20 @@ function SWEP:ApplyForce()
 		if self.CarryEnt:GetClass() == "prop_ragdoll" then
 			mul = mul * 3
 			local ply = RagdollOwner(self.CarryEnt)
-			if self:GetOwner():KeyPressed( IN_RELOAD ) then
-				if not ply then
-					self:GetOwner():ChatPrint("У него нет пульса.")
-				else
-					if ply.heartstop then
-						self:GetOwner():ChatPrint("У него нет пульса, но он всё ещё жив.")
-					else
-						self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "У него сильный пульс" or (ply.nextPulse <= 1.5 and "У него нормальный пульс") or (ply.nextPulse < 2 and "У него слабый пульс") or (ply.nextPulse >= 2 and "У него еле ощущаемый пульс."))
-					end
-				end
-			end
+			--if self:GetOwner():KeyPressed( IN_RELOAD ) then
+			--	if not ply then
+			--		self:GetOwner():ChatPrint("У него нет пульса.")
+			--	else
+			--		if ply.heartstop then
+			--			self:GetOwner():ChatPrint("У него нет пульса, но он всё ещё жив.")
+			--		else
+			--			self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "У него сильный пульс" or (ply.nextPulse <= 1.5 and "У него нормальный пульс") or (ply.nextPulse < 2 and "У него слабый пульс") or (ply.nextPulse >= 2 and "У него еле ощущаемый пульс."))
+			--		end
+			--	end
+			--end
 		end
 		vec:Normalize()
 
-		if SERVER then
-			local ply = RagdollOwner(self.CarryEnt)
-			--self:GetOwner():ChatPrint(tostring(ply.CPR).." "..tostring(ply.Blood).." "..tostring(ply.Organs["brain"]).." "..tostring(ply.heartstop))
-			if self:GetOwner():KeyDown(IN_ATTACK) then
-				if ply and ply.heartstop then
-					if self.firstTimePrint then self:GetOwner():ChatPrint("Вы начинаете проводить СЛР... (держите ЛКМ зажатым до появления пульса)") end
-					self.firstTimePrint = false
-
-					if (self.CPRThink or 0) < CurTime() then
-						self.CPRThink = CurTime() + 1
-						ply.CPR = math.max(ply.CPR + 50,0)
-						
-						ply.o2 = math.min(ply.o2 + 0.5,1)
-						self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft"..tostring(math.random(7))..".wav")
-					end
-				else
-					if not ply and self.CarryEnt:GetClass() == "prop_ragdoll" then
-						if self.firstTimePrint then self:GetOwner():ChatPrint("Вы начинаете проводить СЛР... (держите ЛКМ зажатым до появления пульса)") end
-						self.firstTimePrint = false
-						if (self.CPRThink or 0) < CurTime() then
-							self.CPRThink = CurTime() + 1
-							self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft"..tostring(math.random(7))..".wav")
-						end
-					end
-				end
-			else
-				self.firstTimePrint = true
-			end
-		end
 		local avec, velo = vec * len, phys:GetVelocity() - self:GetOwner():GetVelocity()
 		local Force = (avec - velo / 2) * (self.CarryBone > 3 and mul / 10 or mul)
 		local ForceMagnitude = Force:Length()

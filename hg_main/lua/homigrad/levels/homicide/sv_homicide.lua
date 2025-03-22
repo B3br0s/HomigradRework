@@ -52,6 +52,16 @@ function homicide.CanJoin(teamID)
     return true
 end
 
+function homicide.SetSpawnPos(ply)
+    local SpawnList = ReadDataMap("homicide")
+
+    --PrintTable(SpawnList)
+
+    if SpawnList != nil and SpawnList != {} then
+        ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))--азазазазазазазазазаза
+    end
+end
+
 function homicide.EndRound(winner)
     if winner == 1 and IsValid(homicide.TRAITOR) then--Выиграл трейтор
     net.Start("EndRound")

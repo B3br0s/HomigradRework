@@ -26,10 +26,15 @@ local TransReason = {
     ["Neck"] = "Твоя шея была сломана.",
     ["Fall"] = "Ты умер от падения.",
     ["Crush"] = "Ты умер от столкновения.",
-    ["Bullet"] = "Ты умер от пулевого ранения.",
     ["FullGib"] = "Тебя расплющило",
     ["HeadGib"] = "Твоя голова была расплющена всмятку.",
     ["HeadSmash"] = "Твоя голова была расплющена ближним оружием.",
+    ["Shot"] = "Ты умер от пулевого ранения.",
+    ["BuckShot"] = "Ты умер от ранения дробью.",
+    ["Exploded"] = "Ты умер от взрыва.",
+    ["Beated"] = "Тебя избили до-смерти.",
+    ["Stabbed"] = "Тебя зарезали до-смерти.",
+    ["BurnedToDeath"] = "Ты сгорел до-смерти.",
     [" "] = "Ты умер магическим образом."
 }
 
@@ -51,7 +56,7 @@ hook.Add("HUDPaint","Death_Screen",function()
         end
         local Minus = math.Clamp(LastDeathTime - CurTime(),0,1)
         local Minus3 = math.Clamp(LastDeathTime - CurTime(),0,5)
-        local Plus = (1 - math.Clamp(LastDeathTime - (CurTime() + 3.5),0,1))
+        local Plus = (0.8 - math.Clamp(LastDeathTime - (CurTime() + 3.5),0,1))
         draw.RoundedBox(0,0,0,ScrW(),ScrH(),Color(0,0,0,250 * Minus * Plus))
 
         LerpedMul = LerpFT(0.01,LerpedMul,0)
@@ -72,7 +77,7 @@ hook.Add("HUDPaint","Death_Screen",function()
         surface.SetDrawColor(0,0,0,255)
         surface.DrawTexturedRect(ScrW() - ScrW() * Plus,0,ScrW() * Plus + 1,ScrH())    
 
-        draw.SimpleText("МЁРТВ","HS.45",ScrW() / 2 + (math.random(-5,5) * LerpedMul),ScrH() / 2--[[.5]] + (math.random(-5,5) * LerpedMul),Color(255 * Plus,255 * Plus,255 * Plus,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        draw.SimpleText("МЁРТВ","HS.45",ScrW() / 2 + (math.random(-35,35) * LerpedMul),ScrH() / 2--[[.5]] + (math.random(-35,35) * LerpedMul),Color(255 * Plus,255 * Plus,255 * Plus,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
         draw.SimpleText(TransReason[Reason],"HOS.25",ScrW() / 2,ScrH() / 1.5,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
         if !NoAttacker[Reason] then

@@ -12,7 +12,9 @@ local MusicKitsStart = {
 
 local MusicKitsHave = {
     ["STEAM_0:1:526713154"] = "HighNoon",
-    ["STEAM_0:1:776813961"] = "DashStar"
+    ["STEAM_0:1:776813961"] = "DashStar",
+    ["STEAM_0:1:773957134"] = "DashStar",
+    ["STEAM_0:1:236109572"] = "DashStar"
 }
 
 local Translations = {

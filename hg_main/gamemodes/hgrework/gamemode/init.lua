@@ -13,6 +13,12 @@ function GM:Initialize()
     RunConsoleCommand("hostname","Homigrad Rework | Open-Alpha")
 end
 
+hook.Add("PlayerSpawn","HomiNigga",function(ply)
+    if TableRound and TableRound().SetSpawnPos then
+        TableRound().SetSpawnPos(ply)
+    end
+end)
+
 function GM:PlayerSpawn(ply)
     local ValidModels = {
         ["models/player/group01/male_01.mdl"] = true,

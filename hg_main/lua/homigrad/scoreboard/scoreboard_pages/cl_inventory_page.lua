@@ -158,7 +158,7 @@ TODO:
 [2] - иконки оружий + 
 [3] - Рюкзаки добавить к основному инвентарю(что бы можно было брать в них вещи)
 [4] - увеличить интерфейс + и добавить лутание игроков
-60/100  
+60/100%
 ]]
 
 local BL = {
@@ -469,6 +469,14 @@ local function createinvslot(slotid, parent, backpackid, x, y)
 
     return slot
 end
+
+net.Receive("CreateInv",function()
+    local Amt = net.ReadFloat()
+    local Inv = net.ReadTable()
+    
+    print(Amts)
+end)
+
 local function CreateSlot(slotName, parent,customsize)--ЕЕЕ СИСТЕМА СТАРАЯ!!!
     local slot = vgui.Create("DPanel", parent)
     local size = (customsize != nil and customsize or 64)

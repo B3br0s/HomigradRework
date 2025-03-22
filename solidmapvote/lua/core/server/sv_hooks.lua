@@ -78,6 +78,16 @@ hook.Add( 'PlayerSay', 'SolidMapVote.PlayerCommands', function( ply, text, tChat
         end
     end
 
+    -- Force unvote command :troll:
+    --if table.HasValue( SolidMapVote[ 'Config' ][ 'Force UnVote Commands' ], command ) and not SolidMapVote.isOpen then
+    --    if SolidMapVote[ 'Config' ][ 'Force UnVote Permission' ]( ply ) then
+    --        SolidMapVote.close()
+    --        SolidMapVote.reset()
+    --        SolidMapVote.sendMessage( { Color( 0, 177, 106 ), name, color_white, ' has closed the mapvote!' }, true )
+    --        return ''
+    --    end
+    --end
+
     -- RTV Command
     if table.HasValue( SolidMapVote[ 'Config' ][ 'Vote Commands' ], command ) and not SolidMapVote.isOpen then
         if NAXYIRTV then ply:ChatPrint("sasi") return end
@@ -189,6 +199,7 @@ function SolidMapVote.postMapVoteChange()
                 SolidMapVote.close()
                 SolidMapVote.reset()
                 CURRENT_ROUND = 0
+                RTV_ROUNDS = 20
                 RTV_ACTIVE = false
                 StartRound()
             end
