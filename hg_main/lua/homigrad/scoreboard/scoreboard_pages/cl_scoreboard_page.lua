@@ -23,9 +23,9 @@ function CheckPlyStatus(ply)
 end
 
 hook.Add("HUDPaint","ScoreBoardPage",function()
-    if not ScoreBoard then return end
+    if not hg.ScoreBoard then return end
     if not IsValid(ScoreBoardPanel) then open = false return end
-    if ScoreBoard == 1 and not open then
+    if hg.ScoreBoard == 1 and not open then
         local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {})
         if file.Exists("hgr/muted.json","DATA") then
             MutedPlayers = util.JSONToTable(file.Read("hgr/muted.json","DATA"))
@@ -85,6 +85,8 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             PlayerAvatar:SetPos(20,70 * (_ - 1) + (_ == 1 and 1 or 0))
 
             local PlyColor,PlySText = CheckPlyStatus(ply)
+
+            PlyColor.a = 50
 
             local DefaultSizeX,DefaultSizeY = 412,64
 
@@ -163,7 +165,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                 
                 draw.SimpleText(PlySText, "H.18", w / 19, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-                if Developers[self.Player:SteamID()] and not ply:GetNWBool("HideTag") then
+                /*if Developers[self.Player:SteamID()] and not ply:GetNWBool("HideTag") then
                     local time = CurTime()
     
                     local r = math.abs(math.sin(time * 1.7)) * 200
@@ -171,7 +173,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                     local b = math.abs(math.sin(time * 1.7 + 4)) * 200
                     
                     draw.SimpleText("Разработчик","HOS.25", w / 1.4, h / 2, Color(r,g,b,self.CurAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                    end
+                end*/
 
                 surface.SetDrawColor(0,0,0,50)
 
@@ -192,7 +194,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
 
         panelka = MainPanel
 
-    elseif ScoreBoard != 1 then
+    elseif hg.ScoreBoard != 1 then
         open = false
         if IsValid(panelka) then
             panelka:Remove()

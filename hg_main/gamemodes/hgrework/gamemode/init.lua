@@ -1,12 +1,10 @@
 include("shared.lua")
-include("autorun/loader.lua")
 
 function GM:PlayerLoadout() end--нахуя?
 
 function GM:DoPlayerDeath(ply) return end
 
 function GM:PlayerDeathThink(ply)
-    ply:Spectate(OBS_MODE_ROAMING)
 end
 
 function GM:Initialize()
@@ -57,9 +55,8 @@ function GM:PlayerSpawn(ply)
     }
 
     ply:SetCanZoom(false)
-    ApplyAppearance(ply,ply.Appearance)
     ply:Give("weapon_hands")
-    if not PLYSPAWN_OVERRIDE then
+    if not ply.PLYSPAWN_OVERRIDE then
     ply:SetModel(table.Random(NiggaModels))
     end
     ply:UnSpectate()
@@ -76,6 +73,7 @@ end)
 
 function GM:PlayerInitialSpawn(ply)
     ply.KSILENT = true
+    ply:SetTeam(1)
 end
 
 function GM:DoPlayerDeath(ply,attacker,dmginfo)

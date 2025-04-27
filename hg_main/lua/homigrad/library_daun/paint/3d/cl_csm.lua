@@ -130,7 +130,7 @@ concommand.Add("hg_drawmodel_chache_clear",function()
         count = count + 1
     end
 
-    print("\tremoved " .. count .. " client side models")
+    //print("\tremoved " .. count .. " client side models")
 end)
 
 concommand.Add("hg_drawmodel_chache",function()

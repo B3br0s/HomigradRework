@@ -1,0 +1,93 @@
+local lply = LocalPlayer()
+
+local spectr = {
+    [1] = "First-Person",
+    [2] = "Third-Person",
+    [3] = "Free Flight"
+}
+
+local gradient_d = Material("vgui/gradient-d")
+
+function DrawWHEnt(ent,pos)
+	local pos2 = pos:ToScreen()
+	local x,y = pos2.x, pos2.y
+
+	local teamColor = ent.GetPlayerColor and ent:GetPlayerColor():ToColor() or ent:GetColor()
+	local distance = EyePos():Distance(pos)
+
+	local factor = 1 - math.Clamp(distance / 1024, 0, 1)
+	local size = math.max(10,32 * factor)
+	local alpha = math.max(255 * factor,80)
+
+	local text = ent.Name and ent:Name() or ent.PrintName
+	surface.SetFont("Trebuchet18")
+	local tw, th = surface.GetTextSize(text)
+
+	surface.SetDrawColor(teamColor.r, teamColor.g, teamColor.b, alpha * 0.5)
+	surface.SetMaterial(gradient_d)
+	surface.DrawTexturedRect(x - size / 2 - tw / 2, y - th / 2, size + tw, th)
+
+	surface.SetTextColor(255, 255, 255, alpha)
+	surface.SetTextPos(x - tw / 2, y - th / 2)
+	surface.DrawText(text)
+
+	local barWidth = math.Clamp((ent:Health() / ent:GetMaxHealth()) * (size + tw), 0,size + tw)
+	local healthcolor = ent:Health() / ent:GetMaxHealth() * 255
+
+	surface.SetDrawColor(255, healthcolor, healthcolor, alpha)
+	surface.DrawRect(x - barWidth / 2, y + th / 1.5, barWidth, ScreenScale(1))
+end
+
+hook.Add("HUDPaint","Spectate-HUD",function()
+    if lply:Alive() then
+        return
+    end
+    
+    local ent = lply:GetNWEntity("SpectEnt",NULL)
+ 
+    if !IsValid(ent) then
+        return
+    end
+
+    local entcolor = ent.GetPlayerColor and ent:GetPlayerColor() or ent:GetColor():ToVector()
+    local entname = ent.GetName and ent:GetName() or ent.PrintName
+
+    local x,y = ScrW() / 2,ScrH() - 80
+
+    surface.SetFont("H.25")
+    surface.SetDrawColor(entcolor[1] * 255,entcolor[2] * 255,entcolor[3] * 255,255)
+
+    local tw, th = surface.GetTextSize(entname)
+    local teamColor = ent.GetPlayerColor and ent:GetPlayerColor():ToColor() or ent:GetColor()
+
+	local factor = 1
+	local size = math.max(10,32 * factor)
+	local alpha = math.max(255 * factor,80)
+
+	local text = ent.Name and ent:Name() or ent.PrintName
+	surface.SetFont("HS.25")
+	local tw, th = surface.GetTextSize(text)
+
+	surface.SetDrawColor(teamColor.r, teamColor.g, teamColor.b, alpha * 0.5)
+	surface.SetMaterial(gradient_d)
+	surface.DrawTexturedRect(x - size / 2 - tw / 2, y - th / 2, size + tw, th)
+
+	surface.SetTextColor(255, 255, 255, alpha)
+	surface.SetTextPos(x - tw / 2, y - th / 2)
+	surface.DrawText(text)
+
+	local barWidth = math.Clamp((ent:Health() / ent:GetMaxHealth()) * (size + tw), 0,size + tw)
+	local healthcolor = ent:Health() / ent:GetMaxHealth() * 255
+
+	surface.SetDrawColor(255, healthcolor, healthcolor, alpha)
+	surface.DrawRect(x - barWidth / 2, y + th / 1.5, barWidth, ScreenScale(1))
+
+	draw.SimpleText(string.format(hg.GetPhrase("SpectHP"),ent:Health()),"H.18",ScrW() / 2,y + 35,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+	draw.SimpleText(string.format(hg.GetPhrase("SpectMode"),spectr[lply:GetNWInt("SpecMode",1)]),"H.12",ScrW() / 2,y + 48,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+
+    for _, v in ipairs(player.GetAll()) do --ESP
+        if not v:Alive() or v == ent then continue end
+
+        DrawWHEnt(v,v:GetPos())
+    end
+end)

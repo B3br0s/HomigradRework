@@ -1,37 +1,96 @@
--- \lua\\homigrad\\sh_bone_layers.lua"
+hg.bone = hg.bone or {}
 
-hg.bone = hg.bone or {} -- пост травматический синдром личности
---local hg.bone = hg.bone
-hg.bone.matrixManual = {"ValveBiped.Bip01_Head1", "ValveBiped.Bip01_Spine", "ValveBiped.Bip01_Spine1", "ValveBiped.Bip01_Spine2", "ValveBiped.Bip01_Spine4", "ValveBiped.Bip01_Pelvis", "ValveBiped.Bip01_R_Clavicle", "ValveBiped.Bip01_R_UpperArm", "ValveBiped.Bip01_R_Forearm", "ValveBiped.Bip01_R_Hand", "ValveBiped.Bip01_L_Clavicle", "ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_L_Forearm", "ValveBiped.Bip01_L_Hand", "ValveBiped.Bip01_R_Thigh", "ValveBiped.Bip01_R_Calf", "ValveBiped.Bip01_R_Foot", "ValveBiped.Bip01_R_Toe0", "ValveBiped.Bip01_L_Thigh", "ValveBiped.Bip01_L_Calf", "ValveBiped.Bip01_L_Foot", "ValveBiped.Bip01_L_Toe0"}
-local tbl = {"head", "spine", "spine1", "spine2", "spine4", "pelvis", "r_clavicle", "r_upperarm", "r_forearm", "r_hand", "l_clavicle", "l_upperarm", "l_forearm", "l_hand", "r_thigh", "r_calf", "r_foot", "r_toe0", "l_thigh", "l_calf", "l_foot", "l_toe0"}
-local newTbl = {}
-for i, name in pairs(tbl) do
-	newTbl[name] = i
+local tbl = {
+	["head"] = "ValveBiped.Bip01_Head1",
+	["spine"] = "ValveBiped.Bip01_Spine",
+	["spine1"] = "ValveBiped.Bip01_Spine1",
+	["spine2"] = "ValveBiped.Bip01_Spine2",
+	["r_clavicle"] = "ValveBiped.Bip01_R_Clavicle",
+	["r_upperarm"] = "ValveBiped.Bip01_R_UpperArm",
+	["r_forearm"] = "ValveBiped.Bip01_R_Forearm",
+	["r_hand"] = "ValveBiped.Bip01_R_Hand",
+	["l_clavicle"] = "ValveBiped.Bip01_L_Clavicle",
+	["l_upperarm"] = "ValveBiped.Bip01_L_UpperArm",
+	["l_forearm"] = "ValveBiped.Bip01_L_Forearm",
+	["l_hand"] = "ValveBiped.Bip01_L_Hand",
+}
+
+hg.bone.client_only = {
+	["r_finger0"] = "ValveBiped.Bip01_R_Finger0",
+	["r_finger1"] = "ValveBiped.Bip01_R_Finger1",
+	["r_finger11"] = "ValveBiped.Bip01_R_Finger11",
+	["r_finger12"] = "ValveBiped.Bip01_R_Finger12",
+	["r_finger2"] = "ValveBiped.Bip01_R_Finger2",
+	["r_finger21"] = "ValveBiped.Bip01_R_Finger21",
+	["l_finger0"] = "ValveBiped.Bip01_L_Finger0",
+	["l_finger01"] = "ValveBiped.Bip01_L_Finger01",
+	["l_finger02"] = "ValveBiped.Bip01_L_Finger02",
+	["l_finger1"] = "ValveBiped.Bip01_L_Finger1",
+	["l_finger11"] = "ValveBiped.Bip01_L_Finger11",
+	["l_finger2"] = "ValveBiped.Bip01_L_Finger2",
+	["l_finger21"] = "ValveBiped.Bip01_L_Finger21",
+	["l_finger3"] = "ValveBiped.Bip01_L_Finger3",
+	["l_finger31"] = "ValveBiped.Bip01_L_Finger31",
+	["l_finger4"] = "ValveBiped.Bip01_L_Finger4",
+	["l_finger41"] = "ValveBiped.Bip01_L_Finger41",
+}
+
+local PLAYER = FindMetaTable("Player")
+
+function PLAYER:MBPosition(bone, pos)
+	--if self:GetManipulateBonePosition(bone):IsEqualTol(pos, 0.01) then return end
+
+	timer.Simple(0, function()
+		self:ManipulateBonePosition(bone, pos)
+	end)
 end
 
-hg.bone.matrixManual_Name = newTbl
-local matrixManual = hg.bone.matrixManual
+function PLAYER:MBAngles(bone, ang)
+	--if self:GetManipulateBoneAngles(bone):IsEqualTol(ang, 0.01) then return end
+
+	timer.Simple(0, function()
+		self:ManipulateBoneAngles(bone, ang)
+	end)
+end
+
+hg.bone.matrixManual_Name = tbl
+
 local matrix, matrixSet
-local layers = {0.1, 0.5, 0.8, 1}
-local function create(ply)
-	ply.boneLayers = {}
-	ply.layersMatrix = {}
-	for i = 1, #matrixManual do
-		ply.layersMatrix[i] = {Vector(0, 0, 0), Angle(0, 0, 0)}
-	end
 
-	for i = 1, #layers do
-		local matrix, matrixSet = {}, {}
-		for i = 1, #matrixManual do
-			matrix[i] = {Vector(0, 0, 0), Angle(0, 0, 0)}
-			matrixSet[i] = {Vector(0, 0, 0), Angle(0, 0, 0)}
-		end
+local vecZero, angZero, vecFull = Vector(0, 0, 0), Angle(0, 0, 0), Vector(1, 1, 1)
+local layer, name, boneName, boneID
 
-		ply.boneLayers[i] = {matrix, matrixSet, layers[i]}
+local function reset(ply)
+	ply.manipulated = ply.manipulated or {}
+	ply.unmanipulated = {}
+	ply.manipulate = {}
+	ply.matrixes = {}
+	
+	for bone = 0, ply:GetBoneCount() do
+		ply:ManipulateBonePosition(bone, vecZero, true)
+		ply:ManipulateBoneAngles(bone, angZero, true)
+		ply:ManipulateBoneScale(bone, vecFull, true)
 	end
+	
+	ply.manipulated = {}
 end
 
-hook.Add("Player Spawn", "homigrad-bones", function(ply) create(ply) end)
+local function createLayer(ply, layer, lookup_name)
+	boneName = hg.bone.matrixManual_Name[lookup_name]
+	boneID = isnumber(lookup_name) and lookup_name or ply:LookupBone(boneName)
+	
+	if not boneID then return end
+
+	ply.manipulated = ply.manipulated or {}
+	ply.manipulated[boneID] = ply.manipulated[boneID] or {}
+	ply.manipulated[boneID].Pos = ply.manipulated[boneID].Pos or Vector(0, 0, 0)
+	ply.manipulated[boneID].Ang = ply.manipulated[boneID].Ang or Angle(0, 0, 0)
+	ply.manipulated[boneID].layers = ply.manipulated[boneID].layers or {}
+	ply.manipulated[boneID].layers[layer] = ply.manipulated[boneID].layers[layer] or {Pos = Vector(0, 0, 0), Ang = Angle(0, 0, 0)}
+end
+
+hook.Add("Player Getup", "homigrad-bones", function(ply) reset(ply) end)
+
 local CurTime, LerpVector, LerpAngle = CurTime, LerpVector, LerpAngle
 local m, mSet, mAngle, mPos
 local vecZero, angZero = Vector(0, 0, 0), Angle(0, 0, 0)
@@ -42,287 +101,325 @@ local mul = 1
 local timeHuy = CurTime()
 local hook_Run = hook.Run
 local angle = FindMetaTable("Angle")
+
+function math.EqualWithTolerance(val1, val2, tol)
+    return math.abs(val1 - val2) <= tol
+end
+
+function angle:IsEqualTol(ang, tol)
+    if (tol == nil) then
+        return self == ang
+    end
+
+    return math.EqualWithTolerance(self[1], ang[1], tol)
+        and math.EqualWithTolerance(self[2], ang[2], tol)
+        and math.EqualWithTolerance(self[3], ang[3], tol)
+end
+
 function angle:AngIsEqualTo(otherAng, huy)
 	if not angle.IsEqualTol then return false end
 	return self:IsEqualTol(otherAng, huy)
 end
 
-local hg_anims_draw_distance = ConVarExists("hg_anims_draw_distance") and GetConVar("hg_anims_draw_distance") or CreateClientConVar("hg_anims_draw_distance", 1024, true, nil, "distance to draw attachments", 0, 4096)
-local tolerance = 0
+local hg_anims_draw_distance = ConVarExists("hg_anims_draw_distance") and GetConVar("hg_anims_draw_distance") or CreateClientConVar("hg_anims_draw_distance", 1024, true, nil, "distance to draw anims (0 = infinite)", 0, 4096)
+local hg_anim_fps = ConVarExists("hg_anim_fps") and GetConVar("hg_anim_fps") or CreateClientConVar("hg_anim_fps", 66, true, nil, "fps to draw anims (0 = maximum fps available)", 0, 250)
+
+local tolerance = 0.1
+
 local player_GetAll = player.GetAll
-hook.Add("Think", "homigrad-bones", function()
-	--if true then return end
-	mul = FrameTime() / tickInterval()
-	for i = 1, #player_GetAll() do
-		local ply = player_GetAll()[i]
-		if CLIENT and LocalPlayer():GetPos():Distance(ply:GetPos()) > hg_anims_draw_distance:GetInt() and hg_anims_draw_distance:GetInt() ~= 0 then continue end
-		if CLIENT and not ply.shouldTransmit then continue end
-		local layers = ply.boneLayers
-		local layersMatrix = ply.layersMatrix
-		if (ply.frameTime or 0) > CurTime() then return end
-		ply.frameTime = CurTime() + 0.01
-		--if CLIENT then ply:SetupBones() end
-		--thing above is very expensive
-		if not layers or not layersMatrix then
-			create(ply)
-			continue
-		end
+local timeFrame = 0
 
-		for i = 1, #layers do
-			hg.bone.MatrixClear(ply, i)
-		end
+local function recursive_bones(ply, bone)
+	local children = ply:GetChildBones(bone)
 
-		for i = 1, #layersMatrix do
-			local m = layersMatrix[i]
-			if not m[1]:IsEqualTol(vecZero, tolerance) then m[1]:Set(vecZero) end
-			if not m[2]:AngIsEqualTo(angZero, tolerance) then m[2]:Set(angZero) end
-		end
+	local parent = ply:GetBoneParent(bone)
+	parent = parent ~= -1 and parent or 0
 
-		hook_Run("Bones", ply)
-		for i = 1, #layers do
-			local layer = layers[i]
-			local matrix, matrixSet = layer[1], layer[2]
-			local lerp = math_min(layer[3] * 2, 1)
-			for i = 1, #matrixSet do
-				m = matrix[i]
-				mSet = matrixSet[i]
-				mPos = m[1]
-				mAngle = m[2]
-				if not mPos:IsEqualTol(vecZero, tolerance) then layersMatrix[i][1] = layersMatrix[i][1] + mPos end
-				if not mAngle:AngIsEqualTo(angZero, tolerance) then layersMatrix[i][2] = layersMatrix[i][2] + mAngle end
-				--ply:ManipulateBonePosition(ply:LookupBone(matrixManual[i]),mPos,false)
-				--ply:ManipulateBoneAngles(ply:LookupBone(matrixManual[i]),mAngle,false)
-				local bone = ply:LookupBone(matrixManual[i])
-				if not bone then continue end
-				if layer[3] == 1 then
-					if not mSet[1]:IsEqualTol(ply:GetManipulateBonePosition(bone), tolerance) then mPos:Set(mSet[1]) end
-					--something still moves for no reason...
-					if not mSet[2]:AngIsEqualTo(ply:GetManipulateBoneAngles(bone), tolerance) then mAngle:Set(mSet[2]) end
-				else
-					if not mSet[1]:IsEqualTol(ply:GetManipulateBonePosition(bone), tolerance) then mPos:Set(LerpVectorFT(lerp, mPos, mSet[1])) end
-					if not mSet[2]:AngIsEqualTo(ply:GetManipulateBoneAngles(bone), tolerance) then mAngle:Set(LerpAngleFT(lerp, mAngle, mSet[2])) end
-				end
-			end
-		end
+	local matp = ply.unmanipulated[parent] or ply:GetBoneMatrix(parent)
 
-		for i = 1, #layersMatrix do
-			local layer = layersMatrix[i]
-			local bone = ply:LookupBone(matrixManual[i])
-			if not bone then --lol
-				continue
-			end
+	if ply.matrixes[bone] then
+		local new_matrix = ply.matrixes[bone]
+		--print(new_matrix:GetAngles())
+		local old_matrix = ply.unmanipulated[bone]
+		
+		local lmat = old_matrix:GetInverse() * new_matrix
+		local ang = lmat:GetAngles()
+		local vec, _ = WorldToLocal(new_matrix:GetTranslation(), angle_zero, old_matrix:GetTranslation(), matp:GetAngles())
+		--print(old_matrix:GetTranslation())
+		--ply.manipulate[bone] = {vec, ang}
 
-			if not layer[1]:IsEqualTol(ply:GetManipulateBonePosition(bone), tolerance) then ply:ManipulateBonePosition(bone, layer[1], false) end
-			if not layer[2]:AngIsEqualTo(ply:GetManipulateBoneAngles(bone), tolerance) then ply:ManipulateBoneAngles(bone, layer[2], false) end
-		end
+		--ply:ManipulateBonePosition(bone, vec)
+		--ply:ManipulateBoneAngles(bone, lmat:GetAngles())
+
+		--ply:MBPosition(bone, vec)
+		--ply:MBAngles(bone, lmat:GetAngles())
+
+		--ply:MBPosition(bone, lpos)
+		--ply:MBAngles(bone, ang)
 	end
-end)
 
-local vecZero, angZero = Vector(0, 0, 0), Angle(0, 0, 0)
-function hg.bone.MatrixZero(ply, i)
-	local layer = ply.boneLayers[i]
-	local matrix, matrixSet = layer[1], layer[2]
-	for i = 1, #matrixSet do
-		m = matrix[i]
-		mSet = matrixSet[i]
-		m[1]:Set(vecZero)
-		m[2]:Set(angZero)
-		mSet[1]:Set(vecZero)
-		mSet[2]:Set(angZero)
-		ply:ManipulateBonePosition(ply:LookupBone(matrixManual[i]), vecZero, false)
-		ply:ManipulateBoneAngles(ply:LookupBone(matrixManual[i]), angZero, false)
+	for i = 1, #children do
+		local bonec = children[i]
+
+		recursive_bones(ply, bonec)
 	end
 end
 
-local vecZero, angZero = Vector(0, 0, 0), Angle(0, 0, 0)
-function hg.bone.MatrixClear(ply, i)
-	local layer = ply.boneLayers[i]
-	local matrixSet = layer[2]
-	for i = 1, #matrixSet do
-		m = matrixSet[i]
-		if not m[1]:IsEqualTol(vecZero, tolerance) then m[1]:Set(vecZero) end
-		if not m[2]:AngIsEqualTo(angZero, tolerance) then m[2]:Set(angZero) end
-	end
-end
+local dtime2
+function hg.HomigradBones(ply, time, dtime)
+	if not IsValid(ply) or not ply:IsPlayer() or not ply:Alive() then return end
 
-local vecZero, angZero = Vector(0, 0, 0), Angle(0, 0, 0)
---local hg.bone = hg.bone
-local layer, name
-function hg.bone.Add(ply, layerID, lookup_name, vec, ang, lerp)
-	layer = ply.boneLayers[layerID][1][hg.bone.matrixManual_Name[lookup_name]]
-	if not layer then
-		error("cant lookup bone '" .. lookup_name .. "'")
-		return
-	end
+	local dist = CLIENT and LocalPlayer():GetPos():Distance(ply:GetPos()) or 0
+	local drawdistance = CLIENT and hg_anims_draw_distance:GetInt() or 0
+	
+	if CLIENT and (not ply.shouldTransmit or ply.NotSeen) then return end
 
-	layer[1]:Add(vec or vecZero)
-	layer[2]:Add(ang or angZero)
-end
-
-function hg.bone.SetAdd(ply, layerID, lookup_name, vec, ang)
-	if not ply.boneLayers then
-		create(ply)
-		return
-	end
-
-	layer = ply.boneLayers[layerID][2][hg.bone.matrixManual_Name[lookup_name]]
-	if not layer then
-		error("cant lookup bone '" .. lookup_name .. "'")
-		return
-	end
-
-	layer[1]:Add(vec or vecZero)
-	layer[2]:Add(ang or angZero)
-end
-
-local boneID
-function hg.bone.Apply(ply, layerID, lookup_name, lerp)
-	boneID = hg.bone.matrixManual_Name[lookup_name]
-	if not boneID then
-		error("cant lookup bone '" .. lookup_name .. "'")
-		return
-	end
-
-	layer = ply.boneLayers[layerID]
-	matrix, matrixSet = layer[1][boneID], layer[2][boneID]
-	matrix[1]:Set(LerpVector(lerp, matrix[1], matrixSet[1]))
-	matrix[2]:Set(LerpAngle(lerp, matrix[2], matrixSet[2]))
-end
-
-local angZero = Angle(0, 0, 0)
-local angZero1 = Angle(0, 0, 0)
-local vecZero = Vector(0, 0, 0)
-local vecZero1 = Vector(0, 0, 0)
-function hg.bone.Get(ply, lookup_name)
-	boneID = hg.bone.matrixManual_Name[lookup_name]
-	if not boneID then
-		error("cant lookup bone '" .. lookup_name .. "'")
-		return
-	end
-
-	local ang = angZero
-	ang:Set(angZero1)
-	local vec = vecZero
-	vec:Set(vecZero1)
-	for i = 1, #ply.boneLayers do
-		local layer = ply.boneLayers[i]
-		vec:Add(layer[1][boneID][1])
-		ang:Add(layer[1][boneID][2])
-	end
-	return vec, ang
-end
---[[
-0       ValveBiped.Bip01_Pelvis
-1       ValveBiped.Bip01_Spine
-2       ValveBiped.Bip01_Spine1
-3       ValveBiped.Bip01_Spine2
-4       ValveBiped.Bip01_Spine4
-5       ValveBiped.Bip01_Neck1
-6       ValveBiped.Bip01_Head1
-7       ValveBiped.forward
-8       ValveBiped.Bip01_R_Clavicle
-9       ValveBiped.Bip01_R_UpperArm
-10      ValveBiped.Bip01_R_Forearm
-11      ValveBiped.Bip01_R_Hand
-12      ValveBiped.Anim_Attachment_RH
-13      ValveBiped.Bip01_L_Clavicle
-14      ValveBiped.Bip01_L_UpperArm
-15      ValveBiped.Bip01_L_Forearm
-16      ValveBiped.Bip01_L_Hand
-17      ValveBiped.Anim_Attachment_LH
-18      ValveBiped.Bip01_R_Thigh
-19      ValveBiped.Bip01_R_Calf
-20      ValveBiped.Bip01_R_Foot
-21      ValveBiped.Bip01_R_Toe0
-22      ValveBiped.Bip01_L_Thigh
-23      ValveBiped.Bip01_L_Calf
-24      ValveBiped.Bip01_L_Foot
-25      ValveBiped.Bip01_L_Toe0
-26      ValveBiped.Bip01_L_Finger4
-27      ValveBiped.Bip01_L_Finger41
-28      ValveBiped.Bip01_L_Finger42
-29      ValveBiped.Bip01_L_Finger3
-30      ValveBiped.Bip01_L_Finger31
-31      ValveBiped.Bip01_L_Finger32
-32      ValveBiped.Bip01_L_Finger2
-33      ValveBiped.Bip01_L_Finger21
-34      ValveBiped.Bip01_L_Finger22
-35      ValveBiped.Bip01_L_Finger1
-36      ValveBiped.Bip01_L_Finger11
-37      ValveBiped.Bip01_L_Finger12
-38      ValveBiped.Bip01_L_Finger0
-39      ValveBiped.Bip01_L_Finger01
-40      ValveBiped.Bip01_L_Finger02
-41      ValveBiped.Bip01_R_Finger4
-42      ValveBiped.Bip01_R_Finger41
-43      ValveBiped.Bip01_R_Finger42
-44      ValveBiped.Bip01_R_Finger3
-45      ValveBiped.Bip01_R_Finger31
-46      ValveBiped.Bip01_R_Finger32
-47      ValveBiped.Bip01_R_Finger2
-48      ValveBiped.Bip01_R_Finger21
-49      ValveBiped.Bip01_R_Finger22
-50      ValveBiped.Bip01_R_Finger1
-51      ValveBiped.Bip01_R_Finger11
-52      ValveBiped.Bip01_R_Finger12
-53      ValveBiped.Bip01_R_Finger0
-54      ValveBiped.Bip01_R_Finger01
-55      ValveBiped.Bip01_R_Finger02
-]]
---
-
-local function isMoving(ply)
-	return ply:GetVelocity():Length() > 30 and ply:OnGround()
-end
-
-local function isCrouching(ply)
-	return ply:KeyDown(IN_DUCK) and ply:OnGround()
-end
-
-local function keyDown(owner, key)
-	owner.keydown = owner.keydown or {}
-	local localKey
+	local dtime = (1 / hg_anim_fps:GetFloat())
+	
+	if CLIENT and (hg_anim_fps:GetInt() != 0) and ((time - (ply.timeFrame or 0)) < dtime) then return end
 	if CLIENT then
-		if owner == LocalPlayer() then
-			localKey = owner:KeyDown(key)
-		else
-			localKey = owner.keydown[key]
+		dtime = time - (ply.timeFrame or 0)
+		ply.timeFrame = time
+	end
+	dtime2 = dtime
+	hook_Run("Bones", ply, dtime)
+
+	--[[for bonename, tbl in pairs(ply.manipulated) do
+		boneName = hg.bone.matrixManual_Name[bonename]
+		boneID = ply:LookupBone(boneName)
+		ply:ManipulateBonePosition(boneID, tbl.Pos, false)
+		ply:ManipulateBoneAngles(boneID, tbl.Ang, false)
+	end--]]
+
+	if not ply.manipulated then reset(ply) return end
+
+	for bone, tbl in pairs(ply.manipulated) do
+		for layer, tbl in pairs(tbl.layers) do
+			if (tbl.lastset != time) then
+				hg.bone.Set(ply, bone, vector_origin, angle_zero, layer, 0.5, dtime, true)
+			end
 		end
 	end
-	return SERVER and owner:KeyDown(key) or CLIENT and localKey
+
+	do return end
+
+	if SERVER then return end
+
+	--[[
+	local vec = Vector(0,0,0)
+	local ang = Angle(0,50,0)
+
+	ply:MBPosition(1, vec)
+	ply:MBAngles(1, ang)
+
+	local vec = ply:GetManipulateBonePosition(1)
+	local ang = ply:GetManipulateBoneAngles(1)
+
+	local mat = ply:GetBoneMatrix(1)
+	local matp = ply:GetBoneMatrix(0)
+
+	local ang1 = matp:GetAngles()
+
+	local vec2 = ang1:Forward() * vec[1] + ang1:Right() * -vec[2] + ang1:Up() * vec[3]
+	local ang2 = mat:GetAngles()
+	--ОБЯЗАТЕЛЬНО В ПОРЯДКЕ 3 1 2!!! (roll pitch yaw)
+	ang2:RotateAroundAxis(ang2:Forward(), -ang[3])
+	ang2:RotateAroundAxis(ang2:Right(), ang[1])
+	ang2:RotateAroundAxis(ang2:Up(), -ang[2])
+
+	mat:SetTranslation(mat:GetTranslation() - vec2)
+	mat:SetAngles(ang2)
+
+	print(mat:GetTranslation(), mat:GetAngles(), 1)
+	
+	local ang2 = mat:GetAngles()
+	local mat = ply:GetBoneMatrix(10)
+
+	local ang1 = mat:GetAngles()
+
+	ang1:RotateAroundAxis(ang2:Forward(), -ang[3])
+	ang1:RotateAroundAxis(ang2:Right(), ang[1])
+	ang1:RotateAroundAxis(ang2:Up(), -ang[2])
+
+	mat:SetTranslation(mat:GetTranslation() - vec2)
+	mat:SetAngles(ang1)
+
+	print(mat:GetTranslation(), mat:GetAngles(), 2, "\n")
+	--проблема в том что оно не учитывает то что позиция кости меняется при ее повороте...
+	--]]
+
+	--better version, здесь учитывает
+	--[[
+	local vec = Vector(0,0,0)
+	local ang = Angle(0,0,0)
+
+	ply:MBPosition(1, vec)
+	ply:MBAngles(1, ang)
+
+	local vec = ply:GetManipulateBonePosition(1)
+	local ang = ply:GetManipulateBoneAngles(1)
+
+	local mat = ply:GetBoneMatrix(1)
+	local matp = ply:GetBoneMatrix(0)
+
+	local ang1 = matp:GetAngles()
+
+	local vec2 = ang1:Forward() * vec[1] + ang1:Right() * -vec[2] + ang1:Up() * vec[3]
+	local ang2 = mat:GetAngles()
+	--ОБЯЗАТЕЛЬНО В ПОРЯДКЕ 3 1 2!!! (roll pitch yaw)
+	ang2:RotateAroundAxis(ang2:Forward(), -ang[3])
+	ang2:RotateAroundAxis(ang2:Right(), ang[1])
+	ang2:RotateAroundAxis(ang2:Up(), -ang[2])
+
+	mat:SetTranslation(mat:GetTranslation() - vec2)
+	mat:SetAngles(ang2)
+
+	print(mat:GetTranslation(), mat:GetAngles(), 1)
+	
+	local mat2 = ply:GetBoneMatrix(10)
+
+	local mats = mat * (ply:GetBoneMatrix(1):GetInverse() * mat2)
+
+	print(mats:GetTranslation(), mats:GetAngles(), 2, "\n")
+	--]]
+
+	if not ply.matrixes then return end
+	--ply:MBAngles(ply:LookupBone("ValveBiped.Bip01_Spine2"), Angle(0,0,0))
+
+	--[[
+	--о да.
+
+	--ply:MBAngles(ply:LookupBone("ValveBiped.Bip01_R_UpperArm"), Angle(50,50,50))
+	--ply:MBAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"), Angle(50,50,50))
+
+	--print(ply.unmanipulated[ply:LookupBone("ValveBiped.Bip01_R_Hand")]:GetTranslation())
+	--reset(ply)
+
+	
+	local arm = ply:LookupBone("ValveBiped.Bip01_R_Forearm")
+	local uparm = ply:LookupBone("ValveBiped.Bip01_R_UpperArm")
+	local mat = ply:GetBoneMatrix(arm)
+	local unmanip = ply.unmanipulated[arm]
+
+	mat:SetTranslation(unmanip:GetTranslation() + vector_up * 10)
+	mat:SetAngles(ply:EyeAngles())
+
+	local lmat = unmanip:GetInverse() * mat
+	--print(lmat:GetAngles(),lmat:GetTranslation())
+
+	local vec = mat:GetTranslation() - unmanip:GetTranslation()
+	local matp = ply.unmanipulated[uparm]
+	local vec, _ = WorldToLocal(mat:GetTranslation(), angle_zero, unmanip:GetTranslation(), matp:GetAngles())
+
+	--vec:Rotate(ang)
+
+	--ply:ManipulateBonePosition(arm, vec)
+	--ply:ManipulateBoneAngles(arm, lmat:GetAngles())
+	--]]
+	
+	--recursive_bones(ply, 0)
+
+	--[[for i = 0, ply:GetBoneCount() - 1 do
+		if not ply.manipulate[i] then continue end
+		hg.bone.Set(ply, i, ply.manipulate[i][1], ply.manipulate[i][2], "huy", 1, dtime, true)
+	end--]]
 end
 
-hook.Add("Bones", "homigrad-lean-bone", function(ply)
-	if IsValid(ply.FakeRagdoll) then
-		ply.lean = 0
-		return
+function hg.get_unmanipulated_bones(ply, bone, matmodify)--set bone to 0 for the 1-st recurse
+	ply.unmanipulated = ply.unmanipulated or {}
+	matmodify = matmodify or Matrix()
+
+	local vec = ply:GetManipulateBonePosition(bone)
+	local ang = ply:GetManipulateBoneAngles(bone)
+
+	local parent = ply:GetBoneParent(bone)
+	parent = parent != -1 and parent or 0
+	local mat = ply:GetBoneMatrix(bone)
+	local matp = ply:GetBoneMatrix(parent)
+
+	local ang1 = matp:GetAngles()
+
+	local vec2 = ang1:Forward() * vec[1] + ang1:Right() * -vec[2] + ang1:Up() * vec[3]
+	local ang2 = mat:GetAngles()
+	--ОБЯЗАТЕЛЬНО В ПОРЯДКЕ 3 1 2!!! (roll pitch yaw)
+	ang2:RotateAroundAxis(ang2:Forward(), -ang[3])
+	ang2:RotateAroundAxis(ang2:Right(), ang[1])
+	ang2:RotateAroundAxis(ang2:Up(), -ang[2])
+
+	mat:SetTranslation(mat:GetTranslation() - vec2)
+	mat:SetAngles(ang2)
+
+	if matmodify then
+		mat = matmodify * mat
 	end
-	if not keyDown(ply, IN_ALT1) and not keyDown(ply, IN_ALT2) and not keyDown(ply, IN_ZOOM) or (keyDown(ply, IN_ALT1) and keyDown(ply, IN_ALT2) and keyDown(ply, IN_ZOOM)) then ply.lean = math.Round(LerpFT(0.4, ply.lean or 0, 0), 3) end
-	if keyDown(ply, IN_ALT1) and not keyDown(ply, IN_ALT2) and not keyDown(ply, IN_ZOOM) then
-		ply.lean = math.Round(LerpFT(0.4, ply.lean or 0, -1), 3)
-		local self = ply:GetActiveWeapon()
-		if self.holdtype == "ar2" or self.holdtype == "smg" then
-			hg.bone.SetAdd(ply, 1, "r_upperarm", vecZero, Angle(0, -10, -20))
-			hg.bone.SetAdd(ply, 1, "spine1", vecZero, Angle(isCrouching(ply) and -45 or -33, -30, isCrouching(ply) and 0 or -10))
-			--elseif self.HoldType == "smg" then
-			--hg.bone.SetAdd(ply,1,"spine1",vecZero,Angle(isCrouching(ply) and -50 or -32,-30,isCrouching(ply) and -3 or -10))
-		else
-			hg.bone.SetAdd(ply, 1, "spine1", vecZero, Angle(isCrouching(ply) and -35 or -30, 10, isCrouching(ply) and -2 or -5))
+
+	ply.unmanipulated[bone] = mat
+
+	local children = ply:GetChildBones(bone)
+
+	local modify = mat * ply:GetBoneMatrix(bone):GetInverse()
+	
+	for i = 1, #children do
+		local bonec = children[i]
+
+		hg.get_unmanipulated_bones(ply, bonec, modify)
+	end
+end
+
+if CLIENT then
+	hook.Add("Player Think", "homigrad-bones", hg.HomigradBones)
+else
+	hook.Add("Player Think", "homigrad-bones", hg.HomigradBones)
+end
+
+function hg.bone.Set(ply, lookup_name, vec, ang, layer, lerp, dtime)
+	dtime = dtime or dtime2
+	boneName = hg.bone.matrixManual_Name[lookup_name]
+	boneID = isnumber(lookup_name) and lookup_name or ply:LookupBone(boneName)
+
+	if not boneID then return end
+	
+	layer = layer or "unspecified"
+
+	if layer and layer != "all" then
+		createLayer(ply, layer, boneID)
+
+		if lerp then
+			vec = LerpVector(hg.lerpFrameTime2(lerp, dtime), ply.manipulated[boneID].layers[layer].Pos, vec)
+			ang = LerpAngle(hg.lerpFrameTime2(lerp, dtime), ply.manipulated[boneID].layers[layer].Ang, ang)
 		end
+		
+		local oldpos, oldang = hg.bone.Get(ply, boneID)
+		--print(oldang)
+		local setPos = oldpos - ply.manipulated[boneID].layers[layer].Pos + vec
+		local setAng = oldang - ply.manipulated[boneID].layers[layer].Ang + ang
+
+		hg.bone.SetRaw(ply, boneID, setPos, setAng)
+
+		--print(layer, lookup_name, oldang, ply.layers[layer][lookup_name].Ang, ang, setAng)
+
+		ply.manipulated[boneID].layers[layer].Pos = -(-vec)
+		ply.manipulated[boneID].layers[layer].Ang = -(-ang)
+		ply.manipulated[boneID].layers[layer].lastset = CurTime()
 	end
-	if keyDown(ply, IN_ALT2) and not keyDown(ply, IN_ALT1) and not keyDown(ply, IN_ZOOM) then
-		ply.lean = math.Round(LerpFT(0.4, ply.lean or 0, 1), 3)
-		local self = ply:GetActiveWeapon()
-		if self.holdtype == "ar2" or self.holdtype == "smg" then
-			hg.bone.SetAdd(ply, 1, "r_upperarm", vecZero, Angle(10, 0, 10))
-			hg.bone.SetAdd(ply, 1, "spine1", vecZero, Angle(isCrouching(ply) and 35 or 20, 25, isCrouching(ply) and 18 or 18))
-			hg.bone.SetAdd(ply, 1, "r_forearm", vecZero, Angle(-10, -10, -10))
-			hg.bone.SetAdd(ply, 1, "head", vecZero, Angle(30, 0, 0))
-			--elseif self.HoldType == "smg" then
-			--hg.bone.SetAdd(ply,1,"spine1",vecZero,Angle(isCrouching(ply) and 32 or 20,30,22))
-			--hg.bone.SetAdd(ply,1,"head",vecZero,Angle(30,0,0))
-		else
-			hg.bone.SetAdd(ply, 1, "spine1", vecZero, Angle(35, -10, isCrouching(ply) and -5 or 0))
-		end
-	end
-end)
+end
+--PrintTable(Player(3).manipulated)
+function hg.bone.SetRaw(ply, boneID, vec, ang)
+	ply.manipulated = ply.manipulated or {}
+	ply.manipulated[boneID] = ply.manipulated[boneID] or {}
+
+	ply.manipulated[boneID].Pos = vec
+	ply.manipulated[boneID].Ang = ang
+	
+	ply:ManipulateBonePosition(boneID, vec, false)
+	ply:ManipulateBoneAngles(boneID, ang, false)
+end
+
+function hg.bone.Get(ply, lookup_name)
+	boneName = hg.bone.matrixManual_Name[lookup_name]
+	boneID = isnumber(lookup_name) and lookup_name or ply:LookupBone(boneName)
+
+	if not boneID or not ply.manipulated[boneID] then return end
+
+	return ply.manipulated[boneID].Pos, ply.manipulated[boneID].Ang
+end

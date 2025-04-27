@@ -75,7 +75,7 @@ function MINSTD:RandomFloat(flMin --[[= 0]], flMax --[[= 1]], flExponent --[[= 1
 		flMax = 1
 	end
 
-	assert(flMin <= flMax, "Min limit is greater than max!")
+	//assert(flMin <= flMax, "Min limit is greater than max!")
 
 	-- float in [AM, 1)
 	local fl = AM * self:RandomNumber()

@@ -4,6 +4,7 @@ local KilledBy = NULL
 local Attacker = NULL
 local LastHit = ""
 local LerpedMul = 0
+local lply = LocalPlayer()
 
 local graddown = Material( "vgui/gradient-u" )
 local gradup = Material( "vgui/gradient-d" )
@@ -11,37 +12,33 @@ local gradright = Material( "vgui/gradient-l" )
 local gradleft = Material( "vgui/gradient-r" )
 
 net.Receive("DeathScreen",function()
-    Reason = net.ReadString()
-    KilledBy = net.ReadEntity()
-    Attacker = net.ReadEntity()
-    LastHit = net.ReadString()
+    Reason = lply:GetNWString("KillReason")
+    KilledBy = lply:GetNWEntity("LastInflictor")
+    Attacker = lply:GetNWEntity("LastAttacker")
+    LastHit = lply:GetNWString("LastHitBone")
 
     LerpedMul = 1
 
     LastDeathTime = CurTime() + 5
+
+    surface.PlaySound("homigrad/vgui/csgo_ui_crate_open.wav")
 end)
 
-local TransReason = {
-    ["NeckSnap"] = "Твоя шея была свёрнута.",
-    ["Neck"] = "Твоя шея была сломана.",
-    ["Fall"] = "Ты умер от падения.",
-    ["Crush"] = "Ты умер от столкновения.",
-    ["FullGib"] = "Тебя расплющило",
-    ["HeadGib"] = "Твоя голова была расплющена всмятку.",
-    ["HeadSmash"] = "Твоя голова была расплющена ближним оружием.",
-    ["Shot"] = "Ты умер от пулевого ранения.",
-    ["BuckShot"] = "Ты умер от ранения дробью.",
-    ["Exploded"] = "Ты умер от взрыва.",
-    ["Beated"] = "Тебя избили до-смерти.",
-    ["Stabbed"] = "Тебя зарезали до-смерти.",
-    ["BurnedToDeath"] = "Ты сгорел до-смерти.",
-    [" "] = "Ты умер магическим образом."
-}
+local nothing = {
+    ["dead_hungry"] = true,
+    ["dead_neck"] = true,
+    ["dead_necksnap"] = true,
+    ["dead_world"] = true,
+    ["dead_headExplode"] = true,
+    ["dead_fullgib"] = true,
+    ["dead_unknown"] = true,
+    //["dead_burn"] = true,
+    ["dead_kys"] = true,
+    ["dead_adrenaline"] = true,
+    ["dead_painlosing"] = true,
+    //["dead_blood"] = true,
+    //["dead_pain"] = true,
 
-local NoAttacker = {
-    ["NeckSnap"] = true,
-    ["FullGib"] = true,
-    ["HeadGib"] = true
 }
 
 hook.Add("HUDPaint","Death_Screen",function()
@@ -75,19 +72,50 @@ hook.Add("HUDPaint","Death_Screen",function()
     
         surface.SetMaterial(gradleft)
         surface.SetDrawColor(0,0,0,255)
-        surface.DrawTexturedRect(ScrW() - ScrW() * Plus,0,ScrW() * Plus + 1,ScrH())    
+        surface.DrawTexturedRect(ScrW() - ScrW() * Plus,0,ScrW() * Plus + 1,ScrH()) 
 
-        draw.SimpleText("МЁРТВ","HS.45",ScrW() / 2 + (math.random(-35,35) * LerpedMul),ScrH() / 2--[[.5]] + (math.random(-35,35) * LerpedMul),Color(255 * Plus,255 * Plus,255 * Plus,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-
-        draw.SimpleText(TransReason[Reason],"HOS.25",ScrW() / 2,ScrH() / 1.5,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-        if !NoAttacker[Reason] then
-        draw.SimpleText(((IsValid(Attacker) and Attacker != LocalPlayer()) and "Тебя убили в " or "Ты умер от удара в ")..LastHit,"HOS.25",ScrW() / 2,ScrH() / 1.45,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-        end
-        if Attacker != LocalPlayer() then
-            draw.SimpleText("Тебя убил - ","HOS.25",ScrW() / 2.1,ScrH() / 3.5,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
-            draw.SimpleText(tostring((Attacker:IsPlayer() and Attacker:Name() or Attacker:GetClass())),"HOS.25",ScrW() / 2.1,ScrH() / 3.5,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
+        draw.SimpleText(hg.GetPhrase("Dead"),"HS.45",ScrW() / 2 + (math.random(-35,35) * LerpedMul),ScrH() / 2--[[.5]] + (math.random(-35,35) * LerpedMul),Color(255 * Plus,255 * Plus,255 * Plus,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        //draw.SimpleText(string.format(hg.GetPhrase(Reason),LocalPlayer():GetName()),"HOS.25",ScrW() / 2,ScrH() / 1.5,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        if !nothing[Reason] then
+        draw.SimpleText(hg.GetPhrase("died").." "..hg.GetPhrase("in").." "..hg.GetPhrase("kill_"..LastHit),"HOS.25",ScrW() / 2,ScrH() / 1.45,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        if Attacker != LocalPlayer() and IsValid(Attacker) and Attacker != NULL then
+            local deathMessage
+            local attacker = lply:GetNWEntity("LastAttacker")
+            local attackerName
+                    
+            if IsValid(attacker) then
+                attackerName = attacker.Name and attacker:Name() or attacker:GetClass()
+                deathMessage = hg.GetPhrase("died_by") .. " " .. attackerName
+                
+                if IsValid(KilledBy) then
+                    local weaponName
+                    if KilledBy.GetPrintName ~= nil then
+                        weaponName = KilledBy:GetPrintName()
+                    elseif attacker:IsPlayer() and IsValid(attacker:GetActiveWeapon()) then
+                        weaponName = KilledBy:GetActiveWeapon():GetPrintName()
+                    else
+                        weaponName = KilledBy:GetClass()
+                    end
+                    deathMessage = deathMessage .. " " .. hg.GetPhrase("kill_by_wep") .. " " .. weaponName
+                end
+            else
+                deathMessage = hg.GetPhrase("dead_unknown")
+            end
+            
+            draw.SimpleText(
+                deathMessage,
+                "HOS.25",
+                ScrW() / 2,
+                ScrH() / 3.5,
+                Color(255, 255, 255, 255 * Minus * Plus),
+                TEXT_ALIGN_CENTER,
+                TEXT_ALIGN_CENTER
+            )
+        elseif IsValid(Attacker) and Attacker != NULL then
+            draw.SimpleText(hg.GetPhrase("dead_kys"),"HOS.25",ScrW() / 2,ScrH() / 3.5,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
         else
-            draw.SimpleText("Ты убил сам себя","HOS.25",ScrW() / 2,ScrH() / 3.5,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+            draw.SimpleText(hg.GetPhrase("died_by").." "..tostring(Entity(0)),"HOS.25",ScrW() / 2,ScrH() / 3.5,Color(255,255,255,255 * Minus * Plus),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        end
         end
     end
 end)

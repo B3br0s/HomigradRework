@@ -39,10 +39,6 @@ else
         local ply = LocalPlayer()
         if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") then return true end
 
-        local func = TableRound().CanUseSpawnMenu
-        func = func and func(LocalPlayer())
-        if func ~= nil then return func end
-
         if not ply:IsAdmin() then return false end
     end
 

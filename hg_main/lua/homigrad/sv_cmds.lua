@@ -166,18 +166,111 @@ function player.GetListByName(name)
 end
 
 COMMANDS.submat = {function(ply,args)
-	if args[2] == "^" then
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 		ply:SetSubMaterial(tonumber(args[1],10),args[2])
 	end
 end}
 
-COMMANDS.superfighter = {function(ply,args)
+
+COMMANDS.fling = {function(ply,args)
+	if !ply:IsAdmin() then return end
+	local value = args[2] or 60
+
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ply:SetVelocity(VectorRand(-value * 2,value * 2))
+		if !ply.Fake then
+			hg.Faking(ply,VectorRand(-value,value))
+			ply:SetVelocity(VectorRand(-value * 2,value * 2))
+		else
+			ply.FakeRagdoll:GetPhysicsObject():AddVelocity(VectorRand(-value * 2,value * 2))
+		end
+	end
+end,1}
+
+COMMANDS.zatroll = {function(ply,args)
+	if not ply:IsAdmin() then return end
+
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		if ply:Alive() and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().ishgweapon then
+			ply:GetActiveWeapon().Durability = args[2] and tonumber(args[2]) or 1
+		end
+	end
+end,1}
+
+COMMANDS.setmodel = {function(ply,args)
+	if not ply:IsAdmin() then return end
+
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ply:SetModel(args[2])
+		ply:SetSubMaterial()
+		ply.OverrideModel = args[2]
+	end
+end,1}
+
+COMMANDS.forceclass = {function(ply,args)
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ply:SetPlayerClass(args[2])
+	end
+end,1}
+
+COMMANDS.nologs = {function(ply,args)
+	if not ply:IsAdmin() then return end
+	local value = tonumber(args[1]) > 0
+
+	SetGlobalBool("DisabledLogs",value)
+	PrintMessage(3,"Discord logs -"..(value and "OFF" or "ON"))
+end,1}
+
+COMMANDS.getmats = {function(ply,args)
+	if not ply:IsAdmin() then return end
+
+	local tr = hg.eyeTrace(ply)
+
+	if tr.Entity then
+		for _, mats in ipairs(tr.Entity:GetMaterials()) do
+			ply:ChatPrint(tostring(mats))
+		end
+	end
+end,1}
+
+COMMANDS.notarget = {function(ply,args)
 	if not ply:IsAdmin() then return end
 	local value = tonumber(args[2]) > 0
 
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
-		ply.organism.superfighter = value
-		ply:ChatPrint("SuperFighter Mode - " .. tostring(value))
+		ply:SetNoTarget(value)
+		ply:ChatPrint("NoTarget - " .. tostring(value))
+	end
+end,1}
+
+COMMANDS.sbeu = {function(ply,args)
+	if not ply:IsAdmin() then return end
+	local value = tonumber(args[2]) > 0
+
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ply:ManipulateBoneAngles(0,(value and Angle(180,180,-70) or Angle(0,0,0)))
+		ply:ManipulateBoneAngles(1,(value and Angle(0,-30,0) or Angle(0,0,0)))
+		ply:ManipulateBoneAngles(3,(value and Angle(0,-40,0) or Angle(0,0,0)))
+		ply:ManipulateBoneAngles(4,(value and Angle(0,-40,0) or Angle(0,0,0)))
+		ply.SBEU = value
+
+		if value then
+			for _, wep in ipairs(ply:GetWeapons()) do
+				wep.Primary.Wait = 0.00001
+				wep.AnimTime2 = 0.0000001
+				wep.AnimTime1 = 0.0000001
+				wep.Attack2Time = 0.001
+				wep.AttackTime = 0.001
+				wep.WaitTime1 = 0.001
+				wep.WaitTime2 = 0.001
+				wep.StaminaPrimary = 0
+				wep.StaminaSecondary = 0
+				wep:SetClip1(1e8)	
+				wep.Primary.Force = 0 
+				wep.Primary.RealAutomatic = true
+				wep.Primary.Automatic = true
+			end
+		end
 	end
 end,1}
 
@@ -196,5 +289,125 @@ hook.Add("PlayerSay", "CMDS-Things", function(ply, txt)
 
     if COMMANDS[command] then
         COMMANDS[command][1](ply, args)
+
+		return ""
     end
 end)
+
+function team.SpawnsTwoCommand(point1,point2)
+	local spawnsT = ReadDataMap(point1)
+	local spawnsCT = ReadDataMap(point2)
+
+	if #spawnsT == 0 then
+		for i, ent in RandomPairs(ents.FindByClass("info_player_terrorist")) do
+			table.insert(spawnsT,ent:GetPos())
+		end
+	end
+
+	if #spawnsCT == 0 then
+		for i, ent in RandomPairs(ents.FindByClass("info_player_counterterrorist")) do
+			table.insert(spawnsCT,ent:GetPos())
+		end
+	end
+
+	return spawnsT, spawnsCT
+end
+
+function team.SpawnCommand(tbl, aviable, func, funcShould)
+	for _, ply in RandomPairs(tbl) do
+		if funcShould and funcShould(ply) ~= nil then continue end
+
+		if ply:Alive() then ply:KillSilent() end
+		if func then func(ply) end
+
+		ply:Spawn()
+
+		ply.allowFlashlights = true
+
+		if #aviable > 0 then
+			local key = math.random(#aviable)
+			local point = ReadPoint(aviable[key])
+
+			if point then
+				ply:SetPos(point[1])
+
+				table.remove(aviable, key)
+			end
+		end
+	end
+end
+
+if engine.ActiveGamemode() == "hgrework" then
+	COMMANDS.nextmode = {function(ply,args)
+		if not ply:IsAdmin() then return end
+	
+		if table.HasValue(ROUND_LIST,args[1]) then
+			ROUND_NEXT = args[1]
+			ply:ChatPrint("Следующий режим - "..args[1])
+		else
+			ply:ChatPrint("ты даунн")
+		end
+	end,1}
+	COMMANDS.endmode = {function(ply,args)
+		if not ply:IsAdmin() then return end
+	
+		ROUND_ACTIVE = false
+	end,1}
+	COMMANDS.modes = {function(ply,args)
+		if not ply:IsAdmin() then return end
+
+		print(ROUND_LIST)
+	
+		for _, mode in ipairs(ROUND_LIST) do
+			ply:ChatPrint(mode)
+			--ply:ChatPrint(_)
+		end
+	end,1}
+end
+
+function team.DirectTeams(minTeam, maxTeam)
+    local players = {}
+    for _, ply in ipairs(player.GetAll()) do
+        if ply:Team() ~= 1002 then
+            table.insert(players, ply)
+        end
+    end
+
+    for i = #players, 2, -1 do
+        local j = math.random(i)
+        players[i], players[j] = players[j], players[i]
+    end
+
+    local splitPoint = math.ceil(#players / 2)
+
+    for i, ply in ipairs(players) do
+        if i <= splitPoint then
+            ply:SetTeam(minTeam)
+        else
+            ply:SetTeam(maxTeam)
+        end
+    end
+end
+
+function PlayerIsCuffs(ply)
+	if not ply:Alive() then return end
+	local ent = hg.GetCurrentCharacter(ply)
+	if not IsValid(ent) then return end
+
+	return ply:GetNetVar("handcuffed",false)
+end
+
+function team.GetCountLive(list,func)
+	local count = 0
+	local result
+
+	for i,ply in pairs(list) do
+		if not IsValid(ply) then continue end
+
+		result = func and func(ply)
+		if result == true then count = count + 1 continue elseif result == false then continue end
+		if not PlayerIsCuffs(ply) and ply:Alive() then count = count + 1 end
+	end
+
+	return count
+end

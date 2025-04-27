@@ -345,7 +345,7 @@ function SWEP:ApplyForce()
 			phys:ApplyForceCenter(Force)
 		end
 
-		if self:GetOwner():KeyDown(IN_USE) then
+		/*if self:GetOwner():KeyDown(IN_USE) then
 			SetAng = SetAng or self:GetOwner():EyeAngles()
 			local commands = self:GetOwner():GetCurrentCommand()
 			local x,y = commands:GetMouseX(),commands:GetMouseY()
@@ -356,7 +356,7 @@ function SWEP:ApplyForce()
 			end
 
 			phys:AddAngleVelocity(rotate)
-		end
+		end*/
 
 		phys:ApplyForceCenter(Vector(0, 0, mul))
 		phys:AddAngleVelocity(-phys:GetAngleVelocity() / 10)
@@ -420,7 +420,6 @@ function SWEP:Think()
 	elseif self.CarryEnt then
 		self:SetCarrying()
 	end
-
 	if self:GetFists() and self:GetOwner():KeyDown(IN_ATTACK2) then
 		self:SetNextPrimaryFire(CurTime() + .5)
 		self:SetBlocking(true)
@@ -644,6 +643,25 @@ if SERVER then
 end
 
 function SWEP:DrawWorldModel()
+	local ply = self:GetOwner()
+
+	if !IsValid(ply) then
+		return 
+	end
+
+	//if !self:GetFists() then
+		hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    	hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    	hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
+		hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    	hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    	hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
+	/*else
+		hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-0,30),1,0.125)
+		hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-10,0),1,0.125)	
+		hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,-30,0),1,0.125)
+		hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,-10,0),1,0.125)	
+	end*/
 end
 
 -- no, do nothing

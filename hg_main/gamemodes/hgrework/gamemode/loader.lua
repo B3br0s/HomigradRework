@@ -64,7 +64,7 @@ function GM.includeDir(path,includes)
 		tier = nil
 		for i,sum in pairs(string_split(v,"_")) do
 			if tier then
-				sum = string.gsub(sum,".lua","")
+				sum = string.gsub(sum,".lua" ,"")
 				tier = tonumber(sum)
 
 				break

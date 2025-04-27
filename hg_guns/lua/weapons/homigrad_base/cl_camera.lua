@@ -1,38 +1,61 @@
---НИГГА ЩИЩ ЙОУУУ!!!
 local IsScoping = false
 local ScopeLerp = 0
 
-SWEP.ZoomPos = Vector(0,0,5)
-function SWEP:Camera(Pos,Ang)
-    local lply = self:GetOwner()
-    local Att = lply:LookupAttachment("anim_attachment_RH")
-    local Attachment = lply:GetAttachment(Att)
-    local CamPos = (IsScoping and Attachment.Pos or Pos)
-    local CamAng = lply:EyeAngles()
+SWEP.ZoomPos = Vector(0,0,0)
+SWEP.ZoomAng = Angle(0, 0, 0)
 
-    --Ang[3] = (Ang[3] * (1 - ScopeLerp)) + Attachment.Ang[3] * ScopeLerp
-    Ang[2] = (Ang[2] * (1 - ScopeLerp)) + Attachment.Ang[2] * ScopeLerp
-    Ang[1] = (Ang[1] * (1 - ScopeLerp)) + Attachment.Ang[1] * ScopeLerp
+local addfov = 0
 
-    if IsScoping then
-        CamPos = (Attachment.Pos + Attachment.Ang:Forward() * self.ZoomPos[1] + Attachment.Ang:Right() * self.ZoomPos[2] + Attachment.Ang:Up() * self.ZoomPos[3]) * ScopeLerp + (Pos * (1 - ScopeLerp))
-        --CamPos = CamPos + Attachment.Ang:Forward() * self.ZoomPos[1] + Attachment.Ang:Right() * self.ZoomPos[2] + Attachment.Ang:Up() * self.ZoomPos[3]
-        CamAng = Ang
+local lerpaim = 0
+
+function SWEP:IsSprinting()
+    if IsValid(self:GetOwner()) then
+        return self:GetOwner():IsSprinting()
     else
-        CamPos = Pos * (1 - ScopeLerp) + ((Attachment.Pos + Attachment.Ang:Forward() * self.ZoomPos[1] + Attachment.Ang:Right() * self.ZoomPos[2] + Attachment.Ang:Up() * self.ZoomPos[3]) * ScopeLerp)
-        CamAng = Ang
+        return false
     end
-
-    return CamPos,CamAng
 end
 
-function SWEP:Zoom()
-    local lply = self:GetOwner()
-    if lply:KeyDown(IN_ATTACK2) and !lply:KeyDown(IN_SPEED) then
-        IsScoping = true
-        ScopeLerp = LerpFT(0.1,ScopeLerp,1)
-    else
-        IsScoping = false
-        ScopeLerp = LerpFT(0.1,ScopeLerp,0)
+function SWEP:AdjustMouseSensitivity()
+    return self:IsSighted() and 0.5 or 1
+end
+
+function SWEP:Camera(ply, origin, angles, fov)
+    if !self.Deployed then
+        return origin, angles, fov
     end
+    local pos, ang = self:GetTraceModel(true)
+    local tr = self:GetTrace()
+    local _, anglef = self:GetTraceModel()
+
+    local att = ply:GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
+
+    //pos = att.Pos
+    //ang = att.Ang
+    
+    lerpaim = LerpFT(0.2, lerpaim, self:IsSighted() and 1 or 0)
+    
+    local neworigin, _ = LocalToWorld(self.ZoomPos, self.ZoomAng, pos, ang)
+
+    local newangs = angles
+    newangs:RotateAroundAxis(newangs:Forward(),self.ZoomAng[1] * lerpaim)
+    newangs:RotateAroundAxis(newangs:Right(),self.ZoomAng[2] * lerpaim)
+    newangs:RotateAroundAxis(newangs:Up(),self.ZoomAng[3] * lerpaim)
+
+    origin = Lerp(lerpaim,origin,neworigin)
+    
+    local animpos = math.max(self:LastShootTime() - CurTime() + 0.1,0) * 20
+    origin = origin + anglef:Forward() * animpos
+    
+    origin = origin + anglef:Right() * math.random(-0.1,0.1) * (animpos/200) + anglef:Up() * math.random(-0.1,0.1) * (animpos/200)
+    
+    addfov = LerpFT(0.1, addfov, self:IsSighted() and -(self.addfov or 30) or 0)
+
+    if !self.reload then
+        newangs[3] = (att.Ang[3] * (0.5 - self.saim)) * (1 - self.SpeedAnim) + (angles[3] * (1 - self.saim)) * (1 - self.SpeedAnim)
+        --newangs[2] = (att.Ang[2] * self.saim) * (1 - self.SpeedAnim) + (angles[2] * (1 - self.saim))
+        //newangs[1] = (att.Ang[1] * 0.95 * self.saim) + (angles[1] * (1 - self.saim))
+    end
+
+    return origin, newangs, fov + addfov
 end

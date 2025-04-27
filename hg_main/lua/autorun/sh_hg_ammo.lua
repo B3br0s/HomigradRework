@@ -24,17 +24,6 @@ hg.ammotypes = {
 		minsplash = 10,
 		maxsplash = 5
 	},
-	["5.45x39mm"] = {
-		name = "5.45x39 mm",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 100,
-		maxcarry = 120,
-		minsplash = 10,
-		maxsplash = 5
-	},
 	["12/70gauge"] = {
 		name = "12/70 gauge",
 		dmgtype = DMG_BUCKSHOT,
@@ -68,61 +57,6 @@ hg.ammotypes = {
 		minsplash = 10,
 		maxsplash = 5
 	},
-	[".45acp"] = {
-		name = ".45 ACP",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 100,
-		maxcarry = 80,
-		minsplash = 10,
-		maxsplash = 5
-	},
-	["4.6x30mm"] = {
-		name = "4.6x30 mm",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 100,
-		maxcarry = 120,
-		minsplash = 10,
-		maxsplash = 5
-	},
-	["5.7x28mm"] = {
-		name = "5.7x28 mm",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 100,
-		maxcarry = 150,
-		minsplash = 10,
-		maxsplash = 5
-	},
-	[".44remingtonmagnum"] = {
-		name = ".44 Remington Magnum",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 100,
-		maxcarry = 150,
-		minsplash = 10,
-		maxsplash = 5
-	},
-	["9x39mm"] = {
-		name = "9x39 mm",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 100,
-		maxcarry = 150,
-		minsplash = 10,
-		maxsplash = 5
-	},
 	[".50actionexpress"] = {
 		name = ".50 Action Express",
 		dmgtype = DMG_BULLET,
@@ -131,50 +65,6 @@ hg.ammotypes = {
 		npcdmg = 0,
 		force = 200,
 		maxcarry = 150,
-		minsplash = 10,
-		maxsplash = 5
-	},
-	["7.62x51mm"] = {
-		name = "7.62x51 mm",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 200,
-		maxcarry = 120,
-		minsplash = 10,
-		maxsplash = 5
-	},
-	["7.62x54mm"] = {
-		name = "7.62x54 mm",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 200,
-		maxcarry = 120,
-		minsplash = 10,
-		maxsplash = 5
-	},
-	[".338lapuamagnum"] = {
-		name = ".338 Lapua Magnum",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 600,
-		maxcarry = 120,
-		minsplash = 10,
-		maxsplash = 5
-	},
-	[".22longrifle"] = {
-		name = ".22 Long Rifle",
-		dmgtype = DMG_BULLET,
-		tracer = TRACER_LINE,
-		plydmg = 0,
-		npcdmg = 0,
-		force = 70,
-		maxcarry = 120,
 		minsplash = 10,
 		maxsplash = 5
 	}
@@ -218,70 +108,24 @@ local ammoents = {
 		Scale = 1
 	},
 	["7.62x39mm"] = {
-		Model = "models/items/ammo_76239.mdl",
 		Scale = 1
-	},
-	["7.62x51mm"] = {
-		Model = "models/items/ammo_76251.mdl",
-		Scale = 1
-	},
-	["7.62x54mm"] = {
-		Material = "models/hmcd_ammobox_792",
-		Scale = 1,
-		Color = Color(95, 95, 155)
-	},
-	["5.45x39mm"] = {
-		Material = "models/hmcd_ammobox_792",
-		Scale = 0.8,
-		Color = Color(125, 155, 95)
 	},
 	["12/70gauge"] = {
 		Material = "models/hmcd_ammobox_12",
 		Scale = 1.1,
 	},
 	["12/70beanbag"] = {
-		Model = "models/ammo/beanbag12_ammo.mdl",
-		Scale = 1
+		Material = "models/hmcd_ammobox_12",
+		Scale = 1.1,
 	},
 	["9x19mmparabellum"] = {
 		Material = "models/hmcd_ammobox_9",
 		Scale = 0.8,
 	},
-	[".45acp"] = {
-		Model = "models/ammo/beanbag9_ammo.mdl",
-		Scale = 1
-	},
-	["4.6x30mm"] = {
-		Model = "models/4630_ammobox.mdl",
-		Scale = 1,
-	},
-	[".44remingtonmagnum"] = {
-		Material = "models/hmcd_ammobox_22",
-		Scale = 0.8,
-	},
-	["9x39mm"] = {
-		Material = "models/hmcd_ammobox_9",
-		Scale = 0.9,
-		Color = Color(125, 155, 95)
-	},
-	["5.7x28mm"] = {
-		Material = "models/hmcd_ammobox_22",
-		Scale = 1.2,
-		Color = Color(125, 155, 95)
-	},
 	[".50actionexpress"] = {
 		Material = "models/hmcd_ammobox_22",
 		Scale = 1,
 		Color = Color(255, 255, 125)
-	},
-	[".338lapuamagnum"] = {
-		Material = "models/hmcd_ammobox_792",
-		Scale = 1,
-		Color = Color(125, 255, 125)
-	},
-	[".22longrifle"] = {
-		Material = "models/hmcd_ammobox_22",
-		Scale = 1
 	},
 }
 

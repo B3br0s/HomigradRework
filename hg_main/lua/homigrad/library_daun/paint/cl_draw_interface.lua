@@ -15,11 +15,6 @@ hook.Add("OnScreenSizeChanged","Fuck",function(oldw,oldh,w,h)
     ScreenR = ScrW() / ScrH()
 end)
 
-concommand.Add("hg_fakescreenwh",function(ply,cmd,args)
-    scrw = tonumber(args[1] or ScrW()) or ScrW()
-    scrh = tonumber(args[2] or ScrH()) or ScrH()
-end)
-
 FindMetaTable("Vector").ToScreen2 = function(self)
     local pos = self:ToScreen()
 

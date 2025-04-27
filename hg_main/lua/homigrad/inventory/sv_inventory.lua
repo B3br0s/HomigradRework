@@ -1,62 +1,31 @@
+util.AddNetworkString("inventory")
+util.AddNetworkString("ply_take_item")
+util.AddNetworkString("ply_take_ammo")
 util.AddNetworkString("DropItemInv")
-util.AddNetworkString("ChangeInvSlot")-- :p
-util.AddNetworkString("ChangeInvSlot_ToClient")
 
-net.Receive("ChangeInvSlot",function(len,ply)
-    local SlotID1 = net.ReadFloat()
-    local SlotID2 = net.ReadFloat()
+local function send(ply,lootEnt,remove)
+	if ply then
+		net.Start("inventory")
+		net.WriteEntity(not remove and lootEnt or nil)
+		net.WriteTable(lootEnt.Info.Weapons)
+		net.WriteTable(lootEnt.Info.Ammo)
+		net.Send(ply)
+	else
+		if lootEnt.UsersInventory and istable(lootEnt.UsersInventory) then
+			for ply in pairs(lootEnt.UsersInventory) do
+				if not IsValid(ply) or not ply:Alive() or remove then lootEnt.UsersInventory[ply] = nil end
 
-    local Slot1Backpack = net.ReadBool()
-    local Slot2Backpack = net.ReadBool()
+				send(ply,lootEnt,remove)
+			end
+		end
+	end
+end
 
-    local Slot1Item = net.ReadEntity()
-    local Slot2Item = net.ReadEntity()
-    local backpackss
-    if Slot1Backpack or Slot2Backpack then
-        local armorid,ArmorTBL,ArmorTBL2 = GetItemInSlot(ply.EZarmor, "back")
-        
-        if ArmorTBL2 != nil and ArmorTBL2.IsBackpack then
-            backpackss = ArmorTBL
-        end
-    end
-
-    if Slot1Backpack then
-        backpackss.items_bp[SlotID1] = NULL
-        --ply:PickupWeapon(Slot1Item) завтра -- какой нахуй пикап вепон
-    else
-        ply:SetNWEntity("Slot"..SlotID1,NULL)
-        ply.Slots[SlotID1] = NULL
-    end
-
-    if Slot2Backpack then
-        backpackss.items_bp[SlotID2] = Slot1Item
-        --JMod.UpdateInventory_ToClient(ply) 
-        --[[Just a Bogler — Сегодня, в 16:28
-            убирай её нахуй
-            из кода
-            я забыл её вырезать
-            её нету как раз таки
-            я ее в полу бреду написал]]
-        --ply:StripWeapon(Slot1Item:GetClass()) завтра
-    else
-        ply:SetNWEntity("Slot"..SlotID2,Slot1Item)
-        ply.Slots[SlotID2] = Slot1Item
-    end
-    if Slot1Backpack or Slot2Backpack then
-    end
-end)
-
+hg.send = send
 
 net.Receive("DropItemInv",function(l,ply)
     local wepdrop = net.ReadString()
     local prevplywep = ply:GetActiveWeapon()
-    for i=1,ply.SlotsAvaible do
-        if ply.Slots[i] == nil or ply.Slots[i] == NULL then continue end
-        if ply.Slots[i]:GetClass() == wepdrop or ply.Slots[i]:GetClass() == 'worldspawn' then
-            ply.Slots[i] = NULL
-            ply:SetNWEntity("Slot"..i,NULL)
-        end
-    end
     if !ply:HasWeapon(wepdrop) then
         return
     end
@@ -67,163 +36,151 @@ net.Receive("DropItemInv",function(l,ply)
 
 end)
 
-local BlackList = {
-    ["weapon_hands"] = true,
-    ["weapon_physgun"] = true,
-    ["gmod_tool"] = true,
+
+local function send(ply,lootEnt,remove)
+	if ply then
+		net.Start("inventory")
+		net.WriteEntity(not remove and lootEnt or nil)
+		net.WriteTable(lootEnt.Info.Weapons)
+		net.WriteTable(lootEnt.Info.Ammo)
+		net.Send(ply)
+	else
+		for ply in pairs(lootEnt.UsersInventory) do
+			if not IsValid(ply) or not ply:Alive() or remove then lootEnt.UsersInventory[ply] = nil continue end
+
+			send(ply,lootEnt,remove)
+		end
+	end
+end
+
+hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
+	if lootEnt.UsersInventory ~= nil then
+		for plys,bool in pairs(lootEnt.UsersInventory) do
+			lootEnt.UsersInventory[plys] = nil
+			send(plys,lootEnt,true)
+		end
+	end
+end)
+
+hook.Add("Player Think","Looting",function(ply)
+	local key = ply:KeyDown(IN_USE)
+
+	if not ply.fake and ply:Alive() and ply:KeyDown(IN_ATTACK2) then
+		if ply.okeloot ~= key and key then
+			local tr = {}
+			tr.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
+			tr.endpos = tr.start + ply:EyeAngles():Forward() * 64
+			tr.filter = ply
+			local tracea = util.TraceLine(tr)
+			local hitEnt = tracea.Entity
+
+			if not IsValid(hitEnt) then return end
+			if IsValid(RagdollOwner(hitEnt)) then hitEnt = RagdollOwner(hitEnt) end
+			if IsValid(hitEnt) and hitEnt.IsJModArmor then hitEnt = hitEnt.Owner end
+			if not IsValid(hitEnt) then return end
+			if hitEnt:IsPlayer() and hitEnt:Alive() and not hitEnt.fake then return end
+			if not hitEnt.Info then return end
+			
+			hitEnt.UsersInventory = hitEnt.UsersInventory or {}
+			hitEnt.UsersInventory[ply] = true
+
+			send(ply,hitEnt)
+			hitEnt:CallOnRemove("fuckoff",function() send(nil,hitEnt,true) end)
+		end
+	end
+
+	ply.okeloot = key
+end)
+
+local prekol = {
+	weapon_physgun = true,
+	gmod_tool = true
 }
 
-local DoNotClaim = {
-    ["weapon_m4super"] = true,
-    ["weapon_870"] = true,
-    ["weapon_r8"] = true,
-    ["homigrad_base"] = true,
-}
+net.Receive("inventory",function(len,ply)
+	local lootEnt = net.ReadEntity()
+	if not IsValid(lootEnt) then return end
 
-local DEFAULT_SLOTS = 10
-
-
-hook.Add("PlayerSpawn", "PlayerSpawn_Inventory", function(ply)
-    ply:Give("weapon_hands")
-    ply.Slots = {}
-    ply.SlotsAvaible = 10
-    for i = 1, ply.SlotsAvaible do
-        ply.Slots[i] = NULL 
-        ply:SetNWEntity("Slot"..i,NULL)
-    end
+	lootEnt.UsersInventory[ply] = nil
+	player.Event(ply,"inventory close",lootEnt)
 end)
 
-function SlotsHaveWep(ply, wep)
-    for i = 1, ply.SlotsAvaible do
-        if weapons.Get(ply.Slots[i]) and ply.Slots[i]:GetClass() == wep then
-            return true
-        end
-    end
-    return false
-end
+net.Receive("ply_take_item",function(len,ply)
+	--if ply:Team() ~= 1002 then return end
 
-function PlayerHasWeapon(ply,item)
-    for i=1,10 do
-        if ply.Slots[i] ~= NULL then
-            if item:EntIndex() == ply.Slots[i]:EntIndex() then
-                return true 
-            end
-        end
-    end
-    return false 
-end
+	local lootEnt = net.ReadEntity()
+	if not IsValid(lootEnt) then return end
 
-hook.Add("Player Think", "SlotsHolder", function(ply, time)
+	local wep = net.ReadString()
+	--local takeammo = net.ReadBool()
 
-    if #ply:GetWeapons() == 0 then return end
-    ply:SetNWFloat("SlotsAvaible", ply.SlotsAvaible)
-        
-    if not ply.Slots then
-        ply.Slots = {}
-    end
-    if not ply.NextINVThink then
-        ply.NextINVThink = 0
-    end
-    
-    if ply.NextINVThink > CurTime() then
-        ply.NextINVThink = CurTime() + 0.1
-    end
-    for i=1,ply.SlotsAvaible do 
-        if ply.Slots[i] ~= NULL and IsValid(ply.Slots[i]) then 
-            if !ply:HasWeapon(ply.Slots[i]:GetClass()) then
-                if not IsValid(ply.Slots[i]) or not weapons.Get(ply.Slots[i]) then
-                    ply.Slots[i] = NULL
-                    ply:SetNWEntity("Slot" .. i, NULL) 
-                end
-            end
-        end
-    end
-    for ig, wep in pairs(ply:GetWeapons()) do
-        --print(IsValid(wep) and BlackList[wep:GetClass()])
-        if !PlayerHasWeapon(ply,wep) then
-            for i=1,10 do 
-                if IsValid(wep) and BlackList[wep:GetClass()] then continue end
-                if ply.Slots[i - 1] == NULL then 
-                    ply.Slots[i - 1] = wep
-                    ply:SetNWEntity("Slot" .. i - 1, wep)
-                    break 
-                end
-            end
-        end
-    end
-    
+	local lootInfo = lootEnt.Info
+	local wepInfo = lootInfo.Weapons[wep]
+	
+	if not wepInfo then return end
+
+	if (prekol[wep] and not ply:IsAdmin()) then
+		if !(roundActiveName == 'trashcompactor') then
+			ply:Kick("xd))00") 
+		end
+		return 
+	end
+
+	if ply:HasWeapon(wep) then
+		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end
+		if wepInfo.Clip1!=nil and wepInfo.Clip1 > 0 then
+			ply:GiveAmmo(wepInfo.Clip1,wepInfo.AmmoType)
+			wepInfo.Clip1 = 0
+		else
+			ply:ChatPrint("У тебя уже есть это оружие.")
+		end
+	else
+		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end
+		
+		ply.slots = ply.slots or {}
+		
+		local realwep = weapons.Get(wep)
+		
+		if IsValid(lootEnt.wep) and lootEnt.curweapon == wep then
+			DespawnWeapon(lootEnt)
+			lootEnt.wep:Remove()
+		end
+
+		local actwep = ply:GetActiveWeapon()
+
+		local wep1 = ply:Give(wep)
+		if IsValid(wep1) and wep1:IsWeapon() then
+			wep1:SetClip1(wepInfo.Clip1 or 0)
+		end
+		
+		ply:SelectWeapon(actwep:GetClass())
+
+		if lootEnt:IsPlayer() then lootEnt:StripWeapon(wep) end
+		lootInfo.Weapons[wep] = nil
+		table.RemoveByValue(lootInfo.Weapons2,wep)
+
+		if lootEnt:IsRagdoll() then
+			deadBodies[lootEnt:EntIndex()] = {lootEnt,lootEnt.Info}
+			net.Start("send_deadbodies")
+			net.WriteTable(deadBodies)
+			net.Broadcast()
+		end
+	end
+
+	send(nil,lootEnt)
 end)
 
+net.Receive("ply_take_ammo",function(len,ply)
+	--if ply:Team() ~= 1002 then return end
 
-function CheckSlots(ply)
-    local FilledSlots = 0
-    if not ply.SlotsAvaible then
-        ply.SlotsAvaible = 10
-    end
-    for i = 1,ply.SlotsAvaible do
-        --print(ply.Slots[i]:GetClass() .. " " .. i)
-        if ply.Slots == nil then return end
-        if ply.Slots[i] == NULL then return false end
-        if ply.Slots[i] != NULL then FilledSlots = FilledSlots + 1 end
-    end
-    if FilledSlots == ply.SlotsAvaible then
-        return true
-    end
-end
+	local lootEnt = net.ReadEntity()
+	if not IsValid(lootEnt) then return end
+	local ammo = net.ReadFloat()
+	local lootInfo = lootEnt.Info
+	if not lootInfo.Ammo[ammo] then return end
 
-hook.Add("PlayerCanPickupWeapon","Homigrad_Inventory",function(ply,wep)
-    if wep.IgnoreAll then
-        return true
-    end
-    if wep.CanPickup then
-        return wep.CanPickup
-    end
-    if wep.TwoHanded ~= nil then
-        for _, weapon in pairs(ply:GetWeapons()) do 
-            if weapon.TwoHanded ~= nil then  
-                return false
-            end
-        end
-    end
-    if wep.TwoHanded == nil and wep.Base == 'homigrad_base' then
-        for _, weapon in pairs(ply:GetWeapons()) do 
-            if weapon.TwoHanded == nil and weapon.weaponInvCategory != nil and wep.Base == 'homigrad_base' then  
-                return false
-            end
-        end
-    end
+	ply:GiveAmmo(lootInfo.Ammo[ammo],ammo)
+	lootInfo.Ammo[ammo] = nil
 
-    
-    local slotsfull = CheckSlots(ply)
-    if wep.AdminOnly or BlackList[wep:GetClass()] then
-        if not ply:IsAdmin() then return false end
-        if ply:IsAdmin() then return true end
-    end
-    return not slotsfull
+	send(nil,lootEnt)
 end)
-
---[[                            :*.                
-                           =*:*:          ==.  
-                           -*:*:        -+:*-  
-                           -*:*:     :-+:.==.  
-                           -*:**====**:.-+     
-                       .:*++-:+=..+:-*.+:      
-                      :-.......++:#:-*.*-      
-                       :#***-:..-+.+=.:+-      
-                             -++:..:=+-        
-        .-+###*+-.             ++..*=          
-     .-*@#++++:-#@%+.        :+:.==            
-    *+*#.     **   =@#     :*:.=+              
-  :*=:+#   :@@--@@.-@+*- .*-.:*.               
- .++:.:=+   :%#*@@#+-:*+--.:+:                 
- =*:..:-:#@%#:....:--:-:.:+-                   
- ++..-#@:--::::::-:  -=++-                     
- =*::-#%  +  .=   :  -=*=                      
- .++:-+%     -*     =++.                      
-  :*=::=  #.-  %:.=*++*-                       
-   .**=---. .% * -==**:                        
-     :=*+====--=++*+:                          
-        .-+####+=:                             
-                                               
-                                               ]]
---https://media.tenor.com/vsB8nAqmCrgAAAAe/emoticon-rock-and-roll.png
