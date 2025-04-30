@@ -110,6 +110,7 @@ function SWEP:DrawWM()
             return
         end
         if not IsValid(WM) then self:CreateWorldModel() return end
+        WM:SetNoDraw(false)
         if owner.Fake then self.worldModel:Remove() return end 
         if !owner:Alive() then return end
         local Att = owner:GetAttachment(owner:LookupAttachment("anim_attachment_RH"))
@@ -143,6 +144,16 @@ function SWEP:DrawHolsterModel()
         self:CreateWorldModel()
         return
     end
+
+    if self:GetNWBool("DontShow") then
+        if IsValid(self.worldModel) then
+           self.worldModel:SetNoDraw(true)
+        end
+    else
+        if IsValid(self.worldModel) then
+            self.worldModel:SetNoDraw(false)
+        end
+   end
 
     local fakeRagdoll = owner:GetNWEntity("FakeRagdoll")
     local boneEntity = IsValid(fakeRagdoll) and fakeRagdoll or owner

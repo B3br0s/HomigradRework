@@ -1,35 +1,34 @@
 hg.Localizations = hg.Localizations or {}
-
 hg.CurLoc = hg.CurLoc or nil
 
-function GetLocalization()
+local languageConvar = GetConVar("gmod_language")
+
+function GetLocalization(lang)
+    local Lang = lang or languageConvar:GetString()
+    local Localization = hg.Localizations[Lang] or hg.Localizations["en"]
     
-    local Lang = GetConVar("gmod_language"):GetString()
-
-    local Localization = hg.Localizations[Lang]
-
-    if Localization == nil then
-        Localization = hg.Localizations["en"]
+    if not lang then
+        hg.CurLoc = Localization
     end
-
-    --print(Localization)
-
+    
     return Localization
 end
 
 GetLocalization()
 
 function GetPhrase(Phrase)
-    if hg.CurLoc == nil then
+    if not hg.CurLoc then
         hg.CurLoc = GetLocalization()
     end
-
-    if hg.CurLoc != nil and hg.CurLoc[Phrase] then
-        return hg.CurLoc[Phrase]
-    else
-        return Phrase
-    end
+    
+    return hg.CurLoc[Phrase] or Phrase
 end
+
+cvars.AddChangeCallback("gmod_language", function(convar_name, value_old, value_new)
+    hg.CurLoc = GetLocalization(value_new)
+    
+    hook.Run("OnLanguageChanged", value_new, value_old)
+end)
 
 hg.GetPhrase = GetPhrase
 hg.GetLocalization = GetLocalization

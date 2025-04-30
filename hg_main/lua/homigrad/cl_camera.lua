@@ -180,7 +180,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	lastcall = SysTime()
 	if STOPRENDER then return end
 	Recoil = LerpFT(0.1,Recoil,0)
-	RecoilS = LerpFT(0.1,RecoilS,0)
+	if RecoilS < 15 then
+		RecoilS = LerpFT(0.07,RecoilS,0)
+	else
+		RecoilS = LerpFT(0.035,RecoilS,0)
+	end
 	local fov = CameraSetFOV + ADDFOV
 	local lply = LocalPlayer()
 
@@ -248,6 +252,8 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	
 	local tr, hullcheck, headm = hg.eyeTrace(lply)
 
+	//hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.1)
+
 	if GetConVar("hg_bodycam"):GetInt() == 0 then
 		angEye = lply:EyeAngles()
 		
@@ -310,7 +316,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 	if lply:InVehicle() or not firstPerson then return end
 
-	if not lply:Alive() or (IsValid(wep) and whitelistweps[wep:GetClass()]) or lply:GetMoveType() == MOVETYPE_NOCLIP then
+	if not lply:Alive() or (IsValid(wep) and whitelistweps[wep:GetClass()]) or lply:GetMoveType() == MOVETYPE_NOCLIP or IsValid(wep) and string.match(wep:GetClass(),"_css") then
 		return
 	end
 	

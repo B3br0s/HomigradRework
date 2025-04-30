@@ -162,6 +162,8 @@ function Glide.RagdollPlayer( ply, velocity, unragdollTime )
         ply:ExitVehicle()
     end
 
+    velocity = velocity * 4
+
     if not ply.Fake then
     Faking(ply,velocity + Vector(0,0,200))
     end

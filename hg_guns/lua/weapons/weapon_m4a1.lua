@@ -16,8 +16,10 @@ SWEP.BoltVec = nil
 SWEP.TwoHands = true
 
 SWEP.ZoomPos = Vector(-2,0.75,-7.45)
+SWEP.ZoomAng = Angle(0,0,0)
 SWEP.AttPos = Vector(39.5,1.1,4.75)
 SWEP.AttAng = Angle(0,0,0)
+SWEP.RecoilForce = 0.25
 
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 30
@@ -25,7 +27,7 @@ SWEP.Primary.Damage = 17.5
 SWEP.Primary.Ammo = "5.56x45 mm"
 SWEP.Primary.Wait = 0.09
 SWEP.Primary.Automatic = true
-SWEP.Primary.Force = 35
+SWEP.Primary.Force = 55
 SWEP.Primary.Sound = {"arccw_go/m4a1/m4a1_01.wav","arccw_go/m4a1/m4a1_02.wav","arccw_go/m4a1/m4a1_03.wav"}
 
 SWEP.IconPos = Vector(1.5,50,-4)

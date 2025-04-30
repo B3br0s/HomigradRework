@@ -19,14 +19,16 @@ SWEP.ZoomAng = Angle(0,0,0)
 SWEP.AttPos = Vector(39,0.8,4.9)
 SWEP.AttAng = Angle(0,0,0)
 
+SWEP.IsShotgun = false
 SWEP.Primary.ClipSize = 7
 SWEP.Primary.DefaultClip = 7
 SWEP.Primary.Damage = 17.5
 SWEP.Primary.Wait = 0.09
 SWEP.Primary.ReloadTimeEnd = 1.5
 SWEP.Primary.Automatic = true
-SWEP.Primary.Force = 75
-SWEP.Primary.Sound = {"arccw_go/mag7/mag7_01.wav","arccw_go/mag7/mag7_02.wav"}
+SWEP.Primary.Force = 45
+SWEP.Primary.Sound = "zcitysnd/sound/weapons/firearms/shtg_mossberg500/m500_fire_01.wav"
+SWEP.RecoilForce = 15
 
 SWEP.IconPos = Vector(-7,50,-4)
 SWEP.IconAng = Angle(-20,0,0)
@@ -43,17 +45,3 @@ SWEP.ReloadSoundsEmpty = {
     [1.3] = "arccw_go/mag7/mag7_pump_back.wav",
     [1.5] = "arccw_go/mag7/mag7_pump_forward.wav",
 }
-
-function SWEP:CustomAnim()
-    local ply = self:GetOwner()
-
-    if self:IsPistolHoldType() then
-        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(-7,-20 * (1 - self.SpeedAnim),-55 * self.SpeedAnim))
-        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(5 * (1 - self.SpeedAnim),-20 * (1 - self.SpeedAnim),0))
-    else
-        local d = (1 - self.SpeedAnim)
-        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(-10 - (30 * self.SpeedAnim),-5,-5))
-        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Upperarm"),Angle(10,8,18))
-        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(10,0,-15))
-    end
-end

@@ -21,7 +21,7 @@ net.Receive("DeathScreen",function()
 
     LastDeathTime = CurTime() + 5
 
-    surface.PlaySound("homigrad/vgui/csgo_ui_crate_open.wav")
+    //surface.PlaySound("homigrad/vgui/csgo_ui_crate_open.wav")
 end)
 
 local nothing = {

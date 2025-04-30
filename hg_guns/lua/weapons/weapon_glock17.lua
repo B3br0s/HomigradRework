@@ -13,14 +13,16 @@ SWEP.BoltBone = "v_weapon.glock_slide"
 SWEP.BoltVec = Vector(0,0,-1.5)
 
 SWEP.ZoomPos = Vector(-10,-5.57,-0.81)
+SWEP.ZoomAng = Angle(0,0,0)
 SWEP.AttPos = Vector(26,0.34,3.3)
-SWEP.AttAng = Angle(0,0,0)
+SWEP.AttAng = Angle(1,-0.18,0)
 
 SWEP.Primary.Damage = 25
 SWEP.Primary.Force = 25
 SWEP.Primary.ReloadTime = 1.25
 SWEP.Primary.Sound = "arccw_go/glock18/glock18-1.wav"
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
+SWEP.RecoilForce = 3
 
 SWEP.IconPos = Vector(1,110,-5)
 SWEP.IconAng = Angle(-20,0,0)

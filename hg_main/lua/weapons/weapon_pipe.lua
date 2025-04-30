@@ -9,7 +9,7 @@ SWEP.WorldModel = "models/props_canal/mattpipe.mdl"
 SWEP.HoldType = "melee"
 
 SWEP.Primary.Sound = Sound( "Weapon_Knife.Single" )
-SWEP.Primary.Damage = 15
+SWEP.Primary.Damage = 28
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = true

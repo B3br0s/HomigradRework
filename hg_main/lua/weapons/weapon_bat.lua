@@ -8,7 +8,7 @@ SWEP.WorldModel = "models/weapons/w_knije_t.mdl"
 
 SWEP.HoldType = "melee2"
 
-SWEP.Primary.Damage = 12
+SWEP.Primary.Damage = 16
 SWEP.DamagePain = 10
 
 SWEP.Primary.Ammo = "none"

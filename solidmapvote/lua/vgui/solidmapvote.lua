@@ -38,6 +38,9 @@ function PANEL:Init()
         if #winningMaps > 1 then
             if realWinner == 'extend' then
                 self.subTitleText = 'MAP HAS BEEN EXTENDED AS TIE BREAKER!'
+                timer.Simple(3,function()
+                    SolidMapVote.close()
+                end)
             elseif realWinner == 'random' then
                 self.subTitleText = fixedDisplayName .. ' HAS BEEN CHOSEN RANDOMLY AS TIE BREAKER!'
             else

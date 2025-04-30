@@ -40,7 +40,7 @@ end)
 
 if CLIENT then
 	local PUNCH_DAMPING = 20
-	local PUNCH_SPRING_CONSTANT = 150
+	local PUNCH_SPRING_CONSTANT = 300
 	vp_punch_angle = vp_punch_angle or Angle()
 	local vp_punch_angle_velocity = Angle()
 	vp_punch_angle_last = vp_punch_angle_last or vp_punch_angle
@@ -178,7 +178,20 @@ if CLIENT then
 		if prev_on_ground != current_on_ground and current_on_ground and LocalPlayer():GetMoveType() != MOVETYPE_NOCLIP then
 			angle_hitground.p = math.Clamp(speedPrevious / 15, 0, 20)
 
-			ViewPunch(angle_hitground)
+			ViewPunch(angle_hitground / 2)
+			Recoil = 2
+		end
+	end)
+
+	hook.Add("Player Think","Homigrad_Run",function(ply)
+		if ply:GetVelocity():Length() > 100 and ply:IsSprinting() and ply.sidemove then
+			hg.bone.Set(ply,"spine4",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ply,"spine2",Vector(0,0,0),Angle(ply.sidemove / 1600,ply.move / 600,0),1,0.1)
+			hg.bone.Set(ply,"spine1",Vector(0,0,0),Angle(ply.sidemove / 2600,ply.move / 1200,0),1,0.1)
+		else
+			hg.bone.Set(ply,"spine4",Vector(0,0,0),Angle(0,0,0),1,0.05)
+			hg.bone.Set(ply,"spine2",Vector(0,0,0),Angle(0,0,0),1,0.05)
+			hg.bone.Set(ply,"spine1",Vector(0,0,0),Angle(0,0,0),1,0.05)
 		end
 	end)
 end
@@ -380,7 +393,7 @@ if SERVER then
         return true
     end)
 	hook.Add("Player Think","Homigrad_Organism",function(ply,time)
-	ply:GetViewModel():SetPlaybackRate(1.15) --а зачем? хз
+	ply:GetViewModel():SetPlaybackRate(0.9) --а зачем? хз
 	ply:SetNWFloat("pain",ply.pain)
 	ply:SetNWFloat("painlosing",ply.painlosing)
 	ply:SetNWBool("otrub",ply.otrub)
@@ -496,6 +509,7 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
     
     local isSprinting = ply:IsSprinting()
     local forwardSpeed = mv:GetForwardSpeed()
+    local sideSpeed = mv:GetSideSpeed()
     local maxSpeed = mv:GetMaxSpeed()
     local velocity = ply:GetVelocity():Length()
     
@@ -506,10 +520,9 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
         ply:SetCrouchedWalkSpeed(0)
         return
     end
-    
-    if ply:KeyDown(IN_FORWARD) and not (ply:KeyDown(IN_LEFT) or ply:KeyDown(IN_RIGHT) or ply:KeyDown(IN_BACK)) then
-        ply.move = forwardSpeed
-    end
+  
+    ply.move = forwardSpeed
+    ply.sidemove = sideSpeed
     
     ply:SetDuckSpeed(0.5)
     ply:SetUnDuckSpeed(0.5)
@@ -742,35 +755,6 @@ function hg.eyeTrace(ply, dist, ent, aim_vector)
 	tr.filter = {ply,ent}
 
 	return util.TraceLine(tr), trace, headm
-end
-
-if SERVER then
-	util.AddNetworkString("keyDownply2")
-	hook.Add("KeyPress", "huy-hg", function(ply, key)
-		net.Start("keyDownply2")
-		net.WriteInt(key, 26)
-		net.WriteBool(true)
-		net.WriteEntity(ply)
-		net.Broadcast()
-	end)
-
-	hook.Add("KeyRelease", "huy-hg2", function(ply, key)
-		net.Start("keyDownply2")
-		net.WriteInt(key, 26)
-		net.WriteBool(false)
-		net.WriteEntity(ply)
-		net.Broadcast()
-	end)
-else
-	net.Receive("keyDownply2", function(len)
-		local key = net.ReadInt(26)
-		local down = net.ReadBool()
-		local ply = net.ReadEntity()
-		if not IsValid(ply) then return end
-		ply.keydown = ply.keydown or {}
-		ply.keydown[key] = down
-		if ply.keydown[key] == false then ply.keydown[key] = nil end
-	end)
 end
 
 hook.Add("Player Think","FUCKING FUCK YOU",function(ply,time)		

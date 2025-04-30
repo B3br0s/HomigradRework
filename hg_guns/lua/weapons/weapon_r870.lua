@@ -40,6 +40,7 @@ local function easedLerp(fraction, from, to)
 end
 
 function SWEP:PostAnim()
+    local ply = self:GetOwner()
 	if self.BoltBone != nil and IsValid(self.worldModel) then
 		local bone = self.worldModel:LookupBone(self.BoltBone)
 
@@ -50,33 +51,29 @@ function SWEP:PostAnim()
 
     self.Pump = easedLerp(0.45,self.Pump,self.PumpTarg)
 
-    local PumpAngs = Angle(-10,30,-30)
+    local PumpAngs = Angle(-50,-30,0)
 
-    local ply = self:GetOwner()
-
-    local hand_index = ply:LookupBone("ValveBiped.Bip01_R_Hand")
-	local forearm_index = ply:LookupBone("ValveBiped.Bip01_R_Forearm")
-	local clavicle_index = ply:LookupBone("ValveBiped.Bip01_R_Clavicle")
-
-
-	local attPos, attAng = self:GetTrace()
-	local matrix = ply:GetBoneMatrix(hand_index)
-	if not matrix then return end
-	local plyang = ply:EyeAngles()
-	plyang:RotateAroundAxis(plyang:Forward(),0)
-
-	local _,newAng = LocalToWorld(vector_origin,self.localAng or angle_zero,vector_origin,plyang)
-	local ang = newAng
-    if CLIENT and self:GetOwner() == LocalPlayer() then
-		ang:Add(Angle(-(self.Primary.Force / 4.5) * Recoil,0,0))
-	end
-    ang:Add(PumpAngs * self.Pump)
-	ang:RotateAroundAxis(ang:Forward(),180)
-	if not self:IsSprinting() then
-	matrix:SetAngles(ang)
-	end
-
-	local lpos, lang = ply:SetBoneMatrix2(hand_index, matrix, false)
+    if self:IsPistolHoldType() then
+        if self:IsSprinting() and !self:IsSighted() then
+            hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.4)
+            hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.4)
+            hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-60),1,0.4)
+        else
+            hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.4)
+            hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.4)
+            hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.4)
+        end
+    else
+        if self:IsSprinting() and !self:IsSighted() then
+            hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.3)
+            hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,-30),1,0.3)
+            hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-30),1,0.3)
+        else
+            hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-7,-10) + PumpAngs * self.Pump,1,0.3)
+            hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.3)
+            hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.3)
+        end
+    end
 end
 
 function SWEP:Reload()

@@ -111,6 +111,9 @@ net.Receive("AppearanceSet",function(l,ply)
 end)
 
 function ApplyAppearance(ent,AppearanceTable)
+    if ent:IsRagdoll() and hg.RagdollOwner(ent) != nil and hg.RagdollOwner(ent).AppearanceOverride then
+        return
+    end
     if not AppearanceTable then return end
     ent.Appearance = AppearanceTable
     ent:SetModel(AppearanceTable.Model or ent:GetModel())

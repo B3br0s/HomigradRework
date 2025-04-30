@@ -39,15 +39,17 @@ function DrawWHEnt(ent,pos)
 end
 
 hook.Add("HUDPaint","Spectate-HUD",function()
-    if lply:Alive() then
+    if lply:Alive() and lply:Team() != 1002 then
         return
     end
+
+	if lply:Team() == 1002 and lply:Alive() then
+		lply:SetNWEntity("SpectEnt",NULL)
+	end
     
     local ent = lply:GetNWEntity("SpectEnt",NULL)
  
-    if !IsValid(ent) then
-        return
-    end
+    if IsValid(ent) then
 
     local entcolor = ent.GetPlayerColor and ent:GetPlayerColor() or ent:GetColor():ToVector()
     local entname = ent.GetName and ent:GetName() or ent.PrintName
@@ -84,7 +86,7 @@ hook.Add("HUDPaint","Spectate-HUD",function()
 
 	draw.SimpleText(string.format(hg.GetPhrase("SpectHP"),ent:Health()),"H.18",ScrW() / 2,y + 35,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 	draw.SimpleText(string.format(hg.GetPhrase("SpectMode"),spectr[lply:GetNWInt("SpecMode",1)]),"H.12",ScrW() / 2,y + 48,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-
+	end
     for _, v in ipairs(player.GetAll()) do --ESP
         if not v:Alive() or v == ent then continue end
 

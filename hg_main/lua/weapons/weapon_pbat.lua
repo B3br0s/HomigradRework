@@ -9,7 +9,7 @@ SWEP.WorldModel = "models/drover/w_baton.mdl"
 SWEP.HoldType = "melee"
 
 SWEP.Primary.Sound = Sound( "Weapon_Knife.Single" )
-SWEP.Primary.Damage = 28
+SWEP.Primary.Damage = 20
 SWEP.DamagePain = 5
 
 SWEP.Primary.Ammo = "none"
@@ -20,9 +20,8 @@ SWEP.Primary.Delay = 0.8
 SWEP.Primary.Force = 250
 SWEP.DamageType = DMG_CLUB
 
-SWEP.HitSound = "physics/body/body_medium_impact_soft7.wav"
+SWEP.HitSound = "physics/cardboard/cardboard_box_impact_bullet1.wav"
 SWEP.FlashHitSound = {"physics/flesh/flesh_strider_impact_bullet1.wav","physics/flesh/flesh_strider_impact_bullet2.wav","physics/flesh/flesh_strider_impact_bullet3.wav"}
 
-SWEP.dwsItemPos = Vector(0,-5,2)
-SWEP.dwsItemAng = Angle(-45,90,90)
-SWEP.dwsItemFOV = -6
+SWEP.IconAng = Angle(0,90,150)
+SWEP.IconPos = Vector(15,70,-6)

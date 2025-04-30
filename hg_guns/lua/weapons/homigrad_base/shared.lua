@@ -20,6 +20,7 @@ SWEP.Primary.Damage = 15
 SWEP.Primary.Force = 35
 SWEP.Primary.Automatic = false
 SWEP.TwoHands = false
+SWEP.ViewModel = "models/weapons/arccw_go/v_pist_deagle.mdl"
 
 SWEP.DrawTime = 0.1
 SWEP.Deployed = true
@@ -147,7 +148,7 @@ function SWEP:PrimaryAttack()
 	if SERVER then
 		net.Start("hgwep shoot")
 		net.WriteEntity(self)
-		net.Broadcast()
+		net.SendOmit(self:GetOwner())
 	end
 end
 
@@ -276,15 +277,15 @@ function SWEP:DrawHUD()
 	local ply = LocalPlayer()
 	local ammo,ammobag = self:GetMaxClip1(), self:Clip1()
 	if ammobag > ammo - 1 then
-		text = "Full"
+		text = hg.GetPhrase("gun_full")
 	elseif ammobag > ammo - ammo/3 then
-		text = "Nearly Full"
+		text = hg.GetPhrase("gun_nearfull")
 	elseif ammobag > ammo/3 then
-		text = "Half Empty"
+		text = hg.GetPhrase("gun_halfempty")
 	elseif ammobag >= 1 then
-		text = "Nearly Empty"
+		text = hg.GetPhrase("gun_nearempty")
 	elseif ammobag < 1 then
-		text = "Empty"
+		text = hg.GetPhrase("gun_empty")
 	end
 
 	local ammomags = ply:GetAmmoCount( self:GetPrimaryAmmoType() )

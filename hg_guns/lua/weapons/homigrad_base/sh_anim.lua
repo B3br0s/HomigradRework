@@ -24,7 +24,7 @@ function SWEP:IsSighted()
 	if ply:IsNPC() then return end
 
 	if (self:IsLocal() or SERVER) and ply:IsPlayer() then
-		local is = not self:IsSprinting() and ply:KeyDown(IN_ATTACK2) and !self.reload and !ply:KeyDown(IN_RELOAD)
+		local is = not self:IsSprinting() and ply:KeyDown(IN_ATTACK2) and !self.reload
 		self:SetNWBool("IsSighted",is)
 		return is
 	else
@@ -124,12 +124,6 @@ function SWEP:Step_Anim()
 
 	self:SetHoldType(self.HoldType)
 
-	if !self.CustomAnim then
-		--	hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.1)
-	else
-		self:CustomAnim()
-	end
-
 	if CLIENT and (ply != LocalPlayer() or GetViewEntity() != LocalPlayer()) then
 		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_Head1"),Angle(-20 * self.saim,-5 * self.saim,0))
 	else
@@ -138,12 +132,30 @@ function SWEP:Step_Anim()
 
 	if !self.CustomAnim then
 		if self:IsPistolHoldType() then
-			ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(-7,-20 * (1 - self.SpeedAnim),-55 * self.SpeedAnim))
-			ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"), Angle(5 * (1 - self.SpeedAnim),-20 * (1 - self.SpeedAnim),0))
+			if self:IsSprinting() and !self:IsSighted() then
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.4)
+				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.4)
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-60),1,0.4)
+			else
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-15,0),1,0.4)
+				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.4)
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-20,0,0),1,0.4)
+				local pitch = ply:EyeAngles().p
+				if CLIENT and ply == LocalPlayer() then
+					local corektirovka_sinshluhi13 = ((pitch > 40 or pitch < -40) and (pitch / 125) or 0)
+					//hg.bone.Set(ply,"r_hand",Vector(0,-0.5,0),Angle(RecoilS - corektirovka_sinshluhi13 * (self.TwoHands and 45 or 20) * (pitch > 0 and corektirovka_sinshluhi13  * (self.TwoHands and 1.5 or 0.06) or (self.TwoHands and 1 or 1.5)) - 1.5,-5,2 - (corektirovka_sinshluhi13 * 10)),1,0.1)
+				end
+			end
 		else
-			ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(-13 - (40 * self.SpeedAnim),-10,0))
-			ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Upperarm"),Angle(0,0,10))
-			ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(5,-10,-15))
+			if self:IsSprinting() and !self:IsSighted() then
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.3)
+				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,-30),1,0.3)
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-30),1,0.3)
+			else
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-7,-10),1,0.3)
+				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.3)
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.3)
+			end
 		end
 	else
 		self:CustomAnim()
@@ -164,13 +176,25 @@ function SWEP:Step_Anim()
 	plyang:RotateAroundAxis(plyang:Forward(),0)
 
 	local _,newAng = LocalToWorld(vector_origin,self.localAng or angle_zero,vector_origin,plyang)
-	local ang = newAng
+	local ang = Angle(newAng[1],newAng[2],newAng[3])
 	if CLIENT and self:GetOwner() == LocalPlayer() then
 		ang:Add(Angle(-(self.Primary.Force / math.random(32,64)) * RecoilS,0,0))
 	end
 	ang:RotateAroundAxis(ang:Forward(),180)
 	if not self:IsSprinting() and !self.Pump and !self:IsClose() then
-	matrix:SetAngles(ang)
+	local pitch = ply:EyeAngles().p
+	if pitch > 60 or pitch < -60 then
+		if self:IsPistolHoldType() then
+			ang.p = math.Clamp(ang.p,-18,6) - ((CLIENT and self:GetOwner() == LocalPlayer()) and RecoilS or 0)
+		else
+			ang.p = math.Clamp(ang.p,-36,35) - ((CLIENT and self:GetOwner() == LocalPlayer()) and RecoilS or 0)
+		end
+	else
+		ang.p = ang.p / 5
+	end
+	local ispistolang = Angle(0,-5,0)
+	hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(-ang.p,0,0) + (self:IsPistolHoldType() and ispistolang or Angle(0,0,0)),1,0.1)
+	//matrix:SetAngles(ang)
 	end
 	
 	local lpos, lang = ply:SetBoneMatrix2(hand_index, matrix, false)

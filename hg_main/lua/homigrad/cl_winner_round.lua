@@ -27,6 +27,16 @@ function WinRound(color,text1,winside,text2)
 
         CurSize = LerpFT(0.2,CurSize,TargetSize)
 
+        surface.SetDrawColor(100,100,100,75)
+        surface.DrawOutlinedRect(fix_w + 1,1,w * CurSize,h,1)
+        surface.DrawOutlinedRect(fix_w -1,-1,w * CurSize,h,1)
+        surface.SetDrawColor(100,100,100,5)
+        surface.DrawOutlinedRect(fix_w + 2,2,w * CurSize,h,1)
+        surface.DrawOutlinedRect(fix_w -2,-2,w * CurSize,h,1)
+
+        surface.SetDrawColor(100,100,100,15)
+        surface.DrawOutlinedRect(fix_w,0,w * CurSize,h,1)
+
         draw.RoundedBox(0,fix_w,0,w * CurSize,h,Color(24,24,24,230))
 
         draw.SimpleText(

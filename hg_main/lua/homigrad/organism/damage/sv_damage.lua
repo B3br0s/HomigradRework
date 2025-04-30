@@ -3,15 +3,15 @@ util.AddNetworkString("DeathScreen")
 
 DamageMultipliers = {
     [DMG_CLUB] = 1,--ее
-    [DMG_BULLET] = 2,
-    [DMG_SLASH] = 0.7,
+    [DMG_BULLET] = 4,
+    [DMG_SLASH] = 0.4,
     [DMG_BLAST] = 9,
     [DMG_CRUSH] = 1 / 128,--а почему бы и нет?
 }
 
 PainMultipliers = {
     [DMG_CLUB] = 0.5,--ее
-    [DMG_BULLET] = 0.8,
+    [DMG_BULLET] = 1.2,
     [DMG_SLASH] = 0.3,
     [DMG_BLAST] = 6,
     [DMG_CRUSH] = 9,
@@ -45,8 +45,8 @@ hook.Add("Homigrad_Organs","Organs_Damage",function(ent,dmginfo,physbone,bonenam
 		local ply = (ent:IsPlayer() and ent or RagdollOwner(ent))
 		local rag = ent
 
-		if rag:GetVelocity():Length() > 100
-		and (dmginfo:GetDamage() * 30) > 4 then
+		if rag:GetVelocity():Length() > 400
+		and (dmginfo:GetDamage() * 30) > 7 then
 			ply.KillReason = "dead_neck"
 			ply:SetNWString("KillReason",ply.KillReason)
             if ply:Alive() then
@@ -132,6 +132,12 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 
 		return true
 	end 
+
+	if dmginfo:GetDamage() > 25 and math.random(1,3) == 2 then
+		if not ply.Fake then
+			hg.Faking(ply,(IsValid(dmginfo:GetAttacker() and (ply:GetPos() - dmginfo:GetAttacker():GetPos()):Angle():Forward() * 5000 or dmginfo:GetDamageForce() * 10)))
+		end
+	end
 
 	local physics_bone = GetPhysicsBoneDamageInfo(ent,dmginfo)
 

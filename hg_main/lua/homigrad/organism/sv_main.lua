@@ -6,11 +6,23 @@ hook.Add("Player Think","Main_Handler",function(ply)
     ply:SetNWFloat("painlosing",ply.painlosing)
     ply:SetNWBool("otrub",ply.otrub)
     ply:SetNWBool("bleeding",ply.bleeding)
+    ply:SetNWBool("blood",ply.blood)
 end)
 
 hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
     if ply.PLYSPAWN_OVERRIDE then
         return
+    end
+
+    ply:SetNWBool("Cuffed",false)
+
+    if ply:Team() == 1002 then
+        ply.AppearanceOverride = true
+
+        timer.Simple(0,function()
+            ply:SetModel("models/player/gman_high.mdl")
+            ply:SetPlayerColor(Color(100,100,100):ToVector())
+        end)
     end
 
     ply.painlosing = 1
@@ -19,7 +31,6 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
     ply.bloodNext = 0
     ply.hungerNext = 0
     ply.adrenaNext = 0
-    ply.AppearanceOverride = false
     ply.hunger = 100
     ply.lerp_rh = 0
 	ply.lerp_lh = 0

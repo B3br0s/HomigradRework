@@ -76,7 +76,7 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
     }
     return
     end
-    if dmginfo:GetDamage() > 80 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) or dmginfo:GetDamage() > 270 and dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) then
+    if dmginfo:GetDamage() > 40 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) or dmginfo:GetDamage() > 370 and dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) then
         if hitgroup == HITGROUP_HEAD and not rag.gib["Head"] then
             local bonePos, boneAng = rag:GetBonePosition(physbone)
             rag.gib["Head"] = true
@@ -128,10 +128,8 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
             net.WriteVector(Pos)
             net.WriteVector(Pos + Ang:Up() * 10)
             net.Broadcast()
-            if dmginfo:GetDamage() > 600 then
-                rag:Remove()
-            end
             rag.gib["Full"] = true
+            //rag:Remove()
         end
     end
 end)

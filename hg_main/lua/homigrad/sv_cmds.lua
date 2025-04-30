@@ -213,6 +213,20 @@ COMMANDS.forceclass = {function(ply,args)
 	end
 end,1}
 
+COMMANDS.forceteam = {function(ply,args)
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ply:SetTeam(args[2])
+	end
+end,1}
+
+COMMANDS.nomodechange = {function(ply,args)
+	if not ply:IsAdmin() then return end
+	local value = tonumber(args[1]) > 0
+
+	SetGlobalBool("NoLevelChange",value)
+	PrintMessage(3,"No mode change - "..(value and "ON" or "OF"))
+end,1}
+
 COMMANDS.nologs = {function(ply,args)
 	if not ply:IsAdmin() then return end
 	local value = tonumber(args[1]) > 0
@@ -240,37 +254,6 @@ COMMANDS.notarget = {function(ply,args)
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 		ply:SetNoTarget(value)
 		ply:ChatPrint("NoTarget - " .. tostring(value))
-	end
-end,1}
-
-COMMANDS.sbeu = {function(ply,args)
-	if not ply:IsAdmin() then return end
-	local value = tonumber(args[2]) > 0
-
-	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
-		ply:ManipulateBoneAngles(0,(value and Angle(180,180,-70) or Angle(0,0,0)))
-		ply:ManipulateBoneAngles(1,(value and Angle(0,-30,0) or Angle(0,0,0)))
-		ply:ManipulateBoneAngles(3,(value and Angle(0,-40,0) or Angle(0,0,0)))
-		ply:ManipulateBoneAngles(4,(value and Angle(0,-40,0) or Angle(0,0,0)))
-		ply.SBEU = value
-
-		if value then
-			for _, wep in ipairs(ply:GetWeapons()) do
-				wep.Primary.Wait = 0.00001
-				wep.AnimTime2 = 0.0000001
-				wep.AnimTime1 = 0.0000001
-				wep.Attack2Time = 0.001
-				wep.AttackTime = 0.001
-				wep.WaitTime1 = 0.001
-				wep.WaitTime2 = 0.001
-				wep.StaminaPrimary = 0
-				wep.StaminaSecondary = 0
-				wep:SetClip1(1e8)	
-				wep.Primary.Force = 0 
-				wep.Primary.RealAutomatic = true
-				wep.Primary.Automatic = true
-			end
-		end
 	end
 end,1}
 
@@ -337,38 +320,46 @@ function team.SpawnCommand(tbl, aviable, func, funcShould)
 	end
 end
 
-if engine.ActiveGamemode() == "hgrework" then
-	COMMANDS.nextmode = {function(ply,args)
-		if not ply:IsAdmin() then return end
-	
-		if table.HasValue(ROUND_LIST,args[1]) then
-			ROUND_NEXT = args[1]
-			ply:ChatPrint("Следующий режим - "..args[1])
-		else
-			ply:ChatPrint("ты даунн")
-		end
-	end,1}
-	COMMANDS.endmode = {function(ply,args)
-		if not ply:IsAdmin() then return end
-	
-		ROUND_ACTIVE = false
-	end,1}
-	COMMANDS.modes = {function(ply,args)
-		if not ply:IsAdmin() then return end
+COMMANDS.nextmode = {function(ply,args)
+	if not ply:IsAdmin() then return end
 
-		print(ROUND_LIST)
-	
-		for _, mode in ipairs(ROUND_LIST) do
-			ply:ChatPrint(mode)
-			--ply:ChatPrint(_)
+	if !TableRound(args[1]) then
+		return
+	end
+
+	if TableRound(args[1]).CanStart then
+		if !TableRound(args[1]):CanStart() then
+			ply:ChatPrint("This mode cant be started.")
+			return
 		end
-	end,1}
-end
+	end
+
+	if table.HasValue(ROUND_LIST,args[1]) then
+		ROUND_NEXT = args[1]
+		ply:ChatPrint("Next mode - "..args[1])
+	else
+		ply:ChatPrint("no mode.")
+	end
+end,1}
+COMMANDS.endmode = {function(ply,args)
+	if not ply:IsAdmin() then return end
+
+	ROUND_ACTIVE = false
+end,1}
+COMMANDS.modes = {function(ply,args)
+	if not ply:IsAdmin() then return end
+	print(ROUND_LIST)
+
+	for _, mode in ipairs(ROUND_LIST) do
+		ply:ChatPrint(mode)
+		--ply:ChatPrint(_)
+	end
+end,1}
 
 function team.DirectTeams(minTeam, maxTeam)
     local players = {}
     for _, ply in ipairs(player.GetAll()) do
-        if ply:Team() ~= 1002 then
+        if ply:Team() != 1002 then
             table.insert(players, ply)
         end
     end
@@ -394,7 +385,7 @@ function PlayerIsCuffs(ply)
 	local ent = hg.GetCurrentCharacter(ply)
 	if not IsValid(ent) then return end
 
-	return ply:GetNetVar("handcuffed",false)
+	return ply:GetNWBool("Cuffed",false)
 end
 
 function team.GetCountLive(list,func)

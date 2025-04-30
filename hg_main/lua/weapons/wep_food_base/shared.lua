@@ -55,6 +55,11 @@ SWEP.EatSounds = {
     "snd_jack_hmcd_eat4.wav"
 }
 
+SWEP.Beton = {
+    "physics/concrete/concrete_break2.wav",
+    "physics/concrete/concrete_break3.wav",
+}
+
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 	
 	local WM = self.WorldModel
@@ -103,9 +108,9 @@ function SWEP:Step_Anim()
     local ply = self:GetOwner()
 
     if self:IsAttacking(ply) then
-        hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-60,0),1,0.125)
-        hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-30,0),1,0.125)
-        hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,-20,-20),1,0.125)
+        hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-50,0),1,0.125)
+        hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(10,-20,0),1,0.125)
+        hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(60,-20,-20),1,0.125)
     else
         hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.125)
         hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.125)
@@ -146,7 +151,7 @@ function SWEP:Step()
             self.Bites = self.Bites - 1
             hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-40,0),1,0.1)
             if SERVER then
-                local soundd = (!self.BiteSounds and table.Random(self.DrinkSounds) or table.Random(self.EatSounds))
+                local soundd = ((self.BiteSounds != "BETON" and (!self.BiteSounds and table.Random(self.DrinkSounds) or table.Random(self.EatSounds))) or table.Random(self.Beton))
                 if isstring(soundd) then
                     sound.Play(soundd,self:GetPos(),75,100,1)
                 end

@@ -27,8 +27,9 @@ SWEP.Primary.Damage = 17.5
 SWEP.Primary.Wait = 0.09
 SWEP.Primary.ReloadTimeEnd = 1.2
 SWEP.Primary.Automatic = true
-SWEP.Primary.Force = 35
+SWEP.Primary.Force = 125
 SWEP.Primary.Sound = "arccw_go/ak47/ak47-1.wav"
+SWEP.RecoilForce = 2.5
 
 SWEP.IconPos = Vector(-0.5,50,-4)
 SWEP.IconAng = Angle(-20,0,0)

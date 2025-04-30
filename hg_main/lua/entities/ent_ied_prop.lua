@@ -23,7 +23,7 @@ function ENT:Initialize()
 	end
 end
 
-if not CLIENT then return end
+if SERVER then return end
 
 function ENT:Draw()
     self:DrawModel()

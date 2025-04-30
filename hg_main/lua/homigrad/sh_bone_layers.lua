@@ -5,6 +5,7 @@ local tbl = {
 	["spine"] = "ValveBiped.Bip01_Spine",
 	["spine1"] = "ValveBiped.Bip01_Spine1",
 	["spine2"] = "ValveBiped.Bip01_Spine2",
+	["spine4"] = "ValveBiped.Bip01_Spine4",
 	["r_clavicle"] = "ValveBiped.Bip01_R_Clavicle",
 	["r_upperarm"] = "ValveBiped.Bip01_R_UpperArm",
 	["r_forearm"] = "ValveBiped.Bip01_R_Forearm",

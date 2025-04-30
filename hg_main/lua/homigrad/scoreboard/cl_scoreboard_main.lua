@@ -1,36 +1,25 @@
-CreateClientConVar("hg_tab_setting", "1", true, false, "Переключить меню настроек", 0, 1)
-
 local shit = 0
 local shit_t = 0
 
 if not open then
     open = false
 end
-function AddPanel(Parent,Text,NeedTo,ChangeTo)
-    local ButtonShit = ItemsPanel:Add("DButton")
-    ButtonShit:SetSize(ItemsPanel:GetWide(),ItemsPanel:GetWide())
+function AddPanel(Parent,Text,NeedTo,ChangeTo,SizeXY,DockTo,CustomFunc)
+    local ButtonShit = Parent:Add("hg_button")
+    ButtonShit:SetSize(SizeXY.x,SizeXY.y)
     ButtonShit:SetText(" ")
     ButtonShit:Center()
-    ButtonShit:Dock(TOP)
+    ButtonShit:Dock(DockTo)
     ButtonShit:DockMargin(0,0,0,0)
     ButtonShit:SetPos(0,0)
+    ButtonShit.Text = Text
+    Parent[ChangeTo] = ButtonShit
+    if CustomFunc then
+        ButtonShit.Shit = CustomFunc
+    end
     function ButtonShit:DoClick()
         surface.PlaySound("homigrad/vgui/panorama/sidemenu_click_01.wav")
         hg[NeedTo] = ChangeTo
-    end
-
-    function ButtonShit:Paint(w,h)
-        if !self:IsHovered() then
-            draw.RoundedBox(0, 0, 0, w, h, (hg[NeedTo] == ChangeTo and Color(42, 42, 42) or Color(32,32,32)))
-        else
-            draw.RoundedBox(0, 0, 0, w, h, Color(38, 38, 38, 255))
-        end
-
-        draw.SimpleText(Text, "HS.18", w / 2, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-        surface.SetDrawColor(255,255,255,20)
-
-        surface.DrawOutlinedRect(0,0,w,h,1)
     end
 end
 
@@ -40,11 +29,6 @@ function show_scoreboard(looting)
     end
     if hg.ScoreBoard == 2 and !LocalPlayer():Alive() then
         hg.ScoreBoard = 1 
-    end
-    if GetConVar("hg_tab_setting"):GetBool() then 
-        if ScoreBoardPanel then
-            ScoreBoardPanel:Remove()
-        end
     end
     if not hg.ScoreBoard then
         hg.ScoreBoard = 1 -- 1 - Скорборд, 2 - персонаж
@@ -68,28 +52,48 @@ function show_scoreboard(looting)
     ItemsPanel:SetPos(ScrW() - x,-ScrH())
     //ItemsPanel:ShowCloseButton(false)
     //ItemsPanel:SetTitle(" ")
-    ItemsPanel:MakePopup()
+    //ItemsPanel:MakePopup() //Не обязательно делать поп-апом!!!!
     //ItemsPanel:SetDraggable(false)
     ItemsPanel:SetKeyBoardInputEnabled(false)
     ItemsPanel:SetHeight(ScrH() / 2)
     ItemsPanel:SetY(ScrH() / 4)
-    
-    function ItemsPanel:Paint(w,h)
 
-        /*draw.RoundedBox(0, 0, 0, w, h, Color(38, 38, 38, 255))
+    ItemsPanelPaint = vgui.Create("DFrame",ScoreBoardPanel)
+    ItemsPanelPaint:SetSize(ScrW()/256,ScrH())
+    local x,y = ItemsPanel:GetSize()
+    ItemsPanelPaint:SetPos(ScrW() - x - 10,-ScrH())
+    ItemsPanelPaint:SetKeyBoardInputEnabled(false)
+    ItemsPanelPaint:SetHeight(ScrH() / 2)
+    ItemsPanelPaint:SetY(ScrH() / 4)
+    ItemsPanelPaint:ShowCloseButton(false)
+    ItemsPanelPaint:SetTitle(" ")
+    ItemsPanelPaint:SetDraggable(false)
+    ItemsPanelPaint.PosShit = (ItemsPanel:GetWide() * hg.ScoreBoard)
 
-        surface.SetDrawColor(255,255,255,20)
-
-        surface.DrawOutlinedRect(0,0,w,h,1)
-        */
-
-        //draw.SimpleText("Текущий режим: " .. name, "hg_HomicideSmalles", w - 15, h - 40, Color(255,255,255), TEXT_ALIGN_RIGHT)
-
-        //draw.SimpleText("Следующий режим: " .. nextName, "hg_HomicideSmalles", w - 15, h - 22, Color(255,255,255), TEXT_ALIGN_RIGHT)
+    function ItemsPanelPaint:Paint(w,h)
     end
 
-    AddPanel(ItemsPanel,hg.GetPhrase("sc_players"),"ScoreBoard",1)
-  //AddPanel(ItemsPanel,hg.GetPhrase("sc_invento"),"ScoreBoard",2)
+    local mm_zalupa = vgui.Create("DFrame",ItemsPanelPaint)
+    mm_zalupa:ShowCloseButton(false)
+    mm_zalupa:SetTitle(" ")
+    mm_zalupa:SetDraggable(false)
+    mm_zalupa:SetSize(3,ItemsPanel:GetWide())
+    mm_zalupa.ypos = 0
+
+    function mm_zalupa:Paint(w,h)
+        draw.RoundedBox(16,0,0,w,h,Color(255,255,255,100))
+
+        self.ypos = LerpFT(0.2,self.ypos,ItemsPanel[hg.ScoreBoard]:GetY())
+
+        self:SetY(self.ypos)
+    end
+
+    AddPanel(ItemsPanel,hg.GetPhrase("sc_players"),"ScoreBoard",1,{x = ItemsPanel:GetWide(),y = ItemsPanel:GetWide()},TOP,function(self) self.Amt = #player.GetAll() end)
+    AddPanel(ItemsPanel,hg.GetPhrase("sc_teams"),"ScoreBoard",2,{x = ItemsPanel:GetWide(),y = ItemsPanel:GetWide()},TOP)
+    if LocalPlayer():Alive() then
+        AddPanel(ItemsPanel,hg.GetPhrase("sc_invento"),"ScoreBoard",3,{x = ItemsPanel:GetWide(),y = ItemsPanel:GetWide()},TOP)
+    end
+    //AddPanel(ItemsPanel,hg.GetPhrase("sc_settings"),"ScoreBoard",4,{x = ItemsPanel:GetWide(),y = ItemsPanel:GetWide()},TOP)
 
     /*if LocalPlayer():Alive() then
         local Inventory = vgui.Create("DButton",ItemsPanel)
@@ -111,10 +115,8 @@ end
 
 hook.Add("ScoreboardShow","Homigrad_ScoreBoard",function()
     shit_t = 1
-    if GetConVar("hg_tab_setting"):GetBool() then
-        if IsValid(ScoreBoardPanel) then
-            ScoreBoardPanel:Remove()
-        end
+    if IsValid(ScoreBoardPanel) then
+        ScoreBoardPanel:Remove()
     end
     show_scoreboard()
     return false
@@ -122,10 +124,8 @@ end)
 
 hook.Add("ScoreboardHide","Homigrad_ScoreBoard",function()
     shit_t = 0
-    if GetConVar("hg_tab_setting"):GetBool() then
-        if IsValid(ScoreBoardPanel) then
-            ScoreBoardPanel:Remove()
-        end
+    if IsValid(ScoreBoardPanel) then
+        ScoreBoardPanel:Remove()
     end
 end)
 
@@ -134,28 +134,6 @@ local tabPressed = false
 local nextUpdateTime = RealTime() - 1
 hook.Add("Think", "HomigradScoreboardToggle", function()
     shit = LerpFT(0.1,shit,shit_t)
-    if nextUpdateTime and nextUpdateTime > RealTime() then return end
-    nextUpdateTime = RealTime() + 0.25
-  
-    if !GetConVar("hg_tab_setting"):GetBool() then
-        local isTabDown = input.IsKeyDown(KEY_TAB)
-        
-        if isTabDown and not tabPressed then
-            tabPressed = true
-            if not hg.ScoreBoardPanel then
-                show_scoreboard()
-            else
-                ScoreBoardPanel:Remove()
-                if lootEnt then
-                    net.Start("inventory")
-                    net.WriteEntity(lootEnt)
-                    net.SendToServer()
-                end
-            end
-        elseif not isTabDown then
-            tabPressed = false
-        end
-    end
 end)
 
 

@@ -5,7 +5,7 @@ hook.Add("Player Think","Hunger_Handler",function(ply)
         return
     end
     if ply.hungerNext < CurTime() then
-        ply.hungerNext = CurTime() + math.random(1,5)
+        ply.hungerNext = CurTime() + math.random(3,10)
         //ply:ChatPrint(tostring(ply.hunger))
         local prevhunger = ply.hunger
         ply.hunger = math.Clamp(ply.hunger - 1,0,100)

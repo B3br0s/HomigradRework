@@ -7,6 +7,7 @@ SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
 SWEP.WorldModel = "models/weapons/insurgency/w_marinebayonet.mdl"
+SWEP.ViewModel = "models/weapons/arccw_go/v_eq_throwingknife.mdl"
 
 SWEP.ViewModelFlip = false
 

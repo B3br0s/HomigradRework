@@ -4,21 +4,49 @@ local panelka
 local unmutedicon = Material( "icon32/unmuted.png", "noclamp smooth" )
 local mutedicon = Material( "icon32/muted.png", "noclamp smooth" )
 
+local ugc = {
+    ["superadmin"] = Color(97,0,0),
+    ["admin"] = Color(197, 50, 50),
+    ["moderator"] = Color(175, 255, 156),
+    ["helper"] = Color(163, 156, 255),
+    ["operator"] = Color(21,255,0),
+    ["setmodel"] = Color(0,225,255),
+}
+
 function CheckPlyStatus(ply)
     local AliveColor = Color(0,255,0,20)
     local DeadColor = Color(255,15,15,20)
     local SpecColor = Color(179,179,179,20)
 
-    if ply == LocalPlayer() then
-        return (ply:Alive() and AliveColor or DeadColor),(ply:Alive() and "Живой" or "Мёртв")
-    end
     if ply:Team() == 1002 then
-        return SpecColor,"Наблюдает"
+        return SpecColor,hg.GetPhrase("spectating")
+    end
+
+    if TableRound and TableRound().CanSeeAlive then
+        return (ply:Alive() and AliveColor or DeadColor),(ply:Alive() and hg.GetPhrase("alive") or hg.GetPhrase("unalive"))
+    end
+
+    if ply == LocalPlayer() then
+        return (ply:Alive() and AliveColor or DeadColor),(ply:Alive() and hg.GetPhrase("alive") or hg.GetPhrase("unalive"))
     end
     if LocalPlayer():Team() == 1002 or !LocalPlayer():Alive() then
-        return (ply:Alive() and AliveColor or DeadColor),(ply:Alive() and "Живой" or "Мёртв")
+        return (ply:Alive() and AliveColor or DeadColor),(ply:Alive() and hg.GetPhrase("alive") or hg.GetPhrase("unalive"))
     else
-        return SpecColor,"Неизвестно"
+        return SpecColor,hg.GetPhrase("unknown")
+    end
+end
+
+function CheckPlyTeam(ply)
+    if ply:Team() == 1002 then
+        return Color(200,200,200,255),hg.GetPhrase("spectator")
+    end
+    if TableRound and TableRound().TeamBased then
+
+        local clr,name = TableRound().Teams[ply:Team()].Color,TableRound().Teams[ply:Team()].Name
+        
+        return clr,name
+    elseif TableRound and !TableRound().TeamBased then
+        return TableRound().Teams[1].Color,TableRound().Teams[1].Name
     end
 end
 
@@ -32,20 +60,72 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         end
         open = true
         local MainPanel = vgui.Create("DFrame", ScoreBoardPanel)
-        MainPanel:SetSize(ScrW() / 1.15, ScrH() / 1.05)
+        MainPanel:SetSize(ScrW() / 1.15, ScrH() / 1.15)
         MainPanel:Center()
         MainPanel:SetDraggable(false)
         MainPanel:SetTitle(" ")
         MainPanel:ShowCloseButton(false)
-        --MainPanel:SetPos(0, MainPanel:GetY()) --для фуллскрина,а нам надо по другому..
 
         function MainPanel:Paint(w, h)
-            draw.RoundedBox(8, 0, 0, w, h, Color(0, 0, 0, 0))
+            draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0))
         end
 
-        local ScrollablePlayerList = vgui.Create("DScrollPanel", MainPanel)
-        ScrollablePlayerList:SetSize(MainPanel:GetWide(), MainPanel:GetTall())
-        ScrollablePlayerList:Dock(FILL)
+        local ScrollShit = vgui.Create("hg_frame",MainPanel)
+        ScrollShit:SetSize(ScrW() / 1.3,ScrH() / 1.3)
+        ScrollShit:Center()
+        ScrollShit:SetDraggable(false)
+        ScrollShit:SetTitle(" ")
+        ScrollShit:ShowCloseButton(false)
+        ScrollShit.tps = Color(0,255,0)
+        ScrollShit.DefaultClr = Color(22,22,22,200)
+
+        local function CheckTPSCock(tps)
+            if tps < 15 then
+                return Color(146,0,0)
+            elseif tps < 25 then
+                return Color(255,0,0,255)
+            elseif tps < 35 then
+                return Color(255,94,0)
+            elseif tps < 40 then
+                return Color(255,187,0)
+            elseif tps < 60 then
+                return Color(179,255,0)
+            else
+                return Color(0,255,0)
+            end
+        end
+
+        function ScrollShit:SubPaint(w, h)
+            local tps = math.Round(1 / engine.ServerFrameTime())
+
+            ScrollShit.tps:Lerp(CheckTPSCock(tps),0.1)
+
+            //draw.RoundedBox(0, 0, 0, w, h, Color(22, 22, 22, 200))
+
+            draw.SimpleText(hg.GetPhrase("sc_status"), "HS.18", w - w / 1.16, h - h / 1.02, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(hg.GetPhrase("sc_ug"), "HS.18", w - w / 1.4, h - h / 1.02, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(hg.GetPhrase("sc_team"), "HS.18", w - w / 5.5, h - h / 1.02, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+            surface.SetFont("HS.18")
+            local size = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_curround"),TableRound().name)))
+            local size2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_tps"),tps)))
+
+            draw.SimpleText(string.format(hg.GetPhrase("sc_curround"),TableRound().name), "HS.18", w - w / 1.01, h - 20, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)          
+            draw.SimpleText(string.format(hg.GetPhrase("sc_nextround"),TableRound(ROUND_NEXT).name), "HS.18", w - w / 1.01 + size * 1.1, h - 20, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            
+            draw.SimpleText(string.format(hg.GetPhrase("sc_tps"),tps), "HS.18", w - size2 * 1.5, h - 20,ScrollShit.tps , TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            
+            /*surface.SetDrawColor(100,100,100,75)
+            surface.DrawOutlinedRect(1,1,w,h,1)
+            surface.DrawOutlinedRect(-1,-1,w,h,1)
+            surface.SetDrawColor(100,100,100,5)
+            surface.DrawOutlinedRect(2,2,w,h,1)
+            surface.DrawOutlinedRect(-2,-2,w,h,1)*/
+        end
+
+        local ScrollablePlayerList = vgui.Create("DScrollPanel", ScrollShit)
+        ScrollablePlayerList:SetSize(ScrollShit:GetWide() / 1.05,ScrollShit:GetTall() / 1.1)
+        ScrollablePlayerList:Center()
 
         local sbar = ScrollablePlayerList:GetVBar()
         function sbar:Paint(w, h)
@@ -62,21 +142,37 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         end
         
         function ScrollablePlayerList:Paint(w, h)
-            draw.RoundedBox(8, 0, 0, w, h, Color(0, 0, 0, 0))
+            draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0))
         end
 
-        for _, ply in ipairs(player.GetAll()) do
+        local function SortPlayers(a, b)
+            if !LocalPlayer():Alive() or LocalPlayer():Team() == 1002 then
+                if not a:Alive() and b:Alive() then return false end
+                if a:Alive() and not b:Alive() then return true end
+            end
+            
+            if a:Team() == 1 and b:Team() ~= 1 then return false end
+            if a:Team() ~= 1 and b:Team() == 1 then return true end
+            
+            return a:Name() < b:Name()
+        end
+        
+        local players = player.GetAll()
+        table.sort(players, SortPlayers)
+
+        for _, ply in ipairs(players) do
             if not MutedPlayers[ply:SteamID()] and ply != LocalPlayer() then
                 MutedPlayers[ply:SteamID()] = false
                 file.Write("hgr/muted.json", util.TableToJSON(MutedPlayers))
             end
-            local PlayerButton = vgui.Create("DButton", ScrollablePlayerList)
+            local PlayerButton = vgui.Create("hg_button", ScrollablePlayerList)
             PlayerButton:Dock(TOP)
             PlayerButton:DockMargin(90, 0, 0, 5)
             PlayerButton:SetText(" ")
             PlayerButton:SetTall(64)
             PlayerButton:SetWide(ScrollablePlayerList:GetWide() / 1.03)
             PlayerButton.Player = ply
+            PlayerButton.NoDrawDefault = true
             --PlayerButton:SetPos(0,68 * (_ - 1))
 
             local PlayerAvatar = vgui.Create("AvatarImage",ScrollablePlayerList)
@@ -85,16 +181,11 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             PlayerAvatar:SetPos(20,70 * (_ - 1) + (_ == 1 and 1 or 0))
 
             local PlyColor,PlySText = CheckPlyStatus(ply)
+            local TeamColor,TeamSText = CheckPlyTeam(ply)
 
             PlyColor.a = 50
 
             local DefaultSizeX,DefaultSizeY = 412,64
-
-            local StatusGradient = vgui.Create("DImage",PlayerButton)
-            StatusGradient:SetPos(0,0)
-            StatusGradient:SetSize(412,64)
-            StatusGradient:SetImage("vgui/gradient-l")
-            StatusGradient:SetImageColor(PlyColor)
 
             local MuteButton = vgui.Create("DImageButton",PlayerButton)
             MuteButton:SetMaterial(MutedPlayers[ply:SteamID()] == true and mutedicon or unmutedicon)
@@ -118,7 +209,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
 
             if ply == LocalPlayer() then MuteButton:Remove() end
         
-            function PlayerButton:Paint(w, h)
+            function PlayerButton:SubPaint(w, h)
                 if not self.CurSizeMul then
                     self.CurSizeMul = 1
                     self.CurPosMul = 0
@@ -143,9 +234,18 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                     end
                 end
 
-                draw.RoundedBox(0, 0, 0, w, h, Color(self.CurColor,self.CurColor,self.CurColor))
+                self.DefaultColor = Color(self.CurColor,self.CurColor,self.CurColor)
 
-                StatusGradient:SetSize(DefaultSizeX * 6,DefaultSizeY * self.CurSizeMul)
+                //draw.RoundedBox(0, 0, 0, w, h, Color(self.CurColor,self.CurColor,self.CurColor))
+
+                surface.SetDrawColor(PlyColor.r,PlyColor.g,PlyColor.b,25)
+                surface.SetMaterial(Material("vgui/gradient-l"))
+                surface.DrawTexturedRect(0,0,DefaultSizeX * 2 * (self.CurSizeMul * 2),DefaultSizeY * self.CurSizeMul)
+
+                surface.SetDrawColor(TeamColor.r,TeamColor.g,TeamColor.b,75)
+                surface.SetMaterial(Material("vgui/gradient-r"))
+                surface.DrawTexturedRect(w-DefaultSizeX * 3 * (self.CurSizeMul * 2),0,DefaultSizeX * 3 * (self.CurSizeMul * 2),DefaultSizeY * self.CurSizeMul)
+
                 self:SetSize(DefaultSizeX,DefaultSizeY * self.CurSizeMul)
 
                 DefaultSizeX,DefaultSizeY = 64,64
@@ -162,8 +262,14 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                 PlayerAvatar:SetY(self:GetY())
             
                 draw.SimpleText(ply:Name(), "H.18", w / 2, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+                TeamColor.a = 255
                 
                 draw.SimpleText(PlySText, "H.18", w / 19, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                if ply:GetUserGroup() != "user" then
+                    draw.SimpleText(ply:GetUserGroup(), "H.18", w / 4.45, h / 2, ugc[ply:GetUserGroup()] or Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                end
+                draw.SimpleText(hg.GetPhrase(TeamSText), "H.18", w / 1.2, h / 2, TeamColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
                 /*if Developers[self.Player:SteamID()] and not ply:GetNWBool("HideTag") then
                     local time = CurTime()
@@ -174,21 +280,27 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                     
                     draw.SimpleText("Разработчик","HOS.25", w / 1.4, h / 2, Color(r,g,b,self.CurAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
                 end*/
-
-                surface.SetDrawColor(0,0,0,50)
-
-                surface.DrawOutlinedRect(0,0,w,h,1)
             end
         
             function PlayerButton:DoRightClick()
                 local DM = vgui.Create("DMenu")
-                DM:AddOption("Скопировать STEAMID", function() if ply:IsBot() then chat.AddText(Color(255,0,0),"Невозможно скопировать STEAMID бота.") surface.PlaySound("homigrad/vgui/menu_invalid.wav") return end chat.AddText(Color(107,255,186),"SteamID был скопирован! ("..ply:SteamID()..")") SetClipboardText(ply:SteamID()) surface.PlaySound("homigrad/vgui/lobby_notification_chat.wav") end)
+                DM:AddOption(hg.GetPhrase("sc_copysteam"),function()
+                if ply:IsBot() then chat.AddText(Color(255,0,0),hg.GetPhrase("sc_unable_steamid")) surface.PlaySound("homigrad/vgui/menu_invalid.wav") return end
+                chat.AddText(Color(107,255,186),string.format(hg.GetPhrase("sc_success_copy"),ply:SteamID()))
+                SetClipboardText(ply:SteamID())
+                surface.PlaySound("homigrad/vgui/lobby_notification_chat.wav")
+                end)
                 DM:SetPos(input.GetCursorPos())
                 DM:MakePopup()
 
                 surface.PlaySound("homigrad/vgui/csgo_ui_page_scroll.wav")
             
-                DM:AddOption("Открыть профиль", function() if ply:IsBot() then chat.AddText(Color(255,0,0),"Невозможно открыть профиль бота.") surface.PlaySound("homigrad/vgui/menu_invalid.wav") return end ply:ShowProfile() surface.PlaySound("homigrad/vgui/csgo_ui_crate_open.wav") end)
+                DM:AddOption(hg.GetPhrase("sc_openprofile"), function()
+                if ply:IsBot() then
+                chat.AddText(Color(255,0,0),hg.GetPhrase("sc_unable_prof")) surface.PlaySound("homigrad/vgui/menu_invalid.wav") return end
+                ply:ShowProfile()
+                surface.PlaySound("homigrad/vgui/csgo_ui_crate_open.wav")
+                end)
             end
         end
 

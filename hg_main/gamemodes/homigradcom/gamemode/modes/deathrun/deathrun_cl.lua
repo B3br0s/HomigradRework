@@ -1,0 +1,60 @@
+dr = dr or {}
+
+function dr.GetTeam(ply)
+    if ply:Team() == 1002 then
+        return hg.GetPhrase("spectator"),Color(200,200,200,255),"nothing."
+    end
+    local tbl = dr.Teams[ply:Team()]
+
+    local n = tbl.Name
+    local c = tbl.Color
+    local d = tbl.Desc
+    return n,c,d
+end
+local posadd = 0
+
+local gradient_d = Material("vgui/gradient-d")
+
+
+function dr.HUDPaint()
+    if !hg.ROUND_START then
+        hg.ROUND_START = CurTime()
+    end
+    local StartTime = ((hg.ROUND_START + 7) - CurTime())
+
+    if hg.ROUND_START + 120 - CurTime() > 0 then
+    local sw,sh = ScrW(),ScrH()
+
+    local text = string.format(hg.GetPhrase("levels_endin"),string.FormattedTime(hg.ROUND_START + dr.TimeRoundEnds - CurTime(), "%02i:%02i"	))
+
+    draw.SimpleText( text, "hg_HomicideSmalles", sw / 2,sh / 1.01, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+    end
+
+    if StartTime < 0 then
+        return
+    end
+
+    local DarkMul = math.Clamp(StartTime,0,1)
+
+    local Name,Color,Desc = dr.GetTeam(LocalPlayer())
+
+    Color.a = (255 * DarkMul)
+
+    local PrintName = hg.GetPhrase(Name)
+
+    local w,h = ScrW(),ScrH()
+
+    surface.SetDrawColor(0,0,0,220 * DarkMul)
+    surface.DrawRect(0,0,w,h)
+
+    draw.DrawText(string.format(hg.GetPhrase("you_are"),PrintName),"H.25",w / 2,h / 2,Color,TEXT_ALIGN_CENTER)
+    draw.DrawText(dr.name,"H.45",w / 2,h / 8,Color,TEXT_ALIGN_CENTER)
+    draw.DrawText(hg.GetPhrase(Desc),"H.25",w / 2,h / 1.2,Color,TEXT_ALIGN_CENTER)
+end
+
+function dr.RenderScreenspaceEffects()
+end
+
+function dr.RoundStart()
+    hg.ROUND_START = CurTime()
+end

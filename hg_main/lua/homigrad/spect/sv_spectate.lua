@@ -1,3 +1,18 @@
+util.AddNetworkString("hg changeteam")
+
+net.Receive("hg changeteam",function(l,ply)
+    local tm = net.ReadFloat()
+    if ply:Team() == tm then
+        return
+    end
+
+    if ply:Alive() then
+        ply:Kill()
+    end
+
+    ply:SetTeam(tm)
+end)
+
 hook.Add("Player Think","Spect-HG",function(ply)
     if ply:Alive() then
         return

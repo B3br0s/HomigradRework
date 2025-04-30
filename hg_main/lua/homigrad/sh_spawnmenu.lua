@@ -1,4 +1,5 @@
 local validUserGroup = {
+    operator = true
 }
 
 if SERVER then
