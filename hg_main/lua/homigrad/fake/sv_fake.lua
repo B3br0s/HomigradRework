@@ -40,7 +40,7 @@ function PlayerMeta:CreateFake(force)
 	rag:SetNWVector("PlayerColor",self:GetPlayerColor())
     rag:Activate()
 
-	print(self.AppearanceOverride)
+	//print(self.AppearanceOverride)
 	if not self:IsBot() and self.Appearance and !self.AppearanceOverride then
 	ApplyAppearanceEntity(rag,self.Appearance)
 	end

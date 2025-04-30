@@ -6,6 +6,10 @@ local math_Clamp = math.Clamp
 local k = 0
 local k4 = 0
 local pulseStart = 0
+gradshit = gradshit or nil
+
+local shake = 0
+local dark = 0
 
 hook.Add("Think","DumalkaOstalnix",function()
     for _, ply in ipairs(player.GetAll()) do
@@ -17,6 +21,12 @@ end)
 
 hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
     local ply = LocalPlayer()
+    if !IsValid(gradshit) then
+        gradshit = vgui.Create("DImage")
+        gradshit:Center()
+        gradshit:SetImage('gui/center_gradient')
+        gradshit:SetImageColor(Color(0,0,0,0))
+    end
     --RunConsoleCommand("slot5")
     if not ply:Alive() then if LastDeathTime < CurTime() then k = 0 ply:SetDSP(0) end return end
     
@@ -59,16 +69,52 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
 
         draw.RoundedBox(0,0,0,w,h,Color(0,0,0))
 
+        dark = LerpFT(0.025,dark,1)
+
+        shake = LerpFT(0.1,shake,0)
+
         local pulse = ply:GetNWFloat("pulse")
+
+        surface.SetFont("HS.45")
+        local shit_size = surface.GetTextSize(hg.GetPhrase("uncon"))
+        //local size = shit_size
+
+        if IsValid(gradshit) then
+            gradshit:SetImageColor(Color(255,0,0,15 * dark))
+            gradshit:SetWide(shit_size * 1.3 * dark)
+            gradshit:SetHeight(50)
+            gradshit:Center()
+        end
+
+        draw.SimpleText(hg.GetPhrase("uncon"),"HS.45",ScrW()/2 + (math.random(-5,5) * shake),ScrH()/2 + (math.random(-5,5) * shake),Color(161,0,0,255 * dark),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
         if pulse ~= 0 and pulseStart + pulse * 60 < RealTime() then
             pulseStart = RealTime()
 
+            dark = 0
+
+            shake = 66
+
             surface.PlaySound("snd_jack_hmcd_heartpound.wav")
         end
     else
+        if IsValid(gradshit) then
+                gradshit:SetImageColor(Color(0,0,0,0))
+        end
+        dark = 0
+        shake = 0
         ply:SetDSP(0)
+        pulseStart = 0
     end
 
     cam.End2D()
+end)
+
+hook.Add("InitPostEntity","idk",function()
+    if !IsValid(gradshit) then
+        gradshit = vgui.Create("DImage")
+        gradshit:Center()
+        gradshit:SetImage('gui/center_gradient')
+        gradshit:SetImageColor(Color(0,0,0,0))
+    end
 end)

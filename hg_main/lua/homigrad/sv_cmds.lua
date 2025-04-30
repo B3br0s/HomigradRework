@@ -219,6 +219,13 @@ COMMANDS.forceteam = {function(ply,args)
 	end
 end,1}
 
+COMMANDS.forceuncon = {function(ply,args)
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ply.otrub = true
+		ply.pain = 200
+	end
+end,1}
+
 COMMANDS.nomodechange = {function(ply,args)
 	if not ply:IsAdmin() then return end
 	local value = tonumber(args[1]) > 0

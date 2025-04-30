@@ -1,5 +1,7 @@
 jb = jb or {}
 
+jb.RoundEnds = 0
+
 function jb.SpawnWarden(ply)
     local SpawnList = {}
 
@@ -73,6 +75,8 @@ end
 function jb.StartRoundSV()
     local plys = {}
 
+    jb.RoundEnds = CurTime() + jb.TimeRoundEnds
+
     for _, ply in ipairs(player.GetAll()) do
         if ply:Team() == 1002 then
             continue 
@@ -102,6 +106,13 @@ function jb.RoundThink()
     end
 
     if CT_ALIVE == 0 and !ROUND_ENDED then
+        ROUND_ENDED = true
+        ROUND_ENDSIN = CurTime() + 8
+
+        EndRound(2)
+    end
+
+    if jb.RoundEnds < CurTime() and !ROUND_ENDED then
         ROUND_ENDED = true
         ROUND_ENDSIN = CurTime() + 8
 

@@ -4,6 +4,7 @@ jb = jb or {}
 
 jb.name = "JailBreak"
 jb.TeamBased = true
+jb.TimeRoundEnds = 400
 
 jb.Teams = {
     [1] = {Name = "jb_prisoner",

@@ -1,5 +1,3 @@
--- "addons\\homigrad_core\\lua\\shlib\\tier_0\\paint\\2d\\cl_gradient.lua"
--- Retrieved by https://github.com/lewisclark/glua-steal
 local gradient_left = Material("homigrad/vgui/gradient_left.png")
 local gradient_right = Material("homigrad/vgui/gradient_right.png")
 local gradient_up = Material("homigrad/vgui/gradient_up.png")

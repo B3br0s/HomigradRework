@@ -90,7 +90,7 @@ l.SpectMode = "Режим наблюдателя: %s"
 
 // Уровни
 
-l.level_wins = "%s выиграли."  
+l.level_wins = "%s выиграл."  
 l.levels_endin = "Раунд закончится через: %s"
 
 l.swat_arrived = "Прибыл Спецназ."  
@@ -197,5 +197,7 @@ l.unalive = "Мёртв"
 l.unknown = "Неизвестно"
 l.spectating = "Наблюдает"
 l.spectator = "Наблюдатель"
+
+l.uncon = "БЕЗ СОЗНАНИЯ"
 
 hg.Localizations.ru = l

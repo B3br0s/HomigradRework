@@ -22,7 +22,7 @@ function dr.HUDPaint()
     end
     local StartTime = ((hg.ROUND_START + 7) - CurTime())
 
-    if hg.ROUND_START + 120 - CurTime() > 0 then
+    if hg.ROUND_START + dr.TimeRoundEnds - CurTime() > 0 then
     local sw,sh = ScrW(),ScrH()
 
     local text = string.format(hg.GetPhrase("levels_endin"),string.FormattedTime(hg.ROUND_START + dr.TimeRoundEnds - CurTime(), "%02i:%02i"	))

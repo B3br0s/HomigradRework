@@ -22,6 +22,14 @@ function jb.HUDPaint()
     end
     local StartTime = ((hg.ROUND_START + 7) - CurTime())
 
+    if hg.ROUND_START + jb.TimeRoundEnds - CurTime() > 0 then
+        local sw,sh = ScrW(),ScrH()
+    
+        local text = string.format(hg.GetPhrase("levels_endin"),string.FormattedTime(hg.ROUND_START + dr.TimeRoundEnds - CurTime(), "%02i:%02i"	))
+    
+        draw.SimpleText( text, "hg_HomicideSmalles", sw / 2,sh / 1.01, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+    end
+
     if StartTime < 0 then
         return
     end
