@@ -578,7 +578,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local angs = ply:EyeAngles()
 		angs:RotateAroundAxis(angs:Forward(), 90)
 		angs:RotateAroundAxis(angs:Up(), 90)
-		local speed = 40
+		local speed = 48
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
 				secondstoarrive = 0.8,
@@ -607,7 +607,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local angs = ply:EyeAngles()
 		angs:RotateAroundAxis(angs:Forward(), 90)
 		angs:RotateAroundAxis(angs:Up(), 90)
-		local speed = 40
+		local speed = 48
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
 				secondstoarrive = 0.8,
