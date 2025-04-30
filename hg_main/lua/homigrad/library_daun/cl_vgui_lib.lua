@@ -8,11 +8,12 @@ hg_frame.Text = ""
 function hg_frame:Paint(w,h)
     //draw.RoundedBox(0, 0, 0, w, h, self.DefaultClr)
 
-    if self.SubPaint then
-        self:SubPaint(w,h)
-    end
-
     if self.NoDraw then
+
+        if self.SubPaint then
+            self:SubPaint(w,h)
+        end
+
         return
     end
 
@@ -27,6 +28,10 @@ function hg_frame:Paint(w,h)
 
     surface.SetDrawColor(self.DefaultClr.r,self.DefaultClr.g,self.DefaultClr.b,self.DefaultClr.a)
     surface.DrawRect(0,0,w,h)
+
+    if self.SubPaint then
+        self:SubPaint(w,h)
+    end
 
     draw.SimpleText(self.Text, "HS.18", w / 2, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
