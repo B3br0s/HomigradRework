@@ -16,6 +16,7 @@ net.Receive("hg_reg",function(len,ply)
     local Dir = (tr.HitPos - tr.StartPos):Angle():Forward()
     bullet.Dir = Dir
     local ent = tr.Entity
+    //print("Registered hit from "..wep:GetOwner():Name().." to "..tr.Entity:GetClass())
     //if (tr.Entity:Health() or tr.Entity:IsRagdoll()) and tr_check.HitPos:Distance(tr_check.StartPos) > 1 then //Двойная проверка.
 
     //local dist = tr_check.HitPos:Distance(tr_check.StartPos)

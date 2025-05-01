@@ -29,7 +29,9 @@ hook.Add( "RenderScreenspaceEffects", "Blood_FX", function()
 
     local frac = math.Clamp(1 - (blood - 3200) / ((5000 - 1400) - 1800), 0, 1)
 
-	DrawToyTown(frac * 13, ScrH() * (frac * 1.5))
+    if !ply:GetNWBool("otrub") then
+	    DrawToyTown(frac * 13, ScrH() * (frac * 1.5))
+    end
 
     //print(frac * 13)
     //print(blood)

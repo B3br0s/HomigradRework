@@ -182,6 +182,9 @@ function SWEP:Step_Anim()
 	end
 	ang:RotateAroundAxis(ang:Forward(),180)
 	if not self:IsSprinting() and !self.Pump and !self:IsClose() then
+	//matrix:SetAngles(ang)
+	end
+
 	local pitch = ply:EyeAngles().p
 	if pitch > 60 or pitch < -60 then
 		if self:IsPistolHoldType() then
@@ -194,8 +197,6 @@ function SWEP:Step_Anim()
 	end
 	local ispistolang = Angle(0,-5,0)
 	hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(-ang.p,0,0) + (self:IsPistolHoldType() and ispistolang or Angle(0,0,0)),1,0.1)
-	//matrix:SetAngles(ang)
-	end
 	
 	local lpos, lang = ply:SetBoneMatrix2(hand_index, matrix, false)
 end

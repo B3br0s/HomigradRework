@@ -8,8 +8,10 @@ hmcd.StartSounds = {
 	["gfz"] = "snd_jack_hmcd_panic.mp3" ,
 }
 
-function hmcd.GetTeamName()
-    local ply = LocalPlayer()
+function hmcd.GetTeamName(ply)
+    if !ply then
+        ply = LocalPlayer()
+    end
     if ply.IsTraitor then
         return "hmcd_traitor",Color(230,0,0),hg.GetPhrase("hmcd_traitor_"..hmcd.Type)
     elseif ply.IsGunman then

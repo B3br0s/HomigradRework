@@ -8,6 +8,12 @@ local armorSlots = {
     "acc_lshoulder", "acc_rshoulder", "acc_backpack", "back", "acc_chestrig", "armband"
 }
 
+local BlackList = {
+    ["weapon_hands"] = true,
+    ["weapon_physgun"] = true,
+    ["gmod_tool"] = true,
+    ["gmod_camera"] = true,
+}
 
 local ArmorSlotButtons = {
     {
@@ -72,6 +78,42 @@ local ArmorSlotButtons = {
     }
 }
 
+function CreateInvSlot(Parent,SlotsSize,PosI)
+    local InvButton = vgui.Create("hg_button",Parent)
+    InvButton:SetSize(SlotsSize, SlotsSize)
+    InvButton:SetPos(SlotsSize * (PosI - 1),0)
+    InvButton:Dock(LEFT)
+    InvButton:SetText(" ")
+    InvButton.LowerText = ""
+    InvButton.LowerFont = "HS.10"
+
+    local weps = {}
+    
+    function InvButton:SubPaint(w,h)
+        for _, wep in ipairs(LocalPlayer():GetWeapons()) do
+            if !BlackList[wep:GetClass()] and !table.HasValue(weps,wep) then
+                table.insert(weps,wep)
+            end
+        end
+
+        for _, wep in ipairs(weps) do
+            if PosI == _ and (IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer() or !IsValid(self.Weapon))  then
+                self.Weapon = wep
+            end
+        end
+        if IsValid(self.Weapon) and self.Weapon:GetOwner() == LocalPlayer() then
+            self.LowerText = self.Weapon:GetPrintName()
+        elseif IsValid(self.Weapon) then
+            self.LowerText = " "
+            self:Remove()
+
+            CreateInvSlot(Parent,SlotsSize,PosI)
+        end
+    end
+
+    return InvButton
+end
+
 hook.Add("HUDPaint","InventoryPage",function()
     if not hg.ScoreBoard then return end
     if not IsValid(ScoreBoardPanel) then open = false return end
@@ -88,17 +130,48 @@ hook.Add("HUDPaint","InventoryPage",function()
         MainFrame:SetDraggable(false)
         MainFrame:SetSize(ScrW() / 1.06, ScrH())
         MainFrame.NoDraw = true
+
+        local CenterX = ScoreBoardPanel:GetWide() / 2
         //MainFrame:Center()
 
         function MainFrame:SubPaint(w,h)
-            draw.SimpleText("WORK IN PROGRESS.","HS.45",ScrW()/1.995,ScrH()/2.095,Color(0,0,0),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-            draw.SimpleText("WORK IN PROGRESS.","HS.45",ScrW()/2,ScrH()/2.1,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+            draw.SimpleText("WORK IN PROGRESS.","HS.45",ScrW()/1.995,ScrH()/2.095,Color(204,0,255,45),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+            draw.SimpleText("WORK IN PROGRESS.","HS.45",ScrW()/2,ScrH()/2.1,Color(255,255,255,45),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
-            draw.SimpleText("COME BACK SOON!","HS.45",ScrW()/1.995,ScrH()/1.895,Color(0,0,0),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-            draw.SimpleText("COME BACK SOON!","HS.45",ScrW()/2,ScrH()/1.9,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+            draw.SimpleText("COME BACK SOON!","HS.45",ScrW()/1.995,ScrH()/1.895,Color(204,0,255,45),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+            draw.SimpleText("COME BACK SOON!","HS.45",ScrW()/2,ScrH()/1.9,Color(255,255,255,45),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
         end
 
-        //да мне уже честно похуй,завтра сделаю
+        local SlotsSize = 75
+
+        local InvFrame = vgui.Create("hg_frame",MainFrame)
+        InvFrame:ShowCloseButton(false)
+        InvFrame:SetTitle(" ")
+        InvFrame:SetDraggable(false)
+        InvFrame:SetSize(ScrW() / 3.2, SlotsSize)
+        InvFrame:Center()
+        InvFrame:SetPos(CenterX - ScrW()/6.4,ScrH()-SlotsSize)
+        InvFrame:DockMargin(0,0,0,0)
+        InvFrame:DockPadding(0,0,0,0)
+
+        local weps = {}
+
+        for _, wep in ipairs(LocalPlayer():GetWeapons()) do
+            if !BlackList[wep:GetClass()] and !table.HasValue(weps,wep) then
+                table.insert(weps,wep)
+            end
+        end
+
+        for i = 1, 8 do
+            local Slot = CreateInvSlot(InvFrame,SlotsSize,i)
+            InvFrame[i] = Slot
+
+            for _, wep in ipairs(weps) do
+                if i == _ then
+                    Slot.Weapon = wep
+                end
+            end
+        end
 
         panelka = MainFrame
     elseif hg.ScoreBoard != 3 then

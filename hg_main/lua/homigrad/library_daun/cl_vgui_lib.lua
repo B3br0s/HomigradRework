@@ -17,17 +17,17 @@ function hg_frame:Paint(w,h)
         return
     end
 
-    surface.SetDrawColor(245,245,245,75)
+    surface.SetDrawColor(self.DefaultClr.r,self.DefaultClr.g,self.DefaultClr.b,self.DefaultClr.a)
+    surface.DrawRect(0,0,w,h)
+
+    surface.SetDrawColor(245,245,245,15)
     surface.DrawOutlinedRect(0,0,w,h,1)
-    surface.SetDrawColor(145,145,145,45)
+    surface.SetDrawColor(145,145,145,7.5)
     surface.DrawOutlinedRect(1,1,w,h,1)
     surface.DrawOutlinedRect(-1,-1,w,h,1)
     surface.SetDrawColor(145,145,145,5)
     surface.DrawOutlinedRect(2,2,w,h,1)
     surface.DrawOutlinedRect(-2,-2,w,h,1)
-
-    surface.SetDrawColor(self.DefaultClr.r,self.DefaultClr.g,self.DefaultClr.b,self.DefaultClr.a)
-    surface.DrawRect(0,0,w,h)
 
     if self.SubPaint then
         self:SubPaint(w,h)
@@ -46,7 +46,7 @@ function hg_button:Paint(w,h)
     draw.RoundedBox(0, 0, 0, w, h, (self:IsHovered() and self.HoverClr or self.DefaultClr))
 
     draw.SimpleText(self.Text, "HS.18", w / 2, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    draw.SimpleText(self.LowerText, "HS.18", w / 2, h / 1.2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(self.LowerText, (self.LowerFont or "HS.12"), w / 2, h / 1.2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
     surface.SetDrawColor(100,100,100,35)
     surface.DrawOutlinedRect(0,0,w,h,1)

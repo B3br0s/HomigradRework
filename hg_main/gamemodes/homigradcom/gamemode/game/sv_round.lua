@@ -51,6 +51,8 @@ function StartRound()
         ROUND_NAME = "jb"
     end
 
+    RunConsoleCommand("hostname","Homigrad Rework | Open-Alpha")
+
     ROUND_ENDED = false
 
     for _, ply in ipairs(player.GetAll()) do
@@ -126,4 +128,11 @@ hook.Add("Think","Round-Think",function()
             TableRound():RoundThink()
         end
     end
+end)
+
+hook.Add("PlayerInitialSpawn","SyncModes",function(ply)
+    net.Start("SyncRound")
+    net.WriteString(ROUND_NAME)
+    net.WriteString(ROUND_NEXT)
+    net.Send(ply)
 end)

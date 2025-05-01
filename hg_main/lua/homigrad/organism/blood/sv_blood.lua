@@ -14,7 +14,7 @@ hook.Add("Player Think","Bleed_Homigrad",function(ply,time)
         if ply.bleed > 0 then
             ply.bleed = math.Clamp(ply.bleed - 0.25,0,1000)
 
-            ply.blood = math.Clamp(ply.blood - math.random(2,7),0,5000)
+            ply.blood = math.Clamp(ply.blood - math.random(5,12),0,5000)
 
             //print(ply.blood)
             

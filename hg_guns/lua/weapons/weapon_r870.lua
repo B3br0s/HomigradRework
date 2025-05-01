@@ -112,7 +112,3 @@ end
 function SWEP:PrimaryAdd()
     self.Pumped = false
 end
-
-local function easedLerp(fraction, from, to)
-	return LerpFT(math.ease.InSine(fraction), from, to)
-end

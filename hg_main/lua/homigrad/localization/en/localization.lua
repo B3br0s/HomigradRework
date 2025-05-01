@@ -198,6 +198,6 @@ l.unknown = "Unknown"
 l.spectating = "Spectating"
 l.spectator = "Spectator"
 
-l.uncon = "UNCONSCIOUSNESS"
+l.uncon = "UNCONSCIOUS"
 
 hg.Localizations.en = l

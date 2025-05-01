@@ -39,7 +39,8 @@ function SWEP:BulletCallBack(tr,dmginfo,bullet)
     dmg_table.DamageForce = dmginfo:GetDamageForce()*/
     if LocalPlayer() == self:GetOwner() then
     bullet.Callback = nil
-        if tr.Entity:Health() or tr.Entity:IsRagdoll() or tr.HitWorld and !tr.HitSky then
+        //PrintTable(tr)
+        if (tr.Entity:Health() or tr.Entity:IsRagdoll()) and !tr.HitWorld and !tr.HitSky or tr.HitWorld and !tr.HitSky then
             net.Start("hg_reg")
             net.WriteTable(tr)
             net.WriteEntity(self)
@@ -93,13 +94,14 @@ function SWEP:Shoot(isfake)
     Bullet.Src = Att.Pos
     Bullet.Dir = Att.Ang:Forward()
     Bullet.Damage = self.Primary.Damage
-    Bullet.Num = 1
+    //Bullet.Num = (self.NumBullet or 1)
     Bullet.Spread = Vector(0,0,0)
     Bullet.Tracer = 0
     Bullet.AmmoType = self.Primary.Ammo
-    Bullet.Callback = self.BulletCallBack
 
     for i = 1,Num do
+        Bullet.Callback = self.BulletCallBack
+
         Bullet.Spread = (Num > 1 and VectorRand(-i / 32,i / 16) or Vector(0,0,0))
 
         if CLIENT then
