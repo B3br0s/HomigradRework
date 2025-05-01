@@ -1,3 +1,5 @@
+local lply = LocalPlayer()
+
 hook.Add("PlayerFootstep", "CustomFootstep", function(ply) if IsValid(ply.FakeRagdoll) then return true end end)
 
 hook.Add("Player Think","Player_Fake",function(ply,time)
@@ -16,6 +18,12 @@ hook.Add("Think","Homigrad_Ragdoll_Color",function()
 				end
 			end
 		end
+	end
+end)
+
+hook.Add("HUDPaint","Shit123",function()
+	if ROUND_NAME == "dr" and lply:GetNWBool("Fake") and lply:Alive() then
+		draw.SimpleText(string.format(hg.GetPhrase("dr_youwilldiein"),math.Clamp(math.Round(lply:GetNWFloat("TimeToDeath") - CurTime(),1),0,100000)),"H.25",ScrW()/2,ScrH()/1.5,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 	end
 end)
 

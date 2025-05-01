@@ -1,8 +1,13 @@
+hg = hg or {}
+
+hg.WinTime = hg.WinTime or 0
+
 function WinRound(color,text1,winside,text2)
     --"homigrad/vgui/panorama/case_awarded_4_legendary_01.wav" - звук при выигрыше
 
     local StartTime = CurTime()
     local EndTime = StartTime + 7
+    hg.WinTime = CurTime() + 5
     local TargetSize = 1
     local CurSize = 0
 
@@ -94,6 +99,7 @@ net.Receive("EndRound",function()
     local text1 = net.ReadString()
     local winside = net.ReadString() or nil
     WinRound(color,text1,winside)
+    ROUND_ENDED = true
 end)
 
 concommand.Add("hg_win_test",function(ply,len,args)

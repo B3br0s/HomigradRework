@@ -506,6 +506,17 @@ end
 
 hook.Add("Move", "Homigrad_Move", function(ply, mv)
     if not ply:Alive() then return end
+
+	if GetGlobalBool("DefaultMove",false) then
+		ply:SetDuckSpeed(0.5)
+    	ply:SetUnDuckSpeed(0.5)
+    	ply:SetSlowWalkSpeed(30)
+    	ply:SetCrouchedWalkSpeed(60)
+    	ply:SetWalkSpeed(200)
+    	ply:SetRunSpeed(400)
+    	ply:SetJumpPower(200)
+		return
+	end
     
     local isSprinting = ply:IsSprinting()
     local forwardSpeed = mv:GetForwardSpeed()

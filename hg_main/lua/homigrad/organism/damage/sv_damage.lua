@@ -3,7 +3,7 @@ util.AddNetworkString("DeathScreen")
 
 DamageMultipliers = {
     [DMG_CLUB] = 1,--ее
-    [DMG_BULLET] = 4,
+    [DMG_BULLET] = 1.5,
     [DMG_SLASH] = 0.4,
     [DMG_BLAST] = 9,
     [DMG_CRUSH] = 1 / 128,--а почему бы и нет?
@@ -11,10 +11,10 @@ DamageMultipliers = {
 
 PainMultipliers = {
     [DMG_CLUB] = 0.5,--ее
-    [DMG_BULLET] = 1.2,
+    [DMG_BULLET] = 3.2,
     [DMG_SLASH] = 0.3,
     [DMG_BLAST] = 6,
-    [DMG_CRUSH] = 9,
+    [DMG_CRUSH] = 15,
 }
 
 local Reasons = {
@@ -185,7 +185,9 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 
     ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (PainMultipliers[dmginfo:GetDamageType()] and PainMultipliers[dmginfo:GetDamageType()] or 1.7),0,400)
 
-	ply:SetHealth(ply:Health() - dmginfo:GetDamage() / (ply.Fake and 1 or 8))
+	if rag then
+		ply:SetHealth(ply:Health() - (dmginfo:IsDamageType(DMG_CRUSH) and dmginfo:GetDamage() * (rag:GetVelocity():Length() / 100) or dmginfo:GetDamage()))	
+	end
 
 	if dmginfo:IsDamageType(DMG_SLASH + DMG_BULLET + DMG_BUCKSHOT) then
 		if not ply.bleed then

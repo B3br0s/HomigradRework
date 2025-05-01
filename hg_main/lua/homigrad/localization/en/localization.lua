@@ -106,6 +106,7 @@ l.ng_arrived = "National Guard Arrived."
 l.ng_arrivein = "National Guard will arrive in: %s"
 
 l.you_are = "You are %s"
+l.lvl_loadingmode = "Loading mode %s"
 
 l.hunter_victim = "Hunter Target"
 l.hunter_victim_desc = "You need to survive. \n Escape when the SWAT arrives."
@@ -121,6 +122,7 @@ l.dr_runner_desc = "You need to complete the map and eliminate \"Killer\""
 
 l.dr_killer = "Killer" //"Saw51" //чеча инцидент оу ее
 l.dr_killer_desc = "Your task is to kill everyone on this map using traps."
+l.dr_youwilldiein = "You will die in: %s"
 
 l.jb_prisoner = "Inmate"
 l.jb_prisoner_desc = "You need to kill warden | escape prison."
@@ -191,6 +193,9 @@ l.open_alpha = "OPEN-ALPHA VERSION"
 l.report_bugs = "PLEASE REPORT ALL BUGS TO OUR DISCORD."
 l.youre_hungry = "You're hungry."
 l.need_2_players = "We need 2 players to start."
+
+l.use_door = "Door"
+l.use_button = "Button"
 
 l.alive = "Alive"
 l.unalive = "Dead"

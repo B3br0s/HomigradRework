@@ -48,3 +48,7 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
 	ply.otrub = false
 	ply.CanMove = true
 end)
+
+hook.Add("PlayerInitialSpawn","Homigrad_shit",function(ply)
+    ply:SetTeam(1)
+end)   

@@ -1,6 +1,8 @@
 local open = false
 local panelka
 
+local weps = {}
+
 local armorSlots = {
     "head", "eyes", "mouthnose", "ears", "rightshoulder", "rightforearm", 
     "rightthigh", "rightcalf", "chest", "pelvis", "leftshoulder", "leftforearm", 
@@ -78,6 +80,26 @@ local ArmorSlotButtons = {
     }
 }
 
+function PopulateArmorSlots()
+    local playerArmor = LocalPlayer().EZarmor
+    if not playerArmor then
+        return
+    end
+
+    for _, slotName in ipairs(armorSlots) do
+        local itemID, itemData, armorInfo = GetItemInSlot(playerArmor, slotName)
+        if itemID then
+            armorSlots[slotName] = {
+                id = itemID,
+                data = itemData,
+                specs = armorInfo
+            }
+        else
+            armorSlots[slotName] = nil
+        end
+    end
+end
+
 function CreateInvSlot(Parent,SlotsSize,PosI)
     local InvButton = vgui.Create("hg_button",Parent)
     InvButton:SetSize(SlotsSize, SlotsSize)
@@ -87,7 +109,9 @@ function CreateInvSlot(Parent,SlotsSize,PosI)
     InvButton.LowerText = ""
     InvButton.LowerFont = "HS.10"
 
-    local weps = {}
+    function InvButton:DoRightClick()
+
+    end
     
     function InvButton:SubPaint(w,h)
         for _, wep in ipairs(LocalPlayer():GetWeapons()) do
@@ -95,19 +119,50 @@ function CreateInvSlot(Parent,SlotsSize,PosI)
                 table.insert(weps,wep)
             end
         end
-
-        for _, wep in ipairs(weps) do
-            if PosI == _ and (IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer() or !IsValid(self.Weapon))  then
-                self.Weapon = wep
+        
+        for _, wep in pairs(weps) do
+            if IsValid(wep) and wep:GetOwner() != LocalPlayer() then
+                table.remove(weps,_)
             end
         end
+
+        if IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer() then
+            self.Weapon = nil
+        end
+
+        /*print("                                             ")
+        print(Parent[1].Weapon)
+        print(Parent[2].Weapon)
+        print(Parent[3].Weapon)
+        print(Parent[4].Weapon)
+        print(Parent[5].Weapon)
+        print(Parent[6].Weapon)
+        print(Parent[7].Weapon)
+        print(Parent[8].Weapon)
+        print("                                             ")*/
+        for i, w in ipairs(weps) do
+            if PosI == i and (not IsValid(self.Weapon) or (IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer())) then
+                /*if Parent[PosI - 1] and Parent[PosI - 1].Weapon == nil then
+                    Parent[PosI - 1].Weapon = w
+                    Parent[PosI].Weapon = nil
+                    //print(w)
+                else*/if Parent[PosI] and Parent[PosI].Weapon == nil then
+                    Parent[PosI].Weapon = w
+                    if Parent[PosI + 1].Weapon == w then
+                        Parent[PosI + 1].Weapon = nil
+                    end
+                end
+            end
+        end
+
+        for i, w in ipairs(weps) do
+            //print(PosI)
+        end
+
         if IsValid(self.Weapon) and self.Weapon:GetOwner() == LocalPlayer() then
             self.LowerText = self.Weapon:GetPrintName()
-        elseif IsValid(self.Weapon) then
+        elseif IsValid(self.Weapon) or !IsValid(self.Weapon) then
             self.LowerText = " "
-            self:Remove()
-
-            CreateInvSlot(Parent,SlotsSize,PosI)
         end
     end
 
@@ -153,8 +208,6 @@ hook.Add("HUDPaint","InventoryPage",function()
         InvFrame:SetPos(CenterX - ScrW()/6.4,ScrH()-SlotsSize)
         InvFrame:DockMargin(0,0,0,0)
         InvFrame:DockPadding(0,0,0,0)
-
-        local weps = {}
 
         for _, wep in ipairs(LocalPlayer():GetWeapons()) do
             if !BlackList[wep:GetClass()] and !table.HasValue(weps,wep) then

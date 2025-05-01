@@ -12,6 +12,10 @@ hmcd.SubTypes = {
     "soe"
 }
 
+hg.Points.hmcd = hg.Points.hmcd or {}
+hg.Points.hmcd.Color = Color(150,0,0)
+hg.Points.hmcd.Name = "hmcd"
+
 hmcd.Teams = {
     [1] = {Name = "hmcd_bystander",
            Color = Color(87,87,255),

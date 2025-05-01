@@ -17,6 +17,11 @@ hook.Add("HUDPaint","Round_Shit123",function()
 
         draw.SimpleText(hg.GetPhrase("need_2_players"),"HS.45",ScrW()/2,123,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
+
+    if ROUND_ENDED and hg.WinTime < CurTime() then
+        draw.RoundedBox(0,0,0,ScrW(),ScrH(),Color(0,0,0,250))
+        draw.SimpleText(string.format(hg.GetPhrase("lvl_loadingmode"),TableRound(ROUND_NEXT).name),"H.45",ScrW()/2,ScrH()/2,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+    end
 end)
 
 hook.Add("HUDPaint","Round-Paint",function()
@@ -39,6 +44,7 @@ net.Receive("SyncRound",function()
     ROUND_NAME = net.ReadString()
     ROUND_NEXT = net.ReadString()
     hg.CROUND = ROUND_NAME
+    ROUND_ENDED = false
 
     if TableRound().RoundStart then
         TableRound().RoundStart()

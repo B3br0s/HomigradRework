@@ -3,13 +3,22 @@ dr = dr or {}
 dr.RoundEnds = 1e8
 
 function dr.SpawnKiller(ply)
-    local SpawnList = ReadDataMap("hunt_dr")
+    local SpawnList = ReadDataMap("dr_spawn_killer")
 
+    if #ReadDataMap("dr_spawn_killer") == 0 then
+	    for i, ent in RandomPairs(ents.FindByClass("info_player_terrorist")) do
+	    	table.insert(SpawnList,ent:GetPos())
+	    end
+    end
     ply:SetTeam(2)
 
     ply:Spawn()
 
-    ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
+    if #ReadDataMap("dr_spawn_killer") != 0 then
+        ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
+    else
+        ply:SetPos(table.Random(SpawnList))
+    end
 
     timer.Simple(0,function()
         ply:SetPlayerColor(Color(255,0,0):ToVector())
@@ -18,17 +27,23 @@ function dr.SpawnKiller(ply)
 end
 
 function dr.SpawnRunner(ply)
-    local weps_oth = {"weapon_chips","weapon_energy_drink","weapon_milk","weapon_water_bottle"}
+    local SpawnList = ReadDataMap("dr_spawn_runner")
 
-    local SpawnList = ReadDataMap("hunt_victim")
+    if #ReadDataMap("dr_spawn_runner") == 0 then
+	    for i, ent in RandomPairs(ents.FindByClass("info_player_counterterrorist")) do
+	    	table.insert(SpawnList,ent:GetPos())
+	    end
+    end
 
     ply:SetTeam(1)
 
     ply:Spawn()
 
-    ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
-
-    local wep_other = ply:Give(table.Random(weps_oth))
+    if #ReadDataMap("dr_spawn_runner") != 0 then
+        ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
+    else
+        ply:SetPos(table.Random(SpawnList))
+    end
 
     timer.Simple(0,function()
         ply:SetPlayerColor(Color(0,255,0):ToVector())
@@ -55,6 +70,8 @@ function dr.StartRoundSV()
     dr.SpawnKiller(htr)
 
     game.CleanUpMap(false)
+
+    SetGlobalBool("DefaultMove",true)
 end
 
 function dr.RoundThink()

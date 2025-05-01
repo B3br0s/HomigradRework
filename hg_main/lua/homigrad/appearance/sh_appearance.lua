@@ -104,10 +104,12 @@ util.AddNetworkString("AppearanceGet")
 net.Receive("AppearanceSet",function(l,ply)
     local AppearanceTable = net.ReadTable()
     ply.Appearance = AppearanceTable
-    ply:SetModel(AppearanceTable.Model)
-    ply:SetPlayerColor(Vector(AppearanceTable.Color.r / 255,AppearanceTable.Color.g / 255,AppearanceTable.Color.b / 255))
-    ply:SetSubMaterial()
-    ply:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.FEMKA and 2 or 1])
+    if !ply:Alive() then
+        ply:SetModel(AppearanceTable.Model)
+        ply:SetPlayerColor(Vector(AppearanceTable.Color.r / 255,AppearanceTable.Color.g / 255,AppearanceTable.Color.b / 255))
+        ply:SetSubMaterial()
+        ply:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.FEMKA and 2 or 1])
+    end
 end)
 
 function ApplyAppearance(ent,AppearanceTable)
@@ -155,7 +157,7 @@ function CreateRandomAppearance()--создание случайного апи�
     local mdl = table.Random(AllModels)
     local isfemale = ThatPlyIsFemale(mdl)
     local plyname = (isfemale and table.Random(RandomNames[2]) or table.Random(RandomNames[1]))
-    local clothes = "Нормальный"
+    local clothes = (math.random(1,2) == 1 and "Нормальный" or "Формальный")
 
     local AppTable = {
         Model = mdl,
@@ -176,6 +178,8 @@ local appearancemenu
 
 function SetAppearance(tbl)
     file.Write("hgr/appearance.json",util.TableToJSON(tbl))
+
+    ApplyAppearance(tbl)
 end
 
 function OpenAppMenu()
@@ -196,7 +200,14 @@ function OpenAppMenu()
         menuappearance:MakePopup()
 
         local AppearanceTableJSON = file.Read("hgr/appearance.json","DATA")
+        if AppearanceTableJSON == nil then
+            CreateRandomAppearance()
+        end
         local AppearanceTable = util.JSONToTable(AppearanceTableJSON)
+
+        if !AppearanceTable.ClothesStyle then
+            AppearanceTable.ClothesStyle = "Нормальный"
+        end
 
         appearancemenu = menuappearance
 
@@ -240,6 +251,10 @@ function OpenAppMenu()
             Entity:SetNWVector("PlayerColor",Vector(AppearanceTable.Color.r / 255, AppearanceTable.Color.g / 255, AppearanceTable.Color.b / 255))
             Entity:SetAngles(Entity.Angles)
             Entity:SetSubMaterial()
+            //print(Clothes[AppearanceTable.ClothesStyle])
+            if !AppearanceTable.ClothesStyle then
+                AppearanceTable.ClothesStyle = "Нормальный"
+            end
             Entity:SetSubMaterial(SubMaterials[string.lower(AppearanceTable.Model)],Clothes[AppearanceTable.ClothesStyle][AppearanceTable.Gender])
         end
 

@@ -238,6 +238,14 @@ COMMANDS.nologs = {function(ply,args)
 	if not ply:IsAdmin() then return end
 	local value = tonumber(args[1]) > 0
 
+	SetGlobalBool("DefaultMove",value)
+	PrintMessage(3,"GMod movement -"..(value and "ON" or "OFF"))
+end,1}
+
+COMMANDS.nologs = {function(ply,args)
+	if not ply:IsAdmin() then return end
+	local value = tonumber(args[1]) > 0
+
 	SetGlobalBool("DisabledLogs",value)
 	PrintMessage(3,"Discord logs -"..(value and "OFF" or "ON"))
 end,1}

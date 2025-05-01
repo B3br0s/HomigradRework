@@ -49,6 +49,10 @@ function CheckPlyTeam(ply)
     end
     if TableRound and TableRound().TeamBased then
 
+        if !TableRound().Teams[ply:Team()] then
+            return Color(255,0,0),"N/A"
+        end
+
         local clr,name = TableRound().Teams[ply:Team()].Color,TableRound().Teams[ply:Team()].Name
         
         return clr,name

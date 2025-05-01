@@ -34,16 +34,25 @@ function hmcd.StartRoundSV()
     table.Empty(hmcd.Traitors)
     hmcd.GunMan = nil
 
+    for _, ply in ipairs(player.GetAll()) do
+        local SpawnList = (ReadDataMap("hmcd"))
+
+        if ply:Team() != 1002 then
+            ply:Spawn()
+            ply:GodEnable()
+            ply:SetTeam(1)
+            ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
+        end
+
+    end
+
     game.CleanUpMap(false)
 
     hmcd.AssignTraitor(NotSpect)
     hmcd.AssignGunMan(NotSpect)
     for _, ply in ipairs(player.GetAll()) do
-        local SpawnList = (math.random(1,2) == 1 and ReadDataMap("tdm_red") or ReadDataMap("tdm_blue"))
-
         if ply:Team() != 1002 then
-            ply:SetTeam(1)
-            ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
+            ply:GodDisable()
         end
         net.Start("hmcd_start") 
         net.WriteString(hmcd.Type)
@@ -54,12 +63,16 @@ function hmcd.StartRoundSV()
 end
 
 function hmcd.SpawnTraitor(ply)
-    local Wep1 = ply:Give("weapon_fiveseven")
-    local Wep2 = ply:Give("weapon_kabar")
+    if hmcd.Type != "gdz" then
+        local Wep1 = ply:Give("weapon_fiveseven")
+        local Wep2 = ply:Give("weapon_kabar")
 
-    Wep1:SetNWBool("DontShow",true)
+        Wep1:SetNWBool("DontShow",true)
 
-    ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
+        ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
+    else
+        ply:Give("weapon_kabar")
+    end
 end
 
 function hmcd.AssignTraitor(tbl)
@@ -98,6 +111,9 @@ function hmcd.AssignGunMan(tbl)
         RandomPlayer:Give("weapon_r870")
     elseif hmcd.Type == "standard" then
         RandomPlayer:Give("weapon_glock17")
+    elseif hmcd.Type == "gfz" then
+        RandomPlayer:Give("weapon_pbat")
+        RandomPlayer:Give("weapon_handcuffs")
     end
 end
 

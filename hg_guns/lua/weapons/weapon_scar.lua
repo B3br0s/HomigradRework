@@ -19,7 +19,7 @@ SWEP.ZoomPos = Vector(-2,0.49,-6.48)
 SWEP.ZoomAng = Angle(0,0.45,-0.81)
 SWEP.AttPos = Vector(46.5,1.55,3.7)
 SWEP.AttAng = Angle(-1.5,-0.7,0)
-SWEP.RecoilForce = 3
+SWEP.RecoilForce = 1.5
 
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 30
@@ -27,7 +27,7 @@ SWEP.Primary.Damage = 35
 SWEP.Primary.Ammo = "5.56x45 mm"
 SWEP.Primary.Wait = 0.09
 SWEP.Primary.Automatic = true
-SWEP.Primary.Force = 55
+SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "pwb/weapons/hk416/shoot.wav"
 
 SWEP.IconPos = Vector(-3.5,50,-4)

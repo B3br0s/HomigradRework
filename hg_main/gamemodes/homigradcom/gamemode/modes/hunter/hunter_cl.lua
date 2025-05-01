@@ -1,5 +1,7 @@
 hunter = hunter or {}
 
+local sound_played = false
+
 function hunter.GetTeam(ply)
     if ply:Team() == 1002 then
         return hg.GetPhrase("spectator"),Color(200,200,200,255),"nothing."
@@ -23,6 +25,12 @@ function hunter.HUDPaint()
     local StartTime = ((hg.ROUND_START + 7) - CurTime())
 
     if hg.ROUND_START + 120 - CurTime() > 0 then
+
+    if !sound_played then
+        sound_played = true
+        surface.PlaySound("snd_jack_hmcd_panic.mp3")
+    end
+
     local sw,sh = ScrW(),ScrH()
     local timeuntilshit = 1// * (hg.ROUND_START + 120 - CurTime()) / (LocalPlayer():Team() == 2 and 180 or 90)
 

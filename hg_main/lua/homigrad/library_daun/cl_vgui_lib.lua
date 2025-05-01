@@ -46,7 +46,7 @@ function hg_button:Paint(w,h)
     draw.RoundedBox(0, 0, 0, w, h, (self:IsHovered() and self.HoverClr or self.DefaultClr))
 
     draw.SimpleText(self.Text, "HS.18", w / 2, h / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    draw.SimpleText(self.LowerText, (self.LowerFont or "HS.12"), w / 2, h / 1.2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(self.LowerText, (self.LowerFont or "HS.18"), w / 2, h / 1.2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
     surface.SetDrawColor(100,100,100,35)
     surface.DrawOutlinedRect(0,0,w,h,1)

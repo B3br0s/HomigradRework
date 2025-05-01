@@ -477,6 +477,7 @@ end
 
 -- start of main
 net.Receive("dwr_EntityFireBullets_networked", function(len)
+	do return end
 	-- we receive this only when someone else shoots inorder to eliminate any possibility of accessing serverside-only functions from the client.
 	local src = readVectorUncompressed()
 	local dir = readVectorUncompressed()
@@ -485,7 +486,7 @@ net.Receive("dwr_EntityFireBullets_networked", function(len)
 	local ammotype = net.ReadString()
 	local isSuppressed = net.ReadBool()
 	local entity = net.ReadEntity()
-	local explosion = net.ReadBool()
+	local explosion = (net.ReadBool() or false)
 
 	--local override = net.ReadTable()
 	local ignore = (entity == LocalPlayer())

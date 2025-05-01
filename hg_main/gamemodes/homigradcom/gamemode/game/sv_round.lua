@@ -16,6 +16,8 @@ function StartRound()
 
     ROUND_ACTIVE = true
 
+    SetGlobalBool("DefaultMove",false)
+
     game.CleanUpMap(false)
 
     CURRENT_ROUND = CURRENT_ROUND + 1
@@ -25,6 +27,9 @@ function StartRound()
 
         timer.Simple(0.5,function()
             for i,ply in pairs(player.GetAll()) do
+                if ply:Team() == 1002 then
+                    continue 
+                end
                 if ply:Alive() then ply:KillSilent() end
             end
         end)
@@ -49,6 +54,11 @@ function StartRound()
     if string.match(game.GetMap(),"jb_") then
         ROUND_NEXT = "jb"
         ROUND_NAME = "jb"
+    end
+
+    if string.match(game.GetMap(),"deathrun_") then
+        ROUND_NEXT = "dr"
+        ROUND_NAME = "dr"
     end
 
     RunConsoleCommand("hostname","Homigrad Rework | Open-Alpha")
@@ -124,7 +134,7 @@ hook.Add("Think","Round-Think",function()
     if not ROUND_ACTIVE then
         StartRound()
     else
-        if TableRound().RoundThink then
+        if TableRound and TableRound().RoundThink then
             TableRound():RoundThink()
         end
     end

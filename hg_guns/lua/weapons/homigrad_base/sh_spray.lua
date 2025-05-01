@@ -124,6 +124,7 @@ function SWEP:Step_Spray(time,dtime)
 	if self.Recoil[1] >= 20 then
 		self.Recoil[1] = 20
 	end
+	self.sprayI = LerpFT(0.1,self.sprayI,0)
 	if SERVER then return end
 	local eyeSpray = self.EyeSpray
 	self:GetOwner():SetEyeAngles(self:GetOwner():EyeAngles() + eyeSpray)

@@ -19,10 +19,10 @@ dr.Teams = {
 
 hg.Points = hg.Points or {}
 
-hg.Points.hunt_dr = hg.Points.hunt_dr or {}
-hg.Points.hunt_dr.Color = Color(150,0,0)
-hg.Points.hunt_dr.Name = "dr_spawn_killer"
+hg.Points.dr_spawn_killer = hg.Points.dr_spawn_killer or {}
+hg.Points.dr_spawn_killer.Color = Color(150,0,0)
+hg.Points.dr_spawn_killer.Name = "dr_spawn_killer"
 
-hg.Points.hunt_victim = hg.Points.hunt_victim or {}
-hg.Points.hunt_victim.Color = Color(0,150,0)
-hg.Points.hunt_victim.Name = "dr_spawn_victim"
+hg.Points.dr_spawn_runner = hg.Points.dr_spawn_runner or {}
+hg.Points.dr_spawn_runner.Color = Color(0,150,0)
+hg.Points.dr_spawn_runner.Name = "dr_spawn_runner"

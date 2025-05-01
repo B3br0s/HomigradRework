@@ -17,7 +17,7 @@ SWEP.TwoHands = true
 
 SWEP.ZoomPos = Vector(3,0.35,-5.8)
 SWEP.ZoomAng = Angle(0,5.5,0.1)
-SWEP.AttPos = Vector(30.5,0.77,3.75)
+SWEP.AttPos = Vector(36.5,0.77,3.75)
 SWEP.AttAng = Angle(-5.5,0.05,0)
 SWEP.RecoilForce = 0.25
 

@@ -9,21 +9,19 @@ hook.Add("Player Think", "BloodManager", function(ply)
     
     ply.bloodnext = CurTime() + 0.3
     
-    local bleedPos
-    if ply:GetNWBool("Fake") then
-        local ragdoll = ply:GetNWEntity("FakeRagdoll")
-        bleedPos = IsValid(ragdoll) and ragdoll:GetPos() or ply:GetPos()
-    else
-        bleedPos = ply:GetPos() + Vector(0, 0, 32)
-    end
+    local rag = ply:GetNWEntity("FakeRagdoll")
     
-    bp_hit(bleedPos, Vector(0, 0, -2))
-    blood_Bleed(bleedPos, Vector(0, 0, -2))
+    bp_hit((IsValid(rag) and rag:GetPos() or ply:GetPos()) or ply:GetPos() + Vector(0, 0, 32), Vector(0, 0, -2))
+    blood_Bleed((IsValid(rag) and rag:GetPos() or ply:GetPos()) or ply:GetPos() + Vector(0, 0, 32), Vector(0, 0, -2))
 end)
 
 hook.Add( "RenderScreenspaceEffects", "Blood_FX", function()
 
     local ply = LocalPlayer()
+
+    if !ply:Alive() then
+        return
+    end
 
     local blood = ply:GetNWFloat("blood")
 

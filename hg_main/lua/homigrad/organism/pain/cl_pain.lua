@@ -28,7 +28,7 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
         gradshit:SetImageColor(Color(0,0,0,0))
     end
     --RunConsoleCommand("slot5")
-    if not ply:Alive() then if LastDeathTime < CurTime() then k = 0 ply:SetDSP(0) end return end
+    if not ply:Alive() then if LastDeathTime < CurTime() then k = 0 ply:SetDSP(0) gradshit:SetImageColor(Color(0,0,0,0)) end return end
     
     local painlosing = ply:GetNWFloat("painlosing")
     local pain = ply:GetNWFloat("pain")
@@ -99,7 +99,7 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
         end
     else
         if IsValid(gradshit) then
-                gradshit:SetImageColor(Color(0,0,0,0))
+            gradshit:SetImageColor(Color(0,0,0,0))
         end
         dark = 0
         shake = 0

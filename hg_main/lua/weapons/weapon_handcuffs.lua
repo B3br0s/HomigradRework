@@ -237,7 +237,7 @@ function SWEP:DrawHUD()
         draw.NoTexture()
         Circle(x, y, 5 / frac, 32)
 
-        draw.DrawText(ply:GetNWBool("Cuffed") and hg.GetPhrase("cuffed") or hg.GetPhrase("cuff"), "HS.18",x,y,color_white,TEXT_ALIGN_CENTER)
+        draw.DrawText(ply:GetNWBool("Cuffed") and string.format(hg.GetPhrase("cuffed"),ply:GetNWString("PlayerName","N/A")) or string.format(hg.GetPhrase("cuff"),ply:GetNWString("PlayerName","N/A")), "HS.18",x,y,color_white,TEXT_ALIGN_CENTER)
 
         if IsValid(self.CuffPly) then
             local anim_pos = 1 - math.Clamp((self.CuffTime + cuffTime - CurTime()) / cuffTime,0,1)
