@@ -40,17 +40,7 @@ function PlayerMeta:CreateFake(force)
 	rag:SetNWVector("PlayerColor",self:GetPlayerColor())
     rag:Activate()
 
-	local inv = {}
-
-	for _, wep in ipairs(self:GetWeapons()) do
-		if BlackListWep[wep:GetClass()] then
-			continue 
-		end
-		table.insert(inv,wep:GetClass())
-	end
-
-	rag.Inventory = inv
-
+	rag.Inventory = self.Inventory
 	if ROUND_NAME == "dr" then
 		self.TimeToDeath = CurTime() + 7
 		self:SetNWFloat("TimeToDeath",CurTime() + 7)
@@ -111,9 +101,6 @@ hook.Add("PlayerSpawn","ResetFake",function(ply) --обнуление регдо
 	ply:Give("weapon_hands")
 	ply.Fake = false
 	ply:AddEFlags(EFL_NO_DAMAGE_FORCES)
-
-	net.Start("RemoveRag")
-	net.Send(ply)
 
 	ply:SetNWBool("Fake",false)
 
@@ -414,16 +401,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
     local rag = ply.FakeRagdoll
 	if not IsValid(rag) then ply:Kill() return end
 	if rag == NULL then return end
-	local inv = {}
-
-	for _, wep in ipairs(ply:GetWeapons()) do
-		if BlackListWep[wep:GetClass()] then
-			continue 
-		end
-		table.insert(inv,wep:GetClass())
-	end
-
-	rag.Inventory = inv
+	rag.Inventory = ply.Inventory
 	if ROUND_NAME == "dr" then
 		if ply.TimeToDeath and ply.TimeToDeath < CurTime() then
 			ply:Kill()
@@ -450,6 +428,17 @@ hook.Add("Player Think","FakeControl",function(ply,time)
     local Head = rag:LookupBone("ValveBiped.Bip01_Head1")
 	if not Head then return end
     local HeadPos = rag:GetBonePosition(Head) + AddVecRag
+	if !ply.PrevAng then
+		ply.PrevAng = ply:EyeAngles()
+	end
+
+	ply.PrevAng = LerpAngleFT(0.1,ply.PrevAng,ply:EyeAngles())
+
+	local ydiff = math.AngleDifference(ply.PrevAng.y,ply:EyeAngles().y)
+	local y_diff_round = math.Round(ydiff / 5,1)
+
+	local pdiff = math.AngleDifference(ply.PrevAng.p,ply:EyeAngles().p)
+	local p_diff_round = math.Round(pdiff / 5,1)
 	ply:SetPos(HeadPos)
 	if !ply.otrub then rag:SetEyeTarget( LocalPos ) else rag:SetEyeTarget( Vector(0,0,0) ) end
 	if ply.otrub then
@@ -550,8 +539,17 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local phys4 = Penis
 		local angs = ply:EyeAngles()
 		angs:RotateAroundAxis(angs:Forward(),-85)
-		angs:RotateAroundAxis(angs:Up(),-100)
+		angs:RotateAroundAxis(angs:Up(),-90)
 		angs:RotateAroundAxis(angs:Right(),0)
+
+		local diff_ang = (y_diff_round + p_diff_round)
+		local diff_ang2
+
+		if diff_ang < 0 then
+			diff_ang = diff_ang * -1
+		end
+
+		diff_ang2 = (1 + diff_ang)
 
 		local HeadShadow = {
 			secondstoarrive=0.0000000001 / 1e8,
@@ -580,8 +578,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			secondstoarrive=0.7,
 			pos=phys2:GetPos() + (IsValid(rag.ZacConsLH) and Vector(0,0,7) or IsValid(rag.ZacConsRH) and Vector(0,0,7) or Vector(0,0,0)),
 			angle=angs,
-			maxangulardamp=5,
-			maxspeeddamp=0.01/1e8,
+			maxangulardamp=1 * diff_ang2,
+			maxspeeddamp=1 * diff_ang2,
 			maxangular=1e8,
 			maxspeed=50 / velo,
 			teleportdistance=0,
@@ -592,8 +590,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			secondstoarrive=0.15,
 			pos=phys:GetPos(),
 			angle=angs,
-			maxangulardamp=5,
-			maxspeeddamp=0.01/1e8,
+			maxangulardamp=1 * diff_ang2,
+			maxspeeddamp=1 * diff_ang2,
 			maxangular=1e8,
 			maxspeed=40 / velo,
 			teleportdistance=0,

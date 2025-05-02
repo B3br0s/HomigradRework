@@ -20,8 +20,8 @@ SWEP.Pumped = true
 SWEP.TwoHands = true
 
 SWEP.ZoomPos = Vector(-2,-0.8,-5.45)
-SWEP.ZoomAng = Angle(0,4,0)
-SWEP.AttPos = Vector(46,0.85,5.3)
+SWEP.ZoomAng = Angle(0,6,0)
+SWEP.AttPos = Vector(44,0.85,8.7)
 SWEP.AttAng = Angle(-4,-0.1,0)
 
 SWEP.IconPos = Vector(10,30,-6.5)
@@ -53,7 +53,14 @@ function SWEP:PostAnim()
         return
     end
 
-    self.Pump = easedLerp(0.45,self.Pump,self.PumpTarg)
+    self.Pump = easedLerp(0.55,self.Pump,self.PumpTarg)
+
+    if self.Pump > 0.1 then
+        local p1,a1 = ply:GetBoneMatrix(11):GetTranslation(),ply:GetBoneMatrix(11):GetAngles()
+        a1:RotateAroundAxis(a1:Up(),-10)
+        a1:RotateAroundAxis(a1:Right(),-5)
+        self.shitang = a1
+    end
 
     local PumpAngs = Angle(-50,-30,0)
 
@@ -73,7 +80,7 @@ function SWEP:PostAnim()
             hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,-30),1,0.3)
             hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-30),1,0.3)
         else
-            hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-7,-10) + PumpAngs * self.Pump,1,0.3)
+            hg.bone.Set(ply,"r_forearm",Vector(0,0,0),PumpAngs * self.Pump,1,0.3)
             hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.3)
             hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.3)
         end

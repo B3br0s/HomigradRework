@@ -75,17 +75,6 @@ hook.Add("RenderScene","homigrad_mainrenderscene",function(pos,angle,fov)
 	local focus = HasFocus()
 
 	hook.Run("Frame",pos,angle)
-	
-
-	STOPRENDER = false
-
-	if STOPRENDER then
-		cam.Start2D()
-			draw.SimpleText(text,"DebugFixedSmall",ScrW() / 2,ScrH() / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-		cam.End2D()
-
-		return true
-	end
 
 	RENDERSCENE = true
 	local _view = CalcView(LocalPlayer(),pos,angle,fov)
@@ -98,13 +87,7 @@ hook.Add("RenderScene","homigrad_mainrenderscene",function(pos,angle,fov)
 	view.znear = _view.znear
 	view.drawviewmodel = _view.drawviewmodel
 
-	if CAMERA_ZFAR then
-		view.zfar = CAMERA_ZFAR + 250
-	else
-		view.zfar = nil
-	end
-
-	render_Clear(0,0,0,255,true,true,true)
+	//render_Clear(0,0,0,255,true,true,true)
 	render_RenderView(view)
 
 	RENDERSCENE = nil

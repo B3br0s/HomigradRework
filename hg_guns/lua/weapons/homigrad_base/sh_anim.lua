@@ -4,6 +4,7 @@ SWEP.animmult = 0
 SWEP.saim = 0
 SWEP.BoltLock = true
 SWEP.SprayI = 0
+SWEP.shitang = Angle(0,0,0)
 
 local angZero = Angle(0,0,0)
 local vecZero = Vector(0,0,0)
@@ -105,11 +106,37 @@ end
 
 function SWEP:Step_Anim()
     local ply = self:GetOwner()
+
+	/*if SERVER then
+		if !IsValid(self.shit) then
+			self.shit = ents.Create("prop_physics")
+			local s = self.shit
+			s:SetModel("models/hunter/plates/plate.mdl")
+			s:Spawn()
+			s:GetPhysicsObject():EnableMotion(false)
+		else
+			local plyang = ply:EyeAngles()
+			plyang:RotateAroundAxis(plyang:Forward(),0)
+
+			local _,newAng = LocalToWorld(vector_origin,self.localAng or angle_zero,vector_origin,plyang)
+			local ang = Angle(newAng[1],newAng[2],newAng[3])
+   			//ang:Add(self.AttAng)
+
+			local att = ply:GetAttachment(8)
+
+			local att_shit = ply:GetBoneMatrix(11)
+
+			self.shit:SetAngles(ang)
+			self.shit:SetPos(att_shit:GetTranslation())
+			
+			print(att.a)
+		end
+	end*/
 	self:PostAnim()
 	self.SprayI = LerpFT(0.15,self.SprayI,0.25)
 	if ply:GetNWBool("suiciding") then
 		self:SetHoldType("normal")
-		if self:IsPistolHoldType() then
+			if self:IsPistolHoldType() then
 			hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(50,-10,-30),1,0.1)
 			hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(-5,-110,0),1,0.1)
 			hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-20,0),1,0.1)
@@ -126,6 +153,14 @@ function SWEP:Step_Anim()
 			hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(30,0,0),1,0.1)
 		end
 		return
+	else
+		hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.1)
+
+		hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.1)
 	end
 	if self.reload then
 		return
@@ -161,14 +196,9 @@ function SWEP:Step_Anim()
 				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.4)
 				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-60),1,0.4)
 			else
-				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-15,0),1,0.4)
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.4)
 				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.4)
-				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-20,0,0),1,0.4)
-				local pitch = ply:EyeAngles().p
-				if CLIENT and ply == LocalPlayer() then
-					local corektirovka_sinshluhi13 = ((pitch > 40 or pitch < -40) and (pitch / 125) or 0)
-					//hg.bone.Set(ply,"r_hand",Vector(0,-0.5,0),Angle(RecoilS - corektirovka_sinshluhi13 * (self.TwoHands and 45 or 20) * (pitch > 0 and corektirovka_sinshluhi13  * (self.TwoHands and 1.5 or 0.06) or (self.TwoHands and 1 or 1.5)) - 1.5,-5,2 - (corektirovka_sinshluhi13 * 10)),1,0.1)
-				end
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.4)
 			end
 		else
 			if self:IsSprinting() and !self:IsSighted() then
@@ -176,7 +206,7 @@ function SWEP:Step_Anim()
 				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,-30),1,0.3)
 				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-30),1,0.3)
 			else
-				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-7,-10),1,0.3)
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.3)
 				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.3)
 				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.3)
 			end
@@ -205,8 +235,9 @@ function SWEP:Step_Anim()
 		ang:Add(Angle(-(self.Primary.Force / math.random(32,64)) * RecoilS,0,0))
 	end
 	ang:RotateAroundAxis(ang:Forward(),180)
-	if not self:IsSprinting() and !self.Pump and !self:IsClose() then
-	//matrix:SetAngles(ang)
+	if not self:IsSprinting() and !self:IsClose() then
+	self.shitang = LerpAngleFT(0.25,self.shitang,ang)
+	matrix:SetAngles(self.shitang)
 	end
 
 	local pitch = ply:EyeAngles().p
@@ -220,7 +251,7 @@ function SWEP:Step_Anim()
 		ang.p = ang.p / 5
 	end
 	local ispistolang = Angle(0,-5,0)
-	hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(-ang.p,0,0) + (self:IsPistolHoldType() and ispistolang or Angle(0,0,0)),1,0.1)
+	//hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(-ang.p,0,0) + (self:IsPistolHoldType() and ispistolang or Angle(0,0,0)),1,0.1)
 	
 	local lpos, lang = ply:SetBoneMatrix2(hand_index, matrix, false)
 end

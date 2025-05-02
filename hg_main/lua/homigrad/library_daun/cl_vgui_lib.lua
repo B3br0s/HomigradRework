@@ -17,17 +17,19 @@ function hg_frame:Paint(w,h)
         return
     end
 
+    local mul_daun = (self.CurSize or 1)
+
     surface.SetDrawColor(self.DefaultClr.r,self.DefaultClr.g,self.DefaultClr.b,self.DefaultClr.a)
-    surface.DrawRect(0,0,w,h)
+    surface.DrawRect(w/2 * (1-mul_daun),0,w * mul_daun,h)
 
     surface.SetDrawColor(245,245,245,15)
-    surface.DrawOutlinedRect(0,0,w,h,1)
+    surface.DrawOutlinedRect(w/2 * (1-mul_daun),0,w * mul_daun,h,1)
     surface.SetDrawColor(145,145,145,7.5)
-    surface.DrawOutlinedRect(1,1,w,h,1)
-    surface.DrawOutlinedRect(-1,-1,w,h,1)
+    surface.DrawOutlinedRect(w/2 * (1-mul_daun) + 1,1,w * mul_daun,h,1)
+    surface.DrawOutlinedRect(w/2 * (1-mul_daun) -1,-1,w * mul_daun,h,1)
     surface.SetDrawColor(145,145,145,5)
-    surface.DrawOutlinedRect(2,2,w,h,1)
-    surface.DrawOutlinedRect(-2,-2,w,h,1)
+    surface.DrawOutlinedRect(w/2 * (1-mul_daun) + 2,2,w * mul_daun,h,1)
+    surface.DrawOutlinedRect(w/2 * (1-mul_daun)-2,-2,w * mul_daun,h,1)
 
     if self.SubPaint then
         self:SubPaint(w,h)

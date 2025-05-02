@@ -38,9 +38,9 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
     local critical = ply:GetNWBool("crit",false)
     local incapacitated = ply:GetNWBool("incap",false)
 
-    if painlosing > 0 then
-        DrawMotionBlur(0.8,painlosing / 3,0.016)
-    end
+    /*if painlosing > 0 then
+        DrawMotionBlur(0.9,painlosing / 3,0.016)
+    end*/
 
     local active = ply:GetNWBool("otrub")
 

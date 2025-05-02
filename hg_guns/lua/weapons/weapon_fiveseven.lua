@@ -14,7 +14,7 @@ SWEP.BoltVec = Vector(0,0,-1.5)
 
 SWEP.ZoomPos = Vector(-10,-5.7,-0.38)
 SWEP.ZoomAng = Angle(0,0,0)
-SWEP.AttPos = Vector(26,0.34,3.3)
+SWEP.AttPos = Vector(26,0.5,3.3)
 SWEP.AttAng = Angle(1,-0.5,0)
 
 SWEP.Primary.DefaultClip = 20

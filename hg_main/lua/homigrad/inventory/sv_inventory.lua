@@ -5,7 +5,10 @@ util.AddNetworkString("ply_take_ammo")
 util.AddNetworkString("DropItemInv")
 
 local BlackListWep = {
-	["weapon_hands"] = true
+	["weapon_hands"] = true,
+	["weapon_physgun"] = true,
+	["gmod_tool"] = true,
+	["gmod_camera"] = true,
 }
 
 hg.loots = hg.loots or {}
@@ -14,7 +17,6 @@ hg.loots.small_crate = {
 	"weapon_knife",
 	"weapon_hatchet",
 	"weapon_kknife",
-	"weapon_kabar",
 	"weapon_burger",
 	"weapon_water_bottle",
 	"weapon_chips",
@@ -23,7 +25,6 @@ hg.loots.small_crate = {
 
 hg.loots.medium_crate = {
 	"weapon_glock17",
-	"weapon_kabar",
 	"weapon_handcuffs",
 	"weapon_knife",
 	"weapon_tomahawk",
@@ -37,8 +38,6 @@ hg.loots.medium_crate = {
 }
 
 hg.loots.large_crate = {
-	"weapon_mag7",
-	"weapon_kabar",
 	"weapon_mp7",
 	"weapon_knife",
 	"weapon_shammer",
@@ -55,7 +54,6 @@ hg.loots.large_crate = {
 }
 
 hg.loots.melee_crate = {
-	"weapon_kabar",
 	"weapon_bat",
 	"weapon_kknife",
 	"weapon_shovel",
@@ -301,6 +299,18 @@ hook.Add("Player Think","Homigrad_Limit",function(ply)
 		end
 		table.insert(inv,wep)
 	end
+
+	local invs = {}
+
+	for _, wep in ipairs(ply:GetWeapons()) do
+		if BlackListWep[wep:GetClass()] then
+			continue 
+		end
+		table.insert(invs,wep:GetClass())
+	end
+
+
+	ply.Inventory = invs
 
 	if #inv > 8 then
 		local a,b = table.Random(inv)

@@ -14,10 +14,11 @@ SWEP.HolsterBone = "ValveBiped.Bip01_Spine2"
 SWEP.BoltBone = nil
 SWEP.BoltVec = nil
 SWEP.TwoHands = true
+SWEP.Bodygroups = {[1] = 0,[2]=0,[3]=0,[4]=0,[5]=1}
 
 SWEP.ZoomPos = Vector(3,0.35,-5.8)
 SWEP.ZoomAng = Angle(0,5.5,0.1)
-SWEP.AttPos = Vector(36.5,0.77,3.75)
+SWEP.AttPos = Vector(33,0.57,7)
 SWEP.AttAng = Angle(-5.5,0.05,0)
 SWEP.RecoilForce = 0.25
 
@@ -31,7 +32,7 @@ SWEP.Primary.Force = 15
 SWEP.Primary.Sound = {"arccw_go/mp7/mp7_01.wav","arccw_go/mp7/mp7_02.wav","arccw_go/mp7/mp7_03.wav"}
 SWEP.RecoilForce = 2
 
-SWEP.IconPos = Vector(1.5,80,-4)
+SWEP.IconPos = Vector(0,80,-4)
 SWEP.IconAng = Angle(-20,0,0)
 
 SWEP.ReloadSounds = {

@@ -36,15 +36,7 @@ if SERVER then
 end
 
 function ENT:Use(ply)
-	if !ply:IsPlayer() then
-		return
-	end
-
-	net.Start("hg inventory")
-	net.WriteEntity(self)
-	net.WriteTable(self.Inventory)
-	net.WriteFloat(self.AmtLoot)
-	net.Send(ply)
+	hg.UseCrate(ply,self)
 end
 
 if SERVER then return end

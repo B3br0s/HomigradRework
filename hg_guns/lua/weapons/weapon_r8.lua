@@ -21,7 +21,7 @@ SWEP.BoltLock = false
 
 SWEP.ZoomPos = Vector(-10,-4.5,-0.8)
 SWEP.ZoomAng = Angle(0,0,0)
-SWEP.AttPos = Vector(29,0.15,2.85)
+SWEP.AttPos = Vector(29,-0.13,2.85)
 SWEP.AttAng = Angle(1,0.6,0)
 SWEP.IsRevolver = true
 
@@ -30,7 +30,7 @@ SWEP.Primary.Force = 100
 SWEP.Primary.ReloadTime = 1.25
 SWEP.Primary.Sound = "arccw_go/revolver/revolver-1_01.wav"
 SWEP.Primary.HammerSound = "arccw_go/revolver/revolver_prepare.wav"
-SWEP.RecoilForce = 50
+SWEP.RecoilForce = 15
 
 SWEP.IconPos = Vector(1,100,-5)
 SWEP.IconAng = Angle(-20,0,0)

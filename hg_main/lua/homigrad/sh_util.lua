@@ -362,6 +362,21 @@ function util.safeDiv(a, b)
 	end
 end
 
+function hg.UseCrate(ply,ent)
+	local self = ent
+	if !ply:IsPlayer() then
+		return
+	end
+
+	if hg.eyeTrace(ply,100).Entity == self then
+		net.Start("hg inventory")
+		net.WriteEntity(self)
+		net.WriteTable(self.Inventory)
+		net.WriteFloat(self.AmtLoot)
+		net.Send(ply)
+	end
+end
+
 if SERVER then
 	function ApplyOrganism(ent,organism)
 		if ent:IsPlayer() then
@@ -383,7 +398,6 @@ hook.Add("Think", "Homigrad_Player_Think", function(ply)
 	time = CurTime()
 
 	for _, ply in ipairs(tbl) do
-		ply.owner = ply --решение проблем,ура
         hook.Run("Player Think", ply, time)
 	end
 end)

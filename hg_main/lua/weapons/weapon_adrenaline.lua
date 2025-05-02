@@ -51,7 +51,7 @@ function SWEP:Step_Anim()
     elseif self:IsSAttacking(ply) then
         hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-90,0),1,0.075)
         hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(20,55,0),1,0.125)
-        hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(90,0,20),1,0.075)   
+        hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(90,0,20),1,0.275)   
     else
         hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-40,0),1,0.075)
         hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(20,-10,0),1,0.075)

@@ -100,88 +100,6 @@ function PopulateArmorSlots()
     end
 end
 
-function CreateLootSlot(Parent,SlotsSize,PosI)
-    local InvButton = vgui.Create("hg_button",Parent)
-    InvButton:SetSize(SlotsSize, SlotsSize)
-    InvButton:SetPos(SlotsSize * (PosI - 1),0)
-    InvButton:Dock(LEFT)
-    InvButton:SetText(" ")
-    InvButton.LowerText = ""
-    InvButton.LowerFont = "HS.10"
-
-    function InvButton:DoRightClick()
-
-    end
-    
-    function InvButton:SubPaint(w,h)
-
-    end
-
-    return InvButton
-end
-
-function CreateLocalInvSlot(Parent,SlotsSize,PosI)
-    local InvButton = vgui.Create("hg_button",Parent)
-    InvButton:SetSize(SlotsSize, SlotsSize)
-    InvButton:SetPos(SlotsSize * (PosI - 1),0)
-    InvButton:Dock(LEFT)
-    InvButton:SetText(" ")
-    InvButton.LowerText = ""
-    InvButton.LowerFont = "HS.10"
-    
-    function InvButton:SubPaint(w,h)
-        local weps = {}
-        for _, wep in ipairs(LocalPlayer():GetWeapons()) do
-            if not BlackList[wep:GetClass()] and !table.HasValue(weps, wep) then
-                table.insert(weps, wep)
-            end
-        end
-        
-        for i = #weps, 1, -1 do
-            local wep = weps[i]
-            if not IsValid(wep) or wep:GetOwner() != LocalPlayer() then
-                table.remove(weps, i)
-            end
-        end
-        
-        if IsValid(self.Weapon) and self.Weapon:GetOwner() ~= LocalPlayer() then
-            self.Weapon = nil
-        end
-        
-        for i, w in ipairs(weps) do
-            if PosI == i and (not IsValid(self.Weapon) or (IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer())) then
-                if Parent[PosI] and Parent[PosI].Weapon == nil or Parent[PosI] and Parent[PosI].Weapon != nil and Parent[PosI].Weapon:GetOwner() != LocalPlayer() then
-                    Parent[PosI].Weapon = w
-                    
-                    if Parent[PosI + 1] and Parent[PosI + 1].Weapon == w or IsValid(Parent[PosI + 1].Weapon) and Parent[PosI + 1].Weapon:GetOwner() != LocalPlayer() then
-                        Parent[PosI + 1].Weapon = nil
-                    end
-                    
-                    if Parent[PosI - 1] then
-                        local prevWeapon = Parent[PosI - 1].Weapon
-                        if prevWeapon == nil or (IsValid(prevWeapon) and prevWeapon:GetOwner() ~= LocalPlayer()) then
-                            Parent[PosI - 1].Weapon = w
-                        end
-                    end
-                end
-            end
-        end
-        if IsValid(self.Weapon) and self.Weapon:GetOwner() == LocalPlayer() then
-            self.LowerText = (self.Weapon != nil and (hg.GetPhrase(self.Weapon:GetClass()) != self.Weapon:GetClass() and hg.GetPhrase(self.Weapon:GetClass()) or weapons.Get(self.Weapon:GetClass()).PrintName) or "")
-        elseif IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer() or !IsValid(self.Weapon) then
-            self.LowerText = " "
-        end
-
-        if self.Weapon then
-            hg.DrawWeaponSelection(weapons.Get((isstring(self.Weapon) and self.Weapon or self.Weapon:GetClass())),Parent:GetX() + SlotsSize * (PosI - 1),Parent:GetY(),self:GetWide(),self:GetTall(),0)
-        end
-
-        draw.SimpleText(self.LowerText, (self.LowerFont or "HS.18"), w / 2, h / 1.2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    end
-
-    return InvButton
-end
-
 hook.Add("HUDPaint","InventoryPage",function()
     if not hg.ScoreBoard then return end
     if not IsValid(ScoreBoardPanel) then open = false return end
@@ -237,6 +155,7 @@ hook.Add("HUDPaint","InventoryPage",function()
         for i = 1, 8 do
             local Slot = CreateLocalInvSlot(InvFrame,SlotsSize,i)
             InvFrame[i] = Slot
+            Slot.LootAnim = 0
 
             function Slot:DoRightClick()
                 if self.Weapon then
@@ -245,11 +164,33 @@ hook.Add("HUDPaint","InventoryPage",function()
                 Menu:SetPos(input.GetCursorPos())
                 Menu:MakePopup()
 
-                Menu:AddOption("Выкинуть",function()
-                    net.Start("DropItemInv")
-                    net.WriteString(self.Weapon:GetClass())
-                    net.SendToServer()
-                end)
+                    Menu:AddOption(hg.GetPhrase("inv_drop"),function()
+                        if self.IsDropping then
+                            return
+                        end
+                        surface.PlaySound("homigrad/vgui/item_scroll_sticker_01.wav")
+                        self.DropIn = CurTime() + 0.2
+                        self.IsDropping = true
+                    end)
+                end
+            end
+
+            function Slot:LoadPaint()
+                local w,h = self:GetSize()
+                if self.Weapon and self.DropIn then
+                    if self.DropIn < CurTime() then
+                        self.IsDropping = false
+                        net.Start("DropItemInv")
+                        net.WriteString(self.Weapon:GetClass())
+                        net.SendToServer()
+                    end
+                end
+                if self.IsDropping then
+                    surface.SetDrawColor(225,225,225)
+                    self.LootAnim = self.LootAnim + 12
+            
+                    surface.SetMaterial(Material("homigrad/vgui/loading.png"))
+                    surface.DrawTexturedRectRotated(w/2,h/2,w/1.75,h/1.75,self.LootAnim)
                 end
             end
 
@@ -268,9 +209,101 @@ hook.Add("HUDPaint","InventoryPage",function()
     end
 end)
 
+function CreateLootSlot(Parent,SlotsSize,PosI)
+    local InvButton = vgui.Create("hg_button",Parent)
+    InvButton:SetSize(SlotsSize, SlotsSize)
+    //InvButton:SetPos(SlotsSize * (PosI - 1),0)
+    InvButton:Center()
+    //InvButton:Dock(LEFT)
+    //InvButton:DockMargin(SlotsSize * (1-Parent.CurSize),0,0,0)
+    InvButton:SetText(" ")
+    InvButton.LowerText = ""
+    InvButton.LowerFont = "HS.10"
+
+    function InvButton:DoRightClick()
+
+    end
+    
+    function InvButton:Think()
+        local w,h = Parent:GetSize()
+
+        self:SetX((w / 2) * (1-Parent.CurSize) + ((SlotsSize * (PosI - 1))) * Parent.CurSize)
+    end
+
+    return InvButton
+end
+
+function CreateLocalInvSlot(Parent,SlotsSize,PosI)
+    local InvButton = vgui.Create("hg_button",Parent)
+    InvButton:SetSize(SlotsSize, SlotsSize)
+    InvButton:SetPos(SlotsSize * (PosI - 1),0)
+    InvButton:Dock(LEFT)
+    InvButton:SetText(" ")
+    InvButton.LowerText = ""
+    InvButton.LowerFont = "HS.10"
+
+    function InvButton:SubPaint(w,h)
+        local weps = {}
+        for _, wep in ipairs(LocalPlayer():GetWeapons()) do
+            if not BlackList[wep:GetClass()] and !table.HasValue(weps, wep) then
+                table.insert(weps, wep)
+            end
+        end
+        
+        for i = #weps, 1, -1 do
+            local wep = weps[i]
+            if not IsValid(wep) or wep:GetOwner() != LocalPlayer() then
+                table.remove(weps, i)
+            end
+        end
+        
+        if IsValid(self.Weapon) and self.Weapon:GetOwner() ~= LocalPlayer() then
+            self.Weapon = nil
+        end
+        
+        for i, w in ipairs(weps) do
+            if PosI == i and (not IsValid(self.Weapon) or (IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer())) then
+                if Parent[PosI] and Parent[PosI].Weapon == nil or Parent[PosI] and Parent[PosI].Weapon != nil and Parent[PosI].Weapon:GetOwner() != LocalPlayer() then
+                    Parent[PosI].Weapon = w
+                    
+                    if Parent[PosI + 1] and Parent[PosI + 1].Weapon == w or IsValid(Parent[PosI + 1].Weapon) and Parent[PosI + 1].Weapon:GetOwner() != LocalPlayer() then
+                        Parent[PosI + 1].Weapon = nil
+                    end
+                    
+                    if Parent[PosI - 1] then
+                        local prevWeapon = Parent[PosI - 1].Weapon
+                        if prevWeapon == nil or (IsValid(prevWeapon) and prevWeapon:GetOwner() ~= LocalPlayer()) then
+                            Parent[PosI - 1].Weapon = w
+                        end
+                    end
+                end
+            end
+        end
+        if IsValid(self.Weapon) and self.Weapon:GetOwner() == LocalPlayer() then
+            self.LowerText = (self.Weapon != nil and (hg.GetPhrase(self.Weapon:GetClass()) != self.Weapon:GetClass() and hg.GetPhrase(self.Weapon:GetClass()) or weapons.Get(self.Weapon:GetClass()).PrintName) or "")
+        elseif IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer() or !IsValid(self.Weapon) then
+            self.LowerText = " "
+        end
+
+        self:LoadPaint()
+
+        if self.Weapon then
+            hg.DrawWeaponSelection(weapons.Get((isstring(self.Weapon) and self.Weapon or self.Weapon:GetClass())),Parent:GetX() + SlotsSize * (PosI - 1),Parent:GetY(),self:GetWide(),self:GetTall(),0)
+        end
+
+        draw.SimpleText(self.LowerText, (self.LowerFont or "HS.18"), w / 2, h / 1.2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    end
+
+    return InvButton
+end
+
 function CreateLootFrame(weps,slotsamt,ent)
     local MainFrame = panelka
     local SlotsSize = 75
+
+    if !IsValid(ScoreBoardPanel) then
+        return
+    end
 
     local CenterX = ScoreBoardPanel:GetWide() / 2
 
@@ -291,9 +324,9 @@ function CreateLootFrame(weps,slotsamt,ent)
     local targetsize = 1
 
     function LootFrame:Think()
-        self.CurSize = LerpFT(0.3,self.CurSize,targetsize)
+        self.CurSize = LerpFT(0.15,self.CurSize,targetsize)
         self:Center()
-        self:SetWide(SlotsSize * slotsamt * self.CurSize)
+        //self:SetWide(SlotsSize * slotsamt * self.CurSize)
     end
 
     for i = 1, slotsamt do
@@ -310,23 +343,14 @@ function CreateLootFrame(weps,slotsamt,ent)
             self:Loot()
         end
 
-        function Slot:Loot()
-            if self.BeingLooted or self.Weapon == nil then
-                return
-            end
-            self.BeingLooted = true
-            surface.PlaySound("homigrad/vgui/panorama/inventory_new_item_scroll_01.wav")
-            self.LootIn = CurTime() + 0.8
-        end
-
         function Slot:SubPaint(w,h)
             if self:IsHovered() then
                 if fastloot then  
                     self:Loot()
                 end
             end
-
-            self.LowerText = (self.Weapon != nil and (hg.GetPhrase(self.Weapon) != self.Weapon and hg.GetPhrase(self.Weapon) or weapons.Get(self.Weapon).PrintName) or "")
+    
+            self.LowerText = (self.Weapon != nil and weapons.Get(self.Weapon) and (hg.GetPhrase(self.Weapon) != self.Weapon and hg.GetPhrase(self.Weapon) or weapons.Get(self.Weapon).PrintName) or "")
 
             if self.BeingLooted then
                 surface.SetDrawColor(225,225,225)
@@ -334,14 +358,12 @@ function CreateLootFrame(weps,slotsamt,ent)
             else
                 surface.SetDrawColor(0,0,0,0)
             end
-
+    
             surface.SetMaterial(Material("homigrad/vgui/loading.png"))
             surface.DrawTexturedRectRotated(w/2,h/2,w/1.75,h/1.75,self.LootAnim)
-
-            if self.Weapon then
-                hg.DrawWeaponSelection(weapons.Get(self.Weapon),LootFrame:GetX() + SlotsSize * (i - 1),LootFrame:GetY(),self:GetWide(),self:GetTall(),0)
-            end
-
+    
+            local fixed_x,fixed_y = self:LocalToScreen(self:GetX(),self:GetY())
+    
             if self.Weapon != nil and self.LootIn then
                 if self.LootIn < CurTime() then
                     net.Start("hg loot")
@@ -353,6 +375,19 @@ function CreateLootFrame(weps,slotsamt,ent)
                     surface.PlaySound("homigrad/vgui/panorama/cards_draw_one_04.wav")
                 end
             end
+    
+            if self.Weapon and weapons.Get(self.Weapon) then
+                hg.DrawWeaponSelection(weapons.Get(self.Weapon),(fixed_x - (SlotsSize * (i - 1))) - (SlotsSize) * (1 - LootFrame.CurSize),fixed_y,self:GetWide() * LootFrame.CurSize,self:GetTall() * LootFrame.CurSize,0)
+            end
+        end
+
+        function Slot:Loot()
+            if self.BeingLooted or self.Weapon == nil then
+                return
+            end
+            self.BeingLooted = true
+            surface.PlaySound("homigrad/vgui/panorama/inventory_new_item_scroll_01.wav")
+            self.LootIn = CurTime() + 0.8
         end
     end
 end

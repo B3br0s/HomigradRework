@@ -1,5 +1,5 @@
-SWEP.AttPos = Vector(0,0,5)
-SWEP.AttAng = Angle(-1,0,0)
+SWEP.AttPos = Vector(0,0,0)
+SWEP.AttAng = Angle(0,0,0)
 SWEP.NextShoot = 0
 SWEP.RecoilForce = 1
 SWEP.RecoilMul = 1
@@ -9,13 +9,21 @@ function SWEP:GetEnt()
 end
 
 function SWEP:SetupMuzzle()
+    local ply = self:GetOwner()
     local Att = self:GetOwner():LookupAttachment('anim_attachment_rh')
     local Attachment = self:GetOwner():GetAttachment(Att)
     local Ang = Attachment.Ang
-    Ang:Add(self.AttAng)
+
+    local plyang = ply:EyeAngles()
+	plyang:RotateAroundAxis(plyang:Forward(),0)
+
+	local _,newAng = LocalToWorld(vector_origin,self.localAng or angle_zero,vector_origin,plyang)
+	local ang = Angle(newAng[1],newAng[2],newAng[3])
+    ang:Add(self.AttAng)
     --print(Ang)
-    self:SetNW2Angle("MuzzleAng",Ang)
-    self:SetNW2Vector("MuzzlePos",Attachment.Pos + Attachment.Ang:Forward() * self.AttPos[1] + Attachment.Ang:Right() * self.AttPos[2] + Attachment.Ang:Up() * self.AttPos[3]) 
+    local att_shit = self:GetOwner():GetBoneMatrix(11)
+    self:SetNW2Angle("MuzzleAng",ang)
+    self:SetNW2Vector("MuzzlePos",Attachment.Pos + Ang:Forward() * self.AttPos[1] + Ang:Right() * self.AttPos[2] + Ang:Up() * self.AttPos[3] + Ang:Up() * (SERVER and (!self:IsPistolHoldType() and 7 or -1) or 0)) 
 end
 
 function SWEP:GetTrace()
@@ -30,29 +38,7 @@ function SWEP:GetTrace()
     return util.TraceLine(tr)
 end
 
-function SWEP:BulletCallBack(tr,dmginfo,bullet)
-    /*local dmg_table = {}
-    dmg_table.Damage = dmginfo:GetDamage()
-    dmg_table.DamageType = dmginfo:GetDamageType()
-    dmg_table.DamagePosition = dmginfo:GetDamagePosition()
-    dmg_table.DamageForce = dmginfo:GetDamageForce()*/
-    if LocalPlayer() == self:GetOwner() then
-    bullet.Callback = nil
-        //PrintTable(tr)
-        if (tr.Entity:Health() or tr.Entity:IsRagdoll()) and !tr.HitWorld and !tr.HitSky or tr.HitWorld and !tr.HitSky then
-            net.Start("hg_reg")
-            net.WriteTable(tr)
-            net.WriteEntity(self)
-            //net.WriteTable(dmg_table)
-            net.WriteTable(bullet)
-            net.SendToServer()
-        end
-    end
-end
-
 function SWEP:Shoot(isfake)
-    //self:ShootNets(isfake)
-    //do return end
     local owner = self:GetOwner()
     if owner.suiciding and SERVER then
         if owner.Fake and owner:KeyDown(IN_USE) or !owner.Fake then
@@ -122,7 +108,7 @@ function SWEP:Shoot(isfake)
     local Num = self.NumBullet or 1
 
     local Bullet = {}
-    Bullet.Src = Att.Pos
+    Bullet.Src = Att.Pos - Att.Ang:Forward() * 10 + (SERVER and Att.Ang:Up() * 5 or vector_up * 0)
     Bullet.Dir = Att.Ang:Forward()
     Bullet.Damage = self.Primary.Damage
     //Bullet.Num = (self.NumBullet or 1)
@@ -131,12 +117,12 @@ function SWEP:Shoot(isfake)
     Bullet.AmmoType = self.Primary.Ammo
 
     for i = 1,Num do
-        Bullet.Callback = self.BulletCallBack
+        //Bullet.Callback = self.BulletCallBack
 
-        Bullet.Spread = (Num > 1 and VectorRand(-i / 32,i / 16) or Vector(0,0,0))
+        Bullet.Spread = (Num > 1 and VectorRand(-i / 64,i / 32) or Vector(0,0,0))
 
-        if CLIENT then
-            self:FireLuaBullets(Bullet)//за счёт этого рега создаётся :p
+        if SERVER then
+          self:FireLuaBullets(Bullet)
         end
     
         local effectdata = EffectData()

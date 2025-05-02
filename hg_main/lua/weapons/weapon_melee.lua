@@ -39,7 +39,7 @@ SWEP.Primary.ClipSize = 0
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = true
 
-SWEP.Primary.Damage = 25
+SWEP.Primary.Damage = 35
 SWEP.Primary.Force = 40
 
 SWEP.Secondary.ClipSize = 0
@@ -84,7 +84,7 @@ function SWEP:DrawHUD()
 	if not (GetViewEntity() == LocalPlayer()) then return end
 	if LocalPlayer():InVehicle() then return end
 
-	local tr = hg.eyeTrace(LocalPlayer())
+	local tr = hg.eyeTrace(LocalPlayer(),100)
 
 	if tr.Hit then
 		local hitPos = tr.HitPos

@@ -167,6 +167,9 @@ l.hmcd_bystander_soe = "You are an innocent, rely only on yourself, but stick ar
 l.hmcd_bystander_gfz = "You are a bystander of a murder scene, although it didn't happen to you, you better be cautious."
 l.hmcd_bystander_standard = "You are a bystander of a murder scene, although it didn't happen to you, you better be cautious."
 
+l.event_maker = "Event maker"
+l.event_player = "Player"
+
 // Скорборд
 
 l.sc_players = "Players"

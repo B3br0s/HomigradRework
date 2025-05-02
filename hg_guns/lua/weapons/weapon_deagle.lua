@@ -18,14 +18,14 @@ SWEP.BoltVec = Vector(0,0,-1.5)
 
 SWEP.ZoomPos = Vector(-10,-5.6,-0.51)
 SWEP.ZoomAng = Angle(0,0,0)
-SWEP.AttPos = Vector(29,0.3485,2.98)
+SWEP.AttPos = Vector(29,0.5,2.98)
 SWEP.AttAng = Angle(0.9,-0.3,0)
 
 SWEP.Primary.Damage = 85
 SWEP.Primary.Force = 200
 SWEP.Primary.ReloadTime = 1.25
 SWEP.Primary.Sound = "arccw_go/deagle/deagle-1.wav"
-SWEP.RecoilForce = 15
+SWEP.RecoilForce = 5
 
 SWEP.IconPos = Vector(1,110,-6)
 SWEP.IconAng = Angle(-20,0,0)

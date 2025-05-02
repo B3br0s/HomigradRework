@@ -13,6 +13,10 @@ hook.Add("Player Think","Main_Handler",function(ply)
 
     ply:SetNWFloat("rarm",ply.rarm)
     ply:SetNWFloat("larm",ply.larm)
+
+    if !ply:HasWeapon("weapon_hands") then
+        ply:Give("weapon_hands")
+    end
 end)
 
 hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)

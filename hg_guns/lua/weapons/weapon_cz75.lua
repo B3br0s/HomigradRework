@@ -26,7 +26,7 @@ SWEP.Primary.ReloadTime = 1.25
 SWEP.Primary.Wait = 0.09
 SWEP.Primary.Sound = {"arccw_go/cz75a/cz75_01.wav","arccw_go/cz75a/cz75_02.wav","arccw_go/cz75a/cz75_03.wav"}
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
-SWEP.RecoilForce = 0.5
+SWEP.RecoilForce = 4.5
 
 SWEP.IconPos = Vector(1,110,-5)
 SWEP.IconAng = Angle(-20,0,0)

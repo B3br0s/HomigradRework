@@ -9,8 +9,8 @@ SWEP.CorrectAng = Angle(0,2,0)
 
 SWEP.HolsterPos = Vector(-6,-16,0)
 SWEP.HolsterAng = Angle(0,45,-90)
-SWEP.BoltBone = nil
-SWEP.BoltVec = nil
+SWEP.BoltBone = "v_weapon.bolt"
+SWEP.BoltVec = Vector(-0.1,3.4,0)
 
 SWEP.ZoomPos = Vector(-4,0.323,-7.75)
 SWEP.ZoomAng = Angle(0,1.45,0.02)
@@ -29,19 +29,54 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.Wait = 0.07
 SWEP.TwoHands = true
 SWEP.RecoilForce = 2
+SWEP.BoltManual = true
+SWEP.Bodygroups = {[1] = 0,[2]=0,[3]=0,[4]=1,[5]=1}
 
 SWEP.IconPos = Vector(-2,60,-5)
 SWEP.IconAng = Angle(-20,0,0)
+SWEP.mul_reload = 0
+SWEP.mul_reload2 = 0
 
 SWEP.ReloadSounds = {
-    [0.55] = "arccw_go/mp5/mp5_clipout.wav",
-    [0.75] = "arccw_go/mp5/mp5_clipin.wav",
-    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
+    [0.65] = "arccw_go/mp5/mp5_clipout.wav",
+    [0.95] = "arccw_go/mp5/mp5_clipin.wav",
 }
 
 SWEP.ReloadSoundsEmpty = {
-    [0.55] = "arccw_go/mp5/mp5_clipout.wav",
-    [0.75] = "arccw_go/mp5/mp5_clipin.wav",
-    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav",
-    [1.15] = "arccw_go/mp5/mp5_slideforward.wav"
+    [0.55] = "arccw_go/mp5/mp5_slideback.wav",
+    [0.65] = "arccw_go/mp5/mp5_clipout.wav",
+    [0.95] = "arccw_go/mp5/mp5_clipin.wav",
+    [1.05] = "arccw_go/mp5/mp5_slideforward.wav"
 }
+
+local function easedLerp(fraction, from, to)
+	return LerpFT(math.ease.InSine(fraction), from, to)
+end
+
+function SWEP:PostAnim()
+	if self.BoltBone != nil and IsValid(self.worldModel) then
+		local bone = self.worldModel:LookupBone(self.BoltBone)
+
+		if self:Clip1() <= 0 and self.BoltLock then
+			self.animmul = 1.5
+		else
+			self.animmul = easedLerp(0.45,self.animmul,0)
+		end
+
+		self.worldModel:ManipulateBonePosition(bone,self.BoltVec * self.mul_reload)
+		self.worldModel:ManipulateBoneAngles(bone,Angle(-90,0,0) * self.mul_reload2)
+	end
+
+    if self.reload then
+        local reload_time = self.reload - CurTime()
+        if reload_time < 0.2 then
+            self.mul_reload = LerpFT(0.7, self.mul_reload, 0)
+        elseif reload_time < 0.27 then
+            self.mul_reload2 = LerpFT(0.6, self.mul_reload2, 0)
+        elseif reload_time < 0.8 then
+            self.mul_reload2 = LerpFT(0.3, self.mul_reload2, 1)
+        elseif reload_time < 0.9 then
+            self.mul_reload = LerpFT(0.3, self.mul_reload, 1)
+        end
+    end
+end

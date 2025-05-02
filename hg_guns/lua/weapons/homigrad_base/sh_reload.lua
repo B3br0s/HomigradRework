@@ -43,6 +43,7 @@ function SWEP:ReloadFunc()
         net.Broadcast()
     end
     timer.Simple(self.Primary.ReloadTime,function()
+        ply:SetSequence(1)
         if not IsValid(self) or not IsValid(self:GetOwner()) then return end
         local wep = self:GetOwner():GetActiveWeapon()
         if IsValid(self) and IsValid(ply) and (IsValid(wep) and wep or self:GetOwner().ActiveWeapon) == self then
