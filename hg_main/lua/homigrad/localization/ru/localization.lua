@@ -195,6 +195,13 @@ l.youre_hungry = "Ты голоден."
 l.need_2_players = "Необходимо 2 игрока чтобы начать."
 
 l.use_door = "Дверь"
+l.use_crate_small = "Малый ящик"
+l.use_crate_medium = "Средний ящик"
+l.use_crate_large = "Большой ящик"
+l.use_crate_melee = "Ящик с холодным оружием"
+l.use_crate_weapon = "Оружейный ящик"
+l.use_crate_grenade = "Ящик с гранатами"
+l.use_crate_medkit = "Медицинский ящик"
 l.use_button = "Кнопка"
 
 l.alive = "Живой"
@@ -217,6 +224,9 @@ l.item_notexist = "Предмет не существует."
 //Локализация названий
 
 l.weapon_bandage = "Бинт"
+l.weapon_medkit_hg = "Аптечка"
+l.weapon_painkillers_hg = "Болеутоляющее"
+l.weapon_adrenaline = "Адреналин"
 
 l.weapon_beton = "Съедобная Арматура"
 l.weapon_burger = "Бургер"
