@@ -30,8 +30,7 @@ local validUserGroupSuperAdmin = {
 }
 
 local validUserGroup = {
-	megapenis = true,
-	meagsponsor = true
+	operator = true
 }
 
 function COMMAND_GETASSES(ply)
@@ -352,6 +351,12 @@ COMMANDS.nextmode = {function(ply,args)
 	if table.HasValue(ROUND_LIST,args[1]) then
 		ROUND_NEXT = args[1]
 		ply:ChatPrint("Next mode - "..args[1])
+
+		net.Start("SyncRound")
+    	net.WriteString(ROUND_NAME)
+    	net.WriteString(ROUND_NEXT)
+		net.WriteBool(false)
+    	net.Broadcast()
 	else
 		ply:ChatPrint("no mode.")
 	end

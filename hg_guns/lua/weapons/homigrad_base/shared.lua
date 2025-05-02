@@ -40,6 +40,7 @@ function SWEP:Initialize()
     self.Reloading = false
     self.Inspecting = false
     self.SmoothedBolt = 0
+	self.ishgwep = true
     hg.Weapons[self] = true
     self.Instructions = ""
 
@@ -328,6 +329,11 @@ function SWEP:DrawHUD()
 end
 
 function SWEP:DrawWorldModel()
+	if self.Bodygroups then
+        for _, bodygroup in ipairs(self.Bodygroups) do
+            self:SetBodygroup(_,bodygroup)
+        end
+    end
     if not IsValid(self:GetOwner()) then self:DrawModel() return end
     local owner = self:GetOwner()
 
@@ -336,5 +342,10 @@ function SWEP:DrawWorldModel()
 	if IsValid(self.worldModel) and Pos then
 		self.worldModel:SetPos(Pos)
 		self.worldModel:SetAngles(Ang)
+		if self.Bodygroups then
+			for _, bodygroup in ipairs(self.Bodygroups) do
+				self.worldModel:SetBodygroup(_,bodygroup)
+			end
+		end
 	end
 end

@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Полицейская Дубинка"
-SWEP.Instructions = "Дубинка, используемая полицейскими подразделениями"
 
 SWEP.WorldModel = "models/drover/w_baton.mdl"
 

@@ -139,10 +139,3 @@ hook.Add("Think","Round-Think",function()
         end
     end
 end)
-
-hook.Add("PlayerInitialSpawn","SyncModes",function(ply)
-    net.Start("SyncRound")
-    net.WriteString(ROUND_NAME)
-    net.WriteString(ROUND_NEXT)
-    net.Send(ply)
-end)

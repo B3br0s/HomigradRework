@@ -1,7 +1,199 @@
 util.AddNetworkString("inventory")
+util.AddNetworkString("hg loot")
 util.AddNetworkString("ply_take_item")
 util.AddNetworkString("ply_take_ammo")
 util.AddNetworkString("DropItemInv")
+
+local BlackListWep = {
+	["weapon_hands"] = true
+}
+
+hg.loots = hg.loots or {}
+
+hg.loots.small_crate = {
+	"weapon_knife",
+	"weapon_hatchet",
+	"weapon_kknife",
+	"weapon_kabar",
+	"weapon_burger",
+	"weapon_water_bottle",
+	"weapon_chips",
+	"weapon_energy_drink",
+}
+
+hg.loots.medium_crate = {
+	"weapon_glock17",
+	"weapon_kabar",
+	"weapon_handcuffs",
+	"weapon_knife",
+	"weapon_tomahawk",
+	"weapon_shovel",
+	"weapon_fiveseven",
+	"weapon_pbat",
+	"weapon_hatchet",
+	"weapon_chips",
+	"weapon_energy_drink",
+	"weapon_painkillers_hg",
+}
+
+hg.loots.large_crate = {
+	"weapon_mag7",
+	"weapon_kabar",
+	"weapon_mp7",
+	"weapon_knife",
+	"weapon_shammer",
+	"weapon_shovel",
+	"weapon_painkillers_hg",
+	"weapon_bandage",
+	"weapon_medkit_hg",
+	"weapon_adrenaline",
+	"weapon_faxe",
+	"weapon_pbat",
+	"weapon_hatchet",
+	"weapon_mp9",
+	"weapon_r8",
+}
+
+hg.loots.melee_crate = {
+	"weapon_kabar",
+	"weapon_bat",
+	"weapon_kknife",
+	"weapon_shovel",
+	"weapon_faxe",
+	"weapon_faxe",
+	"weapon_knife",
+	"weapon_tomahawk",
+	"weapon_hatchet",
+	"weapon_pipe",
+	"weapon_shammer",
+	"weapon_shammer",
+	"weapon_pipe",
+}
+
+hg.loots.weapon_crate = {
+	"weapon_mp5",
+	"weapon_mag7",
+	"weapon_mp7",
+	"weapon_r8",
+	"weapon_ak47",
+	"weapon_mp9",
+	"weapon_deagle",
+	"weapon_glock17",
+	"weapon_m4a1",
+	"weapon_m9",
+	"weapon_pipe",
+}
+
+hg.loots.medkit_crate = {
+	"weapon_medkit_hg",
+	"weapon_bandage",
+	"weapon_bandage",
+	"weapon_bandage",
+	"weapon_painkillers_hg",
+	"weapon_adrenaline",
+}
+
+
+hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
+	if !ply:Alive() then
+		return
+	end
+
+	if ply.Fake then
+		return
+	end
+	if ply:KeyDown(IN_ATTACK2) and ply:KeyPressed(IN_USE) then
+		local tr = hg.eyeTrace(ply)
+
+		if tr.Entity then
+			local ent = tr.Entity
+
+			if ent:IsRagdoll() and hg.RagdollOwner(ent) != NULL and ent.Inventory then
+				net.Start("hg inventory")
+				net.WriteEntity(ent)
+				net.WriteTable(ent.Inventory)
+				net.WriteFloat(8)
+				net.Send(ply)
+			end
+		end
+	end
+end)
+
+net.Receive("hg loot",function(len,ply)
+	if !ply:Alive() then
+		return
+	end
+	local ent = net.ReadEntity()
+	local taked = net.ReadString()
+
+	if !ent.Inventory then
+		return
+	end
+
+	if table.HasValue(ent.Inventory,taked) then
+		table.RemoveByValue(ent.Inventory,taked)
+
+		if weapons.Get(taked) then
+			if ply:HasWeapon(taked) then
+				local ent_wep = ents.Create(taked)
+				ent_wep:Spawn()
+				ent_wep:SetPos(ent:GetPos() + vector_up * 32)
+				ent_wep.IsSpawned = true
+
+				if ent:IsRagdoll() and hg.RagdollOwner(ent):Alive() and hg.RagdollOwner(ent).FakeRagdoll == ent then
+					hg.RagdollOwner(ent):StripWeapon(taked)
+				end
+
+				if ent_wep.ishgwep then
+					ent_wep:EmitSound("snd_jack_hmcd_ammotake.wav")
+					ent_wep:SetClip1(0)
+					ply:GiveAmmo(ent_wep:GetMaxClip1(),ent_wep:GetPrimaryAmmoType(),true)
+				end
+			else
+				local wep = ply:Give(taked)
+				if ent:IsRagdoll() and hg.RagdollOwner(ent):Alive() and hg.RagdollOwner(ent).FakeRagdoll == ent then
+
+					local wep2 = hg.RagdollOwner(ent):GetWeapon(taked)
+
+					wep:SetClip1(wep2:Clip1())
+				end
+			end
+
+
+			if ent:IsRagdoll() and hg.RagdollOwner(ent):Alive() and hg.RagdollOwner(ent).FakeRagdoll == ent then
+				hg.RagdollOwner(ent):StripWeapon(taked)
+			end
+		end
+
+		if weapons.Get(taked).isMelee then
+			for _, wep in ipairs(ply:GetWeapons()) do
+				if wep.isMelee and wep:GetClass() != taked then
+					ply:DropWep(wep)
+				end
+			end
+		end
+
+		if weapons.Get(taked).TwoHands then
+			for _, wep in ipairs(ply:GetWeapons()) do
+				if wep.TwoHands and wep:GetClass() != taked then
+					ply:DropWep(wep)
+				end
+			end
+		end
+
+		if weapons.Get(taked).TwoHands != nil then
+			for _, wep in ipairs(ply:GetWeapons()) do
+				if wep.TwoHands == false and weapons.Get(taked).TwoHands == false and wep:GetClass() != taked then
+					ply:DropWep(wep)
+				end
+			end
+		end
+	else
+		net.Start("localized_chat")
+        net.WriteString('item_notexist')
+        net.Send(ply)
+	end
+end)
 
 local function send(ply,lootEnt,remove)
 	if ply then
@@ -25,162 +217,95 @@ hg.send = send
 
 net.Receive("DropItemInv",function(l,ply)
     local wepdrop = net.ReadString()
-    local prevplywep = ply:GetActiveWeapon()
     if !ply:HasWeapon(wepdrop) then
         return
     end
     
-    ply:SelectWeapon(wepdrop)
-    ply:Say("*drop")
-    ply:SelectWeapon(prevplywep)
+    ply:DropWep(ply:GetWeapon(wepdrop))
 
 end)
 
+hook.Add("PlayerCanPickupWeapon","Homigrad_Shit",function(ply,ent)
+	local tr = hg.eyeTrace(ply)
+	if ply:HasWeapon(ent:GetClass()) and hg.Weapons[ent] then
+		ply:GiveAmmo(ent:Clip1(),ent:GetPrimaryAmmoType(),true)
+		ent:SetClip1(0)
+		return false
+	end
+	if ply:HasWeapon(ent:GetClass()) then
+		return false
+	end
+	if hg.eyeTrace(ply).Entity == ent and ply:KeyDown(IN_USE) or (ent:GetPos():Distance(ply:GetPos()) < 45) and ply:KeyDown(IN_USE) then
+		if ent.isMelee then
+				for _, wep in ipairs(ply:GetWeapons()) do
+					if wep.isMelee then
+						ply:DropWep(wep)
+					end
+				end
+			end
+		
+			if ent.TwoHands then
+				for _, wep in ipairs(ply:GetWeapons()) do
+					if wep.TwoHands then
+						ply:DropWep(wep)
+					end
+				end
+			end
+		
+			if ent.TwoHands != nil then
+				for _, wep in ipairs(ply:GetWeapons()) do
+					if wep.TwoHands == false and ent.TwoHands == false then
+						ply:DropWep(wep)
+					end
+				end
+			end
+			return true
+		end
+		if !ent.IsSpawned then
+			if ent.isMelee then
+				for _, wep in ipairs(ply:GetWeapons()) do
+					if wep.isMelee then
+						ply:DropWep(wep)
+					end
+				end
+			end
+		
+			if ent.TwoHands then
+				for _, wep in ipairs(ply:GetWeapons()) do
+					if wep.TwoHands then
+						ply:DropWep(wep)
+					end
+				end
+			end
+		
+			if ent.TwoHands != nil then
+				for _, wep in ipairs(ply:GetWeapons()) do
+					if wep.TwoHands == false and ent.TwoHands == false then
+						ply:DropWep(wep)
+					end
+				end
+			end
 
-local function send(ply,lootEnt,remove)
-	if ply then
-		net.Start("inventory")
-		net.WriteEntity(not remove and lootEnt or nil)
-		net.WriteTable(lootEnt.Info.Weapons)
-		net.WriteTable(lootEnt.Info.Ammo)
-		net.Send(ply)
+		return true
 	else
-		for ply in pairs(lootEnt.UsersInventory) do
-			if not IsValid(ply) or not ply:Alive() or remove then lootEnt.UsersInventory[ply] = nil continue end
-
-			send(ply,lootEnt,remove)
-		end
-	end
-end
-
-hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
-	if lootEnt.UsersInventory ~= nil then
-		for plys,bool in pairs(lootEnt.UsersInventory) do
-			lootEnt.UsersInventory[plys] = nil
-			send(plys,lootEnt,true)
-		end
+		return false
 	end
 end)
 
-hook.Add("Player Think","Looting",function(ply)
-	local key = ply:KeyDown(IN_USE)
+hook.Add("Player Think","Homigrad_Limit",function(ply)
+	local inv = {}
 
-	if not ply.fake and ply:Alive() and ply:KeyDown(IN_ATTACK2) then
-		if ply.okeloot ~= key and key then
-			local tr = {}
-			tr.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
-			tr.endpos = tr.start + ply:EyeAngles():Forward() * 64
-			tr.filter = ply
-			local tracea = util.TraceLine(tr)
-			local hitEnt = tracea.Entity
-
-			if not IsValid(hitEnt) then return end
-			if IsValid(RagdollOwner(hitEnt)) then hitEnt = RagdollOwner(hitEnt) end
-			if IsValid(hitEnt) and hitEnt.IsJModArmor then hitEnt = hitEnt.Owner end
-			if not IsValid(hitEnt) then return end
-			if hitEnt:IsPlayer() and hitEnt:Alive() and not hitEnt.fake then return end
-			if not hitEnt.Info then return end
-			
-			hitEnt.UsersInventory = hitEnt.UsersInventory or {}
-			hitEnt.UsersInventory[ply] = true
-
-			send(ply,hitEnt)
-			hitEnt:CallOnRemove("fuckoff",function() send(nil,hitEnt,true) end)
+	for _, wep in ipairs(ply:GetWeapons()) do
+		if BlackListWep[wep:GetClass()] then
+			continue 
 		end
+		table.insert(inv,wep)
 	end
 
-	ply.okeloot = key
-end)
-
-local prekol = {
-	weapon_physgun = true,
-	gmod_tool = true
-}
-
-net.Receive("inventory",function(len,ply)
-	local lootEnt = net.ReadEntity()
-	if not IsValid(lootEnt) then return end
-
-	lootEnt.UsersInventory[ply] = nil
-	player.Event(ply,"inventory close",lootEnt)
-end)
-
-net.Receive("ply_take_item",function(len,ply)
-	--if ply:Team() ~= 1002 then return end
-
-	local lootEnt = net.ReadEntity()
-	if not IsValid(lootEnt) then return end
-
-	local wep = net.ReadString()
-	--local takeammo = net.ReadBool()
-
-	local lootInfo = lootEnt.Info
-	local wepInfo = lootInfo.Weapons[wep]
-	
-	if not wepInfo then return end
-
-	if (prekol[wep] and not ply:IsAdmin()) then
-		if !(roundActiveName == 'trashcompactor') then
-			ply:Kick("xd))00") 
-		end
-		return 
-	end
-
-	if ply:HasWeapon(wep) then
-		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end
-		if wepInfo.Clip1!=nil and wepInfo.Clip1 > 0 then
-			ply:GiveAmmo(wepInfo.Clip1,wepInfo.AmmoType)
-			wepInfo.Clip1 = 0
-		else
-			ply:ChatPrint("У тебя уже есть это оружие.")
-		end
-	else
-		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end
-		
-		ply.slots = ply.slots or {}
-		
-		local realwep = weapons.Get(wep)
-		
-		if IsValid(lootEnt.wep) and lootEnt.curweapon == wep then
-			DespawnWeapon(lootEnt)
-			lootEnt.wep:Remove()
-		end
-
-		local actwep = ply:GetActiveWeapon()
-
-		local wep1 = ply:Give(wep)
-		if IsValid(wep1) and wep1:IsWeapon() then
-			wep1:SetClip1(wepInfo.Clip1 or 0)
-		end
-		
-		ply:SelectWeapon(actwep:GetClass())
-
-		if lootEnt:IsPlayer() then lootEnt:StripWeapon(wep) end
-		lootInfo.Weapons[wep] = nil
-		table.RemoveByValue(lootInfo.Weapons2,wep)
-
-		if lootEnt:IsRagdoll() then
-			deadBodies[lootEnt:EntIndex()] = {lootEnt,lootEnt.Info}
-			net.Start("send_deadbodies")
-			net.WriteTable(deadBodies)
-			net.Broadcast()
+	if #inv > 8 then
+		local a,b = table.Random(inv)
+		if a != ply:GetActiveWeapon() then
+			ply:DropWep(a)
 		end
 	end
-
-	send(nil,lootEnt)
-end)
-
-net.Receive("ply_take_ammo",function(len,ply)
-	--if ply:Team() ~= 1002 then return end
-
-	local lootEnt = net.ReadEntity()
-	if not IsValid(lootEnt) then return end
-	local ammo = net.ReadFloat()
-	local lootInfo = lootEnt.Info
-	if not lootInfo.Ammo[ammo] then return end
-
-	ply:GiveAmmo(lootInfo.Ammo[ammo],ammo)
-	lootInfo.Ammo[ammo] = nil
-
-	send(nil,lootEnt)
 end)

@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Складной Ножик"
-SWEP.Instructions = "Маленький ножик складного типа, который удобно носить в кармане. Хорошее средство для самообороны, которое никто не сможет увидеть, пока вы не достанете его из кармана."
 
 SWEP.WorldModel = "models/weapons/w_jnife_jj.mdl"
 

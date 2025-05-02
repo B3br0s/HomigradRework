@@ -39,6 +39,8 @@ function dr.SpawnRunner(ply)
 
     ply:Spawn()
 
+    //ply:Give("weapon_knife_css")
+
     if #ReadDataMap("dr_spawn_runner") != 0 then
         ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
     else
@@ -62,6 +64,7 @@ function dr.StartRoundSV()
         end
         table.insert(plys,ply)
         ply:SetTeam(1)
+        ply.AppearanceOverride = true
         dr.SpawnRunner(ply)
     end
 

@@ -49,6 +49,10 @@ function SWEP:PostAnim()
 		self.worldModel:ManipulateBonePosition(bone,self.BoltVec * self.animmul)
 	end
 
+    if ply:GetNWBool("suiciding") then
+        return
+    end
+
     self.Pump = easedLerp(0.45,self.Pump,self.PumpTarg)
 
     local PumpAngs = Angle(-50,-30,0)

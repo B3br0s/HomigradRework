@@ -13,8 +13,8 @@ if ( CLIENT ) then
 	SWEP.ViewModelFlip		= false
 	SWEP.CSMuzzleFlashes	= true
 	
-	SWEP.Slot				= 0
-	SWEP.SlotPos			= 3
+	SWEP.Slot = 1
+	SWEP.SlotPos = 1
 	SWEP.IconLetter			= "j"
 
 	killicon.AddFont("weapon_knife", "CSKillIcons", SWEP.IconLetter, Color( 255, 80, 0, 255 ))

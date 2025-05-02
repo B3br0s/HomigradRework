@@ -5,7 +5,7 @@ function tdm.SpawnBlue(ply)
 
     local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar","weapon_mag7"}
     local weps_sec = {"weapon_deagle","weapon_glock17","weapon_r8","weapon_fiveseven"}
-    local weps_oth = {"weapon_kabar"}
+    local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg"}
 
     ply:SetTeam(1)
 
@@ -17,7 +17,9 @@ function tdm.SpawnBlue(ply)
 
     local wep_primary = ply:Give(table.Random(weps_pri))
     local wep_secondary = ply:Give(table.Random(weps_sec))
-    local wep_other = ply:Give(table.Random(weps_oth))
+    for _, wep in pairs(weps_oth) do
+        ply:Give(wep)
+    end
 
     wep_primary:SetClip1(wep_primary:GetMaxClip1())
     wep_secondary:SetClip1(wep_secondary:GetMaxClip1())
@@ -36,7 +38,7 @@ function tdm.SpawnRed(ply)
 
     local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar","weapon_mag7"}
     local weps_sec = {"weapon_deagle","weapon_glock17","weapon_r8","weapon_fiveseven"}
-    local weps_oth = {"weapon_kabar"}
+    local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg"}
 
     ply:SetTeam(2)
 
@@ -48,7 +50,9 @@ function tdm.SpawnRed(ply)
 
     local wep_primary = ply:Give(table.Random(weps_pri))
     local wep_secondary = ply:Give(table.Random(weps_sec))
-    local wep_other = ply:Give(table.Random(weps_oth))
+    for _, wep in pairs(weps_oth) do
+        ply:Give(wep)
+    end
 
     wep_primary:SetClip1(wep_primary:GetMaxClip1())
     wep_secondary:SetClip1(wep_secondary:GetMaxClip1())

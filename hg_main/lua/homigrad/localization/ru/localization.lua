@@ -203,6 +203,47 @@ l.unknown = "Неизвестно"
 l.spectating = "Наблюдает"
 l.spectator = "Наблюдатель"
 
+l.cant_kick = "Ты не можешь пинать потому что твоя нога сломана."
+l.leg_hurt = "Твоя нога болит."
 l.uncon = "БЕЗ СОЗНАНИЯ"
+
+l.heal = "Подлечить %s"
+l.wep_delay = "Задержка: %s"
+l.wep_dmg = "Урон: %s"
+l.wep_force = "Сила: %s"
+
+l.item_notexist = "Предмет не существует."
+
+//Локализация названий
+
+l.weapon_bandage = "Бинт"
+
+l.weapon_beton = "Съедобная Арматура"
+l.weapon_burger = "Бургер"
+l.weapon_water_bottle = "Бутылка Воды"
+l.weapon_canned_burger = "Консервированный Бургер"
+l.weapon_milk = "Молоко"
+l.weapon_chips = "Чипсы"
+l.weapon_energy_drink = "Энергетик"
+
+l.weapon_ied = "Самодельное взрывное устройство"
+l.ied_plant = "Заложить IED"
+l.ied_metalprop = "в металлический проп"
+l.weapon_hands = "Руки"
+
+l.weapon_handcuffs = "Наручники"
+
+l.weapon_kabar = "Байонет"
+l.weapon_bat = "Бита"
+l.weapon_shammer = "Кувалда"
+l.weapon_kknife = "Кухонный Нож"
+l.weapon_shovel = "Лопата"
+l.weapon_faxe = "Пожарный Топор"
+l.weapon_pbat = "Полицейская Дубинка"
+l.weapon_knife = "Складной Нож"
+l.weapon_tomahawk = "Томагавк"
+l.weapon_hatchet = "Топорик"
+l.weapon_pipe = "Труба"
+l.weapon_fubar = "Фубар"
 
 hg.Localizations.ru = l

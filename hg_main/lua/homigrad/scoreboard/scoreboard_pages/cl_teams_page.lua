@@ -58,11 +58,12 @@ hook.Add("HUDPaint","Teams_Page",function()
     if hg.ScoreBoard == 2 and not open then
         open = true
         local MainPanel = vgui.Create("DFrame", ScoreBoardPanel)
-        MainPanel:SetSize(ScrW() / 1.15, ScrH() / 1.15)
+        MainPanel:SetSize(ScrW(), ScrH() / 1.15)
         MainPanel:Center()
         MainPanel:SetDraggable(false)
         MainPanel:SetTitle(" ")
         MainPanel:ShowCloseButton(false)
+        //MainPanel:SetMouseInputEnabled(false)
 
         function MainPanel:Paint(w, h)
             draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0))
@@ -86,9 +87,9 @@ hook.Add("HUDPaint","Teams_Page",function()
             surface.DrawOutlinedRect(-2,-2,w,h,1)*/
         end
 
-        AddButtonCustom(MainFrame,hg.GetPhrase(TableRound().Teams[1].Name),{x=200,y=MainFrame:GetTall()},0,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1) net.SendToServer() end,TableRound().Teams[1].Color)
+        AddButtonCustom(MainFrame,hg.GetPhrase((TableRound().Teams[1].Name or "N/A")),{x=200,y=MainFrame:GetTall()},0,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1) net.SendToServer() end,TableRound().Teams[1].Color)
         AddButtonCustom(MainFrame,hg.GetPhrase("spectator"),{x=200,y=MainFrame:GetTall()},1,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1002) net.SendToServer() end,Color(200,200,200))
-        AddButtonCustom(MainFrame,hg.GetPhrase(TableRound().Teams[2].Name),{x=200,y=MainFrame:GetTall()},2,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(2) net.SendToServer() end,TableRound().Teams[2].Color)
+        AddButtonCustom(MainFrame,hg.GetPhrase((TableRound().Teams[2].Name or "N/A")),{x=200,y=MainFrame:GetTall()},2,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(2) net.SendToServer() end,TableRound().Teams[2].Color)
 
         panelka = MainPanel
     elseif hg.ScoreBoard != 2 then

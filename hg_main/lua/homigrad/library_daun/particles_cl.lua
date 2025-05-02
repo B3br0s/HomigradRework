@@ -7,11 +7,15 @@ local nextCalculateThinkMin,nextCalculateThinkMax
 
 local Rand,random = math.Rand,math.random
 
+hook.Add("Think","hg",function()
+    CTime = CurTime()
+end)
+
 ParticleLightFunc = function(self)
     local Time = CTime
 
     if (self.delayLight or 0) < Time then
-        self.delayLight = Time + Rand(nextCalculateThinkMin,nextCalculateThinkMax)
+       // self.delayLight = Time + Rand(nextCalculateThinkMin,nextCalculateThinkMax)
 
         local r,g,b = self.r,self.g,self.b
 
@@ -23,13 +27,13 @@ ParticleLightFunc = function(self)
             self.b = b
         end
 
-        local matrix = LightCalculate(self:GetPos(),Lerp(self:GetLifeTime() / self:GetDieTime(),self:GetStartSize(),self:GetEndSize()) / 2)
+        /*local matrix = LightCalculate(self:GetPos(),Lerp(self:GetLifeTime() / self:GetDieTime(),self:GetStartSize(),self:GetEndSize()) / 2)
 
         local r,g,b = LightApply(matrix,r,g,b)
 
         self.sR = r
         self.sG = g
-        self.sB = b
+        self.sB = b*/
     end
 
     local r,g,b = self:GetColor()
@@ -38,7 +42,7 @@ ParticleLightFunc = function(self)
     
     local t = 0.75
 
-    self:SetColor(Lerp(t,r,self.sR),Lerp(t,g,self.sG),Lerp(t,b,self.sB))
+    //self:SetColor(Lerp(t,r,self.sR),Lerp(t,g,self.sG),Lerp(t,b,self.sB))
 
     if self:Think() ~= false then
         self:SetNextThink(Time + Rand(0.1,0.25))
@@ -82,7 +86,9 @@ local function Add(self,mat,pos)
     
     part.Think = Think
 
+    if CTime then
     part:SetNextThink(CTime)
+    end
     part:SetThinkFunction(ParticleLightFunc)
     part.IsValid = IsValid
 
@@ -149,6 +155,8 @@ end)
 
 hook.Add("PostCleanupMap","ParticlesList",function()
     for part in pairs(ParticlesList) do
-        part:Remove()
+        if IsValid(part) then
+            part:Remove()
+        end
     end
 end)

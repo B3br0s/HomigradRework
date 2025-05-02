@@ -3,6 +3,11 @@ MAX_PAIN = 50 --мокс пеин
 hook.Add("Player Think","Homigrad_Pain_Think",function(ply)
     if not ply:Alive() then return end
 
+    if ROUND_NAME == "dr" then
+        ply.pain = 0
+        return
+    end
+
     if ply.painNext < CurTime() then
         ply.painNext = CurTime() + 0.25
 

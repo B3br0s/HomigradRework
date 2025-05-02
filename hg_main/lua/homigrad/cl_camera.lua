@@ -68,6 +68,7 @@ local CalcView--fuck
 local vel = 0
 local diffang = Vector(0,0,0)
 local diffpos = Vector(0,0,0)
+local shit_ang = Angle(0,0,0)
 diffang2 = Angle(0,0,0)
 
 hook.Add("RenderScene","homigrad_mainrenderscene",function(pos,angle,fov)
@@ -176,6 +177,7 @@ local angZero = Angle(0,0,0)
 local lastcall = 0
 
 function CalcView(ply,vec,ang,fov,znear,zfar)
+	shit_ang = LerpAngleFT(0.1,shit_ang,ang)
 	local dtime = SysTime() - lastcall
 	lastcall = SysTime()
 	if STOPRENDER then return end

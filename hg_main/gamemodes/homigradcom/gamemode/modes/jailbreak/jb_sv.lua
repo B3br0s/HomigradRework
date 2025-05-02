@@ -7,7 +7,7 @@ function jb.SpawnWarden(ply)
 
     local weps_pri = {"weapon_m4_css"}
     local weps_sec = {"weapon_deagle_css"}
-    local weps_oth = {"weapon_kknife","weapon_handcuffs"}
+    local weps_oth = {"weapon_kknife","weapon_handcuffs","weapon_painkillers_hg","weapon_bandage"}
 
     if #ReadDataMap("jb_warden") == 0 then
 	    for i, ent in RandomPairs(ents.FindByClass("info_player_counterterrorist")) do
@@ -87,10 +87,15 @@ function jb.StartRoundSV()
         jb.SpawnPrisoner(ply)
     end
 
-    local htr = table.Random(plys)
+    local htr1 = table.Random(plys)
+    table.RemoveByValue(plys,htr1)
 
-    jb.SpawnWarden(htr)
-
+    jb.SpawnWarden(htr1)
+    if #player.GetAll() > 12 then
+        local htr2 = table.Random(plys)
+        jb.SpawnWarden(htr2)
+    end
+    
     game.CleanUpMap(false)
 end
 

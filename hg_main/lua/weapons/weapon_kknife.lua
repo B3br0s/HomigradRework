@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Кухонный ножик"
-SWEP.Instructions = "Колющий, а также рубящий, режущий инструмент, рабочей частью которого является клинок — полоса, выполненная из твёрдого материала."
 
 SWEP.WorldModel = "models/weapons/me_kitknife/w_me_kitknife.mdl"
 

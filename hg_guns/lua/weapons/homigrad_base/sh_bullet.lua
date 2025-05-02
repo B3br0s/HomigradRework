@@ -10,7 +10,6 @@ end
 
 function SWEP:SetupMuzzle()
     local Att = self:GetOwner():LookupAttachment('anim_attachment_rh')
-
     local Attachment = self:GetOwner():GetAttachment(Att)
     local Ang = Attachment.Ang
     Ang:Add(self.AttAng)
@@ -54,6 +53,38 @@ end
 function SWEP:Shoot(isfake)
     //self:ShootNets(isfake)
     //do return end
+    local owner = self:GetOwner()
+    if owner.suiciding and SERVER then
+        if owner.Fake and owner:KeyDown(IN_USE) or !owner.Fake then
+            owner:DropWep(nil,nil,vector_up * -50,true)
+            local SuicideInfo = DamageInfo()
+            local head = owner:GetBoneMatrix(6)
+            SuicideInfo:SetDamagePosition(head:GetTranslation() - vector_up * 6)
+            SuicideInfo:SetDamageForce(vector_up * 64)
+            SuicideInfo:SetDamage(120)
+            SuicideInfo:SetDamageType(DMG_BULLET)
+            SuicideInfo:SetAttacker(owner)
+            SuicideInfo:SetInflictor(self)
+            owner.LastInfo = SuicideInfo
+            owner.LastBone = "ValveBiped.Bip01_Head1"
+            owner:TakeDamageInfo(SuicideInfo)
+            owner:SetHealth(owner:Health() - SuicideInfo:GetDamage() * 7)
+            net.Start("bp headshoot explode")
+            net.WriteVector(head:GetTranslation())
+            net.WriteVector(vector_up * 3)
+            net.Broadcast()
+            net.Start("bp buckshoot")
+            net.WriteVector(head:GetTranslation())
+            net.WriteVector(vector_up * 3)
+            net.Broadcast()
+
+            timer.Simple(0,function()
+                if IsValid(owner.FakeRagdoll) then
+                    owner.FakeRagdoll:ManipulateBoneScale(owner.FakeRagdoll:LookupBone("ValveBiped.Bip01_Head1"),Vector(0.0001,0.0001,0.0001))
+                end
+            end)
+        end
+    end
     if self.NextShoot and self.NextShoot > CurTime() then return end
     if self.reload then
         return

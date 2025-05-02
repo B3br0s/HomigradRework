@@ -107,6 +107,26 @@ function SWEP:Step_Anim()
     local ply = self:GetOwner()
 	self:PostAnim()
 	self.SprayI = LerpFT(0.15,self.SprayI,0.25)
+	if ply:GetNWBool("suiciding") then
+		self:SetHoldType("normal")
+		if self:IsPistolHoldType() then
+			hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(50,-10,-30),1,0.1)
+			hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(-5,-110,0),1,0.1)
+			hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-20,0),1,0.1)
+			hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		else
+			hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(90,30,0),1,0.1)
+			hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(-20,-70,0),1,0.1)
+			hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-20,0),1,0.1)
+			hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.1)
+
+			hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(-80,0,-90),1,0.1)
+			hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(50,-110,0),1,0.1)
+			hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(-20,-90,0),1,0.1)
+			hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(30,0,0),1,0.1)
+		end
+		return
+	end
 	if self.reload then
 		return
 	end
@@ -131,6 +151,10 @@ function SWEP:Step_Anim()
 	end
 
 	if !self.CustomAnim then
+		hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.1)
 		if self:IsPistolHoldType() then
 			if self:IsSprinting() and !self:IsSighted() then
 				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.4)

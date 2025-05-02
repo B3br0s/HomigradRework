@@ -12,6 +12,9 @@ function hmcd.GetTeamName(ply)
     if !ply then
         ply = LocalPlayer()
     end
+    if !hmcd.Type then
+        hmcd.Type = "soe"
+    end
     if ply.IsTraitor then
         return "hmcd_traitor",Color(230,0,0),hg.GetPhrase("hmcd_traitor_"..hmcd.Type)
     elseif ply.IsGunman then

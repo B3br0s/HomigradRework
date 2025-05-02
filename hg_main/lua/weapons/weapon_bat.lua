@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Деревянная бита"
-SWEP.Instructions = "Часть спортивного инвентаря, предназначенная для нанесения ударов по мячу. Также популярно как холодное оружие благодаря своему удобству. Особенности конструкции биты позволяют наносить ею тяжёлые и мощные удары."
 
 SWEP.WorldModel = "models/weapons/w_knije_t.mdl"
 

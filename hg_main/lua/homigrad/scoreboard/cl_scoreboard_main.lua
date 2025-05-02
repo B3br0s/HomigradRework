@@ -1,9 +1,9 @@
-local shit = 0
-local shit_t = 0
-
 if not open then
     open = false
 end
+
+local toggle_tab = (ConVarExists("hg_toggle_score") and GetConVar("hg_toggle_score") or CreateClientConVar("hg_toggle_score","1",true,false,"Toggle tab",0,1))
+
 function AddPanel(Parent,Text,NeedTo,ChangeTo,SizeXY,DockTo,CustomFunc)
     local ButtonShit = Parent:Add("hg_button")
     ButtonShit:SetSize(SizeXY.x,SizeXY.y)
@@ -23,10 +23,7 @@ function AddPanel(Parent,Text,NeedTo,ChangeTo,SizeXY,DockTo,CustomFunc)
     end
 end
 
-function show_scoreboard(looting)
-    if !looting then
-        lootEnt = nil
-    end
+function show_scoreboard()
     if hg.ScoreBoard == 2 and !LocalPlayer():Alive() then
         hg.ScoreBoard = 1 
     end
@@ -43,7 +40,7 @@ function show_scoreboard(looting)
     ScoreBoardPanel:SetDraggable(false)
     ScoreBoardPanel:SetKeyBoardInputEnabled(false)
     function ScoreBoardPanel:Paint(w,h)
-        draw.RoundedBox(0,self:GetX(),self:GetY(),w,h,Color(0,0,0,129 * shit))
+        draw.RoundedBox(0,self:GetX(),self:GetY(),w,h,Color(0,0,0,129))
     end
     
     ItemsPanel = vgui.Create("DScrollPanel",ScoreBoardPanel)
@@ -57,6 +54,7 @@ function show_scoreboard(looting)
     ItemsPanel:SetKeyBoardInputEnabled(false)
     ItemsPanel:SetHeight(ScrH() / 2)
     ItemsPanel:SetY(ScrH() / 4)
+    ItemsPanel:SetZPos(1000)
 
     ItemsPanelPaint = vgui.Create("DFrame",ScoreBoardPanel)
     ItemsPanelPaint:SetSize(ScrW()/256,ScrH())
@@ -114,26 +112,73 @@ function show_scoreboard(looting)
 end
 
 hook.Add("ScoreboardShow","Homigrad_ScoreBoard",function()
-    shit_t = 1
-    if IsValid(ScoreBoardPanel) then
-        ScoreBoardPanel:Remove()
+    if toggle_tab:GetBool() then
+        return false
     end
-    show_scoreboard()
+    if IsValid(ScoreBoardPanel) then
+        if hg.islooting then
+            surface.PlaySound("homigrad/vgui/item_drop.wav")
+        end
+        hg.islooting = false
+        hg.lootent = NULL
+        ScoreBoardPanel:Remove()
+    else
+        show_scoreboard()
+    end
     return false
 end)
 
 hook.Add("ScoreboardHide","Homigrad_ScoreBoard",function()
-    shit_t = 0
+    if toggle_tab:GetBool() then
+        return
+    end
     if IsValid(ScoreBoardPanel) then
         ScoreBoardPanel:Remove()
+        hg.islooting = false
+        hg.lootent = NULL
     end
 end)
 
 
+
 local tabPressed = false
+fastloot = false
 local nextUpdateTime = RealTime() - 1
-hook.Add("Think", "HomigradScoreboardToggle", function()
-    shit = LerpFT(0.1,shit,shit_t)
+hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
+    if hg.islooting and IsValid(hg.lootent) and hg.lootent:GetPos():Distance(LocalPlayer():GetPos()) > 95 or !IsValid(hg.lootent) and hg.islooting or hg.islooting and !LocalPlayer():Alive() then
+        if hg.islooting then
+            surface.PlaySound("homigrad/vgui/item_drop.wav")
+        end
+        hg.islooting = false
+        hg.lootent = NULL
+        if IsValid(ScoreBoardPanel) then
+            hg.islooting = false
+            ScoreBoardPanel:Remove()
+        end
+    end
+    if input.IsKeyDown(KEY_H) and !fastloot then
+        fastloot = true
+    elseif !input.IsKeyDown(KEY_H) then
+        fastloot = false
+    end
+
+    if !toggle_tab:GetBool() then
+        return
+    end
+    if input.IsKeyDown(KEY_TAB) and !tabPressed then
+        if IsValid(ScoreBoardPanel) then
+            if hg.islooting then
+                surface.PlaySound("homigrad/vgui/item_drop.wav")
+            end
+            hg.islooting = false
+            ScoreBoardPanel:Remove()
+        else
+            show_scoreboard()
+        end
+        tabPressed = true
+    elseif !input.IsKeyDown(KEY_TAB) then
+        tabPressed = false
+    end
 end)
 
 

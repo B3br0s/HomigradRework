@@ -195,6 +195,13 @@ l.youre_hungry = "You're hungry."
 l.need_2_players = "We need 2 players to start."
 
 l.use_door = "Door"
+l.use_crate_small = "Small Container"
+l.use_crate_medium = "Medium Container"
+l.use_crate_large = "Large Container"
+l.use_crate_melee = "Melee Container"
+l.use_crate_weapon = "Weapon Container"
+l.use_crate_grenade = "Grenade Container"
+l.use_crate_medkit = "Medicines Container"
 l.use_button = "Button"
 
 l.alive = "Alive"
@@ -203,6 +210,50 @@ l.unknown = "Unknown"
 l.spectating = "Spectating"
 l.spectator = "Spectator"
 
+l.cant_kick = "You cant kick because your leg is broken."
+l.leg_hurt = "Your leg hurts."
 l.uncon = "UNCONSCIOUS"
+
+l.heal = "Heal %s"
+l.wep_delay = "Delay: %s"
+l.wep_dmg = "Damage: %s"
+l.wep_force = "Force: %s"
+
+l.item_notexist = "Item is not exist."
+
+//Локализация названий
+
+l.weapon_bandage = "Bandage"
+l.weapon_medkit_hg = "Medkit"
+l.weapon_painkillers_hg = "Painkillers"
+l.weapon_adrenaline = "Adrenaline"
+
+l.weapon_beton = "Eatable armature"
+l.weapon_burger = "Burger"
+l.weapon_water_bottle = "Water Bottle"
+l.weapon_canned_burger = "Canned Burger"
+l.weapon_milk = "Milk"
+l.weapon_chips = "Chips"
+l.weapon_energy_drink = "Energy Drink"
+
+l.weapon_ied = "Improved Explosive Device"
+l.ied_plant = "Plant IED"
+l.ied_metalprop = "in metallic prop"
+l.weapon_hands = "Hands"
+
+l.weapon_handcuffs = "HandCuffs"
+
+l.weapon_kabar = "Bayonet"
+l.weapon_bat = "Bat"
+l.weapon_shammer = "Sledge Hammer"
+l.weapon_kknife = "Kitchen Knife"
+l.weapon_shovel = "Shovel"
+l.weapon_faxe = "Fire Axe"
+l.weapon_pbat = "Police Tonfa"
+l.weapon_knife = "Pocket Knife"
+l.weapon_tomahawk = "Tomahawk"
+l.weapon_hatchet = "Hatchet"
+l.weapon_pipe = "Lead Pipe"
+l.weapon_fubar = "Fubar"
 
 hg.Localizations.en = l

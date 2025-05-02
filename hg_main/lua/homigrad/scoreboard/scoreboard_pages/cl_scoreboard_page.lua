@@ -43,7 +43,7 @@ function CheckPlyTeam(ply)
     if ROUND_NAME == "hmcd" then
         local name,clr,desc = hmcd.GetTeamName(ply)
 
-        print(clr,name,ply)
+        //print(clr,name,ply)
 
         return clr,name
     end
@@ -71,10 +71,11 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         end
         open = true
         local MainPanel = vgui.Create("DFrame", ScoreBoardPanel)
-        MainPanel:SetSize(ScrW() / 1.15, ScrH() / 1.15)
+        MainPanel:SetSize(ScrW(), ScrH() / 1.15)
         MainPanel:Center()
         MainPanel:SetDraggable(false)
         MainPanel:SetTitle(" ")
+        //MainPanel:SetMouseInputEnabled(false)
         MainPanel:ShowCloseButton(false)
 
         function MainPanel:Paint(w, h)
@@ -87,6 +88,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         ScrollShit:SetDraggable(false)
         ScrollShit:SetTitle(" ")
         ScrollShit:ShowCloseButton(false)
+        //ScrollShit:SetMouseInputEnabled(true)
         ScrollShit.tps = Color(0,255,0)
         ScrollShit.DefaultClr = Color(22,22,22,200)
 
@@ -118,7 +120,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             draw.SimpleText(hg.GetPhrase("sc_team"), "HS.18", w - w / 5.5, h - h / 1.02, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
             surface.SetFont("HS.18")
-            local size = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_curround"),TableRound().name)))
+            local size = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_curround"),(TableRound and TableRound().name or "N/A"))))
             local size2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_tps"),tps)))
 
             draw.SimpleText(string.format(hg.GetPhrase("sc_curround"),TableRound().name), "HS.18", w - w / 1.01, h - 20, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)          
@@ -252,6 +254,10 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                 surface.SetDrawColor(PlyColor.r,PlyColor.g,PlyColor.b,25)
                 surface.SetMaterial(Material("vgui/gradient-l"))
                 surface.DrawTexturedRect(0,0,DefaultSizeX * 2 * (self.CurSizeMul * 2),DefaultSizeY * self.CurSizeMul)
+
+                if !TeamColor then
+                    TeamColor = Color(0,0,0)
+                end
 
                 surface.SetDrawColor(TeamColor.r,TeamColor.g,TeamColor.b,75)
                 surface.SetMaterial(Material("vgui/gradient-r"))

@@ -27,6 +27,9 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
         gradshit:SetImage('gui/center_gradient')
         gradshit:SetImageColor(Color(0,0,0,0))
     end
+    if ROUND_NAME == "dr" then
+        return
+    end
     --RunConsoleCommand("slot5")
     if not ply:Alive() then if LastDeathTime < CurTime() then k = 0 ply:SetDSP(0) gradshit:SetImageColor(Color(0,0,0,0)) end return end
     

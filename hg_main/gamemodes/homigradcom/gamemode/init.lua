@@ -74,6 +74,10 @@ end)
 function GM:PlayerInitialSpawn(ply)
     ply.KSILENT = true
     ply:SetTeam(1)
+    net.Start("SyncRound")
+    net.WriteString(ROUND_NAME)
+    net.WriteString(ROUND_NEXT)
+    net.Send(ply)
 end
 
 function GM:DoPlayerDeath(ply,attacker,dmginfo)

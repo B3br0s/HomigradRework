@@ -129,7 +129,7 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
             net.WriteVector(Pos + Ang:Up() * 10)
             net.Broadcast()
             rag.gib["Full"] = true
-            //rag:Remove()
+            rag:Remove()
         end
     end
 end)

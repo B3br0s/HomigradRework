@@ -7,6 +7,12 @@ hook.Add("Player Think","Main_Handler",function(ply)
     ply:SetNWBool("otrub",ply.otrub)
     ply:SetNWBool("bleeding",ply.bleeding)
     ply:SetNWBool("blood",ply.blood)
+
+    ply:SetNWFloat("rleg",ply.rleg)
+    ply:SetNWFloat("lleg",ply.lleg)
+
+    ply:SetNWFloat("rarm",ply.rarm)
+    ply:SetNWFloat("larm",ply.larm)
 end)
 
 hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
@@ -25,8 +31,6 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
         end)
     end
 
-    ply.painlosing = 1
-	ply.pain = 0
 	ply.painNext = 0
     ply.bloodNext = 0
     ply.hungerNext = 0
@@ -34,9 +38,10 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
     ply.hunger = 100
     ply.lerp_rh = 0
 	ply.lerp_lh = 0
-
 	ply.larm = 1
 	ply.rarm = 1
+    ply.lleg = 1
+	ply.rleg = 1
 	ply.painlosing = 1
 	ply.pain = 0
 	ply.pulse = 80
@@ -46,7 +51,11 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
 	ply.removespeed = 0
 	ply.stamina = 100
 	ply.otrub = false
+	ply.suiciding = false
+	ply:SetNWBool("suiciding",false)
 	ply.CanMove = true
+
+    hg.Gibbed[ply] = nil
 end)
 
 hook.Add("PlayerInitialSpawn","Homigrad_shit",function(ply)

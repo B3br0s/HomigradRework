@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Кувалда"
-SWEP.Instructions = "Ручной ударный инструмент, предназначенный для боя камня, нанесения исключительно сильных ударов при обработке металла, на демонтаже и монтаже конструкций."
 
 SWEP.WorldModel = "models/weapons/me_sledge/w_me_sledge.mdl"
 

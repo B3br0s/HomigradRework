@@ -1,5 +1,8 @@
 hook.Add("Player Think","Bleed_Homigrad",function(ply,time)
     if not ply:Alive() then ply.bleed = 0 ply.blood = 5000 return end
+    if ROUND_NAME == "dr" then
+        return
+    end
     if not ply.blood then
         ply.blood = 5000
     end

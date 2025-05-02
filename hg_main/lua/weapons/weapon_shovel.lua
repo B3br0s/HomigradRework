@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Лопата"
-SWEP.Instructions = "Ручной шанцевый инструмент, используемый преимущественно для работы (копание, расчистка, перенос и так далее) с грунтом."
 
 SWEP.WorldModel = "models/weapons/me_spade/w_me_spade.mdl"
 

@@ -29,6 +29,8 @@ function SWEP:DrawWM()
         
         local Pos = Att.Pos
         local Ang = Att.Ang
+
+        WM:SetModelScale(self.CorrectScale or 1,0)
         
         Pos = Pos + Ang:Forward() * self.CorrectPos[1] + Ang:Right() * self.CorrectPos[2] + Ang:Up() * self.CorrectPos[3]
         Ang:RotateAroundAxis(Ang:Forward(),self.CorrectAng[1])

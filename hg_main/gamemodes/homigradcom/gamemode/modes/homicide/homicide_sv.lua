@@ -63,15 +63,17 @@ function hmcd.StartRoundSV()
 end
 
 function hmcd.SpawnTraitor(ply)
-    if hmcd.Type != "gdz" then
+    if hmcd.Type != "gfz" then
         local Wep1 = ply:Give("weapon_fiveseven")
         local Wep2 = ply:Give("weapon_kabar")
+        ply:Give("weapon_ied")
 
         Wep1:SetNWBool("DontShow",true)
 
         ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
     else
         ply:Give("weapon_kabar")
+        ply:Give("weapon_ied")
     end
 end
 

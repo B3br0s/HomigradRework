@@ -21,6 +21,7 @@ local ValidWeapons = {
 }
 
 hook.Add("Player Think","Fake Shooting",function(ply,time)
+    do return end
     if not ply.Fake or not ply:Alive() then ply:SetNWBool("RightArm",false) ply:SetNWBool("LeftArm",false) return end
     if ply.otrub then return end
     local rag = ply.FakeRagdoll

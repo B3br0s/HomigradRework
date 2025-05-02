@@ -25,28 +25,31 @@ hook.Add("HUDPaint","Round_Shit123",function()
 end)
 
 hook.Add("HUDPaint","Round-Paint",function()
-    if !TableRound() then return end
+    if !TableRound or !TableRound() then return end
     if TableRound().HUDPaint then
         TableRound():HUDPaint()
     end
 end)
 
 hook.Add("RenderScreenspaceEffects","Round-FX",function()
-    if !TableRound() then return end
+    if !TableRound or !TableRound() then return end
     if TableRound().RenderScreenspaceEffects then
         TableRound():RenderScreenspaceEffects()
     end
 end)
 
 net.Receive("SyncRound",function()
-    hg.LastRoundTime = CurTime()
-    hg.ROUND_START = CurTime()
     ROUND_NAME = net.ReadString()
     ROUND_NEXT = net.ReadString()
-    hg.CROUND = ROUND_NAME
-    ROUND_ENDED = false
+    local is = net.ReadBool()
+    if is then
+        hg.LastRoundTime = CurTime()
+        hg.ROUND_START = CurTime()
+        hg.CROUND = ROUND_NAME
+        ROUND_ENDED = false
 
-    if TableRound().RoundStart then
-        TableRound().RoundStart()
+        if TableRound().RoundStart then
+            TableRound().RoundStart()
+        end
     end
 end)

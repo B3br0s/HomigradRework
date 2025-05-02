@@ -40,9 +40,20 @@ function PlayerMeta:CreateFake(force)
 	rag:SetNWVector("PlayerColor",self:GetPlayerColor())
     rag:Activate()
 
+	local inv = {}
+
+	for _, wep in ipairs(self:GetWeapons()) do
+		if BlackListWep[wep:GetClass()] then
+			continue 
+		end
+		table.insert(inv,wep:GetClass())
+	end
+
+	rag.Inventory = inv
+
 	if ROUND_NAME == "dr" then
-		self.TimeToDeath = CurTime() + 6
-		self:SetNWFloat("TimeToDeath",CurTime() + 6)
+		self.TimeToDeath = CurTime() + 7
+		self:SetNWFloat("TimeToDeath",CurTime() + 7)
 	end
 
 	//print(self.AppearanceOverride)
@@ -114,6 +125,9 @@ end)
 
 hook.Add("Player Think","VelocityPlayerFallOnPlayerCheck",function(ply,time)
 	local speed = ply:GetVelocity():Length()
+	if ROUND_NAME == "dr" then
+		return
+	end
 	if ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply.Fake and not ply:HasGodMode() and ply:Alive() then
 		if speed < 600 then return end
 
@@ -222,9 +236,12 @@ end
 function PlayerMeta:DropWep(wep,pos,vel,suicide)
 	local ply = self
 	if not vel then
-		vel = self:EyeAngles():Forward() * 120
+		vel = self:EyeAngles():Forward() * 320
 	end
-	if IsValid(ply:GetActiveWeapon()) and not BlackListWep[ply:GetActiveWeapon():GetClass()] == true then
+	/*if not pos then
+		pos = self:EyePos() - vector_up * 8
+	end*/
+	if IsValid(ply:GetActiveWeapon()) and not BlackListWep[(wep and wep:GetClass() or ply:GetActiveWeapon():GetClass())] == true then
 		if wep == nil then
 			wep = ply:GetActiveWeapon()
 		end
@@ -240,7 +257,7 @@ function PlayerMeta:DropWep(wep,pos,vel,suicide)
 			wep:GetPhysicsObject():SetAngles(angs)
 			wep:GetPhysicsObject():SetPos(ply:EyePos() - angs2:Up() * 40 + angs2:Forward() * 10 + angs2:Right() * 0)
 			wep:GetPhysicsObject():SetAngleVelocity(Vector(0,128,0))
-			wep:GetPhysicsObject():SetVelocity(vel * (3 * (wep.NumBullet != nil and wep.NumBullet or 1)))
+			wep:GetPhysicsObject():SetVelocity(vel * (15 * (wep.NumBullet != nil and wep.NumBullet or 1)))
 
 			timer.Simple(0,function()
 				local rag = ply.FakeRagdoll
@@ -353,52 +370,24 @@ end
 
 hg.Faking = Faking
 
-hook.Add("DoPlayerDeath", "DeathRagdoll", function(ply, att, dmginfo)
+hook.Add("PlayerDeath", "DeathRagdoll", function(ply, att, dmginfo)
 	if hg.Gibbed[ply] then return end
-	if IsValid(ply.FakeRagdoll) then
-	local rag = ply.FakeRagdoll
-	rag = ply
-
-	rag.Items = {}
-
-	rag.CantCheckPulse = false
-	rag.alive = false
-	rag.o2 = 0
-	rag.pulse = 0
-	rag.heartstop = true
-
-	if IsValid(rag.ZacConsRH) then
-		rag.ZacConsRH:Remove()
-	end
-
-	if IsValid(rag.ZacConsLH) then
-		rag.ZacConsLH:Remove()
-	end
-
-	constraint.RemoveAll(rag)
-	return
-	end
 	ply.LastRagdollTime = 0
-	Faking(ply)
+	if !ply.Fake then
+		Faking(ply)
+	end
 
 	local rag = ply.FakeRagdoll
 
-	rag = ply or {}
-
-    rag.Items = {}
-
-	rag.CantCheckPulse = false
-	rag.alive = false
-	rag.o2 = 0
-	rag.pulse = 0
-	rag.heartstop = true
-
-	--Выдавание оружия рагдоллу
-    for _, wep in ipairs(ply:GetWeapons()) do
-        if not BlackListWep[wep:GetClass()] then
-            table.insert(rag.Items, wep)
-        end
-    end
+	timer.Simple(0,function()
+		if IsValid(rag.ZacConsRH) then
+			rag.ZacConsRH:Remove()
+		end
+	
+		if IsValid(rag.ZacConsLH) then
+			rag.ZacConsLH:Remove()
+		end
+	end)
 end)
 
 hook.Add("PlayerUse","KysUseInFake",function(ply)
@@ -425,6 +414,16 @@ hook.Add("Player Think","FakeControl",function(ply,time)
     local rag = ply.FakeRagdoll
 	if not IsValid(rag) then ply:Kill() return end
 	if rag == NULL then return end
+	local inv = {}
+
+	for _, wep in ipairs(ply:GetWeapons()) do
+		if BlackListWep[wep:GetClass()] then
+			continue 
+		end
+		table.insert(inv,wep:GetClass())
+	end
+
+	rag.Inventory = inv
 	if ROUND_NAME == "dr" then
 		if ply.TimeToDeath and ply.TimeToDeath < CurTime() then
 			ply:Kill()
@@ -554,6 +553,21 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		angs:RotateAroundAxis(angs:Up(),-100)
 		angs:RotateAroundAxis(angs:Right(),0)
 
+		local HeadShadow = {
+			secondstoarrive=0.0000000001 / 1e8,
+			pos=Head:GetPos(),
+			angle=HeadAng,
+			maxangulardamp=0.1,
+			maxspeeddamp=10,
+			maxangular=370,
+			maxspeed=30,
+			teleportdistance=0,
+			deltatime=deltatime,
+		}
+	
+		Head:Wake()
+		Head:ComputeShadowControl(HeadShadow)
+
 		local velo = rag:GetVelocity():Length() / 7
 
 		if velo < 1 then
@@ -566,22 +580,22 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			secondstoarrive=0.7,
 			pos=phys2:GetPos() + (IsValid(rag.ZacConsLH) and Vector(0,0,7) or IsValid(rag.ZacConsRH) and Vector(0,0,7) or Vector(0,0,0)),
 			angle=angs,
-			maxangulardamp=0.01/1e8,
+			maxangulardamp=5,
 			maxspeeddamp=0.01/1e8,
 			maxangular=1e8,
-			maxspeed=40 / velo,
+			maxspeed=50 / velo,
 			teleportdistance=0,
 			deltatime=deltatime,
 		}
 
 		local shadowparams = {
-			secondstoarrive=0.25,
+			secondstoarrive=0.15,
 			pos=phys:GetPos(),
 			angle=angs,
-			maxangulardamp=0.01/1e8,
+			maxangulardamp=5,
 			maxspeeddamp=0.01/1e8,
 			maxangular=1e8,
-			maxspeed=30 / velo,
+			maxspeed=40 / velo,
 			teleportdistance=0,
 			deltatime=deltatime,
 		}
@@ -594,31 +608,16 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		angs:RotateAroundAxis(angs:Forward(),-100)
 		//angs:RotateAroundAxis(angs:Up(),-60)
 		shadowparams.maxspeed = 20 / velo
-		shadowparams.secondstoarrive=0.15
+		shadowparams.secondstoarrive=0.35
 		shadowparams.pos = phys3:GetPos()
 		phys3:Wake()
 		phys3:ComputeShadowControl(shadowparams)
-		shadowparams.secondstoarrive=0.25
+		shadowparams.secondstoarrive=0.75
 		shadowparams.pos = phys4:GetPos()
 		shadowparams.maxspeed = 15 / velo
 		phys4:Wake()
 		phys4:ComputeShadowControl(shadowparams)
 	end
-
-	local HeadShadow = {
-		secondstoarrive=0.0000000001 / 1e8,
-		pos=Head:GetPos(),
-		angle=HeadAng,
-		maxangulardamp=10,
-		maxspeeddamp=10,
-		maxangular=370,
-		maxspeed=30,
-		teleportdistance=0,
-		deltatime=deltatime,
-	}
-
-	Head:Wake()
-	Head:ComputeShadowControl(HeadShadow)
 
 	if ply:KeyDown(IN_SPEED) then
 		local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand"))
@@ -645,9 +644,9 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 				local trace = util.TraceLine(traceinfo)
 				if trace.Hit and not trace.HitSky then
 					local cons = constraint.Weld(rag, trace.Entity, bone, trace.PhysicsBone, 0, false, false)
-					//if trace.Entity:IsPlayer() and !trace.Entity.Fake then
-					//	Faking(trace.Entity)
-					//end
+					if trace.Entity:IsPlayer() and !trace.Entity.Fake then
+						Faking(trace.Entity)
+					end
 					if IsValid(cons) then
 						rag.ZacConsLH = cons
 					end
@@ -688,9 +687,9 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 				local trace = util.TraceLine(traceinfo)
 				if trace.Hit and not trace.HitSky then
 					local cons = constraint.Weld(rag, trace.Entity, bone, trace.PhysicsBone, 0, false, false)
-					//if trace.Entity:IsPlayer() and !trace.Entity.Fake then
-					//	Faking(trace.Entity)
-					//end
+					if trace.Entity:IsPlayer() and !trace.Entity.Fake then
+						Faking(trace.Entity)
+					end
 					if IsValid(cons) then
 						rag.ZacConsRH = cons
 					end
@@ -719,7 +718,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 				secondstoarrive = 0.8,
 				pos = lh:GetPos() + ply:EyeAngles():Forward() * 25 + ply:EyeAngles():Up() * 5,
 				angle = ply:EyeAngles(),
-				maxangulardamp = 10,
+				maxangulardamp = 1/1e8,
 				maxspeeddamp = 10,
 				maxangular = 30,
 				maxspeed = speed,
@@ -729,7 +728,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 
 			phys:Wake()
 			phys:ComputeShadowControl(shadowparams)
-			shadowparams.maxspeed = speed / 2
+			shadowparams.maxspeed = speed / 1.25
 			phys2:Wake()
 			phys2:ComputeShadowControl(shadowparams)
 		end
@@ -748,7 +747,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 				secondstoarrive = 0.8,
 				pos = rh:GetPos() + ply:EyeAngles():Forward() * 25 + ply:EyeAngles():Up() * 5,
 				angle = ply:EyeAngles(),
-				maxangulardamp = 10,
+				maxangulardamp = 1/1e8,
 				maxspeeddamp = 10,
 				maxangular = 30,
 				maxspeed = speed,
@@ -776,7 +775,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 				secondstoarrive = 0.65,
 				pos = chst:GetPos() + ply:EyeAngles():Forward() * -25 + ply:EyeAngles():Up() * -5,
 				angle = phys:GetAngles(),
-				maxangulardamp = 10,
+				maxangulardamp = 1/1e8,
 				maxspeeddamp = 10,
 				maxangular = 30,
 				maxspeed = speed,
@@ -801,7 +800,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 				secondstoarrive = 0.65,
 				pos = chst:GetPos() + ply:EyeAngles():Forward() * -25 + ply:EyeAngles():Up() * -5,
 				angle = phys:GetAngles(),
-				maxangulardamp = 10,
+				maxangulardamp = 1/1e8,
 				maxspeeddamp = 10,
 				maxangular = 30,
 				maxspeed = speed,
@@ -818,6 +817,9 @@ end)
 hook.Add("Player Collide","Ragdolling-Collide",function(ply,ent,data)
 	local LIMIT_MASS = 80
 	local LIMIT_SPEED = 120
+	if ROUND_NAME == "dr" then
+		return
+	end
 	if ent:GetVelocity():Length() > LIMIT_SPEED or ent:GetPhysicsObject():GetMass() > LIMIT_MASS and ent:GetVelocity():Length() > LIMIT_SPEED / 2 then
 		timer.Simple(0,function()
 			if not IsValid(ply) or ply.Fake then return end

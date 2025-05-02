@@ -199,7 +199,7 @@ end
 function hg.RagdollOwner(ent)
     if not ent:IsRagdoll() then return NULL end
 
-    return ent:GetNWEntity("RagdollOwner")
+    return ent:GetNWEntity("RagdollOwner",NULL)
 end
 
 local lend = 2
@@ -502,6 +502,64 @@ end
 if CLIENT then
 	hg_camshake_amount = CreateClientConVar("hg_camshake_amount","1",true,false,nil,0,1.5)
     hg_camshake_enabled = CreateClientConVar("hg_camshake_enabled","1",true,false,nil,0,1)
+
+	function hg.DrawWeaponSelection(self, x, y, wide, tall, alpha )
+
+		//self.PrintName = hg.GetPhrase(self:GetClass())
+		
+		local WM = self.WorldModel
+	
+		if not IsValid(DrawingModel) then
+			DrawingModel = ClientsideModel(self.WorldModel,RENDERGROUP_OPAQUE)
+			DrawingModel:SetNoDraw(true)
+		else
+			DrawingModel:SetModel(self.WorldModel)
+			if self.Bodygroups then
+				for _, bodygroup in ipairs(self.Bodygroups) do
+					DrawingModel:SetBodygroup(_,bodygroup)
+				end
+			else
+				DrawingModel:SetBodygroup(0,0)
+				DrawingModel:SetBodygroup(1,0)
+				DrawingModel:SetBodygroup(2,0)
+				DrawingModel:SetBodygroup(3,0)
+			end
+			local vec = Vector(18.7,150,-3)
+			local ang = Vector(0,-90,0):Angle()
+	
+			cam.Start3D( vec, ang, 20, x, y+(IsValid(self) and 35 or 0), wide, tall, 5, 4096 )
+				cam.IgnoreZ( true )
+				render.SuppressEngineLighting( true )
+	
+				if IsValid(self) then
+				render.SetLightingOrigin( self:GetPos() )
+				end
+				render.ResetModelLighting( 50/255, 50/255, 50/255 )
+				render.SetColorModulation( 1, 1, 1 )
+				render.SetBlend( 255 )
+	
+				render.SetModelLighting( 4, 1, 1, 1 )
+	
+				DrawingModel:SetRenderAngles( self.IconAng )
+				DrawingModel:SetRenderOrigin( self.IconPos)
+				DrawingModel:DrawModel()
+				DrawingModel:SetRenderAngles()
+	
+				render.SetColorModulation( 1, 1, 1 )
+				render.SetBlend( 1 )
+				render.SuppressEngineLighting( false )
+				cam.IgnoreZ( false )
+			cam.End3D()
+		end
+	
+		surface.SetDrawColor( 255, 255, 255, alpha )
+		surface.SetMaterial( (self.WepSelectIcon2 or Material("null")) )
+	
+		surface.DrawTexturedRect( x, y + 10,  256 * ScrW()/1920 , 128 * ScrH()/1080 )
+	
+		self:PrintWeaponInfo( x + wide + 20, y + tall * 0.95, alpha )
+	
+	end
 end
 
 hook.Add("Move", "Homigrad_Move", function(ply, mv)

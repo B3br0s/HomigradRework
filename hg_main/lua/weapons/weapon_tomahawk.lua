@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Томагавк"
-SWEP.Instructions = "Находится на вооружении кораблей и подводных лодок ВМС США, использовалась во всех значительных военных конфликтах с участием США с момента её принятия на вооружение в 1983 году."
 
 SWEP.WorldModel = "models/pwb/weapons/w_tomahawk.mdl"
 SWEP.HoldType = "melee"

@@ -7,6 +7,7 @@ SWEP.WorldModel = "models/weapons/arccw_go/v_shot_m1014.mdl"
 SWEP.CorrectPos = Vector(-14.4,-3.4,6.9)
 SWEP.CorrectAng = Angle(0,5,0)
 SWEP.HoldType = "ar2"
+SWEP.TwoHands = true
 
 SWEP.HolsterPos = Vector(-20,-1,8)
 SWEP.HolsterAng = Angle(0,-10,0)

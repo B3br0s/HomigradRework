@@ -57,56 +57,51 @@ end
 
 function SWEP:PostAnim()
     local ply = self:GetOwner()
-	if self.BoltBone != nil and IsValid(self.worldModel) then
-		local bone = self.worldModel:LookupBone(self.BoltBone)
-		local bone2 = self.worldModel:LookupBone(self.CylBone)
+    if not IsValid(ply) then return end
 
-        local mul_reload = self.mul_reload
+    if self.BoltBone and IsValid(self.worldModel) then
+        local bone = self.worldModel:LookupBone(self.BoltBone)
+        local bone2 = self.worldModel:LookupBone(self.CylBone)
 
-		if self:Clip1() <= 0 and self.BoltLock then
-			self.animmul = 1.5
-		else
-			self.animmul = easedLerp(0.45,self.animmul,0)
-		end
+        self.animmul = (self:Clip1() <= 0 and self.BoltLock) and 1.5 or easedLerp(0.45, self.animmul, 0)
 
         if self.reload then
-            if (self.reload - CurTime()) < 0.4 then
-                self.mul_reload = LerpFT(0.2,self.mul_reload,0)
-            elseif (self.reload - CurTime()) < 0.9 then
-                self.mul_reload = LerpFT(0.3,self.mul_reload,1)
+            local reload_time = self.reload - CurTime()
+            if reload_time < 0.4 then
+                self.mul_reload = LerpFT(0.2, self.mul_reload, 0)
+            elseif reload_time < 0.9 then
+                self.mul_reload = LerpFT(0.3, self.mul_reload, 1)
             end
         end
 
-		self.worldModel:ManipulateBoneAngles(bone,self.BoltVec * self.progmul)
+        self.worldModel:ManipulateBoneAngles(bone, self.BoltVec * self.progmul)
+        
         if self.reload then
-            hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,-90) * self.mul_reload,1,0.1)
-		    self.worldModel:ManipulateBoneAngles(bone2,Angle(45,0,0) * mul_reload)
-		    self.worldModel:ManipulateBonePosition(bone2,Vector(1,0,0) * mul_reload)
+            hg.bone.Set(ply, "r_hand", vector_origin, Angle(0, 0, -90) * self.mul_reload, 1, 0.1)
+            self.worldModel:ManipulateBoneAngles(bone2, Angle(45, 0, 0) * self.mul_reload)
+            self.worldModel:ManipulateBonePosition(bone2, Vector(1, 0, 0) * self.mul_reload)
         else
-            self.worldModel:ManipulateBoneAngles(bone2,Angle(45,0,0) * self.progmul)
+            self.worldModel:ManipulateBoneAngles(bone2, Angle(45, 0, 0) * self.progmul)
         end
-	end
-
-    local ply = self:GetOwner()
+    end
 
     if ply:KeyPressed(IN_ATTACK) then
-        sound.Play("arccw_go/revolver/revolver_prepare.wav",self:GetPos(),75)
+        sound.Play("arccw_go/revolver/revolver_prepare.wav", self:GetPos(), 75)
         self.kp = true
-    elseif !ply:KeyDown(IN_ATTACK) then
+    elseif not ply:KeyDown(IN_ATTACK) then
         self.kp = false
         self.Shoted = false
     end
 
-    if ply:KeyDown(IN_ATTACK) and !self.Shoted then
-        self.progmul = math.Round(LerpFT(0.15,self.progmul,1.01),2)
+    if ply:KeyDown(IN_ATTACK) and not self.Shoted then
+        self.progmul = math.Round(LerpFT(0.15, self.progmul, 1.01), 2)
+        if self.progmul >= 0.92 then
+            self.Shoted = true
+            self:PrimaryAttack()
+            self.progmul = 0
+        end
     else
-        self.progmul = math.Round(LerpFT(0.2,self.progmul,0),2)
-    end
-
-    if self.progmul >= 0.92 and !self.Shoted then
-        self.Shoted = true
-        self:PrimaryAttack()
-        self.progmul = 0
+        self.progmul = math.Round(LerpFT(0.2, self.progmul, 0), 2)
     end
 end
 

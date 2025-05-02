@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Байонет"
-SWEP.Instructions = "Армейский штык-нож. Клинок штыка M9 — однолезвийный с пилой на обухе."
 
 SWEP.WorldModel = "models/weapons/insurgency/w_marinebayonet.mdl"
 
@@ -33,7 +32,7 @@ SWEP.Primary.Recoil = 0.5
 SWEP.Primary.Delay = 0.65
 SWEP.Primary.Force = 240
 
-SWEP.IconPos = Vector(12.5,100,-6)
+SWEP.IconPos = Vector(13.5,100,-6)
 SWEP.IconAng = Angle(60,0,0)
 SWEP.WepSelectIcon2 = Material("null")
 SWEP.IconOverride = ""

@@ -1,6 +1,5 @@
 SWEP.PrintName = "Стяжки" 
-SWEP.Author = "HG:R"-- точно не хук хг.ком
-SWEP.Instructions = "Связать человека"
+//SWEP.Instructions = "Связать человека"
 SWEP.Category 				= "Оружие - Остальное"
 
 SWEP.Slot = 5
@@ -19,6 +18,7 @@ SWEP.Primary.Ammo = "none"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 
+SWEP.Bodygroups = {[1]=1}
 SWEP.DrawAmmo = false
 SWEP.EnableTransformModel = true
 
@@ -26,6 +26,13 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
+end
+
+SWEP.IconPos = Vector(17.8,90,-2)
+SWEP.IconAng = Angle(0,90,150)
+
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+    hg.DrawWeaponSelection(self,x,y,wide,tall,alpha)
 end
 
 if SERVER then
@@ -110,7 +117,7 @@ local function GetPly(tr)
     return ent
 end
 
-local cuffTime = 0.7
+local cuffTime = 0.5
 
 if SERVER then
     hook.Add("Player Spawn","Cuffs",function(ply)

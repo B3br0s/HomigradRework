@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Труба"
-SWEP.Instructions = "Вырванная из чьей-то канализационной системы труба"
 
 SWEP.WorldModel = "models/props_canal/mattpipe.mdl"
 

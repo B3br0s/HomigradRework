@@ -8,6 +8,13 @@ local shit = {
     ["func_door"] = "use_door",
     ["class C_BaseEntity"] = "use_button",
     ["class C_BaseToggle"] = "use_button",
+    ["ent_small_crate"] = "use_crate_small",
+    ["ent_medium_crate"] = "use_crate_medium",
+    ["ent_large_crate"] = "use_crate_large",
+    ["ent_medkit_crate"] = "use_crate_medkit",
+    ["ent_grenade_crate"] = "use_crate_grenade",
+    ["ent_weapon_crate"] = "use_crate_weapon",
+    ["ent_melee_crate"] = "use_crate_melee",
 }
 
 hook.Add("Think","Interact-Glow",function()
@@ -28,6 +35,6 @@ end)
 
 hook.Add("HUDPaint","Interact-Shit",function()
     if IsValid(LatestEntity) then
-        draw.SimpleText((LatestEntity:IsWeapon() and LatestEntity:GetPrintName() or hg.GetPhrase(shit[LatestEntity:GetClass()])),"HS.18",ScrW()/2,ScrH()/1.9 - 10 * (1 - LatestShow),Color(255,255,255,255 * LatestShow),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        draw.SimpleText((LatestEntity:IsWeapon() and LatestEntity:GetPrintName() or hg.GetPhrase(shit[LatestEntity:GetClass()])),"HS.18",ScrW()/2,ScrH()/1.85 - 10 * (1 - LatestShow),Color(255,255,255,255 * LatestShow),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end)

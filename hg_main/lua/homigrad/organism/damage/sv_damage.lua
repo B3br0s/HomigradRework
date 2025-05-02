@@ -6,15 +6,15 @@ DamageMultipliers = {
     [DMG_BULLET] = 1.5,
     [DMG_SLASH] = 0.4,
     [DMG_BLAST] = 9,
-    [DMG_CRUSH] = 1 / 128,--а почему бы и нет?
+    [DMG_CRUSH] = 1 / 512,--а почему бы и нет?
 }
 
 PainMultipliers = {
     [DMG_CLUB] = 0.5,--ее
-    [DMG_BULLET] = 3.2,
+    [DMG_BULLET] = 2.2,
     [DMG_SLASH] = 0.3,
     [DMG_BLAST] = 6,
-    [DMG_CRUSH] = 15,
+    [DMG_CRUSH] = 8,
 }
 
 local Reasons = {
@@ -186,7 +186,7 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
     ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (PainMultipliers[dmginfo:GetDamageType()] and PainMultipliers[dmginfo:GetDamageType()] or 1.7),0,400)
 
 	if rag then
-		ply:SetHealth(ply:Health() - (dmginfo:IsDamageType(DMG_CRUSH) and dmginfo:GetDamage() * (rag:GetVelocity():Length() / 100) or dmginfo:GetDamage()))	
+		ply:SetHealth(ply:Health() - (dmginfo:IsDamageType(DMG_CRUSH) and dmginfo:GetDamage() * (rag:GetVelocity():Length() / 150) or dmginfo:GetDamage()))	
 	end
 
 	if dmginfo:IsDamageType(DMG_SLASH + DMG_BULLET + DMG_BUCKSHOT) then

@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Фубар"
-SWEP.Instructions = "Ручное рычажно-клиновое приспособление для вытаскивания (выдирания) вбитых в материал (дерево, пластик и др.) гвоздей."
 
 SWEP.WorldModel = "models/weapons/me_fubar/w_me_fubar.mdl"
 

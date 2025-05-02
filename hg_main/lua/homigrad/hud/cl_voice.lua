@@ -21,6 +21,9 @@ function CreateVoice(ply,istalking)
     VoiceAvatar:SetHeight(VoicePanel:GetTall())
 
     function VoicePanel:Paint(w,h)
+        if !IsValid(ply) then
+            self:Remove()
+        end
         local clr_mul = ply:VoiceVolume() * (ply:Alive() and 1 or 0.2)
 
         self.TalkAmt = LerpFT(0.2,self.TalkAmt,(istalking and 1 or 0))

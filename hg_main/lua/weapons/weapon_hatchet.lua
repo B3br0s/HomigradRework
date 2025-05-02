@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Топорик"
-SWEP.Instructions = "Одноручный ударный инструмент с острым лезвием с одной стороны, используемым для рубки и колки дерева, и наконечником молота с другой стороны."
 
 SWEP.WorldModel = "models/weapons/me_hatchet/w_me_hatchet.mdl"
 

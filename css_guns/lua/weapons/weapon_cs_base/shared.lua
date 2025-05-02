@@ -53,6 +53,9 @@ SWEP.Contact		= ""
 SWEP.Purpose		= ""
 SWEP.Instructions	= ""
 
+SWEP.Slot = 2
+SWEP.SlotPos = 1
+
 // Note: This is how it should have worked. The base weapon would set the category
 // then all of the children would have inherited that.
 // But a lot of SWEPS have based themselves on this base (probably not on purpose)

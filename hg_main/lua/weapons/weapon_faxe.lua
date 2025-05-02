@@ -2,7 +2,6 @@ SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие - Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Пожарный топор"
-SWEP.Instructions = "Массивный топор для вскрытия и разборки конструкций при тушении пожара."
 
 SWEP.WorldModel = "models/weapons/me_axe_fire_tracer/w_me_axe_fire.mdl"
 

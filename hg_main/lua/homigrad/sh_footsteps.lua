@@ -248,7 +248,23 @@ hg.FootSteps = {
         "homigrad/player/land4.wav"
     },
     default = {
-        "null"
+        "homigrad/player/footsteps/new/concrete_ct_01.wav",
+        "homigrad/player/footsteps/new/concrete_ct_02.wav",
+        "homigrad/player/footsteps/new/concrete_ct_03.wav",
+        "homigrad/player/footsteps/new/concrete_ct_04.wav",
+        "homigrad/player/footsteps/new/concrete_ct_05.wav",
+        "homigrad/player/footsteps/new/concrete_ct_06.wav",
+        "homigrad/player/footsteps/new/concrete_ct_07.wav",
+        "homigrad/player/footsteps/new/concrete_ct_08.wav",
+        "homigrad/player/footsteps/new/concrete_ct_09.wav",
+        "homigrad/player/footsteps/new/concrete_ct_10.wav",
+        "homigrad/player/footsteps/new/concrete_ct_11.wav",
+        "homigrad/player/footsteps/new/concrete_ct_12.wav",
+        "homigrad/player/footsteps/new/concrete_ct_13.wav",
+        "homigrad/player/footsteps/new/concrete_ct_14.wav",
+        "homigrad/player/footsteps/new/concrete_ct_15.wav",
+        "homigrad/player/footsteps/new/concrete_ct_16.wav",
+        "homigrad/player/footsteps/new/concrete_ct_17.wav"
     }
 }
 
@@ -269,13 +285,17 @@ if CLIENT then
             --return true
         end
 
+        if GetConVar("developer"):GetBool() then
+            print(mat)
+        end
+
         //print(mat)
         if ply == LocalPlayer() and hg_camshake_enabled:GetBool() and !GetGlobalBool("DefaultMove",false) then
             ViewPunch(Angle((ply:GetVelocity():Length() / 180) * hg_camshake_amount:GetFloat(),0,(f == 0 and -1 or f) * (ply:GetVelocity():Length() / 100) * hg_camshake_amount:GetFloat()),10)
         end
 
         if !hg.FootSteps[mat] then
-            return false
+            mat = "default"
         end
 
         snd = table.Random(hg.FootSteps[mat])
