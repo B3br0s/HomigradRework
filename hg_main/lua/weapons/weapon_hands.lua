@@ -313,17 +313,18 @@ function SWEP:ApplyForce()
 		if self.CarryEnt:GetClass() == "prop_ragdoll" then
 			mul = mul * 3
 			local ply = RagdollOwner(self.CarryEnt)
-			--if self:GetOwner():KeyPressed( IN_RELOAD ) then
-			--	if not ply then
-			--		self:GetOwner():ChatPrint("У него нет пульса.")
-			--	else
-			--		if ply.heartstop then
-			--			self:GetOwner():ChatPrint("У него нет пульса, но он всё ещё жив.")
-			--		else
-			--			self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "У него сильный пульс" or (ply.nextPulse <= 1.5 and "У него нормальный пульс") or (ply.nextPulse < 2 and "У него слабый пульс") or (ply.nextPulse >= 2 and "У него еле ощущаемый пульс."))
-			--		end
-			--	end
-			--end
+			if self:GetOwner():KeyPressed( IN_RELOAD ) then
+				if not ply then
+					self:GetOwner():ChatPrint("У него нет пульса.")
+				else
+					if ply:GetNWBool("otrub") then
+						self:GetOwner():ChatPrint("Он лежит в отключке, но он всё ещё жив.")
+					else
+						self:GetOwner():ChatPrint("У него есть пульс")
+						--self:GetOwner():ChatPrint(ply:GetNWFloat("pulse") < 0.9 and "У него сильный пульс" or (ply:GetNWFloat("pulse") <= 1.5 and "У него нормальный пульс") or (ply:GetNWFloat("pulse") < 2 and "У него слабый пульс") or (ply:GetNWFloat("pulse") >= 2 and "У него еле ощущаемый пульс."))
+					end
+				end
+			end
 		end
 		vec:Normalize()
 
