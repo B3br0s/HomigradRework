@@ -45,6 +45,7 @@ net.Receive("hg inventory",function()
 	local ent = net.ReadEntity()
 	local inv = net.ReadTable()
 	local amt = net.ReadFloat()
+	local jmodent = net.ReadEntity() or NULL
 
 	if hg.islooting then
 		return
@@ -60,6 +61,11 @@ net.Receive("hg inventory",function()
 	hg.ScoreBoard = 3
 	timer.Simple(0.06,function()
 		CreateLootFrame(inv,amt,ent)
+		timer.Simple(0.06,function()
+			if jmodent != NULL and ent:GetNWEntity("JModInv") != NULL and jmodent != Entity(1) and jmodent != Entity(0) then
+				CreateJModFrame(inv,ent,jmodent)
+			end
+		end)
 	end)
 end)
 

@@ -3,7 +3,10 @@ if SERVER then
 end
 
 function KickFoot(ply)
-    local tr = hg.eyeTrace(ply,75)
+    if ply.Fake then
+        return
+    end
+    local tr = hg.eyeTrace(ply,125)
     
     ply:SetNWFloat("LastKick",CurTime()+0.25)
     ply:SetNWFloat("KickCD",CurTime() + 1)
@@ -24,7 +27,7 @@ function KickFoot(ply)
         if !tr.Entity:IsPlayer() then
             tr.Entity:GetPhysicsObject():ApplyForceCenter(Vector() + ply:GetAngles():Forward() * 7500 + vector_up * 3000)
 
-            if tr.Entity:GetPhysicsObject():GetMass() > 250 then
+            if tr.Entity:GetPhysicsObject():GetMass() > 250 and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then
                 sound.Play('homigrad/player/damage'..math.random(1,2)..'.wav',ply:GetPos(),75)
                 ply:SetVelocity(ply:GetVelocity() + ply:EyeAngles():Forward() * -250)
                 ply:SetHealth(ply:Health() - math.random(3,5))
@@ -37,20 +40,59 @@ function KickFoot(ply)
                     net.Send(ply)
                 end
             end
+
+            if tr.Entity:GetClass() == "prop_door_rotating" or tr.Entity:GetClass() == "func_door_rotating" then
+                if math.random(1, 5) == 3 then
+                    local doorPos = tr.Entity:GetPos()
+                    local doorAngles = tr.Entity:GetAngles()
+                    local doorModel = tr.Entity:GetModel()
+                    local doorSkin = tr.Entity:GetSkin() or 0
+
+                    tr.Entity:EmitSound("physics/wood/wood_box_break" .. math.random(1, 2) .. ".wav")
+                    //tr.Entity:Fire("Unlock", "", 0)
+                    tr.Entity:Fire("Open", "", 0)
+                    tr.Entity:Remove()
+
+                    local physDoor = ents.Create("prop_physics")
+                    physDoor:SetModel(doorModel)
+                    physDoor:SetPos(doorPos)
+                    physDoor:SetAngles(doorAngles)
+                    physDoor:SetSkin(doorSkin)
+                    physDoor:Spawn()
+
+                    local phys = physDoor:GetPhysicsObject()
+                    if IsValid(phys) then
+                        local forceDirection = ply:GetAimVector() * 250
+                        for i = 1, 50 do
+                            timer.Simple(0.001 * i, function()
+                                phys:ApplyForceCenter(forceDirection)
+                            end)
+                        end
+                    end
+                else
+                    tr.Entity:Fire("SetAnimation", "Open", 0)
+                    tr.Entity:SetKeyValue("speed", 1000)
+                    tr.Entity:Fire("Open", "", 0)
+                    timer.Simple(0.03, function()
+                        tr.Entity:SetKeyValue("speed", 100)
+                    end)
+                    tr.Entity:EmitSound("physics/wood/wood_box_break" .. math.random(1, 2) .. ".wav")
+                end
+            end
         else
             tr.Entity:TakeDamageInfo(dmginfo)
-            tr.Entity:SetHealth(ply:Health() - math.random(3,5))
-            if math.random(1,5) == 3 then
+            tr.Entity:SetHealth(ply:Health() - math.random(5,8))
+            if math.random(1,3) == 2 then
                 hg.Faking(tr.Entity)
             end
         end
-    elseif tr.HitWorld then
+    elseif tr.HitWorld and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then
         sound.Play('player/foot_kickwall.wav',ply:GetPos(),75)
         ply:SetVelocity(ply:GetVelocity() + ply:EyeAngles():Forward() * -150)
         ply:SetHealth(ply:Health() - math.random(3,5))
-        ply.rleg = math.Clamp(ply.rleg - 0.25,0,1)
+        ply.rleg = math.Clamp(ply.rleg - 0.15,0,1)
         sound.Play('zcitysnd/male/pain_'..math.random(1,5)..'.mp3',ply:GetPos(),125,2)
-        if math.random(1,2) == 2 then
+        if math.random(1,4) == 2 then
             hg.Faking(ply,ply:GetVelocity() + ply:EyeAngles():Forward() * -250)
             net.Start("localized_chat")
             net.WriteString('leg_hurt')

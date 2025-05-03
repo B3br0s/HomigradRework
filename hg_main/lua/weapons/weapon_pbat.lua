@@ -8,7 +8,7 @@ SWEP.WorldModel = "models/drover/w_baton.mdl"
 SWEP.HoldType = "melee"
 
 SWEP.Primary.Sound = Sound( "Weapon_Knife.Single" )
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = 25
 SWEP.DamagePain = 5
 
 SWEP.Primary.Ammo = "none"

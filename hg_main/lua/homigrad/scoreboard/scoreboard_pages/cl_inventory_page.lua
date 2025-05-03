@@ -103,10 +103,13 @@ end
 hook.Add("HUDPaint","InventoryPage",function()
     if not hg.ScoreBoard then return end
     if not IsValid(ScoreBoardPanel) then open = false return end
-    if hg.ScoreBoard == 3 and not open then
-        if !LocalPlayer():Alive() then
-            hg.ScoreBoard = 1
+    if !LocalPlayer():Alive() and hg.ScoreBoard == 3 then
+        hg.ScoreBoard = 1
+        if IsValid(ScoreBoardPanel) then
+            ScoreBoardPanel:Remove()
         end
+    end
+    if hg.ScoreBoard == 3 and not open then
 
         table.Empty(weps)
 
@@ -144,11 +147,46 @@ hook.Add("HUDPaint","InventoryPage",function()
         InvFrame:DockMargin(0,0,0,0)
         InvFrame:DockPadding(0,0,0,0)
 
+        //SlotsSize = 75 * 1.1
+
+        local JModFrame = vgui.Create("hg_frame",MainFrame)
+        JModFrame:ShowCloseButton(false)
+        JModFrame:SetTitle(" ")
+        JModFrame:SetDraggable(false)
+        JModFrame:SetSize(SlotsSize, SlotsSize)
+        JModFrame:Center()
+        JModFrame:SetPos(JModFrame:GetX() - SlotsSize * 6.5,ScrH()-SlotsSize)
+        JModFrame:DockMargin(0,0,0,0)
+        JModFrame:DockPadding(0,0,0,0)
+        JModFrame.NoDraw = true
+
+        SlotsSize = 75
+
         //CreateLootFrame({[1] = "weapon_ak47"})
 
         for _, wep in ipairs(LocalPlayer():GetWeapons()) do
             if !BlackList[wep:GetClass()] and !table.HasValue(weps,wep) then
                 table.insert(weps,wep)
+            end
+        end
+
+        local slotjmod = CreateJModEntInvSlot(JModFrame,SlotsSize,1,LocalPlayer())
+
+        function slotjmod:LoadPaint()
+            local w,h = self:GetSize()
+            if LocalPlayer():GetNWEntity("JModInv") and self.DropIn then
+                if self.DropIn < CurTime() then
+                    self.IsDropping = false
+                    net.Start("hg drop jmod")
+                    net.SendToServer()
+                end
+            end
+            if self.IsDropping then
+                surface.SetDrawColor(225,225,225)
+                self.LootAnim = self.LootAnim + 12
+        
+                surface.SetMaterial(Material("homigrad/vgui/loading.png"))
+                surface.DrawTexturedRectRotated(w/2,h/2,w/1.75,h/1.75,self.LootAnim)
             end
         end
 
@@ -161,18 +199,13 @@ hook.Add("HUDPaint","InventoryPage",function()
                 if self.Weapon then
                     local Menu = DermaMenu(true,self)
 
-                Menu:SetPos(input.GetCursorPos())
-                Menu:MakePopup()
+                    Menu:SetPos(input.GetCursorPos())
+                    Menu:MakePopup()
 
-                    Menu:AddOption(hg.GetPhrase("inv_drop"),function()
-                        if self.IsDropping then
-                            return
-                        end
-                        surface.PlaySound("homigrad/vgui/item_scroll_sticker_01.wav")
-                        self.DropIn = CurTime() + 0.2
-                        self.IsDropping = true
-                    end)
-                end
+                        Menu:AddOption(hg.GetPhrase("inv_drop"),function()
+                            self:Drop()
+                        end)
+                    end
             end
 
             function Slot:LoadPaint()
@@ -212,8 +245,8 @@ end)
 function CreateLootSlot(Parent,SlotsSize,PosI)
     local InvButton = vgui.Create("hg_button",Parent)
     InvButton:SetSize(SlotsSize, SlotsSize)
-    //InvButton:SetPos(SlotsSize * (PosI - 1),0)
-    InvButton:Center()
+    InvButton:SetPos(Parent:GetWide()/2,0)
+    //InvButton:Center()
     //InvButton:Dock(LEFT)
     //InvButton:DockMargin(SlotsSize * (1-Parent.CurSize),0,0,0)
     InvButton:SetText(" ")
@@ -227,7 +260,129 @@ function CreateLootSlot(Parent,SlotsSize,PosI)
     function InvButton:Think()
         local w,h = Parent:GetSize()
 
+        self:SetWide(SlotsSize * Parent.CurSize)
         self:SetX((w / 2) * (1-Parent.CurSize) + ((SlotsSize * (PosI - 1))) * Parent.CurSize)
+    end
+
+    return InvButton
+end
+
+function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
+    local InvButton = vgui.Create("hg_button",Parent)
+    InvButton:SetSize(SlotsSize, SlotsSize)
+    InvButton:SetPos(SlotsSize * (PosI - 1),0)
+    //InvButton:Dock(LEFT)
+    InvButton:SetText(" ")
+    InvButton.LowerText = ""
+    InvButton.LowerFont = "HS.10"
+    InvButton.LootAnim = 0
+
+    function InvButton:Drop()
+        if self.IsDropping then
+            return
+        end
+        if ent:GetNWEntity("JModInv") == NULL then
+            return
+        end
+        surface.PlaySound("homigrad/vgui/item_scroll_sticker_01.wav")
+        self.DropIn = CurTime() + 0.2
+        self.IsDropping = true
+    end
+
+    if ent == LocalPlayer() then
+        function InvButton:DoRightClick()
+            if ent:GetNWEntity("JModInv") != NULL then
+                local Menu = DermaMenu(true,self)
+
+                Menu:SetPos(input.GetCursorPos())
+                Menu:MakePopup()
+
+                    Menu:AddOption(hg.GetPhrase("inv_drop"),function()
+                        self:Drop()
+                    end)
+                end
+        end
+    else
+        function InvButton:DoClick()
+            self:Loot()
+        end
+    end
+
+    function InvButton:SubPaint(w,h)
+        if Parent.CurSize then
+            local w,h = Parent:GetSize()
+            if !table.IsEmpty(weps) then
+                self:SetX((w / 2) * (1 - Parent.CurSize) + SlotsSize * Parent.CurSize)
+            end
+            self:SetWide(SlotsSize * Parent.CurSize)
+            self:Center()
+        end
+
+        if ent == LocalPlayer() then
+            if self:IsHovered() then
+                if fastloot then  
+                    self:Drop()
+                end
+            end
+        end
+
+        if ent == nil then
+            self.LowerText = " "
+            return
+        end
+
+        if ent != LocalPlayer() then
+            if self:IsHovered() then
+                if fastloot then  
+                    self:Loot()
+                end
+            end
+        end
+
+        local jent = ent:GetNWEntity("JModInv",NULL)
+        
+        if IsValid(jent) and jent != NULL then
+            self.LowerText = jent.PrintName
+        else
+            self.LowerText = " "
+        end
+
+        if self.LoadPaint then
+            self:LoadPaint()
+        end
+
+        if self.BeingLooted then
+            surface.SetDrawColor(225,225,225)
+            self.LootAnim = self.LootAnim + 6
+        else
+            surface.SetDrawColor(0,0,0,0)
+        end
+
+        if ent != nil and self.LootIn then
+            if self.LootIn < CurTime() then
+                net.Start("hg loot jmod")
+                net.WriteEntity(ent)
+                net.SendToServer()
+                ent = nil
+                //Parent.CurSizeTarget = 0
+                self.BeingLooted = false
+                surface.PlaySound("homigrad/vgui/panorama/cards_draw_one_04.wav")
+            end
+        end
+
+        surface.SetMaterial(Material("homigrad/vgui/loading.png"))
+        surface.DrawTexturedRectRotated(w/2,h/2,w/1.75,h/1.75,self.LootAnim)
+
+        draw.SimpleText(self.LowerText, (self.LowerFont or "HS.18"), w / 2, h / 1.2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    end
+
+    function InvButton:Loot()
+        if self.BeingLooted then
+            return
+        end
+        self.BeingLooted = true
+        surface.PlaySound("homigrad/vgui/panorama/inventory_new_item_scroll_01.wav")
+        self.LootIn = CurTime() + 0.8
     end
 
     return InvButton
@@ -241,6 +396,15 @@ function CreateLocalInvSlot(Parent,SlotsSize,PosI)
     InvButton:SetText(" ")
     InvButton.LowerText = ""
     InvButton.LowerFont = "HS.10"
+
+    function InvButton:Drop()
+        if self.IsDropping then
+            return
+        end
+        surface.PlaySound("homigrad/vgui/item_scroll_sticker_01.wav")
+        self.DropIn = CurTime() + 0.2
+        self.IsDropping = true
+    end
 
     function InvButton:SubPaint(w,h)
         local weps = {}
@@ -259,6 +423,12 @@ function CreateLocalInvSlot(Parent,SlotsSize,PosI)
         
         if IsValid(self.Weapon) and self.Weapon:GetOwner() ~= LocalPlayer() then
             self.Weapon = nil
+        end
+
+        if self:IsHovered() and self.Weapon then
+            if fastloot then  
+                self:Drop()
+            end
         end
         
         for i, w in ipairs(weps) do
@@ -297,9 +467,56 @@ function CreateLocalInvSlot(Parent,SlotsSize,PosI)
     return InvButton
 end
 
+function CreateJModFrame(weps,ent1,ent)
+    local MainFrame = panelka
+    local SlotsSize = 75
+
+    if !IsValid(ScoreBoardPanel) then
+        return
+    end
+
+    local CenterX = ScoreBoardPanel:GetWide() / 2
+
+    hg.islooting = true
+
+    local LootFrame = vgui.Create("hg_frame",MainFrame)
+    LootFrame:ShowCloseButton(false)
+    LootFrame:SetTitle(" ")
+    LootFrame:SetDraggable(false)
+    LootFrame:SetSize(SlotsSize, SlotsSize)
+    LootFrame:Center()
+    LootFrame:SetX(LootFrame:GetX() - SlotsSize * (table.IsEmpty(weps) and 0 or 5))
+    //LootFrame:SetPos(CenterX - ScrW()/6.4,ScrH()/2.14)
+    LootFrame:DockMargin(0,0,0,0)
+    LootFrame:DockPadding(0,0,0,0)
+    LootFrame.NoDraw = true
+    LootFrame.CurSize = 0.3
+    LootFrame.CurSizeTarget = 1
+
+    function LootFrame:Think()
+        local targetsize = LootFrame.CurSizeTarget
+
+        if !hg.islooting then
+            LootFrame.CurSizeTarget = 0
+            if self.CurSize <= 0.01 then
+                self:Remove()
+            end
+        end
+        self.CurSize = LerpFT((hg.islooting and 0.15 or 0.3),self.CurSize,targetsize)
+        //self:Center()
+        //self:SetWide(SlotsSize * slotsamt * self.CurSize)
+    end
+
+    CreateJModEntInvSlot(LootFrame,SlotsSize,1,ent1,weps)
+end
+
 function CreateLootFrame(weps,slotsamt,ent)
     local MainFrame = panelka
     local SlotsSize = 75
+
+    if table.IsEmpty(weps) and ent:GetNWEntity("JModInv") != NULL then
+        return
+    end
 
     if !IsValid(ScoreBoardPanel) then
         return
@@ -324,7 +541,15 @@ function CreateLootFrame(weps,slotsamt,ent)
     local targetsize = 1
 
     function LootFrame:Think()
-        self.CurSize = LerpFT(0.15,self.CurSize,targetsize)
+        if hg.islooting then
+            targetsize = 1
+        else
+            targetsize = 0
+            if self.CurSize <= 0.01 then
+                self:Remove()
+            end
+        end
+        self.CurSize = LerpFT((hg.islooting and 0.15 or 0.3),self.CurSize,targetsize)
         self:Center()
         //self:SetWide(SlotsSize * slotsamt * self.CurSize)
     end
@@ -377,7 +602,7 @@ function CreateLootFrame(weps,slotsamt,ent)
             end
     
             if self.Weapon and weapons.Get(self.Weapon) then
-                hg.DrawWeaponSelection(weapons.Get(self.Weapon),(fixed_x - (SlotsSize * (i - 1))) - (SlotsSize) * (1 - LootFrame.CurSize),fixed_y,self:GetWide() * LootFrame.CurSize,self:GetTall() * LootFrame.CurSize,0)
+                hg.DrawWeaponSelection(weapons.Get(self.Weapon),(fixed_x - (SlotsSize * (i - 1))) - (SlotsSize) * (1 - LootFrame.CurSize),fixed_y,self:GetWide(),self:GetTall(),0)
             end
         end
 

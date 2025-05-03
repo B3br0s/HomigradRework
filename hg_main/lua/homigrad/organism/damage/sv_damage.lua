@@ -12,9 +12,9 @@ DamageMultipliers = {
 PainMultipliers = {
     [DMG_CLUB] = 0.5,--ее
     [DMG_BULLET] = 2.2,
-    [DMG_SLASH] = 0.3,
+    [DMG_SLASH] = 0.4,
     [DMG_BLAST] = 6,
-    [DMG_CRUSH] = 8,
+    [DMG_CRUSH] = 32,
 }
 
 local Reasons = {
@@ -45,8 +45,8 @@ hook.Add("Homigrad_Organs","Organs_Damage",function(ent,dmginfo,physbone,bonenam
 		local ply = (ent:IsPlayer() and ent or RagdollOwner(ent))
 		local rag = ent
 
-		if rag:GetVelocity():Length() > 400
-		and (dmginfo:GetDamage() * 30) > 7 then
+		if rag:GetVelocity():Length() > 300
+		and (dmginfo:GetDamage() * 30) > 6 then
 			ply.KillReason = "dead_neck"
 			ply:SetNWString("KillReason",ply.KillReason)
             if ply:Alive() then

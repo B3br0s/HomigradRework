@@ -1,4 +1,4 @@
-table.insert(ROUND_LIST,"event")
+//table.insert(ROUND_LIST,"event")
 
 event = event or {}
 

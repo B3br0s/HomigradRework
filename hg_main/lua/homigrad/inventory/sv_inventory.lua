@@ -1,5 +1,7 @@
 util.AddNetworkString("inventory")
 util.AddNetworkString("hg loot")
+util.AddNetworkString("hg drop jmod")
+util.AddNetworkString("hg loot jmod")
 util.AddNetworkString("ply_take_item")
 util.AddNetworkString("ply_take_ammo")
 util.AddNetworkString("DropItemInv")
@@ -9,6 +11,21 @@ local BlackListWep = {
 	["weapon_physgun"] = true,
 	["gmod_tool"] = true,
 	["gmod_camera"] = true,
+}
+
+local AllowedJMod = {
+	["ent_jack_gmod_ezdetpack"] = true,
+	["ent_jack_gmod_ezsticknadebundle"] = true,
+	["ent_jack_gmod_eztnt"] = true,
+	["ent_jack_gmod_eztimebomb"] = true,
+	["ent_jack_gmod_ezsmokenade"] = true,
+	["ent_jack_gmod_ezsignalnade"] = true,
+	["ent_jack_gmod_ezgasnade"] = true,
+	["ent_jack_gmod_ezfragnade"] = true,
+	["ent_jack_gmod_ezfirenade"] = true,
+	["ent_jack_gmod_ezsticknade"] = true,
+	["ent_jack_gmod_ezcsnade"] = true,
+	["ent_jack_gmod_ezdynamite"] = true,
 }
 
 hg.loots = hg.loots or {}
@@ -68,6 +85,21 @@ hg.loots.melee_crate = {
 	"weapon_pipe",
 }
 
+hg.loots.explosives_crate = {
+	"ent_jack_gmod_ezdetpack",
+	"ent_jack_gmod_ezsticknadebundle",
+	"ent_jack_gmod_eztnt",
+	"ent_jack_gmod_eztimebomb",
+	"ent_jack_gmod_ezsmokenade",
+	"ent_jack_gmod_ezsignalnade",
+	"ent_jack_gmod_ezgasnade",
+	"ent_jack_gmod_ezfragnade",
+	"ent_jack_gmod_ezfirenade",
+	"ent_jack_gmod_ezsticknade",
+	"ent_jack_gmod_ezcsnade",
+	"ent_jack_gmod_ezdynamite"
+}
+
 hg.loots.weapon_crate = {
 	"weapon_mp5",
 	"weapon_mag7",
@@ -91,14 +123,98 @@ hg.loots.medkit_crate = {
 	"weapon_adrenaline",
 }
 
+net.Receive("hg drop jmod",function(l,ply)
+	if !ply.JModInv then
+		return
+	end
+
+	local tr = hg.eyeTrace(ply,100)
+
+	if IsValid(ply.JModInv) then
+		ply.JModInv:SetNoDraw(false)
+		ply.JModInv:SetCollisionGroup(COLLISION_GROUP_NONE)
+		ply.JModInv:SetPos(tr.HitPos + vector_up * 16)
+
+		ply.JModInv = NULL
+	end
+end)
+
+net.Receive("hg loot jmod",function(l,ply)
+	local ent = net.ReadEntity()
+
+	if !ent.JModInv then
+		return
+	end
+
+	local pent = ent.JModInv
+
+	if pent == NULL or pent == Entity(1) then
+		return
+	end
+
+	local tr = hg.eyeTrace(ply,160)
+
+	if ply.JModInv == NULL then
+		ply.JModInv = pent
+		pent:SetNoDraw(true)
+		pent:SetCollisionGroup(COLLISION_GROUP_WORLD)
+	else
+		local fent2 = ply.JModInv
+
+		fent2:SetNoDraw(false)
+		fent2:SetCollisionGroup(COLLISION_GROUP_NONE)
+		fent2:SetPos(tr.HitPos)
+
+		ply.JModInv = pent
+		pent:SetNoDraw(true)
+		pent:SetCollisionGroup(COLLISION_GROUP_WORLD)
+	end
+
+	if ent:IsRagdoll() and hg.RagdollOwner(ent).FakeRagdoll == ent and hg.RagdollOwner(ent):Alive() and hg.RagdollOwner(ent).Fake then
+		local entply = hg.RagdollOwner(ent)
+
+		entply.JModInv = NULL
+	end
+
+	ent.JModInv = NULL
+end)
 
 hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 	if !ply:Alive() then
 		return
 	end
 
+	if ply.JModInv != NULL then
+		ply.JModInv:SetPos(ply:GetPos())
+	end
+
 	if ply.Fake then
 		return
+	end
+	if ply:KeyDown(IN_SPEED) and ply:KeyPressed(IN_USE) then
+		local tr = hg.eyeTrace(ply,160)
+
+		if tr.Entity then
+			local ent = tr.Entity
+
+			if AllowedJMod[ent:GetClass()] then
+				if ply.JModInv != NULL then
+					local pent  = ply.JModInv //fent
+
+					pent:SetNoDraw(false)
+					ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
+					ent:SetNoDraw(true)
+					pent:SetCollisionGroup(COLLISION_GROUP_NONE)
+					pent:SetPos(tr.HitPos)
+
+					ply.JModInv = ent
+				else
+					ply.JModInv = ent
+					ent:SetNoDraw(true)
+					ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
+				end
+			end
+		end
 	end
 	if ply:KeyDown(IN_ATTACK2) and ply:KeyPressed(IN_USE) then
 		local tr = hg.eyeTrace(ply)
@@ -111,6 +227,7 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 				net.WriteEntity(ent)
 				net.WriteTable(ent.Inventory)
 				net.WriteFloat(8)
+				net.WriteEntity(ent.JModInv)
 				net.Send(ply)
 			end
 		end
@@ -221,6 +338,12 @@ net.Receive("DropItemInv",function(l,ply)
     
     ply:DropWep(ply:GetWeapon(wepdrop))
 
+end) 
+
+hook.Add("PlayerUse","NoDrawUse",function(ply,ent)
+	if ent:GetNoDraw() then
+		return false
+	end
 end)
 
 hook.Add("PlayerCanPickupWeapon","Homigrad_Shit",function(ply,ent)

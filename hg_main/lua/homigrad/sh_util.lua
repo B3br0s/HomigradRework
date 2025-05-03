@@ -373,6 +373,9 @@ function hg.UseCrate(ply,ent)
 		net.WriteEntity(self)
 		net.WriteTable(self.Inventory)
 		net.WriteFloat(self.AmtLoot)
+		if self.JModInv then
+			net.WriteEntity(self.JModInv)
+		end
 		net.Send(ply)
 	end
 end

@@ -57,9 +57,53 @@ SWEP.DamageType = DMG_SLASH
 SWEP.SubStamina = 2
 SWEP.DamagePain = 0
 SWEP.DamageBleed = 0
+SWEP.atacktime = 0
 
 function SWEP:Think()
     self:SetHoldType(self.HoldType)
+
+	local ply = self:GetOwner()
+	if self.atacktime > CurTime() then
+		local tr = hg.eyeTrace(ply,130)
+
+		local ent = tr.Entity
+
+		if SERVER then
+			if tr.Hit then
+				self.atacktime = 0
+				if IsValid(ent) and IsValid(ent:GetPhysicsObject()) and (string.find(ent:GetPhysicsObject():GetMaterial(),"flesh") or string.find(ent:GetPhysicsObject():GetMaterial(),"player")) then
+					sound.Play(TypeID(self.FlashHitSound) == TYPE_TABLE and self.FlashHitSound[math.random(1,#self.FlashHitSound)] or self.FlashHitSound,self:GetPos(),75,100,1)
+				else
+    	            sound.Play(TypeID(self.HitSound) == TYPE_TABLE and self.HitSound[math.random(1,#self.HitSound)] or self.HitSound,self:GetPos(),75,100,1)
+				end
+			end
+
+			if IsValid(ent) then
+				local dmgTab = DamageInfo()
+    	        dmgTab:SetAttacker(self:GetOwner())
+    	        dmgTab:SetDamage(self.Primary.Damage)
+    	        dmgTab:SetDamageForce(tr.Normal * self.Primary.Force)
+    	        dmgTab:SetInflictor(self)
+    	        dmgTab:SetDamageType(self.DamageType)
+			
+
+				if self.Attack then self:Attack(ent,tr,dmgTab) end
+
+				ent:TakeDamageInfo(dmgTab)
+			end
+		end
+
+		if SERVER and tr.Hit and self.ShouldDecal then
+			local pos1 = tr.HitPos + tr.HitNormal
+			local pos2 = tr.HitPos - tr.HitNormal
+		
+			if IsValid(obj) and obj:GetClass()=="prop_ragdoll" then
+				util.Decal("Impact.Flesh",pos1,pos2)
+			else
+				util.Decal("ManhackCut",pos1,pos2)
+			end
+		end
+	end
 end
 
 function Circle( x, y, radius, seg )
@@ -151,6 +195,8 @@ function SWEP:PrimaryAttack()
 
 	local ply = self:GetOwner()
 
+	self.atacktime = CurTime() + 0.25
+
 	local snd = self.sndTwroh or "weapons/slam/throw.wav"
 	if TypeID(snd) == TYPE_TABLE then snd = snd[math.random(1,#snd)] end
 
@@ -171,46 +217,7 @@ function SWEP:PrimaryAttack()
 
 	--ply:LagCompensation(true)
 
-	local tr = hg.eyeTrace(ply,100)
-
-	local ent = tr.Entity
-
-	if SERVER then
-		if tr.Hit then
-			if IsValid(ent) and IsValid(ent:GetPhysicsObject()) and (string.find(ent:GetPhysicsObject():GetMaterial(),"flesh") or string.find(ent:GetPhysicsObject():GetMaterial(),"player")) then
-				sound.Play(TypeID(self.FlashHitSound) == TYPE_TABLE and self.FlashHitSound[math.random(1,#self.FlashHitSound)] or self.FlashHitSound,self:GetPos(),75,100,1)
-			else
-                sound.Play(TypeID(self.HitSound) == TYPE_TABLE and self.HitSound[math.random(1,#self.HitSound)] or self.HitSound,self:GetPos(),75,100,1)
-			end
-		end
-
-		if IsValid(ent) then
-			local dmgTab = DamageInfo()
-            dmgTab:SetAttacker(self:GetOwner())
-            dmgTab:SetDamage(self.Primary.Damage)
-            dmgTab:SetDamageForce(tr.Normal * self.Primary.Force)
-            dmgTab:SetInflictor(self)
-            dmgTab:SetDamageType(self.DamageType)
-            
-
-			if self.Attack then self:Attack(ent,tr,dmgTab) end
-
-			ent:TakeDamageInfo(dmgTab)
-		end
-	end
-
 	ply:SetAnimation(PLAYER_ATTACK1)
-
-	if SERVER and tr.Hit and self.ShouldDecal then
-		local pos1 = tr.HitPos + tr.HitNormal
-		local pos2 = tr.HitPos - tr.HitNormal
-	
-		if IsValid(obj) and obj:GetClass()=="prop_ragdoll" then
-			util.Decal("Impact.Flesh",pos1,pos2)
-		else
-			util.Decal("ManhackCut",pos1,pos2)
-		end
-	end
 
 	--ply:LagCompensation(false)
 end

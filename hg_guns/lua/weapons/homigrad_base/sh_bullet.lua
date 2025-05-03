@@ -10,7 +10,7 @@ end
 
 function SWEP:SetupMuzzle()
     local ply = self:GetOwner()
-    local Att = self:GetOwner():LookupAttachment('anim_attachment_rh')
+    local Att = self:GetOwner():LookupAttachment('anim_attachment_rh') or 8
     local Attachment = self:GetOwner():GetAttachment(Att)
     local Ang = Attachment.Ang
 
@@ -23,7 +23,7 @@ function SWEP:SetupMuzzle()
     --print(Ang)
     local att_shit = self:GetOwner():GetBoneMatrix(11)
     self:SetNW2Angle("MuzzleAng",ang)
-    self:SetNW2Vector("MuzzlePos",Attachment.Pos + Ang:Forward() * self.AttPos[1] + Ang:Right() * self.AttPos[2] + Ang:Up() * self.AttPos[3] + Ang:Up() * (SERVER and (!self:IsPistolHoldType() and 7 or -1) or 0)) 
+    self:SetNW2Vector("MuzzlePos",Attachment.Pos + Ang:Forward() * self.AttPos[1] + Ang:Right() * self.AttPos[2] + Ang:Up() * self.AttPos[3] + Ang:Up() * (SERVER and (!self:IsPistolHoldType() and -2 or -1) or 0)) 
 end
 
 function SWEP:GetTrace()

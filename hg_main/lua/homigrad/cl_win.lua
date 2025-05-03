@@ -15,7 +15,7 @@ function WinRound(color,text1,winside,text2)
 
     surface.PlaySound("homigrad/vgui/panorama/case_awarded_4_legendary_01.wav")
     
-    local WinGui = vgui.Create("DFrame")
+    local WinGui = vgui.Create("hg_frame")
     WinGui:SetSize(612,120)
     WinGui:Center()
     local XPos = WinGui:GetX()
@@ -23,7 +23,7 @@ function WinRound(color,text1,winside,text2)
     WinGui:ShowCloseButton(false)
     WinGui:SetTitle(" ")
 
-    function WinGui:Paint(w,h)
+    function WinGui:SubPaint(w,h)
         local TimeSpent = (EndTime - CurTime())
 
         //print(text2)
@@ -31,16 +31,7 @@ function WinRound(color,text1,winside,text2)
         local fix_w = w / 2 - ((w/2) * CurSize)
 
         CurSize = LerpFT(0.2,CurSize,TargetSize)
-
-        surface.SetDrawColor(100,100,100,75)
-        surface.DrawOutlinedRect(fix_w + 1,1,w * CurSize,h,1)
-        surface.DrawOutlinedRect(fix_w -1,-1,w * CurSize,h,1)
-        surface.SetDrawColor(100,100,100,5)
-        surface.DrawOutlinedRect(fix_w + 2,2,w * CurSize,h,1)
-        surface.DrawOutlinedRect(fix_w -2,-2,w * CurSize,h,1)
-
-        surface.SetDrawColor(100,100,100,15)
-        surface.DrawOutlinedRect(fix_w,0,w * CurSize,h,1)
+        self.CurSize = CurSize
 
         draw.RoundedBox(0,fix_w,0,w * CurSize,h,Color(24,24,24,230))
 

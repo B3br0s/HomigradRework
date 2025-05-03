@@ -41,6 +41,8 @@ function PlayerMeta:CreateFake(force)
     rag:Activate()
 
 	rag.Inventory = self.Inventory
+	rag.JModInv = self.JModInv
+	rag:SetNWEntity("JModInv",self.JModInv)
 	if ROUND_NAME == "dr" then
 		self.TimeToDeath = CurTime() + 7
 		self:SetNWFloat("TimeToDeath",CurTime() + 7)
@@ -88,6 +90,9 @@ end
 hook.Add("Think","VelocityFakeHitPlyCheck",function()
 	for i,rag in pairs(ents.FindByClass("prop_ragdoll")) do
 		if IsValid(rag) then
+			if rag.JModInv != NULL and IsValid(rag.JModInv) then
+				rag.JModInv:SetPos(rag:GetPos())
+			end
 			if rag:GetVelocity():Length() > 200 then
 				rag:SetCollisionGroup(COLLISION_GROUP_NONE)
 			else
@@ -345,12 +350,6 @@ hook.Add("PreCleanupMap","CleanUpFake",function()
 	BleedingEntities = {}
 end)
 
-util.AddNetworkString("nodraw_helmet")
-
-hook.Add("PlayerUse","UsingInFake",function(ply,ent)
-	if ply.Fake then return false end
-end)
-
 function RagdollOwner(ent)
 	return ent:GetNWEntity("RagdollOwner").FakeRagdoll == ent and ent:GetNWEntity("RagdollOwner") 
 end
@@ -402,6 +401,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 	if not IsValid(rag) then ply:Kill() return end
 	if rag == NULL then return end
 	rag.Inventory = ply.Inventory
+	rag.JModInv = ply.JModInv
+	rag:SetNWEntity("JModInv",ply.JModInv)
 	if ROUND_NAME == "dr" then
 		if ply.TimeToDeath and ply.TimeToDeath < CurTime() then
 			ply:Kill()
@@ -555,7 +556,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			secondstoarrive=0.0000000001 / 1e8,
 			pos=Head:GetPos(),
 			angle=HeadAng,
-			maxangulardamp=0.1,
+			maxangulardamp=3,
 			maxspeeddamp=10,
 			maxangular=370,
 			maxspeed=30,
@@ -578,7 +579,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			secondstoarrive=0.7,
 			pos=phys2:GetPos() + (IsValid(rag.ZacConsLH) and Vector(0,0,7) or IsValid(rag.ZacConsRH) and Vector(0,0,7) or Vector(0,0,0)),
 			angle=angs,
-			maxangulardamp=1 * diff_ang2,
+			maxangulardamp=3 * diff_ang2,
 			maxspeeddamp=1 * diff_ang2,
 			maxangular=1e8,
 			maxspeed=50 / velo,
@@ -590,7 +591,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			secondstoarrive=0.15,
 			pos=phys:GetPos(),
 			angle=angs,
-			maxangulardamp=1 * diff_ang2,
+			maxangulardamp=3 * diff_ang2,
 			maxspeeddamp=1 * diff_ang2,
 			maxangular=1e8,
 			maxspeed=40 / velo,
@@ -713,7 +714,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 60
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 0.8,
+				secondstoarrive = 1.2,
 				pos = lh:GetPos() + ply:EyeAngles():Forward() * 25 + ply:EyeAngles():Up() * 5,
 				angle = ply:EyeAngles(),
 				maxangulardamp = 1/1e8,
@@ -742,7 +743,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 60
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 0.8,
+				secondstoarrive = 1.2,
 				pos = rh:GetPos() + ply:EyeAngles():Forward() * 25 + ply:EyeAngles():Up() * 5,
 				angle = ply:EyeAngles(),
 				maxangulardamp = 1/1e8,

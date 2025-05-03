@@ -14,6 +14,12 @@ hook.Add("Player Think","Main_Handler",function(ply)
     ply:SetNWFloat("rarm",ply.rarm)
     ply:SetNWFloat("larm",ply.larm)
 
+    if istable(ply.JModInv) then
+        ply.JModInv = NULL
+    end
+
+    ply:SetNWEntity("JModInv",ply.JModInv)
+
     if !ply:HasWeapon("weapon_hands") then
         ply:Give("weapon_hands")
     end
@@ -58,6 +64,8 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
 	ply.suiciding = false
 	ply:SetNWBool("suiciding",false)
 	ply.CanMove = true
+    ply.JModInv = NULL
+    ply:SetNWEntity("JModInv",ply.JModInv)
 
     hg.Gibbed[ply] = nil
 end)

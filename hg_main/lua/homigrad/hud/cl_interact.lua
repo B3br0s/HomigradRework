@@ -15,12 +15,24 @@ local shit = {
     ["ent_grenade_crate"] = "use_crate_grenade",
     ["ent_weapon_crate"] = "use_crate_weapon",
     ["ent_melee_crate"] = "use_crate_melee",
+    ["ent_jack_gmod_ezdetpack"] = "use_detpack",
+	["ent_jack_gmod_ezsticknadebundle"] = "use_buket",
+	["ent_jack_gmod_eztnt"] = "use_tnt",
+	["ent_jack_gmod_eztimebomb"] = "use_time_bomb",
+	["ent_jack_gmod_ezfragnade"] = "use_fragnade",
+	["ent_jack_gmod_ezfirenade"] = "use_firenade",
+	["ent_jack_gmod_ezsticknade"] = "use_sticknade",
+	["ent_jack_gmod_ezdynamite"] = "use_dynam",
+    ["ent_jack_gmod_ezsmokenade"] = "use_smokenade",
+	["ent_jack_gmod_ezsignalnade"] = "use_signalnade",
+	["ent_jack_gmod_ezgasnade"] = "use_gasnade",
+	["ent_jack_gmod_ezcsnade"] = "use_teargasnade",
 }
 
 hook.Add("Think","Interact-Glow",function()
     local tr = hg.eyeTrace(ply,100)
     //print(tr.Entity:GetClass())
-    if IsValid(tr.Entity) and (tr.Entity:IsWeapon() or shit[tr.Entity:GetClass()]) then
+    if IsValid(tr.Entity) and (tr.Entity:IsWeapon() or shit[tr.Entity:GetClass()]) and !tr.Entity:GetNoDraw() then
         LatestShow = LerpFT(0.25,LatestShow,1)
         LatestEntity = tr.Entity
     else

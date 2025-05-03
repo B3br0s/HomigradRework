@@ -118,10 +118,11 @@ hook.Add("ScoreboardShow","Homigrad_ScoreBoard",function()
     if IsValid(ScoreBoardPanel) then
         if hg.islooting then
             surface.PlaySound("homigrad/vgui/item_drop.wav")
+            hg.islooting = false
+            hg.lootent = NULL
+        else
+            ScoreBoardPanel:Remove()
         end
-        hg.islooting = false
-        hg.lootent = NULL
-        ScoreBoardPanel:Remove()
     else
         show_scoreboard()
     end
@@ -148,12 +149,13 @@ hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
     if hg.islooting and IsValid(hg.lootent) and hg.lootent:GetPos():Distance(LocalPlayer():GetPos()) > 95 or !IsValid(hg.lootent) and hg.islooting or hg.islooting and !LocalPlayer():Alive() then
         if hg.islooting then
             surface.PlaySound("homigrad/vgui/item_drop.wav")
-        end
-        hg.islooting = false
-        hg.lootent = NULL
-        if IsValid(ScoreBoardPanel) then
             hg.islooting = false
-            ScoreBoardPanel:Remove()
+            hg.lootent = NULL
+        else
+            if IsValid(ScoreBoardPanel) then
+                hg.islooting = false
+                ScoreBoardPanel:Remove()
+            end
         end
     end
     if input.IsKeyDown(KEY_H) and !fastloot then
@@ -169,9 +171,11 @@ hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
         if IsValid(ScoreBoardPanel) then
             if hg.islooting then
                 surface.PlaySound("homigrad/vgui/item_drop.wav")
+                hg.islooting = false
+                hg.lootent = NULL
+            else
+                ScoreBoardPanel:Remove()
             end
-            hg.islooting = false
-            ScoreBoardPanel:Remove()
         else
             show_scoreboard()
         end

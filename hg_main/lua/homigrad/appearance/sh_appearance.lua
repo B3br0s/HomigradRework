@@ -345,7 +345,7 @@ function OpenAppMenu()
             end
         end
 
-        local ApplyButton = vgui.Create( "DButton", BasePanel )
+        local ApplyButton = vgui.Create( "hg_button", BasePanel )
         ApplyButton:Dock( BOTTOM )
         ApplyButton:DockMargin( 2,5,2,5 )
         ApplyButton:SetSize( 250, 30 )
@@ -359,13 +359,6 @@ function OpenAppMenu()
             surface.PlaySound("eft_gear_sounds/gear_armor_use.wav")
         end
         
-        
-        function ApplyButton:Paint( w, h )
-            self.a = Lerp(0.1,self.a or 100,self:IsHovered() and 255 or 150)
-            draw.RoundedBox(0, 0, 0, w, h, Color(red.r,red.g,red.b,self.a))
-            surface.SetDrawColor( color_black)
-            surface.DrawOutlinedRect( 0, 0, w, h, 2.5 )
-        end
         function ClothesStyle:Paint( w, h )
             self.a = Lerp(0.1,self.a or 100,self:IsHovered() and 255 or 150)
             draw.RoundedBox(0, 0, 0, w, h, Color(red.r,red.g,red.b,self.a))

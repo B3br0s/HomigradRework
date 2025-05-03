@@ -22,7 +22,7 @@ SWEP.DrawCrosshair = false
 SWEP.DrawAmmo = true
 SWEP.HoldType = "knife"
 
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = 37
 SWEP.DamageBleed = -30
 
 SWEP.Primary.Ammo = "none"
