@@ -239,6 +239,10 @@ l.wep_force = "Force: %s"
 
 l.item_notexist = "Item is not exist."
 
+l.hasnt_pulse = "He has no pulse."
+l.otrub_but_he_live = "He's unconscious, but he's still alive."
+l.has_pulse = "He has pulse."
+
 //Локализация названий
 
 l.weapon_bandage = "Bandage"

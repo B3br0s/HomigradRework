@@ -312,16 +312,23 @@ function SWEP:ApplyForce()
 
 		if self.CarryEnt:GetClass() == "prop_ragdoll" then
 			mul = mul * 3
-			local ply = RagdollOwner(self.CarryEnt)
+			local ply = hg.RagdollOwner(self.CarryEnt)
 			if self:GetOwner():KeyPressed( IN_RELOAD ) then
-				if not ply then
-					self:GetOwner():ChatPrint("У него нет пульса.")
+				if ply.FakeRagdoll != self.CarryEnt or !ply.Fake or !ply:Alive() then
+					--self:GetOwner():ChatPrint("У него нет пульса.")
+					net.Start("localized_chat")
+                    net.WriteString('hasnt_pulse')
+                    net.Send(self:GetOwner())
 				else
 					if ply:GetNWBool("otrub") then
-						self:GetOwner():ChatPrint("Он лежит в отключке, но он всё ещё жив.")
+						--self:GetOwner():ChatPrint("Он лежит в отключке, но он всё ещё жив.")
+						net.Start("localized_chat")
+                    	net.WriteString('otrub_but_he_live')
+                    	net.Send(self:GetOwner())
 					else
-						self:GetOwner():ChatPrint("У него есть пульс")
-						--self:GetOwner():ChatPrint(ply:GetNWFloat("pulse") < 0.9 and "У него сильный пульс" or (ply:GetNWFloat("pulse") <= 1.5 and "У него нормальный пульс") or (ply:GetNWFloat("pulse") < 2 and "У него слабый пульс") or (ply:GetNWFloat("pulse") >= 2 and "У него еле ощущаемый пульс."))
+						net.Start("localized_chat")
+                    	net.WriteString('has_pulse')
+                    	net.Send(self:GetOwner())
 					end
 				end
 			end
