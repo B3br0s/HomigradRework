@@ -244,6 +244,10 @@ l.wep_force = "Сила: %s"
 
 l.item_notexist = "Предмет не существует."
 
+l.hasnt_pulse = "У него нет пульса."
+l.otrub_but_he_live = "Он лежит в отключке, но он всё ещё жив."
+l.has_pulse = "У него есть пульс."
+
 //Локализация названий
 
 l.weapon_bandage = "Бинт"
