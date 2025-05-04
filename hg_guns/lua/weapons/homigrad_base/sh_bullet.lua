@@ -10,7 +10,7 @@ end
 
 function SWEP:SetupMuzzle()
     local ply = self:GetOwner()
-    local Att = self:GetOwner():LookupAttachment('anim_attachment_rh') or 8
+    local Att = (self:GetOwner():LookupAttachment('anim_attachment_rh') != nil and self:GetOwner():LookupAttachment('anim_attachment_rh') or 8)
     local Attachment = self:GetOwner():GetAttachment(Att)
     local Ang = Attachment.Ang
 

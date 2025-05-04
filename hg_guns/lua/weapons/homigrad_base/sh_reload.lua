@@ -9,7 +9,9 @@ if SERVER then
 else
     net.Receive("hg reload",function()
         local ent = net.ReadEntity()
+        if IsValid(ent) and ent.Reload then
         ent:Reload()
+        end
     end)
 end
 
