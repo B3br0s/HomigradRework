@@ -9,6 +9,7 @@ SWEP.Spawnable = true
 SWEP.WorldModel = "models/freeman/flexcuffs.mdl"
 
 SWEP.CorrectPos = Vector(0.5,-0,0.5)
+SWEP.CorrectAng = Angle(0,0,-90)
 
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.ClipSize = -1
@@ -33,6 +34,63 @@ SWEP.IconAng = Angle(0,90,150)
 
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
     hg.DrawWeaponSelection(self,x,y,wide,tall,alpha)
+end
+
+function SWEP:IsCuff()
+    local ply = self:GetOwner()
+
+    if SERVER then
+        self:SetNWBool("IsSelfCuff",ply:KeyDown(IN_ATTACK))
+        return ply:KeyDown(IN_ATTACK)
+    else
+        return self:GetNWBool("IsSelfCuff")
+    end
+end
+
+function SWEP:IsSelfCuff()
+    local ply = self:GetOwner()
+
+    if SERVER then
+        self:SetNWBool("IsCuff",ply:KeyDown(IN_ATTACK2))
+        return ply:KeyDown(IN_ATTACK2)
+    else
+        return self:GetNWBool("IsCuff")
+    end
+end
+
+function SWEP:Step()
+    local ply = self:GetOwner()
+
+    if ply:GetActiveWeapon() != self then
+        return
+    end
+ 
+	if self:IsCuff() then
+        hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-40,0),1,0.075)
+        hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(10,25,0),1,0.125)
+        hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,-70),1,0.075)   
+    elseif self:IsSelfCuff() then
+        hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-40,0),1,0.075)
+        hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,25,0),1,0.125)
+        hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(20,0,-50),1,0.075)      
+
+        hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(10,-50,0),1,0.075)
+        hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(10,0,0),1,0.125)
+        hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.075)      
+    else
+        hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,30),1,0.1)
+	    hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(10,-10,20),1,0.1)
+	    hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(20,-50,0),1,0.1)
+    
+        hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.275)
+        hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.225)
+        hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.275)   
+    end
+end
+
+function SWEP:Initialize()
+    hg.Weapons[self] = true
+    self:SetHoldType("slam")
 end
 
 if SERVER then
@@ -128,6 +186,26 @@ if SERVER then
         if ply:GetNWBool("Cuffs",false) then return true end
     end)
 
+    function SWEP:SecondaryAttack()
+        local owner = self:GetOwner()
+
+        local tr = hg.eyeTrace(owner)
+        if not tr then return end
+
+        local ply = owner
+
+        if IsValid(ply) and ply.Cuffed then return end
+
+        if ply then
+            owner:EmitSound("weapons/357/357_reload1.wav")
+
+            self.CuffPly = ply
+            self.CuffTime = CurTime()
+
+            self:SendCuff()
+        end
+    end
+
     function SWEP:PrimaryAttack()
         if IsValid(self.CuffPly) then return end
 
@@ -149,9 +227,7 @@ if SERVER then
             self:SendCuff()
         end
     end
-    
-    SWEP.SecondaryAttack = SWEP.PrimaryAttack
-    
+        
     function SWEP:SendCuff()
         net.Start("cuff")
         net.WriteEntity(self)
@@ -171,18 +247,27 @@ if SERVER then
         
         local ply = (IsValid(tr.Entity) and (tr.Entity:IsRagdoll() and (hg.RagdollOwner(tr.Entity) != nil and hg.RagdollOwner(tr.Entity)) or (tr.Entity:IsPlayer() and tr.Entity)))
 
-        if ply ~= cuffPly then
+        if ply ~= cuffPly and cuffPly != owner then
             self.CuffPly = nil
             
             self:SendCuff()
 
             return
         end
+         
+        if cuffPly == owner then
+            ply = owner
+        end
 
         if self.CuffTime + cuffTime <= CurTime() then
-            if ply:IsPlayer() then ply = ply:GetNWEntity("FakeRagdoll") end
+            if cuffPly == owner then
+                hg.Faking(owner)
+            end
+            timer.Simple(0,function()
+                if ply:IsPlayer() then ply = ply:GetNWEntity("FakeRagdoll") end
 
-            self:Cuff(ply)
+                self:Cuff(ply)
+            end)
         end
     end
 end
@@ -303,9 +388,9 @@ function SWEP:DrawWorldModel()
         Pos:Add(Ang:Right() * self.CorrectPos[2])
         Pos:Add(Ang:Up() * self.CorrectPos[3])
 
-        Ang:RotateAroundAxis(Ang:Right(), 0)
-        Ang:RotateAroundAxis(Ang:Up(), 0)
-        Ang:RotateAroundAxis(Ang:Forward(), 90)
+        Ang:RotateAroundAxis(Ang:Right(), self.CorrectAng[1])
+        Ang:RotateAroundAxis(Ang:Up(), self.CorrectAng[2])
+        Ang:RotateAroundAxis(Ang:Forward(), self.CorrectAng[3])
 
         Ang:Normalize()
 

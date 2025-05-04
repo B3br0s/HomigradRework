@@ -2,6 +2,17 @@ dr = dr or {}
 
 dr.RoundEnds = 1e8
 
+function dr.PlayerThink(ply)
+    if ply.Fake then
+        return
+    end
+    if ply:OnGround() then
+        return
+    end
+
+    ply:SetVelocity(ply:GetVelocity() * 1.01)
+end
+
 function dr.SpawnKiller(ply)
     local SpawnList = ReadDataMap("dr_spawn_killer")
 
@@ -100,6 +111,10 @@ function dr.RoundThink()
         ROUND_ENDSIN = CurTime() + 8
 
         EndRound(2)
+    end
+
+    for _, ply in ipairs(player.GetAll()) do
+        dr.PlayerThink(ply)
     end
 end
 

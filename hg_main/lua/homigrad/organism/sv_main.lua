@@ -14,11 +14,11 @@ hook.Add("Player Think","Main_Handler",function(ply)
     ply:SetNWFloat("rarm",ply.rarm)
     ply:SetNWFloat("larm",ply.larm)
 
-    if istable(ply.JModInv) then
-        ply.JModInv = NULL
+    if istable(ply.JModEntInv) then
+        ply.JModEntInv = NULL
     end
 
-    ply:SetNWEntity("JModInv",ply.JModInv)
+    ply:SetNWEntity("JModEntInv",ply.JModEntInv)
 
     if !ply:HasWeapon("weapon_hands") then
         ply:Give("weapon_hands")
@@ -55,6 +55,7 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
 	ply.painlosing = 1
 	ply.pain = 0
 	ply.pulse = 80
+	ply.pulseadd = 0
 	ply.blood = 5000
 	ply.bleed = 0
 	ply.adrenaline = 0
@@ -64,12 +65,23 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
 	ply.suiciding = false
 	ply:SetNWBool("suiciding",false)
 	ply.CanMove = true
-    ply.JModInv = NULL
-    ply:SetNWEntity("JModInv",ply.JModInv)
+    ply.JModEntInv = NULL
+    ply:SetNWEntity("JModEntInv",ply.JModEntInv)
 
     hg.Gibbed[ply] = nil
 end)
 
 hook.Add("PlayerInitialSpawn","Homigrad_shit",function(ply)
     ply:SetTeam(1)
-end)   
+end)
+
+hook.Add("Player Think","Pulse-Holder",function(ply,time)
+    if !ply:Alive() then return end
+    ply.pulse = (math.min(380800 / ply.blood,120) + math.min(200 / ply.stamina,5000) + (math.random(-1,1) / 15) + (ply.pain / 128) + ply.pulseadd / 2.5) * (math.Clamp((ply:Health() / ply:GetMaxHealth()),0.5,1))
+
+    //print(ply.pulse)
+
+    if ply.pulse > 160 then
+        ply.pain = ply.pain + 0.05
+    end
+end)

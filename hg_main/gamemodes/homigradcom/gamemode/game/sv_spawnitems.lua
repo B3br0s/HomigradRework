@@ -37,8 +37,7 @@ hook.Add("BoxesThink", "SpawnBoxes", function()
 
     local points = hook.Run("CheckPoints")
 
-    local drop_chance = math.random(-5,85)
-
+    local drop_chance = math.random(-10,95)
 
     local cur_box
 
@@ -60,11 +59,20 @@ hook.Add("BoxesThink", "SpawnBoxes", function()
         cur_box = "ent_small_crate"
     end
 
-    print(cur_box)
-    print(drop_chance)
+    //print(cur_box)
+    //print(drop_chance)
+
+    local point_shit = table.Random(points)
+
+    for _, ent in ipairs(ents.FindInSphere(point_shit,200)) do
+        if ent.IsCrate then
+            hg.Lastbox = 0
+            return
+        end
+    end
 
     local ent = ents.Create(cur_box)
-    ent:SetPos(table.Random(points))
+    ent:SetPos(point_shit)
     ent:Spawn()
 
     /*for name, tbl in pairs(hg.boxes) do

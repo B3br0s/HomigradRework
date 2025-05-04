@@ -174,9 +174,10 @@ hook.Add("HUDPaint","InventoryPage",function()
 
         function slotjmod:LoadPaint()
             local w,h = self:GetSize()
-            if LocalPlayer():GetNWEntity("JModInv") and self.DropIn then
+            if LocalPlayer():GetNWEntity("JModEntInv") and self.DropIn then
                 if self.DropIn < CurTime() then
                     self.IsDropping = false
+                    self.DropIn = nil
                     net.Start("hg drop jmod")
                     net.SendToServer()
                 end
@@ -213,6 +214,7 @@ hook.Add("HUDPaint","InventoryPage",function()
                 if self.Weapon and self.DropIn then
                     if self.DropIn < CurTime() then
                         self.IsDropping = false
+                        self.DropIn = nil
                         net.Start("DropItemInv")
                         net.WriteString(self.Weapon:GetClass())
                         net.SendToServer()
@@ -281,7 +283,7 @@ function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
         if self.IsDropping then
             return
         end
-        if ent:GetNWEntity("JModInv") == NULL then
+        if ent:GetNWEntity("JModEntInv") == NULL then
             return
         end
         surface.PlaySound("homigrad/vgui/item_scroll_sticker_01.wav")
@@ -291,7 +293,7 @@ function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
 
     if ent == LocalPlayer() then
         function InvButton:DoRightClick()
-            if ent:GetNWEntity("JModInv") != NULL then
+            if ent:GetNWEntity("JModEntInv") != NULL then
                 local Menu = DermaMenu(true,self)
 
                 Menu:SetPos(input.GetCursorPos())
@@ -339,7 +341,7 @@ function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
             end
         end
 
-        local jent = ent:GetNWEntity("JModInv",NULL)
+        local jent = ent:GetNWEntity("JModEntInv",NULL)
         
         if IsValid(jent) and jent != NULL then
             self.LowerText = jent.PrintName
@@ -514,7 +516,7 @@ function CreateLootFrame(weps,slotsamt,ent)
     local MainFrame = panelka
     local SlotsSize = 75
 
-    if table.IsEmpty(weps) and ent:GetNWEntity("JModInv") != NULL then
+    if table.IsEmpty(weps) and ent:GetNWEntity("JModEntInv") != NULL then
         return
     end
 

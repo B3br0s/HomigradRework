@@ -1,5 +1,3 @@
--- \lua\\homigrad\\sh_comunication.lua"
-
 local function ChatLogic(output,input,isChat,teamonly,text)
 	local result,is3D = hook.Run("ChatingCanLisen",output,input,isChat,teamonly,text)
 	if result ~= nil then return result,is3D end

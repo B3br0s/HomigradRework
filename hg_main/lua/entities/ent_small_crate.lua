@@ -7,6 +7,7 @@ ENT.Author = "Homigrad"
 ENT.Category = "Разное"
 ENT.Purpose = ""
 ENT.Spawnable = true
+ENT.IsCrate = true
 
 function ENT:Initialize()
 	if SERVER then
@@ -39,6 +40,20 @@ function ENT:Use(ply)
 	hg.UseCrate(ply,self)
 end
 
+if SERVER then
+	function ENT:Think()
+		if self.SubThink then
+			self:SubThink()
+		end
+
+		//print(self.Inventory)
+	
+		if !self.Inventory or table.IsEmpty(self.Inventory) and !IsValid(self.JModEntInv) then
+			self:Remove()
+		end
+	end
+end
+
 if SERVER then return end
 
 net.Receive("hg inventory",function()
@@ -62,7 +77,7 @@ net.Receive("hg inventory",function()
 	timer.Simple(0.06,function()
 		CreateLootFrame(inv,amt,ent)
 		timer.Simple(0.06,function()
-			if jmodent != NULL and ent:GetNWEntity("JModInv") != NULL and jmodent != Entity(1) and jmodent != Entity(0) then
+			if jmodent != NULL and ent:GetNWEntity("JModEntInv") != NULL and jmodent != Entity(1) and jmodent != Entity(0) then
 				CreateJModFrame(inv,ent,jmodent)
 			end
 		end)

@@ -22,8 +22,8 @@ function ENT:Initialize()
 		local shit_ent = ents.Create(shit)
 		shit_ent:Spawn()
 		shit_ent:SetPos(self:GetPos())
-		self.JModInv = shit_ent
-		self:SetNWEntity("JModInv",shit_ent)
+		self.JModEntInv = shit_ent
+		self:SetNWEntity("JModEntInv",shit_ent)
 		self.Inventory = {}
 	    local phys = self:GetPhysicsObject()
 	    if phys:IsValid() then
@@ -33,9 +33,9 @@ function ENT:Initialize()
 end
 
 if SERVER then
-	function ENT:Think()
-		local shit_ent = self.JModInv
-		self:SetNWEntity("JModInv",shit_ent)
+	function ENT:SubThink()
+		local shit_ent = self.JModEntInv
+		self:SetNWEntity("JModEntInv",shit_ent)
 		if IsValid(shit_ent) then
 			shit_ent:SetPos(self:GetPos())
 			shit_ent:SetNoDraw(true)

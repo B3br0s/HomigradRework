@@ -30,6 +30,12 @@ function PlayerMeta:Notify(string)
 	self:ChatPrint(tostring(string))
 end
 
+function PlayerMeta:ChatPrintLocalized(string)
+	net.Start("localized_chat")
+    net.WriteString(tostring(string))
+    net.Send(self)
+end
+
 function PlayerMeta:CreateFake(force)
     local rag = ents.Create("prop_ragdoll")
     rag:SetModel(self:GetModel())
@@ -41,8 +47,8 @@ function PlayerMeta:CreateFake(force)
     rag:Activate()
 
 	rag.Inventory = self.Inventory
-	rag.JModInv = self.JModInv
-	rag:SetNWEntity("JModInv",self.JModInv)
+	rag.JModEntInv = self.JModEntInv
+	rag:SetNWEntity("JModEntInv",self.JModEntInv)
 	if ROUND_NAME == "dr" then
 		self.TimeToDeath = CurTime() + 7
 		self:SetNWFloat("TimeToDeath",CurTime() + 7)
@@ -90,8 +96,8 @@ end
 hook.Add("Think","VelocityFakeHitPlyCheck",function()
 	for i,rag in pairs(ents.FindByClass("prop_ragdoll")) do
 		if IsValid(rag) then
-			if rag.JModInv != NULL and IsValid(rag.JModInv) then
-				rag.JModInv:SetPos(rag:GetPos())
+			if rag.JModEntInv != NULL and IsValid(rag.JModEntInv) then
+				rag.JModEntInv:SetPos(rag:GetPos())
 			end
 			if rag:GetVelocity():Length() > 200 then
 				rag:SetCollisionGroup(COLLISION_GROUP_NONE)
@@ -401,8 +407,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 	if not IsValid(rag) then ply:Kill() return end
 	if rag == NULL then return end
 	rag.Inventory = ply.Inventory
-	rag.JModInv = ply.JModInv
-	rag:SetNWEntity("JModInv",ply.JModInv)
+	rag.JModEntInv = ply.JModEntInv
+	rag:SetNWEntity("JModEntInv",ply.JModEntInv)
 	if ROUND_NAME == "dr" then
 		if ply.TimeToDeath and ply.TimeToDeath < CurTime() then
 			ply:Kill()
@@ -496,7 +502,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			angle = ang,
 			maxangular = 670,
 			maxangulardamp = 600,
-			maxspeeddamp = 150,
+			maxspeeddamp = 250,
 			maxspeed = 800,
 			teleportdistance = 0,
 			deltatime = 0.01,
@@ -521,7 +527,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			angle = ang,
 			maxangular = 670,
 			maxangulardamp = 600,
-			maxspeeddamp = 150,
+			maxspeeddamp = 250,
 			maxspeed = 800,
 			teleportdistance = 0,
 			deltatime = 0.01,
@@ -550,7 +556,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			diff_ang = diff_ang * -1
 		end
 
-		diff_ang2 = (1 + diff_ang)
+		diff_ang2 = (1.5 + diff_ang)
 
 		local HeadShadow = {
 			secondstoarrive=0.0000000001 / 1e8,
@@ -577,10 +583,10 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 
 		local shadowparams2 = {
 			secondstoarrive=0.7,
-			pos=phys2:GetPos() + (IsValid(rag.ZacConsLH) and Vector(0,0,7) or IsValid(rag.ZacConsRH) and Vector(0,0,7) or Vector(0,0,0)),
+			pos=phys2:GetPos() + (IsValid(rag.ZacConsLH) and Vector(0,0,140) or IsValid(rag.ZacConsRH) and Vector(0,0,140) or Vector(0,0,0)),
 			angle=angs,
-			maxangulardamp=3 * diff_ang2,
-			maxspeeddamp=1 * diff_ang2,
+			maxangulardamp=3 * (diff_ang2 * 4),
+			maxspeeddamp=1 * (diff_ang2 / 2.5),
 			maxangular=1e8,
 			maxspeed=50 / velo,
 			teleportdistance=0,
@@ -591,16 +597,14 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			secondstoarrive=0.15,
 			pos=phys:GetPos(),
 			angle=angs,
-			maxangulardamp=3 * diff_ang2,
-			maxspeeddamp=1 * diff_ang2,
+			maxangulardamp=3 * (diff_ang2 * 4),
+			maxspeeddamp=1 * (diff_ang2 / 2.5),
 			maxangular=1e8,
 			maxspeed=40 / velo,
 			teleportdistance=0,
 			deltatime=deltatime,
 		}
 
-		phys2:Wake()
-		phys2:ComputeShadowControl(shadowparams2)
 		phys:Wake()
 		phys:ComputeShadowControl(shadowparams)
 		angs:RotateAroundAxis(angs:Right(),90)
@@ -609,6 +613,9 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		shadowparams.maxspeed = 20 / velo
 		shadowparams.secondstoarrive=0.35
 		shadowparams.pos = phys3:GetPos()
+		shadowparams.maxangulardamp = 0.1
+		phys2:Wake()
+		phys2:ComputeShadowControl(shadowparams2)
 		phys3:Wake()
 		phys3:ComputeShadowControl(shadowparams)
 		shadowparams.secondstoarrive=0.75
@@ -711,14 +718,14 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local angs = ply:EyeAngles()
 		angs:RotateAroundAxis(angs:Forward(), 90)
 		angs:RotateAroundAxis(angs:Up(), 90)
-		local speed = 60
+		local speed = 65
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 1.2,
-				pos = lh:GetPos() + ply:EyeAngles():Forward() * 25 + ply:EyeAngles():Up() * 5,
+				secondstoarrive = 0.9,
+				pos = lh:GetPos() + ply:EyeAngles():Forward() * 32 + ply:EyeAngles():Up() * 13,
 				angle = ply:EyeAngles(),
 				maxangulardamp = 1/1e8,
-				maxspeeddamp = 10,
+				maxspeeddamp = 25,
 				maxangular = 30,
 				maxspeed = speed,
 				teleportdistance = 0,
@@ -740,14 +747,14 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local angs = ply:EyeAngles()
 		angs:RotateAroundAxis(angs:Forward(), 90)
 		angs:RotateAroundAxis(angs:Up(), 90)
-		local speed = 60
+		local speed = 65
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 1.2,
-				pos = rh:GetPos() + ply:EyeAngles():Forward() * 25 + ply:EyeAngles():Up() * 5,
+				secondstoarrive = 0.9,
+				pos = rh:GetPos() + ply:EyeAngles():Forward() * 32 + ply:EyeAngles():Up() * 13,
 				angle = ply:EyeAngles(),
 				maxangulardamp = 1/1e8,
-				maxspeeddamp = 10,
+				maxspeeddamp = 25,
 				maxangular = 30,
 				maxspeed = speed,
 				teleportdistance = 0,
@@ -771,8 +778,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 40
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 0.65,
-				pos = chst:GetPos() + ply:EyeAngles():Forward() * -25 + ply:EyeAngles():Up() * -5,
+				secondstoarrive = 0.75,
+				pos = chst:GetPos() + ply:EyeAngles():Forward() * -32 + ply:EyeAngles():Up() * -5,
 				angle = phys:GetAngles(),
 				maxangulardamp = 1/1e8,
 				maxspeeddamp = 10,
@@ -796,8 +803,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 40
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 0.65,
-				pos = chst:GetPos() + ply:EyeAngles():Forward() * -25 + ply:EyeAngles():Up() * -5,
+				secondstoarrive = 0.75,
+				pos = chst:GetPos() + ply:EyeAngles():Forward() * -32 + ply:EyeAngles():Up() * -5,
 				angle = phys:GetAngles(),
 				maxangulardamp = 1/1e8,
 				maxspeeddamp = 10,

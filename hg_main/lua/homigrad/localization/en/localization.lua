@@ -193,6 +193,11 @@ l.sc_tps = "Server Tickrate: %s"
 
 // Остальное
 l.inv_drop = "Drop"
+l.pulse_normal = "Normal pulse."
+l.pulse_high = "High pulse."
+l.pulse_low = "Low pulse."
+l.pulse_lowest = "You can't feel a pulse"
+l.pulse_no = "You can't feel a pulse"
 l.open_alpha = "OPEN-ALPHA VERSION"
 l.report_bugs = "PLEASE REPORT ALL BUGS TO OUR DISCORD."
 l.youre_hungry = "You're hungry."

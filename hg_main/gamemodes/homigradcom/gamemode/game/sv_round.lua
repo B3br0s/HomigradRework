@@ -7,6 +7,8 @@ CURRENT_ROUND = (CURRENT_ROUND or 0)
 ROUNDS_ENABLED = true
 RTV_ACTIVE = (RTV_ACTIVE or false)
 
+hg.LastRoundTime = hg.LastRoundTime or 0
+
 function StartRound()
     if #player.GetAll() == 1 then
         RunConsoleCommand("bot")
@@ -81,6 +83,8 @@ function StartRound()
     if TableRound().StartRoundSV then
         TableRound().StartRoundSV()
     end
+    
+    hg.LastRoundTime = CurTime()
 
     net.Start("SyncRound")
     net.WriteString(ROUND_NAME)

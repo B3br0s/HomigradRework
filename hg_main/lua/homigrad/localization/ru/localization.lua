@@ -193,6 +193,11 @@ l.sc_tps = "Тикрейт Сервера: %s"
 
 // Остальное
 l.inv_drop = "Выкинуть"
+l.pulse_normal = "Нормальный пульс."
+l.pulse_high = "Высокий пульс."
+l.pulse_low = "Низкий пульс."
+l.pulse_lowest = "Невозможно нащупать пульс."
+l.pulse_no = "No pulse."
 l.open_alpha = "ОТКРЫТАЯ АЛЬФА"
 l.report_bugs = "ПОЖАЛУЙСТА, СООБЩАЙТЕ БАГИ В НАШ ДИСКОРД СЕРВЕР."
 l.youre_hungry = "Ты голоден."
@@ -259,7 +264,7 @@ l.ied_plant = "Заложить IED"
 l.ied_metalprop = "в металлический проп"
 l.weapon_hands = "Руки"
 
-l.weapon_handcuffs = "Наручники"
+l.weapon_handcuffs = "Стяжки"
 
 l.weapon_kabar = "Байонет"
 l.weapon_bat = "Бита"

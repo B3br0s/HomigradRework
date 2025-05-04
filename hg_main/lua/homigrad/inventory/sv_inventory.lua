@@ -123,30 +123,36 @@ hg.loots.medkit_crate = {
 	"weapon_adrenaline",
 }
 
+
+hg.loots.grenade_crate = {
+	"weapon_rgd5",
+	"weapon_f1",
+}
+
 net.Receive("hg drop jmod",function(l,ply)
-	if !ply.JModInv then
+	if !ply.JModEntInv then
 		return
 	end
 
 	local tr = hg.eyeTrace(ply,100)
 
-	if IsValid(ply.JModInv) then
-		ply.JModInv:SetNoDraw(false)
-		ply.JModInv:SetCollisionGroup(COLLISION_GROUP_NONE)
-		ply.JModInv:SetPos(tr.HitPos + vector_up * 16)
+	if IsValid(ply.JModEntInv) then
+		ply.JModEntInv:SetNoDraw(false)
+		ply.JModEntInv:SetCollisionGroup(COLLISION_GROUP_NONE)
+		ply.JModEntInv:SetPos(tr.HitPos + vector_up * 16)
 
-		ply.JModInv = NULL
+		ply.JModEntInv = NULL
 	end
 end)
 
 net.Receive("hg loot jmod",function(l,ply)
 	local ent = net.ReadEntity()
 
-	if !ent.JModInv then
+	if !ent.JModEntInv then
 		return
 	end
 
-	local pent = ent.JModInv
+	local pent = ent.JModEntInv
 
 	if pent == NULL or pent == Entity(1) then
 		return
@@ -154,18 +160,18 @@ net.Receive("hg loot jmod",function(l,ply)
 
 	local tr = hg.eyeTrace(ply,160)
 
-	if ply.JModInv == NULL then
-		ply.JModInv = pent
+	if ply.JModEntInv == NULL then
+		ply.JModEntInv = pent
 		pent:SetNoDraw(true)
 		pent:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	else
-		local fent2 = ply.JModInv
+		local fent2 = ply.JModEntInv
 
 		fent2:SetNoDraw(false)
 		fent2:SetCollisionGroup(COLLISION_GROUP_NONE)
 		fent2:SetPos(tr.HitPos)
 
-		ply.JModInv = pent
+		ply.JModEntInv = pent
 		pent:SetNoDraw(true)
 		pent:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	end
@@ -173,10 +179,10 @@ net.Receive("hg loot jmod",function(l,ply)
 	if ent:IsRagdoll() and hg.RagdollOwner(ent).FakeRagdoll == ent and hg.RagdollOwner(ent):Alive() and hg.RagdollOwner(ent).Fake then
 		local entply = hg.RagdollOwner(ent)
 
-		entply.JModInv = NULL
+		entply.JModEntInv = NULL
 	end
 
-	ent.JModInv = NULL
+	ent.JModEntInv = NULL
 end)
 
 hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
@@ -184,8 +190,8 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 		return
 	end
 
-	if ply.JModInv != NULL then
-		ply.JModInv:SetPos(ply:GetPos())
+	if ply.JModEntInv != NULL then
+		ply.JModEntInv:SetPos(ply:GetPos())
 	end
 
 	if ply.Fake then
@@ -198,8 +204,8 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 			local ent = tr.Entity
 
 			if AllowedJMod[ent:GetClass()] then
-				if ply.JModInv != NULL then
-					local pent  = ply.JModInv //fent
+				if ply.JModEntInv != NULL then
+					local pent  = ply.JModEntInv //fent
 
 					pent:SetNoDraw(false)
 					ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
@@ -207,9 +213,9 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 					pent:SetCollisionGroup(COLLISION_GROUP_NONE)
 					pent:SetPos(tr.HitPos)
 
-					ply.JModInv = ent
+					ply.JModEntInv = ent
 				else
-					ply.JModInv = ent
+					ply.JModEntInv = ent
 					ent:SetNoDraw(true)
 					ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
 				end
@@ -227,7 +233,7 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 				net.WriteEntity(ent)
 				net.WriteTable(ent.Inventory)
 				net.WriteFloat(8)
-				net.WriteEntity(ent.JModInv)
+				net.WriteEntity(ent.JModEntInv)
 				net.Send(ply)
 			end
 		end

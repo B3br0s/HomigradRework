@@ -82,8 +82,9 @@ function KickFoot(ply)
         else
             tr.Entity:TakeDamageInfo(dmginfo)
             tr.Entity:SetHealth(ply:Health() - math.random(5,8))
+            //ШЛЗФЫОХРВЗОШЛХЪВЫФ ХЩЗГОШПГОШЩХЗЫГОЩЖХВАМШЩЗХЫВГОЩЖАЩЖГЫВАГОЫВГОАШЫВШ
             if math.random(1,3) == 2 then
-                hg.Faking(tr.Entity)
+                hg.Faking(tr.Entity,ply:GetAngles():Forward() * 500)
             end
         end
     elseif tr.HitWorld and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then

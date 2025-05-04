@@ -312,18 +312,14 @@ function SWEP:ApplyForce()
 
 		if self.CarryEnt:GetClass() == "prop_ragdoll" then
 			mul = mul * 3
-			local ply = RagdollOwner(self.CarryEnt)
-			--if self:GetOwner():KeyPressed( IN_RELOAD ) then
-			--	if not ply then
-			--		self:GetOwner():ChatPrint("У него нет пульса.")
-			--	else
-			--		if ply.heartstop then
-			--			self:GetOwner():ChatPrint("У него нет пульса, но он всё ещё жив.")
-			--		else
-			--			self:GetOwner():ChatPrint(ply.nextPulse < 0.9 and "У него сильный пульс" or (ply.nextPulse <= 1.5 and "У него нормальный пульс") or (ply.nextPulse < 2 and "У него слабый пульс") or (ply.nextPulse >= 2 and "У него еле ощущаемый пульс."))
-			--		end
-			--	end
-			--end
+			local ply = hg.RagdollOwner(self.CarryEnt)
+			if self:GetOwner():KeyPressed( IN_RELOAD ) then
+				if not IsValid(ply) then
+					self:GetOwner():ChatPrintLocalized("pulse_no")
+				else
+					self:GetOwner():ChatPrintLocalized((ply:Alive() and ply.Fake and ply.FakeRagdoll == self.CarryEnt) and (ply.pulse > 90 and "pulse_high" or ((ply.pulse <= 85 and ply.pulse > 70) and "pulse_normal") or ((ply.pulse < 45 and ply.pulse > 30) and "pulse_low") or (ply.pulse <= 30 and "pulse_lowest")) or "pulse_no")
+				end
+			end
 		end
 		vec:Normalize()
 
