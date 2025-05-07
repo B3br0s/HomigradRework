@@ -5,8 +5,16 @@ function SWEP:WorldModel_Transform()
 
     local Att = {}
 
-    Att.Pos = ply:GetBoneMatrix(11):GetTranslation()
-    Att.Ang = ply:GetBoneMatrix(11):GetAngles()
+    if !ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")) then
+        return
+    end
+
+    if self:GetOwner():GetActiveWeapon() == self then
+        self.worldModel:SetNoDraw(false)
+    end
+
+    Att.Pos = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetTranslation()
+    Att.Ang = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetAngles()
 
     Att.Ang:RotateAroundAxis(Att.Ang:Forward(),180)
         
@@ -41,6 +49,11 @@ function SWEP:WorldModel_Holster_Transform()
     local WM = self.worldModel
     if not IsValid(WM) then
         self:CreateWorldModel()
+        return
+    end
+
+    if self:GetOwner():GetActiveWeapon() == self then
+        self.worldModel:SetNoDraw(false)
         return
     end
 

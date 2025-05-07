@@ -182,7 +182,6 @@ function SWEP:CreateWorldModel()
 		else
 			wm:SetNoDraw(true)
 		end*/
-		wm:SetNoDraw(true)
 		wm:SetModel(self.WorldModel)
 		wm:SetMaterial("models/spawn_effect")
 		wm:Spawn()
@@ -191,6 +190,7 @@ function SWEP:CreateWorldModel()
 		wm:SetNWBool("nophys", true)
 		wm:SetSolidFlags(FSOLID_NOT_SOLID)
 		wm:AddEFlags(EFL_NO_DISSOLVE)
+		wm:SetNoDraw(true)
         self:CallOnRemove("RemoveWM", function() wm:Remove() end)
 
 		self.worldModel = wm

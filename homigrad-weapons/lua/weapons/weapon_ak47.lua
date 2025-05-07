@@ -32,7 +32,7 @@ SWEP.Primary.Wait = 0.09
 SWEP.Primary.ReloadTime = 1.2
 SWEP.Primary.ReloadTimeEnd = 1.3
 SWEP.Primary.Automatic = true
-SWEP.Primary.Force = 125
+SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "pwb/weapons/rpk/shoot.wav"
 SWEP.RecoilForce = 0.75
 

@@ -35,7 +35,7 @@ SWEP.Primary.Damage = 12.25
 SWEP.Primary.Force = 45
 SWEP.Primary.Sound = "homigrad/weapons/shotguns/xm1014-2.wav"//{"zcitysnd/sound/weapons/firearms/shtg_winchestersx3/shotgun_semiauto_fire1.wav","zcitysnd/sound/weapons/firearms/shtg_winchestersx3/shotgun_semiauto_fire2.wav"}
 SWEP.NumBullet = 8
-SWEP.RecoilForce = 20
+SWEP.RecoilForce = 10
 
 SWEP.IconPos = Vector(-4.25,50,-4)
 SWEP.IconAng = Angle(-20,0,0)

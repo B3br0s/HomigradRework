@@ -32,7 +32,7 @@ SWEP.Primary.Wait = 0.09
 SWEP.Primary.Automatic = true
 SWEP.Primary.ReloadTime = 1.2
 SWEP.Primary.ReloadTimeEnd = 1.3
-SWEP.Primary.Force = 55
+SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "pwb2/weapons/m4a1/ru-556 fire unsilenced.wav"
 
 SWEP.IconPos = Vector(1.5,50,-4)
