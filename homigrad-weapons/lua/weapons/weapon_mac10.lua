@@ -1,0 +1,49 @@
+SWEP.Base = "homigrad_base"
+SWEP.PrintName = "MAC-10"
+SWEP.Spawnable = true
+SWEP.Category = "Оружие - Огнестрел"
+SWEP.WorldModel = "models/weapons/arccw_go/v_smg_mac10.mdl"
+
+SWEP.CorrectPos = Vector(-18,-7.5,7.6)
+SWEP.CorrectAng = Angle(0,0,0)
+
+SWEP.HolsterPos = Vector(-6,-16,0)
+SWEP.HolsterAng = Angle(0,45,-90)
+SWEP.BoltBone = "v_weapon.mac10_bolt"
+SWEP.BoltVec = Vector(0,0,1.2)
+
+SWEP.ZoomPos = Vector(10,-6.14,-2)
+SWEP.ZoomAng = Angle(0,0,0)
+SWEP.AttPos = Vector(0,0,0)
+SWEP.AttAng = Angle(0,0.7,0)
+SWEP.MuzzlePos = Vector(23.5,6.15,-3)
+SWEP.MuzzleAng = Angle(0,0,0)
+
+SWEP.Primary.DefaultClip = 45
+SWEP.Primary.ClipSize = 45
+SWEP.Primary.Damage = 5
+SWEP.Primary.Force = 15
+SWEP.Primary.ReloadTime = 1.25
+SWEP.Primary.Sound = "arccw_go/mac10/mac10-1.wav"
+SWEP.Primary.Ammo = "9x19 mm Parabellum"
+SWEP.Primary.Automatic = true
+SWEP.Primary.Wait = 0.05
+SWEP.RecoilForce = 2
+
+SWEP.Bodygroups = {[1] = 1,[2]=0,[3]=0,[4]=0,[5]=2}
+
+SWEP.IconPos = Vector(-3.5,90,-3)
+SWEP.IconAng = Angle(-20,0,0)
+
+SWEP.ReloadSounds = {
+    [0.55] = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav",
+    [0.75] = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav",
+    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
+}
+
+SWEP.ReloadSoundsEmpty = {
+    [0.55] = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav",
+    [0.75] = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav",
+    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav",
+    [1.15] = "arccw_go/glock18/glock_sliderelease.wav"
+}
