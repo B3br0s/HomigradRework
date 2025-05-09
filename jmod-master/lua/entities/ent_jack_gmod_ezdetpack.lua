@@ -115,15 +115,12 @@ if SERVER then
 			if State == STATE_OFF then
 				if Alt then
 					self:SetState(STATE_ARMED)
-					self:EmitSound("snd_jack_minearm.ogg", 60, 100)
-					JMod.Hint(Dude, "trigger")
 				else
 					constraint.RemoveAll(self)
 					self.StuckStick = nil
 					self.StuckTo = nil
 					Dude:PickupObject(self)
 					self.NextStick = Time + .5
-					JMod.Hint(Dude, "sticky")
 				end
 			else
 				self:EmitSound("snd_jack_minearm.ogg", 60, 70)
@@ -154,7 +151,6 @@ if SERVER then
 
 					self:EmitSound("snd_jack_claythunk.ogg", 65, math.random(80, 120))
 					Dude:DropObject()
-					JMod.Hint(Dude, "arm")
 				end
 			end
 		end
@@ -192,7 +188,6 @@ if SERVER then
 	function ENT:JModEZremoteTriggerFunc(ply)
 		if not (IsValid(ply) and ply:Alive() and (ply == self.EZowner)) then return end
 		if self:GetState() != STATE_ARMED then return end
-		JMod.Hint(ply, "detpack combo", self:GetPos())
 		self:Detonate()
 	end
 

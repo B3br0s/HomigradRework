@@ -1,13 +1,13 @@
 SWEP.Base = "weapon_base"
 SWEP.PrintName = "База ближнего боя"
-SWEP.Category = "Оружие - Ближний Бой"
+SWEP.Category = "Оружие: Ближний Бой"
 SWEP.Author = "Homigrad"
 SWEP.Spawnable = true
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.WorldModel = "models/weapons/insurgency/w_marinebayonet.mdl"
+SWEP.WorldModel = "models/weapons/arccw_go/v_eq_throwingknife.mdl"
 SWEP.ViewModel = "models/weapons/arccw_go/v_eq_throwingknife.mdl"
 
 SWEP.ViewModelFlip = false
@@ -174,7 +174,7 @@ function SWEP:IsDeployed()
 end
 
 function SWEP:CanPrimaryAttack()
-	if self:IsHolstered() or not self:IsDeployed() or ((self.nextAttack or 0) > CurTime()) then return false end
+	if (self.nextAttack or 0) > CurTime() then return false end
 
 	return true
 end
@@ -200,7 +200,7 @@ function SWEP:PrimaryAttack()
 	local snd = self.sndTwroh or "weapons/slam/throw.wav"
 	if TypeID(snd) == TYPE_TABLE then snd = snd[math.random(1,#snd)] end
 
-	self.nextAttack = CurTime() + self.Primary.Delay / (3 + ply:GetNWFloat("adrenaline") / 2) + 0.3 * math.Clamp(1 - (ply:GetNWFloat("stamina")) / 100,0,1)
+	self.nextAttack = CurTime() + self.Primary.Delay / (3 + ply:GetNWFloat("adrenaline") / 2) + 0.4 * math.Clamp(1 - (ply:GetNWFloat("stamina")) / 500,0,1)
 
 	if SERVER then
 		/*net.Start("melee delay")
@@ -210,7 +210,7 @@ function SWEP:PrimaryAttack()
 		--sound.EmitNET(self:EntIndex(),snd,60,1,(self.sndTwrohPitch or 100),self:GetPos())
 		--net.SendOmit(ply)
 
-		ply.stamina = math.max(ply.stamina - self.SubStamina,0)
+		ply.stamina = math.max(ply.stamina - self.SubStamina * 2.5,0)
 	elseif ply == LocalPlayer() then
 		ply:EmitSound(snd,60,self.sndTwrohPitch or 100)
 	end

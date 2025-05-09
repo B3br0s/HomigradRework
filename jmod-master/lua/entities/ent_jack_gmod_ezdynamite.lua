@@ -121,14 +121,9 @@ if SERVER then
 
 			if State == JMod.EZ_STATE_OFF and Alt then
 				self:Arm()
-				JMod.Hint(Dude, "fuse")
 			end
 
 			JMod.ThrowablePickup(Dude, self, 500, 250)
-
-			if not Alt then
-				JMod.Hint(Dude, "arm")
-			end
 		end
 	end
 

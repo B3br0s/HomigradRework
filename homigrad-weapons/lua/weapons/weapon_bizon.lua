@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "ПП-Бизон 19"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Пистолеты-Пулемёты"
 SWEP.WorldModel = "models/weapons/arccw_go/v_smg_bizon.mdl"
 
 SWEP.CorrectPos = Vector(-11.5,-5.9,7.6)
@@ -24,7 +24,7 @@ SWEP.RecoilForce = 1.25
 
 SWEP.Primary.DefaultClip = 45
 SWEP.Primary.ClipSize = 45
-SWEP.Primary.Damage = 3.5
+SWEP.Primary.Damage = 13
 SWEP.Primary.Force = 15
 SWEP.Primary.ReloadTime = 1.25
 SWEP.Primary.Sound = {"arccw_go/bizon/bizon_01.wav","arccw_go/bizon/bizon_02.wav"}
@@ -32,7 +32,7 @@ SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.Primary.Automatic = true
 SWEP.Primary.Wait = 0.07
 SWEP.TwoHands = true
-SWEP.RecoilForce = 2
+SWEP.RecoilForce = 1
 SWEP.HoldType = "ar2"
 
 SWEP.IconPos = Vector(1,80,-5)

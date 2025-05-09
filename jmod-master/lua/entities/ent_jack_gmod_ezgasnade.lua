@@ -2,7 +2,7 @@
 AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
-ENT.Category = "JMod - EZ Misc."
+ENT.Category = "JMod - EZ Explosives"
 ENT.PrintName = "EZ Gas Grenade"
 ENT.Spawnable = true
 ENT.Model = "models/jmod/explosives/grenades/gasnade/gas_grenade.mdl"
@@ -34,10 +34,6 @@ if SERVER then
 				Gas.CurVel = (SelfVel + VectorRand(-200, 200))
 				Gas.MaxLife = 60
 			end)
-		end
-
-		if IsValid(self.EZowner) then
-			JMod.Hint(JMod.GetEZowner(self), "gas spread", self:GetPos())
 		end
 
 		self:Remove()

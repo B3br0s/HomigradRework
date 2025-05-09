@@ -1,5 +1,5 @@
 SWEP.Base = "weapon_melee"
-SWEP.Category = "Оружие - Ближний Бой"
+SWEP.Category = "Оружие: Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Байонет"
 

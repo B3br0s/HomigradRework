@@ -1,5 +1,5 @@
 SWEP.Base = "weapon_melee"
-SWEP.Category = "Оружие - Ближний Бой"
+SWEP.Category = "Оружие: Ближний Бой"
 SWEP.Spawnable = true
 SWEP.PrintName = "Кувалда"
 
@@ -19,6 +19,8 @@ SWEP.FlashHitSound = {"physics/flesh/flesh_strider_impact_bullet1.wav","physics/
 SWEP.ShouldDecal = false
 SWEP.HoldType = "melee2"
 SWEP.DamageType = DMG_CLUB
+
+SWEP.SubStamina = 10
 
 local VecZero = Vector(0.0001,0.0001,0.0001)
 local VecFull = Vector(1,1,1)

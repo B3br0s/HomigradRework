@@ -3,14 +3,14 @@ util.AddNetworkString("DeathScreen")
 
 DamageMultipliers = {
     [DMG_CLUB] = 1,--ее
-    [DMG_BULLET] = 1.5,
+    [DMG_BULLET] = 1.2,
     [DMG_SLASH] = 0.4,
     [DMG_BLAST] = 9,
 }
 
 PainMultipliers = {
     [DMG_CLUB] = 0.5,--ее
-    [DMG_BULLET] = 2.2,
+    [DMG_BULLET] = 0.75,
     [DMG_SLASH] = 0.4,
     [DMG_BLAST] = 6,
 }
@@ -43,8 +43,8 @@ hook.Add("Homigrad_Organs","Organs_Damage",function(ent,dmginfo,physbone,bonenam
 		local ply = (ent:IsPlayer() and ent or RagdollOwner(ent))
 		local rag = ent
 
-		if rag:GetVelocity():Length() > 300
-		and (dmginfo:GetDamage() * 30) > 6 then
+		if rag:GetVelocity():Length() > 350
+		and (dmginfo:GetDamage() * 30) > 8 then
 			ply.KillReason = "dead_neck"
 			ply:SetNWString("KillReason",ply.KillReason)
             if ply:Alive() then
@@ -69,10 +69,6 @@ hook.Add("PlayerDeath","Homigrad_DeathScreen",function(ply,attacker,killedby)
 		if IsValid(ply.FakeRagdoll) then
 			ply.FakeRagdoll:GetPhysicsObject():SetMass(20)
 		end
-	end)
-	timer.Simple(0.1,function()
-		net.Start("DeathScreen")
-		net.Send(ply)
 	end)
 end)
 
@@ -185,7 +181,7 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 	dmginfo:ScaleDamage((DamageMultipliers[dmginfo:GetDamageType()] and DamageMultipliers[dmginfo:GetDamageType()] or 0.7))
 
 	if dmginfo:IsDamageType(DMG_CRUSH) and rag then
-		dmginfo:ScaleDamage((rag:GetVelocity():Length() / 200))
+		dmginfo:ScaleDamage((rag:GetVelocity():Length() / 400))
 	end
 
     ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (PainMultipliers[dmginfo:GetDamageType()] and PainMultipliers[dmginfo:GetDamageType()] or 0.1),0,400)

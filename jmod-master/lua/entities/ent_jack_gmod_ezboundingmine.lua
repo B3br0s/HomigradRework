@@ -137,10 +137,8 @@ if SERVER then
 			if Alt then
 				JMod.SetEZowner(self, activator)
 				self:Bury(activator)
-				JMod.Hint(activator, "mine friends")
 			else
 				activator:PickupObject(self)
-				JMod.Hint(activator, "arm boundingmine")
 			end
 		else
 			self:EmitSound("snd_jack_minearm.ogg", 60, 70)

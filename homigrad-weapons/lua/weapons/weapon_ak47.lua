@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "AK47"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Автоматы"
 SWEP.WorldModel = "models/weapons/arccw_go/v_rif_ak47.mdl"
 
 SWEP.CorrectPos = Vector(-8.5,-5.9,6.6)

@@ -135,11 +135,6 @@ if SERVER then
 				else
 					self.MoorMode = "subsurface"
 				end
-
-				JMod.Hint(activator, "navalmine")
-			else
-				JMod.Hint(activator, "double tap to arm")
-				JMod.Hint(activator, "arm navalmine")
 			end
 
 			self.LastUse = Time
@@ -150,8 +145,6 @@ if SERVER then
 				self:SetState(STATE_OFF)
 				self:EmitSound("snds_jack_gmod/bomb_disarm.ogg", 70, 110)
 				self.Moored = false
-			else
-				JMod.Hint(activator, "double tap to disarm")
 			end
 
 			self.LastUse = Time

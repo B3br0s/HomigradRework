@@ -12,6 +12,7 @@ SWEP.CrouchMul = 0.75
 SWEP.EyeSprayVel = Angle(0,50,0)
 SWEP.RecoilWay = 0
 SWEP.sprayI = 0
+SWEP.NextShoot = 0
 SWEP.Recoil = Angle(0,0,0)
 SWEP.Spray = {}
 SWEP.rec = 0
@@ -118,6 +119,9 @@ function SWEP:ApplyEyeSpray(value)
 end
 
 function SWEP:Step_Spray(time,dtime)
+	if not time then
+		time = CurTime()
+	end
 	if self.NextShoot + 0.3 < time then self.SprayI = 0 end
 	if self.NextShoot + 1 < time then self.dmgStack = 0 end
 	self.Recoil[1] = LerpFT(0.3,self.Recoil[1],0)

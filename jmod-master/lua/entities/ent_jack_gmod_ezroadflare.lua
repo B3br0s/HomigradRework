@@ -2,7 +2,7 @@
 AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Author = "Jackarunda"
-ENT.Category = "JMod - EZ Misc."
+ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
 ENT.PrintName = "EZ Road Flare"
 ENT.NoSitAllowed = true
@@ -119,7 +119,6 @@ if SERVER then
 				net.Send(activator)
 			else
 				activator:PickupObject(self)
-				JMod.Hint(activator, "arm")
 			end
 		elseif State == STATE_BURNIN then
 			activator:PickupObject(self)

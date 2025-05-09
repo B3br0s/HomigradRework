@@ -103,16 +103,16 @@ function tdm.RoundThink()
 end
 
 function tdm.CanStart()
-    local nonspect = {}
-    for _, ply in ipairs(player.GetAll()) do
-        if ply:Team() != 1002 then
-            table.insert(nonspect,ply)
-        end
-    end
+    local world = game.GetWorld()
+    
+    local min, max = world:GetModelBounds()
+    local size = max - min
 
-    if #nonspect < 8 then
+    local size_final = size:Length()
+
+    if size_final < 20000 then
         return false
     else
-        return true
+        return true 
     end
 end

@@ -426,35 +426,7 @@ hook.Add("PlayerInitialSpawn","Homigrad_KS",function(ply)
 	ply.KSILENT = true
 end)
 
-Developers = {
-    ["STEAM_0:1:526713154"] = true
-}
-
-if SERVER then
-	concommand.Add("hg_hidetag",function(ply,args)
-		if Developers[ply:SteamID()] then
-			ply:SetNWBool("HideTag",true)
-		end
-	end)
-	concommand.Add("hg_showtag",function(ply,args)
-		if Developers[ply:SteamID()] then
-			ply:SetNWBool("HideTag",false)
-		end
-	end)
-end
-
 gameevent.Listen("player_spawn")
-if CLIENT then
-	hook.Add("InitPostEntity","123",function()
-		if not file.Exists("hgr/appearance.json","DATA") then
-			CreateRandomAppearance()
-
-			ApplyAppearance(util.JSONToTable(file.Read("hgr/appearance.json","DATA")))
-		else
-			ApplyAppearance(util.JSONToTable(file.Read("hgr/appearance.json","DATA")))
-		end
-	end)
-end
 local hull = 10 
 local HullMin = -Vector(hull,hull,0)
 local Hull = Vector(hull,hull,72)
@@ -464,12 +436,6 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
 	if not IsValid(ply) then return end
 
 	if ply.PLYSPAWN_OVERRIDE then return end
-
-	if SERVER then
-		timer.Simple(0,function()
-			ApplyAppearance(ply,ply.Appearance)
-		end)
-	end
 
 	ply.KillReason = " "
 	ply.LastHitBone = " "
@@ -522,6 +488,15 @@ if CLIENT then
     hg_camshake_enabled = CreateClientConVar("hg_camshake_enabled","1",true,false,nil,0,1)
 
 	function hg.DrawWeaponSelection(self, x, y, wide, tall, alpha )
+
+		/*wide = wide * 1.1
+		tall = tall * 1.1
+
+		x = x / 1.025
+		y = y / 1.025*/
+
+		/*x = wide/2
+		y = tall/2*/
 
 		//self.PrintName = hg.GetPhrase(self:GetClass())
 		
@@ -587,7 +562,7 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
 		ply:SetDuckSpeed(0.5)
     	ply:SetUnDuckSpeed(0.5)
     	ply:SetSlowWalkSpeed(30)
-    	ply:SetCrouchedWalkSpeed(60)
+    	ply:SetCrouchedWalkSpeed(1)
     	ply:SetWalkSpeed(200)
     	ply:SetRunSpeed(400)
     	ply:SetJumpPower(200)
@@ -600,6 +575,7 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
     local maxSpeed = mv:GetMaxSpeed()
     local velocity = ply:GetVelocity():Length()
     
+	local stamina = ply:GetNWFloat("stamina")
     local adrenalineBoost = (ply.adrenaline or 0) * 50
     
     if SERVER and ply.CanMove == false then
@@ -614,25 +590,22 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
     ply:SetDuckSpeed(0.5)
     ply:SetUnDuckSpeed(0.5)
     ply:SetSlowWalkSpeed(30)
-    ply:SetCrouchedWalkSpeed(60)
-    ply:SetWalkSpeed(130)
+    ply:SetWalkSpeed(170)
     ply:SetJumpPower(200)
     
-    local targetRunSpeed = isSprinting and ((forwardSpeed > 1 and 310 or 200) + adrenalineBoost - (ply.removespeed or 0) * 2) 
-                          or (ply:GetWalkSpeed() - (ply.removespeed or 0) * 2)
+    local targetRunSpeed = isSprinting and ((forwardSpeed > 1 and 340 or 240) + adrenalineBoost) * stamina / 85
+                          or (ply:GetWalkSpeed() / 1.5) * stamina / 100
     
-    local lerpFactor = isSprinting and 0.05 or 1
+    local lerpFactor = isSprinting and 0.025 or 0.1
     local newRunSpeed = Lerp(lerpFactor, ply:GetRunSpeed(), targetRunSpeed)
     ply:SetRunSpeed(newRunSpeed)
-    
-    if CLIENT and ply == LocalPlayer() and hg_camshake_enabled:GetBool() then
-        -- ViewPunch(Angle((forwardSpeed / 150000) * hg_camshake_amount:GetFloat(), 0, (mv:GetSideSpeed() / 150000) * hg_camshake_amount:GetFloat()), 10)
-    end
-    
+
+    ply:SetCrouchedWalkSpeed(1 * stamina / 200)
+	
     if isSprinting and forwardSpeed > 30 then
         ply.stamina = math.Clamp((ply.stamina or 100) - 0.01, 0, 100)
-    elseif velocity < 120 and not isSprinting then
-        ply.stamina = math.Clamp((ply.stamina or 0) + 0.07 + adrenalineBoost / 15, 0, 100)
+    elseif velocity < 200 then
+        ply.stamina = math.Clamp((ply.stamina or 0) + 0.035 + adrenalineBoost / 15, 0, 100)
     end
     
     if not ply:Crouching() then
@@ -640,8 +613,9 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
         mv:SetMaxClientSpeed(newRunSpeed)
     end
 end)
+
 function hg.GetCurrentCharacter(ent)
-    return (ent:IsPlayer() and ent or ent:IsRagdoll() and ent.owner.FakeRagdoll == hg.RagdollOwner(ent) and ent)
+    return (ent:IsPlayer() and (ent:GetNWBool("Fake") and ent:GetNWEntity("FakeRagdoll") or ent) or nil)
 end
 hook.Add("HomigradRun", "RunShit", function()
     local entitis = player.GetAll()
@@ -787,6 +761,12 @@ end
 function hg.eyeTrace(ply, dist, ent, aim_vector)
 	local fakeCam = IsValid(ply.FakeRagdoll)
 	local ent = hg.GetCurrentCharacter(ply)
+	if ent == nil then
+		ent = ply
+	end
+	if ent == NULL then
+		ent = ply
+	end
 	local bon = ent:LookupBone("ValveBiped.Bip01_Head1")
 	if not bon then return end
 	if not IsValid(ply) then return end

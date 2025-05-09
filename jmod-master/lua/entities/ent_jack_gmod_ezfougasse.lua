@@ -114,7 +114,6 @@ if SERVER then
 				self:Arm(activator)
 			else
 				activator:PickupObject(self)
-				JMod.Hint(activator, "arm")
 			end
 		else
 			self:EmitSound("snd_jack_minearm.ogg", 60, 70)
@@ -178,8 +177,6 @@ if SERVER then
 				end
 			end
 		end)
-
-		JMod.Hint(armer, "mine friends")
 	end
 
 	function ENT:Think()

@@ -32,10 +32,18 @@ function SWEP:WorldModel_Transform()
 
     local ply = self:GetOwner()
 
+    if !IsValid(ply) then
+        return
+    end
+
     local Att = {}
 
-    Att.Pos = ply:GetBoneMatrix(11):GetTranslation()
-    Att.Ang = ply:GetBoneMatrix(11):GetAngles()
+    if !ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")) then
+        return
+    end
+
+    Att.Pos = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetTranslation()
+    Att.Ang = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetAngles()
 
     Att.Ang:RotateAroundAxis(Att.Ang:Forward(),180)
         
@@ -55,6 +63,8 @@ function SWEP:WorldModel_Transform()
     Ang:RotateAroundAxis(Ang:Forward(),self.CorrectAng[1])
     Ang:RotateAroundAxis(Ang:Right(),self.CorrectAng[2])
     Ang:RotateAroundAxis(Ang:Up(),self.CorrectAng[3])
+
+    Ang = Ang - (self:IsSighted() and Angle(0,0,0) or Angle(12 * (self.sprayI * self.RecoilForce * 1.5)))
     
     mdl:SetAngles(Ang)
     mdl:SetPos(Pos)

@@ -24,7 +24,7 @@ end
 SWEP.saim = 0
 
 function SWEP:Camera(ply, origin, angles, fov)
-    if !self.Deployed then
+    if !self.Deployed or ply:GetNWBool("suiciding") or self:IsSprinting() or self:IsClose() then
         return origin, angles, fov
     end
     local pos, ang = self:GetTrace(true)
@@ -51,9 +51,10 @@ function SWEP:Camera(ply, origin, angles, fov)
     origin = Lerp(lerpaim,origin,neworigin)
     
     local animpos = Recoil * math.random(1,2) / 2
-    origin = (origin + att.Ang:Forward() * animpos * 7) + att.Ang:Forward() * (0.75 * lerpaim)
+    origin = (origin + att.Ang:Forward() * animpos * 20) + att.Ang:Forward() * (0.75 * lerpaim)
 
-    origin = origin + angles:Up() * (RecoilS / 6) * lerpaim
+    origin = origin + angles:Up() * (RecoilS / 6) * lerpaim * self:GetUpMul()
+    origin = origin - angles:Right() * (RecoilS / 36) * lerpaim * self:GetRightMul()
     
     //origin = origin + anglef:Right() * math.random(-0.1,0.1) * (animpos/200) + anglef:Up() * math.random(-0.1,0.1) * (animpos/200)
     
@@ -68,9 +69,9 @@ function SWEP:Camera(ply, origin, angles, fov)
     end
 
     local siht = (att.Pos - origin):Angle()
-    siht[2] = att.Ang[2]
+    siht[2] = att.Ang[2] - (RecoilS / 26) * self:GetRightMul()
     siht[3] = angles[3]
-    siht[1] = att.Ang[1] + RecoilS / 1.5
+    siht[1] = math.Clamp(att.Ang[1] + (RecoilS / 1.5)  * self:GetUpMul(),-83,88)
     siht:RotateAroundAxis(siht:Forward(),self.ZoomAng[1] * lerpaim)
     siht:RotateAroundAxis(siht:Right(),self.ZoomAng[2] * lerpaim)
     siht:RotateAroundAxis(siht:Up(),self.ZoomAng[3] * lerpaim)

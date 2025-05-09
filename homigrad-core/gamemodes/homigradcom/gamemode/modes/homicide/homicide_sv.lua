@@ -75,6 +75,12 @@ function hmcd.SpawnTraitor(ply)
     else
         ply:Give("weapon_kabar")
         ply:Give("weapon_ied")
+
+        local Wep1 = ply:Give("weapon_pnev")
+
+        Wep1:SetNWBool("DontShow",true)
+
+        ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
     end
 end
 
@@ -111,7 +117,7 @@ function hmcd.AssignGunMan(tbl)
     RandomPlayer.IsGunMan = true
 
     if hmcd.Type == "soe" then
-        RandomPlayer:Give("weapon_xm1014")
+        RandomPlayer:Give("weapon_870")
     elseif hmcd.Type == "standard" then
         RandomPlayer:Give("weapon_m9")
     elseif hmcd.Type == "gfz" then

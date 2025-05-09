@@ -2,7 +2,7 @@ SWEP.Base                   = "weapon_base"
 
 SWEP.PrintName 				= "Рация"
 SWEP.Author 				= "Homigrad"
-SWEP.Category 				= "Оружие - Остальное"
+SWEP.Category 				= "Оружие: Остальное"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

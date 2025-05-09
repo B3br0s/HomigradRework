@@ -1,14 +1,15 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "MP5"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Пистолеты-Пулемёты"
 SWEP.WorldModel = "models/weapons/arccw_go/v_smg_mp5.mdl"
 
 SWEP.CorrectPos = Vector(-12.5,-5.8,8)
 SWEP.CorrectAng = Angle(0,2,0)
 
-SWEP.HolsterPos = Vector(-6,-16,0)
-SWEP.HolsterAng = Angle(0,45,-90)
+SWEP.HolsterPos = Vector(-18,-2,9)
+SWEP.HolsterAng = Angle(0,-10,0)
+SWEP.HolsterBone = "ValveBiped.Bip01_Spine2"
 SWEP.BoltBone = "v_weapon.bolt"
 SWEP.BoltVec = Vector(-0.1,3.4,0)
 
@@ -25,7 +26,7 @@ SWEP.Primary.Damage = 25
 SWEP.Primary.Force = 5
 SWEP.Primary.ReloadTime = 1.25
 SWEP.Primary.ReloadTimeEnd = 1.25
-SWEP.Primary.Sound = "arccw_go/mp5/mp5_unsil.wav"
+SWEP.Primary.Sound = "pwb/weapons/mp7/shoot.wav"
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.HoldType = "ar2"
 SWEP.Primary.Automatic = true
@@ -57,7 +58,7 @@ local function easedLerp(fraction, from, to)
 end
 
 function SWEP:PostAnim()
-	if self.BoltBone != nil and IsValid(self.worldModel) then
+	if self.BoltBone and IsValid(self.worldModel) then
 		local bone = self.worldModel:LookupBone(self.BoltBone)
 
 		if self:Clip1() <= 0 and self.BoltLock then

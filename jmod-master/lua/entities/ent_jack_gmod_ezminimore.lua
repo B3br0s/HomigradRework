@@ -106,7 +106,6 @@ if SERVER then
 				self:Arm(activator)
 			else
 				activator:PickupObject(self)
-				JMod.Hint(activator, "arm")
 			end
 		else
 			self:EmitSound("snd_jack_minearm.ogg", 60, 70)
@@ -150,14 +149,12 @@ if SERVER then
 		})
 
 		if not tr.Hit or tr.HitNormal.z <= 0.6 then
-			JMod.Hint(armer, "horizontal surface")
 			self:EmitSound("buttons/button18.wav", 60, 110)
 
 			return
 		end
 
 		JMod.SetEZowner(self, armer)
-		JMod.Hint(armer, "mine friends")
 		self:SetState(STATE_ARMING)
 		self:EmitSound("snd_jack_minearm.ogg", 60, 110)
 		local ang = tr.HitNormal:Angle()

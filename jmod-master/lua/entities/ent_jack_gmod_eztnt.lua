@@ -122,18 +122,12 @@ if SERVER then
 
 			if State == JMod.EZ_STATE_OFF and Alt then
 				self:Arm()
-				JMod.Hint(Dude, "fuse")
 			else
 				constraint.RemoveAll(self)
 				self.StuckStick = nil
 				self.StuckTo = nil
 				Dude:PickupObject(self)
 				self.NextStick = Time + .5
-				JMod.Hint(Dude, "sticky")
-			end
-
-			if not Alt then
-				JMod.Hint(Dude, "arm")
 			end
 		else
 			if self:IsPlayerHolding() and (self.NextStick < Time) then
@@ -160,7 +154,6 @@ if SERVER then
 
 					self:EmitSound("snd_jack_claythunk.ogg", 65, math.random(80, 120))
 					Dude:DropObject()
-					JMod.Hint(Dude, "arm")
 				end
 			end
 		end

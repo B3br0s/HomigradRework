@@ -39,6 +39,8 @@ function DrawWHEnt(ent,pos)
 end
 
 hook.Add("HUDPaint","Spectate-HUD",function()
+	local lply = LocalPlayer()
+	
     if lply:Alive() and lply:Team() != 1002 then
         return
     end

@@ -3,7 +3,7 @@ SWEP.Base = "weapon_gren_base"
 SWEP.PrintName = "RGD-5"
 SWEP.Author = "Homigrad"
 SWEP.Instructions = ""
-SWEP.Category = "Оружие - Взрывоопасное"
+SWEP.Category = "Гранаты"
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

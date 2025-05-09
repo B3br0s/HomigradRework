@@ -32,6 +32,7 @@ local shit = {
 }
 
 hook.Add("Think","Interact-Glow",function()
+    local ply = LocalPlayer()
     if !ply:Alive() then
         return
     end

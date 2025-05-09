@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "M9"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Пистолеты"
 SWEP.WorldModel = "models/weapons/arccw_go/v_pist_m9.mdl"
 
 SWEP.CorrectAng = Angle(0,0,0)
@@ -12,7 +12,7 @@ SWEP.HolsterAng = Angle(0,45,-90)
 SWEP.BoltBone = "v_weapon.HKP2000_Slide"
 SWEP.BoltVec = Vector(0,0,-1.5)
 
-SWEP.ZoomPos = Vector(3,-2.8,-0.4)
+SWEP.ZoomPos = Vector(3,-2.82,-0.44)
 SWEP.ZoomAng = Angle(0,0,0)
 SWEP.AttPos = Vector(0,-0.03,0)
 SWEP.AttAng = Angle(0,0.7,1)
@@ -25,7 +25,7 @@ SWEP.Primary.Damage = 25
 SWEP.Primary.Force = 15
 SWEP.Primary.ReloadTime = 1.25
 SWEP.Primary.Wait = 0.1
-SWEP.Primary.Sound = {"arccw_go/elite/elites_01.wav","arccw_go/elite/elites_02.wav"}
+SWEP.Primary.Sound = "pwb2/weapons/pl14/shot-unsil.wav"
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.RecoilForce = 2
 SWEP.TwoHands = true

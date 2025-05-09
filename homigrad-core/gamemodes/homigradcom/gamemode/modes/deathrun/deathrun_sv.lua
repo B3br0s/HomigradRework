@@ -10,7 +10,7 @@ function dr.PlayerThink(ply)
         return
     end
 
-    ply:SetVelocity(ply:GetVelocity() * 1.01)
+    //ply:SetVelocity(ply:GetVelocity() * 1.01)
 end
 
 function dr.SpawnKiller(ply)

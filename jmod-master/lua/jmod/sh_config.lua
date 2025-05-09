@@ -3042,35 +3042,6 @@ function JMod.SaveDepositConfig(configID)
 	--PrintTable(Existing)
 end
 
-hook.Add("PersistenceSave", "JMOD_SaveDepositConfig", function(persistenceString)
-	if not persistenceString then return end
-	JMod.SaveDepositConfig("Persistant" .. persistenceString)
-end)
-
-hook.Add("PersistenceLoad", "JMOD_LoadDepositConfig", function(persistenceString)
-	if not persistenceString then return end
-	local Info = JMod.LoadDepositConfig("Persistant" .. persistenceString)
-
-	if type(Info) == "string" then
-		print(Info)
-		return
-	else
-		if SERVER and GetConVar("sv_cheats"):GetBool() == true then
-			JMod.NaturalResourceTable = Info
-			net.Start("JMod_NaturalResources")
-				net.WriteBool(false)
-				net.WriteTable(Info)
-			net.Broadcast()
-		end
-	end
-end)
-
-hook.Add("Initialize", "JMOD_Initialize", function()
-	if SERVER then
-		JMod.InitGlobalConfig()
-	end
-end)
-
 local RopeCostList = {["FUNC EZrope"] = 64, ["FUNC EZcable"] = 64, ["FUNC EZchain"] = 64}
 
 hook.Add("JMod_CanKitBuild", "JMOD_KitBuildReqs", function(playa, toolbox, buildInfo)

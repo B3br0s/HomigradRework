@@ -40,17 +40,18 @@ hook.Add("BoxesThink", "SpawnBoxes", function()
     local drop_chance = math.random(-10,95)
 
     local cur_box
-
-    if drop_chance <= 5 then
-        cur_box = "ent_grenade_crate"
-    elseif drop_chance <= 8 then
-        cur_box = "ent_medkit_crate"
+    if drop_chance <= 8 then
+        cur_box = "ent_explosives_crate"
     elseif drop_chance <= 10 then
+        cur_box = "ent_grenade_crate"
+    elseif drop_chance <= 15 then
+        cur_box = "ent_weapon_crate"
+    elseif drop_chance <= 20 then
         cur_box = "ent_large_crate"
     elseif drop_chance <= 25 then
-        cur_box = "ent_medkit_crate"
-    elseif drop_chance <= 30 then
         cur_box = "ent_medium_crate"
+    elseif drop_chance <= 30 then
+        cur_box = "ent_medkit_crate"
     elseif drop_chance <= 50 then
         cur_box = "ent_melee_crate"
     elseif drop_chance <= 80 then

@@ -84,7 +84,6 @@ if SERVER then
 		obj:TakeDamageInfo(Dmg)
 
 		if (obj:Health() < Helf) and obj:IsPlayer() then
-			JMod.Hint(obj, "gas damage")
 			JMod.TryCough(obj)
 		end
 	end

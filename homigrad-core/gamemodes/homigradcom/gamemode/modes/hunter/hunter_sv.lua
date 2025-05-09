@@ -5,7 +5,7 @@ hunter.SwatArrived = false
 hunter.UntilSwat = 1e8
 
 function hunter.SWATSpawn(ply)
-    local weps_pri = {"weapon_m4a1","weapon_r870"}
+    local weps_pri = {"weapon_m4a1"}
     local weps_sec = {"weapon_glock17"}
     local weps_main = {"weapon_kabar","weapon_handcuffs"}
 
@@ -158,6 +158,12 @@ function hunter.CanStart()
         if ply:Team() != 1002 then
             table.insert(nonspect,ply)
         end
+    end
+
+    local map = game.GetMap()
+
+    if !string.match(map,"school") then
+        return false
     end
 
     if #nonspect < 4 then

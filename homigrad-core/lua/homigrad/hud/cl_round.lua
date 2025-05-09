@@ -6,16 +6,16 @@ hook.Add("HUDPaint","Round_Shit123",function()
         end
     end
     if #nonspect < 2 then
-        surface.SetFont("HS.45")
+        surface.SetFont("HS.25")
         local shit_size = surface.GetTextSize(hg.GetPhrase("need_2_players"))
 
         surface.SetMaterial(Material('vgui/gradient-l'))
         surface.SetDrawColor(255,20,20,255)
-        surface.DrawTexturedRect(ScrW()/2,100,shit_size / 1.5,50)
+        surface.DrawTexturedRect(ScrW()/2,100,shit_size / 1.5,30)
         surface.SetMaterial(Material('vgui/gradient-r'))
-        surface.DrawTexturedRect((ScrW()/2)-shit_size/1.505,100,shit_size / 1.5,50)
+        surface.DrawTexturedRect((ScrW()/2)-shit_size/1.505,100,shit_size / 1.5,30)
 
-        draw.SimpleText(hg.GetPhrase("need_2_players"),"HS.45",ScrW()/2,123,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        draw.SimpleText(hg.GetPhrase("need_2_players"),"HS.25",ScrW()/2,115,Color(255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 
     local nonspect = {}

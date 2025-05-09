@@ -36,7 +36,9 @@ hg.loots.small_crate = {
 	"weapon_hatchet",
 	"weapon_kknife",
 	"weapon_burger",
+	"weapon_pnev",
 	"weapon_water_bottle",
+	"weapon_fnp45",
 	"weapon_chips",
 	"weapon_energy_drink",
 }
@@ -44,31 +46,24 @@ hg.loots.small_crate = {
 hg.loots.medium_crate = {
 	"weapon_glock17",
 	"weapon_handcuffs",
-	"weapon_knife",
 	"weapon_tomahawk",
-	"weapon_shovel",
-	"weapon_cz75",
-	"weapon_mac10",
+	"weapon_pnev",
+	"weapon_arpistol",
+	"weapon_fnp45",
 	"weapon_hatchet",
-	"weapon_chips",
-	"weapon_energy_drink",
 	"weapon_painkillers_hg",
 }
 
 hg.loots.large_crate = {
-	"weapon_mp7",
 	"weapon_knife",
-	"weapon_shammer",
-	"weapon_cz75",
-	"weapon_bizon",
 	"weapon_m4a1",
 	"weapon_painkillers_hg",
 	"weapon_bandage",
-	"weapon_medkit_hg",
-	"weapon_adrenaline",
 	"weapon_faxe",
-	"weapon_mac10",
+	"weapon_arpistol",
 	"weapon_hatchet",
+	"weapon_fnp45",
+	"weapon_pnev",
 	//"weapon_mp9",
 }
 
@@ -104,12 +99,15 @@ hg.loots.explosives_crate = {
 
 hg.loots.weapon_crate = {
 	"weapon_mp5",
+	"weapon_870police",
 	//"weapon_mag7",
 	"weapon_mp7",
 	"weapon_ak47",
 	//"weapon_mp9",
 	"weapon_deagle",
+	"weapon_arpistol",
 	"weapon_glock17",
+	"weapon_fnp45",
 	"weapon_m4a1",
 	"weapon_m9",
 	"weapon_pipe",
@@ -117,7 +115,6 @@ hg.loots.weapon_crate = {
 
 hg.loots.medkit_crate = {
 	"weapon_medkit_hg",
-	"weapon_bandage",
 	"weapon_bandage",
 	"weapon_bandage",
 	"weapon_painkillers_hg",
@@ -199,10 +196,14 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 		return
 	end
 	if ply:KeyDown(IN_SPEED) and ply:KeyPressed(IN_USE) then
-		local tr = hg.eyeTrace(ply,160)
+		local tr = hg.eyeTrace(ply,140)
 
 		if tr.Entity then
 			local ent = tr.Entity
+
+			if !IsValid(ent) or ent == NULL then
+				return
+			end
 
 			if AllowedJMod[ent:GetClass()] then
 				if ply.JModEntInv != NULL then
@@ -224,7 +225,7 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 		end
 	end
 	if ply:KeyDown(IN_ATTACK2) and ply:KeyPressed(IN_USE) then
-		local tr = hg.eyeTrace(ply)
+		local tr = hg.eyeTrace(ply,140)
 
 		if tr.Entity then
 			local ent = tr.Entity
@@ -233,7 +234,7 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 				net.Start("hg inventory")
 				net.WriteEntity(ent)
 				net.WriteTable(ent.Inventory)
-				net.WriteFloat(8)
+				net.WriteFloat(8)// Дефолт значение инвента //#ent.Inventory)
 				net.WriteEntity(ent.JModEntInv)
 				net.Send(ply)
 			end
@@ -365,7 +366,7 @@ hook.Add("PlayerCanPickupWeapon","Homigrad_Shit",function(ply,ent)
 	if ply:HasWeapon(ent:GetClass()) then
 		return false
 	end
-	if ply:KeyDown(IN_USE) and IsValid(ent) and ent:GetOwner() != ply and (hg.eyeTrace(ply).Entity == ent or ent:GetPos():Distance(ply:GetPos()) < 45) then
+	if ply:KeyDown(IN_USE) and IsValid(ent) and ent:GetOwner() != ply and (hg.eyeTrace(ply).Entity == ent or ent:GetPos():Distance(ply:GetPos()) < 45 and (IsValid(hg.eyeTrace(ply).Entity) and !hg.eyeTrace(ply).Entity:IsWeapon() or !hg.eyeTrace(ply).Entity)) then
 		if ent.isMelee then
 				for _, wep in ipairs(ply:GetWeapons()) do
 					if wep.isMelee then

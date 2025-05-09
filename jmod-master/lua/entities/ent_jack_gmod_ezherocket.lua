@@ -139,10 +139,8 @@ if SERVER then
 				self:EmitSound("snds_jack_gmod/bomb_arm.ogg", 60, 120)
 				self:SetState(STATE_ARMED)
 				self.EZlaunchableWeaponArmedTime = CurTime()
-				JMod.Hint(activator, "launch")
 			else
 				activator:PickupObject(self)
-				JMod.Hint(activator, "arm")
 			end
 		elseif State == STATE_ARMED then
 			self:EmitSound("snds_jack_gmod/bomb_disarm.ogg", 60, 120)
@@ -238,8 +236,6 @@ if SERVER then
 				self:Detonate()
 			end
 		end)
-
-		JMod.Hint(JMod.GetEZowner(self), "backblast", self:GetPos())
 	end
 
 	function ENT:EZdetonateOverride(detonator)

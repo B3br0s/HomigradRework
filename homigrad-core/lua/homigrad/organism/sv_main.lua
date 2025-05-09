@@ -1,5 +1,6 @@
 hook.Add("Player Think","Main_Handler",function(ply)
     ply:SetNWFloat("hunger",ply.hunger)
+    ply:SetNWFloat("stamina",ply.stamina)
     ply:SetNWFloat("adrenaline",ply.adrenaline)
     ply:SetNWFloat("pulse",ply.pulse)
     ply:SetNWFloat("pain",ply.pain)
@@ -23,6 +24,22 @@ hook.Add("Player Think","Main_Handler",function(ply)
     if !ply:HasWeapon("weapon_hands") then
         ply:Give("weapon_hands")
     end
+end)
+
+hook.Add("OnPlayerJump","Homigrad_Move",function(ply)
+	if !ply:Alive() then
+        return
+    end
+
+    if ply.Fake then
+        return 
+    end
+
+    if TableRound and ROUND_NAME == "dr" then
+        return
+    end
+
+    ply.stamina = ply.stamina - math.random(3,6)
 end)
 
 hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
@@ -76,7 +93,7 @@ hook.Add("PlayerInitialSpawn","Homigrad_shit",function(ply)
 end)
 
 hook.Add("Player Think","Pulse-Holder",function(ply,time)
-    if !ply:Alive() then return end
+    if !ply:Alive() then ply.PLYSPAWN_OVERRIDE = false return end
     ply.pulse = (math.min(380800 / ply.blood,120) + math.min(200 / ply.stamina,5000) + (math.random(-1,1) / 15) + (ply.pain / 128) + ply.pulseadd / 2.5) * (math.Clamp((ply:Health() / ply:GetMaxHealth()),0.5,1))
 
     //print(ply.pulse)

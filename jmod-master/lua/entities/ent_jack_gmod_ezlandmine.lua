@@ -122,7 +122,6 @@ if SERVER then
 				net.Send(activator)
 			else
 				activator:PickupObject(self)
-				JMod.Hint(activator, "arm")
 			end
 		elseif not (activator.KeyDown and activator:KeyDown(IN_SPEED)) then
 			self:EmitSound("snd_jack_minearm.ogg", 60, 70)
@@ -171,7 +170,6 @@ if SERVER then
 	function ENT:Arm(armer, autoColor)
 		local State = self:GetState()
 		if State != STATE_OFF then return end
-		JMod.Hint(armer, "mine friends")
 		JMod.SetEZowner(self, armer)
 		self:SetState(STATE_ARMING)
 		self:EmitSound("snd_jack_minearm.ogg", 60, 110)

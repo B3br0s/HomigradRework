@@ -79,10 +79,8 @@ if SERVER then
 			if State == JMod.EZ_STATE_OFF and Alt then
 				self:Prime()
 				activator:PickupObject(self.Plunger)
-				JMod.Hint(Dude, "arm satchelcharge", self.Plunger)
 			else
 				activator:PickupObject(self)
-				JMod.Hint(Dude, "arm")
 			end
 		end
 	end

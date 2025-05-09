@@ -409,6 +409,16 @@ end
 
 function SWEP:Think()
 	if self:GetOwner().Fake then return end
+	local ply = self:GetOwner()
+
+	hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
+	hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
+	hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
+	hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
 	if IsValid(self:GetOwner()) and self:GetOwner():KeyDown(IN_ATTACK2) and not self:GetFists() then
 		if IsValid(self.CarryEnt) then
 			self:ApplyForce()
@@ -648,9 +658,11 @@ function SWEP:DrawWorldModel()
 	end
 
 	//if !self:GetFists() then
+		hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
 		hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
     	hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
     	hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
+		hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
 		hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
     	hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
     	hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)

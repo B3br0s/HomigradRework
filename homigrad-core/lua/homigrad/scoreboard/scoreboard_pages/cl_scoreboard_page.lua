@@ -1,6 +1,9 @@
 local open = false
 local panelka
 
+local mute_death = false
+local mute_all = false
+
 local unmutedicon = Material( "icon32/unmuted.png", "noclamp smooth" )
 local mutedicon = Material( "icon32/muted.png", "noclamp smooth" )
 
@@ -60,6 +63,51 @@ function CheckPlyTeam(ply)
         return TableRound().Teams[1].Color,TableRound().Teams[1].Name
     end
 end
+
+hook.Add("Think","Mute-Handler",function() //ода доза
+    local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {})
+        if file.Exists("hgr/muted.json","DATA") then
+            MutedPlayers = util.JSONToTable(file.Read("hgr/muted.json","DATA"))
+        end
+
+        for _, ply in ipairs(player.GetAll()) do
+            if mute_death then
+                continue 
+            end
+            if MutedPlayers[ply:SteamID()] == true then
+                continue 
+            end
+
+            ply:SetMuted(mute_all)
+        end
+
+        for _, ply in ipairs(player.GetAll()) do
+            if mute_all then
+                continue 
+            end
+            if MutedPlayers[ply:SteamID()] == true then
+                continue 
+            end
+            if LocalPlayer():Alive() and LocalPlayer():Team() != 1002 then
+                if ply:IsMuted() then
+                    ply:SetMuted(false)
+                end
+                continue 
+            end
+            if !mute_death then
+                ply:SetMuted(false)
+                continue 
+            end
+            if ply:Alive() then
+                ply:SetMuted(false)
+                continue 
+            end
+            if ply == LocalPlayer() then
+                continue 
+            end
+            ply:SetMuted(!ply:Alive())
+        end
+end)
 
 hook.Add("HUDPaint","ScoreBoardPage",function()
     if not hg.ScoreBoard then return end
@@ -136,9 +184,52 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             surface.DrawOutlinedRect(-2,-2,w,h,1)*/
         end
 
+        local ww,hh = ScrollShit:GetSize()
+
+        local delitel = 6.5
+
+        local MuteDead = vgui.Create("hg_button",ScrollShit)
+        MuteDead:SetSize(ww/delitel,hh/20)
+        MuteDead:SetText(" ")
+        MuteDead:Center()
+        MuteDead:SetY(hh/1.06)
+        MuteDead:SetX(MuteDead:GetX()-ww/11)
+        function MuteDead:SubPaint(w,h)
+            draw.SimpleText(hg.GetPhrase("sc_mutedead"),"HS.18",w/2,h/2,!mute_death and Color(0,255,0) or Color(255,0,0),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        end
+
+        function MuteDead:DoClick()
+            mute_death = not mute_death
+            if !mute_death then
+                surface.PlaySound("homigrad/vgui/panorama/ping_alert_01.wav")
+            else
+                surface.PlaySound("homigrad/vgui/panorama/ping_alert_negative.wav")
+            end
+        end
+
+        local MuteAll = vgui.Create("hg_button",ScrollShit)
+        MuteAll:SetSize(ww/delitel,hh/20)
+        MuteAll:SetText(" ")
+        MuteAll:Center()
+        MuteAll:SetY(hh/1.06)
+        MuteAll:SetX(MuteAll:GetX()+ww/11)
+        function MuteAll:SubPaint(w,h)
+            draw.SimpleText(hg.GetPhrase("sc_muteall"),"HS.18",w/2,h/2,!mute_all and Color(0,255,0) or Color(255,0,0),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        end
+
+        function MuteAll:DoClick()
+            mute_all = not mute_all
+            if !mute_all then
+                surface.PlaySound("homigrad/vgui/panorama/ping_alert_01.wav")
+            else
+                surface.PlaySound("homigrad/vgui/panorama/ping_alert_negative.wav")
+            end
+        end
+
         local ScrollablePlayerList = vgui.Create("DScrollPanel", ScrollShit)
-        ScrollablePlayerList:SetSize(ScrollShit:GetWide() / 1.05,ScrollShit:GetTall() / 1.1)
+        ScrollablePlayerList:SetSize(ScrollShit:GetWide() / 1.05,ScrollShit:GetTall() / 1.2)
         ScrollablePlayerList:Center()
+        ScrollablePlayerList:SetY(ScrollablePlayerList:GetY()-35)
 
         local sbar = ScrollablePlayerList:GetVBar()
         function sbar:Paint(w, h)
@@ -201,7 +292,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             local DefaultSizeX,DefaultSizeY = 412,64
 
             local MuteButton = vgui.Create("DImageButton",PlayerButton)
-            MuteButton:SetMaterial(MutedPlayers[ply:SteamID()] == true and mutedicon or unmutedicon)
+            MuteButton:SetMaterial(ply:IsMuted() and mutedicon or unmutedicon)
             MuteButton:SetSize(64,64)
             MuteButton:SetPos(PlayerButton:GetWide() - 128,PlayerButton:GetY())
 
@@ -271,7 +362,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                 self.MuteButton:SetSize(DefaultSizeX * self.CurSizeMul,DefaultSizeY * self.CurSizeMul)
                 self.MuteButton:SetPos(w - 80 - self.CurPosMul / 1.9,0)
 
-                self.MuteButton:SetMaterial(MutedPlayers[ply:SteamID()] == true and mutedicon or unmutedicon)
+                self.MuteButton:SetMaterial(ply:IsMuted() and mutedicon or unmutedicon)
                 end
 
                 PlayerAvatar:SetSize(DefaultSizeX * self.CurSizeMul,DefaultSizeY * self.CurSizeMul)

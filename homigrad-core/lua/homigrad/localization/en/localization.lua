@@ -77,6 +77,7 @@ l.gun_empty = "Empty"
 l.gun_nearempty = "Near Empty"
 l.gun_halfempty = "Half Empty"
 l.gun_nearfull = "Near Fully"
+l.gun_r_pump = "Press R to pump."
 l.gun_full = "Full" 
 
 l.cuff = "Cuff %s"
@@ -190,6 +191,8 @@ l.sc_team = "Team"
 l.sc_ug = "Usergroup"
 l.sc_status = "Status"
 l.sc_tps = "Server Tickrate: %s"
+l.sc_mutedead = "Mute dead"
+l.sc_muteall = "Mute all"
 
 // Остальное
 l.inv_drop = "Drop"

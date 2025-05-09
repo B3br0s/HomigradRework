@@ -145,18 +145,15 @@ if SERVER then
 				if (self:Bury(activator)) then
 					self:SetState(STATE_ARMED)
 					self.EZlaunchableWeaponArmedTime = CurTime()
-					JMod.Hint(activator, "launch")
 					-- todo: hint fuze
 				else
 					self:EmitSound("snds_jack_gmod/bomb_arm.ogg", 60, 120)
 					self:SetState(STATE_ARMED)
 					self.EZlaunchableWeaponArmedTime = CurTime()
-					JMod.Hint(activator, "launch")
 				end
 			else
 				constraint.RemoveAll(self)
 				activator:PickupObject(self)
-				JMod.Hint(activator, "arm")
 			end
 		elseif State == STATE_ARMED then
 			self:EmitSound("snds_jack_gmod/bomb_disarm.ogg", 60, 120)

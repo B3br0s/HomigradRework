@@ -39,7 +39,6 @@ if SERVER then
 		if self.Exploded then return end
 		local Dude = activator or activatorAgain
 		JMod.SetEZowner(self, Dude)
-		JMod.Hint(Dude, self.ClassName)
 		local Time = CurTime()
 		if self.ShiftAltUse and Dude:KeyDown(JMod.Config.General.AltFunctionKey) and Dude:KeyDown(IN_SPEED) then return self:ShiftAltUse(Dude, tobool(onOff)) end
 
@@ -50,19 +49,6 @@ if SERVER then
 
 			if State == JMod.EZ_STATE_OFF and Alt then
 				self:Prime()
-				JMod.Hint(Dude, "grenade")
-			else
-				JMod.Hint(Dude, "prime")
-			end
-
-			if self.Hints then
-				for k, v in pairs(self.Hints) do
-					timer.Simple(k, function()
-						if IsValid(Dude) then
-							JMod.Hint(Dude, v)
-						end
-					end)
-				end
 			end
 
 			JMod.ThrowablePickup(Dude, self, self.HardThrowStr, self.SoftThrowStr)

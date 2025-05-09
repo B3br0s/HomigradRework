@@ -77,6 +77,7 @@ l.gun_empty = "Пусто"
 l.gun_nearempty = "Почти Пусто"
 l.gun_halfempty = "На половину пуст"
 l.gun_nearfull = "Почти полон"
+l.gun_r_pump = "Нажми R чтобы передёрнуть затвор."
 l.gun_full = "Полон" 
 
 l.cuff = "Связать %s"
@@ -190,6 +191,8 @@ l.sc_team = "Команда"
 l.sc_ug = "Юзергруп"
 l.sc_status = "Статус"
 l.sc_tps = "Тикрейт Сервера: %s"
+l.sc_mutedead = "Замутить мёртвых"
+l.sc_muteall = "Замутить всех"
 
 // Остальное
 l.inv_drop = "Выкинуть"

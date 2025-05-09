@@ -11,7 +11,9 @@ hook.Add("Player Think","Homigrad_Pain_Think",function(ply)
     if ply.painNext < CurTime() then
         ply.painNext = CurTime() + 0.25
 
-        ply.pain = math.Clamp(ply.pain - (ply.painlosing * (1 + ply.adrenaline)),0,100)
+        ply.pain = math.Clamp(ply.pain - (ply.painlosing * (1 + ply.adrenaline)) * 0.75,0,100)
+    
+        ply.painlosing = math.Clamp(ply.painlosing - 1,1,100)
     end
 
     if ply.pain >= MAX_PAIN then

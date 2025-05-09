@@ -9,6 +9,8 @@ SWEP.ViewModelFlip = false
 
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
+SWEP.SupportsTPIK = true
+SWEP.Animations = {}
 
 SWEP.Slot = 4
 SWEP.SlotPos = 1

@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "SCAR"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Автоматы"
 SWEP.WorldModel = "models/weapons/arccw_go/v_rif_scar.mdl"
 
 SWEP.CorrectPos = Vector(-11.5,-5.9,7.6)
@@ -22,7 +22,7 @@ SWEP.AttAng = Angle(0,0.75,0)
 
 SWEP.MuzzlePos = Vector(36,5.1,-3)
 SWEP.MuzzleAng = Angle(0,0,0)
-SWEP.RecoilForce = 1.25
+SWEP.RecoilForce = 0.5
 
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 30
@@ -30,7 +30,7 @@ SWEP.Primary.Damage = 35
 SWEP.Primary.Ammo = "5.56x45 mm"
 SWEP.Primary.Wait = 0.09
 SWEP.Primary.Automatic = true
-SWEP.Primary.Force = 35
+SWEP.Primary.Force = 15
 SWEP.Primary.Sound = "pwb/weapons/hk416/shoot.wav"
 SWEP.Primary.ReloadTime = 1.1
 SWEP.Primary.ReloadTimeEnd = 1.3

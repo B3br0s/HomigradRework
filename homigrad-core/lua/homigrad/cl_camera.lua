@@ -6,6 +6,7 @@ CameraSetFOV = 120
 Recoil = 0
 RecoilS = 0
 RecoilAng = Angle(0,0,0)
+RecoilDown = false
 
 CreateClientConVar("hg_fov","120",true,false,nil,70,120)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
@@ -158,6 +159,7 @@ local oldangles = Angle(0,0,0)
 local angZero = Angle(0,0,0)
 
 local lastcall = 0
+local prevang = Angle(0,0,0)
 
 function CalcView(ply,vec,ang,fov,znear,zfar)
 	shit_ang = LerpAngleFT(0.1,shit_ang,ang)
@@ -165,13 +167,13 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	lastcall = SysTime()
 	if STOPRENDER then return end
 	Recoil = LerpFT(0.1,Recoil,0)
-	if RecoilS < 15 then
-		RecoilS = LerpFT(0.07,RecoilS,0)
-	else
-		RecoilS = LerpFT(0.035,RecoilS,0)
-	end
 	local fov = CameraSetFOV + ADDFOV
 	local lply = LocalPlayer()
+
+	prevang = LerpAngleFT(0.075,prevang,ply:EyeAngles())
+
+	local ydiff = math.AngleDifference(prevang.y,ply:EyeAngles().y)
+	local y_diff_round = math.Round(ydiff / 5,1)
 
 	if !lply:Alive() and lply:GetNWInt("specmode") == 1 and IsValid(lply:GetNWEntity("SpectEnt")) then
 		local bone = lply:LookupBone("ValveBiped.Bip01_Head1")
@@ -308,24 +310,17 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local output_ang = angEye
 	local output_pos = vecEye
 
+	if wep and wep.Smooth then
+		RecoilS = LerpFT(wep:Smooth((RecoilDown and 0.3 or 0.25)),RecoilS,(RecoilDown and (wep.Primary.Automatic and -0.15 or -1) or (wep.NextShoot + 0.25 > CurTime() and 0.5 or 0)))
+	else
+		RecoilS = LerpFT(0.07,RecoilS,(RecoilS > 1 and -2 or 1))
+	end
+
 	if wep and wep.Camera then
 		output_pos, output_ang, fov = wep:Camera(ply, output_pos, output_ang, fov)
 	end
 
 	view.fov = fov
-
-	if wep and hand then
-		local posRecoil = Vector(recoil * 8,0,recoil * 1.5)
-		posRecoil:Rotate(hand.Ang)
-		view.znear = Lerp(ScopeLerp,1,max(1 - recoil,0.2))
-		output_pos = output_pos + posRecoil
-
-		if not RENDERSCENE then
-			recoil = LerpFT(scope and (wep.CLR_Scope or 0.25) or (wep.CLR or 0.1),recoil,0)
-		end
-	else
-		recoil = 0
-	end
 
 	vec = Vector(vec[1],vec[2],eye and eye.Pos[3] or vec[3])
 
@@ -335,6 +330,8 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	output_ang[1] = output_ang[1] + sprinthuy
 
 	output_ang[3] = 0
+
+	output_ang[3] = output_ang[3] + y_diff_round
 
 	output_ang = output_ang + vp_punch_angle / 1.5
 
@@ -384,7 +381,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 	if trZNear.Hit then view.znear = 0.1 else view.znear = 1 end--САСАТЬ!!11.. не работает ;c sharik loh
 
-	output_ang[3] = output_ang[3] + (math.random(-2,2) * Recoil)
+	output_ang[3] = output_ang[3] + (math.random(-6,6) * Recoil)
 
 	--print(Recoil)
 	

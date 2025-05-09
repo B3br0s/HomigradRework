@@ -1,9 +1,8 @@
 ﻿AddCSLuaFile()
 ENT.Base = "base_nextbot"
-ENT.Spawnable = false
+ENT.Spawnable = true
 ENT.PrintName = "T I N Y   D E S K   E N G I N E E R"
 ENT.Author = "Jackarunda"
-ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
 function ENT:Initialize()

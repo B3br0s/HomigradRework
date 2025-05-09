@@ -155,9 +155,6 @@ if SERVER then
 				self:SetState(STATE_ARMED)
 				self:EmitSound("snds_jack_gmod/bomb_arm.ogg", 70, 120)
 				self.EZdroppableBombArmedTime = CurTime()
-				JMod.Hint(activator, self.DetType)
-			else
-				JMod.Hint(activator, "double tap to arm")
 			end
 
 			self.LastUse = Time
@@ -168,8 +165,6 @@ if SERVER then
 				self:SetState(STATE_OFF)
 				self:EmitSound("snds_jack_gmod/bomb_disarm.ogg", 70, 120)
 				self.EZdroppableBombArmedTime = nil
-			else
-				JMod.Hint(activator, "double tap to disarm")
 			end
 
 			self.LastUse = Time

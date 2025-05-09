@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "MAC-10"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Пистолеты-Пулемёты"
 SWEP.WorldModel = "models/weapons/arccw_go/v_smg_mac10.mdl"
 
 SWEP.CorrectPos = Vector(-18,-7.5,7.6)
@@ -28,9 +28,7 @@ SWEP.Primary.Sound = "arccw_go/mac10/mac10-1.wav"
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.Primary.Automatic = true
 SWEP.Primary.Wait = 0.05
-SWEP.RecoilForce = 2
-
-SWEP.Bodygroups = {[1] = 1,[2]=0,[3]=0,[4]=0,[5]=2}
+SWEP.RecoilForce = 0.5
 
 SWEP.IconPos = Vector(-3.5,90,-3)
 SWEP.IconAng = Angle(-20,0,0)

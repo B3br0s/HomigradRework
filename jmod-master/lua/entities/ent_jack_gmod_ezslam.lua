@@ -143,8 +143,6 @@ if SERVER then
 							end
 						end
 					end)
-
-					JMod.Hint(Dude, "mine friends", selfg)
 				else
 					if not IsValid(self.AttachedBomb) then
 						constraint.RemoveAll(self)
@@ -162,8 +160,6 @@ if SERVER then
 
 						self.NextStick = Time + .5
 					end
-
-					JMod.Hint(Dude, "sticky", selfg)
 				end
 			else
 				self:EmitSound("snd_jack_minearm.ogg", 60, 70)
@@ -203,10 +199,6 @@ if SERVER then
 
 						self:EmitSound("snd_jack_claythunk.ogg", 65, math.random(80, 120))
 						Dude:DropObject()
-
-						if not JMod.Hint(Dude, "arm") then
-							JMod.Hint(Dude, "slam stick")
-						end
 					end
 				end
 			end

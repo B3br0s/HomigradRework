@@ -128,7 +128,6 @@ if SERVER then
 					self:SetState(STATE_ARMED)
 					self.EZlaunchableWeaponArmedTime = CurTime()
 					self:EmitSound("snds_jack_gmod/bomb_arm.ogg", 60, 120)
-					JMod.Hint(activator, "launch")
 				else
 					constraint.RemoveAll(self)
 					self.StuckStick = nil
@@ -137,7 +136,6 @@ if SERVER then
 					self:SetPos(activator:EyePos() + activator:GetAimVector() * 5)
 					Dude:PickupObject(self)
 					self.NextStick = Time + .5
-					JMod.Hint(Dude, "sticky")
 				end
 			else
 				self:EmitSound("snds_jack_gmod/bomb_disarm.ogg", 60, 120)
@@ -169,7 +167,6 @@ if SERVER then
 
 					self:EmitSound("snd_jack_claythunk.ogg", 65, math.random(80, 120))
 					Dude:DropObject()
-					JMod.Hint(Dude, "arm")
 				end
 			end
 		end
@@ -219,8 +216,6 @@ if SERVER then
 
 		util.ScreenShake(self:GetPos(), 20, 255, .5, 300)
 		---
-
-		JMod.Hint(JMod.GetEZowner(self), "backblast", self:GetPos())
 		timer.Simple(.3, function()
 			if IsValid(self) then
 				self:SetSkin(1)

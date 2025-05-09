@@ -681,29 +681,9 @@ function JMod.SetEZowner(ent, newOwner, setColor)
 end
 
 function JMod.AddFriend(ply, friend)
-	if not (IsValid(ply) and ply:IsPlayer() and IsValid(friend) and friend:IsPlayer()) then return end
-	ply.JModFriends = ply.JModFriends or {}
-
-	table.insert(ply.JModFriends, friend)
-
-	net.Start("JMod_Friends")
-		net.WriteBit(true)
-		net.WriteEntity(ply)
-		net.WriteTable(ply.JModFriends)
-	net.Broadcast()
 end
 
 function JMod.RemoveFriend(ply, friend)
-	if not (IsValid(ply) and ply:IsPlayer() and IsValid(friend) and friend:IsPlayer()) then return end
-	ply.JModFriends = ply.JModFriends or {}
-	
-	table.RemoveByValue(ply.JModFriends, friend)
-
-	net.Start("JMod_Friends")
-		net.WriteBit(true)
-		net.WriteEntity(ply)
-		net.WriteTable(ply.JModFriends)
-	net.Broadcast()
 end
 
 function JMod.ShouldAllowControl(self, ply, neutral)
@@ -897,10 +877,6 @@ function JMod.ThrowablePickup(playa, item, hardstr, softstr)
 						Phys:ApplyForceCenter(vec * (softstr or 400) * Phys:GetMass() * JMod.GetPlayerStrength(playa))
 					end
 				end)
-			elseif key == IN_USE then
-				if item.GetState and item:GetState() == JMod.EZ_STATE_PRIMED then
-					JMod.Hint(playa, "grenade drop", item)
-				end
 			end
 		end
 
@@ -1258,171 +1234,6 @@ function JMod.Rope(ply, origin, dir, width, strength, mat)
 	return Rope, RopeTr.Entity
 end
 
-function JMod.EZprogressTask(ent, pos, deconstructor, task, mult)
-	mult = mult or 1
-	local Time = CurTime()
-
-	if not IsValid(ent) then return "Invalid Ent" end
-
-	if task == "mining" then
-		local DepositKey = JMod.GetDepositAtPos(ent, pos)
-		local DepositInfo = JMod.NaturalResourceTable[DepositKey]
-		if DepositInfo and ent.SetResourceType then
-			local NewType = JMod.NaturalResourceTable[DepositKey].typ
-			if ent.GetResourceType and (ent:GetResourceType() != NewType) then
-				ent:SetNW2Float("EZminingProgress", 0) -- No you don't
-			end 
-			ent:SetResourceType(NewType)
-		end
-		
-		if ent.EZpreviousMiningPos and ent.EZpreviousMiningPos:Distance(pos) > 200 then
-			ent:SetNW2Float("EZminingProgress", 0)
-			ent.EZpreviousMiningPos = nil
-		end
-		if ent:GetNW2Float("EZcancelminingTime", 0) <= Time then
-			ent:SetNW2Float("EZminingProgress", 0)
-			ent.EZpreviousMiningPos = nil
-		end
-		ent:SetNW2Float("EZcancelminingTime", Time + 5)
-		ent.EZpreviousMiningPos = pos
-
-		local Prog = ent:GetNW2Float("EZminingProgress", 0)
-		local AddAmt = math.random(15, 25) * mult * JMod.Config.ResourceEconomy.ExtractionSpeed
-
-		ent:SetNW2Float("EZminingProgress", math.Clamp(Prog + AddAmt, 0, 100))
-
-		if (Prog >= 10) and not(JMod.NaturalResourceTable[DepositKey]) then
-			ent:SetNW2Float("EZminingProgress", 0)
-			ent.EZpreviousMiningPos = nil
-			local NearestGoodDeposit = JMod.GetDepositAtPos(ent, pos, 3)
-			if JMod.NaturalResourceTable[NearestGoodDeposit] then
-				net.Start("JMod_ResourceScanner")
-					net.WriteEntity(ent)
-					net.WriteTable({JMod.NaturalResourceTable[NearestGoodDeposit]})
-				net.Broadcast()
-				return JMod.NaturalResourceTable[NearestGoodDeposit].typ .. " nearby"
-			else
-				return "nothing of value nearby"
-			end
-		elseif Prog >= 100 then
-			local AmtToProduce
-
-			if JMod.NaturalResourceTable[DepositKey].rate then
-				local Rate = JMod.NaturalResourceTable[DepositKey].rate
-				AmtToProduce = Rate * Prog
-			else
-				local AmtLeft = JMod.NaturalResourceTable[DepositKey].amt
-				AmtToProduce = math.min(AmtLeft, math.random(5, 20))
-				if (JMod.NaturalResourceTable[DepositKey].typ == JMod.EZ_RESOURCE_TYPES.DIAMOND) then
-					AmtToProduce = math.min(AmtLeft, math.random(1, 2))
-				end
-				JMod.DepleteNaturalResource(DepositKey, AmtToProduce)
-			end
-
-			JMod.MachineSpawnResource(ent, JMod.NaturalResourceTable[DepositKey].typ, AmtToProduce, ent:WorldToLocal(pos + Vector(0, 0, 8)), Angle(0, 0, 0), nil, 100)
-			ent:SetNW2Float("EZminingProgress", 0)
-			ent.EZpreviousMiningPos = nil
-			JMod.ResourceEffect(JMod.NaturalResourceTable[DepositKey].typ, pos, nil, 1, 1, 1, 5)
-			util.Decal("EZgroundHole", pos + Vector(0, 0, 10), pos + Vector(0, 0, -10))
-			--
-			net.Start("JMod_ResourceScanner")
-				net.WriteEntity(ent)
-				net.WriteTable({JMod.NaturalResourceTable[DepositKey]})
-			net.Broadcast()
-
-			ent:SetResourceType("")
-			
-			return nil
-		end
-
-		return nil
-	end
-
-	if ent:GetNW2Float("EZcancel"..task.."Time", 0) <= Time then
-		ent:SetNW2Float("EZ"..task.."Progress", 0)
-	end
-	ent:SetNW2Float("EZcancel"..task.."Time", Time + 3)
-	
-	local Prog = ent:GetNW2Float("EZ"..task.."Progress", 0)
-	local Phys = ent:GetPhysicsObject()
-	
-	if IsValid(Phys) then
-		local WorkSpreadMult = JMod.CalcWorkSpreadMult(ent, pos)
-
-		if task == "loosen" then
-			if constraint.HasConstraints(ent) or not Phys:IsMotionEnabled() then
-				local Mass = Phys:GetMass() ^ .8
-				local AddAmt = 300 / Mass * WorkSpreadMult * JMod.Config.Tools.Toolbox.DeconstructSpeedMult
-				ent:SetNW2Float("EZ"..task.."Progress", math.Clamp(Prog + AddAmt, 0, 100))
-
-				if Prog >= 100 then
-					sound.Play("snds_jack_gmod/ez_tools/hit.ogg", pos + VectorRand(), 70, math.random(50, 60))
-					constraint.RemoveAll(ent)
-					Phys:EnableMotion(true)
-					Phys:Wake()
-					ent:SetNW2Float("EZ"..task.."Progress", 0)
-					if ent.EZnails then
-						for _, v in ipairs(ent.EZnails) do
-							if IsValid(v) then
-								v:Remove()
-							end
-						end
-						ent.EZnails = {}
-					end
-				end
-			else
-				return "object is already unconstrained"
-			end
-		elseif task == "salvage" then
-			if constraint.HasConstraints(ent) or not Phys:IsMotionEnabled() then
-				return "object is constrained"
-			else
-				local Mass = (Phys:GetMass() * ent:GetPhysicsObjectCount()) ^ .8
-				DropEntityIfHeld(ent)
-				local Yield, Message = JMod.GetSalvageYield(ent)
-
-				if #table.GetKeys(Yield) <= 0 then
-					return Message
-				else
-					local AddAmt = 250 / Mass * WorkSpreadMult * JMod.Config.Tools.Toolbox.DeconstructSpeedMult
-					ent:SetNW2Float("EZ"..task.."Progress", math.Clamp(Prog + AddAmt, 0, 100))
-					
-					if Prog >= 100 then
-						sound.Play("snds_jack_gmod/ez_tools/hit.ogg", pos + VectorRand(), 70, math.random(50, 60))
-
-						for k, v in pairs(Yield) do
-							local AmtLeft = v
-
-							while AmtLeft > 0 do
-								local Remove = math.min(AmtLeft, 100 * JMod.Config.ResourceEconomy.MaxResourceMult)
-								local Ent = ents.Create(JMod.EZ_RESOURCE_ENTITIES[k])
-								Ent:SetPos(pos + VectorRand() * 40 + Vector(0, 0, 30))
-								Ent:SetAngles(AngleRand())
-								Ent:Spawn()
-								Ent:Activate()
-								Ent:SetEZsupplies(k, Remove)
-								JMod.SetEZowner(Ent, deconstructor)
-								timer.Simple(.1, function()
-									if (IsValid(Ent) and IsValid(Ent:GetPhysicsObject())) then 
-										Ent:GetPhysicsObject():SetVelocity(Vector(0, 0, 0)) --- This is so jank
-									end
-								end)
-								AmtLeft = AmtLeft - Remove
-							end
-						end
-						if ent.JModInv then
-							for _, v in ipairs(ent.JModInv.items) do
-								JMod.RemoveFromInventory(ent, v.ent, pos + VectorRand() * 50)
-							end
-						end
-						SafeRemoveEntity(ent)
-					end
-				end
-			end
-		end
-	end
-end
-
 function JMod.BuildRecipe(results, ply, Pos, Ang, skinNum)
 	if istable(results) then
 		for n = 1, (results[2] or 1) do
@@ -1470,30 +1281,8 @@ function JMod.BuildRecipe(results, ply, Pos, Ang, skinNum)
 			Ent:SetCreator(ply)
 			Ent:Spawn()
 			Ent:Activate()
-			JMod.Hint(ply, results)
 		end
 	end
-end
-
-function JMod.ConsumeNutrients(ply, amt)
-	if not IsValid(ply) or not ply:Alive() then return false end
-	local Time = CurTime()
-	amt = math.Round(amt)
-	--
-	ply.EZnutrition = ply.EZnutrition or {
-		NextEat = 0,
-		Nutrients = 0
-	}
-	if (ply.EZnutrition.NextEat or 0) > Time then JMod.Hint(activator, "can not eat") return false end
-	if (ply.EZnutrition.Nutrients or 0) >= 100 then JMod.Hint(ply, "nutrition filled") return false end
-	--
-	ply.EZnutrition.NextEat = Time + amt / JMod.Config.FoodSpecs.EatSpeed
-	ply.EZnutrition.Nutrients = math.Round(ply.EZnutrition.Nutrients + amt * JMod.Config.FoodSpecs.ConversionEfficiency)
-
-	local result = hook.Run("JMod_ConsumeNutrients", ply, amt)
-
-	ply:PrintMessage(HUD_PRINTCENTER, "nutrition: " .. ply.EZnutrition.Nutrients .. "/100")
-	return true
 end
 
 hook.Add("JMod_ConsumeNutrients", "DarkRP_EnergyCompat", function(ply, amt)
@@ -1726,14 +1515,6 @@ function JMod.EnergeticsCookoff(pos, attacker, powerMult, numExplo, numBullet, n
 		end
 	end
 end
-
-hook.Add("PhysgunPickup", "EZPhysgunBlock", function(ply, ent)
-	if ent.block_pickup then
-		JMod.Hint(ply, "blockphysgun")
-
-		return false
-	end
-end)
 
 concommand.Add("jacky_sandbox", function(ply, cmd, args)
 	if not (IsValid(ply) and ply:IsSuperAdmin()) then return end

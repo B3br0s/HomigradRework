@@ -1,18 +1,14 @@
 SWEP.SpeedAnim = 0  
 SWEP.animmul = 0
 
-local function easedLerp(fraction, from, to)
-	return LerpFT(math.ease.InSine(fraction), from, to)
-end
-
 function SWEP:PostAnim()
-	if self.BoltBone != nil and IsValid(self.worldModel) and self.BoltVec != nil then
+	if self.BoltBone and IsValid(self.worldModel) and self.BoltVec != nil and isvector(self.BoltVec) then
 		local bone = self.worldModel:LookupBone(self.BoltBone)
 
 		if self:Clip1() <= 0 and self.BoltLock then
 			self.animmul = 1.5
 		else
-			self.animmul = easedLerp(0.5,self.animmul,0)
+			self.animmul = LerpFT(0.2,self.animmul,0)
 		end
 
 		self.worldModel:ManipulateBonePosition(bone,self.BoltVec * self.animmul)
@@ -42,6 +38,11 @@ function SWEP:Step_Anim()
 			hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(30,0,0),1,0.1)
 		end
 		return
+	else
+		hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.1)
 	end
 	if self.reload then
 		return
@@ -69,23 +70,23 @@ function SWEP:Step_Anim()
 	if !self.CustomAnim then
 		if self:IsPistolHoldType() then
 			if self:IsSprinting() and !self:IsSighted() or self:IsClose() then
-				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.35)
-				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.35)
-				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-60),1,0.35)
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.25)
+				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.25)
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-60),1,0.25)
 			else
-				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.35)
-				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.35)
-				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.35)
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.25)
+				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.25)
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.25)
 			end
 		else
 			if self:IsSprinting() and !self:IsSighted() or self:IsClose() then
-				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.35)
-				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,-30),1,0.35)
-				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-30),1,0.35)
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.25)
+				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,-30),1,0.25)
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(-5,0,-30),1,0.25)
 			else
-				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.35)
-				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.35)
-				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.35)
+				hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.25)
+				hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.25)
+				hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.25)
 			end
 		end
 	else

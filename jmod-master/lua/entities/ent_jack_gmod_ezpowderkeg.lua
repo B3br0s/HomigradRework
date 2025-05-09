@@ -105,7 +105,6 @@ if SERVER then
 		end
 
 		Dude:PickupObject(self)
-		JMod.Hint(Dude, "arm powderkeg")
 	end
 
 	function ENT:EZdetonateOverride(detonator)
@@ -178,7 +177,6 @@ if SERVER then
 				Powder:Spawn()
 				Powder:Activate()
 				constraint.Weld(Powder, Tr.Entity, 0, 0, 0, true)
-				JMod.Hint(JMod.GetEZowner(self), "powder", Powder)
 			end
 
 			self.Powder = self.Powder - 1

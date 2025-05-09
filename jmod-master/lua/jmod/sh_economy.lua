@@ -1270,13 +1270,6 @@ if SERVER then
 						table.sort(Resources, function(a, b) return a.siz > b.siz end)
 						JMod.NaturalResourceTable = Resources
 						print("JMOD: resource generation finished with " .. #Resources .. " resource deposits")
-
-						if GetConVar("sv_cheats"):GetBool() then
-							net.Start("JMod_NaturalResources")
-								net.WriteBool(false)
-								net.WriteTable(JMod.NaturalResourceTable)
-							net.Broadcast()
-						end
 					elseif i % 1000 == 0 then
 						print("JMOD: " .. math.Round(i / MaxTries * 100) .. "%")
 					end
@@ -1370,10 +1363,6 @@ if SERVER then
 	concommand.Add("jmod_debug_shownaturalresources", function(ply, cmd, args)
 		if not GetConVar("sv_cheats"):GetBool() then print("JMod: This needs sv_cheats set to 1") return end
 		if IsValid(ply) and not JMod.IsAdmin(ply) then return end
-		net.Start("JMod_NaturalResources")
-		net.WriteBool(true)
-		net.WriteTable(JMod.NaturalResourceTable)
-		net.Send(ply)
 	end, nil, "Shows locations for natural resource extraction.")
 
 	--[[concommand.Add("jmod_debug_remove_naturalresource",function(ply,cmd,args)
@@ -1388,22 +1377,6 @@ if SERVER then
 elseif CLIENT then
 	local ShowNaturalResources = false
 	local NaturalResourceDisplayCache = {}
-
-	net.Receive("JMod_NaturalResources", function()
-		if net.ReadBool() then
-			ShowNaturalResources = not ShowNaturalResources
-			print("natural resource display: " .. tostring(ShowNaturalResources))
-		end
-		JMod.NaturalResourceTable = net.ReadTable()
-	end)
-
-	net.Receive("JMod_Debugging", function()
-		local Typ = net.ReadInt(8)
-
-		if Typ == 1 then
-			JMod.DebugPositions = net.ReadTable()
-		end
-	end)
 
 	local DebugMat = Material("sprites/grip_hover")
 

@@ -8,7 +8,9 @@ hook.Add("Player Think","Hunger_Handler",function(ply)
         ply.hungerNext = CurTime() + math.random(3,10)
         //ply:ChatPrint(tostring(ply.hunger))
         local prevhunger = ply.hunger
-        ply.hunger = math.Clamp(ply.hunger - 1,0,100)
+        ply.hunger = math.Clamp(ply.hunger - 0.5,0,100)
+
+        ply.stamina = math.Clamp(ply.stamina + ply.hunger / 70,0,100)
 
         if ply.hunger == 30 and prevhunger > ply.hunger then
             net.Start("localized_chat")

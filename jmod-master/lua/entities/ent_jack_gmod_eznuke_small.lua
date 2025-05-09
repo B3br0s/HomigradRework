@@ -64,13 +64,11 @@ if SERVER then
 
 		if not Alt then
 			activator:PickupObject(self)
-			JMod.Hint(activator, "arm")
 		else
 			if State == STATE_OFF then
 				self:SetState(STATE_ARMED)
 				self:EmitSound("snds_jack_gmod/nuke_arm.ogg", 70, 140)
 				self.EZdroppableBombArmedTime = CurTime()
-				JMod.Hint(activator, "dualdet")
 			elseif State == STATE_ARMED then
 				self:SetState(STATE_OFF)
 				self:EmitSound("snds_jack_gmod/bomb_disarm.ogg", 70, 100)

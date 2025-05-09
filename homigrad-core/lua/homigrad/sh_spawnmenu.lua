@@ -5,6 +5,9 @@ local validUserGroup = {
 if SERVER then
 
     local function CanUseSpawnMenu(ply,class)
+        if !TableRound then
+            return true
+        end
         local func = TableRound().CanUseSpawnMenu
         func = func and func(ply,class)
         if func != nil then return func end
@@ -25,6 +28,9 @@ if SERVER then
     hook.Add("PlayerGiveSWEP","SpawnBlockSWEP",function(ply) return CanUseSpawnMenu(ply,"swep") end)
 
     local function spawn(ply,class,ent)
+        if !TableRound then
+            return true
+        end
         local func = TableRound().CanUseSpawnMenu
         func = func and func(ply,class,ent)
     end
@@ -37,6 +43,9 @@ if SERVER then
     hook.Add("PlayerSpawnedNPC","sv_round",function(ply,model,ent) spawn(ply,"npc",ent) end)
 else
     local function CanUseSpawnMenu()
+        if !TableRound then
+            return true
+        end
         local ply = LocalPlayer()
         if validUserGroup[ply:GetUserGroup()] or GetGlobalBool("AccessSpawn") then return true end
 

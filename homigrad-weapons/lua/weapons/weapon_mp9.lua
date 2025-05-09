@@ -2,7 +2,7 @@ do return end
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "MP9"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Пистолеты-Пулемёты"
 SWEP.WorldModel = "models/weapons/arccw_go/v_smg_mp9.mdl"
 
 SWEP.CorrectPos = Vector(-13.9,-3.5,6.5)

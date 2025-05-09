@@ -175,7 +175,7 @@ hook.Add("PlayerSay", "JMod_PLAYERSAY", function(ply, txt)
 	if not ply:Alive() then return end
 
 	if txt == "hi everyone" then
-		JMod.Hint(ply, "idiot")
+		(ply, "idiot")
 	end
 
 	local lowerTxt = string.lower(txt)
@@ -488,7 +488,7 @@ local function StartDelivery(pkg, transceiver, id, bff, ply)
 	local newTime, newPos = hook.Run("JMod_RadioDelivery", ply, transceiver, pkg, DeliveryTime, Pos)
 	DeliveryTime = newTime or DeliveryTime
 	Pos = newPos or Pos
-	JMod.Hint(ply, "aid wait")
+	(ply, "aid wait")
 	Station.state = JMod.EZ_STATION_STATE_DELIVERING
 	Station.nextDeliveryTime = Time + DeliveryTime
 	Station.deliveryLocation = Pos

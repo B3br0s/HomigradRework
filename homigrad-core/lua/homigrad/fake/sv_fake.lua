@@ -13,7 +13,6 @@ hg.ragdollFake = {}
 net.Receive("fake",function(len,ply)
 	if !ply:Alive() then return end
     Faking(ply)
-	
 end)
 
 function PlayerMeta:RagView()
@@ -55,9 +54,9 @@ function PlayerMeta:CreateFake(force)
 	end
 
 	//print(self.AppearanceOverride)
-	if not self:IsBot() and self.Appearance and !self.AppearanceOverride then
+	/*if not self:IsBot() and self.Appearance and !self.AppearanceOverride then
 	ApplyAppearanceEntity(rag,self.Appearance)
-	end
+	end*/
 	
 	rag.Appearance = self.Appearance
 
@@ -99,7 +98,7 @@ hook.Add("Think","VelocityFakeHitPlyCheck",function()
 			if rag.JModEntInv != NULL and IsValid(rag.JModEntInv) then
 				rag.JModEntInv:SetPos(rag:GetPos())
 			end
-			if rag:GetVelocity():Length() > 200 then
+			if rag:GetVelocity():Length() > 100 then
 				rag:SetCollisionGroup(COLLISION_GROUP_NONE)
 			else
 				rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -127,7 +126,7 @@ hook.Add("Player Think","VelocityPlayerFallOnPlayerCheck",function(ply,time)
 		return
 	end
 	if ply:GetMoveType() != MOVETYPE_NOCLIP and not ply.Fake and not ply:HasGodMode() and ply:Alive() then
-		if speed < 600 then return end
+		if speed < 650 then return end
 
 		Faking(ply)
 	end
@@ -566,16 +565,16 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			diff_ang = diff_ang * -1
 		end
 
-		diff_ang2 = (1.5 + diff_ang)
+		diff_ang2 = (1.45 + diff_ang)
 
 		local HeadShadow = {
 			secondstoarrive=0.0000000001 / 1e8,
 			pos=Head:GetPos(),
 			angle=HeadAng,
-			maxangulardamp=3,
-			maxspeeddamp=10,
+			maxangulardamp=1,
+			maxspeeddamp=1,
 			maxangular=370,
-			maxspeed=30,
+			maxspeed=600,
 			teleportdistance=0,
 			deltatime=deltatime,
 		}
@@ -592,10 +591,10 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		//print(velo)
 
 		local shadowparams2 = {
-			secondstoarrive=0.1 * diff_ang2,
+			secondstoarrive=0.25 * diff_ang2,
 			pos=phys2:GetPos() + (IsValid(rag.ZacConsLH) and Vector(0,0,140) or IsValid(rag.ZacConsRH) and Vector(0,0,140) or Vector(0,0,0)),
 			angle=angs2,
-			maxangulardamp=0.2 * (diff_ang2 * 4),
+			maxangulardamp=2.5,
 			maxspeeddamp=1 * (diff_ang2 / 2.5),
 			maxangular=1e8,
 			maxspeed=50 / velo,
@@ -607,7 +606,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 			secondstoarrive=0.15 * diff_ang2,
 			pos=phys:GetPos(),
 			angle=angs,
-			maxangulardamp=0.000001 * (diff_ang2 * 4),
+			maxangulardamp=1.5,
 			maxspeeddamp=1 * (diff_ang2 / 2.5),
 			maxangular=1e8,
 			maxspeed=40 / velo,
@@ -621,16 +620,16 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		angs:RotateAroundAxis(angs:Forward(),-100)
 		//angs:RotateAroundAxis(angs:Up(),-60)
 		shadowparams.maxspeed = 20 / velo
-		shadowparams.secondstoarrive=0.35
+		shadowparams.secondstoarrive=0.75
 		shadowparams.pos = phys3:GetPos()
 		shadowparams.maxangulardamp = 0.1
 		phys2:Wake()
 		phys2:ComputeShadowControl(shadowparams2)
 		phys3:Wake()
 		phys3:ComputeShadowControl(shadowparams)
-		shadowparams.secondstoarrive=0.75
+		shadowparams.secondstoarrive=0.5
 		shadowparams.pos = phys4:GetPos()
-		shadowparams.maxspeed = 15 / velo
+		shadowparams.maxspeed = 65 / velo
 		phys4:Wake()
 		phys4:ComputeShadowControl(shadowparams)
 	end
@@ -731,7 +730,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 65
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 0.8,
+				secondstoarrive = 0.9,
 				pos = lh:GetPos() + ply:EyeAngles():Forward() * 32 + ply:EyeAngles():Up() * 13,
 				angle = ply:EyeAngles(),
 				maxangulardamp = 1/1e8,
@@ -760,7 +759,7 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 65
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 1000 then
 			local shadowparams = {
-				secondstoarrive = 0.8,
+				secondstoarrive = 0.9,
 				pos = rh:GetPos() + ply:EyeAngles():Forward() * 32 + ply:EyeAngles():Up() * 13,
 				angle = ply:EyeAngles(),
 				maxangulardamp = 1/1e8,

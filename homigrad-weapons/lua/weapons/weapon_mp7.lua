@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "MP7"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Пистолеты-Пулемёты"
 SWEP.WorldModel = "models/weapons/arccw_go/v_smg_mp7.mdl"
 
 SWEP.CorrectPos = Vector(-8.5,-6.8,9)
@@ -30,8 +30,8 @@ SWEP.Primary.Ammo = "5.56x45 mm"
 SWEP.Primary.Wait = 0.07
 SWEP.Primary.Automatic = true
 SWEP.Primary.Force = 15
-SWEP.Primary.Sound = "arccw_go/mp7/mp7-1.wav"
-SWEP.RecoilForce = 2
+SWEP.Primary.Sound = "pwb2/weapons/usptactical/usp_unsil-1.wav"
+SWEP.RecoilForce = 0.25
 
 SWEP.IconPos = Vector(0,80,-4)
 SWEP.IconAng = Angle(-20,0,0)

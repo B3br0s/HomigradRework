@@ -643,7 +643,6 @@ function JMod.BuildRecipe(results, ply, Pos, Ang, skinNum)
 			Ent:SetCreator(ply)
 			Ent:Spawn()
 			Ent:Activate()
-			JMod.Hint(ply, results)
 		end
 	end
 end

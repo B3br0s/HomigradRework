@@ -184,10 +184,3 @@ hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
         tabPressed = false
     end
 end)
-
-
-net.Receive("close_tab",function(len)
-	if ScoreBoardPanel then
-		ScoreBoardPanel:Remove()
-	end
-end)

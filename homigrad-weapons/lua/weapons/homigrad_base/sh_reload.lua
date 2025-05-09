@@ -78,15 +78,6 @@ function SWEP:Reload_Step()
         if not self.SoundsPlayed then
             self.SoundsPlayed = {}
         end
-
-        local IsPistol = self.HoldType == "revolver"
-
-        if IsPistol then
-            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,0,0))
-	        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Upperarm"),Angle(0,0,0))
-            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(-60,0,0))
-            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(-60,50,0))
-        end
         
         if self:Clip1() > 0 then
             if self.ReloadSounds[dima] != nil and !self.SoundsPlayed[dima] then

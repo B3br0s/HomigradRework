@@ -30,16 +30,7 @@ if SERVER then
 			local faceProt, skinProt = JMod.GetArmorBiologicalResistance(obj, DMG_NERVEGAS)
 
 			JMod.DepleteArmorChemicalCharge(obj, (faceProt + skinProt) * 4 * .02)
-
-			if faceProt < 1 then
-				net.Start("JMod_VisionBlur")
-				net.WriteFloat(5 * math.Clamp(1 - faceProt, 0, 1))
-				net.WriteFloat(2)
-				net.WriteBit(false)
-				net.Send(obj)
-				JMod.Hint(obj, "tear gas")
-				JMod.TryCough(obj)
-			end
+			
 		elseif obj:IsNPC() then
 			obj.EZNPCincapacitate = Time + math.Rand(2, 5)
 		end

@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "Desert Eagle"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Пистолеты"
 SWEP.WorldModel = "models/weapons/arccw_go/v_pist_deagle.mdl"
 
 SWEP.CorrectAng = Angle(0,0,0)
@@ -29,6 +29,13 @@ SWEP.Primary.ReloadTime = 1.25
 SWEP.Primary.Wait = 0.2
 SWEP.Primary.Sound = "arccw_go/deagle/deagle-1.wav"
 SWEP.RecoilForce = 13
+
+SWEP.RUpMul = 0.75
+SWEP.RRightMul = 0
+
+function SWEP:PrimaryAdd()
+    self.RRightMul = math.random(-1,1)
+end
 
 SWEP.IconPos = Vector(1,110,-6)
 SWEP.IconAng = Angle(-20,0,0)

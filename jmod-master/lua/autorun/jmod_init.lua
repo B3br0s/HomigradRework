@@ -348,43 +348,6 @@ end
 
 local PrimitiveBenchReqs = {[JMod.EZ_RESOURCE_TYPES.WOOD] = 25, [JMod.EZ_RESOURCE_TYPES.CERAMIC] = 15, [JMod.EZ_RESOURCE_TYPES.ALUMINUM] = 8}
 
-local Handcraft = function(ply, cmd, args)
-	local Pos = ply:GetPos()
-	local ScrapResources, LocalScrap = JMod.FindSuitableScrap(Pos, 200, ply)
-	local ResourcesFromResourceEntities = JMod.CountResourcesInRange(nil, nil, ply)
-	local AvailableResources = {}
-	for k, v in pairs(ScrapResources) do
-		AvailableResources[k] = (AvailableResources[k] or 0) + v
-	end
-	for k, v in pairs(ResourcesFromResourceEntities) do
-		AvailableResources[k] = (AvailableResources[k] or 0) + v
-	end
-	local EnoughStuff, StuffLeft = JMod.HaveResourcesToPerformTask(nil, nil, PrimitiveBenchReqs, nil, AvailableResources)
-	if EnoughStuff then
-		local WherePutBench = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 100, ply)
-		JMod.BuildEffect(WherePutBench.HitPos + Vector(0, 0, 30))
-		timer.Simple(0.5, function()
-			local Bench = ents.Create("ent_jack_gmod_ezprimitivebench")
-			Bench:SetPos(WherePutBench.HitPos + Vector(0, 0, 30))
-			Bench:SetAngles(-ply:GetAngles())
-			Bench:Spawn()
-			JMod.SetEZowner(Bench, ply)
-			Bench:Activate()
-		end)
-		
-		local AllDone, Moar = JMod.ConsumeResourcesInRange(PrimitiveBenchReqs, Pos, 200, ply, false, LocalScrap)
-		if not(AllDone) then
-			JMod.ConsumeResourcesInRange(Moar, Pos, 200, ply, false)
-		end
-	else
-		local Mssg = ""
-		for k, v in pairs(StuffLeft) do
-			Mssg = Mssg .. tostring(v) .. " more " .. tostring(k) .. ", "
-		end
-		ply:PrintMessage(HUD_PRINTCENTER, "You need: " .. string.sub(Mssg, 1, -3))
-	end
-end
-
 -- This needs to be here I guess, probably due to load order
 JMod.EZ_CONCOMMANDS = {
 	{name = "inv", func = JMod.EZ_Open_Inventory, helpTxt = "Opens your EZ inventory to manage your armour.", noShow = true},

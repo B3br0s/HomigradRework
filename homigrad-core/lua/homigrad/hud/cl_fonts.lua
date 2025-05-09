@@ -58,6 +58,13 @@ surface.CreateFont("HS.13",{
     shadow = true
 })
 
+surface.CreateFont("HS.14",{
+    font = "Arial",
+    size = math.ceil(14),
+    weight = 1100,
+    shadow = true
+})
+
 surface.CreateFont("HS.18",{
     font = "Arial",
     size = math.ceil(18),

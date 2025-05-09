@@ -3,6 +3,7 @@ SWEP.AttPos = Vector(21,2.775,-1.7)
 SWEP.AttAng = Angle(0,0,0)
 SWEP.MuzzlePos = Vector(0,0,0)
 SWEP.MuzzleAng = Angle(0,0,0)
+SWEP.NextShoot = 0
 
 local Rand = math.Rand
 local random = math.random
@@ -55,8 +56,22 @@ function SWEP:PostShoot(Pos,Ang)
     if CLIENT then
         if self:GetOwner() == LocalPlayer() then
             RecoilS = RecoilS + self.RecoilForce
-            Recoil = Recoil + self.Primary.Force / 256 + 0.5
+            Recoil = Recoil + 0.2 + (self.Primary.Force / 512)
         end
+
+        local Tr = {}
+        Tr.start = Pos
+        Tr.endpos = Pos + Ang:Forward() * 60000
+        Tr.filter = {self:GetOwner(), self}
+        local tr = util.TraceLine(Tr)
+
+        /*local effectdata = EffectData()
+        effectdata:SetOrigin(tr.HitPos + VectorRand(-1 * (self.NumBullet or 0), 1 * (self.NumBullet or 0)))
+        effectdata:SetNormal(tr.Normal + VectorRand(-25 * (self.NumBullet or 0), 25 * (self.NumBullet or 0)))
+        effectdata:SetStart(Pos)
+        effectdata:SetEntity(self)
+        effectdata:SetScale(1)
+        util.Effect("eff_tracer", effectdata)*/
 
         local part = ParticleEmitter(Pos):Add("mat_jack_gmod_shinesprite", Pos)
 
@@ -95,6 +110,43 @@ end
 function SWEP:Shoot()
     local primary = self.Primary
 
+    self:GetTrace()
+
+    self.NextShoot = CurTime() + primary.Wait
+
+    local owner = self:GetOwner()
+    if owner.suiciding and SERVER then
+        if owner.Fake and owner:KeyDown(IN_USE) or !owner.Fake then
+            owner:DropWep(nil,nil,vector_up * -50,true)
+            local SuicideInfo = DamageInfo()
+            local head = owner:GetBoneMatrix(6)
+            SuicideInfo:SetDamagePosition(head:GetTranslation() - vector_up * 6)
+            SuicideInfo:SetDamageForce(vector_up * 64)
+            SuicideInfo:SetDamage(120)
+            SuicideInfo:SetDamageType(DMG_BULLET)
+            SuicideInfo:SetAttacker(owner)
+            SuicideInfo:SetInflictor(self)
+            owner.LastInfo = SuicideInfo
+            owner.LastBone = "ValveBiped.Bip01_Head1"
+            owner:TakeDamageInfo(SuicideInfo)
+            owner:SetHealth(owner:Health() - SuicideInfo:GetDamage() * 7)
+            net.Start("bp headshoot explode")
+            net.WriteVector(head:GetTranslation())
+            net.WriteVector(vector_up * 3)
+            net.Broadcast()
+            net.Start("bp buckshoot")
+            net.WriteVector(head:GetTranslation())
+            net.WriteVector(vector_up * 3)
+            net.Broadcast()
+
+            timer.Simple(0,function()
+                if IsValid(owner.FakeRagdoll) then
+                    owner.FakeRagdoll:ManipulateBoneScale(owner.FakeRagdoll:LookupBone("ValveBiped.Bip01_Head1"),Vector(0.0001,0.0001,0.0001))
+                end
+            end)
+        end
+    end
+
     self:EmitSound(istable(primary.Sound) and table.Random(primary.Sound) or primary.Sound,100,math.random(90,110),1,CHAN_WEAPON,SND_NOFLAGS)
 
     local Pos,Ang = SERVER and self:GetTrace() or self:GetNWVector("Muzzle"),self:GetNW2Angle("Muzzle")
@@ -110,6 +162,8 @@ function SWEP:Shoot()
     Bullet.Tracer = 0
     Bullet.AmmoType = self.Primary.Ammo
 
+    self:GetTrace()//сколько можно нахуй
+
     self:PrimaryAdd()
 
     self:PrimarySpread()
@@ -118,7 +172,7 @@ function SWEP:Shoot()
         self:TakePrimaryAmmo(1)
 
         for i = 1, Num do
-            Bullet.Spread = (i > 1 and VectorRand(-0.06 * (math.random(-1,1) - i),0.05 * (math.random(-1,2) - i)) or Vector(0,0,0))
+            Bullet.Spread = (i > 1 and VectorRand(-0.03 * (math.random(-1,2) - i),0.03 * (math.random(-3,2) - i)) or Vector(0,0,0))
 
             self:FireLuaBullets(Bullet)
         end

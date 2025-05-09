@@ -11,10 +11,10 @@ SWEP.WorldModel = "models/weapons/arccw_go/v_pist_p2000.mdl"
 
 SWEP.CorrectAng = Angle(0,0,0)
 SWEP.CorrectPos = Vector(-13.5,-3.75,5)
-SWEP.Bodygroups = {[1] = 0,[2]=0,[3]=0,[4]=0,[5]=0}
 SWEP.HolsterBone = "ValveBiped.Bip01_Pelvis"
 SWEP.HolsterPos = Vector(0,0,0)
 SWEP.HolsterAng = Angle(0,0,0)
+SWEP.animmul = 0
 
 SWEP.DrawTime = 0.1
 SWEP.Deployed = true
@@ -30,6 +30,10 @@ SWEP.Primary.Force = 35
 SWEP.Primary.Automatic = false
 SWEP.RecoilForce = 1
 SWEP.TwoHands = false
+SWEP.Bodygroups = {[1] = 0,[2]=0,[3]=0,[4]=0,[5]=0}
+
+SWEP.BoltLock = true
+SWEP.SupportsTPIK = false
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
@@ -61,11 +65,14 @@ function SWEP:OwnerChanged()
 end
 
 function SWEP:Holster()
-	if IsValid(self.worldModel) then
-		self.worldModel:Remove()
-	end
-
 	return true
+end
+
+function SWEP:Smooth(value)
+	if self.NextShoot + 0.125 > CurTime() then
+        return 0.06
+    end
+    return math.ease.InSine(value) + math.max(math.ease.InElastic(value) - 0.6,0)
 end
 
 function SWEP:Deploy()
@@ -93,7 +100,9 @@ else
 	net.Receive("hgwep shoot",function()
 		local ent = net.ReadEntity()
 
-		ent:Shoot()
+		if ent.Shoot then
+			ent:Shoot()
+		end
 	end)
 end
 
@@ -101,6 +110,12 @@ function SWEP:PrimaryAdd()
 end
 
 function SWEP:PrimaryAttack()
+	if self:Clip1() == 0 and SERVER then
+		self.Primary.Automatic = false
+		sound.Play("weapons/clipempty_pistol.wav",self:GetPos(),75,math.random(95,105),1)
+		return
+	end
+	self.Primary.Automatic = weapons.Get(self:GetClass()).Primary.Automatic
 	if !self:CanShoot() then return end
     if self:GetNextPrimaryFire() > CurTime() then return end
     if self.NextShoot and self.NextShoot > CurTime() then return end
@@ -115,6 +130,17 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+function SWEP:PostStep()
+end
+
+function SWEP:GetRightMul()
+	return self.RRightMul or 0
+end
+
+function SWEP:GetUpMul()
+	return self.RUpMul or 1
+end
+
 function SWEP:Step()
 	local ply = self:GetOwner()
 
@@ -122,6 +148,16 @@ function SWEP:Step()
 
 	if ply:GetActiveWeapon() != self then
 		return
+	end
+
+	self:PostStep()
+
+	if CLIENT and ply == LocalPlayer() then
+		if self.NextShoot + 0.025 < CurTime() then
+			RecoilDown = false
+		else
+			RecoilDown = true 
+		end
 	end
 
 	local hand_index = ply:LookupBone("ValveBiped.Bip01_R_Hand")
@@ -137,14 +173,19 @@ function SWEP:Step()
 	local _,newAng = LocalToWorld(vector_origin,self.localAng or angle_zero,vector_origin,plyang)
 	local ang = Angle(newAng[1],newAng[2],newAng[3])
 
-	if !self:IsSprinting() and !self:IsClose() then
-		matrix:SetAngles(ang)
+	if !self:IsSprinting() and !self:IsClose() and !self.reload then
+		if self.PumpTarg and self.Pump <= 0.05 then
+			matrix:SetAngles(ang - (!self:IsSighted() and Angle(12 * (self.sprayI * self.RecoilForce * 1.5) * self:GetUpMul(),-1 * (self.sprayI * self.RecoilForce * 1.5) * self:GetRightMul(),0) or Angle(0,0,0)))
+		elseif !self.PumpTarg then
+			matrix:SetAngles(ang - (!self:IsSighted() and Angle(12 * (self.sprayI * self.RecoilForce * 1.5) * self:GetUpMul(),-1 * (self.sprayI * self.RecoilForce * 1.5) * self:GetRightMul(),0) or Angle(0,0,0)))
+		end
 	end
 
 	ply:SetBoneMatrix2(hand_index, matrix, false)
 
 	self:Reload_Step()
-
+	self:Step_Spray()
+	
 	if CLIENT then
 		self:Step_Anim()
 	end
@@ -159,6 +200,14 @@ function SWEP:Think()
 end
 
 function SWEP:DrawWorldModel()
+	if self.Bodygroups then
+        for _, v in ipairs(self.Bodygroups) do
+            if IsValid(self.worldModel) then
+                self.worldModel:SetBodygroup(_,v)
+            end
+            self:SetBodygroup(_,v)
+        end
+    end
 	if !IsValid(self:GetOwner()) then
 		self:DrawModel()
 		return
@@ -183,7 +232,7 @@ function SWEP:CreateWorldModel()
 			wm:SetNoDraw(true)
 		end*/
 		wm:SetModel(self.WorldModel)
-		wm:SetMaterial("models/spawn_effect")
+		wm:SetMaterial("null")
 		wm:Spawn()
 		wm:PhysicsDestroy()
 		wm:SetMoveType(MOVETYPE_NONE)

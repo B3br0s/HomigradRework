@@ -1,7 +1,7 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "Glock 17"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Пистолеты"
 SWEP.WorldModel = "models/weapons/arccw_go/v_pist_glock.mdl"
 
 SWEP.CorrectAng = Angle(0,0,0)

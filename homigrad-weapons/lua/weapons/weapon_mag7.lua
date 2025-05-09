@@ -1,8 +1,8 @@
 do return end
-SWEP.Base = "weapon_r870"
+SWEP.Base = "weapon_870"
 SWEP.PrintName = "MAG-7"
 SWEP.Spawnable = true
-SWEP.Category = "Оружие - Огнестрел"
+SWEP.Category = "Оружие: Дробовики"
 SWEP.WorldModel = "models/weapons/arccw_go/v_shot_mag7.mdl"
 
 SWEP.CorrectPos = Vector(-20.4,-5.5,10)

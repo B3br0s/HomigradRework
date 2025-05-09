@@ -291,7 +291,7 @@ if CLIENT then
 
         //print(mat)
         if ply == LocalPlayer() and hg_camshake_enabled:GetBool() and !GetGlobalBool("DefaultMove",false) then
-            ViewPunch(Angle((ply:GetVelocity():Length() / 180) * hg_camshake_amount:GetFloat(),0,(f == 0 and -1 or f) * (ply:GetVelocity():Length() / 100) * hg_camshake_amount:GetFloat()),10)
+            ViewPunch(Angle((ply:GetVelocity():Length() / 280) * hg_camshake_amount:GetFloat(),0,(f == 0 and -1 or f) * (ply:GetVelocity():Length() / 100) * hg_camshake_amount:GetFloat()),15)
         end
 
         if !hg.FootSteps[mat] then

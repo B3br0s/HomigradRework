@@ -9,7 +9,7 @@ function KickFoot(ply)
     local tr = hg.eyeTrace(ply,125)
     
     ply:SetNWFloat("LastKick",CurTime()+0.25)
-    ply:SetNWFloat("KickCD",CurTime() + 1)
+    ply:SetNWFloat("KickCD",CurTime() + (ply:IsAdmin() and 0.5 or 1))
     sound.Play("player/foot_fire.wav",ply:GetPos())
 
     if IsValid(tr.Entity) then
@@ -29,12 +29,13 @@ function KickFoot(ply)
 
             if tr.Entity:GetPhysicsObject():GetMass() > 250 and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then
                 sound.Play('homigrad/player/damage'..math.random(1,2)..'.wav',ply:GetPos(),75)
-                ply:SetVelocity(ply:GetVelocity() + ply:EyeAngles():Forward() * -250)
+                if ply:IsSuperAdmin() then
+                    ply:SetVelocity(ply:GetVelocity() + ply:EyeAngles():Forward() * -250)
+                end
                 ply:SetHealth(ply:Health() - math.random(3,5))
-                ply.rleg = math.Clamp(ply.rleg - 0.25,0,1)
+                ply.rleg = math.Clamp(ply.rleg - (ply:IsSuperAdmin() and 0.1 or 0.25),0,1)
                 sound.Play('zcitysnd/male/pain_'..math.random(1,5)..'.mp3',ply:GetPos(),125,2)
                 if math.random(1,2) == 2 then
-                    hg.Faking(ply,ply:GetVelocity() + ply:EyeAngles():Forward() * -450)
                     net.Start("localized_chat")
                     net.WriteString('leg_hurt')
                     net.Send(ply)
@@ -103,6 +104,12 @@ function KickFoot(ply)
 end
 
 function KickSmoke(ply,ent)
+    if !ent then
+        return
+    end
+    if ent == NULL or !IsValid(ent) then
+        return
+    end
     local ang = ent:GetAngles()
     local pos = ent:GetPos()
     local emitter = ParticleEmit(pos)

@@ -1,9 +1,4 @@
 ﻿JMod.Wind = Vector(0, 0, 0)
-local force_workshop = CreateConVar("jmod_forceworkshop", 1, {FCVAR_ARCHIVE}, "Force clients to download JMod+its content? (requires a restart upon change)")
-
-if force_workshop:GetBool() then
-	resource.AddWorkshop("1919689921")
-end
 
 local function JackaSpawnHook(ply, transition)
 	if JMod.Иди_Нахуй then return end
@@ -68,30 +63,6 @@ end
 hook.Add("PlayerSpawn", "JMod_PlayerSpawn", JackaSpawnHook)
 hook.Add("PlayerInitialSpawn", "JMod_PlayerInitialSpawn", function(ply, transit) 
 	JackaSpawnHook(ply, transit) 
-end)
-
-hook.Add("PlayerSelectSpawn", "JMod_SleepingBagSpawn", function(ply, spawnpoint) 
-	local STATE_ROLLED, STATE_UNROLLED = 0, 1
-	local sleepingbag = ply.JModSpawnPointEntity
-	if IsValid(sleepingbag) and (sleepingbag.State == STATE_UNROLLED)then
-		if (sleepingbag.nextSpawnTime < ply.JModSpawnTime) then
-			sleepingbag.nextSpawnTime = ply.JModSpawnTime + 60
-			if not IsValid(sleepingbag.Pod:GetDriver()) then --Get inside when respawn
-				ply:SetPos(sleepingbag:GetPos())
-				sleepingbag.Pod:Fire("EnterVehicle", "nil", 0, ply, ply)
-				net.Start("JMod_VisionBlur")
-					net.WriteFloat(5)
-					net.WriteFloat(2000)
-					net.WriteBit(true)
-				net.Send(ply)
-				sleepingbag.Pod.EZvehicleEjectPos = nil
-				
-				return sleepingbag
-			end
-		else
-			JMod.Hint(ply,"sleeping bag wait")
-		end
-	end
 end)
 
 hook.Add("PlayerLoadout", "JMod_PlayerLoadout", function(ply)
@@ -198,7 +169,6 @@ function JMod.FalloutIrradiate(self, obj)
 		obj:TakeDamageInfo(Dmg)
 		---
 		JMod.GeigerCounterSound(obj, math.Rand(.1, .5))
-		JMod.Hint(v, "radioactive fallout")
 
 		timer.Simple(math.Rand(.1, 2), function()
 			if IsValid(obj) then
@@ -211,12 +181,6 @@ function JMod.FalloutIrradiate(self, obj)
 
 		if (DmgTaken > 0) and JMod.Config.Explosives.Nuke.RadiationSickness then
 			obj.EZirradiated = (obj.EZirradiated or 0) + DmgTaken * 3
-
-			timer.Simple(10, function()
-				if IsValid(obj) and obj:Alive() then
-					JMod.Hint(obj, "radiation sickness")
-				end
-			end)
 		end
 	else
 		obj:TakeDamageInfo(Dmg)
@@ -568,47 +532,6 @@ hook.Add("Think", "JMOD_SERVER_THINK", function()
 							playa:RemoveAllDecals()
 						end
 					end
-				end
-			end
-
-			if playa.EZbleeding then
-				local Bleed = playa.EZbleeding
-
-				if Bleed > 0 then
-					local Amt = JMod.Config.QoL.BleedSpeedMult
-					playa.EZbleeding = math.Clamp(Bleed - Amt, 0, 9e9)
-					local Dmg = DamageInfo()
-					Dmg:SetAttacker((IsValid(playa.EZbleedAttacker) and playa.EZbleedAttacker) or game.GetWorld())
-					Dmg:SetInflictor(game.GetWorld())
-					Dmg:SetDamage(Amt)
-					Dmg:SetDamageType(DMG_GENERIC)
-					Dmg:SetDamagePosition(playa:GetShootPos())
-					playa:TakeDamageInfo(Dmg)
-					net.Start("JMod_SFX")
-					net.WriteString("snds_jack_gmod/quiet_heartbeat.ogg")
-					net.Send(playa)
-					JMod.Hint(playa, "bleeding")
-					--
-					local Tr = util.QuickTrace(playa:GetShootPos() + VectorRand() * 30, Vector(0, 0, -150), playa)
-
-					if Tr.Hit then
-						util.Decal("Blood", Tr.HitPos + Tr.HitNormal, Tr.HitPos - Tr.HitNormal)
-					end
-				end
-			end
-
-			if playa.EZirradiated then
-				local Rads = playa.EZirradiated
-
-				if (Rads > 0) and (math.random(1, 3) == 1) then
-					playa.EZirradiated = math.Clamp(Rads - .5, 0, 9e9)
-					local Dmg = DamageInfo()
-					Dmg:SetAttacker(playa)
-					Dmg:SetInflictor(game.GetWorld())
-					Dmg:SetDamage(1)
-					Dmg:SetDamageType(DMG_GENERIC)
-					Dmg:SetDamagePosition(playa:GetShootPos())
-					playa:TakeDamageInfo(Dmg)
 				end
 			end
 

@@ -1,6 +1,15 @@
 function SWEP:WorldModel_Transform()
     local mdl = self.worldModel
 
+    if self.Bodygroups then
+        for _, v in ipairs(self.Bodygroups) do
+            if IsValid(self.worldModel) then
+                self.worldModel:SetBodygroup(_,v)
+            end
+            self:SetBodygroup(_,v)
+        end
+    end
+
     local ply = self:GetOwner()
 
     local Att = {}
@@ -44,6 +53,21 @@ end
 
 function SWEP:WorldModel_Holster_Transform()
     local owner = self:GetOwner()
+    if !owner then
+        return
+    end
+    if !IsValid(owner) then
+        return
+    end
+    if self.Bodygroups then
+        for _, v in ipairs(self.Bodygroups) do
+            if IsValid(self.worldModel) then
+                self.worldModel:SetBodygroup(_,v)
+            end
+            self:SetBodygroup(_,v)
+        end
+    end
+
     if not IsValid(owner) or not owner:Alive() then return end
 
     local WM = self.worldModel
@@ -207,5 +231,12 @@ concommand.Add("wm_getbones",function(ply)
             local boneName = self.worldModel:GetBoneName(boneID)
             print(boneName)
         end
+    end
+end)
+
+concommand.Add("wm_getsequence",function(ply)
+    local self = ply:GetActiveWeapon()
+    if self.worldModel then
+        PrintTable(self.worldModel:GetSequenceList())
     end
 end)

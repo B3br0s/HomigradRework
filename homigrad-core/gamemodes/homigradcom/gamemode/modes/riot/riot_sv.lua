@@ -4,7 +4,7 @@ function riot.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
     local weps_pri = {"weapon_pbat","weapon_handcuffs"}
-    local weps_sec = {"","","","","","","","","","","weapon_glock17"}
+    local weps_sec = {"","","","","","","","","weapon_870police"}
 
     ply:SetTeam(1)
 
@@ -35,7 +35,7 @@ end
 function riot.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"","","","","","","","","","","","","","","","","weapon_glock17","","",""}
+    local weps_pri = {"","","","","","","","","weapon_pnev","","",""}
     local weps_sec = {"weapon_shovel","weapon_pipe","weapon_hatchet","weapon_knife","weapon_bat","weapon_beton","weapon_beton","weapon_beton"}
 
     ply:SetTeam(2)
@@ -52,6 +52,8 @@ function riot.SpawnRed(ply)
     if IsValid(wep_primary) then
     wep_primary:SetClip1(wep_primary:GetMaxClip1())
     end
+
+    ply:Give("weapon_bandage")
 
     timer.Simple(0,function()
         ply:SetPlayerColor(Color(148,54,31):ToVector())
@@ -106,6 +108,17 @@ function riot.CanStart()
     if #nonspect < 4 then
         return false
     else
-        return true
+        local world = game.GetWorld()
+    
+        local min, max = world:GetModelBounds()
+        local size = max - min
+        
+        local size_final = size:Length()
+        
+        if size_final < 20000 then
+            return false
+        else
+            return true 
+        end
     end
 end

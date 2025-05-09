@@ -210,42 +210,4 @@ if CLIENT then
 			end
 		end
 	end)
-
-	net.Receive("JMod_EquippableSync", function()
-		local ply = net.ReadEntity()
-
-		if IsValid(ply) then
-			ply.EZequippables = net.ReadTable()
-			ply.EZequippableModels = nil
-		end
-	end)
-elseif SERVER then
-	local function SyncEquippables(ply)
-		net.Start("JMod_EquippableSync")
-		net.WriteEntity(ply)
-		net.WriteTable(ply.EZequippables)
-		net.Broadcast()
-	end
-
-	function JMod.SetEquippable(ply, slot, name, color, endTime)
-		ply.EZequippables = ply.EZequippables or {}
-
-		if name then
-			ply.EZequippables[slot] = {
-				nam = name,
-				col = color,
-				tim = endTime
-			}
-		else
-			ply.EZequippables[slot] = nil
-		end
-
-		ply:EmitSound("snds_jack_gmod/equip" .. math.random(1, 5) .. ".ogg", 60, math.random(90, 110))
-		SyncEquippables(ply)
-	end
-
-	hook.Add("DoPlayerDeath", "JModEquippablesDeath", function(ply)
-		ply.EZequippables = {}
-		SyncEquippables(ply)
-	end)
 end

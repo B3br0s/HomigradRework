@@ -1,6 +1,8 @@
 local open = false
 local panelka
 
+local lply = LocalPlayer()
+
 local weps = {}
 
 local armorSlots = {
@@ -15,69 +17,6 @@ local BlackList = {
     ["weapon_physgun"] = true,
     ["gmod_tool"] = true,
     ["gmod_camera"] = true,
-}
-
-local ArmorSlotButtons = {
-    {
-        title = "Выкинуть",
-        actionFunc = function(slot, itemID, itemData, itemInfo)
-            net.Start("JMod_Inventory")
-            net.WriteInt(1, 8) -- drop action
-            net.WriteString(itemID)
-            net.SendToServer()
-
-            timer.Simple(0.1, function()
-                if not IsValid(slot.butt) then return end
-                slot.butt:SetImage("null.vmt")
-                PopulateArmorSlots()
-                slot:InvalidateLayout(true)
-            end)
-        end        
-    },
-    {
-        title = "Переключить",
-        visTestFunc = function(slot, itemID, itemData, itemInfo)
-            return itemInfo and itemInfo.tgl
-        end,
-        actionFunc = function(slot, itemID, itemData, itemInfo)
-            net.Start("JMod_Inventory")
-            net.WriteInt(2, 8) -- toggle
-            net.WriteString(itemID)
-            net.SendToServer()
-            timer.Simple(0.001, function() PopulateArmorSlots() slot:InvalidateLayout(true) end)
-        end
-    },
-    {
-        title = "Починить",
-        visTestFunc = function(slot, itemID, itemData, itemInfo)
-            return itemInfo and itemData.dur < itemInfo.dur * 0.9
-        end,
-        actionFunc = function(slot, itemID, itemData, itemInfo)
-            net.Start("JMod_Inventory")
-            net.WriteInt(3, 8) -- repair
-            net.WriteString(itemID)
-            net.SendToServer()
-            timer.Simple(0.001, function() PopulateArmorSlots() slot:InvalidateLayout(true) end)
-        end
-    },
-    {
-        title = "Перезарядить",
-        visTestFunc = function(slot, itemID, itemData, itemInfo)
-            if itemInfo and itemInfo.chrg then
-                for resource, maxAmt in pairs(itemInfo.chrg) do
-                    if itemData.chrg[resource] < maxAmt then return true end
-                end
-            end
-            return false
-        end,
-        actionFunc = function(slot, itemID, itemData, itemInfo)
-            net.Start("JMod_Inventory")
-            net.WriteInt(4, 8) -- recharge
-            net.WriteString(itemID)
-            net.SendToServer()
-            timer.Simple(0.001, function() PopulateArmorSlots() slot:InvalidateLayout(true) end)
-        end
-    }
 }
 
 function PopulateArmorSlots()
@@ -107,6 +46,13 @@ hook.Add("HUDPaint","InventoryPage",function()
         hg.ScoreBoard = 1
         if IsValid(ScoreBoardPanel) then
             ScoreBoardPanel:Remove()
+        end
+    end
+    if open and hg.islooting then
+        if input.IsKeyDown(KEY_W) or input.IsKeyDown(KEY_D) or input.IsKeyDown(KEY_S) or input.IsKeyDown(KEY_A) then
+            ScoreBoardPanel:Remove()
+            hg.islooting = false
+            hg.lootent = nil
         end
     end
     if hg.ScoreBoard == 3 and not open then
@@ -203,7 +149,7 @@ hook.Add("HUDPaint","InventoryPage",function()
             end
             if self.IsDropping then
                 surface.SetDrawColor(225,225,225)
-                self.LootAnim = self.LootAnim + 12
+                self.LootAnim = LerpFT(0.2,self.LootAnim,self.LootAnim + 100)
         
                 surface.SetMaterial(Material("homigrad/vgui/loading.png"))
                 surface.DrawTexturedRectRotated(w/2,h/2,w/1.75,h/1.75,self.LootAnim)
@@ -241,7 +187,8 @@ hook.Add("HUDPaint","InventoryPage",function()
                 end
                 if self.IsDropping then
                     surface.SetDrawColor(225,225,225)
-                    self.LootAnim = self.LootAnim + 12
+                    
+                    self.LootAnim = LerpFT(0.2,self.LootAnim,self.LootAnim + 100)
             
                     surface.SetMaterial(Material("homigrad/vgui/loading.png"))
                     surface.DrawTexturedRectRotated(w/2,h/2,w/1.75,h/1.75,self.LootAnim)
@@ -364,6 +311,9 @@ function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
         
         if IsValid(jent) and jent != NULL then
             self.LowerText = jent.PrintName
+            surface.SetDrawColor(255,255,255,255)
+            surface.SetMaterial(Material("entities/"..jent:GetClass()..".png"))
+            surface.DrawTexturedRect(w-w/1.15,h-h/1.15,w/1.3,h/1.3)
         else
             self.LowerText = " "
         end
@@ -374,7 +324,7 @@ function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
 
         if self.BeingLooted then
             surface.SetDrawColor(225,225,225)
-            self.LootAnim = self.LootAnim + 6
+            self.LootAnim = LerpFT(0.2,self.LootAnim,self.LootAnim + 100)
         else
             surface.SetDrawColor(0,0,0,0)
         end
@@ -557,6 +507,7 @@ function CreateLootFrame(weps,slotsamt,ent)
     //LootFrame:SetPos(CenterX - ScrW()/6.4,ScrH()/2.14)
     LootFrame:DockMargin(0,0,0,0)
     LootFrame:DockPadding(0,0,0,0)
+    LootFrame.NoDefault = true
     LootFrame.CurSize = 0
 
     local targetsize = 1
@@ -601,7 +552,7 @@ function CreateLootFrame(weps,slotsamt,ent)
 
             if self.BeingLooted then
                 surface.SetDrawColor(225,225,225)
-                self.LootAnim = self.LootAnim + 6
+                self.LootAnim = LerpFT(0.2,self.LootAnim,self.LootAnim + 100)
             else
                 surface.SetDrawColor(0,0,0,0)
             end
