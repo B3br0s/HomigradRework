@@ -5,14 +5,14 @@ DamageMultipliers = {
     [DMG_CLUB] = 1,--ее
     [DMG_BULLET] = 1.2,
     [DMG_SLASH] = 0.4,
-    [DMG_BLAST] = 9,
+    [DMG_BLAST] = 4,
 }
 
 PainMultipliers = {
     [DMG_CLUB] = 0.5,--ее
     [DMG_BULLET] = 0.75,
     [DMG_SLASH] = 0.4,
-    [DMG_BLAST] = 6,
+    [DMG_BLAST] = 10,
 }
 
 local Reasons = {
@@ -63,11 +63,11 @@ hook.Add("PlayerDeath","Homigrad_DeathScreen",function(ply,attacker,killedby)
 	ply:SetNWString("KillReason",ply.KillReason)
 	ply:SetNWEntity("LastInflictor",ply.LastDMGInfo:GetInflictor())
 	ply:SetNWEntity("LastAttacker",killedby)
-	ply.AppearanceOverride = false
 	ply.PLYSPAWN_OVERRIDE = false
 	timer.Simple(0,function()
 		if IsValid(ply.FakeRagdoll) then
 			ply.FakeRagdoll:GetPhysicsObject():SetMass(20)
+			ply.AppearanceOverride = false
 		end
 	end)
 end)

@@ -56,6 +56,11 @@ function SWEP:Camera(ply, origin, angles, fov)
     origin = origin + angles:Up() * (RecoilS / 6) * lerpaim * self:GetUpMul()
     origin = origin - angles:Right() * (RecoilS / 36) * lerpaim * self:GetRightMul()
     
+    if self.Attachments["sight"].ViewPos then
+        local shit = self.Attachments["sight"].ViewPos * lerpaim
+        origin = origin + angles:Forward() * shit[1] + angles:Right() * shit[2] + angles:Up() * shit[3]
+    end
+
     //origin = origin + anglef:Right() * math.random(-0.1,0.1) * (animpos/200) + anglef:Up() * math.random(-0.1,0.1) * (animpos/200)
     
     addfov = LerpFT(0.1, addfov, self:IsSighted() and -(self.addfov or 30) - Recoil * 10 or 0)

@@ -30,7 +30,7 @@ function SWEP:Heal(ply)
         ply = self:GetOwner()
     end
     if SERVER then
-        ply.painlosing = math.Clamp(ply.painlosing + math.random(1,2),1,10)
+        ply.painlosing = math.Clamp(ply.painlosing + math.random(2,3),1,10)
     end
 end
 

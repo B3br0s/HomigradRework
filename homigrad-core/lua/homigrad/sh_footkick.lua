@@ -29,9 +29,6 @@ function KickFoot(ply)
 
             if tr.Entity:GetPhysicsObject():GetMass() > 250 and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then
                 sound.Play('homigrad/player/damage'..math.random(1,2)..'.wav',ply:GetPos(),75)
-                if ply:IsSuperAdmin() then
-                    ply:SetVelocity(ply:GetVelocity() + ply:EyeAngles():Forward() * -250)
-                end
                 ply:SetHealth(ply:Health() - math.random(3,5))
                 ply.rleg = math.Clamp(ply.rleg - (ply:IsSuperAdmin() and 0.1 or 0.25),0,1)
                 sound.Play('zcitysnd/male/pain_'..math.random(1,5)..'.mp3',ply:GetPos(),125,2)
@@ -90,12 +87,10 @@ function KickFoot(ply)
         end
     elseif tr.HitWorld and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then
         sound.Play('player/foot_kickwall.wav',ply:GetPos(),75)
-        ply:SetVelocity(ply:GetVelocity() + ply:EyeAngles():Forward() * -150)
         ply:SetHealth(ply:Health() - math.random(3,5))
         ply.rleg = math.Clamp(ply.rleg - 0.15,0,1)
         sound.Play('zcitysnd/male/pain_'..math.random(1,5)..'.mp3',ply:GetPos(),125,2)
         if math.random(1,4) == 2 then
-            hg.Faking(ply,ply:GetVelocity() + ply:EyeAngles():Forward() * -250)
             net.Start("localized_chat")
             net.WriteString('leg_hurt')
             net.Send(ply)

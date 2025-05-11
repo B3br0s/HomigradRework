@@ -92,11 +92,15 @@ function SWEP:WorldModel_Holster_Transform()
    end
 
     local fakeRagdoll = owner:GetNWEntity("FakeRagdoll")
-    local boneEntity = IsValid(fakeRagdoll) and fakeRagdoll or owner
-    local Bone = boneEntity:LookupBone(self.HolsterBone)
+    local zaebal_entity = IsValid(fakeRagdoll) and fakeRagdoll or owner
+    local Bone = zaebal_entity:LookupBone(self.HolsterBone)
     if not Bone then return end
 
-    local Pos, Ang = boneEntity:GetBonePosition(Bone)
+    if !zaebal_entity:GetBoneMatrix(Bone) then
+        return
+    end
+
+    local Pos, Ang = zaebal_entity:GetBoneMatrix(Bone):GetTranslation(),zaebal_entity:GetBoneMatrix(Bone):GetAngles()
     if not Pos or not Ang then return end
 
     Pos = Pos + Ang:Forward() * self.HolsterPos[1] + Ang:Right() * self.HolsterPos[2] + Ang:Up() * self.HolsterPos[3]
@@ -238,5 +242,64 @@ concommand.Add("wm_getsequence",function(ply)
     local self = ply:GetActiveWeapon()
     if self.worldModel then
         PrintTable(self.worldModel:GetSequenceList())
+    end
+end)
+
+hook.Add("Player Think","Shit",function(ply)
+    if !ply:Alive() then
+        return
+    end
+    if ply == LocalPlayer() then
+        return
+    end
+    if ply:GetActiveWeapon().ishgwep then
+        local self = ply:GetActiveWeapon()
+    
+        local mdl = self.worldModel
+    
+        if self.Bodygroups then
+            for _, v in ipairs(self.Bodygroups) do
+                if IsValid(self.worldModel) then
+                    self.worldModel:SetBodygroup(_,v)
+                end
+                self:SetBodygroup(_,v)
+            end
+        end
+
+        local Att = {}
+
+        if !ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")) then
+            return
+        end
+
+        if self:GetOwner():GetActiveWeapon() == self then
+            self.worldModel:SetNoDraw(false)
+        end
+
+        Att.Pos = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetTranslation()
+        Att.Ang = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetAngles()
+
+        Att.Ang:RotateAroundAxis(Att.Ang:Forward(),180)
+
+        local Pos = Att.Pos
+        local Ang = Att.Ang
+        if !IsValid(mdl) then
+            return
+        end
+        mdl:SetModelScale(self.CorrectScale or 1,0)
+
+        Pos = Pos + Ang:Forward() * self.CorrectPos[1] + Ang:Right() * self.CorrectPos[2] + Ang:Up() * self.CorrectPos[3]
+        Ang:RotateAroundAxis(Ang:Forward(),self.CorrectAng[1])
+        Ang:RotateAroundAxis(Ang:Right(),self.CorrectAng[2])
+        Ang:RotateAroundAxis(Ang:Up(),self.CorrectAng[3])
+
+        mdl:SetAngles(Ang)
+        mdl:SetPos(Pos)
+        mdl:SetOwner(ply)
+        mdl:SetParent(ply)
+        mdl:SetPredictable(true)
+
+        mdl:SetRenderAngles(Ang)
+        mdl:SetRenderOrigin(Pos)
     end
 end)

@@ -168,7 +168,23 @@ l.hmcd_bystander_soe = "You are an innocent, rely only on yourself, but stick ar
 l.hmcd_bystander_gfz = "You are a bystander of a murder scene, although it didn't happen to you, you better be cautious."
 l.hmcd_bystander_standard = "You are a bystander of a murder scene, although it didn't happen to you, you better be cautious."
 
-l.event_maker = "Event maker"
+l.hl2dm_cmb_name = "UNIT %s"
+l.hl2dm_cmb = "Combine"
+l.hl2dm_cmb_desc = "Eliminate any resistance."
+
+l.hl2dm_rebel = "Rebel"
+l.hl2dm_rebel_desc = "Eliminate every Combine unit!"
+
+l.coop_endsin = "Map will change in: %s"
+l.coop_rebel = "Rebels"
+l.coop_gondon = "Gordon Freeman"
+l.coop_gondon_desc = "Lead the resistance to win!"
+l.coop_cmb = "Combine"
+
+l.coop_rebel_desc = "Follow the freeman!"
+l.coop_cmb_desc = "what the fuck?"
+
+l.event_maker = "Eventmaster"
 l.event_player = "Player"
 
 // Скорборд

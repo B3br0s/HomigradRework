@@ -78,7 +78,7 @@ function SWEP:ReloadFunc()
                     if self:Clip1() == 0 then
                         timer.Simple(0.3,function()
                             self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))
-                            sound.Play("zcitysnd/sound/weapons/aks74u/handling/aks_boltrelease.wav",self:GetPos(),80,math.random(95,105))
+                            sound.Play("weapons/shotgun/shotgun_cock_forward.wav",self:GetPos(),80,math.random(95,105))
                         end)
                     else
                         self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))

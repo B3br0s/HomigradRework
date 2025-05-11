@@ -35,7 +35,7 @@ end
 function GuiltThink(ply,att)
     local IsGuilted = IsGuilted(ply,att)
 
-    local clamped_dmg = math.Clamp(ply.LastDMGInfo:GetDamage(),0,30)
+    local clamped_dmg = math.Clamp(ply.LastDMGInfo:GetDamage(),0,40)
 
     if IsGuilted then
         att.guilt = math.Clamp(att.guilt - clamped_dmg,0,100)

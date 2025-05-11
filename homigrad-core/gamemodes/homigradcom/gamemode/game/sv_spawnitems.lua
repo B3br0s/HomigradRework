@@ -24,7 +24,10 @@ end)
 hook.Add("Think","Boxes-Main",function()
     if hg.Lastbox < CurTime() then
         hg.Lastbox = CurTime() + math.random(15,35)
-        hook.Run("BoxesThink")
+        local CanSpawn = (TableRound().LootSpawn != nil and TableRound().LootSpawn() or (TableRound().LootSpawn == nil and true))
+        if CanSpawn then
+            hook.Run("BoxesThink")
+        end
     end
 end)
 local spawnOffset = Vector(0, 0, 32)

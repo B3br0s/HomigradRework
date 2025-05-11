@@ -18,6 +18,7 @@ SWEP.AttPos = Vector(0,-0.03,0)
 SWEP.AttAng = Angle(0,0.7,1)
 SWEP.MuzzlePos = Vector(23.5,2.85,-1.4)
 SWEP.MuzzleAng = Angle(0,0,0)
+SWEP.Empty3 = false
 
 SWEP.Primary.DefaultClip = 20
 SWEP.Primary.ClipSize = 20
@@ -28,20 +29,11 @@ SWEP.Primary.Wait = 0.1
 SWEP.Primary.Sound = "pwb2/weapons/pl14/shot-unsil.wav"
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.RecoilForce = 2
-SWEP.TwoHands = true
 
 SWEP.IconPos = Vector(1,110,-5)
 SWEP.IconAng = Angle(-20,0,0)
 
-SWEP.ReloadSounds = {
-    [0.55] = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav",
-    [0.75] = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav",
-    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.55] = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav",
-    [0.75] = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav",
-    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav",
-    [1.15] = "arccw_go/glock18/glock_sliderelease.wav"
-}
+SWEP.Reload1 = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav"
+SWEP.Reload2 = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav"
+SWEP.Reload3 = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
+SWEP.Reload4 = "arccw_go/glock18/glock_sliderelease.wav"

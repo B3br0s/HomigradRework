@@ -43,8 +43,8 @@ function CheckPlyTeam(ply)
     if ply:Team() == 1002 then
         return Color(200,200,200,255),hg.GetPhrase("spectator")
     end
-    if ROUND_NAME == "hmcd" then
-        local name,clr,desc = hmcd.GetTeamName(ply)
+    if TableRound and TableRound().GetTeamName then
+        local name,clr,desc = TableRound().GetTeamName(ply)
 
         //print(clr,name,ply)
 

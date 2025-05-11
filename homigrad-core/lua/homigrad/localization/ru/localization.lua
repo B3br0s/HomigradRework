@@ -168,6 +168,22 @@ l.hmcd_bystander_soe = "Вы невиновны, полагайтесь толь
 l.hmcd_bystander_gfz = "Вы свидетель убийства, хотя вас это не коснулось, лучше быть осторожным."  
 l.hmcd_bystander_standard = "Вы свидетель убийства, хотя вас это не коснулось, лучше быть осторожным."
 
+l.hl2dm_cmb_name = "UNIT %s"
+l.hl2dm_cmb = "Комбайны"
+l.hl2dm_cmb_desc = "Уничтожьте любое сопротивление."
+
+l.hl2dm_rebel = "Повстанцы"
+l.hl2dm_rebel_desc = "Уничтожьте всех комбайнов!"
+
+l.coop_endsin = "Карта сменится через: %s"
+l.coop_rebel = "Повстанцы"
+l.coop_gondon = "Гордон Фримен"
+l.coop_gondon_desc = "Управляйте сопротивлением чтобы победить!"
+l.coop_cmb = "Альянс"
+
+l.coop_rebel_desc = "За фрименом!"
+l.coop_cmb_desc = "Чего блять?"
+
 l.event_maker = "Ивент-мейкер"
 l.event_player = "Игрок"
 

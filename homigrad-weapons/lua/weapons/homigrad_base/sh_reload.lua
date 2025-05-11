@@ -1,8 +1,9 @@
-SWEP.Primary.ReloadTime = 1.2
-SWEP.Primary.ReloadTimeEnd = 1.25
-SWEP.ReloadSounds = {
-}
-SWEP.ReloadSoundsEmpty = {
+SWEP.Primary.ReloadTime = 1.3
+
+SWEP.holdtypes = {
+    ["revolver"] = {[1] = 0.45,[2] = 0.85,[3] = 0.95,[4] = 1.15},
+    ["smg"] = {[1] = 0.45,[2] = 0.75,[3] = 0.85,[4] = 1.15},
+    ["ar2"] = {[1] = 0.5,[2] = 0.8,[3] = 1.1,[4] = 1.3},
 }
 
 if SERVER then
@@ -40,6 +41,11 @@ function SWEP:ReloadFunc()
         ply:SetAnimation(PLAYER_RELOAD)
     end
 
+    local seq = ply:LookupSequence("reload_"..self:GetHoldType())
+    if seq and seq > 0 then
+        ply:AddVCDSequenceToGestureSlot(GESTURE_SLOT_ATTACK_AND_RELOAD, seq, 0, true)
+    end
+
     if SERVER then
         net.Start("hg reload")
         net.WriteEntity(self)
@@ -57,7 +63,38 @@ function SWEP:ReloadFunc()
             self.AmmoChek = 5
             self:SetHoldType(self.HoldType)
         end
+        self.reload = nil
     end)
+
+    if SERVER then
+        if self.Reload1 then
+            timer.Simple(self.holdtypes[self.HoldType][1],function()
+                sound.Play(self.Reload1,self.worldModel:GetPos(),90,100,0.8)
+            end)
+        end
+        if self.Reload2 then
+            timer.Simple(self.holdtypes[self.HoldType][2],function()
+                sound.Play(self.Reload2,self.worldModel:GetPos(),90,100,0.8)
+            end)
+        end
+        if self.Reload3 and (self.Empty3 and self:Clip1() == 0 or !self.Empty3 and true) then
+            timer.Simple(self.holdtypes[self.HoldType][3],function()
+                sound.Play(self.Reload3,self.worldModel:GetPos(),90,100,0.8)
+            end)
+        end
+        if self.Reload4 and (self.Empty4 and self:Clip1() == 0 or !self.Empty4 and true) then
+            timer.Simple(self.holdtypes[self.HoldType][4],function()
+                sound.Play(self.Reload4,self.worldModel:GetPos(),90,100,0.8)
+            end)
+        end
+    else
+        timer.Simple(self.holdtypes[self.HoldType][2] + 0.3,function()
+            if self:Clip1() != 0 and self.Empty3 then
+                ply:SetLayerPlaybackRate(GESTURE_SLOT_ATTACK_AND_RELOAD, 1)
+                ply:SetLayerWeight(GESTURE_SLOT_ATTACK_AND_RELOAD, 0.3)
+            end
+        end)
+    end
 
     /*timer.Simple(self.Primary.ReloadTime,function()
         if ply:GetOwner():GetActiveWeapon() == self then
@@ -65,48 +102,6 @@ function SWEP:ReloadFunc()
             ply:RemoveAmmo(self:GetMaxClip1() - self:Clip1(),self:GetPrimaryAmmoType())
         end
     end)*/
-end
-
-function SWEP:Reload_Step()
-    local ply = self:GetOwner()
-    if self.reload and self.reload > CurTime() then 
-        local rtime = self.Primary.ReloadTimeEnd or self.Primary.ReloadTime
-        local rt = self.reload - CurTime()
-        local time = math.Round(rt,1)
-        local dima = (rtime - time)
-
-        if not self.SoundsPlayed then
-            self.SoundsPlayed = {}
-        end
-        
-        if self:Clip1() > 0 then
-            if self.ReloadSounds[dima] != nil and !self.SoundsPlayed[dima] then
-                if CLIENT then
-                    self:EmitSound(self.ReloadSounds[dima])
-                end
-                self.SoundsPlayed[dima] = true
-            end
-        else
-            if self.ReloadSoundsEmpty[dima] != nil and !self.SoundsPlayed[dima] then
-                if CLIENT then
-                    self:EmitSound(self.ReloadSoundsEmpty[dima])
-                end
-                self.SoundsPlayed[dima] = true
-                if dima == self.Primary.ReloadTimeEnd and !self.BoltLock then
-                    self.animmul = 1.5
-                end
-            end
-        end
-    else
-        if self.reload != nil then
-            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Forearm"),Angle(0,0,0))
-	        ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Upperarm"),Angle(0,0,0))
-            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),Angle(0,0,0))
-            ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_L_Clavicle"),Angle(0,0,0))
-        end
-        self.reload = nil
-        self.SoundsPlayed = nil
-    end
 end
 
 function SWEP:Reload()

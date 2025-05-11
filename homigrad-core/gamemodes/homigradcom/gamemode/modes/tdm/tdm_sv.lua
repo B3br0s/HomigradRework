@@ -110,9 +110,13 @@ function tdm.CanStart()
 
     local size_final = size:Length()
 
-    if size_final < 20000 then
+    if size_final < 15000 then
         return false
     else
         return true 
     end
+end
+
+function tdm.LootSpawn()
+    return false
 end

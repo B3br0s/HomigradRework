@@ -34,13 +34,7 @@ SWEP.RecoilForce = 5.5
 SWEP.IconPos = Vector(26,100,-8.25)
 SWEP.IconAng = Angle(0,0,0)
 
-SWEP.ReloadSounds = {
-    [0.55] = "pwb/weapons/fnp45/clipout.wav",
-    [0.85] = "pwb/weapons/fnp45/clipin.wav"
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.55] = "pwb/weapons/fnp45/clipout.wav",
-    [0.85] = "pwb/weapons/fnp45/clipin.wav",
-    [1.15] = "pwb/weapons/fnp45/sliderelease.wav"
-}
+SWEP.Reload1 = "pwb/weapons/fnp45/clipout.wav"
+SWEP.Reload2 = "pwb/weapons/fnp45/clipin.wav"
+SWEP.Reload3 = false
+SWEP.Reload4 = "pwb/weapons/fnp45/sliderelease.wav"

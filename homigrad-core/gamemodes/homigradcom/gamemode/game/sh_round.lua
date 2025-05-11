@@ -8,7 +8,7 @@ function UpdateShit()
     ROUND_LIST = ROUND_LIST or {}
     ROUND_ACTIVE = ROUND_ACTIVE or false
     ROUND_NEXT = ROUND_NEXT or "hmcd"
-    ROUND_NAME = ROUND_NAME or "hunter"
+    ROUND_NAME = ROUND_NAME or "hmcd"
     ROUND_ENDED = ROUND_ENDED or false
     ROUND_ENDSIN = ROUND_ENDSIN or 0
     

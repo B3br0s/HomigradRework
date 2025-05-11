@@ -11,13 +11,16 @@ hook.Add("Player Think","Bleed_Homigrad",function(ply,time)
         ply.otrub = true
         ply.pain = 55
     end
+    if ply.blood <= 0 then
+        ply:Kill()
+    end
     if ply.bloodNext < CurTime() then
         ply.bloodNext = CurTime() + 0.3
 
         if ply.bleed > 0 then
-            ply.bleed = math.Clamp(ply.bleed - 0.25,0,1000)
+            ply.bleed = math.Clamp(ply.bleed - 0.35,0,1000)
 
-            ply.blood = math.Clamp(ply.blood - math.random(5,12),0,5000)
+            ply.blood = math.Clamp(ply.blood - math.random(5,10),0,5000)
 
             //print(ply.blood)
             

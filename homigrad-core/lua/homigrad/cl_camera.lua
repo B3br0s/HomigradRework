@@ -100,6 +100,7 @@ local ply = LocalPlayer()
 local scrw, scrh = ScrW(), ScrH()
 local whitelistweps = {
 	["weapon_physgun"] = true,
+	["weapon_physcannon"] = true,
 	["gmod_tool"] = true,
 	["gmod_camera"] = true,
 	["drgbase_possessor"] = true,

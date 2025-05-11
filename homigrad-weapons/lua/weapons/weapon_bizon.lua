@@ -38,14 +38,7 @@ SWEP.HoldType = "ar2"
 SWEP.IconPos = Vector(1,80,-5)
 SWEP.IconAng = Angle(-20,0,0)
 
-SWEP.ReloadSounds = {
-    [0.55] = "arccw_go/bizon/bizon_clipout.wav",
-    [0.85] = "arccw_go/bizon/bizon_clipin.wav",
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.55] = "arccw_go/bizon/bizon_clipout.wav",
-    [0.75] = "arccw_go/bizon/bizon_clipin.wav",
-    [0.95] = "arccw_go/bizon/bizon_boltback.wav",
-    [1.15] = "arccw_go/bizon/bizon_boltforward.wav"
-}
+SWEP.Reload1 = "arccw_go/bizon/bizon_clipout.wav"
+SWEP.Reload2 = "arccw_go/bizon/bizon_clipin.wav"
+SWEP.Reload3 = "arccw_go/bizon/bizon_boltback.wav"
+SWEP.Reload4 = "arccw_go/bizon/bizon_boltforward.wav"

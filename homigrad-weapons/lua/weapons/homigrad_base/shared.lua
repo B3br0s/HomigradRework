@@ -15,14 +15,16 @@ SWEP.HolsterBone = "ValveBiped.Bip01_Pelvis"
 SWEP.HolsterPos = Vector(0,0,0)
 SWEP.HolsterAng = Angle(0,0,0)
 SWEP.animmul = 0
+SWEP.Empty3 = true
+SWEP.Empty4 = true
 
 SWEP.DrawTime = 0.1
 SWEP.Deployed = true
+SWEP.ishgweapon = true
 
 SWEP.Primary.DefaultClip = 13
 SWEP.Primary.ClipSize = 13
 SWEP.Primary.Sound = "arccw_go/hkp2000/hkp2000_01.wav"
-SWEP.Primary.ReloadTimeEnd = 1.2
 SWEP.Primary.ReloadTime = 2
 SWEP.Primary.Wait = 0.1
 SWEP.Primary.Damage = 15
@@ -182,8 +184,7 @@ function SWEP:Step()
 	end
 
 	ply:SetBoneMatrix2(hand_index, matrix, false)
-
-	self:Reload_Step()
+	
 	self:Step_Spray()
 	
 	if CLIENT then
@@ -212,15 +213,19 @@ function SWEP:DrawWorldModel()
 		self:DrawModel()
 		return
 	end
-	if self:GetOwner():GetActiveWeapon() != self then
-		self:WorldModel_Holster_Transform()
-		return
-	end
 	if !IsValid(self.worldModel) then
 		self:CreateWorldModel()
 	end
 
-	self:WorldModel_Transform()
+	if self:GetOwner():GetActiveWeapon() != self then
+		self:WorldModel_Holster_Transform()
+	else
+		self:WorldModel_Transform()
+	end
+
+	if CLIENT then
+    	self:DrawAttachments()
+	end
 end
 
 function SWEP:CreateWorldModel()

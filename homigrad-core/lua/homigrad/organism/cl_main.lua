@@ -24,3 +24,7 @@ hook.Add( "RenderScreenspaceEffects", "Hp_FX", function()
 	    DrawColorModify( tab )
     end
 end )
+
+hook.Add("Player Think","Class_Shit",function(ply)
+    ply.PlayerClassName = ply:GetNWString("ClassName"," ")
+end)

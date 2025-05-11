@@ -50,6 +50,35 @@ function AddButtonCustom(Parent,Text,size,number,func,clr)
 
     FrameShit.DoClick = func
     FrameShit.GradColor = clr
+
+    return FrameShit
+end
+
+function CreateModel(p,t)
+    local t_mdl = p:Add("DModelPanel")
+    t_mdl:SetModel(t != 1002 and "models/player/group02/male_08.mdl" or "models/player/gman_high.mdl")
+    t_mdl:SetSize(p:GetWide(),p:GetTall())
+    t_mdl:SetKeyboardInputEnabled(false)
+    t_mdl:SetMouseInputEnabled(false)
+    t_mdl:GetEntity().GetPlayerColor = function()
+        return (((TableRound and TableRound().Teams) and TableRound().Teams[t]) and TableRound().Teams[t].Color:ToVector() or Color(100,100,100):ToVector())
+    end
+    if (TableRound and TableRound().Teams) and TableRound().Teams[t] and TableRound().Teams[t].Model then
+        t_mdl:SetModel(TableRound().Teams[t].Model)
+    end
+    local zaebal = 1
+    function t_mdl:LayoutEntity(ent)
+        if p:IsHovered() then
+            zaebal = LerpFT(0.2,zaebal,1.2)
+        else
+            zaebal = LerpFT(0.2,zaebal,1)
+        end
+        local pos,ang = ent:GetBonePosition(0)
+        t_mdl:SetCamPos(Vector(60 / zaebal,0,pos.z + 6))
+        self:SetLookAt(pos)
+        
+        ent:SetAngles(Angle(0,0,0))
+    end
 end
 
 hook.Add("HUDPaint","Teams_Page",function()
@@ -87,9 +116,13 @@ hook.Add("HUDPaint","Teams_Page",function()
             surface.DrawOutlinedRect(-2,-2,w,h,1)*/
         end
 
-        AddButtonCustom(MainFrame,hg.GetPhrase((TableRound().Teams[1].Name or "N/A")),{x=200,y=MainFrame:GetTall()},0,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1) net.SendToServer() end,TableRound().Teams[1].Color)
-        AddButtonCustom(MainFrame,hg.GetPhrase("spectator"),{x=200,y=MainFrame:GetTall()},1,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1002) net.SendToServer() end,Color(200,200,200))
-        AddButtonCustom(MainFrame,hg.GetPhrase((TableRound().Teams[2].Name or "N/A")),{x=200,y=MainFrame:GetTall()},2,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(2) net.SendToServer() end,TableRound().Teams[2].Color)
+        local t1 = AddButtonCustom(MainFrame,hg.GetPhrase((TableRound().Teams[1].Name or "N/A")),{x=200,y=MainFrame:GetTall()},0,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1) net.SendToServer() end,TableRound().Teams[1].Color)
+        local spect = AddButtonCustom(MainFrame,hg.GetPhrase("spectator"),{x=200,y=MainFrame:GetTall()},1,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1002) net.SendToServer() end,Color(200,200,200))
+        local t2 = AddButtonCustom(MainFrame,hg.GetPhrase((TableRound().Teams[2].Name or "N/A")),{x=200,y=MainFrame:GetTall()},2,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(2) net.SendToServer() end,TableRound().Teams[2].Color)
+
+        CreateModel(t1,1)
+        CreateModel(spect,1002)
+        CreateModel(t2,2)
 
         panelka = MainPanel
     elseif hg.ScoreBoard != 2 then

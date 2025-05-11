@@ -27,6 +27,9 @@ function SWEP:Heal(ply)
         ply = self:GetOwner()
     end
     if SERVER then
+        if ply.bleed > 0 then
+            ply.blood = math.Clamp(ply.blood + 25,0,5000)
+        end
         ply.bleed = math.Clamp(ply.bleed - math.random(10,30),0,1000)
     end
 end

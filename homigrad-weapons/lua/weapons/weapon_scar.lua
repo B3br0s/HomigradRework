@@ -33,20 +33,11 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.Force = 15
 SWEP.Primary.Sound = "pwb/weapons/hk416/shoot.wav"
 SWEP.Primary.ReloadTime = 1.1
-SWEP.Primary.ReloadTimeEnd = 1.3
 
 SWEP.IconPos = Vector(-3.5,50,-4)
 SWEP.IconAng = Angle(-20,0,0)
 
-SWEP.ReloadSounds = {
-    [0.5] = "arccw_go/scar20/scar20_clipout.wav",
-    [0.8] = "arccw_go/scar20/scar20_clipin.wav",
-    //[1.1] = "zcitysnd/sound/weapons/m4a1/handling/m4a1_hit.wav"
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.5] = "arccw_go/scar20/scar20_clipout.wav",
-    [0.8] = "arccw_go/scar20/scar20_clipin.wav",
-    //[1.1] = "zcitysnd/sound/weapons/m4a1/handling/m4a1_hit.wav",
-    [1.2] = "arccw_go/scar20/scar20_boltforward.wav"
-}
+SWEP.Reload1 = "arccw_go/scar20/scar20_clipout.wav"
+SWEP.Reload2 = "arccw_go/scar20/scar20_clipin.wav"
+SWEP.Reload3 = "arccw_go/scar20/scar20_boltforward.wav"
+SWEP.Reload4 = false

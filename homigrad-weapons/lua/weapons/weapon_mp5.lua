@@ -25,7 +25,6 @@ SWEP.Primary.ClipSize = 25
 SWEP.Primary.Damage = 25
 SWEP.Primary.Force = 5
 SWEP.Primary.ReloadTime = 1.25
-SWEP.Primary.ReloadTimeEnd = 1.25
 SWEP.Primary.Sound = "pwb/weapons/mp7/shoot.wav"
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.HoldType = "ar2"
@@ -36,22 +35,18 @@ SWEP.RecoilForce = 1
 SWEP.BoltManual = true
 SWEP.Bodygroups = {[1] = 0,[2]=0,[3]=0,[4]=1,[5]=1}
 
+SWEP.Empty3 = false
+SWEP.Empty4 = false
+
 SWEP.IconPos = Vector(-2,60,-5)
 SWEP.IconAng = Angle(-20,0,0)
 SWEP.mul_reload = 0
 SWEP.mul_reload2 = 0
 
-SWEP.ReloadSounds = {
-    [0.65] = "arccw_go/mp5/mp5_clipout.wav",
-    [0.95] = "arccw_go/mp5/mp5_clipin.wav",
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.55] = "arccw_go/mp5/mp5_slideback.wav",
-    [0.65] = "arccw_go/mp5/mp5_clipout.wav",
-    [0.95] = "arccw_go/mp5/mp5_clipin.wav",
-    [1.05] = "arccw_go/mp5/mp5_slideforward.wav"
-}
+SWEP.Reload1 = "arccw_go/mp5/mp5_slideback.wav"
+SWEP.Reload2 = "arccw_go/mp5/mp5_clipout.wav"
+SWEP.Reload3 = "arccw_go/mp5/mp5_clipin.wav"
+SWEP.Reload4 = "arccw_go/mp5/mp5_slideforward.wav"
 
 local function easedLerp(fraction, from, to)
 	return LerpFT(math.ease.InSine(fraction), from, to)

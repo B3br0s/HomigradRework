@@ -172,3 +172,7 @@ function hunter.CanStart()
         return true
     end
 end
+
+function hunter.LootSpawn()
+    return hunter.SwatArrived
+end

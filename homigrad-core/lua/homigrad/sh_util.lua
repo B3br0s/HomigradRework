@@ -426,6 +426,18 @@ hook.Add("PlayerInitialSpawn","Homigrad_KS",function(ply)
 	ply.KSILENT = true
 end)
 
+if CLIENT then
+	hook.Add("InitPostEntity","123",function()
+		if not file.Exists("hgr/appearance.json","DATA") then
+			CreateRandomAppearance()
+
+			ApplyAppearance(util.JSONToTable(file.Read("hgr/appearance.json","DATA")))
+		else
+			ApplyAppearance(util.JSONToTable(file.Read("hgr/appearance.json","DATA")))
+		end
+	end)
+end
+
 gameevent.Listen("player_spawn")
 local hull = 10 
 local HullMin = -Vector(hull,hull,0)
@@ -437,11 +449,19 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
 
 	if ply.PLYSPAWN_OVERRIDE then return end
 
+	if SERVER then
+		timer.Simple(0,function()
+			ApplyAppearance(ply,ply.Appearance)
+		end)
+	end
+
 	ply.KillReason = " "
 	ply.LastHitBone = " "
 	ply.Fake = false 
 	ply:SetDSP(0)
 	ply.FakeRagdoll = NULL
+	ply.otrub = false
+	ply.pain = 0
 
 	for bone = 0, ply:GetBoneCount() - 1 do
 		ply:ManipulateBoneAngles(bone,Angle(0,0,0))

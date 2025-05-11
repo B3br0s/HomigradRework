@@ -29,8 +29,7 @@ SWEP.Primary.Ammo = "7.62x39 mm"
 SWEP.Primary.DefaultClip = 30
 SWEP.Primary.Damage = 17.5
 SWEP.Primary.Wait = 0.09
-SWEP.Primary.ReloadTime = 1.2
-SWEP.Primary.ReloadTimeEnd = 1.3
+SWEP.Primary.ReloadTime = 1.3
 SWEP.Primary.Automatic = true
 SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "pwb/weapons/rpk/shoot.wav"
@@ -39,14 +38,7 @@ SWEP.RecoilForce = 0.75
 SWEP.IconPos = Vector(-0.5,50,-5.5)
 SWEP.IconAng = Angle(-20,0,0)
 
-SWEP.ReloadSounds = {
-    [0.5] = "arccw_go/ak47/ak47_clipout.wav",
-    [0.8] = "arccw_go/ak47/ak47_clipin.wav",
-    //[1.1] = "zcitysnd/sound/weapons/m4a1/handling/m4a1_hit.wav"
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.5] = "arccw_go/ak47/ak47_clipout.wav",
-    [0.8] = "arccw_go/ak47/ak47_clipin.wav",
-    [1.2] = "arccw_go/ak47/ak47_boltpull.wav",
-}
+SWEP.Reload1 = "arccw_go/ak47/ak47_clipout.wav"
+SWEP.Reload2 = "arccw_go/ak47/ak47_clipin.wav"
+SWEP.Reload3 = "arccw_go/ak47/ak47_boltpull.wav"
+SWEP.Reload4 = false

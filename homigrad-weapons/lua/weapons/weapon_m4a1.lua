@@ -31,23 +31,13 @@ SWEP.Primary.Ammo = "5.56x45 mm"
 SWEP.Primary.Wait = 0.09
 SWEP.Primary.Automatic = true
 SWEP.Primary.ReloadTime = 1.2
-SWEP.Primary.ReloadTimeEnd = 1.3
 SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "pwb2/weapons/m4a1/ru-556 fire unsilenced.wav"
 
 SWEP.IconPos = Vector(1.5,50,-4)
 SWEP.IconAng = Angle(-20,0,0)
 
-SWEP.ReloadSounds = {
-    [0.5] = "pwb2/weapons/m4a1/ru-556 clip out 1.wav",
-    [0.8] = "pwb2/weapons/m4a1/ru-556 clip in 2.wav",
-    //[1.1] = "zcitysnd/sound/weapons/m4a1/handling/m4a1_hit.wav"
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.5] = "pwb2/weapons/m4a1/ru-556 clip out 1.wav",
-    [0.8] = "pwb2/weapons/m4a1/ru-556 clip in 2.wav",
-    //[1.1] = "zcitysnd/sound/weapons/m4a1/handling/m4a1_hit.wav",
-    [1.1] = "pwb2/weapons/m4a1/ru-556 bolt back.wav",
-    [1.3] = "pwb2/weapons/m4a1/ru-556 bolt forward.wav"
-}
+SWEP.Reload1 = "pwb2/weapons/m4a1/ru-556 clip out 1.wav"
+SWEP.Reload2 = "pwb2/weapons/m4a1/ru-556 clip in 2.wav"
+SWEP.Reload3 = "pwb2/weapons/m4a1/ru-556 bolt back.wav"
+SWEP.Reload4 = "pwb2/weapons/m4a1/ru-556 bolt forward.wav"

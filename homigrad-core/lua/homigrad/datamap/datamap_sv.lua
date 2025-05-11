@@ -48,7 +48,7 @@ COMMANDS.point = {function(ply,args)
 	local name
 
 	for _name,info in pairs(hg.Points) do
-		print(info.Name)
+		//print(info.Name)
 		if info.Name == args[1] then name = _name break end
 	end
 

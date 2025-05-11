@@ -54,9 +54,9 @@ function PlayerMeta:CreateFake(force)
 	end
 
 	//print(self.AppearanceOverride)
-	/*if not self:IsBot() and self.Appearance and !self.AppearanceOverride then
+	if not self:IsBot() and self.Appearance and !self.AppearanceOverride then
 	ApplyAppearanceEntity(rag,self.Appearance)
-	end*/
+	end
 	
 	rag.Appearance = self.Appearance
 

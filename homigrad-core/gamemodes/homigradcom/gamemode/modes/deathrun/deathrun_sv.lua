@@ -127,3 +127,7 @@ function dr.CanStart()
         return true
     end
 end
+
+function dr.LootSpawn()
+    return false
+end

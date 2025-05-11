@@ -27,7 +27,6 @@ SWEP.Primary.ClipSize = 5
 SWEP.Primary.DefaultClip = 5
 SWEP.Primary.Damage = 23
 SWEP.Primary.Wait = 0.09
-SWEP.Primary.ReloadTimeEnd = 1.5
 SWEP.Primary.Automatic = false
 SWEP.Primary.Force = 45
 SWEP.Primary.Sound = "pwb/weapons/protecta/shoot.wav"

@@ -122,3 +122,7 @@ function riot.CanStart()
         end
     end
 end
+
+function riot.LootSpawn()
+    return false
+end

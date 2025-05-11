@@ -50,6 +50,10 @@ hook.Add("HUDPaint","Spectate-HUD",function()
 	end
     
     local ent = lply:GetNWEntity("SpectEnt",NULL)
+
+	if lply:GetNWInt("SpecMode",1) == 3 then
+		ent = NULL
+	end
  
     if IsValid(ent) then
 
@@ -92,6 +96,6 @@ hook.Add("HUDPaint","Spectate-HUD",function()
     for _, v in ipairs(player.GetAll()) do --ESP
         if not v:Alive() or v == ent then continue end
 
-        DrawWHEnt(v,v:GetPos())
+        DrawWHEnt(v,((v:GetNWBool("Fake") and IsValid(v:GetNWEntity("FakeRagdoll"))) and v:GetNWEntity("FakeRagdoll"):GetPos() or v:GetPos()))
     end
 end)

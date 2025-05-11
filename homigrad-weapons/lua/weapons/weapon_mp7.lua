@@ -36,15 +36,7 @@ SWEP.RecoilForce = 0.25
 SWEP.IconPos = Vector(0,80,-4)
 SWEP.IconAng = Angle(-20,0,0)
 
-SWEP.ReloadSounds = {
-    [0.5] = "arccw_go/mp7/mp7_clipout.wav",
-    [1] = "arccw_go/mp7/mp7_clipin.wav",
-    //[1.1] = "zcitysnd/sound/weapons/m4a1/handling/m4a1_hit.wav"
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.5] = "arccw_go/mp7/mp7_clipout.wav",
-    [1] = "arccw_go/mp7/mp7_clipin.wav",
-    //[1.1] = "zcitysnd/sound/weapons/m4a1/handling/m4a1_hit.wav",
-    [1.2] = "arccw_go/mp7/mp7_slideforward.wav"
-}
+SWEP.Reload1 = "arccw_go/mp7/mp7_clipout.wav"
+SWEP.Reload2 = "arccw_go/mp7/mp7_clipin.wav"
+SWEP.Reload3 = "arccw_go/mp7/mp7_slideback.wav"
+SWEP.Reload4 = "arccw_go/mp7/mp7_slideforward.wav"

@@ -42,8 +42,10 @@ function SWEP:Heal(ply)
     end
     self.HealSound = table.Random(self.HealSounds)
     if SERVER then
+        ply.blood = math.Clamp(ply.blood + 75,0,5000)
         ply:SetHealth(math.Clamp(ply:Health() + math.random(5,15),0,ply:GetMaxHealth()))
-        ply.bleed = math.Clamp(ply.bleed - math.random(2,6),0,1000)
+        ply.bleed = math.Clamp(ply.bleed - math.random(12,20),0,1000)
+        ply.painlosing = ply.painlosing + 0.5
     end
 end
 

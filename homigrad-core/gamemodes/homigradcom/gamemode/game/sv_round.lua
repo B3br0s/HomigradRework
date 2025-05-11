@@ -14,7 +14,7 @@ function StartRound()
         RunConsoleCommand("bot")
     end
 
-    if RTV_ACTIVE then return end
+    if RTV_ACTIVE or SolidMapVote.isOpen then return end
 
     ROUND_ACTIVE = true
 
@@ -56,6 +56,11 @@ function StartRound()
     if string.match(game.GetMap(),"jb_") then
         ROUND_NEXT = "jb"
         ROUND_NAME = "jb"
+    end
+
+    if string.match(game.GetMap(),"d1_") or string.match(game.GetMap(),"d2_") or string.match(game.GetMap(),"d3_") then
+        ROUND_NEXT = "coop"
+        ROUND_NAME = "coop"
     end
 
     if string.match(game.GetMap(),"deathrun_") then
@@ -106,6 +111,40 @@ function EndRound(team_wins)
 end
 
 --PrintTable(TableRound())
+
+local Replaces = {
+    ["weapon_pistol"] = "weapon_hl2_pistol",
+    ["weapon_357"] = "weapon_magnum357",
+    ["weapon_ar2"] = "weapon_ar2_hl2",
+    ["weapon_smg1"] = "weapon_mp7_hl2",
+    ["weapon_shotgun"] = "weapon_spas12_hl2",
+    //["weapon_crowbar"] = "weapon_hg_crowbar",
+}
+
+hook.Add("Think","Ent_Replace",function()
+    for _, ent in ipairs(ents.GetAll()) do
+        if Replaces[ent:GetClass()] and (!IsValid(ent:GetOwner()) or ent:GetOwner() == NULL or ent:GetOwner():IsPlayer()) then
+            local nigg = ents.Create(Replaces[ent:GetClass()])
+            nigg:SetPos(ent:GetPos())
+            if ent:GetOwner():IsPlayer() then
+                nigg.IsSpawned = false
+            else
+                nigg.IsSpawned = true
+            end
+            nigg:SetAngles(ent:GetAngles())
+            nigg:Spawn()
+            ent:Remove()
+        end
+    end
+end)
+
+hook.Add("PostCleanupMap","TableRound_Hook",function()
+    timer.Simple(0.3,function()
+        if TableRound and TableRound().PostCleanUpHook then
+            TableRound().PostCleanUpHook()
+        end
+    end)
+end)
 
 hook.Add("Think","Round-Think",function()
     local nonspect = {}

@@ -18,6 +18,7 @@ SWEP.AttPos = Vector(0,0,0)
 SWEP.AttAng = Angle(0,0.7,0)
 SWEP.MuzzlePos = Vector(23.5,6.15,-3)
 SWEP.MuzzleAng = Angle(0,0,0)
+SWEP.Empty3 = false
 
 SWEP.Primary.DefaultClip = 45
 SWEP.Primary.ClipSize = 45
@@ -33,15 +34,7 @@ SWEP.RecoilForce = 0.5
 SWEP.IconPos = Vector(-3.5,90,-3)
 SWEP.IconAng = Angle(-20,0,0)
 
-SWEP.ReloadSounds = {
-    [0.55] = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav",
-    [0.75] = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav",
-    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.55] = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav",
-    [0.75] = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav",
-    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav",
-    [1.15] = "arccw_go/glock18/glock_sliderelease.wav"
-}
+SWEP.Reload1 = "weapons/smg1/smg1_clipout.wav"
+SWEP.Reload2 = "weapons/smg1/smg1_clipin.wav"
+SWEP.Reload3 = "weapons/smg1/smg1_cliphit.wav"
+SWEP.Reload4 = "weapons/smg1/smg1_boltback.wav"

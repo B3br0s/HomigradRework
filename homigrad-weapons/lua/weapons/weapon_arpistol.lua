@@ -12,6 +12,7 @@ SWEP.HolsterPos = Vector(8,-8.7,-10)
 SWEP.HolsterAng = Angle(0,-40,180)
 SWEP.BoltBone = nil
 SWEP.BoltVec = nil
+SWEP.Empty3 = false
 
 SWEP.ZoomPos = Vector(0,0.502,8.05)
 SWEP.ZoomAng = Angle(0,0,0)
@@ -34,15 +35,7 @@ SWEP.RecoilForce = 3.5
 SWEP.IconPos = Vector(4.5,80,-5)
 SWEP.IconAng = Angle(0,0,0)
 
-SWEP.ReloadSounds = {
-    [0.55] = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav",
-    [0.75] = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav",
-    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.55] = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav",
-    [0.75] = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav",
-    [0.85] = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav",
-    [1.15] = "arccw_go/glock18/glock_sliderelease.wav"
-}
+SWEP.Reload1 = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav"
+SWEP.Reload2 = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav"
+SWEP.Reload3 = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
+SWEP.Reload4 = "weapons/smg1/smg1_boltforward.wav"

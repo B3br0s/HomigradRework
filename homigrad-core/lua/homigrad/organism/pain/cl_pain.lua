@@ -101,6 +101,12 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
     k = Lerp(0.02,k,math_Clamp(ply:GetNWFloat("pain")  / 50,0,15))
     agony = Lerp(0.02,agony,1 - stam/30)
 
+    hook.Run("Lobotomy",math_Clamp(agony*2,0,100),active,w,h)
+
+    hook.Run("PainShit",k,active,w,h)
+
+    if ply.PlayerClassName == "combine" then cam.End2D() return end
+
     /*if stam < 30 then
         surface.SetDrawColor(100,0,0,100)
 
@@ -116,10 +122,6 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
         surface.SetMaterial(gradleft)
         surface.DrawTexturedRect(w - w * agony,0,w * agony + 1,h)
     end*/
-
-    hook.Run("Lobotomy",math_Clamp(agony*2,0,100),active,w,h)
-
-    hook.Run("PainShit",k,active,w,h)
 
     if active then
         ply:SetDSP(16)

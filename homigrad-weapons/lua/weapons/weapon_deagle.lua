@@ -40,14 +40,7 @@ end
 SWEP.IconPos = Vector(1,110,-6)
 SWEP.IconAng = Angle(-20,0,0)
 
-SWEP.ReloadSounds = {
-    [0.55] = "arccw_go/deagle/de_clipout.wav",
-    [0.75] = "arccw_go/deagle/de_clipin.wav",
-}
-
-SWEP.ReloadSoundsEmpty = {
-    [0.55] = "arccw_go/deagle/de_clipout.wav",
-    [0.75] = "arccw_go/deagle/de_clipin.wav",
-    [1.25] = "arccw_go/deagle/de_slideback.wav",
-    [1.25] = "arccw_go/deagle/de_slideforward.wav"
-}
+SWEP.Reload1 = "arccw_go/deagle/de_clipout.wav"
+SWEP.Reload2 = "arccw_go/deagle/de_clipin.wav"
+SWEP.Reload3 = "arccw_go/deagle/de_slideback.wav"
+SWEP.Reload4 = "arccw_go/deagle/de_slideforward.wav"
