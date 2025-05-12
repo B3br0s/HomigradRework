@@ -11,6 +11,8 @@ SWEP.HolsterAng = Angle(0,-45,-90)
 SWEP.BoltBone = "Hammer"
 SWEP.BoltVec = Angle(0,0,-45)
 
+SWEP.IsRevolver = true
+
 SWEP.ZoomPos = Vector(-6,0.025,5.33)
 SWEP.ZoomAng = Angle(0,0,0)
 SWEP.AttPos = Vector(-2,0,0)
@@ -42,7 +44,7 @@ function SWEP:PostAnim()
 	if self.BoltBone and IsValid(self.worldModel) and self.BoltVec != nil then
 		local bone = self.worldModel:LookupBone(self.BoltBone)
 
-		self.animmul = LerpFT(self:Smooth(0.15),self.animmul,0)
+		self.animmul = LerpFT(0.15,self.animmul,0)
 
 		self.worldModel:ManipulateBoneAngles(bone,self.BoltVec * (1 - self.animmul))
 	end

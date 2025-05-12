@@ -110,6 +110,16 @@ hook.Add("Think","Mute-Handler",function() //ода доза
 end)
 
 hook.Add("HUDPaint","ScoreBoardPage",function()
+    local w = ScrW()
+    local h = ScrH()
+    surface.SetFont("HS.25")
+    local sizex,sizey = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_curround"),(TableRound and TableRound().name or "N/A"))))
+    local sizex2,sizey2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_nextround"),(TableRound and TableRound(ROUND_NEXT).name or "N/A"))))
+    
+    draw.RoundedBox(8,ScrW() - sizex * 1.32 - sizex2 * 0.1, -sizey*0.6,sizex * 2,(sizey*2) * 1.6,Color(0,0,0,100 * open_fade))
+
+    draw.SimpleText(string.format(hg.GetPhrase("sc_curround"),TableRound().name), "HS.25", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8, Color(255, 255, 255, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)          
+    draw.SimpleText(string.format(hg.GetPhrase("sc_nextround"),TableRound(ROUND_NEXT).name), "HS.25", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8 + sizey, Color(255, 255, 255, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     if not hg.ScoreBoard then return end
     if not IsValid(ScoreBoardPanel) then open = false return end
     if hg.ScoreBoard == 1 and not open then
@@ -127,7 +137,6 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         MainPanel:ShowCloseButton(false)
 
         function MainPanel:Paint(w, h)
-            draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0))
         end
 
         local ScrollShit = vgui.Create("hg_frame",MainPanel)
@@ -139,6 +148,8 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         //ScrollShit:SetMouseInputEnabled(true)
         ScrollShit.tps = Color(0,255,0)
         ScrollShit.DefaultClr = Color(22,22,22,200)
+
+        local cx,cy = ScrollShit:GetX(),ScrollShit:GetY()
 
         local function CheckTPSCock(tps)
             if tps < 15 then
@@ -156,7 +167,11 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             end
         end
 
+        local size2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_tps"),tps)))
+
         function ScrollShit:SubPaint(w, h)
+            //ScrollShit:SetPos(cx,cy*open_fade)
+
             local tps = math.Round(1 / engine.ServerFrameTime())
 
             ScrollShit.tps:Lerp(CheckTPSCock(tps),0.1)
@@ -166,13 +181,6 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             draw.SimpleText(hg.GetPhrase("sc_status"), "HS.18", w - w / 1.16, h - h / 1.02, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             draw.SimpleText(hg.GetPhrase("sc_ug"), "HS.18", w - w / 1.4, h - h / 1.02, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             draw.SimpleText(hg.GetPhrase("sc_team"), "HS.18", w - w / 5.5, h - h / 1.02, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-            surface.SetFont("HS.18")
-            local size = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_curround"),(TableRound and TableRound().name or "N/A"))))
-            local size2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_tps"),tps)))
-
-            draw.SimpleText(string.format(hg.GetPhrase("sc_curround"),TableRound().name), "HS.18", w - w / 1.01, h - 20, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)          
-            draw.SimpleText(string.format(hg.GetPhrase("sc_nextround"),TableRound(ROUND_NEXT).name), "HS.18", w - w / 1.01 + size * 1.1, h - 20, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             
             draw.SimpleText(string.format(hg.GetPhrase("sc_tps"),tps), "HS.18", w - size2 * 1.5, h - 20,ScrollShit.tps , TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             

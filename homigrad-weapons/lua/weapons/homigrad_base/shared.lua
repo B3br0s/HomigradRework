@@ -72,7 +72,7 @@ end
 
 function SWEP:Smooth(value)
 	if self.NextShoot + 0.125 > CurTime() then
-        return 0.06
+        return 0.03
     end
     return math.ease.InSine(value) + math.max(math.ease.InElastic(value) - 0.6,0)
 end
@@ -155,7 +155,7 @@ function SWEP:Step()
 	self:PostStep()
 
 	if CLIENT and ply == LocalPlayer() then
-		if self.NextShoot + 0.025 < CurTime() then
+		if self.NextShoot < CurTime() then
 			RecoilDown = false
 		else
 			RecoilDown = true 
@@ -177,9 +177,9 @@ function SWEP:Step()
 
 	if !self:IsSprinting() and !self:IsClose() and !self.reload then
 		if self.PumpTarg and self.Pump <= 0.05 then
-			matrix:SetAngles(ang - (!self:IsSighted() and Angle(12 * (self.sprayI * self.RecoilForce * 1.5) * self:GetUpMul(),-1 * (self.sprayI * self.RecoilForce * 1.5) * self:GetRightMul(),0) or Angle(0,0,0)))
+			matrix:SetAngles(ang - Angle(12 * (self.sprayI * self.RecoilForce * 1.5) * self:GetUpMul(),-1 * (self.sprayI * self.RecoilForce * 1.5) * self:GetRightMul(),0))
 		elseif !self.PumpTarg then
-			matrix:SetAngles(ang - (!self:IsSighted() and Angle(12 * (self.sprayI * self.RecoilForce * 1.5) * self:GetUpMul(),-1 * (self.sprayI * self.RecoilForce * 1.5) * self:GetRightMul(),0) or Angle(0,0,0)))
+			matrix:SetAngles(ang - Angle(12 * (self.sprayI * self.RecoilForce * 1.5) * self:GetUpMul(),-1 * (self.sprayI * self.RecoilForce * 1.5) * self:GetRightMul(),0))
 		end
 	end
 
@@ -193,11 +193,6 @@ function SWEP:Step()
 end
 
 function SWEP:Think()
-	if SERVER then
-		if GetConVar("developer"):GetBool() then
-			self:GetTrace()
-		end
-	end
 end
 
 function SWEP:DrawWorldModel()
@@ -211,16 +206,24 @@ function SWEP:DrawWorldModel()
     end
 	if !IsValid(self:GetOwner()) then
 		self:DrawModel()
+		if CLIENT then
+    		self:DrawAttachments(self)
+		end
 		return
 	end
-	if !IsValid(self.worldModel) then
+
+	if !IsValid(self.worldModel) and IsValid(self:GetOwner()) and self:GetOwner() != NULL then
 		self:CreateWorldModel()
 	end
 
 	if self:GetOwner():GetActiveWeapon() != self then
 		self:WorldModel_Holster_Transform()
 	else
+		self:GetTrace()
 		self:WorldModel_Transform()
+		if CLIENT then
+    		self:DrawAttachments()
+		end
 	end
 
 	if CLIENT then
@@ -239,6 +242,7 @@ function SWEP:CreateWorldModel()
 		wm:SetModel(self.WorldModel)
 		wm:SetMaterial("null")
 		wm:Spawn()
+		wm:GetPhysicsObject():EnableMotion(false)
 		wm:PhysicsDestroy()
 		wm:SetMoveType(MOVETYPE_NONE)
 		wm:SetNWBool("nophys", true)

@@ -70,6 +70,9 @@ function SWEP:WorldModel_Transform()
     mdl:SetPos(Pos)
     mdl:SetOwner(ply)
 
+    self:SetNWVector("WorldPos",Pos)
+    self:SetNW2Angle("WorldAng",Ang)
+
     return Pos,Ang
 end
 

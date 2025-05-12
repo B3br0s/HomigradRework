@@ -17,7 +17,7 @@ SWEP.TwoHands = true
 SWEP.Bodygroups = {[1] = 0,[2]=0,[3]=0,[4]=0,[5]=1}
 
 SWEP.ZoomPos = Vector(9,-5.27,-0.95)
-SWEP.ZoomAng = Angle(0,0,0)
+SWEP.ZoomAng = Angle(0,0.86,-0.08)
 SWEP.AttPos = Vector(0,-0.015,0)
 SWEP.AttAng = Angle(0,0.8,0.2)
 SWEP.MuzzlePos = Vector(22.5,5.15,-4)

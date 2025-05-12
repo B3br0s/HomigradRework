@@ -13,7 +13,7 @@ SWEP.BoltBone = "v_weapon.mac10_bolt"
 SWEP.BoltVec = Vector(0,0,1.2)
 
 SWEP.ZoomPos = Vector(10,-6.14,-2)
-SWEP.ZoomAng = Angle(0,0,0)
+SWEP.ZoomAng = Angle(0,-0.25,-0.07)
 SWEP.AttPos = Vector(0,0,0)
 SWEP.AttAng = Angle(0,0.7,0)
 SWEP.MuzzlePos = Vector(23.5,6.15,-3)

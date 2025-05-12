@@ -2,6 +2,8 @@ if not open then
     open = false
 end
 
+open_fade = 0
+
 local toggle_tab = (ConVarExists("hg_toggle_score") and GetConVar("hg_toggle_score") or CreateClientConVar("hg_toggle_score","1",true,false,"Toggle tab",0,1))
 
 function AddPanel(Parent,Text,NeedTo,ChangeTo,SizeXY,DockTo,CustomFunc)
@@ -19,6 +21,9 @@ function AddPanel(Parent,Text,NeedTo,ChangeTo,SizeXY,DockTo,CustomFunc)
     end
     function ButtonShit:DoClick()
         surface.PlaySound("homigrad/vgui/panorama/sidemenu_click_01.wav")
+        if hg[NeedTo] != ChangeTo then
+            open_fade = 0
+        end
         hg[NeedTo] = ChangeTo
     end
 end
@@ -39,8 +44,11 @@ function show_scoreboard()
     ScoreBoardPanel:MakePopup()
     ScoreBoardPanel:SetDraggable(false)
     ScoreBoardPanel:SetKeyBoardInputEnabled(false)
+    local cx,cy = ScoreBoardPanel:GetX(),ScoreBoardPanel:GetY()
     function ScoreBoardPanel:Paint(w,h)
+        self:SetPos(cx*open_fade,cy)
         draw.RoundedBox(0,self:GetX(),self:GetY(),w,h,Color(0,0,0,129))
+        //Derma_DrawBackgroundBlur(self)
     end
     
     ItemsPanel = vgui.Create("DScrollPanel",ScoreBoardPanel)
@@ -146,6 +154,11 @@ local tabPressed = false
 fastloot = false
 local nextUpdateTime = RealTime() - 1
 hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
+    if IsValid(ScoreBoardPanel) then
+        open_fade = LerpFT(0.1,open_fade,1)
+    else
+        open_fade = LerpFT(0.1,open_fade,0)
+    end
     if hg.islooting and IsValid(hg.lootent) and hg.lootent:GetPos():Distance(LocalPlayer():GetPos()) > 95 or !IsValid(hg.lootent) and hg.islooting or hg.islooting and !LocalPlayer():Alive() then
         if hg.islooting then
             surface.PlaySound("homigrad/vgui/item_drop.wav")

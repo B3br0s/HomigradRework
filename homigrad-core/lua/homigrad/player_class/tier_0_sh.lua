@@ -4,6 +4,9 @@ local classList = player.classList
 local PlayerMeta = FindMetaTable("Player")
 
 function PlayerMeta:GetPlayerClass()
+	if !self.PlayerClassName then
+		return ""
+	end
 	return classList[self.PlayerClassName or ""]
 end
 
@@ -97,6 +100,7 @@ hook.Add("PrePlayerDraw", "PlayerClass", function(ply, flag) return ply:PlayerCl
 hook.Add("HUDPaint", "PlayerClass", function() if LocalPlayer():Alive() then LocalPlayer():PlayerClassEvent("HUDPaint") end end)
 hook.Add("Player Think","ClassOff",function(ply)
 	if !ply:Alive() then
-		ply:PlayerClassEvent("Off")
+		ply.PlayerClassName = ""
+		ply.PlayerClassNameOld = ""
 	end
 end)

@@ -1,6 +1,10 @@
 function SWEP:WorldModel_Transform()
     local mdl = self.worldModel
 
+    if !IsValid(mdl) then
+        return
+    end
+
     if self.Bodygroups then
         for _, v in ipairs(self.Bodygroups) do
             if IsValid(self.worldModel) then
@@ -53,6 +57,10 @@ end
 
 function SWEP:WorldModel_Holster_Transform()
     local owner = self:GetOwner()
+    if !owner:HasWeapon(self:GetClass()) then
+        self.worldModel:Remove()
+        return
+    end
     if !owner then
         return
     end
@@ -126,6 +134,10 @@ function SWEP:GetSAttachment(obj)
 	local wep = IsValid(owner) and owner:GetNWEntity("ragdollWeapon",self) or self
 
 	local model = self.worldModel
+
+    if !model then
+        return
+    end
 	
 	local att = model:GetAttachment(obj)
 	
@@ -190,22 +202,12 @@ end
 
 function SWEP:GetTrace(nomodify)
 	local owner = self:GetOwner()
-    if !IsValid(self.worldModel) then
-        return
-    end
-	local obj = self.worldModel:LookupAttachment("muzzle") or 0
+	local obj = self:LookupAttachment("muzzle") or 0
 	
 	local att = self:GetSAttachment(self.att or obj)
 	
 	if not att then
-		local Pos, Ang
-		
-		local wep = IsValid(owner) and owner:GetNWEntity("ragdollWeapon")
-		if wep and IsValid(wep) then
-			Pos, Ang = wep:GetPos(), wep:GetAngles()
-		else
-			Pos, Ang = self:WorldModel_Transform()
-		end
+		local Pos, Ang = self:WorldModel_Transform()
 
 		att = {Pos = Pos, Ang = Ang}
 	end
@@ -245,61 +247,72 @@ concommand.Add("wm_getsequence",function(ply)
     end
 end)
 
-hook.Add("Player Think","Shit",function(ply)
-    if !ply:Alive() then
-        return
+hook.Add("PostDrawOpaqueRenderables","Weapon_WorldModelDraw",function()
+    for _, ply in ipairs(player.GetAll()) do
+        if !ply:Alive() then
+        continue 
     end
     if ply == LocalPlayer() then
-        return
+        continue 
     end
     if ply:GetActiveWeapon().ishgwep then
         local self = ply:GetActiveWeapon()
+
+        self:WorldModel_Transform()
     
-        local mdl = self.worldModel
-    
-        if self.Bodygroups then
-            for _, v in ipairs(self.Bodygroups) do
-                if IsValid(self.worldModel) then
-                    self.worldModel:SetBodygroup(_,v)
-                end
-                self:SetBodygroup(_,v)
+        for placement, att in pairs(self.Attachments) do
+        if self.Attachments[placement] != NULL then
+            local tbl = self.Attachments[placement]
+            if self.worldModel == nil then
+                continue 
+            end
+            if !IsValid(self.worldModel) then
+                continue 
+            end
+            if !self.worldModel.GetPos then
+                continue 
+            end
+
+            if !self.worldModel.GetAngles then
+                continue 
+            end
+            local Pos = self.worldModel:GetPos()
+            local Ang = self.worldModel:GetAngles()
+            local mdl = self.AttDrawModels[placement]
+            if !IsValid(mdl) and tbl.Model then
+                mdl = ClientsideModel(tbl.Model,RENDERGROUP_BOTH)
+                mdl:SetOwner(ply)
+                mdl:SetPredictable(true)
+                self:CallOnRemove("RemoveAtt", function() mdl:Remove() end)
+                self.worldModel:CallOnRemove("RemoveAtt", function() mdl:Remove() end)
+
+                self.AttDrawModels[placement] = mdl
+            end
+            if IsValid(mdl) then
+                Ang:RotateAroundAxis(Ang:Forward(),tbl.CorrectAng[1])
+                Ang:RotateAroundAxis(Ang:Right(),tbl.CorrectAng[2])
+                Ang:RotateAroundAxis(Ang:Up(),tbl.CorrectAng[3])
+                mdl:SetModelScale(tbl.CorrectSize,0)
+                mdl:SetOwner(ply)
+                mdl:SetParent(ply)
+                mdl:SetPredictable(true)
+                Pos = self.worldModel:GetPos() + Ang:Forward() * tbl.CorrectPos[1] + Ang:Right() * tbl.CorrectPos[2] + Ang:Up() * tbl.CorrectPos[3]
+                Pos = Pos + Ang:Forward() * self.AttachmentPos[placement][1] + Ang:Right() * self.AttachmentPos[placement][2] + Ang:Up() * self.AttachmentPos[placement][3]
+                mdl:SetPos(Pos)
+                mdl:SetAngles(Ang)
+                        
+                mdl:SetRenderAngles(Ang)
+                mdl:SetRenderOrigin(Pos)
+                mdl:DrawModel()
+            end
+        else
+            local mdl = self.AttDrawModels[placement]
+            if IsValid(mdl) then
+                mdl:Remove()
+                mdl = nil
             end
         end
-
-        local Att = {}
-
-        if !ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")) then
-            return
-        end
-
-        if self:GetOwner():GetActiveWeapon() == self then
-            self.worldModel:SetNoDraw(false)
-        end
-
-        Att.Pos = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetTranslation()
-        Att.Ang = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetAngles()
-
-        Att.Ang:RotateAroundAxis(Att.Ang:Forward(),180)
-
-        local Pos = Att.Pos
-        local Ang = Att.Ang
-        if !IsValid(mdl) then
-            return
-        end
-        mdl:SetModelScale(self.CorrectScale or 1,0)
-
-        Pos = Pos + Ang:Forward() * self.CorrectPos[1] + Ang:Right() * self.CorrectPos[2] + Ang:Up() * self.CorrectPos[3]
-        Ang:RotateAroundAxis(Ang:Forward(),self.CorrectAng[1])
-        Ang:RotateAroundAxis(Ang:Right(),self.CorrectAng[2])
-        Ang:RotateAroundAxis(Ang:Up(),self.CorrectAng[3])
-
-        mdl:SetAngles(Ang)
-        mdl:SetPos(Pos)
-        mdl:SetOwner(ply)
-        mdl:SetParent(ply)
-        mdl:SetPredictable(true)
-
-        mdl:SetRenderAngles(Ang)
-        mdl:SetRenderOrigin(Pos)
+    end
+    end
     end
 end)

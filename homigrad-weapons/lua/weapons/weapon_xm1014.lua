@@ -17,7 +17,7 @@ SWEP.BoltVec = Vector(0,0,-2.3)
 SWEP.BoltLock = true
 
 SWEP.ZoomPos = Vector(10,-4.32,-2.75)
-SWEP.ZoomAng = Angle(0,2,0)
+SWEP.ZoomAng = Angle(0,1.35,0.02)
 SWEP.AttPos = Vector(-2,0,0)
 SWEP.AttAng = Angle(0,0.75,0)
 

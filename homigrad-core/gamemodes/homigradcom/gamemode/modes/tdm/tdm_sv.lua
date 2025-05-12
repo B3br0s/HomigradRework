@@ -1,5 +1,7 @@
 tdm = tdm or {}
 
+tdm.GuiltEnabled = true
+
 function tdm.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
@@ -110,8 +112,8 @@ function tdm.CanStart()
 
     local size_final = size:Length()
 
-    if size_final < 15000 then
-        return false
+    if size_final < 10000 then
+            return false
     else
         return true 
     end

@@ -1,5 +1,3 @@
--- "addons\\homigrad_core\\lua\\shlib\\tier_0\\paint\\2d\\cl_piemenu.lua"
--- Retrieved by https://github.com/lewisclark/glua-steal
 local PIEMENU_COLOR = Color(35,35,35)
 local PIEMENU_SELECT_OPTION_COLOR = Color(255,255,255)
 local PieMenu_INVALID_COLOR = Color(125,125,125)

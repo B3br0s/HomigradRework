@@ -65,11 +65,8 @@ hook.Add("Player Think","LocalizeWeps",function(ply)
     end
 end)
 
-hook.Add("Think","LocalizeWeapons",function()
-    for _, ent in ipairs(ents.GetAll()) do
-        if !ent:IsWeapon() then
-            continue 
-        end
+hook.Add("OnEntityCreated","123",function(ent)
+    if ent:IsWeapon() then
 
         if hg.GetPhrase(ent:GetClass().."_desc") != ent:GetClass().."_desc" then
             ent.Instructions = hg.GetPhrase(ent:GetClass().."_desc")
@@ -83,7 +80,7 @@ hook.Add("Think","LocalizeWeapons",function()
         end
 
         if hg.GetPhrase(ent:GetClass()) == ent:GetClass() then
-            continue 
+            return
         end
 
         if ent.isMelee then

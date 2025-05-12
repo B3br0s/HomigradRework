@@ -13,7 +13,7 @@ SWEP.BoltBone = "v_weapon.HKP2000_Slide"
 SWEP.BoltVec = Vector(0,0,-1.5)
 
 SWEP.ZoomPos = Vector(3,-2.82,-0.44)
-SWEP.ZoomAng = Angle(0,0,0)
+SWEP.ZoomAng = Angle(0,-0.28,-0.03)
 SWEP.AttPos = Vector(0,-0.03,0)
 SWEP.AttAng = Angle(0,0.7,1)
 SWEP.MuzzlePos = Vector(23.5,2.85,-1.4)

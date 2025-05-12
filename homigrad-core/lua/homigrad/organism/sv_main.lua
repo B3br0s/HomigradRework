@@ -11,7 +11,8 @@ hook.Add("Player Think","Main_Handler",function(ply)
     ply:SetNWString("ClassName",ply.PlayerClassName or "")
 
     ply:SetNWBool("MistrGondon",ply.isGordon or false)
-
+    ply:SetNWBool("IsCombine",ply.isCombine or false)
+    ply:SetNWBool("IsCombineSuper",ply.isCombineSuper or false)
     ply:SetNWFloat("rleg",ply.rleg)
     ply:SetNWFloat("lleg",ply.lleg)
 
@@ -100,6 +101,8 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
         end
 
         ply.isGordon = false
+        ply.isCombine = false
+        ply.isCombineSuper = false
     
         ply:LagCompensation(false)
     end

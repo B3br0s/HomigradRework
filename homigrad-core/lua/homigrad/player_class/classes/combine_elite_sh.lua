@@ -1,4 +1,4 @@
-local CLASS = player.RegClass("combine")
+local CLASS = player.RegClass("combine_elite")
 local adr = 0
 local pain = 0
 local stam = 0
@@ -8,15 +8,17 @@ local bpm = 0
 function CLASS.Off(self)
 	if CLIENT then return end
 	self.isCombine = nil
+	self.isCombineSuper = nil
 end
 
 function CLASS.On(self)
 	if CLIENT then return end
-	self:SetHealth(150)
-	self:SetMaxHealth(150)
-	self:SetArmor(25)
+	self:SetHealth(200)
+	self:SetMaxHealth(200)
+	self:SetArmor(50)
 	self:Give("weapon_hands")
 	self.isCombine = true
+	self.isCombineSuper = true
 	self:EmitSound("npc/combine_soldier/vo/gosharp.wav")
 end
 
@@ -59,6 +61,8 @@ end
 
 function CLASS.Think(self)
 	self.bleed = 0
+	self.stamina = 100
+    self.painlosing = 3
 end
 
 function CLASS.PlayerStartVoice(self)
@@ -240,9 +244,9 @@ if CLIENT then
 		blood = LerpFT(0.1,blood or 0,self:GetNWFloat("blood"))
 		bpm = LerpFT(0.1,bpm or 0,self:GetNWFloat("pulse"))*/
 
-		local stimcolor = Color(21,96,189,220)
-        local color_sight = Color(21,96,189)
-		local hpcolor = Color(21,96,189)
+		local stimcolor = Color(189,21,21,220)
+        local color_sight = Color(189,21,21)
+		local hpcolor = Color(189,21,21)
         local bgcolor = Color(0,0,0)
 
 		for _, ply in ipairs(player.GetAll()) do
@@ -294,7 +298,36 @@ if CLIENT then
             draw.DrawText("Armor","CMBFontSmall",pos[1]*1.01,pos[2]*1.005+1,hpcolor,TEXT_ALIGN_LEFT)
             draw.DrawText("Armor","CMBFontSmall",pos[1]*1.01,pos[2]*1.005,hpcolor,TEXT_ALIGN_LEFT)
 
+            local wep = self:GetActiveWeapon()
+            if IsValid(wep) and wep.ishgwep then
+                local self = wep
+    
+                local Pos,Ang = self:GetNWVector("Muzzle"),self:GetNW2Angle("Muzzle")
+                local ClientPos,ClientAng = self:GetTrace()
+                local tr = util.QuickTrace(ClientPos,Ang:Forward() * 1000,LocalPlayer())
 
+                local hit = tr.HitPos:ToScreen()
+
+                SightPos.x = LerpFT(0.175,SightPos.x,hit.x)
+                SightPos.y = LerpFT(0.175,SightPos.y,hit.y + 3)
+
+                local istransp = (wep:IsSprinting() or wep:IsClose() or wep.reload != nil or ply:KeyDown(IN_ATTACK2) or ply:GetNWBool("suiciding"))
+
+                color_sight_mul = LerpFT(istransp and 0.3 or 0.15,color_sight_mul,istransp and 0 or 1)
+
+                //print(color_sight_mul)
+
+                color_sight.a = 255 * color_sight_mul
+                
+                draw.RoundedBox(0, SightPos.x - 1, SightPos.y + 2, 2, 6, color_sight)
+                draw.RoundedBox(0, SightPos.x - 1, SightPos.y - 8, 2, 6, color_sight)
+                draw.RoundedBox(0, SightPos.x + 2, SightPos.y - 1, 6, 2, color_sight)
+                draw.RoundedBox(0, SightPos.x - 8, SightPos.y - 1, 6, 2, color_sight)
+                //surface.DrawCircle(SightPos.x + 1.5,SightPos.y+1.75,5,color_sight.r,color_sight.g,color_sight.b,255 * (1 - color_sight_mul))
+            else
+                SightPos.x = ScrW()
+                SightPos.y = ScrH()
+            end
 
             --Стамина
             local pos = {ScrW() - ScrW()/1.15 - y_diff_round,ScrH()/1.17 + p_diff_round}
@@ -322,7 +355,7 @@ if CLIENT then
             draw.DrawText("Pain","CMBFontSmaller",pos[1]*1.01,pos[2]*1.005+1,hpcolor,TEXT_ALIGN_LEFT)
             draw.DrawText("Pain","CMBFontSmaller",pos[1]*1.01,pos[2]*1.005,hpcolor,TEXT_ALIGN_LEFT)
 
-            surface.SetDrawColor(0,119,255,100)
+            surface.SetDrawColor(255,0,0,100)
 			surface.SetMaterial(Material("sprites/mat_jack_helmoverlay_r"))
 			surface.DrawTexturedRect(0,0,ScrW(),ScrH())
 			surface.DrawTexturedRectRotated(ScrW()/2,ScrH()/1.9,ScrW(),ScrH()*1.1,180)

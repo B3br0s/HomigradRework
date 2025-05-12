@@ -16,7 +16,7 @@ SWEP.BoltVec = nil
 SWEP.TwoHands = true
 
 SWEP.ZoomPos = Vector(10,-5.23,-0.6)
-SWEP.ZoomAng = Angle(0,1.3,0.35)
+SWEP.ZoomAng = Angle(0,0.7,0.18)
 SWEP.AttPos = Vector(-2,0,0)
 SWEP.AttAng = Angle(0,0.75,0)
 

@@ -25,6 +25,9 @@ local ENTITY = FindMetaTable("Entity")
 if not HSetNoDraw then HSetNoDraw = ENTITY.SetNoDraw end
 
 function ENTITY:SetNoDraw(value)
+    if self == NULL then
+        return
+    end
     if self.isNoDraw != value then HSetNoDraw(self,value) end
 
     self.isNoDraw = value
@@ -35,6 +38,11 @@ function SetNoDraw(self,value)
 
     self._nodraw = value
 end
+
+hook.Add("RenderScene","ClientSide",function()
+    hook.Run("Render Post")
+    hook.Run("PreRender")
+end)
 
 hook.Add("Render Post","ClientsideModels",function()
     if old then

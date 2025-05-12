@@ -613,7 +613,7 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
     ply:SetWalkSpeed(170)
     ply:SetJumpPower(200)
     
-    local targetRunSpeed = isSprinting and ((forwardSpeed > 1 and 340 or 240) + adrenalineBoost) * stamina / 85
+    local targetRunSpeed = isSprinting and ((forwardSpeed > 1 and 330 or 260) + adrenalineBoost) * stamina / 85
                           or (ply:GetWalkSpeed() / 1.5) * stamina / 100
     
     local lerpFactor = isSprinting and 0.025 or 0.1

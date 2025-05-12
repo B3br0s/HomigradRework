@@ -73,6 +73,7 @@ end)
 
 function GM:PlayerInitialSpawn(ply)
     ply.KSILENT = true
+    ply:KillSilent()
     ply:SetTeam(1)
     net.Start("SyncRound")
     net.WriteString(ROUND_NAME)
@@ -81,6 +82,9 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 function GM:DoPlayerDeath(ply,attacker,dmginfo)
-    --ply.Fake = false
-    --ply.FakeRagdoll = NULL
+    return
+end
+
+function GM:PlayerDeath(ply,attacker,dmginfo)
+    return
 end

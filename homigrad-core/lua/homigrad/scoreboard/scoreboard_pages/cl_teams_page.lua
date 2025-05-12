@@ -105,7 +105,10 @@ hook.Add("HUDPaint","Teams_Page",function()
         MainFrame:SetTitle(" ")
         MainFrame:ShowCloseButton(false)
 
+        local cx,cy = MainFrame:GetX(),MainFrame:GetY()
+        
         function MainFrame:Paint(w, h)
+            //MainFrame:SetPos(cx,cy*open_fade)
             /*draw.RoundedBox(0, 0, 0, w, h, Color(22, 22, 22, 200))
             
             surface.SetDrawColor(100,100,100,75)

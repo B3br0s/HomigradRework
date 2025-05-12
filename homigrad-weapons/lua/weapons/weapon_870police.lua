@@ -15,7 +15,7 @@ SWEP.BoltBone = false
 SWEP.BoltVec = false
 
 SWEP.ZoomPos = Vector(-38,1.36,0.095)
-SWEP.ZoomAng = Angle(0,4.5,0)
+SWEP.ZoomAng = Angle(0,2.23,0)
 SWEP.AttPos = Vector(0,-0.5,-0.7)
 SWEP.AttAng = Angle(0,1,0)
 SWEP.MuzzlePos = Vector(0,-0.5,-0.7)
@@ -34,9 +34,3 @@ SWEP.RecoilForce = 5
 
 SWEP.IconPos = Vector(6,10,-6)
 SWEP.IconAng = Angle(0,0,0)
-
-SWEP.ReloadSounds = {
-}
-
-SWEP.ReloadSoundsEmpty = {
-}

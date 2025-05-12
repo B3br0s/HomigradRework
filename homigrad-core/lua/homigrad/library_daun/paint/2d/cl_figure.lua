@@ -1,5 +1,3 @@
--- "addons\\homigrad_core\\lua\\shlib\\tier_0\\paint\\2d\\cl_figure.lua"
--- Retrieved by https://github.com/lewisclark/glua-steal
 local constructManual = {
     "circle",
     "circle_contr",

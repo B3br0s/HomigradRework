@@ -1,5 +1,7 @@
 riot = riot or {}
 
+riot.GuiltEnabled = true
+
 function riot.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
@@ -115,7 +117,7 @@ function riot.CanStart()
         
         local size_final = size:Length()
         
-        if size_final < 20000 then
+        if size_final < 10000 then
             return false
         else
             return true 

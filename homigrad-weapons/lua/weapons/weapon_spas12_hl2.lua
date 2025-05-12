@@ -15,7 +15,7 @@ SWEP.HoldType = "ar2"
 SWEP.BoltVec = Vector(0,0,-1.5)
 
 SWEP.ZoomPos = Vector(-5,0.045,5.4)
-SWEP.ZoomAng = Angle(0,5.4,-0.1)
+SWEP.ZoomAng = Angle(0,2.6,0)
 SWEP.AttPos = Vector(0,0,0)
 SWEP.AttAng = Angle(0,0,0)
 SWEP.MuzzlePos = Vector(33.5,0,3)

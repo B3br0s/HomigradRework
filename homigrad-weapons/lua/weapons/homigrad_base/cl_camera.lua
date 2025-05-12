@@ -74,9 +74,9 @@ function SWEP:Camera(ply, origin, angles, fov)
     end
 
     local siht = (att.Pos - origin):Angle()
-    siht[2] = att.Ang[2] - (RecoilS / 26) * self:GetRightMul()
+    siht[2] = angles[2]//att.Ang[2] - (RecoilS / 26) * self:GetRightMul()
     siht[3] = angles[3]
-    siht[1] = math.Clamp(att.Ang[1] + (RecoilS / 1.5)  * self:GetUpMul(),-83,88)
+    siht[1] = angles[1]//math.Clamp(att.Ang[1] + (RecoilS / 1.5)  * self:GetUpMul(),-83,88)
     siht:RotateAroundAxis(siht:Forward(),self.ZoomAng[1] * lerpaim)
     siht:RotateAroundAxis(siht:Right(),self.ZoomAng[2] * lerpaim)
     siht:RotateAroundAxis(siht:Up(),self.ZoomAng[3] * lerpaim)

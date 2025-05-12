@@ -10,6 +10,10 @@ function coop.GetTeamName(ply)
         return "coop_gondon",Color(255,102,0),"coop_gondon_desc"
     end
 
+    if !tbl then
+        return "N/A",Color(255,0,0),"N/A"
+    end
+
     local n = tbl.Name
     local c = tbl.Color
     local d = tbl.Desc

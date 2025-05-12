@@ -39,8 +39,8 @@ SWEP.IconAng = Angle(-20,0,0)
 
 SWEP.Reload1 = "weapons/ar2/ar2_magout.wav"
 SWEP.Reload2 = "weapons/ar2/ar2_magin.wav"
-SWEP.Reload3 = "weapons/ar2/ar2_reload_rotate.wav"
-SWEP.Reload4 = "weapons/ar2/ar2_reload_push.wav"
+SWEP.Reload3 = "weapons/ar2/ar2_rotate.wav"
+SWEP.Reload4 = "weapons/ar2/ar2_push.wav"
 
 SWEP.Attachments = {
     ['sight'] = hg.Attachments.holo1,

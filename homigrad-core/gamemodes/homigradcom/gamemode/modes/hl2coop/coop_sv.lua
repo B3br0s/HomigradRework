@@ -6,6 +6,8 @@ coop.Models = {}
 
 coop.Gordon = NULL
 
+coop.GuiltEnabled = true
+
 local mdls = coop.Models
 
 util.AddNetworkString("coop exiting")
@@ -232,7 +234,7 @@ eqp.rebels = {
 }
 
 eqp.rebels_better = {
-    ["main"] = {"weapon_mp7_hl2","weapon_ar2_hl2","weapon_spas12_hl2"},
+    ["main"] = {"weapon_ar2_hl2","weapon_mp7_hl2","weapon_xm1014","weapon_wrekedakm"},
     ["secondary"] = {"weapon_hl2_pistol","weapon_magnum357"},
     ["required"] = {"weapon_bandage","weapon_painkillers_hg","weapon_medkit_hg"}
 }
@@ -353,23 +355,23 @@ end
 
 function coop.PostCleanUpHook()
     for _, ent in ipairs(ents.FindByClass("prop_vehicle_airboat")) do
-        if IsValid(ent) then
+        if isentity(ent) and IsValid(ent) then
             ent:Remove()
         end
     end
     for _, ent in ipairs(ents.FindByClass("prop_vehicle_jeep")) do
-        if IsValid(ent) then
+        if isentity(ent) and IsValid(ent) then
             ent:Remove()
         end
     end
 
     for _, ent in ipairs(ents.FindByClass("item_suit")) do
-        if IsValid(ent) then
+        if isentity(ent) and IsValid(ent) then
             ent:Remove()
         end
     end
     for _, ent in ipairs(ents.GetAll()) do
-        if IsValid(ent) and ent:IsWeapon() and (ent:GetOwner() == NULL or !IsValid(ent:GetOwner())) then
+        if isentity(ent) and IsValid(ent) and ent:IsWeapon() and (ent:GetOwner() == NULL or !IsValid(ent:GetOwner())) then
             ent:Remove()
         end
     end
@@ -424,31 +426,33 @@ function coop.StartRoundSV()
         end)
 
         for _, ent in ipairs(ents.FindByClass("prop_vehicle_airboat")) do
-            if IsValid(ent) then
+            if isentity(ent) and IsValid(ent) then
                 ent:Remove()
             end
         end
 
         for _, ent in ipairs(ents.FindByClass("prop_vehicle_jeep")) do
-            if IsValid(ent) then
+            if isentity(ent) and IsValid(ent) then
                 ent:Remove()
             end
         end
     
         for _, ent in ipairs(ents.FindByClass("item_suit")) do
-            if IsValid(ent) then
+            if isentity(ent) and IsValid(ent) then
                 ent:Remove()
             end
         end
 
         for _, ent in ipairs(ents.GetAll()) do
-            if IsValid(ent) and ent:IsWeapon() and (ent:GetOwner() == NULL or !IsValid(ent:GetOwner())) then
+            if isentity(ent) and IsValid(ent) and ent:IsWeapon() and (ent:GetOwner() == NULL or !IsValid(ent:GetOwner())) then
                 ent:Remove()
             end
         end
 
-        coop.SpawnCater()
-        coop.SpawnCar()
+        timer.Simple(0.5,function()
+            coop.SpawnCater()
+            coop.SpawnCar()
+        end)
     end) 
 end
 
@@ -512,6 +516,10 @@ function coop.RoundThink()
     end
 
     for _, ent in ipairs(ents.FindByClass("npc_odessa")) do
+        ent:SetHealth(100)
+    end
+
+    for _, ent in ipairs(ents.FindByClass("npc_monk")) do
         ent:SetHealth(100)
     end
 

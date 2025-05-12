@@ -1,5 +1,32 @@
 hl2dm = hl2dm or {}
 
+hl2dm.GuiltEnabled = true
+
+local units = {
+    //"CMB-3560", //entropy zero
+    "CMB-4821",
+    "CMB-1123",
+    "CMB-6005",
+    "CMB-7550",
+    "CMB-3098",
+    "CMB-4400",
+    "CMB-8662" 
+}
+
+local units_super = {
+    "CMB-S-3560",
+    "CMB-S-1520",
+    "CMB-S-0662",
+    "CMB-S-9205",
+    "CMB-S-1482",
+    "CMB-S-1592",
+    "CMB-S-9580",
+    "CMB-S-5020",
+    "CMB-S-4080",
+    "CMB-S-3060",
+    "CMB-S-1500",
+}
+
 function hl2dm.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
@@ -12,7 +39,11 @@ function hl2dm.SpawnBlue(ply)
     
     ply:SetPlayerClass("combine")
 
+    ply:SetNWString("UNIT_NAME",table.Random(units))
+
     ply.AppearanceOverride = true
+
+    ply.isCombine = true
 
     ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
 
@@ -55,7 +86,7 @@ local rebels = {
 function hl2dm.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"weapon_ak47","weapon_mp7_hl2","weapon_xm1014","weapon_scar"}
+    local weps_pri = {"weapon_ar2_hl2","weapon_ak74","weapon_m4a1","weapon_wrekedakm"}
     local weps_sec = {"weapon_hl2_pistol","weapon_magnum357"}
     local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg","weapon_painkillers_hg"}
 
@@ -99,6 +130,18 @@ function hl2dm.StartRoundSV()
     for _, ply in ipairs(blus) do
         hl2dm.SpawnBlue(ply)
     end
+
+    for _, ply in ipairs(team.GetPlayers(1)) do
+        if math.random(1,3) == 2 then
+            timer.Simple(0,function()
+                ply:SetModel("models/player/combine_super_soldier.mdl")
+                ply:SetNWString("UNIT_NAME",table.Random(units_super))
+                ply:SetPlayerClass("combine_super")
+                ply.isCombine = true
+                ply.isCombineSuper = true
+            end)
+        end
+    end
     
     game.CleanUpMap(false)
 end
@@ -130,7 +173,7 @@ function hl2dm.CanStart()
 
     local size_final = size:Length()
 
-    if size_final < 15000 then
+    if size_final < 5000 then
         return false
     else
         return true 

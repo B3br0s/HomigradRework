@@ -312,9 +312,9 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local output_pos = vecEye
 
 	if wep and wep.Smooth then
-		RecoilS = LerpFT(wep:Smooth((RecoilDown and 0.3 or 0.25)),RecoilS,(RecoilDown and (wep.Primary.Automatic and -0.15 or -1) or (wep.NextShoot + 0.25 > CurTime() and 0.5 or 0)))
+		RecoilS = LerpFT(wep:Smooth((RecoilDown and 0.1 or 0.175)),RecoilS,RecoilDown and 0.5 or 0)
 	else
-		RecoilS = LerpFT(0.07,RecoilS,(RecoilS > 1 and -2 or 1))
+		RecoilS = LerpFT(0.07,RecoilS,0)
 	end
 
 	if wep and wep.Camera then

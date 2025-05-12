@@ -17,7 +17,7 @@ SWEP.BoltBone = "v_weapon.deagle_slide"
 SWEP.BoltVec = Vector(0,0,-1.5)
 
 SWEP.ZoomPos = Vector(3,-3.74,0.06)
-SWEP.ZoomAng = Angle(0,0,0)
+SWEP.ZoomAng = Angle(0,-0.5,-0.13)
 SWEP.AttPos = Vector(0,0.04,-0.4)
 SWEP.AttAng = Angle(0,0.7,0)
 SWEP.MuzzlePos = Vector(23.5,3.85,-1.4)

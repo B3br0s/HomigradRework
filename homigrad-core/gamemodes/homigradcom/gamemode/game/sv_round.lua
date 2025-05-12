@@ -123,7 +123,7 @@ local Replaces = {
 
 hook.Add("Think","Ent_Replace",function()
     for _, ent in ipairs(ents.GetAll()) do
-        if Replaces[ent:GetClass()] and (!IsValid(ent:GetOwner()) or ent:GetOwner() == NULL or ent:GetOwner():IsPlayer()) then
+        if isentity(ent) and IsValid(ent) and ent.GetClass and Replaces[ent:GetClass()] and (!IsValid(ent:GetOwner()) or ent:GetOwner() == NULL or ent:GetOwner():IsPlayer()) then
             local nigg = ents.Create(Replaces[ent:GetClass()])
             nigg:SetPos(ent:GetPos())
             if ent:GetOwner():IsPlayer() then

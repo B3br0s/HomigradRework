@@ -32,20 +32,23 @@ function SWEP:RemoveAttacment(att_tbl)
     end
 end
 
-function SWEP:DrawAttachments()
+function SWEP:DrawAttachments(modeltodraw)
     local ply = self:GetOwner()
+    if !modeltodraw then
+        modeltodraw = self.worldModel
+    end
     for placement, att in pairs(self.Attachments) do
         if self.Attachments[placement] != NULL then
             local tbl = self.Attachments[placement]
-            local Pos = self.worldModel:GetPos()
-            local Ang = self.worldModel:GetAngles()
+            local Pos = modeltodraw:GetPos()
+            local Ang = modeltodraw:GetAngles()
             local mdl = self.AttDrawModels[placement]
             if !IsValid(mdl) and tbl.Model then
                 mdl = ClientsideModel(tbl.Model,RENDERGROUP_BOTH)
                 mdl:SetOwner(ply)
                 mdl:SetPredictable(true)
                 self:CallOnRemove("RemoveAtt", function() mdl:Remove() end)
-                self.worldModel:CallOnRemove("RemoveAtt", function() mdl:Remove() end)
+                modeltodraw:CallOnRemove("RemoveAtt", function() mdl:Remove() end)
 
                 self.AttDrawModels[placement] = mdl
             end
@@ -57,7 +60,7 @@ function SWEP:DrawAttachments()
                 mdl:SetOwner(ply)
                 mdl:SetParent(ply)
                 mdl:SetPredictable(true)
-                Pos = self.worldModel:GetPos() + Ang:Forward() * tbl.CorrectPos[1] + Ang:Right() * tbl.CorrectPos[2] + Ang:Up() * tbl.CorrectPos[3]
+                Pos = modeltodraw:GetPos() + Ang:Forward() * tbl.CorrectPos[1] + Ang:Right() * tbl.CorrectPos[2] + Ang:Up() * tbl.CorrectPos[3]
                 Pos = Pos + Ang:Forward() * self.AttachmentPos[placement][1] + Ang:Right() * self.AttachmentPos[placement][2] + Ang:Up() * self.AttachmentPos[placement][3]
                 mdl:SetPos(Pos)
                 mdl:SetAngles(Ang)

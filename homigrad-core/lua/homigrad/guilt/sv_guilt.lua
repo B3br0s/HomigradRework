@@ -22,7 +22,7 @@ function IsGuilted(ply, att)
         end
     else
         local Round = TableRound()
-        if Round and Round.TeamBased then
+        if Round and Round.GuiltEnabled then
             if ply:Team() == att:Team() then
                 return true
             end
@@ -34,6 +34,10 @@ end
 
 function GuiltThink(ply,att)
     local IsGuilted = IsGuilted(ply,att)
+
+    if !ply.LastDMGInfo then
+        return
+    end
 
     local clamped_dmg = math.Clamp(ply.LastDMGInfo:GetDamage(),0,40)
 

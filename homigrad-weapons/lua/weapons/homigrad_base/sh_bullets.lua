@@ -27,10 +27,14 @@ if CLIENT then
     
             local Pos,Ang = self:GetNWVector("Muzzle"),self:GetNW2Angle("Muzzle")
             local MuzzlePos,MuzzleAng = self:GetTraceMuzzle()
+            local ClientPos,ClientAng = self:GetTrace()
             //Ang:Add(Angle(0.5,-0.7,0))
             local tr = util.QuickTrace(Pos,Ang:Forward() * 1000,LocalPlayer())
+            local tr1 = util.QuickTrace(ClientPos,Ang:Forward() * 1000,LocalPlayer())
             local hit = tr.HitPos:ToScreen()
+            local hit1 = tr1.HitPos:ToScreen()
             local start = Pos:ToScreen()
+            local start1 = ClientPos:ToScreen()
             local muzzlestart = MuzzlePos:ToScreen()
             surface.SetDrawColor( 255, 255, 255, 100)
             surface.DrawRect(hit.x-2,hit.y+2,4,4)
@@ -40,6 +44,11 @@ if CLIENT then
             surface.DrawRect(muzzlestart.x - 2,muzzlestart.y - 2,4,4)
             surface.SetDrawColor( 0, 0, 0)
             surface.DrawRect(ScrW() / 2 - 2,ScrH() / 2 - 2,4,4)
+
+            surface.SetDrawColor( 0, 225, 255, 100)
+            surface.DrawRect(hit1.x-2,hit1.y+2,4,4)
+            surface.SetDrawColor( 0, 4, 255)
+            surface.DrawRect(start1.x - 2,start1.y - 2,4,4)
         end
     end)
 end
@@ -85,7 +94,7 @@ function SWEP:PostShoot(Pos,Ang)
 	        part:SetStartSize(Rand(5,10) * 0.5)
 	        part:SetEndSize(Rand(10,35))
 	        part:SetRoll(Rand(-360,360))
-	        part:SetVelocity(Dir * Rand(500,500))
+	        part:SetVelocity(Dir * Rand(500,500) + self:GetOwner():GetVelocity() * 2)
 	        part:SetAirResistance(Rand(1750,2000))
         end
 
@@ -102,7 +111,7 @@ function SWEP:PostShoot(Pos,Ang)
 	    	part:SetEndSize(random(45,55))
 
 	    	part:SetRoll(Rand(360,-360))
-	    	part:SetVelocity(Dir * 125)
+	    	part:SetVelocity(Dir * 125 + self:GetOwner():GetVelocity() * 2)
 	    end
     end
 end
@@ -147,7 +156,13 @@ function SWEP:Shoot()
         end
     end
 
-    self:EmitSound(istable(primary.Sound) and table.Random(primary.Sound) or primary.Sound,100,math.random(90,110),1,CHAN_WEAPON,SND_NOFLAGS)
+    if SERVER then
+        self:EmitSound(istable(primary.Sound) and table.Random(primary.Sound) or primary.Sound,100,math.random(90,110),1,CHAN_WEAPON,SND_NOFLAGS)
+    else
+        if self:GetOwner() == LocalPlayer() then
+            self:EmitSound(istable(primary.Sound) and table.Random(primary.Sound) or primary.Sound,100,math.random(90,110),1,CHAN_WEAPON,SND_NOFLAGS)
+        end
+    end
 
     local Pos,Ang = SERVER and self:GetTrace() or self:GetNWVector("Muzzle"),self:GetNW2Angle("Muzzle")
 
