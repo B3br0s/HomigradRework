@@ -49,6 +49,7 @@ function show_scoreboard()
         self:SetPos(cx*open_fade,cy)
         draw.RoundedBox(0,self:GetX(),self:GetY(),w,h,Color(0,0,0,129))
         //Derma_DrawBackgroundBlur(self)
+        draw.SimpleText("HOMIGRAD REWORK","H.70",ScrW()/2,ScrH()/2,Color(255,255,255,30),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
     
     ItemsPanel = vgui.Create("DScrollPanel",ScoreBoardPanel)

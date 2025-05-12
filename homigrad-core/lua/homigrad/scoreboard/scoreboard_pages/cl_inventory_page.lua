@@ -404,6 +404,9 @@ function CreateLocalInvSlot(Parent,SlotsSize,PosI)
         
         for i, w in ipairs(weps) do
             if PosI == i and (not IsValid(self.Weapon) or (IsValid(self.Weapon) and self.Weapon:GetOwner() != LocalPlayer())) then
+                if w == NULL then
+                    continue 
+                end
                 if Parent[PosI] and Parent[PosI].Weapon == nil or Parent[PosI] and Parent[PosI].Weapon != nil and Parent[PosI].Weapon:GetOwner() != LocalPlayer() then
                     Parent[PosI].Weapon = w
                     
