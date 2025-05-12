@@ -1,7 +1,5 @@
 hl2dm = hl2dm or {}
 
-hl2dm.GuiltEnabled = true
-
 local units = {
     //"CMB-3560", //entropy zero
     "CMB-4821",

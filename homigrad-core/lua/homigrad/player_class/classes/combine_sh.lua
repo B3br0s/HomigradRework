@@ -12,8 +12,8 @@ end
 
 function CLASS.On(self)
 	if CLIENT then return end
-	self:SetHealth(150)
-	self:SetMaxHealth(150)
+	self:SetHealth(125)
+	self:SetMaxHealth(125)
 	self:SetArmor(25)
 	self:Give("weapon_hands")
 	self.isCombine = true

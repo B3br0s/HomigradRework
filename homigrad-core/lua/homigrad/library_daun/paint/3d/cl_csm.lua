@@ -1,6 +1,3 @@
--- "addons\\homigrad_core\\lua\\shlib\\tier_0\\paint\\3d\\cl_csm.lua"
--- Retrieved by https://github.com/lewisclark/glua-steal
-//рубат пидор
 //нужна для контроля за количеством, и удалениме лишних объектов которые не рендерится.
 
 ChacheClientsideModels = ChacheClientsideModels or {}

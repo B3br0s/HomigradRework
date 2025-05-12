@@ -1,7 +1,5 @@
 tdm = tdm or {}
 
-tdm.GuiltEnabled = true
-
 function tdm.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 

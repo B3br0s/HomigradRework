@@ -3,7 +3,6 @@ hunter = hunter or {}
 hunter.TimeUntilSWAT = 120
 hunter.SwatArrived = false
 hunter.UntilSwat = 1e8
-hunter.GuiltEnabled = true
 
 function hunter.SWATSpawn(ply)
     local weps_pri = {"weapon_m4a1"}

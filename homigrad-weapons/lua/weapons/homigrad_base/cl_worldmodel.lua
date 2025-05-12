@@ -108,8 +108,17 @@ function SWEP:WorldModel_Holster_Transform()
         return
     end
 
+    if CLIENT then
+        if zaebal_entity:GetPos():Distance(LocalPlayer():GetPos()) > 2000 then
+            self.worldModel:SetNoDraw(true)
+            return
+        else
+            self.worldModel:SetNoDraw(false)
+        end
+    end
+
     local Pos, Ang = zaebal_entity:GetBoneMatrix(Bone):GetTranslation(),zaebal_entity:GetBoneMatrix(Bone):GetAngles()
-    if not Pos or not Ang then return end
+    if not Pos or not Ang then self.worldModel:SetNoDraw(true) return end
 
     Pos = Pos + Ang:Forward() * self.HolsterPos[1] + Ang:Right() * self.HolsterPos[2] + Ang:Up() * self.HolsterPos[3]
     Ang:RotateAroundAxis(Ang:Forward(), self.HolsterAng[1])

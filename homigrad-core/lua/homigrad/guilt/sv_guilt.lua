@@ -22,7 +22,7 @@ function IsGuilted(ply, att)
         end
     else
         local Round = TableRound()
-        if Round and Round.GuiltEnabled then
+        if Round and Round.GuiltEnabled or Round and Round.TeamBased then
             if ply:Team() == att:Team() then
                 return true
             end
@@ -40,6 +40,10 @@ function GuiltThink(ply,att)
     end
 
     local clamped_dmg = math.Clamp(ply.LastDMGInfo:GetDamage(),0,40)
+
+    if ply.isGordon and ROUND_NAME == "coop" then
+        clamped_dmg = clamped_dmg * 1.25
+    end
 
     if IsGuilted then
         att.guilt = math.Clamp(att.guilt - clamped_dmg,0,100)
@@ -69,6 +73,25 @@ hook.Add("PlayerDeath","Homigrad_Guilt",function(ply,killed_with,att)
     GuiltThink(ply,att)
 
     file.Write("hgr/guilt/"..ply:SteamID64(),ply.guilt)
+end)
+
+hook.Add("EntityTakeDamage","Homigrad_Guilt",function(ent,dmginfo)
+    local ply = (ent:IsPlayer() and ent or hg.RagdollOwner(ent))
+    if !ply:IsPlayer() then
+        //print(123)
+        return
+    end
+    local att = dmginfo:GetAttacker()
+
+    if IsValid(att) and att:IsWeapon() then
+        att = att:GetOwner()
+    end
+
+    if !IsValid(att) or att == nil or IsValid(att) and !att:IsPlayer() then
+        return
+    end
+
+    GuiltThink(ply,att)
 end)
 
 hook.Add("PlayerInitialSpawn","Guilt_Shit",function(ply)

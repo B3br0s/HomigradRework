@@ -1,7 +1,5 @@
 riot = riot or {}
 
-riot.GuiltEnabled = true
-
 function riot.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
