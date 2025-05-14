@@ -214,7 +214,17 @@ function SWEP:Reload()
 end
 
 function SWEP:CanShoot()
-    return (!self.Reloading and !self.Inspecting and self:Clip1() > 0 and self.Pumped and !self:IsSprinting() and !self:IsClose())
+    if self.Blank != nil then
+		self.Blank = self.Blank - 1
+		if self.Blank > 0 then
+			self.Pumped = false
+			self:TakePrimaryAmmo(1)
+		end
+		if SERVER and self:GetOwner().suiciding and self:Clip1() > 0 and self.Pumped then
+			self:GetOwner().adrenaline = self:GetOwner().adrenaline + 1.5
+		end
+    end
+    return (!self.Reloading and !self.Inspecting and self:Clip1() > 0 and self.Pumped and !self:IsSprinting() and !self:IsClose() and (self.Blank or 0) <= 0)
 end
 
 function SWEP:PrimaryAdd()

@@ -95,20 +95,6 @@ if CLIENT then
 
 		wep.rollmul = -100
 		wep.Blank = amt
-
-		if wep.IsShotgun then
-			wep.CanShoot = function()
-				local self = wep
-				self.Blank = self.Blank - 1
-				if self.Blank > 0 then
-					self.Pumped = false
-				end
-				if SERVER and self:GetOwner().suiciding and self:Clip1() > 0 then
-					self:GetOwner().adrenaline = self:GetOwner().adrenaline + 1.5
-				end
-    		return (!self.Reloading and !self.Inspecting and self:Clip1() > 0 and self.Pumped and !self:IsSprinting() and !self:IsClose() and (self.Blank or 0) <= 0)
-		end
-	end
 	end)
 else
 	util.AddNetworkString("LoadedZalupa")
@@ -122,21 +108,6 @@ else
 				ply:GetActiveWeapon():Roll()
 			else
 				RollDrum(ply:GetActiveWeapon())
-				ply:GetActiveWeapon().CanShoot = function()
-						local self = ply:GetActiveWeapon()
-						if !self.Blank then
-							self.Blank = 0
-						end
-						self.Blank = self.Blank - 1
-						if self.Blank > 0 then
-							self.Pumped = false
-							self:TakePrimaryAmmo(1)
-						end
-						if SERVER and self:GetOwner().suiciding and self:Clip1() > 0 then
-							self:GetOwner().adrenaline = self:GetOwner().adrenaline + 1.5
-						end
-    				return (!self.Reloading and !self.Inspecting and self:Clip1() > 0 and self.Pumped and !self:IsSprinting() and !self:IsClose() and (self.Blank or 0) <= 0)
-				end
 			//ply:ChatPrint("No, i wanna taste real luck.")
 			end
 			net.Start("LoadedZalupa")

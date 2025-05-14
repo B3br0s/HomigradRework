@@ -380,17 +380,17 @@ end)
 
 hook.Add("PlayerCanPickupWeapon","Homigrad_Shit",function(ply,ent)
 	local tr = hg.eyeTrace(ply)
-	if ply:KeyDown(IN_USE) and IsValid(ent) and ent:GetOwner() != ply and (hg.eyeTrace(ply,150).Entity == ent or ent:GetPos():Distance(ply:GetPos()) < 45 and (IsValid(hg.eyeTrace(ply).Entity) and !hg.eyeTrace(ply).Entity:IsWeapon() or !hg.eyeTrace(ply).Entity)) then
-		if ply:HasWeapon(ent:GetClass()) and hg.Weapons[ent] then
-			ply:GiveAmmo(ent:Clip1(),ent:GetPrimaryAmmoType(),true)
-			if ent:Clip1() > 0 then
-				ent:SetClip1(0)
-				sound.Play("snd_jack_hmcd_ammotake.wav",ent:GetPos(),75,100,1)
-				ply:SetNWFloat("LastPickup",CurTime() + 0.2)
-				sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
-			end
-			return false
+	if ply:HasWeapon(ent:GetClass()) and hg.Weapons[ent] then
+		ply:GiveAmmo(ent:Clip1(),ent:GetPrimaryAmmoType(),true)
+		if ent:Clip1() > 0 then
+			ent:SetClip1(0)
+			sound.Play("snd_jack_hmcd_ammotake.wav",ent:GetPos(),75,100,1)
+			ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+			sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
 		end
+		return false
+	end
+	if ply:KeyDown(IN_USE) and IsValid(ent) and ent:GetOwner() != ply and (hg.eyeTrace(ply,150).Entity == ent or ent:GetPos():Distance(ply:GetPos()) < 45 and (IsValid(hg.eyeTrace(ply).Entity) and !hg.eyeTrace(ply).Entity:IsWeapon() or !hg.eyeTrace(ply).Entity)) then
 		ply:SetNWFloat("LastPickup",CurTime() + 0.2)
 		sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
 		if ent.isMelee then
