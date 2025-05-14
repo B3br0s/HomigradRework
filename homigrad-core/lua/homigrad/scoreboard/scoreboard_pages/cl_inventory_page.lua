@@ -80,11 +80,11 @@ hook.Add("HUDPaint","InventoryPage",function()
         function MainFrame:SubPaint(w,h)
             daun1 = LerpFT(0.3,daun1,(hg.islooting and 1 or 0))
 
-            draw.SimpleText("WORK IN PROGRESS.","HS.45",ScrW()/1.995,ScrH()/2.095,Color(204,0,255,15),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+            /*draw.SimpleText("WORK IN PROGRESS.","HS.45",ScrW()/1.995,ScrH()/2.095,Color(204,0,255,15),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
             draw.SimpleText("WORK IN PROGRESS.","HS.45",ScrW()/2,ScrH()/2.1,Color(255,255,255,15),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
             draw.SimpleText("COME BACK SOON!","HS.45",ScrW()/1.995,ScrH()/1.895,Color(204,0,255,15),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-            draw.SimpleText("COME BACK SOON!","HS.45",ScrW()/2,ScrH()/1.9,Color(255,255,255,15),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+            draw.SimpleText("COME BACK SOON!","HS.45",ScrW()/2,ScrH()/1.9,Color(255,255,255,15),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)*/
 
             if hg.islooting and lootent:IsRagdoll() then
                 lootent = hg.lootent
@@ -171,6 +171,12 @@ hook.Add("HUDPaint","InventoryPage",function()
                         Menu:AddOption(hg.GetPhrase("inv_drop"),function()
                             self:Drop()
                         end)
+
+                        if self.Weapon.Roll and self.Weapon == LocalPlayer():GetActiveWeapon() then
+                            Menu:AddOption(hg.GetPhrase("inv_roll"),function()
+                                RunConsoleCommand("hg_roll")
+                            end)
+                        end
                     end
             end
 

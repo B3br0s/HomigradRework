@@ -78,6 +78,18 @@ function show_scoreboard()
     ItemsPanelPaint.PosShit = (ItemsPanel:GetWide() * hg.ScoreBoard)
 
     function ItemsPanelPaint:Paint(w,h)
+        cam.Start2D()
+            local w = ScrW()
+            local h = ScrH()
+            surface.SetFont("hg_HomicideSmalles")
+            local sizex,sizey = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_curround"),(TableRound and TableRound().name or "N/A"))))
+            local sizex2,sizey2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_nextround"),(TableRound and TableRound(ROUND_NEXT).name or "N/A"))))
+            surface.SetDrawColor(0,0,0,255 * open_fade)
+            surface.SetMaterial(Material("homigrad/vgui/gradient_right.png"))
+            surface.DrawTexturedRect(ScrW()-sizex*2,0,sizex * 2,(sizey*2) * 1.3)
+            draw.SimpleText(string.format(hg.GetPhrase("sc_curround"),TableRound().name), "hg_HomicideSmalles", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8, Color(255, 255, 255, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)          
+            draw.SimpleText(string.format(hg.GetPhrase("sc_nextround"),TableRound(ROUND_NEXT).name), "hg_HomicideSmalles", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8 + sizey, Color(255, 247, 173, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        cam.End2D()
     end
 
     local mm_zalupa = vgui.Create("DFrame",ItemsPanelPaint)
@@ -155,10 +167,24 @@ local tabPressed = false
 fastloot = false
 local nextUpdateTime = RealTime() - 1
 hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
+    if !IsValid(ScoreBoardPanel) then
+        cam.Start2D()
+            local w = ScrW()
+            local h = ScrH()
+            surface.SetFont("hg_HomicideSmalles")
+            local sizex,sizey = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_curround"),(TableRound and TableRound().name or "N/A"))))
+            local sizex2,sizey2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_nextround"),(TableRound and TableRound(ROUND_NEXT).name or "N/A"))))
+            surface.SetDrawColor(0,0,0,255 * open_fade)
+            surface.SetMaterial(Material("homigrad/vgui/gradient_right.png"))
+            surface.DrawTexturedRect(ScrW()-sizex*2,0,sizex * 2,(sizey*2) * 1.3)
+            draw.SimpleText(string.format(hg.GetPhrase("sc_curround"),TableRound().name), "hg_HomicideSmalles", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8, Color(255, 255, 255, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)          
+            draw.SimpleText(string.format(hg.GetPhrase("sc_nextround"),TableRound(ROUND_NEXT).name), "hg_HomicideSmalles", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8 + sizey, Color(255, 247, 173, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        cam.End2D()
+    end
     if IsValid(ScoreBoardPanel) then
         open_fade = LerpFT(0.1,open_fade,1)
     else
-        open_fade = LerpFT(0.1,open_fade,0)
+        open_fade = LerpFT(0.025,open_fade,0)
     end
     if hg.islooting and IsValid(hg.lootent) and hg.lootent:GetPos():Distance(LocalPlayer():GetPos()) > 95 or !IsValid(hg.lootent) and hg.islooting or hg.islooting and !LocalPlayer():Alive() then
         if hg.islooting then

@@ -65,10 +65,7 @@ function CheckPlyTeam(ply)
 end
 
 hook.Add("Think","Mute-Handler",function() //ода доза
-    local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {})
-        if file.Exists("hgr/muted.json","DATA") then
-            MutedPlayers = util.JSONToTable(file.Read("hgr/muted.json","DATA"))
-        end
+        local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {})
 
         for _, ply in ipairs(player.GetAll()) do
             if mute_death then
@@ -110,22 +107,12 @@ hook.Add("Think","Mute-Handler",function() //ода доза
 end)
 
 hook.Add("HUDPaint","ScoreBoardPage",function()
-    local w = ScrW()
-    local h = ScrH()
-    surface.SetFont("HS.25")
-    local sizex,sizey = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_curround"),(TableRound and TableRound().name or "N/A"))))
-    local sizex2,sizey2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_nextround"),(TableRound and TableRound(ROUND_NEXT).name or "N/A"))))
-    
-    draw.RoundedBox(8,ScrW() - sizex * 1.32 - sizex2 * 0.1, -sizey*0.6,sizex * 2,(sizey*2) * 1.6,Color(0,0,0,100 * open_fade))
-
-    draw.SimpleText(string.format(hg.GetPhrase("sc_curround"),TableRound().name), "HS.25", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8, Color(255, 255, 255, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)          
-    draw.SimpleText(string.format(hg.GetPhrase("sc_nextround"),TableRound(ROUND_NEXT).name), "HS.25", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8 + sizey, Color(255, 255, 255, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     if not hg.ScoreBoard then return end
     if not IsValid(ScoreBoardPanel) then open = false return end
     if hg.ScoreBoard == 1 and not open then
-        local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {})
-        if file.Exists("hgr/muted.json","DATA") then
-            MutedPlayers = util.JSONToTable(file.Read("hgr/muted.json","DATA"))
+        local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {}) or {} //рубат сын отсталой шлюхи,спасибо за апдейт ебанного гмода.
+        if isstring(MutedPlayers) then
+            MutedPlayers = util.JSONToTable(MutedPlayers)
         end
         open = true
         local MainPanel = vgui.Create("DFrame", ScoreBoardPanel)

@@ -89,6 +89,33 @@ function PlayerMeta:CreateFake(force)
 
     self:RagView()
 
+	local ply = self
+
+	rag.bull = ents.Create("npc_bullseye")
+	rag:SetNWEntity("RagdollController", ply)
+
+	local bull = rag.bull
+	local eyeatt = rag:GetAttachment(rag:LookupAttachment("eyes"))
+	local bodyphy = rag:GetPhysicsObjectNum(10)
+	bull:SetPos(eyeatt.Pos)
+	--bull:SetPos( eyeatt.Pos + eyeatt.Ang:Up() * 3.5 )
+	bull:SetAngles( rag:GetAngles() )
+	bull:SetMoveType(MOVETYPE_OBSERVER)
+	bull:SetKeyValue( "targetname", "Bullseye" )
+	--bull:SetParent(rag, rag:LookupAttachment("eyes"))
+	bull:SetKeyValue( "health","9999" )
+	bull:SetKeyValue( "spawnflags","256" )
+	bull:Spawn()
+	bull:Activate()
+	bull:SetNotSolid(true)
+	for i, ent in ipairs(ents.FindByClass("npc_*")) do
+		if not IsValid(ent) or not ent.AddEntityRelationship then continue end
+		ent:AddEntityRelationship(bull, ent:Disposition(ply),10000)
+	end
+	rag:AddFlags(FL_NOTARGET)
+	bull.rag = rag
+	bull.ply = ply
+
     return rag
 end
 
@@ -162,7 +189,7 @@ function Faking(ply,force)
     end
 
 	if force then
-		force = force / 1.5
+		force = force / 1.25
 	end
 
     ply.LastRagdollTime = CurTime() + 1.5
@@ -177,6 +204,7 @@ function Faking(ply,force)
 		ply:SetNWEntity("FakeRagdoll",ply.FakeRagdoll)
 		ply:SetActiveWeapon(nil)
         ply.Fake = true
+		ply:SetNoTarget(true)
     else
 		if ply:GetNWBool("Cuffed") or IsValid(ply.FakeRagdoll) and ply.FakeRagdoll:GetNWBool("Cuffed") then
 			return
@@ -185,6 +213,9 @@ function Faking(ply,force)
 			ply.FakeWep:Remove()
 		end
 		ply.FakeWep = nil
+		if IsValid(ply.FakeRagdoll.bull) then
+			ply.FakeRagdoll.bull:Remove()
+		end
 		if ply.FakeRagdoll and constraint.FindConstraints(ply.FakeRagdoll,"Weld") and ply.FakeRagdoll.DuctTape then
 			return
 		end
@@ -198,6 +229,8 @@ function Faking(ply,force)
 		end
 
 		if ply.pain>(50*(ply.blood/5000))+(ply:GetNWInt("SharpenAMT")*5) or ply.blood<3000 then return end
+
+		ply:SetNoTarget(false)
 
         local health = ply:Health()
         local armor = ply:Armor()
@@ -240,10 +273,12 @@ function PlayerMeta:DropWep(wep,pos,vel,suicide)
 	/*if not pos then
 		pos = self:EyePos() - vector_up * 8
 	end*/
+
 	if IsValid(ply:GetActiveWeapon()) and not BlackListWep[(wep and wep:GetClass() or ply:GetActiveWeapon():GetClass())] == true then
 		if wep == nil then
 			wep = ply:GetActiveWeapon()
 		end
+		ply:SetNWFloat("LastPickup",CurTime() + 0.3)
 		wep.IsSpawned = true
 		ply:DropWeapon(wep,pos,vel)
 		if suicide then
@@ -373,6 +408,10 @@ hook.Add("PlayerDeath", "DeathRagdoll", function(ply, att, dmginfo)
 	local rag = ply.FakeRagdoll
 
 	timer.Simple(0,function()
+		if IsValid(rag.bull) then
+			rag.bull:Remove()
+		end
+
 		if IsValid(rag.ZacConsRH) then
 			rag.ZacConsRH:Remove()
 		end
@@ -439,6 +478,11 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 	local attachment = rag:GetAttachment( rag:LookupAttachment( "eyes" ) )
 	local LocalPos, LocalAng = WorldToLocal( lookat, Angle( 0, 0, 0 ), attachment.Pos, attachment.Ang )
 	local AddVecRag = Vector(0,0,-64)
+	if IsValid(rag.bull) then
+		local eyeatt = rag:GetAttachment(rag:LookupAttachment("eyes"))
+
+		rag.bull:SetPos(eyeatt.Pos + eyeatt.Ang:Forward() * 5  + eyeatt.Ang:Up() * -5)
+	end
     local Head = rag:LookupBone("ValveBiped.Bip01_Head1")
 	if not Head then return end
     local HeadPos = rag:GetBonePosition(Head) + AddVecRag
@@ -501,15 +545,15 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
 		local ang = ply:EyeAngles()
 		ang:RotateAroundAxis(eyeangs:Forward(), 50)
-		ang:RotateAroundAxis(eyeangs:Right(), 155)
+		ang:RotateAroundAxis(eyeangs:Right(), 125)
 		local shadowparams = {
-			secondstoarrive = 0.025,
-			pos = Head:GetPos() + eyeangs:Forward() * 25 + eyeangs:Right() * -10,
+			secondstoarrive = 0.0001,
+			pos = Head:GetPos() + eyeangs:Forward() * 28 + eyeangs:Right() * -10,
 			angle = ang,
-			maxangular = 350,
-			maxangulardamp = 0.1 / 1e8,
-			maxspeeddamp = 100,
-			maxspeed = 1400,
+			maxangular = 100000,
+			maxangulardamp = 3,
+			maxspeeddamp = 200,
+			maxspeed = 300,
 			teleportdistance = 0,
 			deltatime=deltatime,
 		}
@@ -526,15 +570,15 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
 		local ang = ply:EyeAngles()
 		ang:RotateAroundAxis(eyeangs:Forward(), 50)
-		ang:RotateAroundAxis(eyeangs:Right(), 155)
+		ang:RotateAroundAxis(eyeangs:Right(), 125)
 		local shadowparams = {
-			secondstoarrive = 0.025,
-			pos = Head:GetPos() + eyeangs:Forward() * 25 + eyeangs:Right() * 10,
+			secondstoarrive = 0.0001,
+			pos = Head:GetPos() + eyeangs:Forward() * 28 + eyeangs:Right() * 10,
 			angle = ang,
-			maxangular = 350,
-			maxangulardamp = 0.1 / 1e8,
-			maxspeeddamp = 100,
-			maxspeed = 1400,
+			maxangular = 100000,
+			maxangulardamp = 3,
+			maxspeeddamp = 200,
+			maxspeed = 300,
 			teleportdistance = 0,
 			deltatime=deltatime,
 		}
@@ -593,10 +637,10 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		//print(velo)
 
 		local shadowparams2 = {
-			secondstoarrive=0.15 * diff_ang2,
+			secondstoarrive=0.45 * diff_ang2,
 			pos=phys2:GetPos() + (IsValid(rag.ZacConsLH) and Vector(0,0,140) or IsValid(rag.ZacConsRH) and Vector(0,0,140) or Vector(0,0,0)),
 			angle=angs2,
-			maxangulardamp=2.5,
+			maxangulardamp=4.5,
 			maxspeeddamp=1 * (diff_ang2 / 2.5),
 			maxangular=370,
 			maxspeed=50 / velo,
@@ -605,10 +649,10 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		}
 
 		local shadowparams = {
-			secondstoarrive=0.15 * diff_ang2,
+			secondstoarrive=0.35 * diff_ang2,
 			pos=phys:GetPos(),
 			angle=angs,
-			maxangulardamp=1.5,
+			maxangulardamp=3.5,
 			maxspeeddamp=1 * (diff_ang2 / 2.5),
 			maxangular=370,
 			maxspeed=40 / velo,
@@ -622,17 +666,18 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		angs:RotateAroundAxis(angs:Right(),90)
 		angs:RotateAroundAxis(angs:Forward(),-100)
 		//angs:RotateAroundAxis(angs:Up(),-60)
-		shadowparams.maxspeed = 20 / velo
-		shadowparams.secondstoarrive=0.75
+		shadowparams.maxspeed = ((IsValid(rag.ZacConsLH) or IsValid(rag.ZacConsRH)) and 30 / velo or 40 / velo)
+		shadowparams.secondstoarrive=((IsValid(rag.ZacConsLH) or IsValid(rag.ZacConsRH)) and 1.5 or 0.75)
 		shadowparams.pos = phys3:GetPos()
-		shadowparams.maxangulardamp = 0.001/1e8
+		shadowparams.maxangulardamp = ((IsValid(rag.ZacConsLH) or IsValid(rag.ZacConsRH)) and 75 or 30)
 		phys2:Wake()
 		phys2:ComputeShadowControl(shadowparams2)
+		shadowparams.secondstoarrive=0.0001
+		shadowparams.pos = phys4:GetPos()
+		shadowparams.maxspeed = ((IsValid(rag.ZacConsLH) or IsValid(rag.ZacConsRH)) and 50 / (velo * 2) or 250 / (velo * 2))
+		shadowparams.maxangulardamp = 1
 		phys3:Wake()
 		phys3:ComputeShadowControl(shadowparams)
-		shadowparams.secondstoarrive=0.5
-		shadowparams.pos = phys4:GetPos()
-		shadowparams.maxspeed = 65 / velo
 		phys4:Wake()
 		phys4:ComputeShadowControl(shadowparams)
 	end
@@ -724,17 +769,17 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 	end
 
 	if ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH) then
-		local phys = Spine
+		local phys = Penis
 		local phys2 = Spine2
 		local lh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
 		local angs = ply:EyeAngles()
 		angs:RotateAroundAxis(angs:Forward(), 90)
 		angs:RotateAroundAxis(angs:Up(), 90)
-		local speed = 125
+		local speed = 110
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 4000 then
 			local shadowparams = {
-				secondstoarrive = 0.85,
-				pos = lh:GetPos() + ply:EyeAngles():Forward() * 37 + ply:EyeAngles():Up() * 13,
+				secondstoarrive = 0.9,
+				pos = lh:GetPos() + ply:EyeAngles():Forward() * 44 + ply:EyeAngles():Up() * 10,
 				angle = ply:EyeAngles(),
 				maxangulardamp = 1/1e8,
 				maxspeeddamp = 25,
@@ -753,17 +798,17 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 	end
 
 	if ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsRH) then
-		local phys = Spine
+		local phys = Penis
 		local phys2 = Spine2
 		local rh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
 		local angs = ply:EyeAngles()
 		angs:RotateAroundAxis(angs:Forward(), 90)
 		angs:RotateAroundAxis(angs:Up(), 90)
-		local speed = 125
+		local speed = 110
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 4000 then
 			local shadowparams = {
-				secondstoarrive = 0.85,
-				pos = rh:GetPos() + ply:EyeAngles():Forward() * 37 + ply:EyeAngles():Up() * 13,
+				secondstoarrive = 0.9,
+				pos = rh:GetPos() + ply:EyeAngles():Forward() * 44 + ply:EyeAngles():Up() * 10,
 				angle = ply:EyeAngles(),
 				maxangulardamp = 1/1e8,
 				maxspeeddamp = 25,
@@ -790,8 +835,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 80
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 4000 then
 			local shadowparams = {
-				secondstoarrive = 0.75,
-				pos = chst:GetPos() + ply:EyeAngles():Forward() * -37 + ply:EyeAngles():Up() * -5,
+				secondstoarrive = 1,
+				pos = chst:GetPos() + ply:EyeAngles():Forward() * -44 + ply:EyeAngles():Up() * -5,
 				angle = phys:GetAngles(),
 				maxangulardamp = 1/1e8,
 				maxspeeddamp = 10,
@@ -815,8 +860,8 @@ hook.Add("Player Think","FakeControl",function(ply,time)
 		local speed = 80
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 4000 then
 			local shadowparams = {
-				secondstoarrive = 0.75,
-				pos = chst:GetPos() + ply:EyeAngles():Forward() * -37 + ply:EyeAngles():Up() * -5,
+				secondstoarrive = 1,
+				pos = chst:GetPos() + ply:EyeAngles():Forward() * -44 + ply:EyeAngles():Up() * -5,
 				angle = phys:GetAngles(),
 				maxangulardamp = 1/1e8,
 				maxspeeddamp = 10,

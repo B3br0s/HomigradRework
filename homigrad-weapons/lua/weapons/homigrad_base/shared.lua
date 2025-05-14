@@ -118,7 +118,7 @@ function SWEP:PrimaryAttack()
 		return
 	end
 	self.Primary.Automatic = weapons.Get(self:GetClass()).Primary.Automatic
-	if !self:CanShoot() then return end
+	if !self:CanShoot() then if !self:IsSprinting() and !self:IsClose() then self.Primary.Automatic = false sound.Play("weapons/clipempty_pistol.wav",self:GetPos(),75,math.random(95,105),1) end return end
     if self:GetNextPrimaryFire() > CurTime() then return end
     if self.NextShoot and self.NextShoot > CurTime() then return end
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Wait)
@@ -193,6 +193,7 @@ function SWEP:Step()
 end
 
 function SWEP:Think()
+	self:Lobotomy_Sharik()
 end
 
 function SWEP:DrawWorldModel()

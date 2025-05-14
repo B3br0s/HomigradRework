@@ -214,7 +214,7 @@ function SWEP:Reload()
 end
 
 function SWEP:CanShoot()
-    return (!self.Reloading and !self.Inspecting and self:Clip1() > 0 and self.Pumped and !self:IsSprinting())
+    return (!self.Reloading and !self.Inspecting and self:Clip1() > 0 and self.Pumped and !self:IsSprinting() and !self:IsClose())
 end
 
 function SWEP:PrimaryAdd()

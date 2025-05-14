@@ -22,7 +22,6 @@ SWEP.MuzzlePos = Vector(0,-0.5,-0.7)
 SWEP.att = 1
 SWEP.NumBullet = false
 
-SWEP.IsShotgun = false
 SWEP.Primary.ClipSize = 5
 SWEP.Primary.DefaultClip = 5
 SWEP.Primary.Damage = 23

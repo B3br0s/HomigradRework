@@ -20,10 +20,22 @@ function CreateVoice(ply,istalking)
     VoiceAvatar:SetWide(VoicePanel:GetTall())
     VoiceAvatar:SetHeight(VoicePanel:GetTall())
 
+    VoicePanel.ZalupaAvatar = VoiceAvatar
+
+    function VoiceAvatar:Paint(w, h)
+        if !IsValid(ply) or !ply.SteamID then
+            self:Remove()
+            return
+        end
+    end
+
     function VoicePanel:SubPaint(w,h)
-        if !IsValid(ply) then
+        if !IsValid(ply) or !ply.SteamID then
             self:Remove()
         end
+
+        self.ZalupaAvatar = VoiceAvatar
+
         local clr_mul = ply:VoiceVolume() * (ply:Alive() and 1 or 0.2)
 
         self.TalkAmt = LerpFT(0.2,self.TalkAmt,(istalking and 1 or 0))
@@ -74,6 +86,27 @@ function CreateVoicePanels()
         //draw.RoundedBox(0,0,0,w,h,Color(255,255,255,10))
     end
 end
+
+hook.Add("HUDPaint","zalua",function(ply)
+    for _zov, ply in ipairs(player.GetAll()) do
+        if IsValid(hg.voicepanel[ply:SteamID()]) then
+            local self = hg.voicepanel[ply:SteamID()]
+            local w,h = self.ZalupaAvatar:GetSize()
+
+            //print(ply:VoiceVolume() * 50)
+
+            self.SizeZalupki = LerpFT(0.4,self.SizeZalupki or 0,ply:VoiceVolume() * 250)
+
+            local X, Y = self.ZalupaAvatar:LocalToScreen(self.ZalupaAvatar:GetWide() / 2, self.ZalupaAvatar:GetTall() / 2)
+
+
+            surface.SetMaterial(Material("homigrad/vgui/models/circle.png"))
+            surface.SetDrawColor(255 * ply:VoiceVolume() * 2, 255 * ply:VoiceVolume() * 2, 255 * ply:VoiceVolume() * 2,200 * ply:VoiceVolume() * 10)
+            surface.DrawTexturedRect(X - self.SizeZalupki/2, Y - self.SizeZalupki/2, self.SizeZalupki, self.SizeZalupki)
+            
+        end
+    end
+end)
 
 hook.Add("PlayerStartVoice", "HUD_Indicator", function(ply)
     //if ply == LocalPlayer() then return end

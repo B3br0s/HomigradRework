@@ -135,6 +135,9 @@ net.Receive("hg drop jmod",function(l,ply)
 	local tr = hg.eyeTrace(ply,100)
 
 	if IsValid(ply.JModEntInv) then
+		ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+		local ent = hg.GetCurrentCharacter(ply)
+		sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
 		ply.JModEntInv:SetNoDraw(false)
 		ply.JModEntInv:SetCollisionGroup(COLLISION_GROUP_NONE)
 		ply.JModEntInv:SetPos(tr.HitPos + vector_up * 16)
@@ -155,6 +158,9 @@ net.Receive("hg loot jmod",function(l,ply)
 	if pent == NULL or pent == Entity(1) then
 		return
 	end
+
+	ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+	sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
 
 	local tr = hg.eyeTrace(ply,160)
 
@@ -196,7 +202,7 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 		return
 	end
 	if ply:KeyDown(IN_SPEED) and ply:KeyPressed(IN_USE) then
-		local tr = hg.eyeTrace(ply,140)
+		local tr = hg.eyeTrace(ply,160)
 
 		if tr.Entity then
 			local ent = tr.Entity
@@ -206,6 +212,7 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 			end
 
 			if AllowedJMod[ent:GetClass()] then
+				ply:SetNWFloat("LastPickup",CurTime() + 0.2)
 				if ply.JModEntInv != NULL then
 					local pent  = ply.JModEntInv //fent
 
@@ -225,12 +232,15 @@ hook.Add("Player Think","Homigrad_Loot_Inventory",function(ply)
 		end
 	end
 	if ply:KeyDown(IN_ATTACK2) and ply:KeyPressed(IN_USE) then
-		local tr = hg.eyeTrace(ply,140)
+		local tr = hg.eyeTrace(ply,160)
 
 		if tr.Entity then
 			local ent = tr.Entity
 
 			if ent:IsRagdoll() and hg.RagdollOwner(ent) != NULL and ent.Inventory then
+
+				ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+
 				net.Start("hg inventory")
 				net.WriteEntity(ent)
 				net.WriteTable(ent.Inventory)
@@ -254,6 +264,8 @@ net.Receive("hg loot",function(len,ply)
 	end
 
 	if table.HasValue(ent.Inventory,taked) then
+		ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+		sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
 		table.RemoveByValue(ent.Inventory,taked)
 
 		if weapons.Get(taked) then
@@ -343,10 +355,20 @@ net.Receive("DropItemInv",function(l,ply)
     if !ply:HasWeapon(wepdrop) then
         return
     end
-    
+
+	ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+	local ent = hg.GetCurrentCharacter(ply)
+	sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
+
     ply:DropWep(ply:GetWeapon(wepdrop))
 
 end) 
+
+hook.Add("AllowPlayerPickup","Homigrad_Gavno",function(ply,ent)
+	if ent:IsWeapon() then
+		return false
+	end
+end)
 
 hook.Add("PlayerUse","NoDrawUse",function(ply,ent)
 	if ent:GetNoDraw() then
@@ -358,15 +380,19 @@ end)
 
 hook.Add("PlayerCanPickupWeapon","Homigrad_Shit",function(ply,ent)
 	local tr = hg.eyeTrace(ply)
-	if ply:HasWeapon(ent:GetClass()) and hg.Weapons[ent] then
-		ply:GiveAmmo(ent:Clip1(),ent:GetPrimaryAmmoType(),true)
-		ent:SetClip1(0)
-		return false
-	end
-	if ply:HasWeapon(ent:GetClass()) then
-		return false
-	end
-	if ply:KeyDown(IN_USE) and IsValid(ent) and ent:GetOwner() != ply and (hg.eyeTrace(ply).Entity == ent or ent:GetPos():Distance(ply:GetPos()) < 45 and (IsValid(hg.eyeTrace(ply).Entity) and !hg.eyeTrace(ply).Entity:IsWeapon() or !hg.eyeTrace(ply).Entity)) then
+	if ply:KeyDown(IN_USE) and IsValid(ent) and ent:GetOwner() != ply and (hg.eyeTrace(ply,150).Entity == ent or ent:GetPos():Distance(ply:GetPos()) < 45 and (IsValid(hg.eyeTrace(ply).Entity) and !hg.eyeTrace(ply).Entity:IsWeapon() or !hg.eyeTrace(ply).Entity)) then
+		if ply:HasWeapon(ent:GetClass()) and hg.Weapons[ent] then
+			ply:GiveAmmo(ent:Clip1(),ent:GetPrimaryAmmoType(),true)
+			if ent:Clip1() > 0 then
+				ent:SetClip1(0)
+				sound.Play("snd_jack_hmcd_ammotake.wav",ent:GetPos(),75,100,1)
+				ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+				sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
+			end
+			return false
+		end
+		ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+		sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
 		if ent.isMelee then
 				for _, wep in ipairs(ply:GetWeapons()) do
 					if wep.isMelee then
@@ -421,6 +447,10 @@ hook.Add("PlayerCanPickupWeapon","Homigrad_Shit",function(ply,ent)
 	else
 		return false
 	end
+
+	if ply:HasWeapon(ent:GetClass()) then
+		return false
+	end
 end)
 
 hook.Add("Player Think","Homigrad_Limit",function(ply)
@@ -449,6 +479,8 @@ hook.Add("Player Think","Homigrad_Limit",function(ply)
 		local a,b = table.Random(inv)
 		if a != ply:GetActiveWeapon() then
 			ply:DropWep(a)
+			ply:SetNWFloat("LastPickup",CurTime() + 0.2)
+			sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
 		end
 	end
 end)

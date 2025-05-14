@@ -267,18 +267,14 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))
 		
 		local eyeAngs = lply:EyeAngles()
-		if GetConVar("hg_bodycam"):GetInt() == 1 then
-			local matrix = ragdoll:GetBoneMatrix(body)
-			local bodypos = matrix:GetTranslation()
-			local bodyang = matrix:GetAngles()
-			
-			eyeAngs = att.Ang
-			att.Pos = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 10 + bodyang:Right() * -8) or lply:EyePos()
-		end
-		local anghook = GetConVar("hg_fakecam_mode"):GetFloat()
-		LerpEyeRagdoll = LerpAngleFT(0.08,LerpEyeRagdoll,LerpAngle(anghook,eyeAngs,att.Ang))
+		LerpEyeRagdoll = eyeAngs
+		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + att.Ang[3] * 0.2
 
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL
+
+
+		local pos,ang = ragdoll:GetBonePosition(ragdoll:LookupBone("ValveBiped.Bip01_Head1"))
+		local att = {Pos = pos + ang:Up() * 2 + ang:Right() * 1,Ang = ang}
 
 		local view = {
 			origin = att.Pos,
@@ -311,6 +307,8 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local output_ang = angEye
 	local output_pos = vecEye
 
+	//output_ang[1] = output_ang[1] + eye.Ang[1] * 0.1
+
 	if wep and wep.Smooth then
 		RecoilS = LerpFT(wep:Smooth((RecoilDown and 0.1 or 0.175)),RecoilS,RecoilDown and 0.5 or 0)
 	else
@@ -329,8 +327,6 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	
 	sprinthuy = LerpFT(0.1,sprinthuy,-math.abs(math.sin(CurTime() * 6)) * vel / 400)
 	output_ang[1] = output_ang[1] + sprinthuy
-
-	output_ang[3] = 0
 
 	output_ang[3] = output_ang[3] + y_diff_round
 

@@ -174,10 +174,6 @@ hook.Add("PlayerSay", "JMod_PLAYERSAY", function(ply, txt)
 	if not IsValid(ply) then return end
 	if not ply:Alive() then return end
 
-	if txt == "hi everyone" then
-		(ply, "idiot")
-	end
-
 	local lowerTxt = string.lower(txt)
 
 	if lowerTxt == "*trigger*" then

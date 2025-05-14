@@ -658,14 +658,14 @@ function SWEP:DrawWorldModel()
 	end
 
 	//if !self:GetFists() then
-		hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
-		hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
-    	hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
-    	hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
-		hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
-		hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
-    	hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
-    	hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
+		//hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
+		//hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    	//hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    	//hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
+		//hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
+		//hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    	//hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
+    	//hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
 	/*else
 		hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-0,30),1,0.125)
 		hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,-10,0),1,0.125)	

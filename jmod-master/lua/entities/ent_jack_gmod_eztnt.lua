@@ -85,18 +85,6 @@ if SERVER then
 		if dmginfo:IsDamageType(DMG_BURN) then
 			self:Arm()
 		end
-
-		if JMod.LinCh(Dmg, 30, 80) then
-			local Pos, State = self:GetPos(), self:GetState()
-
-			if State == STATE_ARMED then
-				self:Detonate()
-			elseif not (State == JMod.EZ_STATE_BROKEN) then
-				sound.Play("Metal_Box.Break", Pos)
-				self:SetState(JMod.EZ_STATE_BROKEN)
-				SafeRemoveEntityDelayed(self, 10)
-			end
-		end
 	end
 
 	function ENT:Arm()

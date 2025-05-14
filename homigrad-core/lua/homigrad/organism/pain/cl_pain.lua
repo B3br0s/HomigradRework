@@ -37,22 +37,22 @@ hook.Add("PainShit","LOBOTOMY_AHAHAHAHAHAH",function(mul,isotrub,w,h)
 	[ "$pp_colour_mulb" ] = 0
     }
     DrawColorModify(tab_otrub)
-	render.UpdateScreenEffectTexture()
-    pain_mat:SetFloat("$c0_y", mul)
-	pain_mat:SetFloat("$c0_z", mul)
-	pain_mat:SetFloat("$c1_x", mul)
-	pain_mat:SetFloat("$c1_y", mul)
-	pain_mat:SetFloat("$c2_x", CurTime() + 10000)
-    pain_mat2:SetFloat("$c0_y", 0.5)
-	pain_mat2:SetFloat("$c0_z", 0.1)
-	pain_mat2:SetFloat("$c1_x", math.Clamp(mul, 0, 4))
-	pain_mat2:SetFloat("$c1_y", mul * 15)
-	pain_mat2:SetFloat("$c2_x", CurTime() + 10000)
-    render.SetMaterial(pain_mat)
-    render.DrawScreenQuad()
-
-    render.SetMaterial(pain_mat2)
-    render.DrawScreenQuad()
+	//render.UpdateScreenEffectTexture()
+    //pain_mat:SetFloat("$c0_y", mul)
+	//pain_mat:SetFloat("$c0_z", mul)
+	//pain_mat:SetFloat("$c1_x", mul)
+	//pain_mat:SetFloat("$c1_y", mul)
+	//pain_mat:SetFloat("$c2_x", CurTime() + 10000)
+    //pain_mat2:SetFloat("$c0_y", 0.5)
+	//pain_mat2:SetFloat("$c0_z", 0.1)
+	//pain_mat2:SetFloat("$c1_x", math.Clamp(mul, 0, 4))
+	//pain_mat2:SetFloat("$c1_y", mul * 15)
+	//pain_mat2:SetFloat("$c2_x", CurTime() + 10000)
+    //render.SetMaterial(pain_mat)
+    //render.DrawScreenQuad()
+//
+    //render.SetMaterial(pain_mat2)
+    //render.DrawScreenQuad()
 end)
 
 hook.Add("Lobotomy","LOBOTOMY_AHAHAHAHAHAH",function(mul,isotrub,w,h)  
@@ -134,6 +134,7 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
 
         local pulse = ply:GetNWFloat("pulse")
 
+        /*
         surface.SetFont("HS.45")
         local shit_size = surface.GetTextSize(hg.GetPhrase("uncon"))
         //local size = shit_size
@@ -146,7 +147,7 @@ hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
         end
 
         draw.SimpleText(hg.GetPhrase("uncon"),"HS.45",ScrW()/2 + (math.random(-5,5) * shake),ScrH()/2 + (math.random(-5,5) * shake),Color(161,0,0,255 * dark),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-
+        */
         if pulse != 0 and pulseStart + pulse * 60 < RealTime() then
             pulseStart = RealTime()
 

@@ -38,7 +38,7 @@ function SWEP:Initialize()
     hg.Weapons[self] = true
     self:SetHoldType(self.HoldType)
 
-    self.Uses = 2
+    self.Uses = 4
 end
 
 function SWEP:Step_Anim()

@@ -63,7 +63,7 @@ function SWEP:Camera(ply, origin, angles, fov)
 
     //origin = origin + anglef:Right() * math.random(-0.1,0.1) * (animpos/200) + anglef:Up() * math.random(-0.1,0.1) * (animpos/200)
     
-    addfov = LerpFT(0.1, addfov, self:IsSighted() and -(self.addfov or 30) - Recoil * 10 or 0)
+    addfov = LerpFT(0.15, addfov, self:IsSighted() and -(self.addfov or 30) - Recoil * 10 or 0)
 
     local removemul = (RecoilS / 4) * lerpaim
 
@@ -75,7 +75,7 @@ function SWEP:Camera(ply, origin, angles, fov)
 
     local siht = (att.Pos - origin):Angle()
     siht[2] = angles[2]//att.Ang[2] - (RecoilS / 26) * self:GetRightMul()
-    siht[3] = angles[3]
+    siht[3] = angles[3] + (self:IsPistolHoldType() and 2 or 5)
     siht[1] = angles[1]//math.Clamp(att.Ang[1] + (RecoilS / 1.5)  * self:GetUpMul(),-83,88)
     siht:RotateAroundAxis(siht:Forward(),self.ZoomAng[1] * lerpaim)
     siht:RotateAroundAxis(siht:Right(),self.ZoomAng[2] * lerpaim)

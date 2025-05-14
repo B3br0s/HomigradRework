@@ -91,18 +91,6 @@ if SERVER then
 		if dmginfo:GetInflictor() == self then return end
 		self:TakePhysicsDamage(dmginfo)
 		local Dmg = dmginfo:GetDamage()
-
-		if JMod.LinCh(Dmg, 60, 120) then
-			local Pos, State = self:GetPos(), self:GetState()
-
-			if State == STATE_ARMED then
-				self:Detonate()
-			elseif not (State == STATE_BROKEN) then
-				sound.Play("Metal_Box.Break", Pos)
-				self:SetState(STATE_BROKEN)
-				SafeRemoveEntityDelayed(self, 10)
-			end
-		end
 	end
 
 	function ENT:Use(activator, activatorAgain, onOff)
@@ -133,9 +121,9 @@ if SERVER then
 				if Alt then
 					if self.NextDisarm < Time then
 						self.NextDisarm = Time + .2
-						self.DisarmProgress = self.DisarmProgress + JMod.Config.Explosives.BombDisarmSpeed
+						self.DisarmProgress = self.DisarmProgress + 1 * self.DisarmNeeded / 10
 						self.NextDisarmFail = Time + 1
-						Dude:PrintMessage(HUD_PRINTCENTER, "disarming: " .. math.floor(self.DisarmProgress) .. "/" .. math.ceil(self.DisarmNeeded))
+						Dude:PrintMessage(HUD_PRINTCENTER, "disarming: " .. self.DisarmProgress .. "/" .. self.DisarmNeeded)
 
 						if self.DisarmProgress >= self.DisarmNeeded then
 							self:SetState(STATE_OFF)

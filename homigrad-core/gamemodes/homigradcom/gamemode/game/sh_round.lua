@@ -11,6 +11,8 @@ function UpdateShit()
     ROUND_NAME = ROUND_NAME or "hmcd"
     ROUND_ENDED = ROUND_ENDED or false
     ROUND_ENDSIN = ROUND_ENDSIN or 0
+
+    hg.Points = hg.Points or {}
     
     hg.Points.box_spawn = hg.Points.box_spawn or {}
     hg.Points.box_spawn.Color = Color(150,0,0)

@@ -46,12 +46,81 @@ BoneIntoHG={
     ["ValveBiped.Bip01_R_Foot"]=7
 }
 
+hook.Add("Think","Ragdoll_Zalupa",function()
+    for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
+        if IsValid(ent) and ent:IsRagdoll() then
+            local rag = ent
+            if rag.gib then
+                rag:SetNWBool("NoHead",rag.gib.Head)
+                rag:SetNWBool("NoLArm",rag.gib.LArm)
+                rag:SetNWBool("NoRArm",rag.gib.RArm)
+                rag:SetNWBool("NoLLeg",rag.gib.LLeg)
+                rag:SetNWBool("NoRLeg",rag.gib.RLeg)
+            end
+        end
+    end
+end)
+
+local vecZero = Vector(0,0,0)
+local vecInf = Vector(1,1,1) / 0
+
+local function removeBone(rag,bone,phys_bone)
+	rag:ManipulateBoneScale(bone,vecZero)
+	--rag:ManipulateBonePosition(bone,vecInf) -- Thanks Rama (only works on certain graphics cards!)
+
+	if rag.gibRemove[phys_bone] then return end
+
+	local phys_obj = rag:GetPhysicsObjectNum(phys_bone)
+	
+	if not IsValid(phys_obj) then return end
+
+	phys_obj:EnableCollisions(false)
+	phys_obj:SetMass(0.1)
+	--rag:RemoveInternalConstraint(phys_bone)
+
+	if rag.constraints and IsValid(rag.constraints[rag:GetBoneName(bone)]) then
+		rag.constraints[rag:GetBoneName(bone)]:Remove()
+		rag.constraints[rag:GetBoneName(bone)] = nil
+	end
+
+	constraint.RemoveAll(phys_obj)
+	rag.gibRemove[phys_bone] = phys_obj
+end
+
+local function recursive_bone(rag,bone,list)
+	for i,bone in pairs(rag:GetChildBones(bone)) do
+		if bone == 0 then continue end--wtf
+
+		list[#list + 1] = bone
+
+		recursive_bone(rag, bone, list)
+	end
+
+end
+
+function Gib_RemoveBone(rag,bone,phys_bone)
+	rag.gibRemove = rag.gibRemove or {}
+
+	removeBone(rag,bone,phys_bone)
+
+	local list = {}
+	recursive_bone(rag,bone,list)
+	for i,bone in pairs(list) do
+		removeBone(rag,bone,rag:TranslateBoneToPhysBone(bone))
+	end
+end
+
 hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
     if WhiteList[rag:GetModel()] then return end
     if IsValid(rag:GetNWEntity("RagdollOwner")) and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
         rag:GetNWEntity("RagdollOwner").LastHitBone = bone
         rag:GetNWEntity("RagdollOwner"):SetNWString('LastHitBone',bone)
+    end
 
+    dmginfo:ScaleDamage(2)
+
+    if dmginfo:GetInflictor().NumBullet then
+        dmginfo:ScaleDamage(dmginfo:GetInflictor().NumBullet / 2)
     end
     if not rag.gib then
         rag.gib = {
@@ -79,7 +148,7 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
     if dmginfo:GetDamage() > 40 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) or dmginfo:GetDamage() > 370 and dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) then
         if hitgroup == HITGROUP_HEAD and not rag.gib["Head"] then
             local bonePos, boneAng = rag:GetBonePosition(physbone)
-            rag.gib["Head"] = true
+            rag.gib["Head"] = true 
             if rag:GetNWEntity("RagdollOwner") != nil and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag or rag:GetNWEntity("RagdollOwner") != NULL and !rag:GetNWEntity("RagdollOwner"):Alive() then
                 hg.Gibbed[rag:GetNWEntity("RagdollOwner")] = true
             end
@@ -105,7 +174,7 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
             net.Broadcast()
         end
     end
-    if dmginfo:GetDamage() > 350 and rag:GetVelocity():Length() > 450 or rag:GetVelocity():Length() > 1750 or dmginfo:GetDamageType() == DMG_BLAST then-- we do a little trolling
+    if dmginfo:GetDamage() > 350 and rag:GetVelocity():Length() > 450 or rag:GetVelocity():Length() > 900 or dmginfo:GetDamageType() == DMG_BLAST then-- we do a little trolling
         if dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then return end
         if not rag.gib["Full"] then
             if rag:GetNWEntity("RagdollOwner") != nil and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag or rag:GetNWEntity("RagdollOwner") != NULL and !rag:GetNWEntity("RagdollOwner"):Alive() then
@@ -141,4 +210,96 @@ hook.Add("EntityTakeDamage","Homigrad_Gib_Main",function(ent,dmginfo)
 
     local Bone = ent:GetBoneName(ent:TranslatePhysBoneToBone(PhysBone))
     hook.Run("Homigrad_Gib",ent,dmginfo,PhysBone,BoneIntoHG[Bone],Bone)
+end)
+
+
+
+//Остальная хуйня
+
+local vecZero = Vector(0,0,0)
+local vecInf = Vector(1,1,1) / 0
+
+local function removeBone(rag,bone,phys_bone)
+	rag:ManipulateBoneScale(bone,vecZero)
+	--rag:ManipulateBonePosition(bone,vecInf) -- Thanks Rama (only works on certain graphics cards!)
+
+	if rag.gibRemove[phys_bone] then return end
+
+	local phys_obj = rag:GetPhysicsObjectNum(phys_bone)
+	
+	if not IsValid(phys_obj) then return end
+
+	phys_obj:EnableCollisions(false)
+	phys_obj:SetMass(0.1)
+	--rag:RemoveInternalConstraint(phys_bone)
+
+	if rag.constraints and IsValid(rag.constraints[rag:GetBoneName(bone)]) then
+		rag.constraints[rag:GetBoneName(bone)]:Remove()
+		rag.constraints[rag:GetBoneName(bone)] = nil
+	end
+
+	constraint.RemoveAll(phys_obj)
+	rag.gibRemove[phys_bone] = phys_obj
+end
+
+local function recursive_bone(rag,bone,list)
+	for i,bone in pairs(rag:GetChildBones(bone)) do
+		if bone == 0 then continue end--wtf
+
+		list[#list + 1] = bone
+
+		recursive_bone(rag, bone, list)
+	end
+
+end
+
+/*
+["Head"] 
+["LArm"] 
+["RArm"] 
+["Torso"]
+["LLeg"] 
+["RLeg"] 
+["Full"] 
+*/
+
+local BoneToGib = {
+    ["ValveBiped.Bip01_Head1"] = "NoHead",
+    ["ValveBiped.Bip01_Neck1"] = "NoHead",
+    ["ValveBiped.Bip01_L_Thigh"] = "NoLLeg",
+    ["ValveBiped.Bip01_R_Thigh"] = "NoRLeg",
+    ["ValveBiped.Bip01_L_UpperArm"] = "NoLArm",
+    ["ValveBiped.Bip01_R_UpperArm"] = "NoRArm",
+}
+
+function Gib_RemoveBone(rag,bone,phys_bone)
+    local name = rag:GetBoneName(bone)
+
+    //print(name)
+	rag.gibRemove = rag.gibRemove or {}
+
+	removeBone(rag,bone,phys_bone)
+
+    if BoneToGib[name] then
+        rag:SetNWBool(BoneToGib[name],true)
+        //print(BoneToGib[name])
+    end
+
+	local list = {}
+	recursive_bone(rag,bone,list)
+	for i,bone in pairs(list) do
+		removeBone(rag,bone,rag:TranslateBoneToPhysBone(bone))
+	end
+end
+
+concommand.Add("hg_removebone",function(ply)
+	if not ply:IsAdmin() then return end
+	local trace = hg.eyeTrace(ply,1000)
+	local ent = trace.Entity
+	if not IsValid(ent) then return end
+
+	local phys_bone = trace.PhysicsBone
+	if not phys_bone or phys_bone == 0 then return end
+
+	Gib_RemoveBone(ent,ent:TranslatePhysBoneToBone(phys_bone),phys_bone)
 end)

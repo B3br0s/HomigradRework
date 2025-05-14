@@ -212,6 +212,7 @@ l.sc_muteall = "Mute all"
 
 // Остальное
 l.inv_drop = "Drop"
+l.inv_roll = "Roll drum"
 l.pulse_normal = "Normal pulse."
 l.pulse_high = "High pulse."
 l.pulse_low = "Low pulse."

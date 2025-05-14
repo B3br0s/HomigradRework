@@ -7,7 +7,7 @@ hook.Add("Player Think", "BloodManager", function(ply)
         return
     end
     
-    ply.bloodnext = CurTime() + 0.3
+    ply.bloodnext = CurTime() + 0.1
     
     local rag = ply:GetNWEntity("FakeRagdoll")
     
@@ -34,3 +34,90 @@ hook.Add( "RenderScreenspaceEffects", "Blood_FX", function()
     //print(frac * 13)
     //print(blood)
 end )
+
+hook.Add("Think","RagdollBlood",function()
+    for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
+        if IsValid(ent) and ent:IsRagdoll() then
+            if ent.blood and ent.blood <= 0 then
+                continue 
+            end
+            if !ent.LastBleed then
+                ent.LastBleed = 0
+            end
+            if ent.LastBleed > CurTime() then
+                continue 
+            end
+            if ent.LastBleed < CurTime() then
+                ent.LastBleed = CurTime() + 0.1
+            end
+            if !ent.blood then
+                ent.blood = 5000
+            end
+            if ent:GetNWBool("NoHead") then
+                ent.blood = math.Clamp(ent.blood - math.random(1,5),0,5000)
+                local zalupa_ragdolla = ent:LookupBone("ValveBiped.Bip01_Neck1")
+                if zalupa_ragdolla then
+                    local head = ent:GetBoneMatrix(zalupa_ragdolla)
+
+                    if !head then
+                        continue 
+                    end
+
+                    blood_BleedArtery(head:GetTranslation(),(head:GetAngles() + AngleRand(-15,15)):Forward() * math.random(150,250) * (ent.blood / 5000))
+                end
+            end
+            if ent:GetNWBool("NoLLeg") then
+                ent.blood = math.Clamp(ent.blood - math.random(1,3),0,5000)
+                local zalupa_ragdolla = ent:LookupBone("ValveBiped.Bip01_Pelvis")
+                if zalupa_ragdolla then
+                    local head = ent:GetBoneMatrix(zalupa_ragdolla)
+
+                    if !head then
+                        continue 
+                    end
+
+                    blood_BleedArtery(head:GetTranslation(),(head:GetAngles() + AngleRand(-15,15)):Right() * math.random(150,250) * (ent.blood / 5000))
+                end
+            end
+            if ent:GetNWBool("NoRLeg") then
+                ent.blood = math.Clamp(ent.blood - math.random(1,3),0,5000)
+                local zalupa_ragdolla = ent:LookupBone("ValveBiped.Bip01_Pelvis")
+                if zalupa_ragdolla then
+                    local head = ent:GetBoneMatrix(zalupa_ragdolla)
+
+                    if !head then
+                        continue 
+                    end
+
+                    blood_BleedArtery(head:GetTranslation(),(head:GetAngles() + AngleRand(-15,15)):Right() * math.random(150,250) * (ent.blood / 5000))
+                end
+            end
+            if ent:GetNWBool("NoLArm") then
+                ent.blood = math.Clamp(ent.blood - math.random(1,3),0,5000)
+                local zalupa_ragdolla = ent:LookupBone("ValveBiped.Bip01_L_Clavicle")
+                if zalupa_ragdolla then
+                    local head = ent:GetBoneMatrix(zalupa_ragdolla)
+
+                    if !head then
+                        continue 
+                    end
+
+                    blood_BleedArtery(head:GetTranslation(),(head:GetAngles() + AngleRand(-15,15)):Forward() * math.random(150,250) * (ent.blood / 5000))
+                end
+            end
+            if ent:GetNWBool("NoRArm") then
+                ent.blood = math.Clamp(ent.blood - math.random(1,3),0,5000)
+                local zalupa_ragdolla = ent:LookupBone("ValveBiped.Bip01_R_Clavicle")
+                if zalupa_ragdolla then
+                    local head = ent:GetBoneMatrix(zalupa_ragdolla)
+
+                    if !head then
+                        continue 
+                    end
+
+                    blood_BleedArtery(head:GetTranslation(),(head:GetAngles() + AngleRand(-15,15)):Forward() * math.random(150,250) * (ent.blood / 5000))
+                end
+            end
+        end
+    end
+end)

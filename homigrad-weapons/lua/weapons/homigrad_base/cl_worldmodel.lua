@@ -92,6 +92,7 @@ function SWEP:WorldModel_Holster_Transform()
     if self:GetNWBool("DontShow") then
         if IsValid(self.worldModel) then
            self.worldModel:SetNoDraw(true)
+           return
         end
     else
         if IsValid(self.worldModel) then
@@ -117,7 +118,7 @@ function SWEP:WorldModel_Holster_Transform()
         end
     end
 
-    local Pos, Ang = zaebal_entity:GetBoneMatrix(Bone):GetTranslation(),zaebal_entity:GetBoneMatrix(Bone):GetAngles()
+    local Pos, Ang = zaebal_entity:GetBonePosition(Bone)
     if not Pos or not Ang then self.worldModel:SetNoDraw(true) return end
 
     Pos = Pos + Ang:Forward() * self.HolsterPos[1] + Ang:Right() * self.HolsterPos[2] + Ang:Up() * self.HolsterPos[3]

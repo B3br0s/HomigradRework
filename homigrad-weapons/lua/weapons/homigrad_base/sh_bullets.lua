@@ -151,6 +151,15 @@ function SWEP:Shoot()
             timer.Simple(0,function()
                 if IsValid(owner.FakeRagdoll) then
                     owner.FakeRagdoll:ManipulateBoneScale(owner.FakeRagdoll:LookupBone("ValveBiped.Bip01_Head1"),Vector(0.0001,0.0001,0.0001))
+                    owner.FakeRagdoll.gib = {
+                            ["Head"] = true,
+                            ["LArm"] = false,
+                            ["RArm"] = false,
+                            ["Torso"] = false,
+                            ["LLeg"] = false,
+                            ["RLeg"] = false,
+                            ["Full"] = false
+                            }
                 end
             end)
         end

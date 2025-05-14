@@ -1,34 +1,35 @@
 function IsGuilted(ply, att)
-    if ply:GetClass() != "player" then
-        return false
-    end
-    if att:GetClass() != "player" then
-        return false
-    end
-    if ROUND_ENDED then
-        return false
-    end
-    if ply == att then
+    if !ply:Alive() then
         return
     end
-    if !IsValid(ply) or !IsValid(att) or att == NULL or ply == NULL then
-        return
+    if not IsValid(ply) or not IsValid(att) or ply == NULL or att == NULL then
+        return false
     end
+    
+    if ply:GetClass() ~= "player" or att:GetClass() ~= "player" then
+        return false
+    end
+    
+    if ROUND_ENDED or ply == att then
+        return false
+    end
+    
     if ROUND_NAME == "hmcd" then
-        if !ply.IsTraitor and !att.IsTraitor then
+        if not ply.IsTraitor and not att.IsTraitor then
             return true
         elseif ply.IsTraitor and att.IsTraitor then
             return true
         end
-    else
-        local Round = TableRound()
-        if Round and Round.GuiltEnabled or Round and Round.TeamBased then
-            if ply:Team() == att:Team() then
-                return true
-            end
+        return false
+    end
+    
+    local Round = TableRound()
+    if Round then
+        if Round.GuiltEnabled or Round.TeamBased then
+            return ply:Team() == att:Team()
         end
     end
-
+    
     return false
 end
 
@@ -39,7 +40,7 @@ function GuiltThink(ply,att)
         return
     end
 
-    local clamped_dmg = math.Clamp(ply.LastDMGInfo:GetDamage(),0,40)
+    local clamped_dmg = math.Clamp(ply.LastDMGInfo:GetDamage(),0,7)
 
     if ply.isGordon and ROUND_NAME == "coop" then
         clamped_dmg = clamped_dmg * 1.25
@@ -79,6 +80,9 @@ hook.Add("EntityTakeDamage","Homigrad_Guilt",function(ent,dmginfo)
     local ply = (ent:IsPlayer() and ent or hg.RagdollOwner(ent))
     if !ply:IsPlayer() then
         //print(123)
+        return
+    end
+    if !ply:Alive() then
         return
     end
     local att = dmginfo:GetAttacker()

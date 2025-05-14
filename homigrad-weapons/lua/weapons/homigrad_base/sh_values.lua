@@ -7,7 +7,11 @@ function SWEP:IsPistolHoldType()
 end
 
 function SWEP:CanShoot()
-    return (!self.reload and !self.Inspecting and self:Clip1() > 0 and !self:IsSprinting())
+    return (!self.reload and !self.Inspecting and self:Clip1() > 0 and !self:IsSprinting() and !self:IsClose())
+end
+
+function SWEP:Lobotomy_Sharik()
+	//Залупня
 end
 
 function SWEP:IsSighted()
