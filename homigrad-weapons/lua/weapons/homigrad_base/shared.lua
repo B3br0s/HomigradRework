@@ -148,7 +148,7 @@ function SWEP:Step()
 
 	self:DrawWorldModel()
 
-	if ply:GetActiveWeapon() != self then
+	if !IsValid(ply) or IsValid(ply) and ply:IsPlayer() and ply:GetActiveWeapon() != self then
 		return
 	end
 
@@ -205,6 +205,11 @@ function SWEP:DrawWorldModel()
             self:SetBodygroup(_,v)
         end
     end
+
+	if !IsValid(self.worldModel) and IsValid(self:GetOwner()) and self:GetOwner() != NULL then
+		self:CreateWorldModel()
+	end
+
 	if !IsValid(self:GetOwner()) then
 		self:DrawModel()
 		if CLIENT then
@@ -213,11 +218,7 @@ function SWEP:DrawWorldModel()
 		return
 	end
 
-	if !IsValid(self.worldModel) and IsValid(self:GetOwner()) and self:GetOwner() != NULL then
-		self:CreateWorldModel()
-	end
-
-	if self:GetOwner():GetActiveWeapon() != self then
+	if IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon() != self then
 		self:WorldModel_Holster_Transform()
 	else
 		self:GetTrace()
@@ -269,5 +270,15 @@ hook.Add("Think", "Homigrad-Weapons", function()
 	for wep in pairs(hg.Weapons) do
 		if not IsValid(wep) or not wep.Step or not IsValid(wep:GetOwner()) then continue end
 		wep:Step()
+		//wep:DrawWorldModel()
 	end
 end)
+
+if CLIENT then
+	hook.Add("PostDrawOpaqueRenderables", "Homigrad-Weapons", function()
+		for wep in pairs(hg.Weapons) do
+			if not IsValid(wep) or !wep.DrawWorldModel then continue end
+			//wep:DrawWorldModel()
+		end
+	end)
+end

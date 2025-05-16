@@ -180,7 +180,7 @@ function SWEP:Shoot()
     local Bullet = {}
     Bullet.Src = Pos
     Bullet.Dir = Ang:Forward()
-    Bullet.Damage = self.Primary.Damage
+    Bullet.Damage = weapons.Get(self:GetClass()).Primary.Damage
     //Bullet.Num = (self.NumBullet or 1)
     Bullet.Spread = Vector(0,0,0)
     Bullet.Tracer = 0

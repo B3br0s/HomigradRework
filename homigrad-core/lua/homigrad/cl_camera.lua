@@ -268,7 +268,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		
 		local eyeAngs = lply:EyeAngles()
 		LerpEyeRagdoll = eyeAngs
-		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + att.Ang[3] * 0.2
+		//LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + att.Ang[3] * 0.01
 
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL
 

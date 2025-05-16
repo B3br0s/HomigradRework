@@ -25,7 +25,7 @@ function KickFoot(ply)
         dmginfo:SetInflictor(ply)
 
         if !tr.Entity:IsPlayer() then
-            tr.Entity:GetPhysicsObject():ApplyForceCenter(Vector() + ply:GetAngles():Forward() * 7500 + vector_up * 3000)
+            tr.Entity:GetPhysicsObject():ApplyForceCenter(Vector() + ply:GetAngles():Forward() * 14000 + vector_up * 8000)
 
             if tr.Entity:GetPhysicsObject():GetMass() > 250 and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then
                 sound.Play('homigrad/player/damage'..math.random(1,2)..'.wav',ply:GetPos(),75)
@@ -60,7 +60,7 @@ function KickFoot(ply)
 
                     local phys = physDoor:GetPhysicsObject()
                     if IsValid(phys) then
-                        local forceDirection = ply:GetAimVector() * 250
+                        local forceDirection = ply:GetAimVector() * 1250
                         for i = 1, 50 do
                             timer.Simple(0.001 * i, function()
                                 phys:ApplyForceCenter(forceDirection)
@@ -69,7 +69,7 @@ function KickFoot(ply)
                     end
                 else
                     tr.Entity:Fire("SetAnimation", "Open", 0)
-                    tr.Entity:SetKeyValue("speed", 1000)
+                    tr.Entity:SetKeyValue("speed", 2000)
                     tr.Entity:Fire("Open", "", 0)
                     timer.Simple(0.03, function()
                         tr.Entity:SetKeyValue("speed", 100)
@@ -82,7 +82,7 @@ function KickFoot(ply)
             tr.Entity:SetHealth(ply:Health() - math.random(5,8))
             //ШЛЗФЫОХРВЗОШЛХЪВЫФ ХЩЗГОШПГОШЩХЗЫГОЩЖХВАМШЩЗХЫВГОЩЖАЩЖГЫВАГОЫВГОАШЫВШ
             if math.random(1,3) == 2 then
-                hg.Faking(tr.Entity,ply:GetAngles():Forward() * 500)
+                hg.Faking(tr.Entity,ply:GetAngles():Forward() * 750)
             end
         end
     elseif tr.HitWorld and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then

@@ -33,12 +33,11 @@ hg.loots = hg.loots or {}
 
 hg.loots.small_crate = {
 	"weapon_knife",
-	"weapon_hatchet",
 	"weapon_kknife",
 	"weapon_burger",
 	"weapon_pnev",
+	"weapon_sawedoff",
 	"weapon_water_bottle",
-	"weapon_fnp45",
 	"weapon_chips",
 	"weapon_energy_drink",
 }
@@ -47,6 +46,7 @@ hg.loots.medium_crate = {
 	"weapon_glock17",
 	"weapon_handcuffs",
 	"weapon_tomahawk",
+	"weapon_sawedoff",
 	"weapon_pnev",
 	"weapon_arpistol",
 	"weapon_fnp45",
@@ -62,6 +62,7 @@ hg.loots.large_crate = {
 	"weapon_faxe",
 	"weapon_arpistol",
 	"weapon_hatchet",
+	"weapon_sawedoff",
 	"weapon_fnp45",
 	"weapon_pnev",
 	//"weapon_mp9",
@@ -106,6 +107,7 @@ hg.loots.weapon_crate = {
 	//"weapon_mp9",
 	"weapon_deagle",
 	"weapon_arpistol",
+	"weapon_sawedoff",
 	"weapon_glock17",
 	"weapon_fnp45",
 	"weapon_m4a1",

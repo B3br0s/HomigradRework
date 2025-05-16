@@ -75,7 +75,7 @@ function SWEP:ReloadFunc()
             self:SetHoldType(self.HoldType)
             timer.Simple(self.Primary.ReloadTime,function()
                 if SERVER then
-                    if self:Clip1() == 0 then
+                    if self:Clip1() == 0 and self.BoltLock then
                         timer.Simple(0.3,function()
                             self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))
                             sound.Play("weapons/shotgun/shotgun_cock_forward.wav",self:GetPos(),80,math.random(95,105))

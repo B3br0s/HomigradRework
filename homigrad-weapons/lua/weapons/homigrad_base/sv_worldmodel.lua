@@ -49,6 +49,9 @@ function SWEP:WorldModel_Transform()
         
     local Pos = Att.Pos
     local Ang = Att.Ang
+    if !IsValid(mdl) then
+        return
+    end
     mdl:SetModelScale(self.CorrectScale or 1,0)
 
     local plyang = ply:EyeAngles()
