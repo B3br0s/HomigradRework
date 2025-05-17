@@ -84,7 +84,7 @@ local rebels = {
 function hl2dm.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"weapon_ar2_hl2","weapon_ak74","weapon_m4a1","weapon_wrekedakm"}
+    local weps_pri = {"weapon_ar2_hl2","weapon_ak74","weapon_m4a1","weapon_wrekedakm","weapon_sawedoff","weapon_doublebarrel"}
     local weps_sec = {"weapon_hl2_pistol","weapon_magnum357"}
     local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg","weapon_painkillers_hg"}
 
@@ -95,6 +95,9 @@ function hl2dm.SpawnRed(ply)
     ply.AppearanceOverride = true
 
     ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
+
+    hg.Equip_Armor(ply,"vest2")
+    hg.Equip_Armor(ply,"helmet1")
 
     local wep_primary = ply:Give(table.Random(weps_pri))
     local wep_secondary = ply:Give(table.Random(weps_sec))
@@ -134,7 +137,7 @@ function hl2dm.StartRoundSV()
             timer.Simple(0,function()
                 ply:SetModel("models/player/combine_super_soldier.mdl")
                 ply:SetNWString("UNIT_NAME",table.Random(units_super))
-                ply:SetPlayerClass("combine_super")
+                ply:SetPlayerClass("combine_elite")
                 ply.isCombine = true
                 ply.isCombineSuper = true
             end)

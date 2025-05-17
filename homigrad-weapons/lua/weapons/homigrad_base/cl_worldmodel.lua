@@ -1,58 +1,63 @@
+hg = hg or {}
+
+hg.csm = hg.csm or {}
+
 function SWEP:WorldModel_Transform()
     local mdl = self.worldModel
-
-    if !IsValid(mdl) then
-        return
-    end
-
+    if not IsValid(mdl) then return end
+    
+    local ply = self:GetOwner()
+    if not IsValid(ply) then return end
+    
     if self.Bodygroups then
-        for _, v in ipairs(self.Bodygroups) do
-            if IsValid(self.worldModel) then
-                self.worldModel:SetBodygroup(_,v)
-            end
-            self:SetBodygroup(_,v)
+        for k, v in ipairs(self.Bodygroups) do
+            mdl:SetBodygroup(k, v)
+            self:SetBodygroup(k, v)
         end
     end
+    
+    //mdl:SetNoDraw(self:GetOwner():GetActiveWeapon() ~= self)
+    
+    local bone = ply:LookupBone("ValveBiped.Bip01_R_Hand")
+    if not bone then return end
+    
+    local mat = ply:GetBoneMatrix(bone)
 
-    local ply = self:GetOwner()
-
-    local Att = {}
-
-    if !ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")) then
+    if !mat then
         return
     end
-
-    if self:GetOwner():GetActiveWeapon() == self then
-        self.worldModel:SetNoDraw(false)
-    end
-
-    Att.Pos = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetTranslation()
-    Att.Ang = ply:GetBoneMatrix(ply:LookupBone("ValveBiped.Bip01_R_Hand")):GetAngles()
-
-    Att.Ang:RotateAroundAxis(Att.Ang:Forward(),180)
-        
-    local Pos = Att.Pos
-    local Ang = Att.Ang
-    if !IsValid(mdl) then
-        return
-    end
-    mdl:SetModelScale(self.CorrectScale or 1,0)
     
-    Pos = Pos + Ang:Forward() * self.CorrectPos[1] + Ang:Right() * self.CorrectPos[2] + Ang:Up() * self.CorrectPos[3]
-    Ang:RotateAroundAxis(Ang:Forward(),self.CorrectAng[1])
-    Ang:RotateAroundAxis(Ang:Right(),self.CorrectAng[2])
-    Ang:RotateAroundAxis(Ang:Up(),self.CorrectAng[3])
+    local Ang = mat:GetAngles()
+    Ang:RotateAroundAxis(Ang:Forward(), 180)
     
-    mdl:SetAngles(Ang)
+    local Pos = mat:GetTranslation()
+    
+    mdl:SetModelScale(self.CorrectScale or 1, 0)
+    
+    if self.CorrectPos then
+        Pos = Pos + Ang:Forward() * self.CorrectPos[1] 
+             + Ang:Right() * self.CorrectPos[2] 
+             + Ang:Up() * self.CorrectPos[3]
+    end
+    
+    if self.CorrectAng then
+        Ang:RotateAroundAxis(Ang:Forward(), self.CorrectAng[1])
+        Ang:RotateAroundAxis(Ang:Right(), self.CorrectAng[2])
+        Ang:RotateAroundAxis(Ang:Up(), self.CorrectAng[3])
+    end
+    
+    Ang:Normalize()
+    
     mdl:SetPos(Pos)
+    mdl:SetAngles(Ang)
     mdl:SetOwner(ply)
-    mdl:SetParent(ply)
+    //mdl:SetupBones(true)
     mdl:SetPredictable(true)
     
-    mdl:SetRenderAngles(Ang)
     mdl:SetRenderOrigin(Pos)
-
-    return Pos,Ang
+    mdl:SetRenderAngles(Ang)
+    
+    return Pos, Ang
 end
 
 function SWEP:WorldModel_Holster_Transform()
@@ -136,6 +141,96 @@ function SWEP:WorldModel_Holster_Transform()
 
     return Pos,Ang
 end
+
+function SWEP:DrawWorldModel()
+	if self.Bodygroups then
+        for _, v in ipairs(self.Bodygroups) do
+            if IsValid(self.worldModel) then
+                self.worldModel:SetBodygroup(_,v)
+            end
+            self:SetBodygroup(_,v)
+        end
+    end
+
+	if !IsValid(self.worldModel) and IsValid(self:GetOwner()) and self:GetOwner() != NULL then
+		self:CreateWorldModel()
+	end
+
+	if !IsValid(self:GetOwner()) then
+		self:DrawModel()
+    	self:DrawAttachments(self)
+		return
+	end
+
+	if IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon() != self then
+		local pos,ang = self:WorldModel_Holster_Transform()
+        if !pos then
+            return
+        end
+        self.worldModel:SetPos(pos)
+		self.worldModel:SetAngles(ang)
+        self.worldModel:SetRenderOrigin(pos)
+		self.worldModel:SetRenderAngles(ang)
+        self:DrawAttachments()
+	else
+		self:GetTrace()
+		local mdl = self.worldModel
+    if not IsValid(mdl) then return end
+    
+    local ply = self:GetOwner()
+    if not IsValid(ply) then return end
+    
+    if self.Bodygroups then
+        for k, v in ipairs(self.Bodygroups) do
+            mdl:SetBodygroup(k, v)
+            self:SetBodygroup(k, v)
+        end
+    end
+    
+    mdl:SetNoDraw(self:GetOwner():GetActiveWeapon() ~= self)
+    
+    local bone = ply:LookupBone("ValveBiped.Bip01_R_Hand")
+    if not bone then return end
+    
+    local mat = ply:GetBoneMatrix(bone)
+
+    if !mat then
+        return
+    end
+    
+    local Ang = mat:GetAngles()
+    Ang:RotateAroundAxis(Ang:Forward(), 180)
+    
+    local Pos = mat:GetTranslation()
+    
+    mdl:SetModelScale(self.CorrectScale or 1, 0)
+    
+    if self.CorrectPos then
+        Pos = Pos + Ang:Forward() * self.CorrectPos[1] 
+             + Ang:Right() * self.CorrectPos[2] 
+             + Ang:Up() * self.CorrectPos[3]
+    end
+    
+    if self.CorrectAng then
+        Ang:RotateAroundAxis(Ang:Forward(), self.CorrectAng[1])
+        Ang:RotateAroundAxis(Ang:Right(), self.CorrectAng[2])
+        Ang:RotateAroundAxis(Ang:Up(), self.CorrectAng[3])
+    end
+    
+    Ang:Normalize()
+    
+    mdl:SetPos(Pos)
+    mdl:SetAngles(Ang)
+    mdl:SetOwner(ply)
+    //mdl:SetupBones(true)
+    mdl:SetPredictable(true)
+    
+    mdl:SetRenderOrigin(Pos)
+    mdl:SetRenderAngles(Ang)
+    self:DrawAttachments()
+	end
+end
+
 
 function SWEP:GetSAttachment(obj)
 	local pos, ang = self:WorldModel_Transform()
@@ -291,6 +386,7 @@ hook.Add("PostDrawOpaqueRenderables","Weapon_WorldModelDraw",function()
             local mdl = self.AttDrawModels[placement]
             if !IsValid(mdl) and tbl.Model then
                 mdl = ClientsideModel(tbl.Model,RENDERGROUP_BOTH)
+                table.insert(hg.csm,mdl)
                 mdl:SetOwner(ply)
                 mdl:SetPredictable(true)
                 self:CallOnRemove("RemoveAtt", function() mdl:Remove() end)

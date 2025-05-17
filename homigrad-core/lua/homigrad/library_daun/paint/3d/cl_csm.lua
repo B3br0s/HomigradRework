@@ -7,6 +7,7 @@ local list,listID = ChacheClientsideModels,ChacheClientsideModelsByID
 local id = 0
 local old
 local time,time2 = 0,0
+local hg_optimization = CreateClientConVar("hg_optimization", "1", true, false, "НУ ИГРА ЕЩЕ В СТАДИИ РАЗРАБОТКИ", 0, 1)
 
 local IsValid = IsValid
 
@@ -35,6 +36,83 @@ function SetNoDraw(self,value)
 
     self._nodraw = value
 end
+
+hook.Add("Think","devshit",function()
+    for _, ent in ipairs(ents.GetAll()) do
+        if ent.GetIndex and ent:GetIndex() != -1 then
+            continue 
+        end
+
+        if !IsValid(ent) or ent == NULL then
+            ent:Remove()
+        end
+    end
+end)
+
+hook.Add("PreRender","Shit",function()
+    local ply = LocalPlayer()
+
+    local fov = (ply:Alive() and 80 or 55)
+    
+    local AimZalupa = util.AimVector(LocalPlayer():EyeAngles(),GetConVar("hg_fov"):GetInt(),ScrW()/2,ScrH()/2,ScrW(),ScrH())
+
+    for _, ent in ipairs(hg.csm) do
+        if !IsValid(ent) then
+            ent:Remove() 
+            table.remove(hg.csm,_)
+        end
+
+        if ent == NULL then
+            continue 
+        end
+
+        if !IsValid(ent) then
+            continue 
+        end
+
+        local dtt = (hg.viewpos - ent:GetPos()):GetNormalized()
+        local att = math.deg(math.acos(AimZalupa:Dot(dtt)))
+
+        if att < fov and ply:GetActiveWeapon().worldModel != ent then
+            if hg_optimization:GetBool() then
+                ent:SetNoDraw(true)
+            else
+                ent:SetNoDraw(false)
+            end
+            //print(ent:GetModel())
+        else
+            ent:SetNoDraw(false)
+        end
+    end
+
+    for _, ent in ipairs(ents.GetAll()) do
+        local dtt = (hg.viewpos - ent:GetPos()):GetNormalized()
+        local att = math.deg(math.acos(AimZalupa:Dot(dtt)))
+
+        if ent:EntIndex() == -1 then
+            continue 
+        end
+
+        if ent:IsRagdoll() then
+            continue 
+        end
+
+        if ent:IsPlayer() then
+            continue 
+        end
+
+        if att < 52 then
+            if hg_optimization:GetBool() then
+                ent:SetNoDraw(true)
+            else
+                ent:SetNoDraw(false)
+            end
+            ent:DestroyShadow()
+        else
+            ent:SetNoDraw(false)
+        end
+    end
+end)
 
 hook.Add("RenderScene","ClientSide",function()
     hook.Run("Render Post")

@@ -3,30 +3,40 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self.Entity:SetModel(self.Model)
-	self.Entity:SetMaterial(self.ModelMaterial or "")
-	self.Entity:SetColor(self.Color or Color(255,255,255))
+	local tbl = hg.Armors[self.Armor]
+	self.Entity:SetModel(tbl.Model)
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
 	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 	self:SetUseType(SIMPLE_USE)
 	self:DrawShadow(true)
-	self:SetModelScale(self:GetModelScale()*self.ModelScale,0)
+	self:SetModelScale(tbl.Scale or 1,0)
 	local phys = self:GetPhysicsObject()
 	if IsValid(phys) then
-		phys:SetMass(20)
 		phys:Wake()
 		phys:EnableMotion(true)
 	end
-
 end
 
 function ENT:Use( activator )
     if activator:IsPlayer() then 
 
-		activator:GiveAmmo( self.AmmoCount, self.AmmoType, true )
-        self:EmitSound("snd_jack_hmcd_ammobox.wav", 75, math.random(90,110), 1, CHAN_ITEM )
+		local ply = activator
+
+		local tbl = hg.Armors[self.Armor]
+		//print(activator.armor[tbl.Placement])
+		if ply.armor[tbl.Placement] != "NoArmor" then
+			hg.DropArmor(ply,ply.armor[tbl.Placement])
+			ply.armor[tbl.Placement] = self.Armor
+		else
+			ply.armor[tbl.Placement] = self.Armor
+		end
         self:Remove()
+
+		net.Start("armor_sosal")
+		net.WriteEntity(ply)
+		net.WriteTable(ply.armor)
+		net.Broadcast()
 	end
 end

@@ -34,10 +34,12 @@ SWEP.Primary.ReloadTime = 1.2
 SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "pwb2/weapons/m4a1/ru-556 fire unsilenced.wav"
 
-SWEP.IconPos = Vector(1.5,50,-4)
-SWEP.IconAng = Angle(-20,0,0)
+SWEP.IconPos = Vector(1.8,50,3.25)
+SWEP.IconAng = Angle(0,0,0)
 
 SWEP.Reload1 = "pwb2/weapons/m4a1/ru-556 clip out 1.wav"
 SWEP.Reload2 = "pwb2/weapons/m4a1/ru-556 clip in 2.wav"
 SWEP.Reload3 = "pwb2/weapons/m4a1/ru-556 bolt back.wav"
 SWEP.Reload4 = "pwb2/weapons/m4a1/ru-556 bolt forward.wav"
+
+SWEP.Weight = 2

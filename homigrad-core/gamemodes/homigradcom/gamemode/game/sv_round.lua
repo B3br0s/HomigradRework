@@ -41,6 +41,9 @@ function StartRound()
     local CanBeStarted = {}
 
     for _, lvl in ipairs(ROUND_LIST) do
+        if TableRound(lvl).CantRandom then
+            continue 
+        end
         if TableRound(lvl).CanStart and TableRound(lvl).CanStart() then
             table.insert(CanBeStarted,lvl)
         elseif !TableRound(lvl).CanStart then

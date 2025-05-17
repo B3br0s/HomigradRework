@@ -22,7 +22,7 @@ function AddPanel(Parent,Text,NeedTo,ChangeTo,SizeXY,DockTo,CustomFunc)
     function ButtonShit:DoClick()
         surface.PlaySound("homigrad/vgui/panorama/sidemenu_click_01.wav")
         if hg[NeedTo] != ChangeTo then
-            open_fade = 0
+            open_target = 1
         end
         hg[NeedTo] = ChangeTo
     end
@@ -36,6 +36,7 @@ function show_scoreboard()
         hg.ScoreBoard = 1 -- 1 - Скорборд, 2 - персонаж
     end
     ScoreBoardPanel = vgui.Create("DFrame")
+    open_target = 0
     
     ScoreBoardPanel:SetSize(ScrW(),ScrH())
     ScoreBoardPanel:Center()
@@ -46,10 +47,10 @@ function show_scoreboard()
     ScoreBoardPanel:SetKeyBoardInputEnabled(false)
     local cx,cy = ScoreBoardPanel:GetX(),ScoreBoardPanel:GetY()
     function ScoreBoardPanel:Paint(w,h)
-        self:SetPos(cx*open_fade,cy)
-        draw.RoundedBox(0,self:GetX(),self:GetY(),w,h,Color(0,0,0,129))
+        //self:SetPos(cx-(w*open_shit),cy)
+        draw.RoundedBox(0,self:GetX(),self:GetY(),w,h,Color(0,0,0,129 * open_fade))
         //Derma_DrawBackgroundBlur(self)
-        draw.SimpleText("HOMIGRAD REWORK","H.70",ScrW()/2,ScrH()/2,Color(255,255,255,30),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        draw.SimpleText("HOMIGRAD REWORK","H.70",ScrW()/2,ScrH()/2,Color(255,255,255,30 * open_fade),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
     
     ItemsPanel = vgui.Create("DScrollPanel",ScoreBoardPanel)
@@ -133,6 +134,7 @@ function show_scoreboard()
 end
 
 hook.Add("ScoreboardShow","Homigrad_ScoreBoard",function()
+    hg.score_closing = false
     if toggle_tab:GetBool() then
         return false
     end
@@ -140,6 +142,7 @@ hook.Add("ScoreboardShow","Homigrad_ScoreBoard",function()
         if hg.islooting then
             surface.PlaySound("homigrad/vgui/item_drop.wav")
             hg.islooting = false
+            hg.score_closing = true
             hg.lootent = NULL
         else
             ScoreBoardPanel:Remove()
@@ -155,7 +158,10 @@ hook.Add("ScoreboardHide","Homigrad_ScoreBoard",function()
         return
     end
     if IsValid(ScoreBoardPanel) then
-        ScoreBoardPanel:Remove()
+        hg.score_closing = true
+        timer.Simple(0.2,function()
+            ScoreBoardPanel:Remove()
+        end)
         hg.islooting = false
         hg.lootent = NULL
     end
@@ -181,19 +187,26 @@ hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
             draw.SimpleText(string.format(hg.GetPhrase("sc_nextround"),TableRound(ROUND_NEXT).name), "hg_HomicideSmalles", ScrW() - sizex * 1.3 - sizex2 * 0.1, 8 + sizey, Color(255, 247, 173, 255 * open_fade), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         cam.End2D()
     end
-    if IsValid(ScoreBoardPanel) then
-        open_fade = LerpFT(0.1,open_fade,1)
+    if !hg.score_closing then
+        open_fade = LerpFT(0.25,open_fade,1)
     else
-        open_fade = LerpFT(0.025,open_fade,0)
+        open_fade = LerpFT(0.25,open_fade,0)
     end
     if hg.islooting and IsValid(hg.lootent) and hg.lootent:GetPos():Distance(LocalPlayer():GetPos()) > 95 or !IsValid(hg.lootent) and hg.islooting or hg.islooting and !LocalPlayer():Alive() then
         if hg.islooting then
             surface.PlaySound("homigrad/vgui/item_drop.wav")
             hg.islooting = false
             hg.lootent = NULL
+            if !hg.score_closing then
+                hg.score_closing = true
+                timer.Simple(0.2,function()
+                    ScoreBoardPanel:Remove()
+                end)
+            end
         else
             if IsValid(ScoreBoardPanel) then
                 hg.islooting = false
+                hg.score_closing = true
                 ScoreBoardPanel:Remove()
             end
         end
@@ -213,11 +226,13 @@ hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
                 surface.PlaySound("homigrad/vgui/item_drop.wav")
                 hg.islooting = false
                 hg.lootent = NULL
+                hg.score_closing = true
             else
                 ScoreBoardPanel:Remove()
             end
         else
             show_scoreboard()
+            hg.score_closing = false
         end
         tabPressed = true
     elseif !input.IsKeyDown(KEY_TAB) then

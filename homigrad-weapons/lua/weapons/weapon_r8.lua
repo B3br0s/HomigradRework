@@ -41,6 +41,8 @@ SWEP.IconPos = Vector(1,100,-5)
 SWEP.IconAng = Angle(-20,0,0)
 SWEP.Shoted = false
 
+SWEP.Weight = 1
+
 SWEP.ReloadSounds = {
     [0.55] = "arccw_go/revolver/revolver_siderelease.wav",
     [0.65] = "arccw_go/revolver/revolver_clipout.wav",

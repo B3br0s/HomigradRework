@@ -32,6 +32,21 @@ hg.FootSteps = {
         "homigrad/player/footsteps/new/grass_12.wav",
         "homigrad/player/footsteps/new/grass_13.wav"
     },
+    paper = {
+        "homigrad/player/footsteps/new/grass_01.wav",
+        "homigrad/player/footsteps/new/grass_02.wav",
+        "homigrad/player/footsteps/new/grass_03.wav",
+        "homigrad/player/footsteps/new/grass_04.wav",
+        "homigrad/player/footsteps/new/grass_05.wav",
+        "homigrad/player/footsteps/new/grass_06.wav",
+        "homigrad/player/footsteps/new/grass_07.wav",
+        "homigrad/player/footsteps/new/grass_08.wav",
+        "homigrad/player/footsteps/new/grass_09.wav",
+        "homigrad/player/footsteps/new/grass_10.wav",
+        "homigrad/player/footsteps/new/grass_11.wav",
+        "homigrad/player/footsteps/new/grass_12.wav",
+        "homigrad/player/footsteps/new/grass_13.wav"
+    },
     metal = {
         "homigrad/player/footsteps/new/metal_solid_35.wav",
         "homigrad/player/footsteps/new/metal_solid_36.wav",
@@ -49,6 +64,23 @@ hg.FootSteps = {
         "homigrad/player/footsteps/new/metal_solid_48.wav",
         "homigrad/player/footsteps/new/metal_solid_49.wav",
         "homigrad/player/footsteps/new/metal_solid_50.wav"
+    },
+    metalvehicle = {
+        "homigrad/player/footsteps/new/metal_grate_01.wav",
+        "homigrad/player/footsteps/new/metal_grate_02.wav",
+        "homigrad/player/footsteps/new/metal_grate_03.wav",
+        "homigrad/player/footsteps/new/metal_grate_04.wav",
+        "homigrad/player/footsteps/new/metal_grate_05.wav",
+        "homigrad/player/footsteps/new/metal_grate_06.wav",
+        "homigrad/player/footsteps/new/metal_grate_07.wav",
+        "homigrad/player/footsteps/new/metal_grate_08.wav",
+        "homigrad/player/footsteps/new/metal_grate_09.wav",
+        "homigrad/player/footsteps/new/metal_grate_10.wav",
+        "homigrad/player/footsteps/new/metal_grate_11.wav",
+        "homigrad/player/footsteps/new/metal_grate_12.wav",
+        "homigrad/player/footsteps/new/metal_grate_13.wav",
+        "homigrad/player/footsteps/new/metal_grate_14.wav",
+        "homigrad/player/footsteps/new/metal_grate_15.wav"
     },
     metalvent = {
         "homigrad/player/footsteps/new/metal_grate_01.wav",
@@ -269,29 +301,34 @@ hg.FootSteps = {
 }
 
 if CLIENT then
-    local hg_camshake_amount = CreateClientConVar("hg_camshake_amount","1",true,false,nil,0,1.5)
-    local hg_camshake_enabled = CreateClientConVar("hg_camshake_enabled","1",true,false,nil,0,1)
+    local hg_camshake_amount = CreateClientConVar("hg_camshake_amount", "1", true, false, nil, 0, 1.5)
+    local hg_camshake_enabled = CreateClientConVar("hg_camshake_enabled", "1", true, false, nil, 0, 1)
 
-    hook.Add("PlayerFootstep","Homigrad_Step",function(ply,pos,f,snd,v)
+    hook.Add("PlayerFootstep", "Homigrad_Step", function(ply, pos, f, snd, v)
         local tr = util.TraceLine({
             start = pos + vector_up * 10,
             endpos = pos + vector_up * -100,
             filter = {ply}
         })
 
+        if !ply.lastfoot then
+            ply.lastfoot = CurTime() + 0.3
+        end
+
+        if ply.lastfoot > CurTime() then
+            return true
+        end
+
+        ply.lastfoot = CurTime() + (ply:IsSprinting() and 0.2 or 0.3)
+
         local mat = util.GetSurfacePropName(tr.SurfaceProps)
 
         if mat == "default" then
-            --return true
+            -- return true
         end
 
         if GetConVar("developer"):GetBool() then
             print(mat)
-        end
-
-        //print(mat)
-        if ply == LocalPlayer() and hg_camshake_enabled:GetBool() and !GetGlobalBool("DefaultMove",false) then
-            ViewPunch(Angle((ply:GetVelocity():Length() / 280) * hg_camshake_amount:GetFloat(),0,(f == 0 and -1 or f) * (ply:GetVelocity():Length() / 100) * hg_camshake_amount:GetFloat()),15)
         end
 
         if !hg.FootSteps[mat] then
@@ -300,14 +337,22 @@ if CLIENT then
 
         snd = table.Random(hg.FootSteps[mat])
 
-        sound.Play(snd,pos,80,math.random(90,100),v * 1.4)
+        if ply.armor and ply.armor.torso != "NoArmor" then
+            sound.Play(Sound("snd_jack_gear" .. math.random(1, 6) .. ".wav"), pos, 100, 100, 0.5)
+        end
+
+        if ply:GetNWBool("IsCombine") then
+            sound.Play(Sound("npc/combine_soldier/gear" .. math.random(1, 6) .. ".wav"), pos, 75, 100, v * 1.4)
+        end
+
+        sound.Play(snd, pos, 80, math.random(90, 100), v * 1.4)
 
         return true
     end)
 else
-    hook.Add("OnPlayerHitGround","Homigrad_Step",function(ply,inwater,float,speed)
-        snd = table.Random(hg.FootSteps.land)
+    hook.Add("OnPlayerHitGround", "Homigrad_Step", function(ply, inwater, float, speed)
+        local snd = table.Random(hg.FootSteps.land)
     
-        ply:EmitSound(snd,70,math.random(95,100),0.4,CHAN_BODY,SND_CHANGE_PITCH)
+        ply:EmitSound(snd, 70, math.random(95, 100), 0.4, CHAN_BODY, SND_CHANGE_PITCH)
     end)
 end

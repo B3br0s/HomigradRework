@@ -4,6 +4,9 @@ local panelka
 local lply = LocalPlayer()
 
 local weps = {}
+local loot_queue = {} //куэуэ
+local obrabotka_active = false
+local cur = NULL
 
 local armorSlots = {
     "head", "eyes", "mouthnose", "ears", "rightshoulder", "rightforearm", 
@@ -39,9 +42,40 @@ function PopulateArmorSlots()
     end
 end
 
+hook.Add("Think","ObrabotkaQueui",function()
+    if LocalPlayer():Alive() and hg.ScoreBoard == 3 then
+        if !table.IsEmpty(loot_queue) then
+            obrabotka_active = true
+            for _, item in ipairs(loot_queue) do
+                if cur == NULL then
+                    cur = item
+                    table.remove(loot_queue,_)
+                else
+                    if IsValid(item) and item != cur then
+                        item.LootIn = CurTime() + 0.4
+                        if weapons.Get(item.Weapon) and weapons.Get(item.Weapon).Weight then
+                            item.LootIn = CurTime() + 0.45 * weapons.Get(item.Weapon).Weight
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    if cur.LootIn and cur.LootIn < CurTime() then
+        cur:LootReal()
+        cur = NULL
+    end
+
+    if !open then
+        obrabotka_active = false
+        cur = NULL
+    end
+end)
+
 hook.Add("HUDPaint","InventoryPage",function()
     if not hg.ScoreBoard then return end
-    if not IsValid(ScoreBoardPanel) then open = false return end
+    if not IsValid(ScoreBoardPanel) then open = false if !table.IsEmpty(loot_queue) then table.Empty(loot_queue) end return end
     if !LocalPlayer():Alive() and hg.ScoreBoard == 3 then
         hg.ScoreBoard = 1
         if IsValid(ScoreBoardPanel) then
@@ -89,7 +123,7 @@ hook.Add("HUDPaint","InventoryPage",function()
             if hg.islooting and lootent:IsRagdoll() then
                 lootent = hg.lootent
                 draw.SimpleText(lootent:GetNWString("PlayerName"),"HS.18",w/2,h/1.85,Color(255,255,255,255 * daun1),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-            elseif hg.islooting then
+            elseif hg.islooting and IsValid(hg.lootent) and hg.lootent != NULL then
                 lootent = hg.lootent
                 draw.SimpleText(hg.GetPhrase(lootent:GetClass()),"HS.18",w/2,h/1.85,Color(255,255,255,255 * daun1),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
             elseif !hg.islooting and lootent != NULL then
@@ -209,6 +243,7 @@ hook.Add("HUDPaint","InventoryPage",function()
         end
     elseif hg.ScoreBoard != 3 then
         hg.islooting = false
+        if !table.IsEmpty(loot_queue) then table.Empty(loot_queue) end
         open = false
         if IsValid(panelka) then
             panelka:Remove()
@@ -228,7 +263,6 @@ function CreateLootSlot(Parent,SlotsSize,PosI)
     InvButton.LowerFont = "HS.10"
 
     function InvButton:DoRightClick()
-
     end
     
     function InvButton:Think()
@@ -280,6 +314,16 @@ function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
         function InvButton:DoClick()
             self:Loot()
         end
+    end
+
+    function InvButton:LootReal()
+        net.Start("hg loot jmod")
+        net.WriteEntity(ent)
+        net.SendToServer()
+        ent = nil
+        //Parent.CurSizeTarget = 0
+        self.BeingLooted = false
+        surface.PlaySound("homigrad/vgui/panorama/cards_draw_one_04.wav")
     end
 
     function InvButton:SubPaint(w,h)
@@ -337,13 +381,7 @@ function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
 
         if ent != nil and self.LootIn then
             if self.LootIn < CurTime() then
-                net.Start("hg loot jmod")
-                net.WriteEntity(ent)
-                net.SendToServer()
-                ent = nil
-                //Parent.CurSizeTarget = 0
-                self.BeingLooted = false
-                surface.PlaySound("homigrad/vgui/panorama/cards_draw_one_04.wav")
+                self:Loot()
             end
         end
 
@@ -359,6 +397,7 @@ function CreateJModEntInvSlot(Parent,SlotsSize,PosI,ent,weps)
         end
         self.BeingLooted = true
         surface.PlaySound("homigrad/vgui/panorama/inventory_new_item_scroll_01.wav")
+        table.insert(loot_queue,self)
         self.LootIn = CurTime() + 0.8
     end
 
@@ -571,6 +610,12 @@ function CreateLootFrame(weps,slotsamt,ent)
     
             local fixed_x,fixed_y = self:LocalToScreen(self:GetX(),self:GetY())
     
+            if self.Weapon and weapons.Get(self.Weapon) then
+                hg.DrawWeaponSelection(weapons.Get(self.Weapon),(fixed_x - (SlotsSize * (i - 1))) - (SlotsSize) * (1 - LootFrame.CurSize),fixed_y,self:GetWide(),self:GetTall(),0)
+            end
+        end
+
+        function Slot:LootReal()
             if self.Weapon != nil and self.LootIn then
                 if self.LootIn < CurTime() then
                     net.Start("hg loot")
@@ -582,19 +627,21 @@ function CreateLootFrame(weps,slotsamt,ent)
                     surface.PlaySound("homigrad/vgui/panorama/cards_draw_one_04.wav")
                 end
             end
-    
-            if self.Weapon and weapons.Get(self.Weapon) then
-                hg.DrawWeaponSelection(weapons.Get(self.Weapon),(fixed_x - (SlotsSize * (i - 1))) - (SlotsSize) * (1 - LootFrame.CurSize),fixed_y,self:GetWide(),self:GetTall(),0)
-            end
         end
 
         function Slot:Loot()
-            if self.BeingLooted or self.Weapon == nil then
+            if self.BeingLooted or self.Weapon == nil or !weapons.Get(self.Weapon) then
                 return
             end
+            print(weapons.Get(self.Weapon))
             self.BeingLooted = true
-            surface.PlaySound("homigrad/vgui/panorama/inventory_new_item_scroll_01.wav")
-            self.LootIn = CurTime() + 0.8
+            if weapons.Get(self.Weapon).ishgwep then
+                surface.PlaySound("homigrad/vgui/panorama/rotate_weapon_0"..math.random(1,3)..".wav")
+            else
+                surface.PlaySound("homigrad/vgui/panorama/inventory_new_item_scroll_01.wav")
+            end
+            self.LootIn = CurTime() + 0.4 * (weapons.Get(self.Weapon).Weight or 1)
+            table.insert(loot_queue,self)
         end
     end
 end

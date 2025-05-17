@@ -98,9 +98,3 @@ end)
 hook.Add("PreCalcView", "PlayerClass", function(ply, vec, ang, fov, znear, zfar) return ply:PlayerClassEvent("CalcView", vec, ang, fov, znear, zfar) end)
 hook.Add("PrePlayerDraw", "PlayerClass", function(ply, flag) return ply:PlayerClassEvent("PlayerDraw", flag) end)
 hook.Add("HUDPaint", "PlayerClass", function() if LocalPlayer():Alive() then LocalPlayer():PlayerClassEvent("HUDPaint") end end)
-hook.Add("Player Think","ClassOff",function(ply)
-	if !ply:Alive() then
-		ply.PlayerClassName = ""
-		ply.PlayerClassNameOld = ""
-	end
-end)

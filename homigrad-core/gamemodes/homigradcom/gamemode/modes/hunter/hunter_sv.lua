@@ -18,6 +18,9 @@ function hunter.SWATSpawn(ply)
         ply:Give(wep)
     end
 
+    hg.Equip_Armor(ply,"helmet1")
+    hg.Equip_Armor(ply,"vest2")
+
     wep_primary:SetClip1(wep_primary:GetMaxClip1())
     wep_secondary:SetClip1(wep_secondary:GetMaxClip1())
 
@@ -32,8 +35,8 @@ end
 function hunter.SpawnHunter(ply)
     local SpawnList = ReadDataMap("hunt_hunter")
 
-    local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp5","weapon_xm1014"}
-    local weps_sec = {"weapon_deagle","weapon_glock17","weapon_mac10","weapon_m9","weapon_cz75","weapon_magnum357","weapon_magnum357","weapon_magnum357"}//БОЛЬШЕ МАГНУМА,БОЛЬШЕЕЕЕЕЕЕЕ АХЫАХАХАХ ХААХАААХАХАААААААААААА
+    local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp5","weapon_xm1014","weapon_m590a1","weapon_mag7"}
+    local weps_sec = {"weapon_deagle","weapon_glock17","weapon_mac10","weapon_m9","weapon_cz75","weapon_magnum357"}
     local weps_oth = {"weapon_kknife","weapon_hatchet","weapon_tomahawk","weapon_kabar"}
     local weps_main = {"weapon_ied","weapon_handcuffs","weapon_f1"}
 
@@ -50,6 +53,10 @@ function hunter.SpawnHunter(ply)
     for _, wep in ipairs(weps_main) do
         ply:Give(wep)
     end
+
+    hg.Equip_Armor(ply,"helmet1")
+    hg.Equip_Armor(ply,"mask3")
+    hg.Equip_Armor(ply,"vest3")
 
     wep_primary:SetClip1(wep_primary:GetMaxClip1())
     wep_secondary:SetClip1(wep_secondary:GetMaxClip1())
@@ -162,11 +169,11 @@ function hunter.CanStart()
 
     local map = game.GetMap()
 
-    if !string.match(map,"school") then
-        return false
-    end
+    //if !string.match(map,"school") then
+    //    return false
+    //end
 
-    if #nonspect < 4 then
+    if #nonspect < 6 then
         return false
     else
         return true

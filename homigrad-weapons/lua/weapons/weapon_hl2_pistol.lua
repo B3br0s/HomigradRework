@@ -36,3 +36,5 @@ SWEP.Reload1 = "weapons/pistol/pistol_clipout.wav"
 SWEP.Reload2 = "weapons/pistol/pistol_clipin.wav"
 SWEP.Reload3 = false
 SWEP.Reload4 = "weapons/pistol/pistol_sliderelease.wav"
+
+SWEP.Weight = 0.7

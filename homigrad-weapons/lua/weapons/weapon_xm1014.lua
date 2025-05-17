@@ -42,6 +42,8 @@ SWEP.RecoilForce = 7.5
 SWEP.IconPos = Vector(-4.25,50,-4)
 SWEP.IconAng = Angle(-20,0,0)
 
+SWEP.Weight = 2.5
+
 function SWEP:ReloadFunc()
     self.AmmoChek = 5
     if self.reload then

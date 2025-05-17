@@ -43,6 +43,8 @@ SWEP.IconAng = Angle(-20,0,0)
 SWEP.mul_reload = 0
 SWEP.mul_reload2 = 0
 
+SWEP.Weight = 1.5
+
 SWEP.Reload1 = "arccw_go/mp5/mp5_slideback.wav"
 SWEP.Reload2 = "arccw_go/mp5/mp5_clipout.wav"
 SWEP.Reload3 = "arccw_go/mp5/mp5_clipin.wav"

@@ -1,9 +1,10 @@
-//table.insert(ROUND_LIST,"event")
+table.insert(ROUND_LIST,"event")
 
 event = event or {}
 
 event.name = "Event"
 event.TeamBased = false
+event.CantRandom = true
 
 event.Teams = {
     [1] = {Name = "event_maker",

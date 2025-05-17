@@ -9,6 +9,8 @@ SWEP.Author = "Homigrad"
 
 SWEP.WorldModel = "models/weapons/arccw_go/v_pist_p2000.mdl"
 
+SWEP.Weight = 1
+
 SWEP.CorrectAng = Angle(0,0,0)
 SWEP.CorrectPos = Vector(-13.5,-3.75,5)
 SWEP.HolsterBone = "ValveBiped.Bip01_Pelvis"
@@ -41,6 +43,7 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
+SWEP.ishgwep = true
 
 hg.Weapons = hg.Weapons or {}
 
@@ -72,9 +75,9 @@ end
 
 function SWEP:Smooth(value)
 	if self.NextShoot + 0.125 > CurTime() then
-        return 0.03
+        return 0.04
     end
-    return math.ease.InSine(value) + math.max(math.ease.InElastic(value) - 0.6,0)
+    return math.ease.InSine(value) + math.max(math.ease.InElastic(value) - 0.3,0) + 0.05
 end
 
 function SWEP:Deploy()
@@ -196,43 +199,6 @@ function SWEP:Think()
 	self:Lobotomy_Sharik()
 end
 
-function SWEP:DrawWorldModel()
-	if self.Bodygroups then
-        for _, v in ipairs(self.Bodygroups) do
-            if IsValid(self.worldModel) then
-                self.worldModel:SetBodygroup(_,v)
-            end
-            self:SetBodygroup(_,v)
-        end
-    end
-
-	if !IsValid(self.worldModel) and IsValid(self:GetOwner()) and self:GetOwner() != NULL then
-		self:CreateWorldModel()
-	end
-
-	if !IsValid(self:GetOwner()) then
-		self:DrawModel()
-		if CLIENT then
-    		self:DrawAttachments(self)
-		end
-		return
-	end
-
-	if IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon() != self then
-		self:WorldModel_Holster_Transform()
-	else
-		self:GetTrace()
-		self:WorldModel_Transform()
-		if CLIENT then
-    		self:DrawAttachments()
-		end
-	end
-
-	if CLIENT then
-    	self:DrawAttachments()
-	end
-end
-
 function SWEP:CreateWorldModel()
 	if SERVER then
 		local wm = ents.Create("prop_physics")
@@ -257,7 +223,9 @@ function SWEP:CreateWorldModel()
 
 		return wm
 	else
-		local wm = ClientsideModel(self.WorldModel,RENDERGROUP_OPAQUE)
+		local wm = ClientsideModel(self.WorldModel)
+
+		table.insert(hg.csm,wm)
 
         self:CallOnRemove("RemoveWM", function() wm:Remove() end)
 		self.worldModel = wm

@@ -1,5 +1,6 @@
 local open = false
 local panelka
+local open_gavno = 0
 
 local mute_death = false
 local mute_all = false
@@ -108,12 +109,18 @@ end)
 
 hook.Add("HUDPaint","ScoreBoardPage",function()
     if not hg.ScoreBoard then return end
-    if not IsValid(ScoreBoardPanel) then open = false return end
+    if not IsValid(ScoreBoardPanel) then open = false open_gavno = 1 return end
+    if hg.ScoreBoard == 1 and !hg.score_closing then
+        open_gavno = LerpFT(0.2,open_gavno,0)
+    else
+        open_gavno = LerpFT(0.2,open_gavno,1)
+    end
     if hg.ScoreBoard == 1 and not open then
         local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {}) or {} //рубат сын отсталой шлюхи,спасибо за апдейт ебанного гмода.
         if isstring(MutedPlayers) then
             MutedPlayers = util.JSONToTable(MutedPlayers)
         end
+        open_target = 0
         open = true
         local MainPanel = vgui.Create("DFrame", ScoreBoardPanel)
         MainPanel:SetSize(ScrW(), ScrH() / 1.15)
@@ -122,8 +129,10 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         MainPanel:SetTitle(" ")
         //MainPanel:SetMouseInputEnabled(false)
         MainPanel:ShowCloseButton(false)
+        local cx = MainPanel:GetX()
 
         function MainPanel:Paint(w, h)
+            self:SetX(cx-(w*open_gavno))
         end
 
         local ScrollShit = vgui.Create("hg_frame",MainPanel)
@@ -157,6 +166,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         local size2 = surface.GetTextSize(tostring(string.format(hg.GetPhrase("sc_tps"),tps)))
 
         function ScrollShit:SubPaint(w, h)
+            self:Center()
             //ScrollShit:SetPos(cx,cy*open_fade)
 
             local tps = math.Round(1 / engine.ServerFrameTime())
@@ -275,7 +285,9 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
             --PlayerButton:SetPos(0,68 * (_ - 1))
 
             local PlayerAvatar = vgui.Create("AvatarImage",ScrollablePlayerList)
-            PlayerAvatar:SetPlayer(ply,64)
+            if ply then
+                PlayerAvatar:SetPlayer(ply,64)
+            end
             PlayerAvatar:SetSize(62,62)
             PlayerAvatar:SetPos(20,70 * (_ - 1) + (_ == 1 and 1 or 0))
 
@@ -410,8 +422,9 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         panelka = MainPanel
 
     elseif hg.ScoreBoard != 1 then
+        //print(open_shit)
         open = false
-        if IsValid(panelka) then
+        if IsValid(panelka) and open_gavno >= 0.95 then
             panelka:Remove()
         end
     end

@@ -36,8 +36,10 @@ SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "sounds_zcity/ak74u/close.wav"
 SWEP.RecoilForce = 1.15
 
-SWEP.IconPos = Vector(13,30,-2.5)
+SWEP.IconPos = Vector(12,30,-2.5)
 SWEP.IconAng = Angle(0,0,0)
+
+SWEP.Weight = 2
 
 SWEP.Reload1 = "zcitysnd/sound/weapons/aks74u/handling/aks_magout.wav"
 SWEP.Reload2 = "zcitysnd/sound/weapons/aks74u/handling/aks_magin.wav"

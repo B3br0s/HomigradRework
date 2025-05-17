@@ -1,4 +1,5 @@
 util.AddNetworkString("hg changeteam")
+util.AddNetworkString("spect_shit")
 
 net.Receive("hg changeteam",function(l,ply)
     local tm = net.ReadFloat()
@@ -49,26 +50,52 @@ hook.Add("Player Think","Spect-HG",function(ply)
         ply:SetMoveType(MOVETYPE_NONE)
         ply:SpectateEntity(ply.spect)
     elseif ply.specmode == 2 and IsValid(ply.spect) then
+        local ent = hg.GetCurrentCharacter(ply.spect)
+        if ent == NULL then
+            ent = ply.spect
+        end
+        local pos,ang = ent:GetBonePosition(6)
         ply:Spectate(OBS_MODE_CHASE)
         ply:SpectateEntity((ply.spect.Fake and (ply.spect.FakeRagdoll) or ply.spect))
-        ply:SetPos(ply.spect:GetPos())
-        ply:Spectate(OBS_MODE_CHASE)
+        ply:SetPos(pos)
+        //ply:Spectate(OBS_MODE_CHASE)
     elseif ply.specmode == 3 then
         ply:UnSpectate()
         ply:SetObserverMode(OBS_MODE_ROAMING)
         ply:SetMoveType(MOVETYPE_NOCLIP)
     end
+end)
 
-    //print(ply.specmode)
+net.Receive("spect_shit",function(l,ply)
+    if ply:Alive() then
+        return
+    end
 
-    if ply:KeyPressed(IN_RELOAD) then
+    local AlivePlys = {}
+
+    for _, ply in ipairs(player.GetAll()) do
+        if !ply:Alive() then
+            continue 
+        end
+
+        table.insert(AlivePlys,ply)
+    end
+
+    if IsValid(ply.spect) and !ply.spect:Alive() then
+        ply.spec = 1
+        ply.spect = table.Random(AlivePlys)
+    end
+
+    local key = net.ReadFloat()
+
+    if key == IN_RELOAD then
         ply.specmode = ply.specmode + 1
         if ply.specmode == 4 then
             ply.specmode = 1
         end
     end
 
-    if ply:KeyPressed(IN_ATTACK) then
+    if key == IN_ATTACK then
         ply.spec = ply.spec + 1 
         if ply.spec > #AlivePlys then
             ply.spec = 1
@@ -77,7 +104,7 @@ hook.Add("Player Think","Spect-HG",function(ply)
         ply:SetNWEntity("SpectEnt",ply.spect)
     end
 
-    if ply:KeyPressed(IN_ATTACK2) then
+    if key == IN_ATTACK2 then
         ply.spec = ply.spec - 1 
         if ply.spec < 1 then
             ply.spec = #AlivePlys

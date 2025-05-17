@@ -1,5 +1,6 @@
 local open = false
 local panelka
+local open_gavno = 0
 
 function AddFrame(Parent,Text,SizeXY,DockTo,size)
     local FrameShit = Parent:Add("hg_frame")
@@ -83,7 +84,12 @@ end
 
 hook.Add("HUDPaint","Teams_Page",function()
     if not hg.ScoreBoard then return end
-    if not IsValid(ScoreBoardPanel) then open = false return end
+    if not IsValid(ScoreBoardPanel) then open = false open_gavno = 1 return end
+    if hg.ScoreBoard == 2 and !hg.score_closing then
+        open_gavno = LerpFT(0.2,open_gavno,0)
+    else
+        open_gavno = LerpFT(0.2,open_gavno,1)
+    end
     if hg.ScoreBoard == 2 and not open then
         open = true
         local MainPanel = vgui.Create("DFrame", ScoreBoardPanel)
@@ -105,20 +111,6 @@ hook.Add("HUDPaint","Teams_Page",function()
         MainFrame:SetTitle(" ")
         MainFrame:ShowCloseButton(false)
 
-        local cx,cy = MainFrame:GetX(),MainFrame:GetY()
-        
-        function MainFrame:Paint(w, h)
-            //MainFrame:SetPos(cx,cy*open_fade)
-            /*draw.RoundedBox(0, 0, 0, w, h, Color(22, 22, 22, 200))
-            
-            surface.SetDrawColor(100,100,100,75)
-            surface.DrawOutlinedRect(1,1,w,h,1)
-            surface.DrawOutlinedRect(-1,-1,w,h,1)
-            surface.SetDrawColor(100,100,100,5)
-            surface.DrawOutlinedRect(2,2,w,h,1)
-            surface.DrawOutlinedRect(-2,-2,w,h,1)*/
-        end
-
         local t1 = AddButtonCustom(MainFrame,hg.GetPhrase((TableRound().Teams[1].Name or "N/A")),{x=200,y=MainFrame:GetTall()},0,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1) net.SendToServer() end,TableRound().Teams[1].Color)
         local spect = AddButtonCustom(MainFrame,hg.GetPhrase("spectator"),{x=200,y=MainFrame:GetTall()},1,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(1002) net.SendToServer() end,Color(200,200,200))
         local t2 = AddButtonCustom(MainFrame,hg.GetPhrase((TableRound().Teams[2].Name or "N/A")),{x=200,y=MainFrame:GetTall()},2,function() surface.PlaySound("homigrad/vgui/menu_accept.wav") net.Start("hg changeteam") net.WriteFloat(2) net.SendToServer() end,TableRound().Teams[2].Color)
@@ -127,10 +119,16 @@ hook.Add("HUDPaint","Teams_Page",function()
         CreateModel(spect,1002)
         CreateModel(t2,2)
 
+        local cx = MainFrame:GetX()
+        
+        function MainFrame:Paint(w, h)
+            MainFrame:SetX(cx+((w*1.8)*open_gavno))
+        end
+
         panelka = MainPanel
     elseif hg.ScoreBoard != 2 then
         open = false
-        if IsValid(panelka) then
+        if IsValid(panelka) and open_gavno >= 0.95 then
             panelka:Remove()
         end
     end

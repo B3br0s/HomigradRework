@@ -8,7 +8,7 @@ SWEP.CorrectPos = Vector(4.5,-0.7,1)
 SWEP.CorrectAng = Angle(0,2,0)
 SWEP.HoldType = "ar2"
 
-SWEP.HolsterPos = Vector(-13,-1,8)
+SWEP.HolsterPos = Vector(-5,2.5,2)
 SWEP.HolsterAng = Angle(0,-10,0)
 SWEP.HolsterBone = "ValveBiped.Bip01_Spine2"
 SWEP.BoltBone = "Slide"
@@ -34,6 +34,8 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "sounds_zcity/akmwreked/close.wav"
 SWEP.RecoilForce = 1.25
+
+SWEP.Weight = 1.65
 
 SWEP.IconPos = Vector(13,30,-2.5)
 SWEP.IconAng = Angle(0,0,0)

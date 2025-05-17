@@ -89,3 +89,17 @@ hook.Add("PostDrawOpaqueRenderables","Holo_Draw",function()
 		end
     end
 end)
+
+hook.Add("RenderScene","Holo_Draw",function()
+    local ply = LocalPlayer()
+    if ply:GetActiveWeapon().ishgweapon then
+        local self = ply:GetActiveWeapon()
+        for placement, att in pairs(self.Attachments) do
+        	if self.Attachments[placement] != NULL then
+				if self.Attachments[placement].IsHolo then
+					self:DoHolo()
+				end
+			end
+		end
+    end
+end)

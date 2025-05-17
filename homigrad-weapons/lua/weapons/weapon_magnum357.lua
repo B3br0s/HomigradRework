@@ -43,6 +43,8 @@ SWEP.Reload2 = "weapons/357/357_reload2.wav"
 SWEP.Reload3 = "weapons/357/357_reload3.wav"
 SWEP.Reload4 = "weapons/357/357_reload4.wav"
 
+SWEP.Weight = 1.1
+
 function SWEP:PostAnim()
 	//self.rollmul = LerpFT(0.2,self.rollmul,55550)
 	if self.BoltBone and IsValid(self.worldModel) and self.BoltVec != nil then

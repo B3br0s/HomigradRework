@@ -20,13 +20,6 @@ function CLASS.On(self)
 	self:EmitSound("npc/combine_soldier/vo/gosharp.wav")
 end
 
-function CLASS.PlayerFootstep(self, pos, foot, name, volume, filter)
-	if SERVER then return true end
-	sound.Play(Sound("npc/combine_soldier/gear" .. math.random(1, 6) .. ".wav"), pos, 75, 100, 1)
-	sound.Play(name, pos, 75, 100, volume)
-	return true
-end
-
 local function getList(self)
 	local list = {}
 	for _, ply in RandomPairs(player.GetAll()) do

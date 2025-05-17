@@ -123,6 +123,47 @@ function SWEP:WorldModel_Holster_Transform()
     return Pos,Ang
 end
 
+function SWEP:DrawWorldModel()
+	if self.Bodygroups then
+        for _, v in ipairs(self.Bodygroups) do
+            if IsValid(self.worldModel) then
+                self.worldModel:SetBodygroup(_,v)
+            end
+            self:SetBodygroup(_,v)
+        end
+    end
+
+	if !IsValid(self.worldModel) and IsValid(self:GetOwner()) and self:GetOwner() != NULL then
+		self:CreateWorldModel()
+	end
+
+	if !IsValid(self:GetOwner()) then
+		self:DrawModel()
+		if CLIENT then
+    		self:DrawAttachments(self)
+		end
+		return
+	end
+
+	if IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon() != self then
+		self:WorldModel_Holster_Transform()
+	else
+		self:GetTrace()
+		local pos,ang = self:WorldModel_Transform()
+		if CLIENT then
+			self.worldModel:SetPos(pos)
+			self.worldModel:SetAngles(ang)
+		end
+		if CLIENT then
+    		self:DrawAttachments()
+		end
+	end
+
+	if CLIENT then
+    	self:DrawAttachments()
+	end
+end
+
 function SWEP:GetTrace(nomodify)
 	local owner = self:GetOwner()
 	local obj = self:LookupAttachment("muzzle") or 0

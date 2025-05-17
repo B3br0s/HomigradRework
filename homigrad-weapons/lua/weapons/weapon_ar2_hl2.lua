@@ -42,6 +42,8 @@ SWEP.Reload2 = "weapons/ar2/ar2_magin.wav"
 SWEP.Reload3 = "weapons/ar2/ar2_rotate.wav"
 SWEP.Reload4 = "weapons/ar2/ar2_push.wav"
 
+SWEP.Weight = 2.3
+
 SWEP.Attachments = {
     ['sight'] = hg.Attachments.holo1,
 }

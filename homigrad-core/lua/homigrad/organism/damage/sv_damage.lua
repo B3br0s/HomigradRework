@@ -3,7 +3,7 @@ util.AddNetworkString("DeathScreen")
 
 DamageMultipliers = {
     [DMG_CLUB] = 1,--ее
-    [DMG_BULLET] = 1.2,
+    [DMG_BULLET] = 2,
     [DMG_SLASH] = 0.4,
     [DMG_BLAST] = 4,
 }
@@ -130,9 +130,9 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 		return true
 	end 
 
-	if dmginfo:GetDamage() > 25 and math.random(1,3) == 2 then
+	if dmginfo:GetDamage() > 25 and math.random(1,2) == 2 then
 		if not ply.Fake then
-			hg.Faking(ply,(IsValid(dmginfo:GetAttacker() and (ply:GetPos() - dmginfo:GetAttacker():GetPos()):Angle():Forward() * 5000 or dmginfo:GetDamageForce() * 10)))
+			hg.Faking(ply,(IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * -10 or Ang:Forward() * 10) * math.random(10,30))
 		end
 	end
 
@@ -146,6 +146,8 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
     ply:SetNWString("LastHitBone",bonename)
 
 	if BoneIntoHG[bonename] then hitgroup = BoneIntoHG[bonename] end
+
+	local dmg_mul,dmg_type = hg.Armor_Effect(ply,ent,dmginfo,hitgroup)
 
 	local mul = RagdollDamageBoneMul[hitgroup]
 
@@ -166,6 +168,8 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
     ply.KillReason = Reasons[dmginfo:GetDamageType()]
     ply:SetNWString("KillReason",ply.KillReason)
 
+	dmginfo:SetDamageType(dmg_type)
+
 	local LastDMGINFO = DamageInfo()
 	LastDMGINFO:SetAttacker(dmginfo:GetAttacker())
 	LastDMGINFO:SetDamage(dmginfo:GetDamage())
@@ -181,7 +185,7 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 	dmginfo:ScaleDamage((DamageMultipliers[dmginfo:GetDamageType()] and DamageMultipliers[dmginfo:GetDamageType()] or 0.7))
 
 	if dmginfo:IsDamageType(DMG_CRUSH) and rag then
-		dmginfo:ScaleDamage((rag:GetVelocity():Length() / 400))
+		dmginfo:ScaleDamage((rag:GetVelocity():Length() / 900))
 	end
 
     ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (PainMultipliers[dmginfo:GetDamageType()] and PainMultipliers[dmginfo:GetDamageType()] or 0.1),0,400)
@@ -195,6 +199,10 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 			ply.bleed = 0
 		end
 		ply.bleed = ply.bleed + dmginfo:GetDamage() * 2
+	end
+
+	if dmginfo:GetDamageType() != DMG_CRUSH then
+		dmginfo:ScaleDamage(dmg_mul)
 	end
 
 	hook.Run("Homigrad_Organs",ent,dmginfo,GetPhysicsBoneDamageInfo(ent,dmginfo),ent:GetBoneName(ent:TranslatePhysBoneToBone(GetPhysicsBoneDamageInfo(ent,dmginfo))))

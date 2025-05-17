@@ -627,10 +627,17 @@ if SERVER then
 			if pos then
 				TargetPos = ent:LocalToWorld(pos)
 			end
+
+			if ent == NULL then
+				return
+			end
 			
 			local vec = target - TargetPos
 			local len, mul = vec:Length(), ent:GetPhysicsObject():GetMass()
 			vec:Normalize()
+			if phys == NULL then
+				return
+			end
 			local avec, velo = vec * len, phys:GetVelocity() - ply:GetVelocity()
 			local Force = (avec - velo / 10) * (bone > 3 and mul / 3.5 or mul)
 			--слушай а это вообще прикольнее даже чем у кета

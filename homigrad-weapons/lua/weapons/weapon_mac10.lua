@@ -38,3 +38,5 @@ SWEP.Reload1 = "weapons/smg1/smg1_clipout.wav"
 SWEP.Reload2 = "weapons/smg1/smg1_clipin.wav"
 SWEP.Reload3 = "weapons/smg1/smg1_cliphit.wav"
 SWEP.Reload4 = "weapons/smg1/smg1_boltback.wav"
+
+SWEP.Weight = 0.7

@@ -1,7 +1,7 @@
-tdm = tdm or {}
+bahmut = bahmut or {}
 
-function tdm.SpawnBlue(ply)
-    local SpawnList = ReadDataMap("tdm_blue")
+function bahmut.SpawnBlue(ply)
+    local SpawnList = ReadDataMap("bahmut_blue")
 
     local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar"}
     local weps_sec = {"weapon_deagle","weapon_glock17","weapon_fiveseven"}
@@ -14,9 +14,6 @@ function tdm.SpawnBlue(ply)
     ply.AppearanceOverride = true
 
     ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
-
-    hg.Equip_Armor(ply,"vest2")
-    hg.Equip_Armor(ply,"helmet1")
 
     local wep_primary = ply:Give(table.Random(weps_pri))
     local wep_secondary = ply:Give(table.Random(weps_sec))
@@ -36,8 +33,8 @@ function tdm.SpawnBlue(ply)
     end)
 end
 
-function tdm.SpawnRed(ply)
-    local SpawnList = ReadDataMap("tdm_red")
+function bahmut.SpawnRed(ply)
+    local SpawnList = ReadDataMap("bahmut_red")
 
     local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar"}
     local weps_sec = {"weapon_deagle","weapon_glock17","weapon_fiveseven"}
@@ -50,9 +47,6 @@ function tdm.SpawnRed(ply)
     ply.AppearanceOverride = true
 
     ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))
-
-    hg.Equip_Armor(ply,"vest2")
-    hg.Equip_Armor(ply,"helmet1")
 
     local wep_primary = ply:Give(table.Random(weps_pri))
     local wep_secondary = ply:Give(table.Random(weps_sec))
@@ -72,24 +66,24 @@ function tdm.SpawnRed(ply)
     end)
 end
 
-function tdm.StartRoundSV()
+function bahmut.StartRoundSV()
     team.DirectTeams(1,2)
 
     local blus = team.GetPlayers(1)
     local reds = team.GetPlayers(2)
 
     for _, ply in ipairs(reds) do
-        tdm.SpawnRed(ply)
+        bahmut.SpawnRed(ply)
     end
 
     for _, ply in ipairs(blus) do
-        tdm.SpawnBlue(ply)
+        bahmut.SpawnBlue(ply)
     end
     
     game.CleanUpMap(false)
 end
 
-function tdm.RoundThink()
+function bahmut.RoundThink()
     local T_ALIVE = team.GetCountLive(team.GetPlayers(2))
     local CT_ALIVE = team.GetCountLive(team.GetPlayers(1))
 
@@ -108,7 +102,7 @@ function tdm.RoundThink()
     end
 end
 
-function tdm.CanStart()
+function bahmut.CanStart()
     local world = game.GetWorld()
     
     local min, max = world:GetModelBounds()
@@ -123,6 +117,6 @@ function tdm.CanStart()
     end
 end
 
-function tdm.LootSpawn()
+function bahmut.LootSpawn()
     return false
 end

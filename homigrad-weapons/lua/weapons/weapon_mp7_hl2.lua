@@ -41,6 +41,8 @@ SWEP.Reload2 = "weapons/smg1/smg1_clipin.wav"
 SWEP.Reload3 = false
 SWEP.Reload4 = "weapons/smg1/smg1_boltforward.wav"
 
+SWEP.Weight = 1.5
+
 SWEP.AttachmentPos = {
     ['sight'] = Vector(-3,0,5.5),
 }

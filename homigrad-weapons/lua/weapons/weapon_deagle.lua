@@ -40,6 +40,8 @@ end
 SWEP.IconPos = Vector(1,110,-6)
 SWEP.IconAng = Angle(-20,0,0)
 
+SWEP.Weight = 1.5
+
 SWEP.Reload1 = "arccw_go/deagle/de_clipout.wav"
 SWEP.Reload2 = "arccw_go/deagle/de_clipin.wav"
 SWEP.Reload3 = "arccw_go/deagle/de_slideback.wav"

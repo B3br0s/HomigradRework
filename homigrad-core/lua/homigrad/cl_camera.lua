@@ -8,6 +8,10 @@ RecoilS = 0
 RecoilAng = Angle(0,0,0)
 RecoilDown = false
 
+hg = hg or {}
+
+hg.viewpos = LocalPlayer():EyePos()
+
 CreateClientConVar("hg_fov","120",true,false,nil,70,120)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
 
@@ -161,6 +165,7 @@ local angZero = Angle(0,0,0)
 
 local lastcall = 0
 local prevang = Angle(0,0,0)
+local prevpos = LocalPlayer():EyePos()
 
 function CalcView(ply,vec,ang,fov,znear,zfar)
 	shit_ang = LerpAngleFT(0.1,shit_ang,ang)
@@ -172,6 +177,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local lply = LocalPlayer()
 
 	prevang = LerpAngleFT(0.075,prevang,ply:EyeAngles())
+	prevpos = LerpVectorFT(0.1,prevpos,ply:EyePos())
 
 	local ydiff = math.AngleDifference(prevang.y,ply:EyeAngles().y)
 	local y_diff_round = math.Round(ydiff / 5,1)
@@ -192,12 +198,44 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 		local eye = nigga:GetAttachment(nigga:LookupAttachment("eyes"))
 
-		view.origin = eye.Pos
 		view.angles = (IsValid(lply:GetNWEntity("SpectEnt"):GetNWEntity("FakeRagdoll")) and eye.Ang or nigga:EyeAngles())
+		view.zfar = 6000
+		view.origin = eye.Pos
+
+		local wep = lply:GetNWEntity("SpectEnt"):GetActiveWeapon()
+
+		local output_pos,output_ang = view.origin,view.angles
+
+		if wep and wep.Camera then
+			output_pos, output_ang, fov = wep:Camera(lply:GetNWEntity("SpectEnt"), output_pos, output_ang, fov)
+		end
+
+		hg.viewpos = view.origin
+
+		view.origin = output_pos
 
 		return view
-	elseif !lply:Alive() then
-		return
+	elseif !lply:Alive() and lply:GetNWInt("specmode") == 2 and IsValid(lply:GetNWEntity("SpectEnt")) then
+		local nigga = (IsValid(lply:GetNWEntity("SpectEnt"):GetNWEntity("FakeRagdoll")) and lply:GetNWEntity("SpectEnt"):GetNWEntity("FakeRagdoll") or lply:GetNWEntity("SpectEnt"))
+
+		local eye = nigga:GetAttachment(nigga:LookupAttachment("eyes"))
+
+		view.origin = eye.Pos - ang:Forward() * 70
+		view.angles = ang
+		view.zfar = 6000
+
+		hg.viewpos = view.origin
+
+		return view
+	elseif !lply:Alive() and lply:GetNWInt("specmode") == 3 then
+		local view = {}
+		view.zfar = 6000
+		view.origin = prevpos
+		view.angles = ply:EyeAngles()
+
+		hg.viewpos = view.origin
+
+		return view
 	end
 
 	DRAWMODEL = nil
@@ -280,7 +318,9 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			origin = att.Pos,
 			angles = LerpEyeRagdoll,
 			fov = fov,
-			drawviewer = true
+			drawviewer = true,
+			zfar = 6000,
+			znear = znear,
 		}
 
 		if IsValid(helmEnt) then
@@ -385,10 +425,13 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	view.origin = output_pos
 	view.angles = output_ang
 	view.drawviewer = true
+	view.zfar = 6000
 	
 	oldview = table.Copy(view)
 
 	DRAWMODEL = true
+
+	hg.viewpos = output_pos
 	
 	return view
 end

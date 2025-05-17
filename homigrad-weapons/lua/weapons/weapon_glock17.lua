@@ -34,3 +34,5 @@ SWEP.Reload1 = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav"
 SWEP.Reload2 = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav"
 SWEP.Reload3 = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
 SWEP.Reload4 = "arccw_go/glock18/glock_sliderelease.wav"
+
+SWEP.Weight = 0.7

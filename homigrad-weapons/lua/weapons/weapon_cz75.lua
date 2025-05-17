@@ -34,6 +34,8 @@ SWEP.RecoilForce = 1.5
 SWEP.IconPos = Vector(1,110,-5)
 SWEP.IconAng = Angle(-20,0,0)
 
+SWEP.Weight = 1.5
+
 SWEP.Reload1 = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav"
 SWEP.Reload2 = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav"
 SWEP.Reload3 = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"

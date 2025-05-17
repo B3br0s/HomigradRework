@@ -39,5 +39,7 @@ SWEP.InsertSound = "pwb2/weapons/ksg/shellinsert1.wav"
 SWEP.NumBullet = 8
 SWEP.RecoilForce = 27.5
 
+SWEP.Weight = 2.5
+
 SWEP.IconPos = Vector(8,15,-2.5)
 SWEP.IconAng = Angle(0,0,0)

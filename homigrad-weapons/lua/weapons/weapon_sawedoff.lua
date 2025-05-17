@@ -39,5 +39,67 @@ SWEP.InsertSound = "pwb2/weapons/ksg/shellinsert1.wav"
 SWEP.NumBullet = 8
 SWEP.RecoilForce = 27.5
 
+SWEP.Weight = 1.6
+
 SWEP.IconPos = Vector(16,50,-2.5)
 SWEP.IconAng = Angle(0,0,0)
+
+function SWEP:ReloadFunc()
+    self.AmmoChek = 5
+    if self.reload then
+        self.NextShoot = CurTime() + 1
+        return
+    end
+    local ply = self:GetOwner()
+    if ply:GetAmmoCount(self:GetPrimaryAmmoType()) <= 0 then
+        return
+    end
+    if self:Clip1() >= self.Primary.ClipSize or self:Clip1() >= self:GetMaxClip1() then
+        return
+    end
+
+    self.reload = CurTime() + self.Primary.ReloadTime
+
+    self.NextShoot = CurTime() + 1
+    
+    if SERVER then
+        net.Start("hg reload")
+        net.WriteEntity(self)
+        net.Broadcast()
+    end
+
+    ply:SetAnimation(PLAYER_RELOAD)
+
+    if not IsValid(self) or not IsValid(self:GetOwner()) then return end
+        local wep = self:GetOwner():GetActiveWeapon()
+        if IsValid(self) and IsValid(ply) and (IsValid(wep) and wep or self:GetOwner().ActiveWeapon) == self then
+            self.AmmoChek = 5
+            self:SetHoldType(self.HoldType)
+            timer.Simple(self.Primary.ReloadTime,function()
+                if SERVER then
+                    if self:Clip1() == 0 and self.BoltLock then
+                        timer.Simple(0.3,function()
+                            self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))
+                            sound.Play("weapons/shotgun/shotgun_cock_forward.wav",self:GetPos(),80,math.random(95,105))
+                        end)
+                    else
+                        self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))
+                    end
+                end
+
+                ply:SetAmmo(ply:GetAmmoCount( self:GetPrimaryAmmoType() )-1, self:GetPrimaryAmmoType())
+
+                if SERVER then
+                    sound.Play(self.InsertSound,self:GetPos(),95,math.random(95,105),0.75)
+                end
+
+                self.reload = nil
+
+                if ply:GetAmmoCount( self:GetPrimaryAmmoType()) != 0 and self:Clip1() != self:GetMaxClip1() then                    
+                    ply:AnimResetGestureSlot(GESTURE_SLOT_ATTACK_AND_RELOAD)
+    
+                    ply:SetAnimation(PLAYER_IDLE)
+                end
+            end)
+        end
+end

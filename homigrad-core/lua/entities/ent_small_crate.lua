@@ -72,6 +72,7 @@ net.Receive("hg inventory",function()
 
 	if !IsValid(ScoreBoardPanel) then
 		show_scoreboard()
+		hg.score_closing = false
 	end
 	hg.ScoreBoard = 3
 	timer.Simple(0.06,function()

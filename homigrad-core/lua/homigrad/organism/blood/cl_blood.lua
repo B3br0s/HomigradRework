@@ -7,7 +7,7 @@ hook.Add("Player Think", "BloodManager", function(ply)
         return
     end
     
-    ply.bloodnext = CurTime() + 0.1
+    ply.bloodnext = CurTime() + 0.35
     
     local rag = ply:GetNWEntity("FakeRagdoll")
     

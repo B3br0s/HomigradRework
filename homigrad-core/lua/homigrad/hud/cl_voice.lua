@@ -95,7 +95,7 @@ hook.Add("HUDPaint","zalua",function(ply)
 
             //print(ply:VoiceVolume() * 50)
 
-            self.SizeZalupki = LerpFT(0.4,self.SizeZalupki or 0,ply:VoiceVolume() * 250)
+            self.SizeZalupki = LerpFT(0.4,self.SizeZalupki or 0,ply:VoiceVolume() * 450)
 
             local X, Y = self.ZalupaAvatar:LocalToScreen(self.ZalupaAvatar:GetWide() / 2, self.ZalupaAvatar:GetTall() / 2)
 

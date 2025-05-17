@@ -34,8 +34,10 @@ SWEP.Primary.Force = 15
 SWEP.Primary.Sound = "pwb/weapons/hk416/shoot.wav"
 SWEP.Primary.ReloadTime = 1.1
 
-SWEP.IconPos = Vector(-3.5,50,-4)
-SWEP.IconAng = Angle(-20,0,0)
+SWEP.IconPos = Vector(-2.5,45,3)
+SWEP.IconAng = Angle(0,0,0)
+
+SWEP.Weight = 2.5
 
 SWEP.Reload1 = "arccw_go/scar20/scar20_clipout.wav"
 SWEP.Reload2 = "arccw_go/scar20/scar20_clipin.wav"

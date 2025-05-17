@@ -1,6 +1,9 @@
 function IsGuilted(ply, att)
     if !ply:Alive() then
-        return
+        return false
+    end
+    if !ROUND_ACTIVE then
+        return false
     end
     if not IsValid(ply) or not IsValid(att) or ply == NULL or att == NULL then
         return false

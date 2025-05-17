@@ -32,9 +32,6 @@ function SWEP:Camera(ply, origin, angles, fov)
 
     local att = ply:GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
 
-    //pos = att.Pos
-    //ang = att.Ang
-    
     lerpaim = LerpFT(0.15, lerpaim, self:IsSighted() and 1 or 0)
 
     if !pos or !ang then
@@ -61,21 +58,12 @@ function SWEP:Camera(ply, origin, angles, fov)
         origin = origin + angles:Forward() * shit[1] + angles:Right() * shit[2] + angles:Up() * shit[3]
     end
 
-    //origin = origin + anglef:Right() * math.random(-0.1,0.1) * (animpos/200) + anglef:Up() * math.random(-0.1,0.1) * (animpos/200)
-    
     addfov = LerpFT(0.15, addfov, self:IsSighted() and -(self.addfov or 30) - Recoil * 10 or 0)
 
     local removemul = (RecoilS / 4) * lerpaim
-
-    if !self.reload  then
-        newangs[3] = (att.Ang[3] * (0.5 - self.saim)) * (1 - self.SpeedAnim) + (angles[3] * (1 - self.saim)) * (1 - self.SpeedAnim)
-        --newangs[2] = (att.Ang[2] * self.saim) * (1 - self.SpeedAnim) + (angles[2] * (1 - self.saim))
-        //newangs[1] = (att.Ang[1] * 0.95 * self.saim) + (angles[1] * (1 - self.saim))
-    end
-
     local siht = (att.Pos - origin):Angle()
     siht[2] = angles[2]//att.Ang[2] - (RecoilS / 26) * self:GetRightMul()
-    siht[3] = angles[3] + (self:IsPistolHoldType() and 2 or 5)
+    siht[3] = angles[3] + (self:IsPistolHoldType() and 1 or 3)
     siht[1] = angles[1]//math.Clamp(att.Ang[1] + (RecoilS / 1.5)  * self:GetUpMul(),-83,88)
     siht:RotateAroundAxis(siht:Forward(),self.ZoomAng[1] * lerpaim)
     siht:RotateAroundAxis(siht:Right(),self.ZoomAng[2] * lerpaim)

@@ -38,12 +38,45 @@ function DrawWHEnt(ent,pos)
 	surface.DrawRect(x - barWidth / 2, y + th / 1.5, barWidth, ScreenScale(1))
 end
 
+local rp = false
+local ap = false
+local a2p = false
+
 hook.Add("HUDPaint","Spectate-HUD",function()
 	local lply = LocalPlayer()
 	
     if lply:Alive() and lply:Team() != 1002 then
         return
     end
+
+	if !lply:Alive() then
+		if lply:KeyDown(IN_RELOAD) and !rp then
+			rp = true
+			net.Start("spect_shit")
+			net.WriteFloat(IN_RELOAD)
+			net.SendToServer()
+		elseif !lply:KeyDown(IN_RELOAD) then
+			rp = false
+		end
+
+		if lply:KeyDown(IN_ATTACK) and !ap then
+			ap = true
+			net.Start("spect_shit")
+			net.WriteFloat(IN_ATTACK)
+			net.SendToServer()
+		elseif !lply:KeyDown(IN_ATTACK) then
+			ap = false
+		end
+
+		if lply:KeyDown(IN_ATTACK2) and !a2p then
+			a2p = true
+			net.Start("spect_shit")
+			net.WriteFloat(IN_ATTACK2)
+			net.SendToServer()
+		elseif !lply:KeyDown(IN_ATTACK2) then
+			a2p = false
+		end
+	end
 
 	if lply:Team() == 1002 and lply:Alive() then
 		lply:SetNWEntity("SpectEnt",NULL)

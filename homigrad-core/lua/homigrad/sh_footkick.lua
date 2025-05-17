@@ -9,7 +9,7 @@ function KickFoot(ply)
     local tr = hg.eyeTrace(ply,125)
     
     ply:SetNWFloat("LastKick",CurTime()+0.25)
-    ply:SetNWFloat("KickCD",CurTime() + (ply:IsAdmin() and 0.5 or 1))
+    ply:SetNWFloat("KickCD",CurTime() + (ply:IsAdmin() and 0.25 or 1))
     sound.Play("player/foot_fire.wav",ply:GetPos())
 
     if IsValid(tr.Entity) then
@@ -155,7 +155,8 @@ hook.Add("Player Think","FootKick_niggadaun",function(ply)
     if ply.Fake then
         return
     end
-    if ply:KeyPressed(IN_ZOOM) and ply:GetNWFloat("KickCD",0) < CurTime() then
+    if ply:KeyDown(IN_ZOOM) and ply:GetNWFloat("KickCD",0) < CurTime() and !ply.kickd then
+        ply.kickd = true
         if (SERVER and ply.rleg > 0 or ply:GetNWFloat("rleg",0) > 0) then
             if SERVER then
                 KickFoot(ply)
@@ -173,6 +174,8 @@ hook.Add("Player Think","FootKick_niggadaun",function(ply)
                 net.Send(ply)
             end
         end
+    elseif !ply:KeyDown(IN_ZOOM) then
+        ply.kickd = false
     end
     if ply:GetNWFloat("LastKick",0) > CurTime() then
         hg.bone.Set(ply,"r_thigh",Vector(0,0,0),Angle(0,-90,0),1,0.7)

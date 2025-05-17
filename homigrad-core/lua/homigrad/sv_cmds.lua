@@ -368,13 +368,32 @@ COMMANDS.endmode = {function(ply,args)
 end,1}
 COMMANDS.modes = {function(ply,args)
 	if not ply:IsAdmin() then return end
-	print(ROUND_LIST)
+	//print(ROUND_LIST)
 
 	for _, mode in ipairs(ROUND_LIST) do
 		ply:ChatPrint(mode)
 		--ply:ChatPrint(_)
 	end
 end,1}
+
+COMMANDS.avaiblemodes = {function(ply,args)
+	if not ply:IsAdmin() then return end
+	local CanBeStarted = {}
+
+    for _, lvl in ipairs(ROUND_LIST) do
+        if TableRound(lvl).CantRandom then
+            continue 
+        end
+        if TableRound(lvl).CanStart and TableRound(lvl).CanStart() then
+            table.insert(CanBeStarted,lvl)
+			ply:ChatPrint(lvl)
+        elseif !TableRound(lvl).CanStart then
+            table.insert(CanBeStarted,lvl)
+			ply:ChatPrint(lvl)
+        end
+    end
+end,1}
+
 
 function team.DirectTeams(minTeam, maxTeam)
     local players = {}

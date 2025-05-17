@@ -275,6 +275,11 @@ function coop.SpawnResistance(ply)
                 for _, wep in ipairs(eqp[fraction]["required"]) do
                     ply:Give(wep)
                 end
+
+                if string.match(fraction,"rebel") and !ply.isGordon then
+                    hg.Equip_Armor(ply,"vest2")
+                    hg.Equip_Armor(ply,"helmet1")
+                end
             
                 if IsValid(MainWep) then
                     ply:GiveAmmo(MainWep:GetMaxClip1() * math.random(3,6), MainWep:GetPrimaryAmmoType(), true)

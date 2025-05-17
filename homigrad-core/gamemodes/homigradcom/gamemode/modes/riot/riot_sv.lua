@@ -17,6 +17,9 @@ function riot.SpawnBlue(ply)
     for _, wep in pairs(weps_pri) do
         ply:Give(wep)
     end
+
+    hg.Equip_Armor(ply,"helmet1")
+
     local wep_secondary = ply:Give(table.Random(weps_sec))
 
 
@@ -51,6 +54,10 @@ function riot.SpawnRed(ply)
 
     if IsValid(wep_primary) then
     wep_primary:SetClip1(wep_primary:GetMaxClip1())
+    end
+
+    if math.random(1,3) == 2 then
+        hg.Equip_Armor(ply,"mask2")
     end
 
     ply:Give("weapon_bandage")

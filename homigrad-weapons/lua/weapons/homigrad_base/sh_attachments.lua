@@ -50,6 +50,8 @@ function SWEP:DrawAttachments(modeltodraw)
                 self:CallOnRemove("RemoveAtt", function() mdl:Remove() end)
                 modeltodraw:CallOnRemove("RemoveAtt", function() mdl:Remove() end)
 
+                table.insert(hg.csm,mdl)
+
                 self.AttDrawModels[placement] = mdl
             end
             if IsValid(mdl) then

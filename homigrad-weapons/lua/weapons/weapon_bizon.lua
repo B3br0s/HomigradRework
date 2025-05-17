@@ -35,6 +35,8 @@ SWEP.TwoHands = true
 SWEP.RecoilForce = 1
 SWEP.HoldType = "ar2"
 
+SWEP.Weight = 1.75
+
 SWEP.IconPos = Vector(1,80,-5)
 SWEP.IconAng = Angle(-20,0,0)
 

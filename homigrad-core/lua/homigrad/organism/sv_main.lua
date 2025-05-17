@@ -59,6 +59,8 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
                 ply:SetPlayerColor(Color(100,100,100):ToVector())
             end)
         end
+
+        hook.Run("InitArmor",ply)
     
         ply:LagCompensation(true)
     
@@ -106,6 +108,11 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
     
         ply:LagCompensation(false)
     end
+
+    net.Start("armor_sosal")
+    net.WriteEntity(ply)
+    net.WriteTable(ply.armor)
+    net.Broadcast()
 end)
 
 hook.Add("PlayerInitialSpawn","Homigrad_shit",function(ply)

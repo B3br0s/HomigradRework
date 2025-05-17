@@ -160,7 +160,8 @@ hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
             if rag and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
                 rag:GetNWEntity("RagdollOwner").KillReason = "dead_headExplode"
                 if rag:GetNWEntity("RagdollOwner"):Alive() then
-                rag:GetNWEntity("RagdollOwner"):Kill()
+                    hg.DropArmor(rag:GetNWEntity("RagdollOwner"),rag:GetNWEntity("RagdollOwner").armor.head,phys_obj:GetPos(),phys_obj:GetAngles():Forward() * 250 + phys_obj:GetAngles():Right() * 100)
+                    rag:GetNWEntity("RagdollOwner"):Kill()
                 end
             end
             local Pos,Ang = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_Head1"))

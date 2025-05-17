@@ -48,6 +48,7 @@ SWEP.MuzzlePos = Vector(36,4.28,-2.9)
 SWEP.IconPos = Vector(-5.75,50,1)
 SWEP.IconAng = Angle(0,0,0)
 
+SWEP.Weight = 2
 
 SWEP.Primary.Damage = 30
 SWEP.Primary.Force = 60

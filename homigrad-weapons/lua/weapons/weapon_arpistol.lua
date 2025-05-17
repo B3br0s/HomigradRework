@@ -32,6 +32,8 @@ SWEP.Primary.Sound = "pwb2/weapons/mac11/mac10-1.wav"
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.RecoilForce = 3.5
 
+SWEP.Weight = 1.25
+
 SWEP.IconPos = Vector(4.5,80,-5)
 SWEP.IconAng = Angle(0,0,0)
 

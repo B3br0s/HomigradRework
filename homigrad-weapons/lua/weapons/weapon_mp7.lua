@@ -33,6 +33,8 @@ SWEP.Primary.Force = 15
 SWEP.Primary.Sound = "pwb2/weapons/usptactical/usp_unsil-1.wav"
 SWEP.RecoilForce = 0.25
 
+SWEP.Weight = 1.5
+
 SWEP.IconPos = Vector(0,80,-4)
 SWEP.IconAng = Angle(-20,0,0)
 

@@ -195,10 +195,12 @@ function SWEP:Shoot()
     if SERVER then
         self:TakePrimaryAmmo(1)
 
-        for i = 1, Num do
-            Bullet.Spread = (i > 1 and VectorRand(-0.03 * (math.random(-1,2) - i),0.03 * (math.random(-3,2) - i)) or Vector(0,0,0))
-
-            self:FireLuaBullets(Bullet)
+        if !self:GetOwner().suiciding then
+            for i = 1, Num do
+                Bullet.Spread = (i > 1 and VectorRand(-0.03 * (math.random(-1,2) - i),0.03 * (math.random(-3,2) - i)) or Vector(0,0,0))
+                
+                self:FireLuaBullets(Bullet)
+            end
         end
     end
 

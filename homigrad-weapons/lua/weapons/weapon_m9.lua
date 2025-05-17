@@ -30,10 +30,12 @@ SWEP.Primary.Sound = "pwb2/weapons/pl14/shot-unsil.wav"
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.RecoilForce = 2
 
-SWEP.IconPos = Vector(1,110,-5)
+SWEP.IconPos = Vector(1,110,-6)
 SWEP.IconAng = Angle(-20,0,0)
 
 SWEP.Reload1 = "zcitysnd/sound/weapons/m9/handling/m9_magout.wav"
 SWEP.Reload2 = "zcitysnd/sound/weapons/m9/handling/m9_magin.wav"
 SWEP.Reload3 = "zcitysnd/sound/weapons/m9/handling/m9_maghit.wav"
 SWEP.Reload4 = "arccw_go/glock18/glock_sliderelease.wav"
+
+SWEP.Weight = 0.7

@@ -32,13 +32,15 @@ SWEP.Primary.Force = 45
 SWEP.Primary.Sound = "zcitysnd/sound/weapons/firearms/shtg_mossberg500/m500_fire_01.wav"
 SWEP.RecoilForce = 30
 
-SWEP.IconPos = Vector(-7,50,-4)
-SWEP.IconAng = Angle(-20,0,0)
+SWEP.IconPos = Vector(-8,70,4.5)
+SWEP.IconAng = Angle(0,0,0)
 
 SWEP.Reload1 = "arccw_go/mag7/mag7_clipout.wav"
 SWEP.Reload2 = "arccw_go/mag7/mag7_clipin.wav"
 SWEP.Reload3 = "arccw_go/mag7/mag7_pump_back.wav"
 SWEP.Reload4 = "arccw_go/mag7/mag7_pump_forward.wav"
+
+SWEP.Weight = 1.7
 
 function SWEP:ReloadFunc()
     self.AmmoChek = 5

@@ -35,8 +35,10 @@ SWEP.Primary.Force = 35
 SWEP.Primary.Sound = "pwb/weapons/rpk/shoot.wav"
 SWEP.RecoilForce = 0.75
 
-SWEP.IconPos = Vector(-0.5,50,-5.5)
-SWEP.IconAng = Angle(-20,0,0)
+SWEP.IconPos = Vector(-0.5,50,2.8)
+SWEP.IconAng = Angle(0,0,0)
+
+SWEP.Weight = 2.3
 
 SWEP.Reload1 = "arccw_go/ak47/ak47_clipout.wav"
 SWEP.Reload2 = "arccw_go/ak47/ak47_clipin.wav"

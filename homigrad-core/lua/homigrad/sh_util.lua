@@ -455,6 +455,8 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
 		end)
 	end
 
+	hook.Run("InitArmor_CL",ply)
+
 	ply.KillReason = " "
 	ply.LastHitBone = " "
 	ply.Fake = false 
@@ -575,6 +577,19 @@ if CLIENT then
 	end
 end
 
+function player.GetAlive()
+	local alive = {}
+	for _, ply in ipairs(player.GetAll()) do
+		if !ply:Alive() then
+			continue 
+		end
+
+		table.insert(alive,ply)
+	end
+
+	return alive
+end
+
 function hg.ShouldTPIK(ply,wpn)
 	if wpn.SupportTPIK then
 		return true
@@ -620,7 +635,7 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
     ply:SetWalkSpeed(170)
     ply:SetJumpPower(200)
     
-    local targetRunSpeed = isSprinting and ((forwardSpeed > 1 and 330 or 260) + adrenalineBoost) * stamina / 85
+    local targetRunSpeed = isSprinting and ((forwardSpeed > 1 and 300 or 260) + adrenalineBoost) * stamina / 85
                           or (ply:GetWalkSpeed() / 1.5) * stamina / 100
     
     local lerpFactor = isSprinting and 0.025 or 0.1
