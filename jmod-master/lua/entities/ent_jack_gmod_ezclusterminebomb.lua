@@ -4,7 +4,7 @@ ENT.Base = "ent_jack_gmod_ezbomb"
 ENT.Author = "Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Cluster Mine Layer"
+ENT.PrintName = "Cluster Mine Layer"
 ENT.Spawnable = true
 ENT.AdminSpawnable = true
 ---
@@ -107,5 +107,5 @@ elseif CLIENT then
 		self:DrawModel()
 	end
 
-	language.Add("ent_jack_gmod_ezclusterminebomb", "EZ Cluster Mine Layer")
+	language.Add("ent_jack_gmod_ezclusterminebomb", "Cluster Mine Layer")
 end

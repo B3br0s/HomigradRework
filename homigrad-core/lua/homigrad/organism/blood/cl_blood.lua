@@ -15,7 +15,7 @@ hook.Add("Player Think", "BloodManager", function(ply)
     blood_Bleed((IsValid(rag) and rag:GetPos() or ply:GetPos()) or ply:GetPos() + Vector(0, 0, 32), Vector(0, 0, -2))
 end)
 
-hook.Add( "RenderScreenspaceEffects", "Blood_FX", function()
+hook.Add( "EffectRender", "Blood_FX", function()
 
     local ply = LocalPlayer()
 

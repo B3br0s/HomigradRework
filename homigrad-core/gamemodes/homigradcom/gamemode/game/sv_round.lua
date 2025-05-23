@@ -6,6 +6,7 @@ RTV_ROUNDS = 15
 CURRENT_ROUND = (CURRENT_ROUND or 0)
 ROUNDS_ENABLED = true
 RTV_ACTIVE = (RTV_ACTIVE or false)
+RTV_ENABLED = true
 
 hg.LastRoundTime = hg.LastRoundTime or 0
 
@@ -14,7 +15,13 @@ function StartRound()
         RunConsoleCommand("bot")
     end
 
-    if RTV_ACTIVE or SolidMapVote.isOpen then return end
+    if RTV_ACTIVE then
+        return
+    end
+
+    if !RTV_ENABLED then
+        CURRENT_ROUND = CURRENT_ROUND - 1
+    end
 
     ROUND_ACTIVE = true
 
@@ -27,7 +34,9 @@ function StartRound()
         SolidMapVote.start()
         RTV_ACTIVE = true
 
-        timer.Simple(0.5,function()
+        //hg.rtv_open()
+
+        timer.Simple(0.25,function()
             for i,ply in pairs(player.GetAll()) do
                 if ply:Team() == 1002 then
                     continue 

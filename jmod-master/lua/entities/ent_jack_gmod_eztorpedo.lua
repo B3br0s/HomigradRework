@@ -4,7 +4,7 @@ ENT.Type = "anim"
 ENT.Author = "Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Torpedo"
+ENT.PrintName = "Torpedo"
 ENT.Spawnable = true
 ENT.AdminSpawnable = true
 ---
@@ -301,5 +301,5 @@ elseif CLIENT then
 		JMod.RenderModel(self.Mdl, Pos - Dir * 85, Ang, Vector(.7, .7, .7), Vector(.5, .5, .5))
 	end
 
-	language.Add("ent_jack_gmod_eztorpedo", "EZ Torpedo")
+	language.Add("ent_jack_gmod_eztorpedo", "Torpedo")
 end

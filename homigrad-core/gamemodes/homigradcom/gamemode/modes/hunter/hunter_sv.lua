@@ -7,7 +7,7 @@ hunter.UntilSwat = 1e8
 function hunter.SWATSpawn(ply)
     local weps_pri = {"weapon_m4a1"}
     local weps_sec = {"weapon_glock17"}
-    local weps_main = {"weapon_kabar","weapon_handcuffs"}
+    local weps_main = {"weapon_sog","weapon_handcuffs","weapon_medkit_hg","weapon_bandage"}
 
     ply:SetTeam(3)
 
@@ -35,9 +35,9 @@ end
 function hunter.SpawnHunter(ply)
     local SpawnList = ReadDataMap("hunt_hunter")
 
-    local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp5","weapon_xm1014","weapon_m590a1","weapon_mag7"}
-    local weps_sec = {"weapon_deagle","weapon_glock17","weapon_mac10","weapon_m9","weapon_cz75","weapon_magnum357"}
-    local weps_oth = {"weapon_kknife","weapon_hatchet","weapon_tomahawk","weapon_kabar"}
+    local weps_pri = {"weapon_ak47","weapon_doublebarrel","weapon_870_a","weapon_870_b","weapon_xm1014"}
+    local weps_sec = {"weapon_deagle","weapon_fiveseven","weapon_glock17","weapon_tec9"}
+    local weps_oth = {"weapon_hatchet","weapon_axe","weapon_sog"}
     local weps_main = {"weapon_ied","weapon_handcuffs","weapon_f1"}
 
     ply:SetTeam(2)
@@ -61,7 +61,7 @@ function hunter.SpawnHunter(ply)
     wep_primary:SetClip1(wep_primary:GetMaxClip1())
     wep_secondary:SetClip1(wep_secondary:GetMaxClip1())
 
-    ply:GiveAmmo(wep_primary:GetMaxClip1() * math.random(8,16), wep_primary:GetPrimaryAmmoType(), true)
+    ply:GiveAmmo(wep_primary:GetMaxClip1() * math.random(12,24), wep_primary:GetPrimaryAmmoType(), true)
     ply:GiveAmmo(wep_secondary:GetMaxClip1() * math.random(8,12), wep_secondary:GetPrimaryAmmoType(), true)
 
     timer.Simple(0,function()
@@ -71,7 +71,7 @@ function hunter.SpawnHunter(ply)
 end
 
 function hunter.SpawnVictim(ply)
-    local weps_oth = {"weapon_knife","","weapon_chips","weapon_energy_drink","weapon_milk","weapon_water_bottle"}
+    local weps_oth = {"weapon_sog","weapon_chips","weapon_energy_drink","weapon_milk","weapon_water_bottle"}
 
     local SpawnList = ReadDataMap("hunt_victim")
 

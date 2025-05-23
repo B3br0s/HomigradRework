@@ -4,7 +4,7 @@ ENT.Type="anim"
 ENT.Author="Jackarunda, AdventureBoots"
 ENT.Category="JMod - EZ Explosives"
 ENT.Information="The base for all of the other ez bombs"
-ENT.PrintName="EZ Base Bomb"
+ENT.PrintName="Base Bomb"
 ENT.Spawnable=false
 ENT.AdminSpawnable=true
 ---
@@ -301,5 +301,5 @@ elseif(CLIENT)then
 			self.Mdl:DrawModel()
 		else return end
 	end
-	--language.Add("ent_jack_gmod_base_ezbomb","EZ Bomb Base")
+	--language.Add("ent_jack_gmod_base_ezbomb","Bomb Base")
 end

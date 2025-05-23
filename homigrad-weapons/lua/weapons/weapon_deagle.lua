@@ -1,46 +1,64 @@
 SWEP.Base = "homigrad_base"
-SWEP.PrintName = "Desert Eagle"
-SWEP.Spawnable = true
+SWEP.PrintName = "Desert Eagle" //Ебальники школьников представили по которым будут хуярить с этого?
 SWEP.Category = "Оружие: Пистолеты"
+SWEP.Spawnable = true
+
 SWEP.WorldModel = "models/weapons/arccw_go/v_pist_deagle.mdl"
+SWEP.ViewModel = "models/weapons/arccw_go/v_pist_deagle.mdl"
 
-SWEP.CorrectAng = Angle(0,0,0)
-SWEP.CorrectPos = Vector(-13,-5.25,5)
+SWEP.HoldType = "revolver"
 
-SWEP.Primary.DefaultClip = 7
+SWEP.Primary.ReloadTime = 1.7
 SWEP.Primary.ClipSize = 7
-SWEP.Primary.Ammo = ".50 Action Express"
+SWEP.Primary.DefaultClip = 7
+SWEP.Primary.Damage = 60
+SWEP.Primary.Force = 30
+SWEP.Primary.Ammo = "9x19 mm Parabellum"
+SWEP.Primary.Wait = 0.1
+SWEP.Sound = "arccw_go/deagle/deagle-1.wav"
 
-SWEP.HolsterPos = Vector(-6,-16,0)
-SWEP.HolsterAng = Angle(0,45,-90)
+SWEP.RecoilForce = 1.5
+
+SWEP.WorldPos = Vector(-2,-1.5,-0.5)
+SWEP.WorldAng = Angle(1,-2,0)
+SWEP.AttPos = Vector(25.5,3.85,-1.25)
+SWEP.AttAng = Angle(-0.4,-0.3,0)
+SWEP.HolsterAng = Angle(0,-90,0)
+SWEP.HolsterPos = Vector(-16,4,2)
+
 SWEP.BoltBone = "v_weapon.deagle_slide"
-SWEP.BoltVec = Vector(0,0,-1.5)
+SWEP.BoltVec = Vector(0,0,-1)
 
-SWEP.ZoomPos = Vector(3,-3.74,0.06)
-SWEP.ZoomAng = Angle(0,-0.5,-0.13)
-SWEP.AttPos = Vector(0,0.04,-0.4)
-SWEP.AttAng = Angle(0,0.7,0)
-SWEP.MuzzlePos = Vector(23.5,3.85,-1.4)
-SWEP.MuzzleAng = Angle(0,0,0)
+SWEP.IconPos = Vector(40,-11.5,-8)
+SWEP.IconAng = Angle(0,90,0)
 
-SWEP.Primary.Damage = 85
-SWEP.Primary.Force = 200
-SWEP.Primary.ReloadTime = 1.25
-SWEP.Primary.Wait = 0.2
-SWEP.Primary.Sound = "arccw_go/deagle/deagle-1.wav"
-SWEP.RecoilForce = 13
+SWEP.Rarity = 5
 
-SWEP.RUpMul = 0.75
-SWEP.RRightMul = 0
+SWEP.TwoHands = false
 
-function SWEP:PrimaryAdd()
-    self.RRightMul = math.random(-1,1)
-end
+SWEP.ZoomPos = Vector(6,-3.745,-0.3)
+SWEP.ZoomAng = Angle(-0.8,-0.3,0)
 
-SWEP.IconPos = Vector(1,110,-6)
-SWEP.IconAng = Angle(-20,0,0)
-
-SWEP.Weight = 1.5
+SWEP.Animations = {
+	["idle"] = {
+        Source = "idle",
+    },
+	["draw"] = {
+        Source = "draw",
+        MinProgress = 0.5,
+        Time = 1
+    },
+    ["reload"] = {
+        Source = "reload",
+        MinProgress = 0.5,
+        Time = 1.5
+    },
+    ["reload_empty"] = {
+        Source = "reload_empty",
+        MinProgress = 0.5,
+        Time = 1.8
+    }
+}
 
 SWEP.Reload1 = "arccw_go/deagle/de_clipout.wav"
 SWEP.Reload2 = "arccw_go/deagle/de_clipin.wav"

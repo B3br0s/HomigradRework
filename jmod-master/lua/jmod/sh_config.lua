@@ -733,7 +733,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 			-- String starting with FUNC direct to function
 			-- A table with the setup {class, number} will spawn that number of class
 			-- If you add a second number to that table, if the class is an EZ resource, it will attempt to set the resource to that number
-			["EZ Nail"] = {
+			["Nail"] = {
 				results = "FUNC EZnail",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5
@@ -745,7 +745,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Binds the object you're looking at to the object behind it"
 			},
-			["EZ Bolt"] = {
+			["Bolt"] = {
 				results = "FUNC EZbolt",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 8
@@ -757,7 +757,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Creates a single axis bearing for conecting rotating objects"
 			},
-			["EZ Box"] = {
+			["Box"] = {
 				results = "FUNC EZbox",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15
@@ -768,7 +768,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Stores the object you're looking at in a box for transportation or storage"
 			},
-			["EZ Rope"] = {
+			["Rope"] = {
 				results = "FUNC EZrope",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.CLOTH] = 2
@@ -780,7 +780,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Attaches a rope between two points"
 			},
-			["EZ Cable"] = {
+			["Cable"] = {
 				results = "FUNC EZcable",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 2
@@ -792,7 +792,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Attaches a strong cable between two points, and creates an electrical connection"
 			},
-			["EZ Chain"] = {
+			["Chain"] = {
 				results = "FUNC EZchain",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 5
@@ -804,7 +804,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Attaches a very strong chain between two points"
 			},
-			["EZ Ground Scanner"] = {
+			["Ground Scanner"] = {
 				results = "ent_jack_gmod_ezgroundscanner",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -817,7 +817,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Scans the ground for resource deposits when held still on solid ground. \nDoubles as a form of psychological torture."
 			},
-			["EZ Electric Winch"] = {
+			["Electric Winch"] = {
 				results = "ent_jack_gmod_ezwinch",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -828,7 +828,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Allows you to move objects up and down with ease."
 			},
-			["EZ Solar Panel"] = {
+			["Solar Panel"] = {
 				results = "ent_jack_gmod_ezsolargenerator",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -841,7 +841,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Generates power when aimed at the map's 'sun'."
 			},
-			["EZ Automated Field Hospital"] = {
+			["Automated Field Hospital"] = {
 				results = "ent_jack_gmod_ezfieldhospital",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 200,
@@ -856,7 +856,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Heals players so you don't have to get more blood on you."
 			},
-			["EZ Smelting Furnace"] = {
+			["Smelting Furnace"] = {
 				results = "ent_jack_gmod_ezfurnace",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 200,
@@ -869,7 +869,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Uses flex-fuel technology to refine ores into their respective ingots."
 			},
-			["EZ Oil Refinery"] = {
+			["Oil Refinery"] = {
 				results = "ent_jack_gmod_ezrefinery",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 200,
@@ -882,7 +882,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Performs fractional distillation of crude oil, creating fuel, plastic, rubber, and gas."
 			},
-			["EZ Power Bank"] = {
+			["Power Bank"] = {
 				results = "ent_jack_gmod_ezpowerbank",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -894,7 +894,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Allows for power-grid construction by linking machines that either consume or produce EZ power."
 			},
-			["EZ Oil Rig"] = {
+			["Oil Rig"] = {
 				results = "ent_jack_gmod_ezoil_rig",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -907,7 +907,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "A buoyant version of the EZ Pumpjack that allows for pumping oil deposits located underwater.\n Must be floating directly over an oil deposit to use."
 			},
-			["EZ Uranium Enrichment Centrifuge"] = {
+			["Uranium Enrichment Centrifuge"] = {
 				results = "ent_jack_gmod_ezcentrifuge",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 400,
@@ -921,7 +921,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Turns uranium into fissile material"
 			},
-			["EZ Liquid Fuel Generator"] = {
+			["Liquid Fuel Generator"] = {
 				results = "ent_jack_gmod_ezlfg",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 200,
@@ -935,7 +935,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Produces Power from Fuel. Very noisy."
 			},
-			["EZ Bomb Bay"] = {
+			["Bomb Bay"] = {
 				results = "ent_jack_gmod_ezbombbay",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 400,
@@ -946,7 +946,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "A bay for safely holding large amounts of bombs."
 			},
-			["EZ Big Bomb"] = {
+			["Big Bomb"] = {
 				results = "ent_jack_gmod_ezbigbomb",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 400,
@@ -958,7 +958,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Bigger than the EZ Bomb, but smaller than the Mega."
 			},
-			["EZ Bomb"] = {
+			["Bomb"] = {
 				results = "ent_jack_gmod_ezbomb",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 250,
@@ -970,7 +970,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Ol' reliable, a good way to send the enemy running for the bunkers."
 			},
-			["EZ Thin-Skinned Bomb"] = {
+			["Thin-Skinned Bomb"] = {
 				results = "ent_jack_gmod_ezhebomb",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -981,7 +981,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Standard HE bomb with a very thin shell that produces no significant fragmentation."
 			},
-			["EZ Torpedo"] = {
+			["Torpedo"] = {
 				results = "ent_jack_gmod_eztorpedo",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 50,
@@ -994,7 +994,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "The shark of death, travels in a straight path via gas propeller."
 			},
-			["EZ Cluster Bomb"] = {
+			["Cluster Bomb"] = {
 				results = "ent_jack_gmod_ezclusterbomb",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1005,7 +1005,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "For when you need to send hundreds of tiny bombs rather than a big one."
 			},
-			["EZ Cluster Buster"] = {
+			["Cluster Buster"] = {
 				results = "ent_jack_gmod_ezclusterbuster",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1017,7 +1017,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Cluster bomb that can pierce multiple hard targets from the air."
 			},
-			["EZ War Mine"] = {
+			["War Mine"] = {
 				results = "ent_jack_gmod_ezwarmine",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1030,7 +1030,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Smart perimeter defense mine that warns the user of approaching enemies. Will explode violently when angered enough."
 			},
-			["EZ General Purpose Crate"] = {
+			["General Purpose Crate"] = {
 				results = "ent_jack_gmod_ezcrate_uni",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.WOOD] = 50
@@ -1040,7 +1040,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "It's a box, tap it with whatever you want to store. Only works with JMod items."
 			},
-			["EZ HE Rocket"] = {
+			["HE Rocket"] = {
 				results = "ent_jack_gmod_ezherocket",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1052,7 +1052,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Pointy end goes forward towards soon to be explosion. Stay away from rear unless you want 3rd degree burns."
 			},
-			["EZ HEAT Rocket"] = {
+			["HEAT Rocket"] = {
 				results = "ent_jack_gmod_ezheatrocket",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1062,9 +1062,9 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				sizeScale = 1,
 				category = "Explosives",
 				craftingType = "toolbox",
-				description = "EZ HE Rocket, except it's a lot more effective against armored vehicles with less boom."
+				description = "HE Rocket, except it's a lot more effective against armored vehicles with less boom."
 			},
-			["EZ Rocket Motor"] = {
+			["Rocket Motor"] = {
 				results = "ent_jack_gmod_ezrocketmotor",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.PAPER] = 20,
@@ -1075,7 +1075,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Attach to an object and launch to propell it away."
 			},
-			["EZ Firework Rocket"] = {
+			["Firework Rocket"] = {
 				results = "ent_jack_gmod_ezfirework",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.CHEMICALS] = 10,
@@ -1087,7 +1087,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Firework to celebrate the holidays with.\n Or set stuff on fire."
 			},
-			["EZ Rocket Pod"] = {
+			["Rocket Pod"] = {
 				results = "ent_jack_gmod_ezrocketpod",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 30,
@@ -1099,7 +1099,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Allows you to load multiple rockets\n and launch them in a reliable way."
 			},
-			["EZ Incendiary Bomb"] = {
+			["Incendiary Bomb"] = {
 				results = "ent_jack_gmod_ezincendiarybomb",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1112,7 +1112,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Fire bomb. Detonates in the air to ensure max spread of napalm."
 			},
-			["EZ Mega Bomb"] = {
+			["Mega Bomb"] = {
 				results = "ent_jack_gmod_ezmoab",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 380,
@@ -1124,7 +1124,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Anything on the surface of the enemy bunker is gonna be gone, and they'll need to cleanup the bunker."
 			},
-			["EZ Micro Black Hole Generator"] = {
+			["Micro Black Hole Generator"] = {
 				results = "ent_jack_gmod_ezmbhg",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 300,
@@ -1138,7 +1138,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Takes a couple minutes to spin up, and then creates an impossibly weak black hole that scales with time."
 			},
-			["EZ Micro Nuclear Bomb"] = {
+			["Micro Nuclear Bomb"] = {
 				results = "ent_jack_gmod_eznuke",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 300,
@@ -1151,7 +1151,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Powerful nuclear weapon that will easily level a large portion of the map."
 			},
-			["EZ Nuclear Rocket"] = {
+			["Nuclear Rocket"] = {
 				results = "ent_jack_gmod_eznukerocket",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 300,
@@ -1165,7 +1165,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "High velocity map deletion."
 			},
-			["EZ Mini Naval Mine"] = {
+			["Mini Naval Mine"] = {
 				results = "ent_jack_gmod_eznavalmine",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1176,7 +1176,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Ships beware! This mine is ready to send em to Davy Jones' locker!"
 			},
-			["EZ Nano Nuclear Bomb"] = {
+			["Nano Nuclear Bomb"] = {
 				results = "ent_jack_gmod_eznuke_small",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1189,7 +1189,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Weak nuclear bomb, though easily transportable."
 			},
-			["EZ Resource Crate"] = {
+			["Resource Crate"] = {
 				results = "ent_jack_gmod_ezcrate",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.WOOD] = 100
@@ -1199,7 +1199,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Store your resources here for clean organization and automatic pulling when crafting."
 			},
-			["EZ Fuel Lantern"] = {
+			["Fuel Lantern"] = {
 				results = "ent_jack_gmod_ezfuellantern",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -1211,7 +1211,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Produces light when fuelled and ignited."
 			},
-			["EZ Sentry"] = {
+			["Sentry"] = {
 				results = "ent_jack_gmod_ezsentry",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 200,
@@ -1223,7 +1223,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Shoots enemies so you don't have to! Just remember to refill the ammo and power."
 			},
-			["EZ Small Bomb"] = {
+			["Small Bomb"] = {
 				results = "ent_jack_gmod_ezsmallbomb",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 100,
@@ -1235,7 +1235,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "A small alternative to the EZ Bomb, it has airbrakes for low altitude bombing."
 			},
-			["EZ Supply Radio"] = {
+			["Supply Radio"] = {
 				results = "ent_jack_gmod_ezaidradio",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1247,7 +1247,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Order more supplies for free. Just place it outside and watch for the package."
 			},
-			["EZ Thermobaric Bomb"] = {
+			["Thermobaric Bomb"] = {
 				results = "ent_jack_gmod_ezthermobaricbomb",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1259,7 +1259,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Bunker buster, will cause more damage if you place it indoors."
 			},
-			["EZ Thermonuclear Bomb"] = {
+			["Thermonuclear Bomb"] = {
 				results = "ent_jack_gmod_eznuke_big",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 400,
@@ -1272,7 +1272,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Now we are all sons of bitches."
 			},
-			["EZ Vehicle Mine"] = {
+			["Vehicle Mine"] = {
 				results = "ent_jack_gmod_ezatmine",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 40,
@@ -1283,7 +1283,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "A good way of stopping enemy vehicles from passing through."
 			},
-			["EZ Workbench"] = {
+			["Workbench"] = {
 				results = "ent_jack_gmod_ezworkbench",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 300,
@@ -1295,7 +1295,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Craft all your smaller items here."
 			},
-			["EZ Fabricator"] = {
+			["Fabricator"] = {
 				results = "ent_jack_gmod_ezfabricator",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 300,
@@ -1308,7 +1308,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Highly advanced machine used for manufacturing Parts."
 			},
-			["EZ Pumpjack"] = {
+			["Pumpjack"] = {
 				results = "ent_jack_gmod_ezpumpjack",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1321,7 +1321,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "A pump for extracting liquids from the ground."
 			},
-			["EZ Auger Drill"] = {
+			["Auger Drill"] = {
 				results = "ent_jack_gmod_ezaugerdrill",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1334,7 +1334,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "A drill for extracting ores from the ground."
 			},
-			["EZ Geothermal Generator"] = {
+			["Geothermal Generator"] = {
 				results = "ent_jack_gmod_ezgeothermalgenerator",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1346,7 +1346,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Bulky machine for utilizing geothermal deposits, and creating power from them."
 			},
-			["EZ Fluid Bottler"] = {
+			["Fluid Bottler"] = {
 				results = "ent_jack_gmod_ezfluid_bottler",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1358,7 +1358,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Machine for compressing air into EZ gas and bottling water. \nAlso cleans the air of toxins and radioactive fallout."
 			},
-			["EZ Solid Fuel Generator"] = {
+			["Solid Fuel Generator"] = {
 				results = "ent_jack_gmod_ezsfg",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1371,7 +1371,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Generator that uses coal or wood to heat water to produce power."
 			},
-			["EZ Radioisotope Thermoelectric Generator"] = {
+			["Radioisotope Thermoelectric Generator"] = {
 				results = "ent_jack_gmod_ezrtg",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1385,7 +1385,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "Generator that uses radioactive decay to slowly create power.\nWorks just about anywhere."
 			},
-			["EZ Sprinkler"] = {
+			["Sprinkler"] = {
 				results = "ent_jack_gmod_ezsprinkler",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1425,7 +1425,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "toolbox",
 				description = "The good ship mud skipper."
 			},
-			["EZ Basic Parts, x50"] = {
+			["Basic Parts, x50"] = {
 				results = {"ent_jack_gmod_ezbasicparts", 1, 50},
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 25,
@@ -1439,7 +1439,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "50 basic parts used for crafting and repairs."
 			},
-			["EZ Basic Parts, x100"] = {
+			["Basic Parts, x100"] = {
 				results = "ent_jack_gmod_ezbasicparts",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 40,
@@ -1453,7 +1453,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "1 box of parts used for crafting and repairs."
 			},
-			["EZ Basic Parts, x300"] = {
+			["Basic Parts, x300"] = {
 				results = {"ent_jack_gmod_ezbasicparts", 3},
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 120,
@@ -1467,7 +1467,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "3 boxes of parts used for crafting and repairs."
 			},
-			["EZ Precision Parts, x100"] = {
+			["Precision Parts, x100"] = {
 				results = "ent_jack_gmod_ezprecparts",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1480,7 +1480,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "1 box of precision parts used for use in high-powered machines and weapons."
 			},
-			["EZ Precision Parts, x10"] = {
+			["Precision Parts, x10"] = {
 				results = {"ent_jack_gmod_ezprecparts", 1, 10},
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -1493,7 +1493,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "10 precision parts used for use in high-powered machines and weapons."
 			},
-			["EZ Advanced Parts, x50"] = {
+			["Advanced Parts, x50"] = {
 				results = {"ent_jack_gmod_ezadvparts", 1, 50},
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.PRECISIONPARTS] = 100,
@@ -1505,7 +1505,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "50 Advanced Parts for use in hyper-advanced technology"
 			},
-			["EZ Advanced Parts, x5"] = {
+			["Advanced Parts, x5"] = {
 				results = {"ent_jack_gmod_ezadvparts", 1, 5},
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.PRECISIONPARTS] = 10,
@@ -1517,7 +1517,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "5 Advanced Parts for use in hyper-advanced technology"
 			},
-			["EZ Advanced Textiles"] = {
+			["Advanced Textiles"] = {
 				results = "ent_jack_gmod_ezadvtextiles",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.CLOTH] = 100,
@@ -1528,7 +1528,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "fabricator"},
 				description = "Advanced fabrics for use in high-tier clothing."
 			},
-			["EZ Chemicals"] = {
+			["Chemicals"] = {
 				results = "ent_jack_gmod_ezchemicals",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.OIL] = 50,
@@ -1539,7 +1539,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Caustic burns and choking smoke."
 			},
-			["EZ Ammo"] = {
+			["Ammo"] = {
 				results = "ent_jack_gmod_ezammo",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -1550,7 +1550,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "General purpose bullets. Don't ask how we got so many types of ammo in one box."
 			},
-			["EZ Paper"] = {
+			["Paper"] = {
 				results = "ent_jack_gmod_ezpaper",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.WOOD] = 30,
@@ -1560,7 +1560,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Writing material that can be used for more malicious purposes."
 			},
-			["EZ Cloth"] = {
+			["Cloth"] = {
 				results = "ent_jack_gmod_ezcloth",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ORGANICS] = 80,
@@ -1570,7 +1570,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Mysterious fabrication of fabric from edible organics. Don't ask how."
 			},
-			["EZ Black Powder Paper Cartridges"] = {
+			["Black Powder Paper Cartridges"] = {
 				results = "ent_jack_gmod_ezammobox_bppc",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.PAPER] = 20,
@@ -1581,7 +1581,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Ancient black powder ammo for the similarly ancient guns."
 			},
-			["EZ Arrows"] = {
+			["Arrows"] = {
 				results = "ent_jack_gmod_ezammobox_a",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 15,
@@ -1591,7 +1591,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Modern broadhead hunting arrows for cheap armor-piercing capability."
 			},
-			["EZ Flintlock Musket"] = {
+			["Flintlock Musket"] = {
 				results = JMod.WeaponTable["Flintlock Musket"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -1602,7 +1602,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Cumbersome musket that comes with a bayonet."
 			},
-			["EZ Flintlock Blunderbuss"] = {
+			["Flintlock Blunderbuss"] = {
 				results = JMod.WeaponTable["Flintlock Blunderbuss"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -1613,7 +1613,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Prehistoric shotgun that you can delete enemies with! (unless they have armor)"
 			},
-			["EZ Cap and Ball Revolver"] = {
+			["Cap and Ball Revolver"] = {
 				results = JMod.WeaponTable["Cap and Ball Revolver"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -1624,7 +1624,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "A very inaccurate, outdated revolver. Fires 6 shots."
 			},
-			["EZ Break-Action Shotgun"] = {
+			["Break-Action Shotgun"] = {
 				results = JMod.WeaponTable["Break-Action Shotgun"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1634,7 +1634,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A double barrel O/U shotgun."
 			},
-			["EZ Revolver"] = {
+			["Revolver"] = {
 				results = JMod.WeaponTable["Revolver"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1644,7 +1644,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A simple revolver. Fires 6 shots"
 			},
-			["EZ Single-Shot Rifle"] = {
+			["Single-Shot Rifle"] = {
 				results = JMod.WeaponTable["Single-Shot Rifle"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 75,
@@ -1654,7 +1654,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A simple rifle. Fires one bullet at a time."
 			},
-			["EZ Crossbow"] = {
+			["Crossbow"] = {
 				results = JMod.WeaponTable["Crossbow"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1663,7 +1663,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A crossbow. Can be very efficient if you hit all your shots."
 			},
-			["EZ Bolt-Action Rifle"] = {
+			["Bolt-Action Rifle"] = {
 				results = JMod.WeaponTable["Bolt-Action Rifle"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 125
@@ -1672,7 +1672,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A bolt action rifle. First practical high-power repeating rifle."
 			},
-			["EZ Lever-Action Carbine"] = {
+			["Lever-Action Carbine"] = {
 				results = JMod.WeaponTable["Lever-Action Carbine"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1682,7 +1682,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A Lever action carbine, less power than bolt action rifle, but more ammo."
 			},
-			["EZ Magnum Revolver"] = {
+			["Magnum Revolver"] = {
 				results = JMod.WeaponTable["Magnum Revolver"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 75,
@@ -1692,7 +1692,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Revolver, but with a more powerful round."
 			},
-			["EZ Pump-action Shotgun"] = {
+			["Pump-action Shotgun"] = {
 				results = JMod.WeaponTable["Pump-Action Shotgun"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 125,
@@ -1701,7 +1701,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Pump action shotgun, More shotgun shells."
 			},
-			["EZ Shot Revolver"] = {
+			["Shot Revolver"] = {
 				results = JMod.WeaponTable["Shot Revolver"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1710,7 +1710,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Small shotgun, ready to tear faces off at very close range."
 			},
-			["EZ Grenade Launcher"] = {
+			["Grenade Launcher"] = {
 				results = JMod.WeaponTable["Grenade Launcher"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 125,
@@ -1720,7 +1720,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "fabricator"},
 				description = "First grenade launcher. A single grenade to turn shit into scrap."
 			},
-			["EZ Pistol"] = {
+			["Pistol"] = {
 				results = JMod.WeaponTable["Pistol"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 75,
@@ -1730,7 +1730,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A pistol. Great sidearm to have."
 			},
-			["EZ Plinking Pistol"] = {
+			["Plinking Pistol"] = {
 				results = JMod.WeaponTable["Plinking Pistol"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1740,7 +1740,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A plinking pistol. Great if you want to deal with that bird that's annoying you."
 			},
-			["EZ Sniper Rifle"] = {
+			["Sniper Rifle"] = {
 				results = JMod.WeaponTable["Sniper Rifle"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1750,7 +1750,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A sniper rifle. Pick off targets at long range."
 			},
-			["EZ Pocket Pistol"] = {
+			["Pocket Pistol"] = {
 				results = JMod.WeaponTable["Pocket Pistol"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50,
@@ -1760,7 +1760,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A pocket pistol. It's concealable, allowing you to seem unarmed to others."
 			},
-			["EZ Anti-Materiel Sniper Rifle"] = {
+			["Anti-Materiel Sniper Rifle"] = {
 				results = JMod.WeaponTable["Anti-Materiel Sniper Rifle"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 200,
@@ -1770,7 +1770,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "An Anti-materiel sniper rifle. Use to obliterate your enemies and their property at long range."
 			},
-			["EZ Assault Rifle"] = {
+			["Assault Rifle"] = {
 				results = JMod.WeaponTable["Assault Rifle"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 125,
@@ -1780,7 +1780,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "An assault rifle. Reliable automatic rifle to dispatch assailants at medium range."
 			},
-			["EZ Battle Rifle"] = {
+			["Battle Rifle"] = {
 				results = JMod.WeaponTable["Battle Rifle"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1790,7 +1790,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A battle rifle. Powerful semi-auto rifle to dispatch assailants at medium range."
 			},
-			["EZ Carbine"] = {
+			["Carbine"] = {
 				results = JMod.WeaponTable["Carbine"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1800,7 +1800,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A carbine. Like the assault rifle, but with a shorter barrel."
 			},
-			["EZ Designated Marksman Rifle"] = {
+			["Designated Marksman Rifle"] = {
 				results = JMod.WeaponTable["Designated Marksman Rifle"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1810,7 +1810,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "A designated marksman rifle. Strong semi-auto rifle equipped with a scope for long range target removal."
 			},
-			["EZ Machine Pistol"] = {
+			["Machine Pistol"] = {
 				results = JMod.WeaponTable["Machine Pistol"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 75,
@@ -1820,7 +1820,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A machine pistol. Extremely fast automatic pistol for short range encounters."
 			},
-			["EZ Magnum Pistol"] = {
+			["Magnum Pistol"] = {
 				results = JMod.WeaponTable["Magnum Pistol"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 75,
@@ -1830,7 +1830,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "A magnum pistol. Strong semi-auto pistol."
 			},
-			["EZ Submachine Gun"] = {
+			["Submachine Gun"] = {
 				results = JMod.WeaponTable["Sub Machine Gun"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 125,
@@ -1840,7 +1840,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A submachine gun. Fast automatic SMG for short-medium range engagements."
 			},
-			["EZ Semiautomatic Shotgun"] = {
+			["Semiautomatic Shotgun"] = {
 				results = JMod.WeaponTable["Semi-Automatic Shotgun"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1850,7 +1850,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A semi-automatic shotgun. Fast firing tube-fed shotgun for close range battle."
 			},
-			["EZ Rocket Launcher"] = {
+			["Rocket Launcher"] = {
 				results = JMod.WeaponTable["Rocket Launcher"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 200,
@@ -1860,7 +1860,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "fabricator"},
 				description = "A rocket launcher. Launches rockets. What else did you think it did?"
 			},
-			["EZ Fully-Automatic Shotgun"] = {
+			["Fully-Automatic Shotgun"] = {
 				results = JMod.WeaponTable["Fully-Automatic Shotgun"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 125,
@@ -1870,7 +1870,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "A fully-automatic shotgun. Fast firing magazine-fed automatic shotgun for close range deletion."
 			},
-			["EZ Light Machine Gun"] = {
+			["Light Machine Gun"] = {
 				results = JMod.WeaponTable["Light Machine Gun"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1881,7 +1881,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A light machine gun. Fast firing LMG capable of laying down suppressive fire at medium range."
 			},
-			["EZ Medium Machine Gun"] = {
+			["Medium Machine Gun"] = {
 				results = JMod.WeaponTable["Medium Machine Gun"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 200,
@@ -1892,7 +1892,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "A medium machine gun. Powerful machine gun with decent fire rate for dealing serious damage."
 			},
-			["EZ Anti-Materiel Rifle"] = {
+			["Anti-Materiel Rifle"] = {
 				results = JMod.WeaponTable["Anti-Materiel Rifle"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 250,
@@ -1903,7 +1903,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "An Anti-materiel rifle. Use to obliterate your enemies and their property in quick succession."
 			},
-			["EZ Multiple Grenade Launcher"] = {
+			["Multiple Grenade Launcher"] = {
 				results = JMod.WeaponTable["Multiple Grenade Launcher"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 150,
@@ -1914,7 +1914,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "A Multiple Grenade Launcher. Use wisely to wreak havoc at close-medium range."
 			},
-			["EZ Multiple Rocket Launcher"] = {
+			["Multiple Rocket Launcher"] = {
 				results = JMod.WeaponTable["Multiple Rocket Launcher"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 250,
@@ -1925,7 +1925,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "A Multiple Rocket Launcher. The holy grail. Use this to strike down the deserving."
 			},
-			["EZ Flamethrower"] = {
+			["Flamethrower"] = {
 				results = "ent_jack_gmod_ezarmor_flametank",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 100,
@@ -1938,7 +1938,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A flamethrower. Use to burn your enemies to ashes."
 			},
-			["EZ Toolbox"] = {
+			["Toolbox"] = {
 				results = "ent_jack_gmod_eztoolbox",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 50
@@ -1948,7 +1948,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"craftingtable", "workbench"},
 				description = "Build, Upgrade, Salvage. All you need to build the big machines."
 			},
-			["EZ Chemical Power"] = {
+			["Chemical Power"] = {
 				results = "ent_jack_gmod_ezbattery",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.COPPER] = 20,
@@ -1959,7 +1959,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Uses a chemical reaction to give you 100 power"
 			},
-			["EZ Electrolysis Gas"] = {
+			["Electrolysis Gas"] = {
 				results = {"ent_jack_gmod_ezgas", 1, 50},
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.POWER] = 50,
@@ -1969,7 +1969,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Uses a chemical reaction to give you 50 gas"
 			},
-			["EZ Pick Axe"] = {
+			["Pick Axe"] = {
 				results = "ent_jack_gmod_ezpickaxe",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 25,
@@ -1979,7 +1979,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"craftingtable", "workbench"},
 				description = "I am a dwarf and I'm digging in a hole"
 			},
-			["EZ Axe"] = {
+			["Axe"] = {
 				results = "ent_jack_gmod_ezaxe",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 15,
@@ -1989,7 +1989,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"craftingtable", "workbench"},
 				description = "I must find a little woodsman, in me!"
 			},
-			["EZ Shovel"] = {
+			["Shovel"] = {
 				results = "ent_jack_gmod_ezshovel",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 12,
@@ -1999,7 +1999,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"craftingtable", "workbench"},
 				description = "Give me a spade, and I'll give you a hooole"
 			},
-			["EZ Bucket"] = {
+			["Bucket"] = {
 				results = "ent_jack_gmod_ezbucket",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.STEEL] = 20
@@ -2008,7 +2008,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"craftingtable", "workbench"},
 				description = "I am wise to collect water with my bucket"
 			},
-			["EZ Detpack"] = {
+			["Detpack"] = {
 				results = "ent_jack_gmod_ezdetpack",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2018,7 +2018,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A Versatile breaching tool."
 			},
-			["EZ Dynamite"] = {
+			["Dynamite"] = {
 				results = "ent_jack_gmod_ezdynamite",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.PAPER] = 10,
@@ -2028,7 +2028,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Good for blastmining and blasting idiots."
 			},
-			["EZ Explosives"] = {
+			["Explosives"] = {
 				results = "ent_jack_gmod_ezexplosives",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2038,7 +2038,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "No bomb is complete without explosives!"
 			},
-			["EZ Flashbang"] = {
+			["Flashbang"] = {
 				results = "ent_jack_gmod_ezflashbang",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2049,7 +2049,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Look away unless you want to be blinded."
 			},
-			["EZ Fougasse Mine"] = {
+			["Fougasse Mine"] = {
 				results = "ent_jack_gmod_ezfougasse",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2060,7 +2060,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Focus fire on the flammable targets."
 			},
-			["EZ Fragmentation Grenade"] = {
+			["Fragmentation Nade"] = {
 				results = "ent_jack_gmod_ezfragnade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2070,7 +2070,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Frag nade, for sending hundreds of fragments into your enemy."
 			},
-			["EZ Criticality Weapon"] = {
+			["Criticality Weapon"] = {
 				results = "ent_jack_gmod_ezcriticalityweapon",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2083,7 +2083,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "They say Slotin was often in his trademark blue jeans and cowboy boots..."
 			},
-			["EZ Road Flare"] = {
+			["Road Flare"] = {
 				results = "ent_jack_gmod_ezroadflare",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.CHEMICALS] = 5,
@@ -2094,7 +2094,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Colorable road flare, for signalling and illumination."
 			},
-			["EZ Glow Stick"] = {
+			["Glow Stick"] = {
 				results = "ent_jack_gmod_ezglowstick",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.PLASTIC] = 5,
@@ -2104,7 +2104,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Colorable glowstick, for identification, low-power illumination, and raves."
 			},
-			["EZ IFAK Packet"] = {
+			["IFAK Packet"] = {
 				results = "ent_jack_gmod_ezifakpacket",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.MEDICALSUPPLIES] = 5,
@@ -2114,7 +2114,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Individual First Aid Kit for stopping bleeding."
 			},
-			["EZ Fumigator"] = {
+			["Fumigator"] = {
 				results = "ent_jack_gmod_ezfumigator",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2125,7 +2125,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Go ahead, tell your hitler jokes. We'll wait."
 			},
-			["EZ Gas Grenade"] = {
+			["Gas Nade"] = {
 				results = "ent_jack_gmod_ezgasnade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2136,7 +2136,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Portable way of gassing j- enemies."
 			},
-			["EZ Tear Gas Grenade"] = {
+			["Tear Gas Nade"] = {
 				results = "ent_jack_gmod_ezcsnade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2147,7 +2147,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Effective area denial for those without gasmasks. Might be a warcrime."
 			},
-			["EZ Gebalte Ladung"] = {
+			["Gebalte Ladung"] = {
 				results = "ent_jack_gmod_ezsticknadebundle",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2157,7 +2157,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A very heavy and very explosive stick grenade."
 			},
-			["EZ Impact Grenade"] = {
+			["Impact Nade"] = {
 				results = "ent_jack_gmod_ezimpactnade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2167,7 +2167,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "For the aggressive type. Explodes on impact."
 			},
-			["EZ Incendiary Grenade"] = {
+			["Incendiary Nade"] = {
 				results = "ent_jack_gmod_ezfirenade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2178,7 +2178,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Portable fire bomb, try cooking it before throwing to spread it more."
 			},
-			["EZ Landmine"] = {
+			["Landmine"] = {
 				results = "ent_jack_gmod_ezlandmine",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15,
@@ -2188,7 +2188,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Anti-personnel land mine. Try your best to match the color with the ground."
 			},
-			["EZ Bear Trap"] = {
+			["Bear Trap"] = {
 				results = "ent_jack_gmod_ezbeartrap",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15
@@ -2197,7 +2197,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Basic trap for catching/slowing down enemies.\n Try your best to match the color with the ground."
 			},
-			["EZ Sleeping Bag"] = {
+			["Sleeping Bag"] = {
 				results = "ent_jack_sleepingbag",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 1,
@@ -2208,7 +2208,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"toolbox", "workbench", "craftingtable"},
 				description = "A sleeping bag you can set your spawn point at."
 			},
-			["EZ Ballistic Mask"] = {
+			["Ballistic Mask"] = {
 				results = JMod.ArmorTable["BallisticMask"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2218,7 +2218,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Face protection for the narcissists."
 			},
-			["EZ Gas Mask"] = {
+			["Gas Mask"] = {
 				results = JMod.ArmorTable["GasMask"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2229,7 +2229,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Protect yourself against the enemies' warcrimes."
 			},
-			["EZ Headset"] = {
+			["Headset"] = {
 				results = JMod.ArmorTable["Headset"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 20,
@@ -2239,7 +2239,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Headset that allows you to remotely communicate with radios and your friends."
 			},
-			["EZ Heavy Left Shoulder Armor"] = {
+			["Heavy Left Shoulder Armor"] = {
 				results = JMod.ArmorTable["Heavy-Left-Shoulder"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 20,
@@ -2251,7 +2251,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "You must care about your shoulders if you wear this."
 			},
-			["EZ Heavy Right Shoulder Armor"] = {
+			["Heavy Right Shoulder Armor"] = {
 				results = JMod.ArmorTable["Heavy-Right-Shoulder"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 20,
@@ -2263,7 +2263,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "You must care about your shoulders if you wear this."
 			},
-			["EZ Heavy Torso Armor"] = {
+			["Heavy Torso Armor"] = {
 				results = JMod.ArmorTable["Heavy-Vest"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 20,
@@ -2312,7 +2312,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "congrats you are now 5"
 			},
-			["EZ Light Helmet"] = {
+			["Light Helmet"] = {
 				results = JMod.ArmorTable["Light-Helmet"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 2,
@@ -2323,7 +2323,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Simple lightweight helmet that doesn't block much damage."
 			},
-			["EZ Respirator"] = {
+			["Respirator"] = {
 				results = JMod.ArmorTable["Respirator"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2334,7 +2334,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "You can wear goggles while protecting your lungs, but you'll have to retreat."
 			},
-			["EZ Riot Helmet"] = {
+			["Riot Helmet"] = {
 				results = JMod.ArmorTable["Riot-Helmet"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2344,7 +2344,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				"The light helmet, but with cheap glass attached to the front. Light face defense."
 			},
-			["EZ Heavy Riot Helmet"] = {
+			["Heavy Riot Helmet"] = {
 				results = JMod.ArmorTable["Heavy-Riot-Helmet"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2354,7 +2354,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Heavy riot helmet with proper ballistic protection."
 			},
-			["EZ Heavy Helmet"] = {
+			["Heavy Helmet"] = {
 				results = JMod.ArmorTable["Heavy-Helmet"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2366,7 +2366,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A heavy helmet that provides good defense without taking up your face slots."
 			},
-			["EZ Ultra Heavy Helmet"] = {
+			["Ultra Heavy Helmet"] = {
 				results = JMod.ArmorTable["Ultra-Heavy-Helmet"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2378,7 +2378,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Strongest helmet avaliable, at the cost of weight and vision."
 			},
-			["EZ Light Left Shoulder Armor"] = {
+			["Light Left Shoulder Armor"] = {
 				results = JMod.ArmorTable["Light-Left-Shoulder"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ADVANCEDTEXTILES] = 5,
@@ -2388,7 +2388,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Decent protection for your shoulders."
 			},
-			["EZ Light Right Shoulder Armor"] = {
+			["Light Right Shoulder Armor"] = {
 				results = JMod.ArmorTable["Light-Right-Shoulder"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ADVANCEDTEXTILES] = 5,
@@ -2398,7 +2398,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Decent protection for your shoulders."
 			},
-			["EZ Light Torso Armor"] = {
+			["Light Torso Armor"] = {
 				results = JMod.ArmorTable["Light-Vest"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2409,7 +2409,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Will provide light damage protection at little cost to mobility."
 			},
-			["EZ Medium Helmet"] = {
+			["Medium Helmet"] = {
 				results = JMod.ArmorTable["Medium-Helmet"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15,
@@ -2420,7 +2420,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Well-rounded helmet with balanced protection and weight."
 			},
-			["EZ Medium Torso Armor"] = {
+			["Medium Torso Armor"] = {
 				results = JMod.ArmorTable["Medium-Vest"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2431,7 +2431,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A vest, that while somewhat heavy, will provide appreciable over-all protection to your torso."
 			},
-			["EZ Medium-Heavy Torso Armor"] = {
+			["Medium-Heavy Torso Armor"] = {
 				results = JMod.ArmorTable["Medium-Heavy-Vest"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2443,7 +2443,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "It's in the name, for when you need a bit more protection than the medium provides."
 			},
-			["EZ Medium-Light Torso Armor"] = {
+			["Medium-Light Torso Armor"] = {
 				results = JMod.ArmorTable["Medium-Light-Vest"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2454,7 +2454,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "A lightweight balance between the Light and Medium vests."
 			},
-			["EZ Thermal Goggles"] = {
+			["Thermal Goggles"] = {
 				results = JMod.ArmorTable["ThermalGoggles"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15,
@@ -2465,7 +2465,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Allows you to visualize most heat signatures."
 			},
-			["EZ Night Vision Goggles"] = {
+			["Night Vision Goggles"] = {
 				results = JMod.ArmorTable["NightVisionGoggles"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15,
@@ -2476,7 +2476,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "See at night, be blinded by bright light."
 			},
-			["EZ Left Calf Armor"] = {
+			["Left Calf Armor"] = {
 				results = JMod.ArmorTable["Left-Calf"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ADVANCEDTEXTILES] = 5,
@@ -2486,7 +2486,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "For your legs."
 			},
-			["EZ Left Forearm Armor"] = {
+			["Left Forearm Armor"] = {
 				results = JMod.ArmorTable["Left-Forearm"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ADVANCEDTEXTILES] = 5,
@@ -2496,7 +2496,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Convenient armor for the limbs hanging in front of your chest."
 			},
-			["EZ Light Left Thigh Armor"] = {
+			["Light Left Thigh Armor"] = {
 				results = JMod.ArmorTable["Light-Left-Thigh"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ADVANCEDTEXTILES] = 5,
@@ -2506,7 +2506,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Keep your thigh."
 			},
-			["EZ Heavy Left Thigh Armor"] = {
+			["Heavy Left Thigh Armor"] = {
 				results = JMod.ArmorTable["Heavy-Left-Thigh"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 2,
@@ -2518,7 +2518,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "i'm not making that joke."
 			},
-			["EZ Pelvis Armor"] = {
+			["Pelvis Armor"] = {
 				results = JMod.ArmorTable["Pelvis-Panel"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 2,
@@ -2529,7 +2529,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Prevent annihilation of your family jewels."
 			},
-			["EZ Right Calf Armor"] = {
+			["Right Calf Armor"] = {
 				results = JMod.ArmorTable["Right-Calf"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ADVANCEDTEXTILES] = 5,
@@ -2539,7 +2539,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "For your legs."
 			},
-			["EZ Right Forearm Armor"] = {
+			["Right Forearm Armor"] = {
 				results = JMod.ArmorTable["Right-Forearm"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ADVANCEDTEXTILES] = 5,
@@ -2549,7 +2549,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Convenient armor for the limbs hanging in front of your chest."
 			},
-			["EZ Light Right Thigh Armor"] = {
+			["Light Right Thigh Armor"] = {
 				results = JMod.ArmorTable["Light-Right-Thigh"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ADVANCEDTEXTILES] = 5,
@@ -2559,7 +2559,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Keep your thigh."
 			},
-			["EZ Heavy Right Thigh Armor"] = {
+			["Heavy Right Thigh Armor"] = {
 				results = JMod.ArmorTable["Heavy-Right-Thigh"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 2,
@@ -2571,7 +2571,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "I'm not making that joke."
 			},
-			["EZ Hazmat Suit"] = {
+			["Hazmat Suit"] = {
 				results = JMod.ArmorTable["Hazmat Suit"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.CHEMICALS] = 20,
@@ -2582,7 +2582,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Full-body protection against environmental hazards, though fragile."
 			},
-			["EZ Parachute"] = {
+			["Parachute"] = {
 				results = JMod.ArmorTable["Parachute"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15,
@@ -2592,7 +2592,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Valuable tool to break your fall with when falling high distances."
 			},
-			["EZ Backpack"] = {
+			["Backpack"] = {
 				results = JMod.ArmorTable["Backpack"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2602,7 +2602,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Carry more items and resources to school."
 			},
-			["EZ Pouches"] = {
+			["Pouches"] = {
 				results = JMod.ArmorTable["Pouches"].ent,
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 4,
@@ -2612,7 +2612,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Handy bags for carrying some extra bits and pieces."
 			},
-			["EZ Medical Supplies"] = {
+			["Medical Supplies"] = {
 				results = "ent_jack_gmod_ezmedsupplies",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2623,7 +2623,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Necessities to heal anyone."
 			},
-			["EZ Medkit"] = {
+			["Medkit"] = {
 				results = "ent_jack_gmod_ezmedkit",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2633,7 +2633,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Go help em doc. Watch your head, you're gonna be a target."
 			},
-			["EZ Mini Bounding Mine"] = {
+			["Mini Bounding Mine"] = {
 				results = "ent_jack_gmod_ezboundingmine",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15,
@@ -2644,7 +2644,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Bury this in the soil around your base, and you got a very hidden defense option."
 			},
-			["EZ Mini Claymore"] = {
+			["Mini Claymore"] = {
 				results = "ent_jack_gmod_ezminimore",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 20,
@@ -2654,7 +2654,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Simple way to trap corners and the like."
 			},
-			["EZ Mini Impact Grenade"] = {
+			["Mini Impact Nade"] = {
 				results = "ent_jack_gmod_eznade_impact",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2664,7 +2664,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "You could throw it, but it's much better for making sure that bumping a bomb is a death sentence."
 			},
-			["EZ Mini Proximity Grenade"] = {
+			["Mini Proximity Nade"] = {
 				results = "ent_jack_gmod_eznade_proximity",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2674,7 +2674,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Useful for turning big bombs into traps. Very weak on its own however."
 			},
-			["EZ Mini Remote Grenade"] = {
+			["Mini Remote Nade"] = {
 				results = "ent_jack_gmod_eznade_remote",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2684,7 +2684,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Set it on a bomb, and trigger it from afar. Good if you want to ensure you're out of blast range."
 			},
-			["EZ Mini Timed Grenade"] = {
+			["Mini Timed Nade"] = {
 				results = "ent_jack_gmod_eznade_timed",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 5,
@@ -2694,7 +2694,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Arm it on a bomb, and run like hell."
 			},
-			["EZ Munitions"] = {
+			["Munitions"] = {
 				results = "ent_jack_gmod_ezmunitions",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2705,7 +2705,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "fabricator",
 				description = "Ammo for your explosive toys."
 			},
-			["EZ Powder Keg"] = {
+			["Powder Keg"] = {
 				results = "ent_jack_gmod_ezpowderkeg",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2715,7 +2715,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Become bugs bunny and kill yosemite sam with a black-powder line!"
 			},
-			["EZ Propellant"] = {
+			["Propellant"] = {
 				results = "ent_jack_gmod_ezpropellant",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.CLOTH] = 25,
@@ -2725,7 +2725,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Propellant for guns and other things."
 			},
-			["EZ Coolant"] = {
+			["Coolant"] = {
 				results = "ent_jack_gmod_ezcoolant",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.CHEMICALS] = 10,
@@ -2735,7 +2735,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "For cooling down machines. Do not drink."
 			},
-			["EZ Nutrients"] = {
+			["Nutrients"] = {
 				results = "ent_jack_gmod_eznutrients",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.ORGANICS] = 50,
@@ -2746,7 +2746,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = {"workbench", "craftingtable"},
 				description = "Tasty food! 99% Plastic Free!"
 			},
-			["EZ SLAM"] = {
+			["SLAM"] = {
 				results = "ent_jack_gmod_ezslam",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 20,
@@ -2756,7 +2756,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				description = "Fires an armor-piercing mega bullet at any enemy vehicle to cross the laser beam.",
 				craftingType = "workbench"
 			},
-			["EZ Satchel Charge"] = {
+			["Satchel Charge"] = {
 				results = "ent_jack_gmod_ezsatchelcharge",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2766,7 +2766,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Powerful explosive charge with a traditional plunger detonator that you can drag away."
 			},
-			["EZ Signal Grenade"] = {
+			["Signal Nade"] = {
 				results = "ent_jack_gmod_ezsignalnade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2776,7 +2776,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Send smoke signals to your team, and probably be ignored or brutally murdered by the enemy."
 			},
-			["EZ Smoke Grenade"] = {
+			["Smoke Nade"] = {
 				results = "ent_jack_gmod_ezsmokenade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 25,
@@ -2786,7 +2786,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Smokescreen so nobody knows who they're shooting."
 			},
-			["EZ Stick Grenade"] = {
+			["Stick Nade"] = {
 				results = "ent_jack_gmod_ezsticknade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 15,
@@ -2796,7 +2796,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "An old-fashioned Stielhandgranate with a toggleable frag sleeve."
 			},
-			["EZ Sticky Bomb"] = {
+			["Sticky Bomb"] = {
 				results = "ent_jack_gmod_ezstickynade",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 10,
@@ -2807,7 +2807,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Don't get yourself stuck on it! Very good for sticking to vehicles and stationary objects."
 			},
-			["EZ TNT"] = {
+			["TNT"] = {
 				results = "ent_jack_gmod_eztnt",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 20,
@@ -2817,7 +2817,7 @@ function JMod.InitGlobalConfig(forceNew, configToApply)
 				craftingType = "workbench",
 				description = "Simple breaching device. Reacts to powder from the powder keg."
 			},
-			["EZ Time Bomb"] = {
+			["Time Bomb"] = {
 				results = "ent_jack_gmod_eztimebomb",
 				craftingReqs = {
 					[JMod.EZ_RESOURCE_TYPES.BASICPARTS] = 20,

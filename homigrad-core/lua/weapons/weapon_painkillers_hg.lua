@@ -15,12 +15,12 @@ SWEP.FiresUnderwater = false
 SWEP.DrawCrosshair = false
 SWEP.DrawAmmo = true
 
-SWEP.CorrectAng = Angle(0,0,0)
-SWEP.CorrectPos = Vector(0,0,0)
+SWEP.WorldAng = Angle(0,0,0)
+SWEP.WorldPos = Vector(0,0,0)
 SWEP.CorrectScale = 1
 
-SWEP.IconPos = Vector(20.5,110,-5)
-SWEP.IconAng = Angle(0,-90,40)
+SWEP.IconPos = Vector(30,0,0)
+SWEP.IconAng = Angle(0,0,0)
 
 SWEP.HealSound = "zcity/healing/bloodbag_start_0.wav"
 SWEP.HealSoundEnd = "zcity/healing/tablets_close_3.wav"

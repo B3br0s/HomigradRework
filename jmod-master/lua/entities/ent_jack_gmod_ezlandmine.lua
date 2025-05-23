@@ -4,7 +4,7 @@ ENT.Type = "anim"
 ENT.Author = "Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Land Mine"
+ENT.PrintName = "Land Mine"
 ENT.NoSitAllowed = true
 ENT.Spawnable = true
 ENT.AdminSpawnable = true
@@ -117,9 +117,7 @@ if SERVER then
 		if State == STATE_OFF then
 			if Alt then
 				JMod.SetEZowner(self, activator)
-				net.Start("JMod_ColorAndArm")
-				net.WriteEntity(self)
-				net.Send(activator)
+				self:Arm(activator,true)
 			else
 				activator:PickupObject(self)
 			end
@@ -277,5 +275,5 @@ elseif CLIENT then
 		end
 	end
 
-	language.Add("ent_jack_gmod_ezlandmine", "EZ Landmine")
+	language.Add("ent_jack_gmod_ezlandmine", "Landmine")
 end

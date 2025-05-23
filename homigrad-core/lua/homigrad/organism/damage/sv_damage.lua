@@ -43,7 +43,7 @@ hook.Add("Homigrad_Organs","Organs_Damage",function(ent,dmginfo,physbone,bonenam
 		local ply = (ent:IsPlayer() and ent or RagdollOwner(ent))
 		local rag = ent
 
-		if rag:GetVelocity():Length() > 350
+		if rag:GetVelocity():Length() > 475
 		and (dmginfo:GetDamage() * 30) > 8 then
 			ply.KillReason = "dead_neck"
 			ply:SetNWString("KillReason",ply.KillReason)
@@ -112,13 +112,12 @@ end
 
 hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
     if IsValid(ent:GetPhysicsObject()) and dmginfo:IsDamageType(DMG_BULLET+DMG_BUCKSHOT+DMG_CLUB+DMG_GENERIC+DMG_BLAST) then ent:GetPhysicsObject():ApplyForceOffset(dmginfo:GetDamageForce():GetNormalized() * math.min(dmginfo:GetDamage() * 10,3000),dmginfo:GetDamagePosition()) end
-	local ply = RagdollOwner(ent) or ent
+	local ply = (ent:IsRagdoll() and hg.RagdollOwner(ent) or ent)
 	if ent.IsArmor then
-		ply = ent.Owner
-		ent = ply:GetNWEntity("FakeRagdoll") or ply
+		ply = (ent:IsRagdoll() and hg.RagdollOwner(ent) or ent)
 	end
 
-	if not ply or not ply:IsPlayer() or not ply:Alive() or ply:HasGodMode() then
+	if not IsValid(ply) or not ply:IsPlayer() or not ply:Alive() or ply:HasGodMode() or ent:IsRagdoll() and IsValid(ply) and ply.FakeRagdoll != ent then
 		return
 	end
 
@@ -130,9 +129,10 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 		return true
 	end 
 
-	if dmginfo:GetDamage() > 25 and math.random(1,2) == 2 then
+	if dmginfo:GetDamage() > 27 then
 		if not ply.Fake then
-			hg.Faking(ply,(IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * -10 or Ang:Forward() * 10) * math.random(10,30))
+			hg.Faking(ply,(IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * 15 or Ang:Forward() * 150) * math.random(5,10))
+			ply:SetHealth(ply:Health() - dmginfo:GetDamage())
 		end
 	end
 
@@ -185,14 +185,19 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 	dmginfo:ScaleDamage((DamageMultipliers[dmginfo:GetDamageType()] and DamageMultipliers[dmginfo:GetDamageType()] or 0.7))
 
 	if dmginfo:IsDamageType(DMG_CRUSH) and rag then
-		dmginfo:ScaleDamage((rag:GetVelocity():Length() / 900))
+		dmginfo:ScaleDamage((rag:GetVelocity():Length() > 150 and (rag:GetVelocity():Length() / 15000) or 0))
+		ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (rag:GetVelocity():Length() / 200),0,400)
 	end
+
+	//print(ply:Health())
 
     ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (PainMultipliers[dmginfo:GetDamageType()] and PainMultipliers[dmginfo:GetDamageType()] or 0.1),0,400)
 
-	if rag and !dmginfo:IsDamageType(DMG_CRUSH) then
+	if rag then
 		ply:SetHealth(ply:Health() - dmginfo:GetDamage())	
 	end
+
+	print(ply:Health())
 
 	if dmginfo:IsDamageType(DMG_SLASH + DMG_BULLET + DMG_BUCKSHOT) then
 		if not ply.bleed then

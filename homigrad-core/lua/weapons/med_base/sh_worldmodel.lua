@@ -1,5 +1,5 @@
-SWEP.CorrectAng = Angle(0,0,0)
-SWEP.CorrectPos = Vector(0,0,0)
+SWEP.WorldAng = Angle(0,0,0)
+SWEP.WorldPos = Vector(0,0,0)
 
 function SWEP:CreateWorldModel()
     if not IsValid(self:GetOwner()) then return end
@@ -32,10 +32,10 @@ function SWEP:DrawWM()
 
         WM:SetModelScale(self.CorrectScale or 1,0)
         
-        Pos = Pos + Ang:Forward() * self.CorrectPos[1] + Ang:Right() * self.CorrectPos[2] + Ang:Up() * self.CorrectPos[3]
-        Ang:RotateAroundAxis(Ang:Forward(),self.CorrectAng[1])
-        Ang:RotateAroundAxis(Ang:Right(),self.CorrectAng[2])
-        Ang:RotateAroundAxis(Ang:Up(),self.CorrectAng[3])
+        Pos = Pos + Ang:Forward() * self.WorldPos[1] + Ang:Right() * self.WorldPos[2] + Ang:Up() * self.WorldPos[3]
+        Ang:RotateAroundAxis(Ang:Forward(),self.WorldAng[1])
+        Ang:RotateAroundAxis(Ang:Right(),self.WorldAng[2])
+        Ang:RotateAroundAxis(Ang:Up(),self.WorldAng[3])
         
         WM:SetAngles(Ang)
         WM:SetPos(Pos)

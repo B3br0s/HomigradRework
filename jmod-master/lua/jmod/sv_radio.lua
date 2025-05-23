@@ -484,7 +484,6 @@ local function StartDelivery(pkg, transceiver, id, bff, ply)
 	local newTime, newPos = hook.Run("JMod_RadioDelivery", ply, transceiver, pkg, DeliveryTime, Pos)
 	DeliveryTime = newTime or DeliveryTime
 	Pos = newPos or Pos
-	(ply, "aid wait")
 	Station.state = JMod.EZ_STATION_STATE_DELIVERING
 	Station.nextDeliveryTime = Time + DeliveryTime
 	Station.deliveryLocation = Pos

@@ -69,6 +69,7 @@ end)
 
 hook.Add("RenderScreenspaceEffects","Homigrad_Pain_HUD",function()
     local ply = LocalPlayer()
+    hook.Run("EffectRender")
     if !IsValid(gradshit) then
         gradshit = vgui.Create("DImage")
         gradshit:Center()

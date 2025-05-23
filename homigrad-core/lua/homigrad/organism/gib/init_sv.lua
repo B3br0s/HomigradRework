@@ -110,98 +110,126 @@ function Gib_RemoveBone(rag,bone,phys_bone)
 	end
 end
 
-hook.Add("Homigrad_Gib","Gib_Main",function(rag,dmginfo,physbone,hitgroup,bone)
-    if WhiteList[rag:GetModel()] then return end
-    if IsValid(rag:GetNWEntity("RagdollOwner")) and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
-        rag:GetNWEntity("RagdollOwner").LastHitBone = bone
-        rag:GetNWEntity("RagdollOwner"):SetNWString('LastHitBone',bone)
-    end
+hook.Add("Homigrad_Gib", "Gib_Main", function(rag, dmginfo, physbone, hitgroup, bone)
+	if WhiteList[rag:GetModel()] then return end
 
-    dmginfo:ScaleDamage(2)
+	local owner = rag:GetNWEntity("RagdollOwner")
+	if IsValid(owner) and owner.FakeRagdoll == rag then
+		owner.LastHitBone = bone
+		owner:SetNWString("LastHitBone", bone)
+	end
 
-    if dmginfo:GetInflictor().NumBullet then
-        dmginfo:ScaleDamage(dmginfo:GetInflictor().NumBullet / 2)
-    end
-    if not rag.gib then
-        rag.gib = {
-            ["Head"] = false,
-            ["LArm"] = false,
-            ["RArm"] = false,
-            ["Torso"] = false,
-            ["LLeg"] = false,
-            ["RLeg"] = false,
-            ["Full"] = false
-        }
-    end
-    if rag.gib["Full"] then
-    rag.gib = {
-        ["Head"] = true,
-        ["LArm"] = true,
-        ["RArm"] = true,
-        ["Torso"] = true,
-        ["LLeg"] = true,
-        ["RLeg"] = true,  
-        ["Full"] = true
-    }
-    return
-    end
-    if dmginfo:GetDamage() > 40 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) or dmginfo:GetDamage() > 370 and dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH) then
-        if hitgroup == HITGROUP_HEAD and not rag.gib["Head"] then
-            local bonePos, boneAng = rag:GetBonePosition(physbone)
-            rag.gib["Head"] = true 
-            if rag:GetNWEntity("RagdollOwner") != nil and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag or rag:GetNWEntity("RagdollOwner") != NULL and !rag:GetNWEntity("RagdollOwner"):Alive() then
-                hg.Gibbed[rag:GetNWEntity("RagdollOwner")] = true
-            end
-            rag:ManipulateBoneScale(rag:LookupBone("ValveBiped.Bip01_Head1"),VecZero)
-            local phys_obj = rag:GetPhysicsObjectNum(physbone)
-	        phys_obj:EnableCollisions(false)
-	        phys_obj:SetMass(0.1)
-            constraint.RemoveAll(phys_obj)
-            if rag and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
-                rag:GetNWEntity("RagdollOwner").KillReason = "dead_headExplode"
-                if rag:GetNWEntity("RagdollOwner"):Alive() then
-                    hg.DropArmor(rag:GetNWEntity("RagdollOwner"),rag:GetNWEntity("RagdollOwner").armor.head,phys_obj:GetPos(),phys_obj:GetAngles():Forward() * 250 + phys_obj:GetAngles():Right() * 100)
-                    rag:GetNWEntity("RagdollOwner"):Kill()
-                end
-            end
-            local Pos,Ang = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_Head1"))
-            net.Start("bp headshoot explode")
-            net.WriteVector(Pos)
-            net.WriteVector(Vector(0,0,0) + VectorRand() + (IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * -10 or Ang:Forward() * 10) * math.random(10,30))
-            net.Broadcast()
-            net.Start("bp buckshoot")
-            net.WriteVector(Pos)
-            net.WriteVector(Vector(0,0,0) + dmginfo:GetAttacker():EyeAngles():Forward())
-            net.Broadcast()
-        end
-    end
-    if dmginfo:GetDamage() > 350 and rag:GetVelocity():Length() > 450 or rag:GetVelocity():Length() > 900 or dmginfo:GetDamageType() == DMG_BLAST then-- we do a little trolling
-        if dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then return end
-        if not rag.gib["Full"] then
-            if rag:GetNWEntity("RagdollOwner") != nil and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag or rag:GetNWEntity("RagdollOwner") != NULL and !rag:GetNWEntity("RagdollOwner"):Alive() then
-                hg.Gibbed[rag:GetNWEntity("RagdollOwner")] = true
-            end 
-            if rag and rag:GetNWEntity("RagdollOwner").FakeRagdoll == rag then
-                timer.Simple(0,function()
-                    rag:GetNWEntity("RagdollOwner").KillReason = "dead_fullgib"
-                    if rag:GetNWEntity("RagdollOwner"):Alive() then
-                        rag:GetNWEntity("RagdollOwner"):Kill()
-                        end
-                end)
-            end
-            local Pos,Ang = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_Spine2"))
-            net.Start("blood particle explode")
-            net.WriteVector(Pos)
-            net.WriteVector(Pos + Ang:Up() * 10)
-            net.Broadcast()
-            net.Start("bp fall")
-            net.WriteVector(Pos)
-            net.WriteVector(Pos + Ang:Up() * 10)
-            net.Broadcast()
-            rag.gib["Full"] = true
-            rag:Remove()
-        end
-    end
+	dmginfo:ScaleDamage(2)
+	if dmginfo:GetInflictor().NumBullet then
+		dmginfo:ScaleDamage(dmginfo:GetInflictor().NumBullet / 2)
+	end
+
+	if not rag.gib then
+		rag.gib = {
+			Head = false,
+			LArm = false,
+			RArm = false,
+			Torso = false,
+			LLeg = false,
+			RLeg = false,
+			Full = false
+		}
+	end
+
+	if rag.gib.Full then
+		rag.gib = {
+			Head = true,
+			LArm = true,
+			RArm = true,
+			Torso = true,
+			LLeg = true,
+			RLeg = true,
+			Full = true
+		}
+		return
+	end
+
+	local highDamage = dmginfo:GetDamage() > 40 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH)
+	local slashCrushKill = dmginfo:GetDamage() > 370 and dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH)
+
+	if (highDamage or slashCrushKill) and hitgroup == HITGROUP_HEAD and not rag.gib.Head then
+		rag.gib.Head = true
+
+		local bonePos, boneAng = rag:GetBonePosition(physbone)
+
+		if IsValid(owner) and (owner.FakeRagdoll == rag or not owner:Alive()) then
+			hg.Gibbed[owner] = true
+		end
+
+		local headBone = rag:LookupBone("ValveBiped.Bip01_Head1")
+		rag:ManipulateBoneScale(headBone, VecZero)
+
+		local phys = rag:GetPhysicsObjectNum(physbone)
+		phys:EnableCollisions(false)
+		phys:SetMass(0.1)
+		constraint.RemoveAll(phys)
+
+		if IsValid(owner) and owner.FakeRagdoll == rag then
+			owner.KillReason = "dead_headExplode"
+			local realOwner = hg.RagdollOwner(rag)
+			if IsValid(realOwner) and realOwner.Fake and realOwner.FakeRagdoll == rag and realOwner:Alive() then
+				hg.DropArmor(owner, owner.armor.head, phys:GetPos(), phys:GetAngles():Forward() * 250 + phys:GetAngles():Right() * 100)
+				owner:Kill()
+			end
+		end
+
+		local pos, ang = rag:GetBonePosition(headBone)
+
+		net.Start("bp headshoot explode")
+		net.WriteVector(pos)
+		net.WriteVector(VectorRand() + ((IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * -10) or ang:Forward() * 10) * math.random(10, 30))
+		net.Broadcast()
+
+		net.Start("bp buckshoot")
+		net.WriteVector(pos)
+		net.WriteVector((dmginfo:GetAttacker():EyeAngles():Forward()))
+		net.Broadcast()
+	end
+
+	local highVel = rag:GetVelocity():Length()
+	local fullGibCondition = (
+		(dmginfo:GetDamage() > 350 and highVel > 450) or 
+		highVel > 900 or 
+		dmginfo:GetDamageType() == DMG_BLAST
+	)
+
+	if fullGibCondition and not dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) then
+		if not rag.gib.Full then
+			if IsValid(owner) and (owner.FakeRagdoll == rag or not owner:Alive()) then
+				hg.Gibbed[owner] = true
+			end
+
+			if IsValid(owner) and owner.FakeRagdoll == rag then
+				timer.Simple(0, function()
+					owner.KillReason = "dead_fullgib"
+					local realOwner = hg.RagdollOwner(rag)
+					if IsValid(realOwner) and realOwner.Fake and realOwner.FakeRagdoll == rag and realOwner:Alive() then
+						realOwner:Kill()
+					end
+				end)
+			end
+
+			local spinePos, spineAng = rag:GetBonePosition(rag:LookupBone("ValveBiped.Bip01_Spine2"))
+
+			net.Start("blood particle explode")
+			net.WriteVector(spinePos)
+			net.WriteVector(spinePos + spineAng:Up() * 10)
+			net.Broadcast()
+
+			net.Start("bp fall")
+			net.WriteVector(spinePos)
+			net.WriteVector(spinePos + spineAng:Up() * 10)
+			net.Broadcast()
+
+			rag.gib.Full = true
+			rag:Remove()
+		end
+	end
 end)
 
 hook.Add("EntityTakeDamage","Homigrad_Gib_Main",function(ent,dmginfo)

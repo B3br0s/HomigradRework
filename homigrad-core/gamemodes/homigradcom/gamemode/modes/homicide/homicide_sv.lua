@@ -53,6 +53,8 @@ function hmcd.StartRoundSV()
     for _, ply in ipairs(player.GetAll()) do
         if ply:Team() != 1002 then
             ply:GodDisable()
+            ply:SetModel(table.Random(tdm.Models))
+            ply:SetPlayerColor(ColorRand(false):ToVector())
         end
         net.Start("hmcd_start") 
         net.WriteString(hmcd.Type)
@@ -65,7 +67,7 @@ end
 function hmcd.SpawnTraitor(ply)
     if hmcd.Type != "gfz" then
         local Wep1 = ply:Give("weapon_fiveseven")
-        local Wep2 = ply:Give("weapon_kabar")
+        local Wep2 = ply:Give("weapon_sog")
         ply:Give("weapon_f1")
         ply:Give("weapon_ied")
 
@@ -73,14 +75,14 @@ function hmcd.SpawnTraitor(ply)
 
         ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
     else
-        ply:Give("weapon_kabar")
+        ply:Give("weapon_sog")
         ply:Give("weapon_ied")
 
-        local Wep1 = ply:Give("weapon_pnev")
+        //local Wep1 = ply:Give("weapon_pnev")
 
-        Wep1:SetNWBool("DontShow",true)
+        //Wep1:SetNWBool("DontShow",true)
 
-        ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
+        //ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
     end
 end
 
@@ -117,11 +119,15 @@ function hmcd.AssignGunMan(tbl)
     RandomPlayer.IsGunMan = true
 
     if hmcd.Type == "soe" then
-        RandomPlayer:Give("weapon_870")
+        if math.random(1,2) == 2 then
+            RandomPlayer:Give("weapon_870_a")
+        else
+            RandomPlayer:Give("weapon_870_b")
+        end
     elseif hmcd.Type == "standard" then
-        RandomPlayer:Give("weapon_m9")
+        RandomPlayer:Give("weapon_glock17")
     elseif hmcd.Type == "gfz" then
-        RandomPlayer:Give("weapon_pbat")
+        //RandomPlayer:Give("weapon_pbat")
         RandomPlayer:Give("weapon_handcuffs")
     end
 end

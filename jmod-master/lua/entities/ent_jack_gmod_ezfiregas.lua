@@ -1,7 +1,7 @@
 ﻿-- Jackarunda 2021
 AddCSLuaFile()
 ENT.Type = "anim"
-ENT.PrintName = "EZ fire Gas"
+ENT.PrintName = "fire Gas"
 ENT.Author = "Jackarunda"
 ENT.NoSitAllowed = true
 ENT.Editable = false

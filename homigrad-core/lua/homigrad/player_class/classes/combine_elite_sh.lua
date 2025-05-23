@@ -295,16 +295,15 @@ if CLIENT then
             if IsValid(wep) and wep.ishgwep then
                 local self = wep
     
-                local Pos,Ang = self:GetNWVector("Muzzle"),self:GetNW2Angle("Muzzle")
-                local ClientPos,ClientAng = self:GetTrace()
-                local tr = util.QuickTrace(ClientPos,Ang:Forward() * 1000,LocalPlayer())
+                local Pos,Ang = self:GetTrace()
+                local tr = util.QuickTrace(Pos,Ang:Forward() * 10000,LocalPlayer())
 
                 local hit = tr.HitPos:ToScreen()
 
                 SightPos.x = LerpFT(0.175,SightPos.x,hit.x)
                 SightPos.y = LerpFT(0.175,SightPos.y,hit.y + 3)
 
-                local istransp = (wep:IsSprinting() or wep:IsClose() or wep.reload != nil or ply:KeyDown(IN_ATTACK2) or ply:GetNWBool("suiciding"))
+                local istransp = (wep:IsSprinting() or wep.reload != nil or ply:KeyDown(IN_ATTACK2) or ply:GetNWBool("suiciding"))
 
                 color_sight_mul = LerpFT(istransp and 0.3 or 0.15,color_sight_mul,istransp and 0 or 1)
 
@@ -354,8 +353,8 @@ if CLIENT then
 			surface.DrawTexturedRectRotated(ScrW()/2,ScrH()/1.9,ScrW(),ScrH()*1.1,180)
 
         else
-			draw.DrawText("H.U.D CONNECTION LOST","CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/2.05 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-			draw.DrawText("VISIBLITY LOST","CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/1.95 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.DrawText("H.U.D CONNECTION LOST","CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/2.15 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.DrawText("VISIBLITY LOST","CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/1.85 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			//draw.DrawText("TRYING TO REBOOT"..string.rep(".", shit),"CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/1.9 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 		end
 	end

@@ -18,8 +18,10 @@ SWEP.FiresUnderwater = false
 SWEP.DrawCrosshair = false
 SWEP.DrawAmmo = true
 
-SWEP.IconPos = Vector(21.5,90,-5)
-SWEP.IconAng = Angle(0,-90,40)
+SWEP.Rarity = 2
+
+SWEP.IconPos = Vector(50,0,0)
+SWEP.IconAng = Angle(0,0,0)
 SWEP.WepSelectIcon2 = Material("null")
 SWEP.IconOverride = ""
 
@@ -95,6 +97,10 @@ end
 
 function SWEP:Step()
     local ply = self:GetOwner()
+
+    if !IsValid(ply) then
+        return
+    end
 
     if ply:GetActiveWeapon() != self then
         return

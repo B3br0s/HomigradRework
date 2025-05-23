@@ -1,7 +1,7 @@
 ﻿-- Jackarunda 2021
 AddCSLuaFile()
 ENT.Type = "anim"
-ENT.PrintName = "EZ Poison Gas"
+ENT.PrintName = "Poison Gas"
 ENT.Author = "Jackarunda"
 ENT.NoSitAllowed = true
 ENT.Editable = false

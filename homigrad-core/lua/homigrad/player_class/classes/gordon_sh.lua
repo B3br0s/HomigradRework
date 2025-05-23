@@ -17,7 +17,7 @@ function CLASS.On(self)
 	self:SetHealth(150)
 	self:SetMaxHealth(150)
     self:SetArmor(100)
-	self:SetModel("models/gordon_mkv.mdl")
+	//self:SetModel("models/gordon_mkv.mdl")
 	self:Give("weapon_hands")
 	self.isGordon = true
 	net.Start("gordon_suit")
@@ -305,16 +305,15 @@ if CLIENT then
             if IsValid(wep) and wep.ishgwep then
                 local self = wep
     
-                local Pos,Ang = self:GetNWVector("Muzzle"),self:GetNW2Angle("Muzzle")
-                local ClientPos,ClientAng = self:GetTrace()
-                local tr = util.QuickTrace(ClientPos,Ang:Forward() * 1000,LocalPlayer())
+                local Pos,Ang = self:GetTrace()
+                local tr = util.QuickTrace(Pos,Ang:Forward() * 10000,LocalPlayer())
 
                 local hit = tr.HitPos:ToScreen()
 
                 SightPos.x = LerpFT(0.175,SightPos.x,hit.x)
                 SightPos.y = LerpFT(0.175,SightPos.y,hit.y + 3)
 
-                local istransp = (wep:IsSprinting() or wep:IsClose() or wep.reload != nil or ply:KeyDown(IN_ATTACK2) or ply:GetNWBool("suiciding"))
+                local istransp = (wep:IsSprinting() or wep.reload != nil or ply:KeyDown(IN_ATTACK2) or ply:GetNWBool("suiciding"))
 
                 color_sight_mul = LerpFT(istransp and 0.3 or 0.15,color_sight_mul,istransp and 0 or 1)
 

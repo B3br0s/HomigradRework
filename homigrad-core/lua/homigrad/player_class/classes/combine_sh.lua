@@ -321,8 +321,8 @@ if CLIENT then
 			surface.DrawTexturedRectRotated(ScrW()/2,ScrH()/1.9,ScrW(),ScrH()*1.1,180)
 
         else
-			draw.DrawText("H.U.D CONNECTION LOST","CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/2.05 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-			draw.DrawText("VISIBLITY LOST","CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/1.95 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.DrawText("H.U.D CONNECTION LOST","CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/2.15 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+			draw.DrawText("VISIBLITY LOST","CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/1.85 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			//draw.DrawText("TRYING TO REBOOT"..string.rep(".", shit),"CMBFontDefaultSmaller",ScrW() / 2 - y_diff_round,ScrH()/1.9 + p_diff_round,Color(200,0,0,255 * (1 - pain / 100)),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 		end
 	end

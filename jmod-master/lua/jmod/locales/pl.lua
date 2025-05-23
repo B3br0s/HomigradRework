@@ -14,7 +14,7 @@
 	["hint bombdrop"] = "Wpisz *bomb* na czacie albo komende 'jmod_ez_bombdrop' w konsoli żeby odczepić bombe",
 	["hint mine friends"] = "Ustaw przyjaciół komendą 'jmod_friends;'  w konsoli by przyjaciele nie odpalali inteligętnych min wybuchowych",
 	["hint prime"] = "Trzymaj klawisz Chodzenia a następnie kliknij klawisz Użycia żeby podnieść i odpalić granat",
-	["hint grenade"] = "Granaty mogą być rzucone na dalekie dystanse za pomocą lewego przycisku myszy lub bliżej przy kliknięciu prawego przycisku myszy",
+	["hint Nade"] = "Granaty mogą być rzucone na dalekie dystanse za pomocą lewego przycisku myszy lub bliżej przy kliknięciu prawego przycisku myszy",
 	["hint grenade drop"] = "Uważaj! Upuszczone granaty dalej są uzbrojone i wybuchną!",
 	["hint arm boundingmine"] = "Trzymaj klawisz Chodzenia a następnie kliknij klawisz Użycia blisko miękkiego terenu aby zakopać i uzbroić",
 	["hint arm powderkeg"] = "Trzymaj klawisz Chodzenia a następnie kliknij klawisz Użycia żeby rozsypywać czarny proch",

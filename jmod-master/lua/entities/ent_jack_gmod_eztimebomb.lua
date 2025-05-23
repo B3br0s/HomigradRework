@@ -3,10 +3,11 @@ ENT.Type = "anim"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Time Bomb"
+ENT.PrintName = "Time Bomb"
 ENT.NoSitAllowed = true
 ENT.Spawnable = true
 ENT.AdminSpawnable = true
+ENT.Rarity = 5
 ---
 ENT.EZscannerDanger = true
 ENT.JModPreferredCarryAngles = Angle(-90, 0, 0)
@@ -281,5 +282,5 @@ elseif CLIENT then
 		end
 	end
 
-	language.Add("ent_jack_gmod_eztimebomb", "EZ Time Bomb")
+	language.Add("ent_jack_gmod_eztimebomb", "Time Bomb")
 end

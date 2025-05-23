@@ -1,252 +1,244 @@
 SWEP.Base = "weapon_base"
 SWEP.PrintName = "Homigrad Weapon Base"
-SWEP.Spawnable = true
-SWEP.DrawAmmo = false
-SWEP.HoldType = "revolver"
-SWEP.Slot = 2
-SWEP.SlotPos = 2
-SWEP.Author = "Homigrad"
 
+SWEP.ViewModel = "models/weapons/arccw_go/v_pist_p2000.mdl"
 SWEP.WorldModel = "models/weapons/arccw_go/v_pist_p2000.mdl"
 
-SWEP.Weight = 1
-
-SWEP.CorrectAng = Angle(0,0,0)
-SWEP.CorrectPos = Vector(-13.5,-3.75,5)
-SWEP.HolsterBone = "ValveBiped.Bip01_Pelvis"
-SWEP.HolsterPos = Vector(0,0,0)
-SWEP.HolsterAng = Angle(0,0,0)
-SWEP.animmul = 0
-SWEP.Empty3 = true
-SWEP.Empty4 = true
-
-SWEP.DrawTime = 0.1
-SWEP.Deployed = true
-SWEP.ishgweapon = true
-
-SWEP.Primary.DefaultClip = 13
-SWEP.Primary.ClipSize = 13
-SWEP.Primary.Sound = "arccw_go/hkp2000/hkp2000_01.wav"
-SWEP.Primary.ReloadTime = 2
-SWEP.Primary.Wait = 0.1
-SWEP.Primary.Damage = 15
-SWEP.Primary.Force = 35
-SWEP.Primary.Automatic = false
-SWEP.RecoilForce = 1
-SWEP.TwoHands = false
-SWEP.Bodygroups = {[1] = 0,[2]=0,[3]=0,[4]=0,[5]=0}
-
-SWEP.BoltLock = true
-SWEP.SupportsTPIK = false
-
-SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = -1
-SWEP.Secondary.Automatic = false
-SWEP.Secondary.Ammo = "none"
+SWEP.Spawnable = true
+SWEP.Category = "Оружие: Базы"
+SWEP.DrawAmmo = false
+SWEP.DrawCrosshair = false
 SWEP.ishgwep = true
+SWEP.SupportTPIK = true
+
+SWEP.IKAnimationProxy = {}
+SWEP.Animations = {}
+
+SWEP.Rarity = 3
+
+SWEP.animmul = 0
+
+SWEP.Slot = 2
+SWEP.SlotPos = 0 
+
+SWEP.HoldType = "revolver"
+SWEP.Primary.Damage = 10
+SWEP.Primary.Ammo = "9x19 mm Parabellum"
+SWEP.Primary.Wait = 0.1
+SWEP.Primary.Force = 5
+SWEP.Sound = "arccw_go/hkp2000/hkp2000-1.wav"
 
 hg.Weapons = hg.Weapons or {}
 
 function SWEP:Initialize()
-    self.Reloading = false
-    self.Inspecting = false
-    self.SmoothedBolt = 0
-	self.ishgwep = true
     hg.Weapons[self] = true
-    self.Instructions = ""
 
-	self:Initialize_Spray()
-	self.Deployed = true
+    self:SetHoldType(self.HoldType)
 
-	self:SetHoldType(weapons.Get(self:GetClass()).HoldType)
+    self:Deploy()
 end
 
-function SWEP:OwnerChanged()
-	if IsValid(self.worldModel) then
-		self.worldModel:Remove()
-	end
-
-	return true
+function SWEP:CanShoot()
+    return (!self.reload and self:Clip1() > 0 and !self:IsSprinting() and !self:GetOwner():GetNWBool("otrub")) and !self:IsTooClose()
 end
 
-function SWEP:Holster()
-	return true
-end
+function SWEP:IsSprinting()
+	local ply = self:GetOwner() 
 
-function SWEP:Smooth(value)
-	if self.NextShoot + 0.125 > CurTime() then
-        return 0.04
+    if self.reload then
+        return false
     end
-    return math.ease.InSine(value) + math.max(math.ease.InElastic(value) - 0.3,0) + 0.05
-end
 
-function SWEP:Deploy()
-    local ply = self:GetOwner()
-	self:SetHoldType("normal")
-	self.Deployed = false
-	if self:IsPistolHoldType() then
-		self:EmitSound("homigrad/weapons/draw_pistol.mp3")
-	else
-		self:EmitSound("homigrad/weapons/draw_rifle.mp3")
+	if !IsValid(ply) then
+		return false
 	end
-	timer.Simple(self.DrawTime,function()
-		self:SetHoldType(weapons.Get(self:GetClass()).HoldType)
-		self.Deployed = true
-	end)
+
+	if ply.Fake then
+		return false
+	end
+
+	if ply:IsSprinting() then
+		return true
+	end
+
+	return false
 end
 
-function SWEP:SecondaryAttack()
-    return
+function SWEP:IsLocal()
+	return CLIENT and self:GetOwner() == LocalPlayer()
 end
 
 if SERVER then
-	util.AddNetworkString("hgwep shoot")
+    util.AddNetworkString("hg shoot")
 else
-	net.Receive("hgwep shoot",function()
-		local ent = net.ReadEntity()
+    net.Receive("hg shoot",function()
+        local wep = net.ReadEntity()
 
-		if ent.Shoot then
-			ent:Shoot()
-		end
-	end)
-end
-
-function SWEP:PrimaryAdd()
+        if wep.Shoot then
+            wep:Shoot()
+        end
+    end)
 end
 
 function SWEP:PrimaryAttack()
-	if self:Clip1() == 0 and SERVER then
+    if self:Clip1() == 0 and SERVER then
 		self.Primary.Automatic = false
 		sound.Play("weapons/clipempty_pistol.wav",self:GetPos(),75,math.random(95,105),1)
 		return
 	end
 	self.Primary.Automatic = weapons.Get(self:GetClass()).Primary.Automatic
-	if !self:CanShoot() then if !self:IsSprinting() and !self:IsClose() then self.Primary.Automatic = false sound.Play("weapons/clipempty_pistol.wav",self:GetPos(),75,math.random(95,105),1) end return end
-    if self:GetNextPrimaryFire() > CurTime() then return end
-    if self.NextShoot and self.NextShoot > CurTime() then return end
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Wait)
+    if !self:CanShoot() then
+        return
+    end
+    self:Shoot()
+end
 
-	self:Shoot()
+function SWEP:PrimaryAdd()
+end
 
-	if SERVER then
-		net.Start("hgwep shoot")
-		net.WriteEntity(self)
-		net.SendOmit(self:GetOwner())
+function SWEP:SecondaryAttack()
+end
+
+function SWEP:OwnerChanged()
+    if IsValid(self.worldModel) then
+        self.worldModel:Remove()
+        self.worldModel = nil
+    end
+end
+
+function SWEP:IsPistolHoldType()
+    if self.HoldType == "revolver" then
+        return true 
+    else
+        return false
+    end
+end
+
+function SWEP:Deploy()
+    local ply = self:GetOwner()
+	self:SetHoldType("normal")
+	if self:IsPistolHoldType() then
+		self:EmitSound("homigrad/weapons/draw_pistol.mp3")
+	else
+		self:EmitSound("homigrad/weapons/draw_rifle.mp3")
 	end
+	if self.Animations then
+        hg.PlayAnim(self,"draw")
+    end
 end
 
-function SWEP:PostStep()
+function SWEP:SetupDataTables()
+	self:NetworkVar("Float", 1, "SequenceCycle")
+	self:NetworkVar("Float", 2, "SequenceIndex")
+	self:NetworkVar("Float", 3, "SequenceProxy")
+	self:NetworkVar("Float", 4, "IKTimeLineStart")
+    self:NetworkVar("Float", 5, "IKTime")
+    self:NetworkVar("Float", 6, "SequenceSpeed")
+    self:NetworkVar("Float", 7, "ProcessedValue")
+    self:NetworkVar("Float", 8, "NextShoot")
+
+	self:NetworkVar("String", 0, "IKAnimation")
 end
 
-function SWEP:GetRightMul()
-	return self.RRightMul or 0
+function SWEP:PostAnim()
+    if self.BoltBone and self.BoltVec and CLIENT then
+        local bone = self:GetWM():LookupBone(self.BoltBone)
+
+        if bone then
+            self:GetWM():ManipulateBonePosition(bone,self.BoltVec * self.animmul)
+        end
+    end
+
+    self.animmul = LerpFT(0.25,self.animmul,0)
 end
 
-function SWEP:GetUpMul()
-	return self.RUpMul or 1
+function SWEP:IsClose()
+    local Pos,Ang = self:GetTrace()
+
+    local ply = self:GetOwner()
+
+    local tr_tbl = {
+        start = Pos - Ang:Forward() * 55,
+        endpos = Pos,
+        filter = {self.worldModel,hg.GetCurrentCharacter(ply)}
+    }
+
+    local tr = util.TraceLine(tr_tbl)
+
+    local tr_tbl2 = {
+        start = tr_tbl.start,
+        endpos = (Pos) + Ang:Forward() * Pos:Distance(tr.HitPos),
+        filter = {self.worldModel,hg.GetCurrentCharacter(ply)}
+    }
+
+    local tr = util.TraceLine(tr_tbl2)
+
+    local dist = (tr.Hit and Pos:Distance(tr.HitPos) or 0)
+
+    if GetConVar("developer"):GetBool() and CLIENT then
+        local hit = tr.HitPos:ToScreen()
+        surface.SetDrawColor( 255, 0, 0, 255)
+        surface.DrawRect(hit.x-2,hit.y+2,4,4)
+    end
+
+    self.ClosePos = LerpFT(0.1,self.ClosePos,dist)
+    self.Isclose = tr.Hit
+
+    return tr.Hit,dist
+end
+
+function SWEP:IsTooClose()
+    return false
 end
 
 function SWEP:Step()
-	local ply = self:GetOwner()
+    local ply = self:GetOwner()
+    
+    self:PostAnim()
 
-	self:DrawWorldModel()
+    if !IsValid(ply) then
+        return
+    end
 
-	if !IsValid(ply) or IsValid(ply) and ply:IsPlayer() and ply:GetActiveWeapon() != self then
-		return
-	end
+    self:Step_Spray()
 
-	self:PostStep()
+    if ply:GetActiveWeapon() != self then
+        self:WorldModel_Holster_Transform()
+    end
+    
+    self:SetNWBool("sighted",ply:KeyDown(IN_ATTACK2))
 
-	if CLIENT and ply == LocalPlayer() then
-		if self.NextShoot < CurTime() then
-			RecoilDown = false
-		else
-			RecoilDown = true 
-		end
-	end
+    self.NoLHand = (self:IsPistolHoldType() and ply:GetNWBool("suiciding") or false)
 
-	local hand_index = ply:LookupBone("ValveBiped.Bip01_R_Hand")
-	local forearm_index = ply:LookupBone("ValveBiped.Bip01_R_Forearm")
-	local clavicle_index = ply:LookupBone("ValveBiped.Bip01_R_Clavicle")
-	
-	local matrix = ply:GetBoneMatrix(hand_index)
-	if not matrix then return end
+    self:SetHoldType((ply:GetNWBool("suiciding") and "normal" or self.HoldType))
 
-	local plyang = ply:EyeAngles()
-	plyang:RotateAroundAxis(plyang:Forward(),180)
-
-	local _,newAng = LocalToWorld(vector_origin,self.localAng or angle_zero,vector_origin,plyang)
-	local ang = Angle(newAng[1],newAng[2],newAng[3])
-
-	if !self:IsSprinting() and !self:IsClose() and !self.reload then
-		if self.PumpTarg and self.Pump <= 0.05 then
-			matrix:SetAngles(ang - Angle(12 * (self.sprayI * self.RecoilForce * 1.5) * self:GetUpMul(),-1 * (self.sprayI * self.RecoilForce * 1.5) * self:GetRightMul(),0))
-		elseif !self.PumpTarg then
-			matrix:SetAngles(ang - Angle(12 * (self.sprayI * self.RecoilForce * 1.5) * self:GetUpMul(),-1 * (self.sprayI * self.RecoilForce * 1.5) * self:GetRightMul(),0))
-		end
-	end
-
-	ply:SetBoneMatrix2(hand_index, matrix, false)
-	
-	self:Step_Spray()
-	
-	if CLIENT then
-		self:Step_Anim()
-	end
+    self.speed = (ply:GetNWBool("suiciding") and 0 or LerpFT(0.12,self.speed or 0,((self:IsSprinting() or self.ClosePos > 6) and 1 or 0)))
 end
 
-function SWEP:Think()
-	self:Lobotomy_Sharik()
-end
+hook.Add("Think","Homigrad-Weapon",function()
+    for wep, _ in pairs(hg.Weapons) do
+        if IsValid(wep) and wep.Step then
+            wep:Step()
+            if IsValid(wep:GetOwner()) and wep.IsClose and wep:GetOwner():GetActiveWeapon() == wep then
+                local is,dist = wep:IsClose()
 
-function SWEP:CreateWorldModel()
-	if SERVER then
-		local wm = ents.Create("prop_physics")
-		/*if GetConVar("developer"):GetBool() then
-			wm:SetNoDraw(false)
-		else
-			wm:SetNoDraw(true)
-		end*/
-		wm:SetModel(self.WorldModel)
-		wm:SetMaterial("null")
-		wm:Spawn()
-		wm:GetPhysicsObject():EnableMotion(false)
-		wm:PhysicsDestroy()
-		wm:SetMoveType(MOVETYPE_NONE)
-		wm:SetNWBool("nophys", true)
-		wm:SetSolidFlags(FSOLID_NOT_SOLID)
-		wm:AddEFlags(EFL_NO_DISSOLVE)
-		wm:SetNoDraw(true)
-        self:CallOnRemove("RemoveWM", function() wm:Remove() end)
-
-		self.worldModel = wm
-
-		return wm
-	else
-		local wm = ClientsideModel(self.WorldModel)
-
-		table.insert(hg.csm,wm)
-
-        self:CallOnRemove("RemoveWM", function() wm:Remove() end)
-		self.worldModel = wm
-
-		return wm
-	end
-end
-
-hook.Add("Think", "Homigrad-Weapons", function()
-	for wep in pairs(hg.Weapons) do
-		if not IsValid(wep) or not wep.Step or not IsValid(wep:GetOwner()) then continue end
-		wep:Step()
-		//wep:DrawWorldModel()
-	end
+                if SERVER then
+                    wep.ClosePos = dist
+                    wep.Isclose = is
+                else
+                    wep.ClosePos = (wep:GetOwner() == LocalPlayer() and LerpFT(0.05,wep.ClosePos,dist) or 0)
+                    wep.Isclose = is
+                end
+            end
+        end
+    end
 end)
 
-if CLIENT then
-	hook.Add("PostDrawOpaqueRenderables", "Homigrad-Weapons", function()
-		for wep in pairs(hg.Weapons) do
-			if not IsValid(wep) or !wep.DrawWorldModel then continue end
-			//wep:DrawWorldModel()
-		end
-	end)
+function SWEP:IsSighted()
+    local ply = self:GetOwner()
+    if SERVER then
+        return ply:KeyDown(IN_ATTACK2)
+    else
+        return self:GetNWBool("sighted",false)
+    end
 end

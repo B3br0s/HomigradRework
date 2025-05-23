@@ -1,45 +1,73 @@
-SWEP.Base = "weapon_sawedoff"
-SWEP.PrintName = "ИЖ-27"
-SWEP.Spawnable = true
+SWEP.Base = "homigrad_base"
+SWEP.PrintName = "Izh-27"
 SWEP.Category = "Оружие: Дробовики"
-SWEP.WorldModel = "models/weapons/tfa_ins2/w_doublebarrel.mdl"
+SWEP.Spawnable = true
 
-SWEP.CorrectPos = Vector(2,-0.3,3)
-SWEP.CorrectAng = Angle(0,2,0)
+SWEP.WorldModel = "models/weapons/arccw/c_ur_dbs.mdl"
+SWEP.ViewModel = "models/weapons/arccw/c_ur_dbs.mdl"
+
+SWEP.holdtypes = {
+    ["ar2"] = {[1] = 0.27,[2] = 0.7,[3] = 1.75,[4] = 2.2},
+}
+
 SWEP.HoldType = "ar2"
-SWEP.TwoHands = true
 
-SWEP.HolsterPos = Vector(-5,4,1)
-SWEP.HolsterAng = Angle(0,-10,0)
-SWEP.HolsterBone = "ValveBiped.Bip01_Spine2"
-SWEP.BoltBone = "W_BOLT_SHOT"
-SWEP.BoltVec = Vector(0,0,0)
-SWEP.BoltLock = false
-
-SWEP.ZoomPos = Vector(-22.5,1.32,0)
-SWEP.ZoomAng = Angle(0,1,0)
-SWEP.AttPos = Vector(-19,0,0)
-SWEP.AttAng = Angle(0,0,0)
-
-SWEP.MuzzlePos = Vector(-19,0,0)
-SWEP.MuzzleAng = Angle(0,0,0)
-
-SWEP.IsShotgun = true
-SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 2
 SWEP.Primary.DefaultClip = 2
-SWEP.Primary.Damage = 37.5
-SWEP.Primary.Wait = 0.2
-SWEP.Primary.ReloadTime = 1
-SWEP.Primary.Ammo = "12/70 gauge"
-SWEP.Primary.Damage = 23
-SWEP.Primary.Force = 75
-SWEP.Primary.Sound = "sounds_zcity/doublebarrel_short/close.wav"
-SWEP.InsertSound = "pwb2/weapons/ksg/shellinsert1.wav"
+SWEP.Primary.Damage = 40
+SWEP.Primary.Force = 40
 SWEP.NumBullet = 8
-SWEP.RecoilForce = 27.5
+SWEP.Primary.Ammo = "12/70 gauge"
+SWEP.Sound = "zcitysnd/sound/weapons/firearms/shtg_berettasv10/beretta_fire_01.wav"
+SWEP.InsertSound = "pwb2/weapons/m4super90/shell.wav"
+SWEP.Primary.ReloadTime = 2.5
+SWEP.Primary.Wait = 0.2
 
-SWEP.Weight = 2.5
+SWEP.Empty3 = false
+SWEP.Empty4 = false
 
-SWEP.IconPos = Vector(8,15,-2.5)
-SWEP.IconAng = Angle(0,0,0)
+SWEP.IsShotgun = true
+
+SWEP.WorldPos = Vector(1,2,-1)
+SWEP.WorldAng = Angle(1,0,0)
+SWEP.AttPos = Vector(37,1.5,-2.7)
+SWEP.AttAng = Angle(0.2,0,0)
+SWEP.HolsterAng = Angle(90,-90,0)
+SWEP.HolsterPos = Vector(-24,5,5.5)
+
+SWEP.BoltBone = nil
+SWEP.BoltVec = nil
+
+SWEP.IconPos = Vector(160,-17,0)
+SWEP.IconAng = Angle(0,90,0)
+
+SWEP.TwoHands = true
+
+SWEP.ZoomPos = Vector(5,-1.53,-2.5)
+SWEP.ZoomAng = Angle(-0.3,0,0)
+
+SWEP.RecoilForce = 2
+
+SWEP.Animations = {
+    ["draw"] = {
+        Source = "draw",
+        Time = 1
+    },
+    ["idle"] = {
+        Source = "idle",
+        Time = 1
+    },
+    ["reload"] = {
+        Source = "reload",
+        Time = 3
+    },
+    ["reload_empty"] = {
+        Source = "reload_empty",
+        Time = 3
+    },
+}
+
+SWEP.Reload1 = "weapons/arccw_ur/dbs/open.ogg"
+SWEP.Reload2 = "weapons/arccw_ur/dbs/eject.ogg"
+SWEP.Reload3 = "arccw_uc/common/dbs-shell-insert-02.ogg"
+SWEP.Reload4 = "weapons/arccw_ur/dbs/close.ogg"

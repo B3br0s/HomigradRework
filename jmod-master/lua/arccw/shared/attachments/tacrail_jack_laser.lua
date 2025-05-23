@@ -1,4 +1,4 @@
-﻿att.PrintName = "EZ Tactical Laser"
+﻿att.PrintName = "Tactical Laser"
 att.Icon = Material("entities/acwatt_tac_pointer.png")
 att.Description = "y r u gae"
 att.Desc_Pros = {}

@@ -1,48 +1,82 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "XM1014"
-SWEP.Spawnable = true
 SWEP.Category = "Оружие: Дробовики"
-SWEP.WorldModel = "models/weapons/arccw_go/v_shot_m1014.mdl"
+SWEP.Spawnable = true
 
-SWEP.CorrectPos = Vector(-11.5,-4.9,7.6)
-SWEP.CorrectAng = Angle(0,3,0)
+SWEP.WorldModel = "models/weapons/arccw/c_ud_m1014.mdl"
+SWEP.ViewModel = "models/weapons/arccw/c_ud_m1014.mdl"
+
 SWEP.HoldType = "ar2"
-SWEP.TwoHands = true
 
-SWEP.HolsterPos = Vector(-20,-1,8)
-SWEP.HolsterAng = Angle(0,-10,0)
-SWEP.HolsterBone = "ValveBiped.Bip01_Spine2"
-SWEP.BoltBone = "v_weapon.xm1014_Bolt"
-SWEP.BoltVec = Vector(0,0,-2.3)
-SWEP.BoltLock = true
-
-SWEP.ZoomPos = Vector(10,-4.32,-2.75)
-SWEP.ZoomAng = Angle(0,1.35,0.02)
-SWEP.AttPos = Vector(-2,0,0)
-SWEP.AttAng = Angle(0,0.75,0)
-
-SWEP.MuzzlePos = Vector(36,4.15,-4)
-SWEP.MuzzleAng = Angle(0,0,0)
+SWEP.Primary.ReloadTime = 1.7
+SWEP.Primary.ClipSize = 6
+SWEP.Primary.DefaultClip = 6
+SWEP.Primary.Damage = 24
+SWEP.Primary.Force = 15
+SWEP.NumBullet = 8
+SWEP.Primary.Ammo = "12/70 gauge"
+SWEP.Sound = "sounds_zcity/doublebarrel/close.wav"
+SWEP.InsertSound = "pwb2/weapons/m4super90/shell.wav"
+SWEP.Primary.ReloadTime = 0.25
+SWEP.Primary.Wait = 0.15
 
 SWEP.IsShotgun = true
-SWEP.Primary.Automatic = false
-SWEP.Primary.ClipSize = 7
-SWEP.Primary.DefaultClip = 7
-SWEP.Primary.Damage = 17.5
-SWEP.Primary.Wait = 0.2
-SWEP.Primary.ReloadTime = 1
-SWEP.Primary.Ammo = "12/70 gauge"
-SWEP.Primary.Damage = 23
-SWEP.Primary.Force = 75
-SWEP.Primary.Sound = "pwb2/weapons/m4super90/xm1014-1.wav"//{"zcitysnd/sound/weapons/firearms/shtg_winchestersx3/shotgun_semiauto_fire1.wav","zcitysnd/sound/weapons/firearms/shtg_winchestersx3/shotgun_semiauto_fire2.wav"}
-SWEP.InsertSound = "pwb2/weapons/m4super90/shell.wav"
-SWEP.NumBullet = 8
-SWEP.RecoilForce = 7.5
 
-SWEP.IconPos = Vector(-4.25,50,-4)
-SWEP.IconAng = Angle(-20,0,0)
+SWEP.WorldPos = Vector(-3,-0.5,-1)
+SWEP.WorldAng = Angle(1,0,0)
+SWEP.AttPos = Vector(37,2.76,-2.2)
+SWEP.AttAng = Angle(0.2,-0.1,0)
+SWEP.HolsterAng = Angle(0,-90,0)
+SWEP.HolsterPos = Vector(-16,4,2)
 
-SWEP.Weight = 2.5
+SWEP.BoltBone = "1014_bolt"
+SWEP.BoltVec = Vector(0,0,-2)
+
+SWEP.IconPos = Vector(130,-17,-0)
+SWEP.IconAng = Angle(0,90,0)
+
+SWEP.TwoHands = true
+
+SWEP.ZoomPos = Vector(6,-2.72,-1.1)
+SWEP.ZoomAng = Angle(-0.3,0,0)
+
+SWEP.RecoilForce = 2.5
+
+SWEP.Animations = {
+    ["pump"] = {
+        Source = "cycle",
+        Time = 0.3
+    },
+    ["draw"] = {
+        Source = "draw",
+        Time = 1
+    },
+    ["idle"] = {
+        Source = "idle",
+        Time = 1
+    },
+    ["insert"] = {
+        Source = "sgreload_insert",
+        Time = 0.8
+    },
+    ["insert_start"] = {
+        Source = "sgreload_start",
+        Time = 0.5
+    },
+    ["insert_start_empty"] = {
+        Source = "sgreload_start_empty",
+        Time = 1.2
+    },
+    ["insert_end"] = {
+        Source = "sgreload_finish",
+        Time = 0.8
+    },
+}
+
+SWEP.Reload1 = false
+SWEP.Reload2 = false
+SWEP.Reload3 = false
+SWEP.Reload4 = false
 
 function SWEP:ReloadFunc()
     self.AmmoChek = 5
@@ -68,37 +102,64 @@ function SWEP:ReloadFunc()
         net.Broadcast()
     end
 
-    ply:SetAnimation(PLAYER_RELOAD)
+    local isempty = self:Clip1() == 0
+
+    if !self.isup then
+        if self:Clip1() == 0 then
+            hg.PlayAnim(self,"insert_start_empty")
+            if SERVER then
+                    self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))
+                    ply:SetAmmo(ply:GetAmmoCount( self:GetPrimaryAmmoType() )-1, self:GetPrimaryAmmoType())
+
+                    timer.Simple(self.Primary.ReloadTime * 2.5,function()
+                        if SERVER then
+                            local pos,ang = self:WorldModel_Transform()
+                            sound.Play(self.InsertSound,pos,95,math.random(95,105),0.75)
+                        end
+                        timer.Simple(0.1,function()
+                            local pos,ang = self:WorldModel_Transform()
+                            sound.Play("weapons/arccw_ur/spas12/forearm_forward.ogg",pos,95,math.random(95,105),0.75)
+                        end)
+                    end)
+            end
+        else
+            hg.PlayAnim(self,"insert_start")
+        end
+        self.isup = true
+    end
+
+    //ply:SetAnimation(PLAYER_RELOAD)
 
     if not IsValid(self) or not IsValid(self:GetOwner()) then return end
         local wep = self:GetOwner():GetActiveWeapon()
         if IsValid(self) and IsValid(ply) and (IsValid(wep) and wep or self:GetOwner().ActiveWeapon) == self then
             self.AmmoChek = 5
             self:SetHoldType(self.HoldType)
-            timer.Simple(self.Primary.ReloadTime,function()
-                if SERVER then
-                    if self:Clip1() == 0 and self.BoltLock then
-                        timer.Simple(0.3,function()
-                            self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))
-                            sound.Play("weapons/shotgun/shotgun_cock_forward.wav",self:GetPos(),80,math.random(95,105))
-                        end)
-                    else
-                        self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))
+            timer.Simple(self.Primary.ReloadTime + (isempty and 1 or 0),function()
+                local pos,ang = self:WorldModel_Transform()
+                if ply:GetAmmoCount( self:GetPrimaryAmmoType() ) > 0 then
+                    hg.PlayAnim(self,"insert")
+                    self:SetClip1(math.Clamp(self:Clip1()+1,0,self:GetMaxClip1()))
+                    ply:SetAmmo(ply:GetAmmoCount( self:GetPrimaryAmmoType() )-1, self:GetPrimaryAmmoType())
+
+                    if SERVER then
+                        sound.Play(self.InsertSound,pos,95,math.random(95,105),0.75)
                     end
                 end
 
-                ply:SetAmmo(ply:GetAmmoCount( self:GetPrimaryAmmoType() )-1, self:GetPrimaryAmmoType())
+                timer.Simple(0.9,function()
+                    if !ply:KeyDown(IN_RELOAD) or self:Clip1() == self:GetMaxClip1() or ply:GetAmmoCount( self:GetPrimaryAmmoType() ) == 0 then
+                        hg.PlayAnim(self,"insert_end")
+                        self.isup = false
+                    end
 
-                if SERVER then
-                    sound.Play(self.InsertSound,self:GetPos(),95,math.random(95,105),0.75)
-                end
-
-                self.reload = nil
+                    self.reload = nil
+                end)
 
                 if ply:GetAmmoCount( self:GetPrimaryAmmoType()) != 0 and self:Clip1() != self:GetMaxClip1() then                    
-                    ply:AnimResetGestureSlot(GESTURE_SLOT_ATTACK_AND_RELOAD)
-    
-                    ply:SetAnimation(PLAYER_IDLE)
+                    //ply:AnimResetGestureSlot(GESTURE_SLOT_ATTACK_AND_RELOAD)
+
+                    //ply:SetAnimation(PLAYER_IDLE)
                 end
             end)
         end

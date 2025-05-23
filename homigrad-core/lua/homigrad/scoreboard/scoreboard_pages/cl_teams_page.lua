@@ -122,7 +122,7 @@ hook.Add("HUDPaint","Teams_Page",function()
         local cx = MainFrame:GetX()
         
         function MainFrame:Paint(w, h)
-            MainFrame:SetX(cx+((w*1.8)*open_gavno))
+            MainFrame:SetX(cx+((SW/1.4)*open_gavno))
         end
 
         panelka = MainPanel

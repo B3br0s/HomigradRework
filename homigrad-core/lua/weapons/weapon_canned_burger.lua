@@ -18,5 +18,5 @@ SWEP.DrawAmmo = true
 SWEP.Regens = 10
 SWEP.BiteSounds = true
 
-SWEP.CorrectAng = Angle(0,0,0)
-SWEP.CorrectPos = Vector(0,-2,0)
+SWEP.WorldAng = Angle(0,0,0)
+SWEP.WorldPos = Vector(0,-2,0)

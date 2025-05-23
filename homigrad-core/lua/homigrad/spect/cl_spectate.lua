@@ -124,7 +124,8 @@ hook.Add("HUDPaint","Spectate-HUD",function()
 	surface.DrawRect(x - barWidth / 2, y + th / 1.5, barWidth, ScreenScale(1))
 
 	draw.SimpleText(string.format(hg.GetPhrase("SpectHP"),ent:Health()),"H.18",ScrW() / 2,y + 35,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-	draw.SimpleText(string.format(hg.GetPhrase("SpectMode"),spectr[lply:GetNWInt("SpecMode",1)]),"H.12",ScrW() / 2,y + 48,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+	draw.SimpleText(string.format(hg.GetPhrase("SpectMode"),spectr[lply:GetNWInt("SpecMode",1)]),"H.12",ScrW() / 2,y + 58,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+
 	end
     for _, v in ipairs(player.GetAll()) do --ESP
         if not v:Alive() or v == ent then continue end

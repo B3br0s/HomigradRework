@@ -32,55 +32,59 @@ local AllowedJMod = {
 hg.loots = hg.loots or {}
 
 hg.loots.small_crate = {
-	"weapon_knife",
-	"weapon_kknife",
 	"weapon_burger",
-	"weapon_pnev",
-	"weapon_sawedoff",
 	"weapon_water_bottle",
+	"weapon_canned_burger",
+	"weapon_milk",
+	"weapon_chips",
+	"weapon_energy_drink",
+	"weapon_hammer",
+	"weapon_sog",
+	"weapon_hatchet",
+	"weapon_glock17",
+	"weapon_tec9"
+}
+
+hg.loots.medium_crate = {
+	"weapon_deagle",
+	"weapon_glock17",
+	"weapon_tec9",
+	"weapon_handcuffs",
+	"weapon_crowbar_hg",
+	"weapon_hatchet",
+	"weapon_axe",
+	"weapon_fubar",
 	"weapon_chips",
 	"weapon_energy_drink",
 }
 
-hg.loots.medium_crate = {
-	"weapon_glock17",
-	"weapon_handcuffs",
-	"weapon_tomahawk",
-	"weapon_sawedoff",
-	"weapon_pnev",
-	"weapon_arpistol",
-	"weapon_fnp45",
-	"weapon_hatchet",
-	"weapon_painkillers_hg",
-}
-
 hg.loots.large_crate = {
-	"weapon_knife",
+	"weapon_axe",
+	"weapon_crowbar_hg",
+	"weapon_fubar",
+	"weapon_shovel",
+	"weapon_sog",
+	"weapon_hammer",
+	"weapon_deagle",
+	"weapon_glock17",
+	"weapon_tec9",
+	"weapon_ak47",
 	"weapon_m4a1",
-	"weapon_painkillers_hg",
-	"weapon_bandage",
-	"weapon_faxe",
-	"weapon_arpistol",
-	"weapon_hatchet",
-	"weapon_sawedoff",
-	"weapon_fnp45",
-	"weapon_pnev",
-	//"weapon_mp9",
+	"weapon_xm1014",
+	"weapon_870_b",
+	"weapon_870_a",
+	"weapon_doublebarrel",
 }
 
 hg.loots.melee_crate = {
-	"weapon_bat",
-	"weapon_kknife",
-	"weapon_shovel",
-	"weapon_faxe",
-	"weapon_faxe",
-	"weapon_knife",
-	"weapon_tomahawk",
+	"weapon_axe",
+	"weapon_crowbar_hg",
+	"weapon_fubar",
+	"weapon_hammer",
 	"weapon_hatchet",
-	"weapon_pipe",
-	"weapon_shammer",
-	"weapon_shammer",
-	"weapon_pipe",
+	"weapon_melee",
+	"weapon_shovel",
+	"weapon_sog"
 }
 
 hg.loots.explosives_crate = {
@@ -100,19 +104,17 @@ hg.loots.explosives_crate = {
 
 hg.loots.weapon_crate = {
 	"weapon_mp5",
-	"weapon_870police",
-	//"weapon_mag7",
 	"weapon_mp7",
-	"weapon_ak47",
-	//"weapon_mp9",
 	"weapon_deagle",
-	"weapon_arpistol",
-	"weapon_sawedoff",
 	"weapon_glock17",
-	"weapon_fnp45",
+	"weapon_tec9",
+	"weapon_ak47",
 	"weapon_m4a1",
-	"weapon_m9",
-	"weapon_pipe",
+	"weapon_scar",
+	"weapon_xm1014",
+	"weapon_870_b",
+	"weapon_870_a",
+	"weapon_doublebarrel",
 }
 
 hg.loots.medkit_crate = {
@@ -142,6 +144,7 @@ net.Receive("hg drop jmod",function(l,ply)
 		sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
 		ply.JModEntInv:SetNoDraw(false)
 		ply.JModEntInv:SetCollisionGroup(COLLISION_GROUP_NONE)
+		ply.JModEntInv:SetNotSolid(false)
 		ply.JModEntInv:SetPos(tr.HitPos + vector_up * 16)
 
 		ply.JModEntInv = NULL
@@ -169,16 +172,19 @@ net.Receive("hg loot jmod",function(l,ply)
 	if ply.JModEntInv == NULL then
 		ply.JModEntInv = pent
 		pent:SetNoDraw(true)
+		pent:SetNotSolid(true)
 		pent:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	else
 		local fent2 = ply.JModEntInv
 
 		fent2:SetNoDraw(false)
 		fent2:SetCollisionGroup(COLLISION_GROUP_NONE)
+		fent2:SetNotSolid(false)
 		fent2:SetPos(tr.HitPos)
 
 		ply.JModEntInv = pent
 		pent:SetNoDraw(true)
+		pent:SetNotSolid(true)
 		pent:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	end
 
@@ -459,7 +465,7 @@ hook.Add("Player Think","Homigrad_Limit",function(ply)
 	local inv = {}
 
 	for _, wep in ipairs(ply:GetWeapons()) do
-		if BlackListWep[wep:GetClass()] then
+		if wep.GetClass and BlackListWep[wep:GetClass()] then
 			continue 
 		end
 		table.insert(inv,wep)

@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Author = "Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
-ENT.PrintName = "EZ Mini Claymore"
+ENT.PrintName = "Mini Claymore"
 ENT.NoSitAllowed = true
 ENT.Spawnable = true
 ENT.AdminSpawnable = true
@@ -240,5 +240,5 @@ elseif CLIENT then
 		end
 	end
 
-	language.Add("ent_jack_gmod_ezminimore", "EZ Mini Claymore")
+	language.Add("ent_jack_gmod_ezminimore", "Mini Claymore")
 end

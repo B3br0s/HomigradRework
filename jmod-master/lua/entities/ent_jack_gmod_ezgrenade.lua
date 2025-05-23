@@ -4,7 +4,7 @@ ENT.Type = "anim"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Grenade Base"
+ENT.PrintName = "Grenade Base"
 ENT.NoSitAllowed = true
 ENT.Spawnable = false
 ENT.Model = "models/weapons/w_grenade.mdl"
@@ -12,6 +12,7 @@ ENT.Material = nil
 ENT.ModelScale = nil
 ENT.HardThrowStr = 500
 ENT.SoftThrowStr = 250
+ENT.Rarity = 4
 ENT.Mass = 10
 ENT.ImpactSound = "Grenade.ImpactHard"
 ENT.SpoonEnt = "ent_jack_spoon"
@@ -76,7 +77,7 @@ if SERVER then
 		self.NextDet = 0
 
 		if istable(WireLib) then
-			self.Inputs = WireLib.CreateInputs(self, {"Detonate", "Arm"}, {"This will directly detonate the grenade", "Arms grenade when > 0"})
+			self.Inputs = WireLib.CreateInputs(self, {"Detonate", "Arm"}, {"This will directly detonate the Nade", "Arms grenade when > 0"})
 
 			self.Outputs = WireLib.CreateOutputs(self, {"State"}, {"1 is armed \n 0 is not \n -1 is broken"})
 		end

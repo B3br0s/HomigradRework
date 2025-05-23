@@ -424,6 +424,10 @@ function PlayerIsCuffs(ply)
 	local ent = hg.GetCurrentCharacter(ply)
 	if not IsValid(ent) then return end
 
+	if ent.weld and !table.IsEmpty(ent.weld) then
+		return true
+	end
+
 	return ply:GetNWBool("Cuffed",false)
 end
 

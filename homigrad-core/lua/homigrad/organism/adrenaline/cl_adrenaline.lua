@@ -1,6 +1,6 @@
 local is_bright = (ConVarExists("hg_adrenaline_bright") and GetConVar("hg_adrenaline_bright") or CreateClientConVar("hg_adrenaline_bright","1",true,false,"disable shit flashbang",0,1))
 
-hook.Add( "RenderScreenspaceEffects", "Adrenaline_FX", function()
+hook.Add( "EffectRender", "Adrenaline_FX", function()
 
     local ply = LocalPlayer()
 

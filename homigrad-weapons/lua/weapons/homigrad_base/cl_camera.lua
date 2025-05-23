@@ -1,73 +1,49 @@
-local IsScoping = false
-local ScopeLerp = 0
-
-SWEP.ZoomPos = Vector(-15,0.15,0.65)
 SWEP.ZoomAng = Angle(0,0,0)
-
-local addfov = 0
+SWEP.ZoomPos = Vector(0,0,0)
 
 local lerpaim = 0
-local lerpaima = 0
+local addfov = 0
 
-function SWEP:IsSprinting()
-    if IsValid(self:GetOwner()) then
-        return self:GetOwner():IsSprinting()
-    else
-        return false
-    end
-end
-
-function SWEP:AdjustMouseSensitivity()
-    return self:IsSighted() and 0.5 or 1
-end
-
-SWEP.saim = 0
+vis_recoil = 0
 
 function SWEP:Camera(ply, origin, angles, fov)
-    if !self.Deployed or ply:GetNWBool("suiciding") or self:IsSprinting() or self:IsClose() then
-        return origin, angles, fov
-    end
-    local pos, ang = self:GetTrace(true)
-    local _, anglef = self:GetTrace()
+	local pos, ang = self:WorldModel_Transform()
 
-    local att = ply:GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
+	if !pos or ply:GetNWBool("suiciding") then
+		return origin, angles, fov
+	end
 
-    lerpaim = LerpFT(0.15, lerpaim, self:IsSighted() and 1 or 0)
+	ang:RotateAroundAxis(ang:Right(),self.ZoomAng[1] * lerpaim)
+    ang:RotateAroundAxis(ang:Up(),self.ZoomAng[2] * lerpaim)
+    ang:RotateAroundAxis(ang:Forward(),self.ZoomAng[3] * lerpaim)
+	
+	lerpaim = LerpFT(0.1, lerpaim, self:IsSighted() and 1 or 0)
+	
+	local neworigin, _ = LocalToWorld(self.ZoomPos, self.ZoomAng, pos, ang)
+	origin = Lerp(lerpaim,origin,neworigin)
 
-    if !pos or !ang then
-        return origin, angles, fov
-    end
-    
-    local neworigin, _ = LocalToWorld(self.ZoomPos, self.ZoomAng, pos, ang)
-
-    local newangs = angles
-    newangs:RotateAroundAxis(newangs:Forward(),self.ZoomAng[1] * lerpaim)
-    newangs:RotateAroundAxis(newangs:Right(),self.ZoomAng[2] * lerpaim)
-    newangs:RotateAroundAxis(newangs:Up(),self.ZoomAng[3] * lerpaim)
-
-    origin = Lerp(lerpaim,origin,neworigin)
-    
-    local animpos = Recoil * math.random(1,2) / 2
-    origin = (origin + att.Ang:Forward() * animpos * 20) + att.Ang:Forward() * (0.75 * lerpaim)
-
-    origin = origin + angles:Up() * (RecoilS / 6) * lerpaim * self:GetUpMul()
-    origin = origin - angles:Right() * (RecoilS / 36) * lerpaim * self:GetRightMul()
-    
-    if self.Attachments["sight"].ViewPos then
-        local shit = self.Attachments["sight"].ViewPos * lerpaim
-        origin = origin + angles:Forward() * shit[1] + angles:Right() * shit[2] + angles:Up() * shit[3]
-    end
-
-    addfov = LerpFT(0.15, addfov, self:IsSighted() and -(self.addfov or 30) - Recoil * 10 or 0)
-
-    local removemul = (RecoilS / 4) * lerpaim
-    local siht = (att.Pos - origin):Angle()
-    siht[2] = angles[2]//att.Ang[2] - (RecoilS / 26) * self:GetRightMul()
-    siht[3] = angles[3] + (self:IsPistolHoldType() and 1 or 3)
-    siht[1] = angles[1]//math.Clamp(att.Ang[1] + (RecoilS / 1.5)  * self:GetUpMul(),-83,88)
-    siht:RotateAroundAxis(siht:Forward(),self.ZoomAng[1] * lerpaim)
-    siht:RotateAroundAxis(siht:Right(),self.ZoomAng[2] * lerpaim)
-    siht:RotateAroundAxis(siht:Up(),self.ZoomAng[3] * lerpaim)
-
-    return origin, ((siht * lerpaim) + (angles * (1 - lerpaim))), fov + addfov
+	origin = origin + ang:Forward() * 2 * Recoil + ang:Up() * vis_recoil / 2
+	origin = origin + ang:Forward() * Recoil
+	//ang = ang + Angle(5 * vis_recoil,0,0)
+	
+	addfov = LerpFT(0.1, addfov, self:IsSighted() and -(self.addfov or 10) or 0)
+	return origin, (ang * lerpaim) + angles * (1 - lerpaim), fov + addfov
 end
+
+hook.Add("AdjustMouseSensitivity","Homigrad-Camera",function()
+	local lply = LocalPlayer()
+
+	vis_recoil = LerpFT(0.1,vis_recoil,0)
+
+	if !lply:Alive() then
+		return 1
+	end
+
+	local wep = lply:GetActiveWeapon()
+
+	if wep.IsSighted and wep:IsSighted() then
+		return 0.5
+	end
+	
+	return 1
+end)

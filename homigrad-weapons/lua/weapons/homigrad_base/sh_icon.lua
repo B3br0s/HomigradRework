@@ -1,4 +1,4 @@
-SWEP.IconPos = Vector(1,125,0.6)
+SWEP.IconPos = Vector(0,0,0)
 SWEP.IconAng = Angle(0,0,0)
 SWEP.WepSelectIcon2 = Material("null")
 SWEP.IconOverride = ""

@@ -120,5 +120,5 @@ elseif CLIENT then
 		self:DrawModel()
 	end
 
-	language.Add("ent_jack_gmod_ezclusterbuster_skeet", "EZ Smart EFP Submunition")
+	language.Add("ent_jack_gmod_ezclusterbuster_skeet", "Smart EFP Submunition")
 end

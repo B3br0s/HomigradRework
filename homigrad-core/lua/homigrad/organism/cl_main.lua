@@ -1,4 +1,4 @@
-hook.Add( "RenderScreenspaceEffects", "Hp_FX", function()
+hook.Add( "EffectRender", "Hp_FX", function()
 
     local ply = LocalPlayer()
 

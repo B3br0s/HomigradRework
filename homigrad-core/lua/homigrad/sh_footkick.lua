@@ -25,7 +25,7 @@ function KickFoot(ply)
         dmginfo:SetInflictor(ply)
 
         if !tr.Entity:IsPlayer() then
-            tr.Entity:GetPhysicsObject():ApplyForceCenter(Vector() + ply:GetAngles():Forward() * 14000 + vector_up * 8000)
+            tr.Entity:GetPhysicsObject():ApplyForceCenter(Vector() + ply:GetAngles():Forward() * 24000 + vector_up * 6000)
 
             if tr.Entity:GetPhysicsObject():GetMass() > 250 and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then
                 sound.Play('homigrad/player/damage'..math.random(1,2)..'.wav',ply:GetPos(),75)
@@ -82,7 +82,7 @@ function KickFoot(ply)
             tr.Entity:SetHealth(ply:Health() - math.random(5,8))
             //ШЛЗФЫОХРВЗОШЛХЪВЫФ ХЩЗГОШПГОШЩХЗЫГОЩЖХВАМШЩЗХЫВГОЩЖАЩЖГЫВАГОЫВГОАШЫВШ
             if math.random(1,3) == 2 then
-                hg.Faking(tr.Entity,ply:GetAngles():Forward() * 750)
+                hg.Faking(tr.Entity,ply:GetAngles():Forward() * 450)
             end
         end
     elseif tr.HitWorld and tr.Entity:GetClass() != "prop_door_rotating" and tr.Entity:GetClass() != "func_door_rotating" then
@@ -153,6 +153,9 @@ hook.Add("Player Think","FootKick_niggadaun",function(ply)
         return
     end
     if ply.Fake then
+        return
+    end
+    if ROUND_NAME == "dr" then
         return
     end
     if ply:KeyDown(IN_ZOOM) and ply:GetNWFloat("KickCD",0) < CurTime() and !ply.kickd then

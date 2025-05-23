@@ -1,5 +1,4 @@
 SWEP.Base = "med_base"
-SWEP.PrintName = "Аптечка"
 SWEP.Category = "Медицина"
 SWEP.Spawnable = true
 
@@ -15,8 +14,8 @@ SWEP.FiresUnderwater = false
 SWEP.DrawCrosshair = false
 SWEP.DrawAmmo = true
 
-SWEP.CorrectAng = Angle(90,0,0)
-SWEP.CorrectPos = Vector(0.9,-4.7,2.2)
+SWEP.WorldAng = Angle(90,0,0)
+SWEP.WorldPos = Vector(0.9,-4.7,2.2)
 SWEP.CorrectScale = 0.8
 
 SWEP.HealSounds = {

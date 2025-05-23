@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.Category = "JMod - EZ Explosives"
-ENT.PrintName = "EZ Satchel Charge"
+ENT.PrintName = "Satchel Charge"
 ENT.Spawnable = true
 ENT.Model = "models/jmod/explosives/grenades/satchelcharge/satchel_charge.mdl"
 ENT.SpoonEnt = nil
@@ -160,5 +160,5 @@ elseif CLIENT then
 		end
 	end
 
-	language.Add("ent_jack_gmod_ezsatchelcharge", "EZ Satchel Charge")
+	language.Add("ent_jack_gmod_ezsatchelcharge", "Satchel Charge")
 end

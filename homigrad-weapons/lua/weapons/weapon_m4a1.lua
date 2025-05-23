@@ -1,45 +1,67 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "M4A1"
-SWEP.Spawnable = true
 SWEP.Category = "Оружие: Автоматы"
-SWEP.WorldModel = "models/weapons/arccw_go/v_rif_m4a1.mdl"
+SWEP.Spawnable = true
 
-SWEP.CorrectPos = Vector(-11.5,-5.9,7.6)
-SWEP.CorrectAng = Angle(-2,2,0)
+SWEP.WorldModel = "models/weapons/arccw_go/v_rif_m4a1.mdl"
+SWEP.ViewModel = "models/weapons/arccw_go/v_rif_m4a1.mdl"
+
 SWEP.HoldType = "ar2"
 
-SWEP.HolsterPos = Vector(-13,-1,8)
-SWEP.HolsterAng = Angle(0,-10,0)
-SWEP.HolsterBone = "ValveBiped.Bip01_Spine2"
-SWEP.BoltBone = nil
-SWEP.BoltVec = nil
-SWEP.TwoHands = true
-
-SWEP.ZoomPos = Vector(10,-5.23,-0.6)
-SWEP.ZoomAng = Angle(0,0.7,0.18)
-SWEP.AttPos = Vector(-2,0,0)
-SWEP.AttAng = Angle(0,0.75,0)
-
-SWEP.MuzzlePos = Vector(36,5.1,-3)
-SWEP.MuzzleAng = Angle(0,0,0)
-SWEP.RecoilForce = 0.25
-
+SWEP.Primary.ReloadTime = 1.7
+SWEP.Primary.Automatic = true
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 30
-SWEP.Primary.Damage = 17.5
+SWEP.Primary.Damage = 35
+SWEP.Primary.Force = 1
 SWEP.Primary.Ammo = "5.56x45 mm"
-SWEP.Primary.Wait = 0.09
-SWEP.Primary.Automatic = true
-SWEP.Primary.ReloadTime = 1.2
-SWEP.Primary.Force = 35
-SWEP.Primary.Sound = "pwb2/weapons/m4a1/ru-556 fire unsilenced.wav"
+SWEP.Primary.Wait = 0.085
+SWEP.Sound = "pwb2/weapons/m4a1/ru-556 fire unsilenced.wav"
+SWEP.RecoilForce = 0.4
 
-SWEP.IconPos = Vector(1.8,50,3.25)
-SWEP.IconAng = Angle(0,0,0)
+SWEP.WorldPos = Vector(-6,-1.5,0)
+SWEP.WorldAng = Angle(1,0,0)
+SWEP.AttPos = Vector(32,5.15,-3.45)
+SWEP.AttAng = Angle(0,0.2,0)
+SWEP.HolsterAng = Angle(0,-10,0)
+SWEP.HolsterPos = Vector(-28,-3,5.5)
+SWEP.HolsterBone = "ValveBiped.Bip01_Spine4"
+
+SWEP.IconPos = Vector(110,-18.5,-2.5)
+SWEP.IconAng = Angle(0,90,0)
+
+SWEP.TwoHands = true
+
+SWEP.Rarity = 5
+
+SWEP.BoltBone = nil
+SWEP.BoltVec = nil
+
+SWEP.ZoomPos = Vector(10,-5.21,-0.5)
+SWEP.ZoomAng = Angle(-0.8,-0.05,0)
+
+SWEP.Animations = {
+	["idle"] = {
+        Source = "idle",
+    },
+	["draw"] = {
+        Source = "draw",
+        MinProgress = 0.5,
+        Time = 0.5
+    },
+    ["reload"] = {
+        Source = "reload",
+        MinProgress = 0.5,
+        Time = 2
+    },
+    ["reload_empty"] = {
+        Source = "reload_empty",
+        MinProgress = 0.5,
+        Time = 1.8
+    }
+}
 
 SWEP.Reload1 = "pwb2/weapons/m4a1/ru-556 clip out 1.wav"
 SWEP.Reload2 = "pwb2/weapons/m4a1/ru-556 clip in 2.wav"
-SWEP.Reload3 = "pwb2/weapons/m4a1/ru-556 bolt back.wav"
-SWEP.Reload4 = "pwb2/weapons/m4a1/ru-556 bolt forward.wav"
-
-SWEP.Weight = 2
+SWEP.Reload3 = "pwb2/weapons/m4a1/ru-556 bolt forward.wav"
+SWEP.Reload4 = false

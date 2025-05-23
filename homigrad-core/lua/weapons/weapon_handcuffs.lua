@@ -8,8 +8,8 @@ SWEP.Spawnable = true
 
 SWEP.WorldModel = "models/freeman/flexcuffs.mdl"
 
-SWEP.CorrectPos = Vector(0.5,-0,0.5)
-SWEP.CorrectAng = Angle(0,0,-90)
+SWEP.WorldPos = Vector(0.5,-0,0.5)
+SWEP.WorldAng = Angle(0,0,-90)
 
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.ClipSize = -1
@@ -23,14 +23,16 @@ SWEP.Bodygroups = {[1]=1}
 SWEP.DrawAmmo = false
 SWEP.EnableTransformModel = true
 
+SWEP.Rarity = 1
+
 function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
 end
 
-SWEP.IconPos = Vector(17.8,90,-2)
-SWEP.IconAng = Angle(0,90,150)
+SWEP.IconPos = Vector(40,0,-1)
+SWEP.IconAng = Angle(0,0,180)
 
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
     hg.DrawWeaponSelection(self,x,y,wide,tall,alpha)
@@ -130,6 +132,9 @@ function SWEP:CuffRope(rag)
 end
 function SWEP:Cuff(rag)
     if self.Cuffed == true or rag.Cuffed then return end
+    if !rag then
+        return
+    end
     self.Cuffed = true
     rag.Cuffed = true
     hg.RagdollOwner(rag):SetNWBool("Cuffed",true)
@@ -354,7 +359,7 @@ function SWEP:WorldModel_Transform()
         if not matrix then return end
 
         local pos, ang = matrix:GetTranslation(), matrix:GetAngles()
-        model:SetupBones()
+        //model:SetupBones()
         model:SetNoDraw(true)
     else
         model:SetRenderOrigin(self:GetPos())
@@ -384,13 +389,13 @@ function SWEP:DrawWorldModel()
         local Pos = attachment.Pos
         local Ang = attachment.Ang
 
-        Pos:Add(Ang:Forward() * self.CorrectPos[1])
-        Pos:Add(Ang:Right() * self.CorrectPos[2])
-        Pos:Add(Ang:Up() * self.CorrectPos[3])
+        Pos:Add(Ang:Forward() * self.WorldPos[1])
+        Pos:Add(Ang:Right() * self.WorldPos[2])
+        Pos:Add(Ang:Up() * self.WorldPos[3])
 
-        Ang:RotateAroundAxis(Ang:Right(), self.CorrectAng[1])
-        Ang:RotateAroundAxis(Ang:Up(), self.CorrectAng[2])
-        Ang:RotateAroundAxis(Ang:Forward(), self.CorrectAng[3])
+        Ang:RotateAroundAxis(Ang:Right(), self.WorldAng[1])
+        Ang:RotateAroundAxis(Ang:Up(), self.WorldAng[2])
+        Ang:RotateAroundAxis(Ang:Forward(), self.WorldAng[3])
 
         Ang:Normalize()
 

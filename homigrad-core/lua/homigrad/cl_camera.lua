@@ -15,8 +15,6 @@ hg.viewpos = LocalPlayer():EyePos()
 CreateClientConVar("hg_fov","120",true,false,nil,70,120)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
 
-CreateClientConVar("hg_bodycam","0",true,false,nil,0,1)
-
 CreateClientConVar("hg_fakecam_mode","0",true,false,nil,0,1)
 
 CreateClientConVar("hg_deathsound","1",true,false,nil,0,1)
@@ -43,19 +41,11 @@ surface.CreateFont("HomigradFontBig",{
 	shadow = true
 })
 
-surface.CreateFont("BodyCamFont",{
-	font = "Arial",
-	size = 40,
-	weight = 1100,
-	outline = false,
-	shadow = true
-})
-
 local view = {
 	x = 0,
 	y = 0,
 	drawhud = true,
-	drawviewmodel = false,
+	//drawviewmodel = false,
 	dopostprocess = true,
 	drawmonitors = true
 }
@@ -198,13 +188,17 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 		local eye = nigga:GetAttachment(nigga:LookupAttachment("eyes"))
 
-		view.angles = (IsValid(lply:GetNWEntity("SpectEnt"):GetNWEntity("FakeRagdoll")) and eye.Ang or nigga:EyeAngles())
-		view.zfar = 6000
-		view.origin = eye.Pos
+		view.angles = lply:GetNWEntity("SpectEnt"):EyeAngles()
+		view.zfar = zfar
+		view.origin = eye.Pos + view.angles:Forward() * 2
+
+		lply:SetEyeAngles(view.angles)
 
 		local wep = lply:GetNWEntity("SpectEnt"):GetActiveWeapon()
 
 		local output_pos,output_ang = view.origin,view.angles
+		
+		//view.angles[1] = (angs[1] * math.Clamp((1 - shit / 140),0,1)) + (-(view.origin - view.origin + (nigga:IsRagdoll() and eye.Ang or nigga:EyeAngles()):Forward() * 7):Angle()[1] + zaebal_ang[1]) * math.Clamp(shit / 140,0,1)
 
 		if wep and wep.Camera then
 			output_pos, output_ang, fov = wep:Camera(lply:GetNWEntity("SpectEnt"), output_pos, output_ang, fov)
@@ -222,16 +216,17 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 		view.origin = eye.Pos - ang:Forward() * 70
 		view.angles = ang
-		view.zfar = 6000
+		view.zfar = zfar
 
 		hg.viewpos = view.origin
 
 		return view
 	elseif !lply:Alive() and lply:GetNWInt("specmode") == 3 then
 		local view = {}
-		view.zfar = 6000
+		view.zfar = zfar
 		view.origin = prevpos
 		view.angles = ply:EyeAngles()
+		view.angles[3] = 0
 
 		hg.viewpos = view.origin
 
@@ -280,21 +275,9 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 	//hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.1)
 
-	if GetConVar("hg_bodycam"):GetInt() == 0 then
-		angEye = lply:EyeAngles()
-		
-		vecEye = tr.StartPos or lply:EyePos()
-	else
-		local matrix = ply:GetBoneMatrix(body)
-		local bodypos = matrix:GetTranslation()
-		local bodyang = matrix:GetAngles()
-		--bodyang:RotateAroundAxis(bodyang:Right(),90)
-
-		--bodyang[2] = eye.Ang[2]
-		--bodyang[3] = 0
-		angEye = eye.Ang--bodyang
-		vecEye = (eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 14 + bodyang:Right() * -6) or lply:EyePos()
-	end
+	angEye = lply:EyeAngles()
+	
+	vecEye = tr.StartPos or lply:EyePos()
 
 	local ragdoll = ply:GetNWEntity("FakeRagdoll")
 	follow = ragdoll
@@ -314,12 +297,20 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		local pos,ang = ragdoll:GetBonePosition(ragdoll:LookupBone("ValveBiped.Bip01_Head1"))
 		local att = {Pos = pos + ang:Up() * 2 + ang:Right() * 1,Ang = ang}
 
+		local output_pos,output_ang = att.Pos,LerpEyeRagdoll
+
+		local wep = ply:GetActiveWeapon()
+
+		if wep and wep.Camera then
+			output_pos, output_ang, fov = wep:Camera(ply, output_pos, output_ang, fov)
+		end
+
 		local view = {
-			origin = att.Pos,
-			angles = LerpEyeRagdoll,
+			origin = output_pos,
+			angles = output_ang,
 			fov = fov,
 			drawviewer = true,
-			zfar = 6000,
+			zfar = zfar,
 			znear = znear,
 		}
 
@@ -425,7 +416,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	view.origin = output_pos
 	view.angles = output_ang
 	view.drawviewer = true
-	view.zfar = 6000
+	view.zfar = zfar
 	
 	oldview = table.Copy(view)
 
@@ -440,14 +431,16 @@ hook.Add("CalcView","VIEWhuy",CalcView)
 
 hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
 	if not IsValid(LocalPlayer()) or not LocalPlayer():Alive() then return end
-	if not IsValid(follow) then return end
-	
+	if not IsValid(follow) then
+		angle[3] = 0
+		cmd:SetViewAngles(angle)
+
+		return
+	end
+
 	local att = follow:GetAttachment(follow:LookupAttachment("eyes"))
 	if not att or not istable(att) then return end
 
-	local attang = LocalPlayer():EyeAngles()
-	local view = render.GetViewSetup(true)
-	local anglea = view.angles
 	local angRad = math.rad(angle[3])
 	local newX = x * math.cos(angRad) - y * math.sin(angRad)
 	local newY = x * math.sin(angRad) + y * math.cos(angRad)
@@ -458,9 +451,10 @@ hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
 	if math.abs(angle.pitch) > 89 then
 		angle.roll = angle.roll + 180
 		angle.yaw = angle.yaw + 180
-		angle.pitch = 89 * (angle.pitch / math.abs(angle.pitch))
+		angle.pitch = 89 * angle.pitch / math.abs(angle.pitch)
 	end
 
 	cmd:SetViewAngles(angle)
+
 	return true
 end)

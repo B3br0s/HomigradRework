@@ -38,7 +38,7 @@ function show_scoreboard()
     ScoreBoardPanel = vgui.Create("DFrame")
     open_target = 0
     
-    ScoreBoardPanel:SetSize(ScrW(),ScrH())
+    ScoreBoardPanel:SetSize(SW,SH)
     ScoreBoardPanel:Center()
     ScoreBoardPanel:ShowCloseButton(false)
     ScoreBoardPanel:SetTitle(" ")
@@ -228,7 +228,12 @@ hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
                 hg.lootent = NULL
                 hg.score_closing = true
             else
-                ScoreBoardPanel:Remove()
+                hg.score_closing = true
+                timer.Simple(0.2,function()
+                    ScoreBoardPanel:Remove()
+                end)
+                hg.islooting = false
+                hg.lootent = NULL
             end
         else
             show_scoreboard()

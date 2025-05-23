@@ -47,8 +47,17 @@ function SWEP:DrawHUD()
 		randomymag = 0
 	end
 
-	local hand = ply:GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
-	local textpos = (hand.Pos+hand.Ang:Forward()*7+hand.Ang:Up()*5+hand.Ang:Right()*-1):ToScreen()
+	local ent = hg.GetCurrentCharacter(ply)
+
+	if !IsValid(ent) then
+		ent = ply
+	end
+
+	local mat = ent:GetBoneMatrix(self.reload and ent:LookupBone("ValveBiped.Bip01_L_Hand") or ent:LookupBone("ValveBiped.Bip01_R_Hand"))
+
+	local pos,ang = mat:GetTranslation(),ply:EyeAngles()
+
+	local textpos = (pos + ang:Forward() * 10 + ang:Right() * -2 + ang:Up() * 4):ToScreen()
 	if self.IsRevolver then
 		draw.DrawText( string.format(hg.GetPhrase("gun_revolver"),ammobag), "HomigradFontBig", textpos.x+randomx, textpos.y+randomy, color_gray1, TEXT_ALIGN_RIGHT )
 		draw.DrawText( string.format(hg.GetPhrase("gun_revolvermags"),ammomags), "HomigradFontBig", textpos.x+randomxmag, textpos.y+25+randomymag, color_gray, TEXT_ALIGN_RIGHT )

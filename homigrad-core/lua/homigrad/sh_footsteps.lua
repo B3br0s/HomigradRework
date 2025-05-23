@@ -327,6 +327,10 @@ if CLIENT then
             -- return true
         end
 
+        if ply:IsSprinting() and ply:GetVelocity():Length() > 300 and ply == LocalPlayer() then
+            Viewpunch(Angle(2,0,0))
+        end
+
         if GetConVar("developer"):GetBool() then
             print(mat)
         end

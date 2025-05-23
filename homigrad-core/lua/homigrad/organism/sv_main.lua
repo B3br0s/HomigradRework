@@ -25,7 +25,7 @@ hook.Add("Player Think","Main_Handler",function(ply)
 
     ply:SetNWEntity("JModEntInv",ply.JModEntInv)
 
-    if !ply:HasWeapon("weapon_hands") then
+    if !ply:HasWeapon("weapon_hands") and ply:Alive() then
         ply:Give("weapon_hands")
     end
 end)
@@ -43,7 +43,7 @@ hook.Add("OnPlayerJump","Homigrad_Move",function(ply)
         return
     end
 
-    ply.stamina = ply.stamina - math.random(3,6)
+    ply.stamina = ply.stamina - math.random(2,10)
 end)
 
 hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
@@ -109,10 +109,10 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
         ply:LagCompensation(false)
     end
 
-    net.Start("armor_sosal")
-    net.WriteEntity(ply)
-    net.WriteTable(ply.armor)
-    net.Broadcast()
+    //net.Start("armor_sosal")
+    //net.WriteEntity(ply)
+    //net.WriteTable(ply.armor)
+    //net.Broadcast()
 end)
 
 hook.Add("PlayerInitialSpawn","Homigrad_shit",function(ply)

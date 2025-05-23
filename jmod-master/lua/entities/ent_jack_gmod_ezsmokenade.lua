@@ -2,7 +2,7 @@
 AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
-ENT.PrintName = "EZ Smoke Grenade"
+ENT.PrintName = "Smoke Nade"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Spawnable = true
 ENT.JModPreferredCarryAngles = Angle(0, 140, 0)
@@ -51,5 +51,5 @@ elseif CLIENT then
 		self:DrawModel()
 	end
 
-	language.Add("ent_jack_gmod_ezsmokenade", "EZ Smokescreen Grenade")
+	language.Add("ent_jack_gmod_ezsmokenade", "Smokescreen Nade")
 end

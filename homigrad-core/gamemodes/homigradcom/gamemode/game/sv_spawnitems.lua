@@ -32,6 +32,9 @@ hook.Add("Think","Boxes-Main",function()
 end)
 local spawnOffset = Vector(0, 0, 32)
 hook.Add("BoxesThink", "SpawnBoxes", function()
+    if !ROUND_ACTIVE then
+        return
+    end
     if TableRound() and TableRound().ShouldSpawnItems then
         if !TableRound().ShouldSpawnItems then
             return

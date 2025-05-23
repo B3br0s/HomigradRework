@@ -4,7 +4,7 @@ ENT.Type = "anim"
 ENT.Author = "Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Black Powder Pile"
+ENT.PrintName = "Black Powder Pile"
 ENT.NoSitAllowed = true
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
@@ -125,5 +125,5 @@ elseif CLIENT then
 		end
 	end
 
-	language.Add("ent_jack_gmod_ezblackpowderpile", "EZ Black Powder Pile")
+	language.Add("ent_jack_gmod_ezblackpowderpile", "Black Powder Pile")
 end

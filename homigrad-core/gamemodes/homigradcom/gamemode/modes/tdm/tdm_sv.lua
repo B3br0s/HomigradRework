@@ -1,11 +1,30 @@
 tdm = tdm or {}
 
+tdm.Models = {
+    "models/player/group01/male_01.mdl",
+    "models/player/group01/male_02.mdl",
+    "models/player/group01/male_03.mdl",
+    "models/player/group01/male_04.mdl",
+    "models/player/group01/male_05.mdl",
+    "models/player/group01/male_06.mdl",
+    "models/player/group01/male_07.mdl",
+    "models/player/group01/male_08.mdl",
+    "models/player/group01/male_09.mdl",
+
+    "models/player/group01/female_01.mdl",
+    "models/player/group01/female_02.mdl",
+    "models/player/group01/female_03.mdl",
+    "models/player/group01/female_04.mdl",
+    "models/player/group01/female_05.mdl",
+    "models/player/group01/female_06.mdl",
+}
+
 function tdm.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
-    local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar"}
+    local weps_pri = {"weapon_m16a1","weapon_mp7"}
     local weps_sec = {"weapon_deagle","weapon_glock17","weapon_fiveseven"}
-    local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg","weapon_f1"}
+    local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_f1"}
 
     ply:SetTeam(1)
 
@@ -31,6 +50,7 @@ function tdm.SpawnBlue(ply)
     ply:GiveAmmo(wep_secondary:GetMaxClip1() * math.random(2,4), wep_secondary:GetPrimaryAmmoType(), true)
 
     timer.Simple(0,function()
+        ply:SetModel(table.Random(tdm.Models))
         ply:SetPlayerColor(Color(0,0,255):ToVector())
         ply:SetSubMaterial()
     end)
@@ -39,9 +59,9 @@ end
 function tdm.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar"}
+    local weps_pri = {"weapon_ak47","weapon_mp5"}
     local weps_sec = {"weapon_deagle","weapon_glock17","weapon_fiveseven"}
-    local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg","weapon_rgd5"}
+    local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_f1"}
 
     ply:SetTeam(2)
 
@@ -67,6 +87,7 @@ function tdm.SpawnRed(ply)
     ply:GiveAmmo(wep_secondary:GetMaxClip1() * math.random(2,4), wep_secondary:GetPrimaryAmmoType(), true)
 
     timer.Simple(0,function()
+        ply:SetModel(table.Random(tdm.Models))
         ply:SetPlayerColor(Color(255,0,0):ToVector())
         ply:SetSubMaterial()
     end)

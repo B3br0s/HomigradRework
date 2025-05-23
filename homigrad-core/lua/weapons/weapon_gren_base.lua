@@ -12,6 +12,8 @@ SWEP.WorldModel = "models/pwb/weapons/w_f1.mdl"
 
 SWEP.Granade = ""
 
+SWEP.Rarity = 5
+
 SWEP.Primary.ClipSize		= -1
 SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Automatic		= false
@@ -22,8 +24,8 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
 
-SWEP.IconAng = Angle(0,0,0)
-SWEP.IconPos = Vector(28.4,120,-7.3)
+SWEP.IconAng = Angle(-10,0,0)
+SWEP.IconPos = Vector(40,-0.5,-0.5)
 
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
     hg.DrawWeaponSelection(self,x,y,wide,tall,alpha)

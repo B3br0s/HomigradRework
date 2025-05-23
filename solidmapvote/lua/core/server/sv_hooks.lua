@@ -194,6 +194,8 @@ function SolidMapVote.postMapVoteChange()
                 -- requested by a user
                 SolidMapVote.close()
                 SolidMapVote.reset()
+                RTV_ACTIVE = false
+                StartRound()
             else
                 --RunConsoleCommand( 'changelevel', game.GetMap() )
                 SolidMapVote.close()

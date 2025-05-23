@@ -1,7 +1,7 @@
 ﻿-- Jackarunda 2021
 AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgasparticle"
-ENT.PrintName = "EZ Virus Particle"
+ENT.PrintName = "Virus Particle"
 ENT.Author = "Jackarunda"
 ENT.NoSitAllowed = true
 ENT.Editable = false

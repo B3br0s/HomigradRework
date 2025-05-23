@@ -1,4 +1,4 @@
-﻿att.PrintName = "EZ Low-Magnification Scope"
+﻿att.PrintName = "Low-Magnification Scope"
 att.Icon = Material("entities/acwatt_optic_magnus.png")
 att.Description = "eat shit and die commie"
 att.SortOrder = 4.5

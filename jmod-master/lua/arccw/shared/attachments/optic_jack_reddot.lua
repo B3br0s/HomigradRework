@@ -1,4 +1,4 @@
-﻿att.PrintName = "EZ Red Dot Sight"
+﻿att.PrintName = "Red Dot Sight"
 att.Icon = Material("entities/acwatt_optic_aimpoint.png")
 att.Description = "wew lad"
 att.SortOrder = 0

@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Mininade Base"
+ENT.PrintName = "Mininade Base"
 ENT.Spawnable = false
 ENT.JModPreferredCarryAngles = Angle(0, -140, 0)
 ENT.Model = "models/jmod/explosives/grenades/minifragnade/w_minifragjade.mdl"

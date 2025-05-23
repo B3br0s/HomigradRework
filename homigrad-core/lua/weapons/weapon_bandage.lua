@@ -15,12 +15,12 @@ SWEP.FiresUnderwater = false
 SWEP.DrawCrosshair = false
 SWEP.DrawAmmo = true
 
-SWEP.CorrectAng = Angle(0,90,0)
-SWEP.CorrectPos = Vector(2.8,-0.4,2)
+SWEP.WorldAng = Angle(0,90,0)
+SWEP.WorldPos = Vector(2.8,-0.4,2)
 SWEP.CorrectScale = 0.8
 
-SWEP.IconPos = Vector(18.5,90,-2.5)
-SWEP.IconAng = Angle(30,0,-80)
+SWEP.IconPos = Vector(40,0,0)
+SWEP.IconAng = Angle(0,90,0)
 
 function SWEP:Heal(ply)
     if !ply then

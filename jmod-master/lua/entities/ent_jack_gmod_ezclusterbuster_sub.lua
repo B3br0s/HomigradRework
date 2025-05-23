@@ -216,5 +216,5 @@ elseif CLIENT then
 		end
 	end
 
-	language.Add("ent_jack_gmod_ezclusterbuster_sub", "EZ Cluster Buster Submunition")
+	language.Add("ent_jack_gmod_ezclusterbuster_sub", "Cluster Buster Submunition")
 end

@@ -4,10 +4,11 @@ ENT.Type = "anim"
 ENT.Author = "Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ TNT"
+ENT.PrintName = "TNT"
 ENT.NoSitAllowed = true
 ENT.Spawnable = true
 ENT.AdminSpawnable = true
+ENT.Rarity = 5
 ---
 ENT.JModPreferredCarryAngles = Angle(-90, 0, 0)
 ENT.JModEZstorable = true
@@ -242,5 +243,5 @@ elseif CLIENT then
 		self:DrawModel()
 	end
 
-	language.Add("ent_jack_gmod_ezdynamite", "EZ Dynamite")
+	language.Add("ent_jack_gmod_ezdynamite", "Dynamite")
 end

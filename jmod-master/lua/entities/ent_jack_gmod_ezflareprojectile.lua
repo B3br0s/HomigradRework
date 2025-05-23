@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Author = "Jackarunda"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Flare Projectile"
+ENT.PrintName = "Flare Projectile"
 ENT.NoSitAllowed = true
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
@@ -87,5 +87,5 @@ elseif CLIENT then
 		end
 	end
 
-	language.Add("ent_jack_gmod_ezflareprojectile", "EZ Flare Projectile")
+	language.Add("ent_jack_gmod_ezflareprojectile", "Flare Projectile")
 end

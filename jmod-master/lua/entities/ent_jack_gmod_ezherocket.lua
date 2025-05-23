@@ -4,7 +4,7 @@ ENT.Type = "anim"
 ENT.Author = "Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ HE Rocket"
+ENT.PrintName = "HE Rocket"
 ENT.Spawnable = true
 ENT.AdminSpawnable = true
 ---
@@ -333,5 +333,5 @@ elseif CLIENT then
 		end
 	end
 
-	language.Add("ent_jack_gmod_ezherocket", "EZ HE Rocket")
+	language.Add("ent_jack_gmod_ezherocket", "HE Rocket")
 end

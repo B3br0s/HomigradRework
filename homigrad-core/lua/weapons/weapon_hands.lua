@@ -1,5 +1,5 @@
 SWEP.IgnoreAll = true
-
+SWEP.IKAnimationProxy = {}
 if SERVER then
 	AddCSLuaFile()
 	SWEP.Weight = 5
@@ -7,6 +7,7 @@ if SERVER then
 	SWEP.AutoSwitchFrom = false
 else
 	SWEP.PrintName = "Руки"
+	SWEP.Category = "Оружие: Остальное"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
@@ -170,7 +171,8 @@ SWEP.Spawnable = true
 SWEP.AdminOnly = false
 SWEP.HoldType = "normal"
 SWEP.ViewModel = "models/weapons/c_arms_citizen.mdl"
-SWEP.WorldModel = "models/props_junk/cardboard_box004a.mdl"
+SWEP.WorldModel = "models/weapons/c_arms_citizen.mdl"
+SWEP.SupportTPIK = true
 SWEP.UseHands = true
 SWEP.AttackSlowDown = .5
 SWEP.Primary.ClipSize = -1
@@ -190,10 +192,76 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 1, "NextDown")
 	self:NetworkVar("Bool", 3, "Blocking")
 	self:NetworkVar("Bool", 4, "IsCarrying")
+
+	self:NetworkVar("Float", 5, "SequenceCycle")
+	self:NetworkVar("Float", 6, "SequenceIndex")
+	self:NetworkVar("Float", 7, "SequenceProxy")
+	self:NetworkVar("Float", 8, "IKTimeLineStart")
+    self:NetworkVar("Float", 9, "IKTime")
+    self:NetworkVar("Float", 10, "SequenceSpeed")
+    self:NetworkVar("Float", 11, "ProcessedValue")
+
+	self:NetworkVar("String", 0, "IKAnimation")
 end
 
-function SWEP:PreDrawViewModel(vm, wep, ply)
-	vm:SetMaterial("engine/occlusionproxy") -- Hide that view model with hacky material
+SWEP.Animations = {
+	["idle"] = {
+        Source = "fists_idle_01",
+    },
+	["null"] = {
+        Source = "seq_admire",
+    },
+	["draw"] = {
+        Source = "fists_draw",
+        MinProgress = 0.5,
+        Time = 1
+    },
+	["fists_left"] = {
+        Source = "fists_left",
+        MinProgress = 0.5,
+        Time = 0.75
+    },
+	["fists_right"] = {
+        Source = "fists_right",
+        MinProgress = 0.5,
+        Time = 0.75
+    },
+}
+
+function SWEP:Deploy()
+	if not IsFirstTimePredicted() then
+		//self:DoBFSAnimation("fists_draw")
+		//self:GetOwner():GetViewModel():SetPlaybackRate(.1)
+
+		return
+	end
+
+	self:SetNextPrimaryFire(CurTime() + .5)
+	self:SetFists(false)
+	self:SetHoldType("normal")
+	self:SetNextDown(CurTime())
+
+	return true
+end
+
+function SWEP:CreateWM()
+	local wm = ClientsideModel(self.ViewModel)
+	local ply = self:GetOwner()
+
+	wm:SetRenderOrigin(ply:GetBonePosition(6))
+	wm:SetPos(ply:GetBonePosition(6))
+
+	wm:SetModelScale(1)
+
+	self:CallOnRemove("removeshit",function() wm:Remove() end)
+
+	wm:SetNoDraw(true)
+
+	self.worldModel = wm
+end
+
+function SWEP:GetWM()
+	return self.worldModel
 end
 
 function SWEP:Initialize()
@@ -202,22 +270,12 @@ function SWEP:Initialize()
 	self:SetHoldType(self.HoldType)
 	self:SetFists(false)
 	self:SetBlocking(false)
-end
 
-function SWEP:Deploy()
-	if not IsFirstTimePredicted() then
-		self:DoBFSAnimation("fists_draw")
-		self:GetOwner():GetViewModel():SetPlaybackRate(.1)
+	hg.Weapons[self] = true
 
-		return
-	end
-
-	self:SetNextPrimaryFire(CurTime() + .5)
-	self:SetFists(false)
-	self:SetNextDown(CurTime())
-	self:DoBFSAnimation("fists_draw")
-
-	return true
+	timer.Simple(0,function()
+		self:Deploy()
+	end)
 end
 
 function SWEP:Holster()
@@ -229,6 +287,189 @@ end
 function SWEP:CanPrimaryAttack()
 	if self:GetOwner().Fake then return false end
 	return true
+end
+
+function SWEP:HasAnimation(seq, lq)
+    if self.Animations[seq] or self.IKAnimationProxy[seq] then
+        return true
+    end
+
+    if lq then return false end
+
+    local vm = hg.Zaebal_Day_VM(self)
+
+    if !IsValid(vm) then return true end
+    seq = vm:LookupSequence(seq)
+
+    return seq != -1
+end
+
+function SWEP:Step()
+	if !self:GetFists() then
+		if IsValid(self.worldModel) then
+			self.worldModel:Remove()
+			self.worldModel = nil
+		end
+	else
+		if CLIENT and !IsValid(self.worldModel) then
+			self:CreateWM()
+		end
+	end
+end
+
+function SWEP:GetAnimationEntry(seq)
+    if self:HasAnimation(seq) then
+        if self.IKAnimationProxy[seq] then
+            return self.IKAnimationProxy[seq]
+        else
+            if self.Animations[seq] then
+                return self.Animations[seq]
+            elseif !self:GetProcessedValue("SuppressDefaultAnimations", true) then
+                return {
+                    Source = seq,
+                    Time = self:GetSequenceTime(seq)
+                }
+            end
+        end
+    else
+        return {}
+    end
+end
+
+function SWEP:PlayAnim(anim, mult, lock, delayidle, noproxy, notranslate, noidle)
+    mult = mult or 1
+    lock = lock or false
+    local untranslatedanim = anim
+    //mult = self:RunHook("Hook_TranslateAnimSpeed", {mult = mult, anim = anim}).Mult or mult
+    local omult = mult
+
+    local mdl = hg.Zaebal_Day_VM(self)
+
+    if !IsValid(mdl) then return 0, 1 end
+
+    local animation = self:GetAnimationEntry(anim)
+
+    local source = animation.Source
+
+    local tsource = source
+
+    if mdl:LookupSequence(tsource) != -1 then
+        source = tsource
+    end
+
+    local seq = 0
+
+    if animation.ProxyAnimation and !noproxy then
+        if CLIENT then
+            mdl = animation.Model
+
+            if !mdl then
+                mdl = self:LocateSlotFromAddress(animation.Address).GunDriverModel
+            end
+        else
+            mdl = ents.Create("prop_physics")
+            mdl:SetModel(animation.ModelName)
+        end
+
+        self:SetSequenceProxy(animation.Address or 0)
+
+        if IsValid(mdl) then
+
+            seq = mdl:LookupSequence(source)
+
+            if seq == -1 then return 0, 1 end
+
+            if animation.AlsoPlayBase then
+                self:PlayAnim(anim, mult, lock, delayidle, true)
+            end
+
+        end
+    else
+        seq = mdl:LookupSequence(source)
+
+        if seq == -1 then return 0, 1 end
+
+        self:SetSequenceProxy(0)
+    end
+
+    local time = 0.1
+    local minprogress = 1
+
+    if IsValid(mdl) then
+        time = animation.Time or mdl:SequenceDuration(seq)
+
+        mult = mult * (animation.Mult or 1)
+
+        if animation.Reverse then
+            mult = mult * -1
+        end
+
+        local tmult = 1
+
+        tmult = (mdl:SequenceDuration(seq) / time) / mult
+
+        if animation.ProxyAnimation then
+            mdl:SetSequence(seq)
+            mdl:SetCycle(0)
+        else
+            mdl:SendViewModelMatchingSequence(seq)
+            mdl:SetPlaybackRate(math.Clamp(tmult, -12, 12)) -- It doesn't like it if you go higher
+        end
+
+        self:SetSequenceIndex(seq or 0)
+        self:SetSequenceSpeed((1 / time) / mult)
+
+        if mult < 0 then
+            self:SetSequenceCycle(1)
+        else
+            self:SetSequenceCycle(0)
+        end
+
+        mult = math.abs(mult)
+
+        if animation.EjectAt then
+            self:SetTimer(animation.EjectAt * mult, function()
+                self:DoEject()
+            end, "ejectat")
+        end
+
+        if animation.DropMagAt then
+            self:SetTimer(animation.DropMagAt * mult, function()
+                self:DropMagazine()
+            end)
+        end
+
+        if animation.DumpAmmo then
+            self:SetTimer((animation.MinProgress or 0.5) * mult, function()
+                if SERVER then
+                    self:Unload()
+                end
+            end)
+        end
+
+        minprogress = animation.MinProgress or 0.8
+        minprogress = math.min(minprogress, 1)
+
+        if animation.RestoreAmmo then
+            self:SetTimer(time * mult * minprogress, function()
+                self:RestoreClip(animation.RestoreAmmo)
+            end)
+        end
+
+        if animation.IKTimeLine then
+            self:SetIKAnimation(anim)
+            self:SetIKTimeLineStart(CurTime())
+            self:SetIKTime(time * mult)
+        end
+    end
+
+    if animation.PoseParamChanges then
+        for i, k in pairs(animation.PoseParamChanges) do
+            self.PoseParamState[i] = k
+        end
+    end
+
+    return time * mult, minprogress
 end
 
 local pickupWhiteList = {
@@ -390,6 +631,7 @@ function SWEP:SetCarrying(ent, bone, pos, dist)
 	if IsValid(ent) then
 		self:SetNWBool( "Pickup", true )
 		self.CarryEnt = ent
+		self:GetOwner():SetNetVar("carryent",ent)
 		self.CarryBone = bone
 		self.CarryDist = dist
 
@@ -401,6 +643,7 @@ function SWEP:SetCarrying(ent, bone, pos, dist)
 	else
 		self:SetNWBool( "Pickup", false )
 		self.CarryEnt = nil
+		self:GetOwner():SetNetVar("carryent",nil)
 		self.CarryBone = nil
 		self.CarryPos = nil
 		self.CarryDist = nil
@@ -408,17 +651,33 @@ function SWEP:SetCarrying(ent, bone, pos, dist)
 end
 
 function SWEP:Think()
-	if self:GetOwner().Fake then return end
+	if self:GetOwner().Fake then
+		self.SupportTPIK = false
+		return
+	else
+		self.SupportTPIK = true
+	end
 	local ply = self:GetOwner()
 
-	hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
-	hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
-    hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
-    hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
-	hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.05)
-	hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.05)
-    hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.05)
-    hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.05)
+	hg.bone.Set(ply,"r_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.15)
+	hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.15)
+    hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.15)
+    hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.15)
+	hg.bone.Set(ply,"l_clavicle",Vector(0,0,0),Angle(0,0,0),1,0.15)
+	hg.bone.Set(ply,"l_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.15)
+    hg.bone.Set(ply,"l_forearm",Vector(0,0,0),Angle(0,0,0),1,0.15)
+    hg.bone.Set(ply,"l_hand",Vector(0,0,0),Angle(0,0,0),1,0.15)
+
+	if CLIENT then
+		if self:GetIsCarrying() then
+			//hg.DragHands(ply,self)
+		end
+	end
+
+	if SERVER then
+		self:SetIsCarrying(IsValid(self.CarryEnt))
+	end
+
 	if IsValid(self:GetOwner()) and self:GetOwner():KeyDown(IN_ATTACK2) and not self:GetFists() then
 		if IsValid(self.CarryEnt) then
 			self:ApplyForce()
@@ -440,7 +699,7 @@ function SWEP:Think()
 		local Time = CurTime()
 
 		if self:GetNextIdle() < Time then
-			self:DoBFSAnimation("fists_idle_0" .. math.random(1, 2))
+			//self:DoBFSAnimation("fists_idle_0" .. math.random(1, 2))
 			self:UpdateNextIdle()
 		end
 
@@ -452,11 +711,12 @@ function SWEP:Think()
 		if (self:GetNextDown() < Time) or self:GetOwner():KeyDown(IN_SPEED) then
 			self:SetNextDown(Time + 1)
 			self:SetFists(false)
+			self:SetHoldType("normal")
 			self:SetBlocking(false)
 		end
 	else
 		HoldType = "normal"
-		self:DoBFSAnimation("fists_draw")
+		//self:DoBFSAnimation("fists_draw")
 	end
 
 	if IsValid(self.CarryEnt) or self.CarryEnt then
@@ -468,7 +728,7 @@ function SWEP:Think()
 	end
 
 	if SERVER then
-		self:SetHoldType(HoldType)
+		//self:SetHoldType(HoldType)
 	end
 end
 
@@ -476,26 +736,28 @@ function SWEP:PrimaryAttack()
 
 	if self:GetOwner().Fake then return false end
 
-	local side = "fists_left"
-
-	if math.random(1, 2) == 1 then
-		side = "fists_right"
+	if !self.side then
+		self.side = "fists_left"
 	end
 
 	if self:GetOwner():KeyDown(IN_ATTACK2) then return end
 	
 	self:SetNextDown(CurTime() + 7)
 
+	if self:GetBlocking() then return end
+	if self:GetOwner():KeyDown(IN_SPEED) then return end
+
 	if not self:GetFists() then
 		self:SetFists(true)
-		self:DoBFSAnimation("fists_draw")
+		self:PlayAnim("idle")
+
+		self:PlayAnim("draw")
+		self:SetHoldType("camera")
+		//self:DoBFSAnimation("fists_draw")
 		self:SetNextPrimaryFire(CurTime() + .35)
 
 		return
 	end
-
-	if self:GetBlocking() then return end
-	if self:GetOwner():KeyDown(IN_SPEED) then return end
 
 	if not IsFirstTimePredicted() then
 		self:DoBFSAnimation(side)
@@ -505,8 +767,8 @@ function SWEP:PrimaryAttack()
 	end
 
 	self:GetOwner():ViewPunch(Angle(0, 0, math.random(-2, 2)))
-	self:DoBFSAnimation(side)
-	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+	//self:DoBFSAnimation(side)
+	//self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 	if CLIENT and self:GetOwner() == LocalPlayer() then
 		ViewPunch(Angle(3,0,math.random(-5,5)))
 	end
@@ -515,12 +777,19 @@ function SWEP:PrimaryAttack()
 
 	if SERVER then
 		sound.Play("weapons/melee/swing_fists_0"..math.random(1,3)..".wav", self:GetPos(), 65, math.random(90, 110))
+		self:PlayAnim(self.side)
 
 		timer.Simple(.075, function()
 			if IsValid(self) then
 				self:AttackFront()
 			end
 		end)
+	end
+
+	if self.side == "fists_left" then
+		self.side = "fists_right"
+	else
+		self.side = "fists_left"
 	end
 
 	self:SetNextPrimaryFire(CurTime() + .35)
@@ -597,6 +866,11 @@ function SWEP:Reload()
 	if not IsFirstTimePredicted() then return end
 
 	self:SetFists(false)
+	if IsValid(self.worldModel) then
+		self.worldModel:Remove()
+		self.worldModel = nil
+		self:SetHoldType("normal")
+	end
 	self:SetBlocking(false)
 	local ent = self:GetCarrying()
 	if SERVER then
@@ -636,7 +910,10 @@ if SERVER then
 			local len, mul = vec:Length(), ent:GetPhysicsObject():GetMass()
 			vec:Normalize()
 			if phys == NULL then
-				return
+				continue 
+			end
+			if ply == NULL then
+				continue 
 			end
 			local avec, velo = vec * len, phys:GetVelocity() - ply:GetVelocity()
 			local Force = (avec - velo / 10) * (bone > 3 and mul / 3.5 or mul)
@@ -659,6 +936,19 @@ end
 
 function SWEP:DrawWorldModel()
 	local ply = self:GetOwner()
+
+	if ply:GetActiveWeapon() == self then
+		if IsValid(self.worldModel) then
+			local angs = ply:EyeAngles()
+			angs[1] = math.Clamp(angs[1],-89,60)
+			local pos = ply:GetBonePosition(6) - angs:Forward() * 8
+
+			self.worldModel:SetPos(pos)
+			self.worldModel:SetRenderOrigin(pos)
+			self.worldModel:SetAngles(angs)
+			self.worldModel:SetRenderAngles(angs)
+		end
+	end
 
 	if !IsValid(ply) then
 		return 

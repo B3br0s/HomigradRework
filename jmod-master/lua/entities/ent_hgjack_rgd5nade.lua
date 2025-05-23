@@ -61,5 +61,5 @@ elseif CLIENT then
 		
 	end
 
-	--language.Add("ent_jack_gmod_ezfragnade", "EZ Frag Grenade")
+	--language.Add("ent_jack_gmod_ezfragnade", "Frag Nade")
 end

@@ -38,8 +38,8 @@ end
 function riot.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"","","","","","","","","weapon_pnev","","",""}
-    local weps_sec = {"weapon_shovel","weapon_pipe","weapon_hatchet","weapon_knife","weapon_bat","weapon_beton","weapon_beton","weapon_beton"}
+    local weps_pri = {"","","","","","","","","weapon_glock17","","",""}
+    local weps_sec = {"weapon_shovel","weapon_hatchet","weapon_sog","weapon_axe","weapon_beton","weapon_beton","weapon_beton"}
 
     ply:SetTeam(2)
 

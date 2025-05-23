@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.Category = "JMod - EZ Explosives"
-ENT.PrintName = "EZ Stick Grenade"
+ENT.PrintName = "Stick Nade"
 ENT.Spawnable = true
 ENT.Model = "models/jmod/explosives/grenades/sticknade/stick_grenade.mdl" -- "models/mechanics/robotics/a2.mdl"
 ENT.Material = "models/mats_jack_nades/stick_grenade"
@@ -64,5 +64,5 @@ if SERVER then
 		end
 	end
 elseif CLIENT then
-	language.Add("ent_jack_gmod_ezsticknade", "EZ Stick Grenade")
+	language.Add("ent_jack_gmod_ezsticknade", "Stick Nade")
 end

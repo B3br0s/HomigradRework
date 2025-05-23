@@ -1,32 +1,58 @@
 SWEP.Base = "weapon_melee"
 SWEP.Category = "Оружие: Ближний Бой"
+SWEP.Author = "Homigrad"
 SWEP.Spawnable = true
-SWEP.PrintName = "Фубар"
+SWEP.AdminSpawnable = true
 
-SWEP.WorldModel = "models/weapons/me_fubar/w_me_fubar.mdl"
+SWEP.ViewModel = "models/weapons/tfa_nmrih/v_me_fubar.mdl"
+SWEP.WorldModel = "models/weapons/tfa_nmrih/w_me_fubar.mdl"
 
-SWEP.Primary.Damage = 45
-SWEP.Primary.Ammo = "none"
-SWEP.Primary.DefaultClip = -1
-SWEP.Primary.Automatic = true
-SWEP.Primary.Recoil = 0.5
-SWEP.Primary.Delay = 1.1
-SWEP.Primary.Force = 100
+SWEP.HoldAng = Angle(180,180,-8)
+SWEP.HoldPos = Vector(0.45,-1.5,9)
 
-SWEP.DrawSound = "weapons/melee/holster_in_light.wav"
-SWEP.HitSound = "physics/metal/metal_sheet_impact_hard2.wav"
-SWEP.FlashHitSound = "weapons/melee/flesh_impact_blunt_03.wav"
-SWEP.ShouldDecal = false
-SWEP.HoldType = "melee2"
-SWEP.DamageType = DMG_CLUB
+SWEP.AnimAng = Angle(0,0,0)
+SWEP.AnimPos = Vector(-13,0,0)
 
-SWEP.sndTwroh = {"weapons/melee/swing_heavy_blunt_01.wav","weapons/melee/swing_heavy_blunt_02.wav","weapons/melee/swing_heavy_blunt_03.wav"}
+SWEP.IconAng = Angle(90,0,90)
+SWEP.IconPos = Vector(120,5.25,7)
 
-SWEP.dwsItemPos = Vector(0.5,5,0)
-SWEP.dwsItemAng = Angle(90 + 45,0,90)
-SWEP.dwsItemFOV = 2
+SWEP.ModelScale = 1
 
-SWEP.IconPos = Vector(14.5,50,-6)
-SWEP.IconAng = Angle(-120,0,90)
-SWEP.WepSelectIcon2 = Material("null")
-SWEP.IconOverride = ""
+SWEP.ViewModelFlip = false
+
+SWEP.AutoSwitchTo = false
+SWEP.AutoSwitchFrom = false
+
+SWEP.Slot = 1
+SWEP.SlotPos = 2
+
+SWEP.Rarity = 4
+
+SWEP.AnimWait = 2
+SWEP.AttackTime = 0.2
+SWEP.AttackAng = Angle(0,0,50)
+SWEP.AttackWait = 0.6
+SWEP.AttackDist = 80
+SWEP.AttackDamage = 65
+SWEP.AttackType = DMG_CLUB
+SWEP.NoLHand = false
+
+SWEP.AttackHitFlesh = "Flesh.ImpactHard"
+SWEP.AttackHit = {"physics/metal/metal_sheet_impact_hard2.wav","physics/metal/metal_sheet_impact_hard6.wav"}
+SWEP.DeploySnd = "physics/metal/weapon_impact_soft1.wav"
+
+SWEP.Animations = {
+	["idle"] = {
+        Source = "Idle",
+    },
+	["draw"] = {
+        Source = "Draw",
+        MinProgress = 0.5,
+        Time = 0.5
+    },
+    ["attack"] = {
+        Source = "Attack_Quick",
+        MinProgress = 0.5,
+        Time = 2
+    },
+}

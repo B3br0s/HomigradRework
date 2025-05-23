@@ -21,8 +21,13 @@ SWEP.DrawAmmo = true
 SWEP.Regens = 15
 SWEP.BiteSounds = "BETON"
 
-SWEP.CorrectAng = Angle(0,0,180)
-SWEP.CorrectPos = Vector(0,0,3)
+SWEP.Rarity = 5
+
+SWEP.WorldAng = Angle(0,0,180)
+SWEP.WorldPos = Vector(0,0,3)
+
+SWEP.IconAng = Angle(0,0,90)
+SWEP.IconPos = Vector(100,0,0)
 
 function SWEP:Eat()
     local ply = self:GetOwner()

@@ -28,7 +28,11 @@ local shit = {
 	["ent_jack_gmod_ezsignalnade"] = "use_signalnade",
 	["ent_jack_gmod_ezgasnade"] = "use_gasnade",
 	["ent_jack_gmod_ezcsnade"] = "use_teargasnade",
-    ["ent_jack_gmod_ezammo"] = "use_ezammo"
+    ["ent_jack_gmod_ezammo"] = "use_ezammo",
+}
+
+local bases = {
+    ["armor_base"] = true
 }
 
 hook.Add("Think","Interact-Glow",function()
@@ -38,7 +42,7 @@ hook.Add("Think","Interact-Glow",function()
     end
     local tr = hg.eyeTrace(ply,100)
     //print(tr.Entity:GetClass())
-    if IsValid(tr.Entity) and (tr.Entity:IsWeapon() or shit[tr.Entity:GetClass()]) and !tr.Entity:GetNoDraw() then
+    if IsValid(tr.Entity) and (tr.Entity:IsWeapon() or shit[tr.Entity:GetClass()]) and !tr.Entity:GetNoDraw() or IsValid(tr.Entity) and scripted_ents.Get(tr.Entity:GetClass()) and scripted_ents.Get(tr.Entity:GetClass()).Base and bases[scripted_ents.Get(tr.Entity:GetClass()).Base] then
         LatestShow = LerpFT(0.25,LatestShow,1)
         LatestEntity = tr.Entity
     else
@@ -52,7 +56,12 @@ hook.Add("Think","Interact-Glow",function()
 end)
 
 hook.Add("HUDPaint","Interact-Shit",function()
+    local ply = LocalPlayer()
+    if !ply:Alive() then
+        return
+    end
     if IsValid(LatestEntity) then
-        draw.SimpleText((LatestEntity:IsWeapon() and LatestEntity:GetPrintName() or hg.GetPhrase(shit[LatestEntity:GetClass()])),"HS.18",ScrW()/2,ScrH()/1.85 - 10 * (1 - LatestShow),Color(255,255,255,255 * LatestShow),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+        local printt = (LatestEntity:IsWeapon() and LatestEntity:GetPrintName() or hg.GetPhrase(shit[LatestEntity:GetClass()])) or (hg.GetPhrase(LatestEntity:GetClass()) != LatestEntity:GetClass() and hg.GetPhrase(LatestEntity:GetClass())) or LatestEntity.PrintName
+        draw.SimpleText((printt != nil and printt or LatestEntity.PrintName),"HS.18",ScrW()/2,ScrH()/1.85 - 10 * (1 - LatestShow),Color(255,255,255,255 * LatestShow),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     end
 end)

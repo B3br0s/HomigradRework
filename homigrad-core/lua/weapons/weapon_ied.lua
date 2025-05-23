@@ -18,6 +18,8 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
 
+SWEP.Rarity = 4
+
 SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
@@ -30,13 +32,17 @@ SWEP.DrawCrosshair			= false
 SWEP.ViewModel				= "models/props_junk/cardboard_jox004a.mdl"
 SWEP.WorldModel				= "models/props_junk/cardboard_jox004a.mdl"
 
-SWEP.IconPos = Vector(18.5,80,-2)
-SWEP.IconAng = Angle(10,0,90)
+SWEP.IconPos = Vector(70,0,0)
+SWEP.IconAng = Angle(0,90,90)
 SWEP.WepSelectIcon2 = Material("null")
 SWEP.IconOverride = ""
 
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 	hg.DrawWeaponSelection(self,x,y,wide,tall,alpha)
+end
+
+function SWEP:Think()
+   self:SetHoldType("normal")
 end
 
 if SERVER then

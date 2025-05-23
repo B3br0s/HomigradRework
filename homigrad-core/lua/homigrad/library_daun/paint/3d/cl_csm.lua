@@ -1,5 +1,9 @@
 //нужна для контроля за количеством, и удалениме лишних объектов которые не рендерится.
 
+hg = hg or {}
+
+hg.csm = hg.csm or {}
+
 ChacheClientsideModels = ChacheClientsideModels or {}
 ChacheClientsideModelsByID = ChacheClientsideModelsByID or {}
 
@@ -7,7 +11,7 @@ local list,listID = ChacheClientsideModels,ChacheClientsideModelsByID
 local id = 0
 local old
 local time,time2 = 0,0
-local hg_optimization = CreateClientConVar("hg_optimization", "1", true, false, "НУ ИГРА ЕЩЕ В СТАДИИ РАЗРАБОТКИ", 0, 1)
+local hg_optimization = CreateClientConVar("hg_optimization", "1", true, false, "Отключает рендер объектов за пределами камеры", 0, 1)
 
 local IsValid = IsValid
 
@@ -43,6 +47,16 @@ hook.Add("Think","devshit",function()
             continue 
         end
 
+        if ent:GetPos():Distance(Vector(0,0,0)) < 0.3 then
+            if IsValid(ent) and ent:GetClass() == "class C_BaseFlex" then
+                ent:SetNoDraw(true)
+            end
+        end
+
+        if ent.SupportTPIK then
+            continue 
+        end
+
         if !IsValid(ent) or ent == NULL then
             ent:Remove()
         end
@@ -57,6 +71,11 @@ hook.Add("PreRender","Shit",function()
     local AimZalupa = util.AimVector(LocalPlayer():EyeAngles(),GetConVar("hg_fov"):GetInt(),ScrW()/2,ScrH()/2,ScrW(),ScrH())
 
     for _, ent in ipairs(hg.csm) do
+        
+        if ent.SupportTPIK then
+            continue 
+        end
+
         if !IsValid(ent) then
             ent:Remove() 
             table.remove(hg.csm,_)
@@ -66,12 +85,26 @@ hook.Add("PreRender","Shit",function()
             continue 
         end
 
+        if ent.NoRender then
+            ent:SetNoDraw(true)
+            continue 
+        end
+
         if !IsValid(ent) then
             continue 
         end
 
         local dtt = (hg.viewpos - ent:GetPos()):GetNormalized()
         local att = math.deg(math.acos(AimZalupa:Dot(dtt)))
+
+        if ent.DontOptimise then
+            ent:SetNoDraw(false)
+            continue 
+        end
+
+        if ent.NoRender then
+            ent:SetNoDraw(true)
+        end
 
         if att < fov and ply:GetActiveWeapon().worldModel != ent then
             if hg_optimization:GetBool() then
@@ -89,6 +122,15 @@ hook.Add("PreRender","Shit",function()
         local dtt = (hg.viewpos - ent:GetPos()):GetNormalized()
         local att = math.deg(math.acos(AimZalupa:Dot(dtt)))
 
+        if ent.NoRender then
+            ent:SetNoDraw(true)
+            continue 
+        end
+
+        if ent.SupportTPIK then
+            continue 
+        end
+
         if ent:EntIndex() == -1 then
             continue 
         end
@@ -98,6 +140,15 @@ hook.Add("PreRender","Shit",function()
         end
 
         if ent:IsPlayer() then
+            continue 
+        end
+
+        if table.HasValue(hg.csm,ent) then
+            continue 
+        end
+
+        if ent.DontOptimise then
+            ent:SetNoDraw(false)
             continue 
         end
 

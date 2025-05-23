@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.Category = "JMod - EZ Explosives"
-ENT.PrintName = "EZ Incendiary Grenade"
+ENT.PrintName = "Incendiary Nade"
 ENT.Spawnable = true
 ENT.Model = "models/jmod/explosives/grenades/firenade/incendiary_grenade.mdl"
 --ENT.ModelScale=1.5
@@ -41,5 +41,5 @@ if SERVER then
 		self:Remove()
 	end
 elseif CLIENT then
-	language.Add("ent_jack_gmod_ezfirenade", "EZ Incendiary Grenade")
+	language.Add("ent_jack_gmod_ezfirenade", "Incendiary Nade")
 end

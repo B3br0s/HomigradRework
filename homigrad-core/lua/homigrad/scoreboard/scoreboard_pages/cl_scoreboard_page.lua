@@ -68,6 +68,8 @@ end
 hook.Add("Think","Mute-Handler",function() //ода доза
         local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {})
 
+        MutedPlayers = util.JSONToTable(MutedPlayers)
+
         for _, ply in ipairs(player.GetAll()) do
             if mute_death then
                 continue 
@@ -123,7 +125,7 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         open_target = 0
         open = true
         local MainPanel = vgui.Create("DFrame", ScoreBoardPanel)
-        MainPanel:SetSize(ScrW(), ScrH() / 1.15)
+        MainPanel:SetSize(ScrW() * ScrMul(), ScrH() / 1.15)
         MainPanel:Center()
         MainPanel:SetDraggable(false)
         MainPanel:SetTitle(" ")

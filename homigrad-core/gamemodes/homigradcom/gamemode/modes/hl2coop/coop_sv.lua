@@ -13,29 +13,18 @@ local mdls = coop.Models
 util.AddNetworkString("coop exiting")
 
 mdls.citizens = {
-    "models/zcity/humans/group01/female_01.mdl",
-    "models/zcity/humans/group01/female_02.mdl",
-    "models/zcity/humans/group01/female_03.mdl",
-    "models/zcity/humans/group01/female_04.mdl",
-    "models/zcity/humans/group01/female_05.mdl",
-    "models/zcity/humans/group01/female_06.mdl",
-    "models/zcity/humans/group01/female_07.mdl",
-
-    "models/zcity/humans/group01/male_01.mdl",
-    "models/zcity/humans/group01/male_02.mdl",
-    "models/zcity/humans/group01/male_03.mdl",
-    "models/zcity/humans/group01/male_04.mdl",
-    "models/zcity/humans/group01/male_05.mdl",
-    "models/zcity/humans/group01/male_06.mdl",
-    "models/zcity/humans/group01/male_07.mdl",
-    "models/zcity/humans/group01/male_08.mdl",
-    "models/zcity/humans/group01/male_09.mdl",}
+    "models/player/group02/male_02.mdl",
+    "models/player/group02/male_04.mdl",
+    "models/player/group02/male_06.mdl",
+    "models/player/group02/male_08.mdl",
+}
 
 mdls.refugees = {
     "models/player/group02/male_02.mdl",
     "models/player/group02/male_04.mdl",
     "models/player/group02/male_06.mdl",
-    "models/player/group02/male_08.mdl",}
+    "models/player/group02/male_08.mdl",
+}
 
 mdls.rebels = {
     "models/player/group03/female_01.mdl",
@@ -268,6 +257,14 @@ function coop.SpawnResistance(ply)
                     ply:Give("weapon_physcannon")
                 end
             end
+            timer.Simple(0.2,function()
+            if ply.isGordon and fraction != "citizens" then
+                ply:SetModel("models/gordon_mkv.mdl")
+                ply:SetPlayerClass("gordon") //повторочка
+            elseif ply.isGordon and fraction == "citizens" then
+                ply:SetModel("models/humans/gordon/group01/gordoncitizen.mdl")
+            end
+            end)
             if eqp[fraction] then
                 local MainWep = ply:Give(table.Random(eqp[fraction]["main"]))
                 local SecondWep = ply:Give(table.Random(eqp[fraction]["secondary"]))
@@ -422,8 +419,8 @@ function coop.StartRoundSV()
     local fraction = maps_fraction[game.GetMap()]
 
     timer.Simple(0.1,function()
-        gondon:SetPlayerClass("gordon") //повторочка
         //coop.SpawnResistance(gondon)
+        gondon.isGordon = true
         timer.Simple(1,function()
             if fraction == "rebel_better" then
                 gondon:Give("weapon_physcannon")

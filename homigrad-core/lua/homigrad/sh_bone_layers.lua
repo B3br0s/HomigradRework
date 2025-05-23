@@ -311,3 +311,24 @@ function hg.bone.Get(ply, lookup_name)
 
 	return ply.manipulated[boneID].Pos, ply.manipulated[boneID].Ang
 end
+
+local ENTITY = FindMetaTable("Entity")
+
+function ENTITY:SetBoneMatrix2(boneID, matrix, dontset)
+    local localpos = self:GetManipulateBonePosition(boneID)
+    local localang = self:GetManipulateBoneAngles(boneID)
+    local newmat = Matrix()
+    newmat:SetTranslation(localpos)
+    newmat:SetAngles(localang)
+    local inv = newmat:GetInverse()
+    local oldMat = self:GetBoneMatrix(boneID) * inv
+    local newMat = oldMat:GetInverse() * matrix
+    local lpos, lang = newMat:GetTranslation(), newMat:GetAngles()
+
+    if not dontset then
+        self:ManipulateBonePosition(boneID, lpos, false)
+        self:ManipulateBoneAngles(boneID, lang, false)
+    end
+
+    return lpos, lang
+end

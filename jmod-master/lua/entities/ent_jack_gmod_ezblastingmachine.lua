@@ -2,7 +2,7 @@
 AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Author = "TheOnly8Z"
-ENT.PrintName = "EZ Satchel Charge Plunger"
+ENT.PrintName = "Satchel Charge Plunger"
 ENT.Spawnable = false
 ENT.NoSitAllowed = true
 ENT.JModPreferredCarryAngles = Angle(0, 0, 0)
@@ -106,5 +106,5 @@ elseif CLIENT then
 		self.Mdl:DrawModel()
 	end
 
-	language.Add("ent_jack_gmod_ezsatchelcharge_plunger", "EZ Satchel Charge Plunger")
+	language.Add("ent_jack_gmod_ezsatchelcharge_plunger", "Satchel Charge Plunger")
 end

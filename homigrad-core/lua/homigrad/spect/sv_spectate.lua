@@ -19,6 +19,13 @@ hook.Add("Player Think","Spect-HG",function(ply)
         return
     end
 
+    local angles = ply:EyeAngles()
+
+    angles[3] = 0
+	angles[2] = math.Clamp(angles[2],-180,180)
+
+	//ply:SetEyeAngles(angles)
+
     if not ply.spec then
         ply.spec = 1
     end

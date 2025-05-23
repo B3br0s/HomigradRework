@@ -14,7 +14,7 @@
 	["hint bombdrop"] = "Say *bomb* in chat or command jmod_ez_bombdrop t' deweld bomb",
 	["hint mine friends"] = "Set yer mateys wit' command jmod_friends; mateys won't trigger yer intelligent booby-traps",
 	["hint prime"] = "Hold Walk 'n press Use t' pick up 'n arm hand-bomb",
-	["hint grenade"] = "Hand-bombs can be thrown great lengths, right skewer t' do a short toss",
+	["hint Nade"] = "Hand-bombs can be thrown great lengths, right skewer t' do a short toss",
 	["hint grenade drop"] = "Careful matey! Dropped hand-bombs are still burnin!",
 	["hint arm boundingmine"] = "Hold Walk 'n press Use when nigh soft terrain t' burrow 'n arm",
 	["hint arm powderkeg"] = "Hold Walk 'n press Use t' toggle pourin' black powder",

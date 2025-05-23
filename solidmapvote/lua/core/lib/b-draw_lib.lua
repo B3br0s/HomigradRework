@@ -58,7 +58,7 @@ local function fetchAvatarAsset( id64, size )
 		local link = body:match("http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/.-jpg")
 		if not link then return end
 
-		fetchedavatars[ id64 .. " " .. size ] = link:Replace( ".jpg", ( size != "" and "_" .. size or "") .. ".jpg")
+		fetchedavatars[ id64 .. " " .. size ] = link:Replace( ".jpg", ( size ~= "" and "_" .. size or "") .. ".jpg")
 	end)
 end
 

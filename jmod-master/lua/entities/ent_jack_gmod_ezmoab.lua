@@ -4,7 +4,7 @@ ENT.Base = "ent_jack_gmod_ezbomb"
 ENT.Author = "Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "glhfggwpezpznore"
-ENT.PrintName = "EZ Mega Bomb"
+ENT.PrintName = "Mega Bomb"
 ENT.Spawnable = true
 ENT.AdminOnly = true
 ENT.AdminSpawnable = true
@@ -133,5 +133,5 @@ elseif CLIENT then
 		self.Mdl:DrawModel()
 	end
 
-	language.Add("ent_jack_gmod_ezmoab", "EZ Mega Bomb")
+	language.Add("ent_jack_gmod_ezmoab", "Mega Bomb")
 end

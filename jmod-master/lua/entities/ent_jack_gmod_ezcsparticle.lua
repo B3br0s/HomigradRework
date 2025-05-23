@@ -1,7 +1,7 @@
 ﻿-- Based off of JMOD EZ Gas Particle, created by Freaking Fission, uses some code from GChem
 AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgasparticle"
-ENT.PrintName = "EZ CS Gas"
+ENT.PrintName = "CS Gas"
 ENT.Author = "Jackarunda, Freaking Fission"
 ENT.NoSitAllowed = true
 ENT.Editable = false

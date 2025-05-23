@@ -4,7 +4,7 @@ ENT.Base = "ent_jack_gmod_ezbomb"
 ENT.Author = "AdventureBoots, Jackarunda"
 ENT.Category = "JMod - EZ Explosives"
 ENT.Information = "A bomb that deploys seeking anti-tank skeets"
-ENT.PrintName = "EZ Cluster Buster" -- this is effectively a miniature CBU-97
+ENT.PrintName = "Cluster Buster" -- this is effectively a miniature CBU-97
 ENT.Spawnable = true
 ENT.AdminOnly = false
 ---
@@ -87,5 +87,5 @@ elseif CLIENT then
 		self:DrawModel()
 	end
 
-	language.Add("ent_jack_gmod_ezblubomb", "EZ Cluster Buster")
+	language.Add("ent_jack_gmod_ezblubomb", "Cluster Buster")
 end

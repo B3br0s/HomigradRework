@@ -28,8 +28,8 @@ local units_super = {
 function hl2dm.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
-    local weps_pri = {"weapon_ar2_hl2","weapon_mp7_hl2","weapon_spas12_hl2"}
-    local weps_sec = {"weapon_hl2_pistol"}
+    local weps_pri = {"weapon_mp7"}
+    local weps_sec = {"weapon_glock17"}
 
     ply:SetTeam(1)
 
@@ -84,9 +84,9 @@ local rebels = {
 function hl2dm.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"weapon_ar2_hl2","weapon_ak74","weapon_m4a1","weapon_wrekedakm","weapon_sawedoff","weapon_doublebarrel"}
-    local weps_sec = {"weapon_hl2_pistol","weapon_magnum357"}
-    local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg","weapon_painkillers_hg"}
+    local weps_pri = {"weapon_mp7","weapon_scar","weapon_870_a","weapon_m4a1","weapon_ak47"}
+    local weps_sec = {"weapon_glock17","weapon_deagle","weapon_tec9"}
+    local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_painkillers_hg"}
 
     ply:SetTeam(2)
 

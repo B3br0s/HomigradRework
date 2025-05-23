@@ -9,19 +9,19 @@ SWEP.ViewModelFlip = false
 
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
-SWEP.SupportsTPIK = true
-SWEP.Animations = {}
 
 SWEP.Slot = 4
 SWEP.SlotPos = 1
+
+SWEP.Rarity = 2
 
 SWEP.UseHands = true
 SWEP.FiresUnderwater = false
 SWEP.DrawCrosshair = false
 SWEP.DrawAmmo = true
 
-SWEP.IconPos = Vector(18.7,80,-2.25)
-SWEP.IconAng = Angle(0,90,10)
+SWEP.IconPos = Vector(55,0,0)
+SWEP.IconAng = Angle(0,180,0)
 SWEP.WepSelectIcon2 = Material("null")
 SWEP.IconOverride = ""
 
@@ -99,6 +99,10 @@ end
 
 function SWEP:Step()
     local ply = self:GetOwner()
+
+    if !IsValid(ply) then
+        return
+    end
 
     if ply:GetActiveWeapon() != self then
         return

@@ -39,6 +39,7 @@ if SERVER then
 		if IsValid(shit_ent) then
 			shit_ent:SetPos(self:GetPos())
 			shit_ent:SetNoDraw(true)
+			shit_ent:SetNotSolid(true)
 			shit_ent:SetCollisionGroup(COLLISION_GROUP_WORLD)
 		end
 	end
