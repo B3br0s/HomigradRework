@@ -149,7 +149,7 @@ hook.Add("Homigrad_Gib", "Gib_Main", function(rag, dmginfo, physbone, hitgroup, 
 		return
 	end
 
-	local highDamage = dmginfo:GetDamage() > 40 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH)
+	local highDamage = dmginfo:GetDamage() > 60 and not dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH)
 	local slashCrushKill = dmginfo:GetDamage() > 370 and dmginfo:IsDamageType(DMG_SLASH + DMG_CRUSH)
 
 	if (highDamage or slashCrushKill) and hitgroup == HITGROUP_HEAD and not rag.gib.Head then
@@ -173,9 +173,18 @@ hook.Add("Homigrad_Gib", "Gib_Main", function(rag, dmginfo, physbone, hitgroup, 
 			owner.KillReason = "dead_headExplode"
 			local realOwner = hg.RagdollOwner(rag)
 			if IsValid(realOwner) and realOwner.Fake and realOwner.FakeRagdoll == rag and realOwner:Alive() then
-				hg.DropArmor(owner, owner.armor.head, phys:GetPos(), phys:GetAngles():Forward() * 250 + phys:GetAngles():Right() * 100)
+				hg.DropArmor(rag, rag.armor.head, phys:GetPos(), phys:GetAngles():Forward() * 250 + phys:GetAngles():Right() * 100)
+				hg.DropArmor(rag, rag.armor.face, phys:GetPos(), phys:GetAngles():Forward() * 250 + phys:GetAngles():Right() * 100)
+				rag.armor.head = "NoArmor"
+				rag.armor.face = "NoArmor"
+				rag:SetNetVar("Armor",rag.armor)
 				owner:Kill()
 			end
+		end
+
+		if rag.armor then
+			hg.DropArmor(rag, rag.armor.head, phys:GetPos(), phys:GetAngles():Forward() * 250 + phys:GetAngles():Right() * 100)
+			hg.DropArmor(rag, rag.armor.face, phys:GetPos(), phys:GetAngles():Forward() * 250 + phys:GetAngles():Right() * 100)
 		end
 
 		local pos, ang = rag:GetBonePosition(headBone)

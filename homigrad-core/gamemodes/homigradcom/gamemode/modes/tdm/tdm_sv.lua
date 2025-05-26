@@ -23,7 +23,7 @@ function tdm.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
     local weps_pri = {"weapon_m16a1","weapon_mp7"}
-    local weps_sec = {"weapon_deagle","weapon_glock17","weapon_fiveseven"}
+    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glock17","weapon_329pd"}
     local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_f1"}
 
     ply:SetTeam(1)
@@ -60,7 +60,7 @@ function tdm.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
     local weps_pri = {"weapon_ak47","weapon_mp5"}
-    local weps_sec = {"weapon_deagle","weapon_glock17","weapon_fiveseven"}
+    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glock17","weapon_329pd"}
     local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_f1"}
 
     ply:SetTeam(2)

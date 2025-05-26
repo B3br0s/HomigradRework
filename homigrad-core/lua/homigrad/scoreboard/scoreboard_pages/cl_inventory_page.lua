@@ -63,6 +63,9 @@ local function CreateArmorSlot(parent,placement,posx,posy,sizex,sizey)
     button:SetPos(posx,posy)
     button:SetSize(sizex,sizey)
     button:SetText(" ")
+    if !LocalPlayer().armor then
+        hook.Run("InitArmor_CL",LocalPlayer())
+    end
     button.ItemIcon = (LocalPlayer().armor[placement] != "NoArmor" and hg.Armors[LocalPlayer().armor[placement]].Icon or "null")
     button.Item = (LocalPlayer().armor[placement] != "NoArmor" and hg.Armors[LocalPlayer().armor[placement]] or nil)
     button.LootAnim = 0
@@ -256,6 +259,24 @@ hook.Add("HUDPaint","InventoryPage",function()
                     draw.SimpleText(lootent:GetNWString("PlayerName"),"HS.18",w/2,h/1.85,Color(255,255,255,255 * daun1),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
                 end
             end    
+
+
+            for _, a in ipairs(MainFrame:GetChildren()) do
+                if isentity(a) then
+                    continue 
+                end
+                a:SetAlpha(255 * open_fade + 0.05)
+
+                if #a:GetChildren() > 0 then
+                    for _, a in ipairs(a:GetChildren()) do      
+                        if isentity(a) then
+                            continue 
+                        end
+
+                        a:SetAlpha(255 * open_fade + 0.05)  
+                    end
+                end
+            end
         end
 
         local SlotsSize = 75 * math.min(ScrW()/1920,ScrH()/1080)
@@ -330,6 +351,7 @@ hook.Add("HUDPaint","InventoryPage",function()
             local ent = self.Entity
 
             ent.IsIcon = true
+            ent.NoRender = true
 
             for placement, armor in pairs(ply.armor) do
                     local tbl = hg.Armors[armor]

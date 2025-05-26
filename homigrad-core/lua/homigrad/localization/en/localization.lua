@@ -74,9 +74,9 @@ l.gun_default = "%s"
 l.gun_defaultmags = "%s Mags Left"
 
 l.gun_empty = "Empty"
-l.gun_nearempty = "Near Empty"
+l.gun_nearempty = "Nearly Empty"
 l.gun_halfempty = "Half Empty"
-l.gun_nearfull = "Near Fully"
+l.gun_nearfull = "Nearly Full"
 l.gun_r_pump = "Press R to pump."
 l.gun_full = "Full" 
 
@@ -174,6 +174,12 @@ l.hl2dm_cmb_desc = "Eliminate any resistance."
 
 l.hl2dm_rebel = "Rebel"
 l.hl2dm_rebel_desc = "Eliminate every Combine unit!"
+
+l.criresp_suspect = "Suspect"
+l.criresp_suspect_desc = "This is my fucking house, bitches, I can do what I want."
+
+l.criresp_swat = "SWAT Operator"
+l.criresp_swat_desc = "Negotiations failed, eliminate the threat. 10-4"
 
 l.coop_endsin = "Map will change in: %s"
 l.coop_rebel = "Rebels"
@@ -291,6 +297,7 @@ l.weapon_hands = "Hands"
 
 l.weapon_handcuffs = "Cuffs"
 
+l.weapon_pbat = "Police Tonfa"
 l.weapon_sog = "SOG SEAL 2000"
 l.weapon_crowbar_hg = "Crowbwar"
 l.weapon_fubar = "Fubar"

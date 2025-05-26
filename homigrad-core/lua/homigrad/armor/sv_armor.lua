@@ -135,6 +135,10 @@ function hg.DropArmor(ply,name,pos,vel)
     timer.Simple(0,function()
         ent:GetPhysicsObject():SetVelocity(vel)
     end)
+
+    ply.armor[tbl.Placement] = "NoArmor"
+
+    ply:SetNetVar("Armor",ply.armor)
 end
 
 net.Receive("hg drop armor",function(l,ply)

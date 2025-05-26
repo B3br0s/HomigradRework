@@ -1,5 +1,5 @@
 SWEP.Base = "homigrad_base"
-SWEP.PrintName = "Desert Eagle" //Ебальники школьников представили по которым будут хуярить с этого?
+SWEP.PrintName = "Desert Eagle IMI" //Ебальники школьников представили по которым будут хуярить с этого?
 SWEP.Category = "Оружие: Пистолеты"
 SWEP.Spawnable = true
 
@@ -13,11 +13,14 @@ SWEP.Primary.ClipSize = 7
 SWEP.Primary.DefaultClip = 7
 SWEP.Primary.Damage = 60
 SWEP.Primary.Force = 30
-SWEP.Primary.Ammo = "9x19 mm Parabellum"
-SWEP.Primary.Wait = 0.1
+SWEP.Primary.Ammo = ".50 Action Express"
+SWEP.Primary.Wait = 0.2
 SWEP.Sound = "arccw_go/deagle/deagle-1.wav"
 
 SWEP.RecoilForce = 1.5
+
+SWEP.Slot = 2
+SWEP.SlotPos = 1
 
 SWEP.WorldPos = Vector(-2,-1.5,-0.5)
 SWEP.WorldAng = Angle(1,-2,0)

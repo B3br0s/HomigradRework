@@ -43,6 +43,48 @@ hg.Armors = {
         Bone = "ValveBiped.Bip01_Spine2",
         Icon = "entities/ent_jack_gmod_ezarmor_strandhogg.png"
     },
+    ["vest4"] = {
+        Name = "Korund",
+        Model = "models/eft_props/gear/armor/ar_korundvm.mdl",
+        Pos = Vector(3.6,0,0),
+        Ang = Angle(90,0,-90),
+        FemPos = Vector(2,0,0),
+        FemScale = 0.75,
+        Scale = 0.95,
+        Protection = 2,
+        Rarity = 3,
+        Placement = "torso",
+        Bone = "ValveBiped.Bip01_Spine2",
+        Icon = "entities/ent_jack_gmod_ezarmor_korundvm.png"
+    },
+    ["vest5"] = {
+        Name = "Interceptor",
+        Model = "models/eft_props/gear/armor/ar_otv_ucp.mdl",
+        Pos = Vector(3.3,0,0),
+        Ang = Angle(90,0,-90),
+        FemPos = Vector(2,0,0),
+        FemScale = 0.75,
+        Scale = 0.8,
+        Protection = 1.75,
+        Rarity = 3,
+        Placement = "torso",
+        Bone = "ValveBiped.Bip01_Spine2",
+        Icon = "entities/ent_jack_gmod_ezarmor_interceptor.png"
+    },
+    ["vest6"] = {
+        Name = "Kirasa-Black",
+        Model = "models/eft_props/gear/armor/ar_kirasa_black.mdl",
+        Pos = Vector(3.6,0,0),
+        Ang = Angle(90,0,-90),
+        FemPos = Vector(2,0,0),
+        FemScale = 0.75,
+        Scale = 0.95,
+        Protection = 1.35,
+        Rarity = 3,
+        Placement = "torso",
+        Bone = "ValveBiped.Bip01_Spine2",
+        Icon = "entities/ent_jack_gmod_ezarmor_kora_kulon_b.png"
+    },
 
     ["back1"] = {
         Name = "Duffle Bag",

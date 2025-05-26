@@ -4,7 +4,7 @@ function riot.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
     local weps_pri = {"weapon_pbat","weapon_handcuffs"}
-    local weps_sec = {"","","","","","","","","weapon_870police"}
+    local weps_sec = {"","","","","","","","",""}
 
     ply:SetTeam(1)
 
@@ -39,7 +39,7 @@ function riot.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
     local weps_pri = {"","","","","","","","","weapon_glock17","","",""}
-    local weps_sec = {"weapon_shovel","weapon_hatchet","weapon_sog","weapon_axe","weapon_beton","weapon_beton","weapon_beton"}
+    local weps_sec = {"weapon_shovel","weapon_hatchet","weapon_sog","weapon_hammer"}
 
     ply:SetTeam(2)
 

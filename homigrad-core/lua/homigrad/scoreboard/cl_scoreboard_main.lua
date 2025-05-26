@@ -142,7 +142,12 @@ hook.Add("ScoreboardShow","Homigrad_ScoreBoard",function()
         if hg.islooting then
             surface.PlaySound("homigrad/vgui/item_drop.wav")
             hg.islooting = false
-            hg.score_closing = true
+            if !hg.score_closing then
+                hg.score_closing = true
+                timer.Simple(0.2,function()
+                    ScoreBoardPanel:Remove()
+                end)
+            end
             hg.lootent = NULL
         else
             ScoreBoardPanel:Remove()
@@ -207,7 +212,9 @@ hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
             if IsValid(ScoreBoardPanel) then
                 hg.islooting = false
                 hg.score_closing = true
-                ScoreBoardPanel:Remove()
+                timer.Simple(0.2,function()
+                    ScoreBoardPanel:Remove()
+                end)
             end
         end
     end
@@ -226,7 +233,12 @@ hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
                 surface.PlaySound("homigrad/vgui/item_drop.wav")
                 hg.islooting = false
                 hg.lootent = NULL
-                hg.score_closing = true
+                if !hg.score_closing then
+                    hg.score_closing = true
+                    timer.Simple(0.2,function()
+                        ScoreBoardPanel:Remove()
+                    end)
+                end
             else
                 hg.score_closing = true
                 timer.Simple(0.2,function()

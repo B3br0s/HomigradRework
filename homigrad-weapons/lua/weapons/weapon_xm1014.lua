@@ -1,5 +1,5 @@
 SWEP.Base = "homigrad_base"
-SWEP.PrintName = "XM1014"
+SWEP.PrintName = "XM-1014"
 SWEP.Category = "Оружие: Дробовики"
 SWEP.Spawnable = true
 
@@ -57,11 +57,11 @@ SWEP.Animations = {
     },
     ["insert"] = {
         Source = "sgreload_insert",
-        Time = 0.8
+        Time = 1
     },
     ["insert_start"] = {
         Source = "sgreload_start",
-        Time = 0.5
+        Time = 1.5
     },
     ["insert_start_empty"] = {
         Source = "sgreload_start_empty",
@@ -69,7 +69,7 @@ SWEP.Animations = {
     },
     ["insert_end"] = {
         Source = "sgreload_finish",
-        Time = 0.8
+        Time = 1.2
     },
 }
 
@@ -77,6 +77,9 @@ SWEP.Reload1 = false
 SWEP.Reload2 = false
 SWEP.Reload3 = false
 SWEP.Reload4 = false
+
+SWEP.Slot = 2
+SWEP.SlotPos = 0
 
 function SWEP:ReloadFunc()
     self.AmmoChek = 5

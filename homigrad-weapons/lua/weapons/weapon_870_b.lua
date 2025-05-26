@@ -10,7 +10,7 @@ SWEP.HoldType = "ar2"
 
 SWEP.Primary.ClipSize = 8
 SWEP.Primary.DefaultClip = 8
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = 18
 SWEP.Primary.Force = 20
 SWEP.NumBullet = 8
 SWEP.Primary.Ammo = "12/70 gauge"
@@ -20,8 +20,11 @@ SWEP.Pump = 0
 SWEP.PumpEnd = false
 SWEP.Pumped = true
 SWEP.PumpTarg = 0
-SWEP.Primary.ReloadTime = 0.2
+SWEP.Primary.ReloadTime = 0.3
 SWEP.Primary.Wait = 0.5
+
+SWEP.Slot = 2
+SWEP.SlotPos = 0
 
 SWEP.IsShotgun = true
 
@@ -64,7 +67,7 @@ SWEP.Animations = {
     },
     ["insert_start"] = {
         Source = "sgreload_start",
-        Time = 0.4
+        Time = 0.6
     },
     ["insert_end"] = {
         Source = "sgreload_finish",

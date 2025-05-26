@@ -32,7 +32,8 @@ local shit = {
 }
 
 local bases = {
-    ["armor_base"] = true
+    ["armor_base"] = true,
+    ["ammo_base"] = true
 }
 
 hook.Add("Think","Interact-Glow",function()
@@ -46,7 +47,7 @@ hook.Add("Think","Interact-Glow",function()
         LatestShow = LerpFT(0.25,LatestShow,1)
         LatestEntity = tr.Entity
     else
-        LatestShow = LerpFT(0.5,LatestShow,0)
+        LatestShow = LerpFT(0.25,LatestShow,0)
     end
     if LatestShow > 0.05 then
         halo.Add({LatestEntity},Color(255,255,255,255 * LatestShow),1,1,5)

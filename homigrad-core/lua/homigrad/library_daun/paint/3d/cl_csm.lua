@@ -49,7 +49,7 @@ hook.Add("Think","devshit",function()
 
         if ent:GetPos():Distance(Vector(0,0,0)) < 0.3 then
             if IsValid(ent) and ent:GetClass() == "class C_BaseFlex" then
-                ent:SetNoDraw(true)
+                //ent:SetNoDraw(true)
             end
         end
 
@@ -63,6 +63,11 @@ hook.Add("Think","devshit",function()
     end
 end)
 
+hook.Add("Player Think","123123123",function(ply)
+    ply.Fake = ply:GetNWBool("Fake")
+    ply.FakeRagdoll = ply:GetNWEntity("FakeRagdoll")
+end)
+
 hook.Add("PreRender","Shit",function()
     local ply = LocalPlayer()
 
@@ -73,6 +78,11 @@ hook.Add("PreRender","Shit",function()
     for _, ent in ipairs(hg.csm) do
         
         if ent.SupportTPIK then
+            continue 
+        end
+
+        if IsValid(ent) and !ent.IsIcon and ent:GetPos() == Vector() then
+            ent.NoRender = true
             continue 
         end
 

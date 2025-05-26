@@ -37,7 +37,7 @@ SWEP.AttackDamage = 65
 SWEP.AttackType = DMG_CLUB
 SWEP.NoLHand = false
 
-SWEP.AttackHitFlesh = "Flesh.ImpactHard"
+SWEP.AttackHitFlesh = {"weapons/melee/flesh_impact_blunt_01.wav","weapons/melee/flesh_impact_blunt_02.wav","weapons/melee/flesh_impact_blunt_05.wav","weapons/melee/flesh_impact_blunt_03.wav"}
 SWEP.AttackHit = {"physics/metal/metal_sheet_impact_hard2.wav","physics/metal/metal_sheet_impact_hard6.wav"}
 SWEP.DeploySnd = "physics/metal/weapon_impact_soft1.wav"
 

@@ -1,0 +1,9 @@
+ENT.Type = "anim"
+ENT.Base = "base_gmodentity"
+ENT.PrintName = "Projectile Base"
+ENT.Spawnable = false
+ENT.Model = "models/weapons/w_missile_closed.mdl"
+ENT.ModelScale = 1
+ENT.CollideSound = ""
+ENT.ExplodeSound = ""
+ENT.deton = false

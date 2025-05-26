@@ -40,6 +40,9 @@ SWEP.IconAng = Angle(0,90,0)
 
 SWEP.TwoHands = true
 
+SWEP.Slot = 2
+SWEP.SlotPos = 0
+
 SWEP.Rarity = 4
 
 SWEP.ZoomPos = Vector(10,-5.205,-1.35)

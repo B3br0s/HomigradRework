@@ -3,6 +3,8 @@ SWEP.Primary.ReloadTime = 1
 SWEP.Empty3 = true
 SWEP.Empty4 = true
 
+SWEP.reload = nil
+
 SWEP.holdtypes = {
     ["revolver"] = {[1] = 0.3,[2] = 0.7,[3] = 1,[4] = 1.2},
     ["smg"] = {[1] = 0.45,[2] = 0.75,[3] = 0.85,[4] = 1.15},
@@ -15,7 +17,7 @@ else
     net.Receive("hg reload",function()
         local ent = net.ReadEntity()
         if IsValid(ent) and ent.Reload then
-        ent:Reload()
+            ent:Reload()
         end
     end)
 end
@@ -37,7 +39,7 @@ function SWEP:ReloadFunc()
     end
     self.reload = CurTime() + self.Primary.ReloadTime
     
-    if self:Clip1() > 0 then
+    if self:Clip1() > 0 or !self.Animations["reload_empty"] then
         hg.PlayAnim(self,"reload")
     else
         hg.PlayAnim(self,"reload_empty")
@@ -59,17 +61,28 @@ function SWEP:ReloadFunc()
             ply:SetAmmo(ply:GetAmmoCount( self:GetPrimaryAmmoType() )-needed, self:GetPrimaryAmmoType())
             self.AmmoChek = 5
         end
-        self.reload = nil
-        if self.Animations then
+        if self.Animations and !self.Primary.MagTime then
             hg.PlayAnim(self,"idle",1,true)
+            self.reload = nil
+        elseif self.Animations and self.Primary.MagTime then
+            timer.Simple(self.Primary.MagTime,function()
+                hg.PlayAnim(self,"idle",1,true)
+                self.reload = nil
+            end)
         end
     end)
 
     if SERVER then
         local ply = self:GetOwner()
 
+        local ht = self.holdtypes[self.HoldType]
+
+        if self.holdtypes[self.HoldType.."_empty"] and self:Clip1() == 0 then
+            ht = self.holdtypes[self.HoldType.."_empty"] 
+        end
+
         if self.Reload1 then
-            timer.Simple(self.holdtypes[self.HoldType][1], function()
+            timer.Simple(ht[1], function()
                 local ent = hg.GetCurrentCharacter(ply)
                 if IsValid(ent) then
                     sound.Play(self.Reload1, ent:GetPos(), 90, 100, 0.8)
@@ -78,7 +91,7 @@ function SWEP:ReloadFunc()
         end
 
         if self.Reload2 then
-            timer.Simple(self.holdtypes[self.HoldType][2], function()
+            timer.Simple(ht[2], function()
                 local ent = hg.GetCurrentCharacter(ply)
                 if IsValid(ent) then
                     sound.Play(self.Reload2, ent:GetPos(), 90, 100, 0.8)
@@ -87,7 +100,7 @@ function SWEP:ReloadFunc()
         end
 
         if self.Reload3 and ((self.Empty3 and self:Clip1() == 0) or (not self.Empty3)) then
-            timer.Simple(self.holdtypes[self.HoldType][3], function()
+            timer.Simple(ht[3], function()
                 local ent = hg.GetCurrentCharacter(ply)
                 if IsValid(ent) then
                     sound.Play(self.Reload3, ent:GetPos(), 90, 100, 0.8)
@@ -96,7 +109,7 @@ function SWEP:ReloadFunc()
         end
 
         if self.Reload4 and ((self.Empty4 and self:Clip1() == 0) or (not self.Empty4)) then
-            timer.Simple(self.holdtypes[self.HoldType][4], function()
+            timer.Simple(ht[4], function()
                 local ent = hg.GetCurrentCharacter(ply)
                 if IsValid(ent) then
                     sound.Play(self.Reload4, ent:GetPos(), 90, 100, 0.8)

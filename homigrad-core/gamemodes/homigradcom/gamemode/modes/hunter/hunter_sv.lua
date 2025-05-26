@@ -36,7 +36,7 @@ function hunter.SpawnHunter(ply)
     local SpawnList = ReadDataMap("hunt_hunter")
 
     local weps_pri = {"weapon_ak47","weapon_doublebarrel","weapon_870_a","weapon_870_b","weapon_xm1014"}
-    local weps_sec = {"weapon_deagle","weapon_fiveseven","weapon_glock17","weapon_tec9"}
+    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_fiveseven","weapon_glock17","weapon_tec9"}
     local weps_oth = {"weapon_hatchet","weapon_axe","weapon_sog"}
     local weps_main = {"weapon_ied","weapon_handcuffs","weapon_f1"}
 

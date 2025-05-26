@@ -43,6 +43,9 @@ SWEP.IconAng = Angle(0,90,0)
 
 SWEP.TwoHands = true
 
+SWEP.Slot = 2
+SWEP.SlotPos = 0
+
 SWEP.ZoomPos = Vector(5,-1.53,-2.5)
 SWEP.ZoomAng = Angle(-0.3,0,0)
 

@@ -59,7 +59,7 @@ if SERVER then
 		splad:SetScale(1)
 		util.Effect("eff_jack_bombletdetonate", splad, true, true)
 		---
-		util.BlastDamage(game.GetWorld(), Att, SelfPos + Vector(0, 0, 20), 150, 90)
+		util.BlastDamage(game.GetWorld(), Att, SelfPos + Vector(0, 0, 1), 150, 90)
 		---
 		util.ScreenShake(SelfPos, 1000, 3, 1, 500)
 		---

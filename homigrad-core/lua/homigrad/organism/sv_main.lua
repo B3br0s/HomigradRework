@@ -19,6 +19,12 @@ hook.Add("Player Think","Main_Handler",function(ply)
     ply:SetNWFloat("rarm",ply.rarm)
     ply:SetNWFloat("larm",ply.larm)
 
+    if !ply:GetActiveWeapon().CanSuicide then
+		ply.suiciding = false
+	end
+
+	ply:SetNWBool("suiciding",ply.suiciding)
+
     if istable(ply.JModEntInv) then
         ply.JModEntInv = NULL
     end
@@ -27,6 +33,10 @@ hook.Add("Player Think","Main_Handler",function(ply)
 
     if !ply:HasWeapon("weapon_hands") and ply:Alive() then
         ply:Give("weapon_hands")
+    end
+
+    if !IsValid(ply:GetActiveWeapon()) then
+        ply:SetActiveWeapon(ply:GetWeapon("weapon_hands"))
     end
 end)
 

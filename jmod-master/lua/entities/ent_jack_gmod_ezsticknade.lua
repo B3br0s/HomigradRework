@@ -51,7 +51,7 @@ if SERVER then
 			plooie:SetNormal(vector_up)
 			util.Effect("eff_jack_minesplode", plooie, true, true)
 			util.ScreenShake(SelfPos, 20, 20, 1, 1000)
-			JMod.FragSplosion(self, SelfPos + Vector(0, 0, 20), 3000, 70, 5000, JMod.GetEZowner(self))
+			JMod.FragSplosion(self, SelfPos + Vector(0, 0, 1), 3000, 70, 5000, JMod.GetEZowner(self))
 			self:Remove()
 		else
 			JMod.Sploom(JMod.GetEZowner(self), SelfPos, 150)

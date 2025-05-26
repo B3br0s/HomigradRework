@@ -60,6 +60,9 @@ SWEP.Animations = {
     }
 }
 
+SWEP.Slot = 2
+SWEP.SlotPos = 1
+
 SWEP.Reload1 = "arccw_go/tec9/tec9_clipout.wav"
 SWEP.Reload2 = "arccw_go/tec9/tec9_clipin.wav"
 SWEP.Reload3 = "arccw_go/tec9/tec9_boltpull.wav"

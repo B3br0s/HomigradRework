@@ -1,6 +1,3 @@
--- sh_hg_ammo.lua"
-
---
 hg.ammotypes = {
 	["5.56x45mm"] = {
 		name = "5.56x45 mm",
@@ -25,7 +22,7 @@ hg.ammotypes = {
 		maxsplash = 5
 	},
 	["12/70gauge"] = {
-		name = "12/70 gauge",
+		name = "12/70 Gauge",
 		dmgtype = DMG_BUCKSHOT,
 		tracer = TRACER_LINE,
 		plydmg = 0,
@@ -36,7 +33,7 @@ hg.ammotypes = {
 		maxsplash = 5
 	},
 	["12/70beanbag"] = {
-		name = "12/70 beanbag",
+		name = "12/70 Beanbag",
 		dmgtype = DMG_BULLET,
 		tracer = TRACER_LINE,
 		plydmg = 0,
@@ -57,6 +54,17 @@ hg.ammotypes = {
 		minsplash = 10,
 		maxsplash = 5
 	},
+	[".44magnum"] = {
+		name = ".44 Magnum",
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 100,
+		maxcarry = 80,
+		minsplash = 10,
+		maxsplash = 5
+	},
 	[".50actionexpress"] = {
 		name = ".50 Action Express",
 		dmgtype = DMG_BULLET,
@@ -67,41 +75,44 @@ hg.ammotypes = {
 		maxcarry = 150,
 		minsplash = 10,
 		maxsplash = 5
-	}
+	},
+	["4.6x30mmnato"] = {
+		name = "4.6x30mm NATO",
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 200,
+		maxcarry = 150,
+		minsplash = 10,
+		maxsplash = 5
+	},
+	["5.7x28mm"] = {
+		name = "5.7×28mm",
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 200,
+		maxcarry = 150,
+		minsplash = 10,
+		maxsplash = 5
+	},
+	["rpg7proj"] = {
+		name = "RPG-7 Projectile",
+		count = 1,
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 200,
+		maxcarry = 150,
+		minsplash = 10,
+		maxsplash = 5
+	},
 }
 
 local ammotypes = hg.ammotypes
---[[
-name = "5.56x45 mm",
-
-name = "7.62x39 mm",
-
-name = "5.45x39 mm",
-
-name = "12/70 gauge",
-
-name = "12/70 beanbag",
-
-name = "9x19 mm Parabellum",
-
-name = ".45 ACP",
-
-name = "4.6×30 mm",
-
-name = "5.7×28 mm",
-
-name = ".44 Remington Magnum",
-
-name = "9x39 mm",
-
-name = ".50 Action Express",
-
-name = "7.62x51 mm",
-
-name = "7.62x54 mm",
-
-name = ".338 Lapua Magnum"
-]]
 local ammoents = {
 	["5.56x45mm"] = {
 		Material = "models/hmcd_ammobox_556",
@@ -127,6 +138,26 @@ local ammoents = {
 		Scale = 1,
 		Color = Color(255, 255, 125)
 	},
+	[".44magnum"] = {
+		Material = "models/hmcd_ammobox_22",
+		Scale = 1,
+		Color = Color(255, 255, 125)
+	},
+	["4.6x30mmnato"] = {
+		Material = "models/hmcd_ammobox_22",
+		Scale = 1,
+		Color = Color(255, 255, 125)
+	},
+	["5.7x28mm"] = {
+		Material = "models/hmcd_ammobox_22",
+		Scale = 1,
+		Color = Color(255, 255, 125)
+	},
+	["rpg7proj"] = {
+		Model = "models/weapons/tfa_ins/w_rpg7_projectile.mdl",
+		Scale = 1,
+		Color = Color(255, 255, 255)
+	},
 }
 
 local function addAmmoTypes()
@@ -138,7 +169,7 @@ local function addAmmoTypes()
 		ammoent.PrintName = tbl.name
 		ammoent.Category = "HG Ammo"
 		ammoent.Spawnable = true
-		ammoent.AmmoCount = 30
+		ammoent.AmmoCount = (tbl.count or 30)
 		ammoent.AmmoType = tbl.name
 		ammoent.Model = ammoents[name].Model or "models/props_lab/box01a.mdl"
 		ammoent.ModelMaterial = ammoents[name].Material or ""

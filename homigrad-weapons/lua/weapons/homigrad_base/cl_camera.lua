@@ -9,15 +9,15 @@ vis_recoil = 0
 function SWEP:Camera(ply, origin, angles, fov)
 	local pos, ang = self:WorldModel_Transform()
 
-	if !pos or ply:GetNWBool("suiciding") then
+	lerpaim = LerpFT(0.1, lerpaim, self:IsSighted() and 1 or 0)
+
+	if !pos or ply:GetNWBool("suiciding") or self.speed > 0.2 then
 		return origin, angles, fov
 	end
 
 	ang:RotateAroundAxis(ang:Right(),self.ZoomAng[1] * lerpaim)
     ang:RotateAroundAxis(ang:Up(),self.ZoomAng[2] * lerpaim)
     ang:RotateAroundAxis(ang:Forward(),self.ZoomAng[3] * lerpaim)
-	
-	lerpaim = LerpFT(0.1, lerpaim, self:IsSighted() and 1 or 0)
 	
 	local neworigin, _ = LocalToWorld(self.ZoomPos, self.ZoomAng, pos, ang)
 	origin = Lerp(lerpaim,origin,neworigin)

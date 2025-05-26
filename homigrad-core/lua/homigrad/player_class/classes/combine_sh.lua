@@ -13,7 +13,7 @@ end
 function CLASS.On(self)
 	if CLIENT then return end
 	self:SetHealth(125)
-	self:SetMaxHealth(125)
+	self:SetMaxHealth(150)
 	self:SetArmor(25)
 	self:Give("weapon_hands")
 	self.isCombine = true
@@ -52,6 +52,7 @@ end
 
 function CLASS.Think(self)
 	self.bleed = 0
+    self.painlosing = 3.5
 end
 
 function CLASS.PlayerStartVoice(self)

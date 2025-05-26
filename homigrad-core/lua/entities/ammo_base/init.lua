@@ -6,20 +6,21 @@ function ENT:Initialize()
 	self.Entity:SetModel(self.Model)
 	self.Entity:SetMaterial(self.ModelMaterial or "")
 	self.Entity:SetColor(self.Color or Color(255,255,255))
-	self:PhysicsInit( SOLID_VPHYSICS )
-	self:SetMoveType( MOVETYPE_VPHYSICS )
-	self:SetSolid( SOLID_VPHYSICS )
-	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-	self:SetUseType(SIMPLE_USE)
-	self:DrawShadow(true)
-	self:SetModelScale(self:GetModelScale()*self.ModelScale,0)
-	local phys = self:GetPhysicsObject()
-	if IsValid(phys) then
-		phys:SetMass(20)
-		phys:Wake()
-		phys:EnableMotion(true)
-	end
-
+	timer.Simple(0,function()
+		self:PhysicsInit( SOLID_VPHYSICS )
+		self:SetMoveType( MOVETYPE_VPHYSICS )
+		self:SetSolid( SOLID_VPHYSICS )
+		self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+		self:SetUseType(SIMPLE_USE)
+		self:DrawShadow(true)
+		self:SetModelScale(self:GetModelScale()*self.ModelScale,0)
+		local phys = self:GetPhysicsObject()
+		if IsValid(phys) then
+			phys:SetMass(20)
+			phys:Wake()
+			phys:EnableMotion(true)
+		end
+	end)
 end
 
 function ENT:Use( activator )

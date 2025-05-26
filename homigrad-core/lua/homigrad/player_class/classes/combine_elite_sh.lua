@@ -55,7 +55,7 @@ end
 function CLASS.Think(self)
 	self.bleed = 0
 	self.stamina = 100
-    self.painlosing = 3
+    self.painlosing = 5
 end
 
 function CLASS.PlayerStartVoice(self)

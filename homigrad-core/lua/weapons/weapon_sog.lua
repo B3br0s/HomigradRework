@@ -13,6 +13,8 @@ SWEP.HoldPos = Vector(3,1.1,2.25)
 SWEP.AnimAng = Angle(0,0,0)
 SWEP.AnimPos = Vector(-7,-3,0)
 
+SWEP.AttackDamage = 25
+
 SWEP.ModelScale = 1.45
 
 SWEP.ViewModelFlip = false

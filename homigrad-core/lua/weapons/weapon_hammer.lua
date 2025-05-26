@@ -26,19 +26,21 @@ SWEP.SlotPos = 2
 SWEP.Rarity = 4
 SWEP.HoldType = "melee"
 SWEP.AnimWait = 2
-SWEP.AttackTime = 0.3
-SWEP.AttackAng = Angle(0,0,0)
+SWEP.AttackTime = 0.05
+SWEP.AttackAng = Angle(0,-20,0)
 SWEP.AttackWait = 0.4
 SWEP.AttackDist = 60
-SWEP.AttackDamage = 15
+SWEP.AttackDamage = 20
 SWEP.AttackType = DMG_CLUB
 SWEP.NoLHand = true
+SWEP.isMelee = true
+SWEP.isTakeSlot = false
 
 SWEP.IconAng = Angle(0,-90,0)
 SWEP.IconPos = Vector(60,5.25,0)
 
-SWEP.AttackHitFlesh = {"physics/flesh/flesh_impact_bullet1.wav","physics/flesh/flesh_impact_bullet2.wav"}
-SWEP.AttackHit = "Concrete.ImpactHard"
+SWEP.AttackHitFlesh = {"weapons/melee/flesh_impact_blunt_01.wav","weapons/melee/flesh_impact_blunt_02.wav","weapons/melee/flesh_impact_blunt_05.wav","weapons/melee/flesh_impact_blunt_03.wav"}
+SWEP.AttackHit = "snd_jack_hmcd_hammerhit.wav"
 SWEP.DeploySnd = "physics/metal/metal_grenade_impact_soft2.wav"
 
 SWEP.Animations = {
@@ -229,30 +231,3 @@ local bonenames = {
 	["ValveBiped.Bip01_L_Thigh"] = "#hg.bones.lthigh",
 	["ValveBiped.Bip01_L_Calf"] = "#hg.bones.lcalf"
 }
-
-function SWEP:DrawHUD()
-	local owner = self:GetOwner()
-	local tr = {}
-	tr.start = owner:GetAttachment(owner:LookupAttachment("eyes")).Pos
-
-	local dir = Vector(1, 0, 0)
-	dir:Rotate(owner:EyeAngles())
-
-	tr.endpos = tr.start + dir * 75
-	tr.filter = owner
-
-	local tRes1, _ = hg.eyeTrace(owner)
-	local traceResult = util.TraceLine(tr)
-	local hit = traceResult.Hit and 1 or 0
-
-	local hitEnt = traceResult.Entity ~= Entity(0) and 1 or 0
-	local isRag = traceResult.Entity:IsRagdoll()
-	local frac = traceResult.Fraction
-
-	surface.SetDrawColor(Color(255 * (1 - hitEnt),255 * hitEnt,0, 255 * hit))
-	draw.NoTexture()
-
-	Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-
-	draw.DrawText("", "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER)
-end

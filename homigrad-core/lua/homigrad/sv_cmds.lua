@@ -186,16 +186,6 @@ COMMANDS.fling = {function(ply,args)
 	end
 end,1}
 
-COMMANDS.zatroll = {function(ply,args)
-	if not ply:IsAdmin() then return end
-
-	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
-		if ply:Alive() and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().ishgweapon then
-			ply:GetActiveWeapon().Durability = args[2] and tonumber(args[2]) or 1
-		end
-	end
-end,1}
-
 COMMANDS.setmodel = {function(ply,args)
 	if not ply:IsAdmin() then return end
 
@@ -221,8 +211,16 @@ end,1}
 COMMANDS.forceuncon = {function(ply,args)
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
 		ply.otrub = true
-		ply.pain = 200
+		ply.pain = 400
 	end
+end,1}
+
+COMMANDS.nortv = {function(ply,args)
+	if not ply:IsAdmin() then return end
+	local value = tonumber(args[1]) > 0
+
+	SetGlobalBool("NoRTV",value)
+	PrintMessage(3,"No RTV - "..(value and "ON" or "OF"))
 end,1}
 
 COMMANDS.nomodechange = {function(ply,args)

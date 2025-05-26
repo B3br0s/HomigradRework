@@ -34,12 +34,12 @@ if CLIENT then
             surface.SetDrawColor( 0, 0, 0)
             surface.DrawRect(ScrW() / 2 - 2,ScrH() / 2 - 2,4,4)
 
-            //self:IsClose()
+            self:IsClose()
         end
     end)
 end
 
-function SWEP:GetTrace()
+function SWEP:GetTrace(nomod)
     local ply = self:GetOwner()
 
     local ent = hg.GetCurrentCharacter(ply)
@@ -52,10 +52,18 @@ function SWEP:GetTrace()
 
     local mat = ent:GetBoneMatrix(head_index)
 
-    local Pos,Ang = self:WorldModel_Transform()
+    local Pos,Ang = self:WorldModel_Transform(nomod)
 
     if !self.AttPos then
         return Pos,Ang
+    end
+
+    if !Ang then
+        Ang = Angle(0,0,0)
+    end
+    
+    if !Pos then
+        Pos = Vector(0,0,0)
     end
 
     Pos = Pos + Ang:Forward() * self.AttPos[1]
@@ -74,25 +82,23 @@ function SWEP:Shoot()
         return
     end
 
+    if !IsValid(self:GetOwner()) then
+        return
+    end
+
     if self:GetOwner():GetNWBool("otrub") then
         return
     end
 
     self:PrimaryAdd()
 
-    if SERVER then
-        net.Start("hg shoot")
-        net.WriteEntity(self)
-        net.SendOmit(self:GetOwner())
-    end
-
     self:PrimarySpread()
 
     local primary = self.Primary
 
     if self:IsLocal() then
-        vis_recoil = vis_recoil + primary.Force / 5 * self.RecoilForce
-        Recoil = Recoil + 2
+        vis_recoil = vis_recoil + primary.Force / 15 * self.RecoilForce
+        Recoil = Recoil + 0.25
     end
 
     local ply = self:GetOwner()
@@ -103,12 +109,38 @@ function SWEP:Shoot()
 
     local Pos,Ang = self:GetTrace()
 
+    if self.Animations["fire"] then
+        hg.PlayAnim(self,"fire")
+    end
+
+    if SERVER then
+        net.Start("hg shoot")
+        net.WriteEntity(self)
+        net.SendPVS(Pos)
+    end
+
     if SERVER then
         sound.Play(istable(self.Sound) and self.Sound[math.random(1,#self.Sound)] or self.Sound,Pos,100,math.random(90,110),1)
     end
 
-    if CLIENT then
-        debugoverlay.Line(Pos,Pos + Ang:Forward() * 10000,2,Color(255,255,0))
+    local tr_tbl = {
+        start = Pos,
+        endpos = Pos+Ang:Forward() * 100000,
+        filter = {ent,ply,self,self.worldModel}
+    }   
+
+    local tr = util.TraceLine(tr_tbl)
+
+    local dist = Pos:Distance(tr.HitPos)
+
+    if self:GetOwner():IsSuperAdmin() then
+        if CLIENT then
+            //debugoverlay.Line(Pos,Pos + Ang:Forward() * dist,2,Color(255,0,0))
+            debugoverlay.SweptBox(Pos + Ang:Right() * 1.25 - Ang:Up() * 0.75,Pos + Ang:Forward() * dist,Vector(1,1,1),Vector(1.5,1.5,1.5),Ang,2,Color(255,255,0))
+            debugoverlay.BoxAngles(Pos+Ang:Forward()*dist,Vector(0,0,0),Vector(2,2,2),Ang,5,Color(255,0,0))
+        else
+            debugoverlay.BoxAngles(Pos+Ang:Forward()*dist,Vector(0,0,0),Vector(2,2,2),Ang,5,Color(0,0,255))
+        end
     end
 
     local Num = self.NumBullet or 1
@@ -125,6 +157,21 @@ function SWEP:Shoot()
         return
     end
 
+    if SERVER then
+        if ply:GetNWBool("suiciding") and !ply.Fake then
+            hg.Faking(ply,ply:EyeAngles():Forward() * - 100)
+            timer.Simple(0,function() //ее крутое падение назад
+                local rag = ply.FakeRagdoll
+
+                if IsValid(rag) then
+                    local s1 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(3) )
+
+                    s1:AddAngleVelocity(ply:EyeAngles():Up() * -2500)
+                end
+            end)
+        end
+    end
+
     local Bullet = {}
     Bullet.Src = (ply:GetNWBool("suiciding") and mat:GetTranslation() or Pos)
     Bullet.Dir = Ang:Forward()
@@ -136,6 +183,8 @@ function SWEP:Shoot()
     Bullet.AmmoType = self.Primary.Ammo
     if ply:GetNWBool("suiciding") then
         Bullet.Filter = {}
+    else
+        Bullet.Filter = {hg.GetCurrentCharacter(ply)}
     end
 
     //self:PrimarySpread()

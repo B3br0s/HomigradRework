@@ -1,5 +1,7 @@
 hl2dm = hl2dm or {}
 
+hl2dm.hasrpg = false
+
 local units = {
     //"CMB-3560", //entropy zero
     "CMB-4821",
@@ -12,24 +14,24 @@ local units = {
 }
 
 local units_super = {
-    "CMB-S-3560",
-    "CMB-S-1520",
-    "CMB-S-0662",
-    "CMB-S-9205",
-    "CMB-S-1482",
-    "CMB-S-1592",
-    "CMB-S-9580",
-    "CMB-S-5020",
-    "CMB-S-4080",
-    "CMB-S-3060",
-    "CMB-S-1500",
+    "CMB-ELITE-3560",
+    "CMB-ELITE-1520",
+    "CMB-ELITE-0662",
+    "CMB-ELITE-9205",
+    "CMB-ELITE-1482",
+    "CMB-ELITE-1592",
+    "CMB-ELITE-9580",
+    "CMB-ELITE-5020",
+    "CMB-ELITE-4080",
+    "CMB-ELITE-3060",
+    "CMB-ELITE-1500",
 }
 
 function hl2dm.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
-    local weps_pri = {"weapon_mp7"}
-    local weps_sec = {"weapon_glock17"}
+    local weps_pri = {"weapon_hg_smg1","weapon_spas12","weapon_hg_ar2"}
+    local weps_sec = {"weapon_usp_match"}
 
     ply:SetTeam(1)
 
@@ -50,6 +52,8 @@ function hl2dm.SpawnBlue(ply)
 
     wep_primary:SetClip1(wep_primary:GetMaxClip1())
     wep_secondary:SetClip1(wep_secondary:GetMaxClip1())
+
+    ply:Give("weapon_hl2nade")
 
     ply:GiveAmmo(wep_primary:GetMaxClip1() * math.random(8,16), wep_primary:GetPrimaryAmmoType(), true)
     ply:GiveAmmo(wep_secondary:GetMaxClip1() * math.random(2,4), wep_secondary:GetPrimaryAmmoType(), true)
@@ -84,9 +88,9 @@ local rebels = {
 function hl2dm.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"weapon_mp7","weapon_scar","weapon_870_a","weapon_m4a1","weapon_ak47"}
-    local weps_sec = {"weapon_glock17","weapon_deagle","weapon_tec9"}
-    local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_painkillers_hg"}
+    local weps_pri = {"weapon_hg_smg1","weapon_870_b","weapon_mp5"}
+    local weps_sec = {"weapon_usp_match","weapon_tec9"}
+    local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_painkillers_hg","weapon_hl2nade"}
 
     ply:SetTeam(2)
 
@@ -115,11 +119,18 @@ function hl2dm.SpawnRed(ply)
         ply:SetPlayerColor(Color(255,153,0):ToVector())
         ply:SetModel(table.Random(rebels))
         ply:SetSubMaterial()
+
+        if math.random(0,100) < 10 and !hl2dm.hasrpg then
+            hl2dm.hasrpg = true
+            ply:Give("weapon_rpg7")
+        end
     end)
 end
 
 function hl2dm.StartRoundSV()
     team.DirectTeams(1,2)
+
+    hl2dm.hasrpg = false
 
     local blus = team.GetPlayers(1)
     local reds = team.GetPlayers(2)

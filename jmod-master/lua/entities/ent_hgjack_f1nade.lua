@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.PrintName = "EZHG F1 Granade"
-ENT.Category = "JModHomigrad"
+ENT.Category = "JMod - EZ Explosives"
 ENT.Spawnable = true
 ENT.JModPreferredCarryAngles = Angle(0, -140, 0)
 ENT.Model = "models/pwb/weapons/w_f1_thrown.mdl"
@@ -42,7 +42,7 @@ if SERVER then
 		local OnGround = util.QuickTrace(SelfPos + Vector(0, 0, 5), Vector(0, 0, -15), {self}).Hit
 
 		local Spred = Vector(0, 0, 0)
-		JMod.FragSplosion(self, SelfPos + Vector(0, 0, 20), 800, 450, 3500, self:GetOwner() or game.GetWorld())
+		JMod.FragSplosion(self, SelfPos + Vector(0, 0, 1), 800, 450, 3500, self:GetOwner() or game.GetWorld())
 		self:Remove()
 	end
 elseif CLIENT then

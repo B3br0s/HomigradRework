@@ -204,8 +204,9 @@ end
 
 if SERVER then
 	concommand.Add("suicide",function(ply,args)
-		ply.suiciding = not ply.suiciding
-		ply:SetNWBool("suiciding",ply.suiciding)
+		if ply:GetActiveWeapon().CanSuicide then
+			ply.suiciding = not ply.suiciding
+		end
 	end)
 end
 
@@ -373,10 +374,13 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
 	ply.KillReason = " "
 	ply.LastHitBone = " "
 	ply.Fake = false 
+	ply.SequenceCycle = 0
 	ply:SetDSP(0)
 	ply.FakeRagdoll = NULL
 	ply.otrub = false
 	ply.pain = 0
+
+	ply.RenderOverride = hg.RenderOverride
 
 	for bone = 0, ply:GetBoneCount() - 1 do
 		ply:ManipulateBoneAngles(bone,Angle(0,0,0))
@@ -438,13 +442,14 @@ if CLIENT then
 
 		//self.PrintName = hg.GetPhrase(self:GetClass())
 		
-		local WM = self.WorldModel
+		local WM = self.WorldModelReal or self.WorldModel
 
 		local DrawingModel = hg.DrawModels[(isstring(self) and self or self.ClassName)]
 	
 		if not IsValid(DrawingModel) then
-			DrawingModel = ClientsideModel(self.WorldModel,RENDERGROUP_OPAQUE)
+			DrawingModel = ClientsideModel(self.WorldModelReal or self.WorldModel,RENDERGROUP_OPAQUE)
 			DrawingModel.IsIcon = true
+			DrawingModel.NoRender = true
 			DrawingModel:SetNoDraw(true)
 			timer.Simple(0,function()
 				if self.Bodygroups then
@@ -459,7 +464,9 @@ if CLIENT then
 			end)
 
 			hg.DrawModels[(isstring(self) and self or self.ClassName)] = DrawingModel
+			DrawingModel:SetNoDraw(true)
 		else
+			DrawingModel.NoRender = true
 			DrawingModel:SetNoDraw(true)
 			local vec = Vector(0,0,0)
 			local ang = Angle(0,0,0)
@@ -477,7 +484,7 @@ if CLIENT then
 	
 				DrawingModel:SetRenderAngles(self.IconAng or Angle(0,0,0))
 				DrawingModel:SetRenderOrigin((self.IconPos or Vector(0,0,0))-DrawingModel:OBBCenter())
-				DrawingModel:SetModel(self.WorldModel)
+				DrawingModel:SetModel(self.WorldModelReal or self.WorldModel)
 				if self.Bodygroups then
 				    for k, v in ipairs(self.Bodygroups) do
 				        DrawingModel:SetBodygroup(k, v)
@@ -600,24 +607,6 @@ hook.Add("entity_killed","player_deathhg",function(data)
 	
 	hook.Run("Player Death", ply, attacker)
 end)
-
-if SERVER then
-	hook.Add("Player Think","TPIK-Animation-Handler",function(ply)
-		if !ply:Alive() then
-			return
-		end
-
-		local self = ply:GetActiveWeapon()
-
-		if !self.SupportTPIK then
-			return
-		end
-
-		local mult = self:GetSequenceSpeed()
-
-    	self:SetSequenceCycle(self:GetSequenceCycle() + (FrameTime() * mult))
-	end)
-end
 
 hook.Add("Player Death","SetHull",function(ply, attacker)
     timer.Simple(0,function()

@@ -125,9 +125,9 @@ function hmcd.AssignGunMan(tbl)
             RandomPlayer:Give("weapon_870_b")
         end
     elseif hmcd.Type == "standard" then
-        RandomPlayer:Give("weapon_glock17")
+        RandomPlayer:Give("weapon_329pd")
     elseif hmcd.Type == "gfz" then
-        //RandomPlayer:Give("weapon_pbat")
+        RandomPlayer:Give("weapon_pbat")
         RandomPlayer:Give("weapon_handcuffs")
     end
 end

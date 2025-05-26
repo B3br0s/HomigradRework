@@ -11,7 +11,7 @@ SWEP.HoldType = "ar2"
 SWEP.Primary.ReloadTime = 1.7
 SWEP.Primary.ClipSize = 8
 SWEP.Primary.DefaultClip = 8
-SWEP.Primary.Damage = 12
+SWEP.Primary.Damage = 18
 SWEP.Primary.Force = 20
 SWEP.NumBullet = 8
 SWEP.Primary.Ammo = "12/70 gauge"
@@ -25,6 +25,9 @@ SWEP.Primary.ReloadTime = 0.15
 SWEP.Primary.Wait = 0.5
 
 SWEP.IsShotgun = true
+
+SWEP.Slot = 2
+SWEP.SlotPos = 0
 
 SWEP.WorldPos = Vector(-6,-1.5,-1)
 SWEP.WorldAng = Angle(1,0,0)
@@ -99,8 +102,8 @@ function SWEP:Reload()
         end
         if SERVER then
             sound.Play("pwb2/weapons/ksg/pumpback.wav",self:GetPos(),70,100,1,0)
-            hg.PlayAnim(self,"pump")
         end
+        hg.PlayAnim(self,"pump")
         timer.Simple(0.125,function()
             if SERVER then
                 sound.Play("pwb2/weapons/ksg/pumpforward.wav",self:GetPos(),70,100,1,0)

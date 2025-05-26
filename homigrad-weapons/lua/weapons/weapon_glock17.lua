@@ -8,6 +8,9 @@ SWEP.ViewModel = "models/weapons/arccw_go/v_pist_glock.mdl"
 
 SWEP.HoldType = "revolver"
 
+SWEP.Slot = 2
+SWEP.SlotPos = 1
+
 SWEP.Primary.ReloadTime = 1.7
 SWEP.Primary.ClipSize = 17
 SWEP.Primary.DefaultClip = 17

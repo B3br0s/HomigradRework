@@ -19,8 +19,8 @@ SWEP.Primary.DefaultClip = 15
 SWEP.Primary.Damage = 25
 SWEP.Primary.Force = 1
 SWEP.Primary.Ammo = "5.56x45 mm"
-SWEP.Primary.Wait = 0.06
-SWEP.Sound = "pwb2/weapons/m4a1/ru-556 fire unsilenced.wav"
+SWEP.Primary.Wait = 0.1
+SWEP.Sound = "zcitysnd/sound/weapons/m16a4/m16a4_fp.wav"
 SWEP.RecoilForce = 0.4
 
 SWEP.WorldPos = Vector(-4,1,0)
@@ -28,7 +28,7 @@ SWEP.WorldAng = Angle(1,0,0)
 SWEP.AttPos = Vector(32,2.85,-3.45)
 SWEP.AttAng = Angle(0,0,0)
 SWEP.HolsterAng = Angle(0,-10,0)
-SWEP.HolsterPos = Vector(-28,-3,5.5)
+SWEP.HolsterPos = Vector(-22,0,5.5)
 SWEP.HolsterBone = "ValveBiped.Bip01_Spine4"
 
 SWEP.IconPos = Vector(125,-17.25,-20)
@@ -55,7 +55,7 @@ end
 function SWEP:PrimaryAdd()
     self.CurBul = self.CurBul + 1
 
-    if self.CurBul > 2 then
+    if self.CurBul > (CLIENT and 3 or 2) then
         self.can = false
     end
 end

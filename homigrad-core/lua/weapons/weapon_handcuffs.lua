@@ -63,6 +63,10 @@ end
 function SWEP:Step()
     local ply = self:GetOwner()
 
+    if !IsValid(ply) then
+        return
+    end
+
     if ply:GetActiveWeapon() != self then
         return
     end
@@ -155,7 +159,7 @@ function SWEP:Cuff(rag)
     CuffEnt:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
     CuffEnt:Spawn()
 
-    for i = 1,4 do
+    for i = 1,2 do
         self:CuffRope(rag)
     end
 
@@ -271,7 +275,9 @@ if SERVER then
             timer.Simple(0,function()
                 if ply:IsPlayer() then ply = ply:GetNWEntity("FakeRagdoll") end
 
-                self:Cuff(ply)
+                if IsValid(self) and self.Cuff then
+                    self:Cuff(ply)
+                end
             end)
         end
     end
@@ -334,7 +340,7 @@ function SWEP:DrawHUD()
         draw.NoTexture()
         Circle(x, y, 5 / frac, 32)
 
-        draw.DrawText(ply:GetNWBool("Cuffed") and string.format(hg.GetPhrase("cuffed"),ply:GetNWString("PlayerName","N/A")) or string.format(hg.GetPhrase("cuff"),ply:GetNWString("PlayerName","N/A")), "HS.18",x,y,color_white,TEXT_ALIGN_CENTER)
+        draw.DrawText(ply:GetNWBool("Cuffed") and string.format(hg.GetPhrase("cuffed"),ply:Name()) or string.format(hg.GetPhrase("cuff"),ply:Name()), "HS.18",x,y,color_white,TEXT_ALIGN_CENTER)
 
         if IsValid(self.CuffPly) then
             local anim_pos = 1 - math.Clamp((self.CuffTime + cuffTime - CurTime()) / cuffTime,0,1)

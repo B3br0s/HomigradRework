@@ -4,13 +4,17 @@ local function ChatLogic(output, input, isChat, teamonly, text)
     local result, is3D = hook.Run("ChatingCanLisen", output, input, isChat, teamonly, text)
     if result ~= nil then return result, is3D end
 
-    if output:Alive() and input:Alive() then
+    if ROUND_ENDED or !ROUND_ACTIVE then
+        return true
+    end
+
+    if output:Alive() and input:Alive() and !input:GetNWBool("otrub") then
         if teamonly then
             return output:Team() == input:Team()
         else
             return input:GetPos():DistToSqr(output:GetPos()) < 800000, true
         end
-    elseif not output:Alive() and not input:Alive() then
+    elseif not output:Alive() and not input:Alive() or output:Team() == 1002 and not input:Alive() then
         return true
     else
         if not output:Alive() and input:Team() == 1002 and input:Alive() then 

@@ -1,11 +1,11 @@
 SWEP.Base = "weapon_base"
 
 SWEP.PrintName = "База Гранаты"
-SWEP.Category = "Гранаты"
+SWEP.Category = "Оружие: Гранаты"
 
 SWEP.Slot = 4
 SWEP.SlotPos = 0
-SWEP.Spawnable = true
+SWEP.Spawnable = false
 
 SWEP.ViewModel = "models/pwb/weapons/w_f1.mdl"
 SWEP.WorldModel = "models/pwb/weapons/w_f1.mdl"
@@ -58,6 +58,10 @@ end
 
 function SWEP:Step()
     local ply = self:GetOwner()
+
+    if !IsValid(ply) then
+        return
+    end
 
     if ply:GetActiveWeapon() != self then
         return

@@ -1,5 +1,7 @@
 //ВОООТ ТУТ МИ ПАСТРОИМ СПИЗЖИНЫ ТПИК С ARC9!!!!!
 
+hg = hg or {}
+
 hg.LHIKHandBones = {
     "ValveBiped.Bip01_L_Wrist",
     "ValveBiped.Bip01_L_Ulna",
@@ -22,9 +24,7 @@ hg.LHIKHandBones = {
 }
 
 hg.RHIKHandBones = {
-    "ValveBiped.Bip01_R_Wrist",
-    "ValveBiped.Bip01_R_Ulna",
-    "ValveBiped.Bip01_R_Hand",
+    "ValveBiped.Bip01_R_Hand", --окак
     "ValveBiped.Bip01_R_Finger4",
     "ValveBiped.Bip01_R_Finger41",
     "ValveBiped.Bip01_R_Finger42",
@@ -39,7 +39,7 @@ hg.RHIKHandBones = {
     "ValveBiped.Bip01_R_Finger12",
     "ValveBiped.Bip01_R_Finger0",
     "ValveBiped.Bip01_R_Finger01",
-    "ValveBiped.Bip01_R_Finger02"
+    "ValveBiped.Bip01_R_Finger02",
 }
 
 hg.TPIKBones = {
@@ -78,7 +78,60 @@ hg.TPIKBones = {
     "ValveBiped.Bip01_R_Finger12",
     "ValveBiped.Bip01_R_Finger0",
     "ValveBiped.Bip01_R_Finger01",
-    "ValveBiped.Bip01_R_Finger02"
+    "ValveBiped.Bip01_R_Finger02",
+    "R Clavicle",
+    "R UpperArm",
+    "R Forearm",
+    "R Hand",
+    "R Finger0",
+    "R Finger01",
+    "R Finger02",
+    "R Finger1",
+    "R Finger11",
+    "R Finger12",
+    "R Finger2",
+    "R Finger21",
+    "R Finger22",
+    "R Finger3",
+    "R Finger31",
+    "R Finger32",
+    "R Finger4",
+    "R Finger41",
+    "R Finger42",
+    "R ForeTwist",
+    "R ForeTwist1",
+    "R ForeTwist2",
+    "R ForeTwist3",
+    "R ForeTwist4",
+    "R ForeTwist5",
+    "R ForeTwist6",
+    "L Clavicle",
+    "L UpperArm",
+    "L Forearm",
+    "L Hand",
+    "L Finger0",
+    "L Finger01",
+    "L Finger02",
+    "L Finger1",
+    "L Finger11",
+    "L Finger12",
+    "L Finger2",
+    "L Finger21",
+    "L Finger22",
+    "L Finger3",
+    "L Finger31",
+    "L Finger32",
+    "L Finger4",
+    "L Finger41",
+    "L Finger42",
+    "L ForeTwist",
+    "L ForeTwist1",
+    "L ForeTwist2",
+    "L ForeTwist3",
+    "L ForeTwist4",
+    "L ForeTwist5",
+    "L ForeTwist6",
+
 }
 
 hg.LHIKBones = {
@@ -101,7 +154,7 @@ hg.LHIKBones = {
     "ValveBiped.Bip01_L_Finger12",
     "ValveBiped.Bip01_L_Finger0",
     "ValveBiped.Bip01_L_Finger01",
-    "ValveBiped.Bip01_L_Finger02"
+    "ValveBiped.Bip01_L_Finger02",
 }
 
 hg.RHIKBones = {
@@ -124,9 +177,51 @@ hg.RHIKBones = {
     "ValveBiped.Bip01_R_Finger12",
     "ValveBiped.Bip01_R_Finger0",
     "ValveBiped.Bip01_R_Finger01",
-    "ValveBiped.Bip01_R_Finger02"
+    "ValveBiped.Bip01_R_Finger02",
 }
 
+hg.TranslateBones = {
+    //["R Clavicle"] = "ValveBiped.Bip01_R_Clavicle",
+    //["R UpperArm"] = "ValveBiped.Bip01_R_UpperArm",
+    //["R Forearm"] = "ValveBiped.Bip01_R_Forearm",
+    ["R Hand"] = "ValveBiped.Bip01_R_Hand",
+    ["R Finger0"] = "ValveBiped.Bip01_R_Finger0",
+    ["R Finger01"] = "ValveBiped.Bip01_R_Finger01",
+    ["R Finger02"] = "ValveBiped.Bip01_R_Finger02",
+    ["R Finger1"] = "ValveBiped.Bip01_R_Finger1",
+    ["R Finger11"] = "ValveBiped.Bip01_R_Finger11",
+    ["R Finger12"] = "ValveBiped.Bip01_R_Finger12",
+    ["R Finger2"] = "ValveBiped.Bip01_R_Finger2",
+    ["R Finger21"] = "ValveBiped.Bip01_R_Finger21",
+    ["R Finger22"] = "ValveBiped.Bip01_R_Finger22",
+    ["R Finger3"] = "ValveBiped.Bip01_R_Finger3",
+    ["R Finger31"] = "ValveBiped.Bip01_R_Finger31",
+    ["R Finger32"] = "ValveBiped.Bip01_R_Finger32",
+    ["R Finger4"] = "ValveBiped.Bip01_R_Finger4",
+    ["R Finger41"] = "ValveBiped.Bip01_R_Finger41",
+    ["R Finger42"] = "ValveBiped.Bip01_R_Finger42",
+    ["R ForeTwist"] = "ValveBiped.Bip01_R_Ulna",
+    //["L Clavicle"] = "ValveBiped.Bip01_L_Clavicle",
+    //["L UpperArm"] = "ValveBiped.Bip01_L_UpperArm",
+    ["L Forearm"] = "ValveBiped.Bip01_L_Forearm",
+    ["L Hand"] = "ValveBiped.Bip01_L_Hand",
+    ["L Finger0"] = "ValveBiped.Bip01_L_Finger0",
+    ["L Finger01"] = "ValveBiped.Bip01_L_Finger01",
+    ["L Finger02"] = "ValveBiped.Bip01_L_Finger02",
+    ["L Finger1"] = "ValveBiped.Bip01_L_Finger1",
+    ["L Finger11"] = "ValveBiped.Bip01_L_Finger11",
+    ["L Finger12"] = "ValveBiped.Bip01_L_Finger12",
+    ["L Finger2"] = "ValveBiped.Bip01_L_Finger2",
+    ["L Finger21"] = "ValveBiped.Bip01_L_Finger21",
+    ["L Finger22"] = "ValveBiped.Bip01_L_Finger22",
+    ["L Finger3"] = "ValveBiped.Bip01_L_Finger3",
+    ["L Finger31"] = "ValveBiped.Bip01_L_Finger31",
+    ["L Finger32"] = "ValveBiped.Bip01_L_Finger32",
+    ["L Finger4"] = "ValveBiped.Bip01_L_Finger4",
+    ["L Finger41"] = "ValveBiped.Bip01_L_Finger41",
+    ["L Finger42"] = "ValveBiped.Bip01_L_Finger42",
+    ["L ForeTwist"] = "ValveBiped.Bip01_L_Ulna"
+}
 local Lerp = Lerp
 
 local cached_children = {}
@@ -203,201 +298,115 @@ function bone_apply_matrix(ent, bone, new_matrix, endbone)
 		local mat = ent:GetBoneMatrix(id)
 		if not mat then continue end
 		ent:SetBoneMatrix(id, new_matrix * (inv_matrix * mat))
+        //print(ent)
 	end
 	ent:SetBoneMatrix(bone, new_matrix)
 end
 
-local cachelastcycle = 0 -- probably bad
-
--- local headcontrol = {"ValveBiped.Bip01_Neck1", "ValveBiped.Bip01_Head1"}
-
-function hg.SolveAnimPartTPIK(wep)
-    local self = wep
-
-    local seqprox = self:GetSequenceProxy()
-    if seqprox != 0 then
-        for _, wm in ipairs({true, false}) do
-            local mdl = self:GetAnimationProxyModel(wm)
-            if !IsValid(mdl) then continue end
-            mdl:SetSequence(self:GetSequenceIndex())
-            mdl:SetCycle(self:GetSequenceCycle())
-            if seqprox == self.LHIKModelAddress then
-                local lhik_mdl
-                if wm then
-                    lhik_mdl = self.LHIKModelWM
-                else
-                    lhik_mdl = self.LHIKModel
-                end
-                if !lhik_mdl then return end
-                lhik_mdl:SetSequence(self:GetSequenceIndex())
-                lhik_mdl:SetCycle(self:GetSequenceCycle())
-            end
-            if seqprox == self.RHIKModelAddress then
-                local rhik_mdl
-                if wm then
-                    rhik_mdl = self.RHIKModelWM
-                else
-                    rhik_mdl = self.RHIKModel
-                end
-                if !rhik_mdl then return end
-                rhik_mdl:SetSequence(self:GetSequenceIndex())
-                rhik_mdl:SetCycle(self:GetSequenceCycle())
-            end
-            local anim_mdl = self:GetAnimationProxyGunDriver()
-            if IsValid(anim_mdl) then
-                anim_mdl:SetSequence(self:GetSequenceIndex())
-                anim_mdl:SetCycle(self:GetSequenceCycle())
-            end
-        end
-    end
-end
-
-function hg.DoTPIK(wep,ply,ent)
-    local self = wep
-    if not wep then
+function hg.DoTPIK(ply,ent)
+    if !IsValid(ply) then
         return
     end
-
-    if !IsValid(ent) then
-        return
-    end
-
-    if !wep.SupportTPIK then
-        return
-    end
-
-    if ply:GetNWBool("otrub") then
-        return
-    end
-    
+    local self = ply:GetActiveWeapon()
+    if not self or not IsValid(ent) or not self.SupportTPIK or ply:GetNWBool("otrub") then return end
     local wm = self.worldModel
+    if not IsValid(wm) then return end
 
-    if !IsValid(wm) then return end
+    if !ply.SequenceCycle then
+        ply.SequenceCycle = 0
+    end
 
-    hg.SolveAnimPartTPIK(wep)
+    if !ply.SequenceIndex then
+        ply.SequenceIndex = 0
+    end
+
+    //print(ply.SequenceCycle)
+
+    //hg.SolveAnimPartTPIK(wep)
 
     local everythingfucked = false
-
-    if wm:GetPos():IsZero() and self.wmnormalpos then -- VERY STUPID BUT SetupModel() on wm makes wm go to 0 0 0 BUT ONLY ON CERTAIN PLAYERMODELS???????
-        wm:SetPos(self.wmnormalpos) 
+    if wm:GetPos():IsZero() and self.wmnormalpos then
+        wm:SetPos(self.wmnormalpos)
         wm:SetAngles(self.wmnormalang)
         everythingfucked = true
-    else 
+    else
         self.wmnormalpos = wm:GetPos()
         self.wmnormalang = wm:GetAngles()
     end
-    
-    if !self.SupportTPIK then
-        if cachelastcycle > 0 then wm:SetCycle(0) cachelastcycle = 0 end
-        return
-    end
 
-    local tpikdelay = 0
-
-    local lod
-
-    if ply != LocalPlayer() then
-        local dist = EyePos():DistToSqr(ent:GetPos())
-
-        local convartpiktime = 120
-        tpikdelay = 1 / convartpiktime
-
-        if lod == 1 then
-            tpikdelay = math.max(0.05, tpikdelay)  -- max 20 fps if lodding
-        elseif lod == 1.5 then
-            tpikdelay = math.max(0.1, tpikdelay)
-        end
-    end
+    if not self.SupportTPIK then return end
 
     local shouldfulltpik = true
 
-    if !ply.LastTPIKTime then
-        ply.LastTPIKTime = 0
-    end
-
-    if !ply.TPIKCache then
+    if not ply.TPIKCache then
         ply.TPIKCache = {}
     end
 
-    if ply.LastTPIKTime + tpikdelay > CurTime() then
-        shouldfulltpik = false
-    end
-
     local nolefthand = false
-
     local htype = self:GetHoldType()
-
     if ply:IsTyping() then nolefthand = true end
 
-    ply.LerpRHIK = LerpFT(0.15,ply.LerpRHIK or 0,IsValid(wm) and 1 or 0)
-    ply.LerpLHIK = LerpFT(0.15,ply.LerpLHIK or 0,!nolefthand and 1 or 0)
-
-    if ent:IsRagdoll() and ply:GetNWBool("LeftArm") then
-        nolefthand = true
-    end
-
-    if self.NoLHand then
-        nolefthand = true
-    end
-    
-    //if ply:GetNW2Int("CurrentCustomGesture", 0) > 0 then nolefthand = true end -- custom thing
+    if ent:IsRagdoll() and ply:GetNWBool("LeftArm") then nolefthand = true end
+    if self.NoLHand then nolefthand = true end
 
     if shouldfulltpik then
         wm:SetupBones()
 
-        local time = self:GetSequenceCycle()
-        local seq = self:GetSequenceIndex()
+        local time = ply.SequenceCycle
+        local seq = ply.SequenceIndex or 0
 
-        if self:GetSequenceProxy() != 0 then seq = wm:LookupSequence("idle") end -- lhik ubgls fix
-        
-        if (htype == "normal" or htype == "passive") and (seq == wm:LookupSequence("draw") or seq == wm:LookupSequence("holster")) then seq = wm:LookupSequence("idle") end -- no draw/holster with some holdtypes. bad code but whatever.
+        if self:GetSequenceProxy() != 0 then
+            seq = wm:LookupSequence("idle")
+        end
+
+        if (htype == "normal" or htype == "passive") and (seq == wm:LookupSequence("draw") or seq == wm:LookupSequence("holster")) then
+            seq = wm:LookupSequence("idle")
+        end
 
         wm:SetSequence(seq)
-
         wm:SetCycle(time)
         cachelastcycle = time
-
         wm:InvalidateBoneCache()
     end
 
-    if !everythingfucked then hg.DoRHIK(true,wep) end
-    
+    if not everythingfucked then
+        hg.DoRHIK(true, self)
+    end
+
     local bones = hg.TPIKBones
-
-     if nolefthand then
-         bones = hg.RHIKHandBones
-     end
-
-    if lod == 1.5 then -- hackkkkk
-        bones = hg.LHIKHandBones
+    if nolefthand then
+        bones = hg.RHIKHandBones
     end
 
-    if !ent then
-        ent = ply
-    end
-
-    ent:SetupBones()
+    if not ent then ent = ply end
 
     local ply_spine_index = ent:LookupBone("ValveBiped.Bip01_Spine4")
-    if !ply_spine_index then return end
+    if not ply_spine_index then return end
+
     local ply_spine_matrix = ent:GetBoneMatrix(ply_spine_index)
+    if !ply_spine_matrix then
+        return
+    end
     local wmpos = ply_spine_matrix:GetTranslation()
 
+    ent:SetupBones()
     for _, bone in ipairs(bones) do
         local wm_boneindex = wm:LookupBone(bone)
-        if !wm_boneindex then continue end
+        if not wm_boneindex then continue end
         local wm_bonematrix = wm:GetBoneMatrix(wm_boneindex)
-        if !wm_bonematrix then continue end
+        if not wm_bonematrix then continue end
 
-        local ply_boneindex = ent:LookupBone(bone)
-        if !ply_boneindex then continue end
+        local translated = hg.TranslateBones[bone] != nil and hg.TranslateBones[bone] or bone
+
+        local ply_boneindex = ent:LookupBone(translated)
+        if not ply_boneindex then continue end
         local ply_bonematrix = ent:GetBoneMatrix(ply_boneindex)
-        if !ply_bonematrix then continue end
+        if not ply_bonematrix then continue end
 
         local bonepos = wm_bonematrix:GetTranslation()
         local boneang = wm_bonematrix:GetAngles()
 
-        bonepos.x = math.Clamp(bonepos.x, wmpos.x - 38, wmpos.x + 38) -- clamping if something gone wrong so no stretching (or animator is fleshy)
+        bonepos.x = math.Clamp(bonepos.x, wmpos.x - 38, wmpos.x + 38)
         bonepos.y = math.Clamp(bonepos.y, wmpos.y - 38, wmpos.y + 38)
         bonepos.z = math.Clamp(bonepos.z, wmpos.z - 38, wmpos.z + 38)
 
@@ -438,13 +447,8 @@ function hg.DoTPIK(wep,ply,ent)
 
     local eyeahg = ply:EyeAngles()
 
-    local shit_1 = eyeahg[1]
-
-    local shit = shit_1 / 360
-
     if shouldfulltpik then
-        ply_r_upperarm_pos, ply_r_forearm_pos, ply_r_upperarm_angle, ply_r_forearm_angle = hg.Solve2PartIK(ply_r_upperarm_matrix:GetTranslation(), ply_r_hand_matrix:GetTranslation(), r_upperarm_length, r_forearm_length, -1.3 - shit, eyeahg)
-        ply.LastTPIKTime = CurTime()
+        ply_r_upperarm_pos, ply_r_forearm_pos, ply_r_upperarm_angle, ply_r_forearm_angle = hg.Solve2PartIK(ply_r_upperarm_matrix:GetTranslation(), ply_r_hand_matrix:GetTranslation(), r_upperarm_length, r_forearm_length, -1.3, eyeahg)
 
         ply.TPIKCache.r_upperarm_pos, ply.TPIKCache.ply_r_upperarm_angle = WorldToLocal(ply_r_upperarm_pos, ply_r_upperarm_angle, ply_r_upperarm_matrix:GetTranslation(), ply_r_upperarm_matrix:GetAngles())
         ply.TPIKCache.r_forearm_pos, ply.TPIKCache.ply_r_forearm_angle = WorldToLocal(ply_r_forearm_pos, ply_r_forearm_angle, ply_r_upperarm_matrix:GetTranslation(), ply_r_upperarm_matrix:GetAngles())
@@ -484,23 +488,15 @@ function hg.DoTPIK(wep,ply,ent)
     local ply_l_upperarm_pos, ply_l_forearm_pos, ply_l_upperarm_angle, ply_l_forearm_angle
 
     if shouldfulltpik or !(ply.TPIKCache.l_upperarm_pos and ply.TPIKCache.l_forearm_pos and ply.TPIKCache.ply_l_upperarm_angle and ply.TPIKCache.ply_l_forearm_angle) then
-        ply_l_upperarm_pos, ply_l_forearm_pos, ply_l_upperarm_angle, ply_l_forearm_angle = hg.Solve2PartIK(ply_l_upperarm_matrix:GetTranslation(), ply_l_hand_matrix:GetTranslation(), l_upperarm_length, l_forearm_length, 1 + shit, eyeahg)
+        ply_l_upperarm_pos, ply_l_forearm_pos, ply_l_upperarm_angle, ply_l_forearm_angle = hg.Solve2PartIK(ply_l_upperarm_matrix:GetTranslation(), ply_l_hand_matrix:GetTranslation(), l_upperarm_length, l_forearm_length, 1, eyeahg)
 
-        ply.LastTPIKTime = CurTime()
+        //ply.LastTPIKTime = CurTime()
         ply.TPIKCache.l_upperarm_pos, ply.TPIKCache.ply_l_upperarm_angle = WorldToLocal(ply_l_upperarm_pos, ply_l_upperarm_angle, ply_l_upperarm_matrix:GetTranslation(), ply_l_upperarm_matrix:GetAngles())
         ply.TPIKCache.l_forearm_pos, ply.TPIKCache.ply_l_forearm_angle = WorldToLocal(ply_l_forearm_pos, ply_l_forearm_angle, ply_l_upperarm_matrix:GetTranslation(), ply_l_upperarm_matrix:GetAngles())
     else
         ply_l_upperarm_pos, ply_l_upperarm_angle = LocalToWorld(ply.TPIKCache.l_upperarm_pos, ply.TPIKCache.ply_l_upperarm_angle, ply_l_upperarm_matrix:GetTranslation(), ply_l_upperarm_matrix:GetAngles())
         ply_l_forearm_pos, ply_l_forearm_angle = LocalToWorld(ply.TPIKCache.l_forearm_pos, ply.TPIKCache.ply_l_forearm_angle, ply_l_upperarm_matrix:GetTranslation(), ply_l_upperarm_matrix:GetAngles())
     end
-
-    local l_up_pos = ply_l_upperarm_matrix:GetTranslation()
-    local l_fr_pos = ply_l_forearm_matrix:GetTranslation()
-    local l_hand_pos = ply_l_hand_matrix:GetTranslation()
-
-    local l_up_ang = ply_l_upperarm_matrix:GetAngles()
-    local l_fr_ang = ply_l_forearm_matrix:GetAngles()
-    local l_hand_ang = ply_l_hand_matrix:GetAngles()
 
     ply_l_upperarm_matrix:SetAngles(ply_l_upperarm_angle)
     ply_l_forearm_matrix:SetTranslation(ply_l_upperarm_pos)
@@ -562,21 +558,25 @@ function hg.Solve2PartIK(start_p, end_p, length0, length1, sign, angs)
     return Joint0_F, Joint1_F, ang1, ang2
 end
 
-hook.Add("PrePlayerDraw","TPIK",function(ply)
-    local ent = hg.GetCurrentCharacter(ply)
-    hg.DoTPIK(ply:GetActiveWeapon(),ply,ent) 
-end)
-
-hook.Add("PostPlayerDraw","TPIK",function(ply)
-    local ent = hg.GetCurrentCharacter(ply)
-    hg.DoTPIK(ply:GetActiveWeapon(),ply,ent) 
-end)
-
-hook.Add("PostDrawPlayerRagdoll","TPIK",function(ply)
-    local ent = hg.GetCurrentCharacter(ply)
-    hg.DoTPIK(ply:GetActiveWeapon(),ply,ent) 
+hook.Add("PostDrawPlayerRagdoll","Ragdoll_draw_tpik",function(ply,rag)
+    hg.DoTPIK(ply,rag) 
     hg.RenderArmor(ply)
+    //print(ply)
 end)
+
+function hg.RenderOverride(ply)
+    local ent = hg.GetCurrentCharacter(ply)
+
+    hg.RenderArmor(ply)
+
+    if !IsValid(ent) then
+        ent = ply
+    end
+
+    hg.DoTPIK(ply,ent)
+
+    ent:DrawModel()
+end
 
 /*
                                  .+       : #                                                                        
@@ -648,3 +648,5 @@ end)
                        *#     -%              %@    @:    .@   @   :@     @=   *%     -%      #=                     
                                                     -      *...           .                    %: 
 */
+
+//Зато,не пизда анимешная как у шарика в скриптах,ну по фактам же?

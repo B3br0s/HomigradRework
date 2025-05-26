@@ -3,7 +3,8 @@ SWEP.PrintName = "Адреналин"
 SWEP.Category = "Медицина"
 SWEP.Spawnable = true
 
-SWEP.WorldModel = "models/weapons/w_models/w_jyringe_jroj.mdl"
+SWEP.WorldModel = "models/hunter/plates/plate025.mdl"
+SWEP.WorldModelReal = "models/weapons/w_models/w_jyringe_jroj.mdl"
 
 SWEP.ViewModelFlip = false
 
@@ -19,7 +20,7 @@ SWEP.WorldAng = Angle(0,-90,0)
 SWEP.WorldPos = Vector(0,0,-2)
 SWEP.CorrectScale = 1.1
 
-SWEP.IconPos = Vector(30,0,0)
+SWEP.IconPos = Vector(30,1.35,0)
 SWEP.IconAng = Angle(0,90,0)
 
 SWEP.HealSound = "zcity/healing/bloodbag_loop_2.wav"

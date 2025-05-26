@@ -108,6 +108,8 @@ function GetCurrentName()
 end
 
 hook.Add("OnEntityCreated","LocalizeWep",function(ent)
+    hook.Run("OnLanguageChanged")
+    
     if IsValid(ent) and isentity(ent) and ent:IsWeapon() then
         local wep = ent
 
@@ -125,8 +127,6 @@ hook.Add("OnLanguageChanged","Localization_Wep",function()
         end
     end
 end)
-
-hook.Run("OnLanguageChanged")
 
 hook.Add("InitPostEntity","Localize",function()
     hook.Run("OnLanguageChanged")

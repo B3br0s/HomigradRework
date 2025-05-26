@@ -4,9 +4,11 @@ SWEP.WorldPos = Vector(0,0,0)
 function SWEP:CreateWorldModel()
     if not IsValid(self:GetOwner()) then return end
     if IsValid(self.worldModel) then return end
-    local WorldModel = ClientsideModel(self.WorldModel)
+    local WorldModel = ClientsideModel(self.WorldModelReal or self.WorldModel)
 
     WorldModel:SetOwner(self:GetOwner())
+
+    WorldModel.IsIcon = true
 
     self:CallOnRemove("RemoveWM", function() WorldModel:Remove() end)
 
@@ -26,6 +28,7 @@ function SWEP:DrawWM()
         if owner.Fake then self.worldModel:Remove() return end 
         if !owner:Alive() then return end
         local Att = owner:GetAttachment(owner:LookupAttachment("anim_attachment_RH"))
+        WM.IsIcon = true
         
         local Pos = Att.Pos
         local Ang = Att.Ang

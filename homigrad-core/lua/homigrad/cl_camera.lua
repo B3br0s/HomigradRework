@@ -45,7 +45,7 @@ local view = {
 	x = 0,
 	y = 0,
 	drawhud = true,
-	//drawviewmodel = false,
+	drawviewmodel = false,
 	dopostprocess = true,
 	drawmonitors = true
 }
@@ -295,7 +295,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 
 		local pos,ang = ragdoll:GetBonePosition(ragdoll:LookupBone("ValveBiped.Bip01_Head1"))
-		local att = {Pos = pos + ang:Up() * 2 + ang:Right() * 1,Ang = ang}
+		local att = {Pos = pos + ang:Up() * 1.5 + ang:Right() * 1,Ang = ang}
 
 		local output_pos,output_ang = att.Pos,LerpEyeRagdoll
 
@@ -311,7 +311,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 			fov = fov,
 			drawviewer = true,
 			zfar = zfar,
-			znear = znear,
+			znear = 1.5,
 		}
 
 		if IsValid(helmEnt) then

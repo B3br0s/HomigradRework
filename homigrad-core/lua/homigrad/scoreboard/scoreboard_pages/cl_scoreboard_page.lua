@@ -9,12 +9,12 @@ local unmutedicon = Material( "icon32/unmuted.png", "noclamp smooth" )
 local mutedicon = Material( "icon32/muted.png", "noclamp smooth" )
 
 local ugc = {
-    ["superadmin"] = Color(97,0,0),
-    ["admin"] = Color(197, 50, 50),
-    ["moderator"] = Color(175, 255, 156),
-    ["helper"] = Color(163, 156, 255),
-    ["operator"] = Color(21,255,0),
-    ["setmodel"] = Color(0,225,255),
+    ["superadmin"] = Color(189,0,0),
+    ["admin"] = Color(255, 52, 52),
+    ["moderator"] = Color(0, 255, 0),
+    ["operator"] = Color(0,4,255),
+    ["helper"] = Color(187, 255, 0),
+    ["intern"] = Color(126,255,137)
 }
 
 function CheckPlyStatus(ply)
@@ -68,8 +68,10 @@ end
 hook.Add("Think","Mute-Handler",function() //ода доза
         local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {})
 
-        MutedPlayers = util.JSONToTable(MutedPlayers)
-
+        if !istable(MutedPlayers) then
+            MutedPlayers = util.JSONToTable(MutedPlayers)
+        end
+        
         for _, ply in ipairs(player.GetAll()) do
             if mute_death then
                 continue 
@@ -121,6 +123,8 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
         local MutedPlayers = (file.Exists("hgr/muted.json","DATA") and file.Read("hgr/muted.json","DATA") or {}) or {} //рубат сын отсталой шлюхи,спасибо за апдейт ебанного гмода.
         if isstring(MutedPlayers) then
             MutedPlayers = util.JSONToTable(MutedPlayers)
+        else
+            file.Write("hgr/muted.json", util.TableToJSON(MutedPlayers))
         end
         open_target = 0
         open = true
@@ -345,6 +349,11 @@ hook.Add("HUDPaint","ScoreBoardPage",function()
                         self.WasHovered = true
                         surface.PlaySound("homigrad/vgui/csgo_ui_contract_type2.wav")
                     end
+                end
+
+                if !IsValid(ply) then
+                    self:Remove()
+                    return
                 end
 
                 self.DefaultColor = Color(self.CurColor,self.CurColor,self.CurColor)

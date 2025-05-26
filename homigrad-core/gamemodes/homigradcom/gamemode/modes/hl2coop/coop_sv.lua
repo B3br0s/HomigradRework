@@ -211,20 +211,20 @@ coop.Equipment = {}
 local eqp = coop.Equipment
 
 eqp.refugees = {
-    ["main"] = {"weapon_hl2_pistol"},
-    ["secondary"] = {"weapon_hatchet","weapon_pipe"},
+    ["main"] = {"weapon_usp_match"},
+    ["secondary"] = {"weapon_hatchet"},
     ["required"] = {"weapon_bandage"}
 }
 
 eqp.rebels = {
-    ["main"] = {"weapon_mp7_hl2","weapon_mp5"},
-    ["secondary"] = {"weapon_kabar","weapon_hl2_pistol"},
+    ["main"] = {"weapon_hg_smg1","weapon_mp5"},
+    ["secondary"] = {"weapon_sog","weapon_usp_match"},
     ["required"] = {"weapon_bandage","weapon_painkillers_hg"}
 }
 
 eqp.rebels_better = {
-    ["main"] = {"weapon_ar2_hl2","weapon_mp7_hl2","weapon_xm1014","weapon_wrekedakm"},
-    ["secondary"] = {"weapon_hl2_pistol","weapon_magnum357"},
+    ["main"] = {"weapon_ar2_hl2","weapon_hg_smg1","weapon_xm1014"},
+    ["secondary"] = {"weapon_usp_match","weapon_329pd"},
     ["required"] = {"weapon_bandage","weapon_painkillers_hg","weapon_medkit_hg"}
 }
 
@@ -260,6 +260,7 @@ function coop.SpawnResistance(ply)
             timer.Simple(0.2,function()
             if ply.isGordon and fraction != "citizens" then
                 ply:SetModel("models/gordon_mkv.mdl")
+                ply:Give("weapon_crowbar_hg")
                 ply:SetPlayerClass("gordon") //повторочка
             elseif ply.isGordon and fraction == "citizens" then
                 ply:SetModel("models/humans/gordon/group01/gordoncitizen.mdl")

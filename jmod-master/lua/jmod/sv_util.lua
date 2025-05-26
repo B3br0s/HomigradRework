@@ -230,7 +230,7 @@ function JMod.FragSplosion(shooter, origin, fragNum, fragDmg, fragMaxDist, attac
 	---
 	shooter = shooter or game.GetWorld()
 	zReduction = zReduction or 2
-	util.BlastDamage(shooter, attacker, origin, fragMaxDist * .25, fragDmg)
+	util.BlastDamage(shooter, attacker, origin, fragMaxDist * .1, fragDmg)
 
 	local WaterDivider = 1
 	for i = 1, 4 do
@@ -287,7 +287,7 @@ function JMod.FragSplosion(shooter, origin, fragNum, fragDmg, fragMaxDist, attac
 				local DistFactor = (-Tr.Fraction + 1.2)^2
 				local DamageToDeal = fragDmg * DmgMul * DistFactor
 				if DamageToDeal >= 1 then
-					firer:FireBullets({
+					firer:FireLuaBullets({
 						Attacker = attacker,
 						Damage = DamageToDeal,
 						Force = DamageToDeal * .02,
@@ -517,7 +517,7 @@ function JMod.RicPenBullet(ent, pos, dir, dmg, doBlasts, wreckShit, num, penMul,
 	if num and num > 10 then return end
 	local Attacker = ent.EZowner or ent or game.GetWorld()
 
-	ent:FireBullets({
+	ent:FireLuaBullets({
 		Attacker = Attacker,
 		Damage = dmg * 2,
 		Force = dmg,
@@ -595,7 +595,7 @@ function JMod.RicPenBullet(ent, pos, dir, dmg, doBlasts, wreckShit, num, penMul,
 		end
 
 		if Penetrated then
-			ent:FireBullets({
+			ent:FireLuaBullets({
 				Attacker = Attacker,
 				Damage = 1,
 				Force = 1,
@@ -1466,7 +1466,7 @@ function JMod.EnergeticsCookoff(pos, attacker, powerMult, numExplo, numBullet, n
 
 			sound.Play("snd_jack_fireworkpop" .. math.random(1, 5) .. ".ogg", pos + VectorRand() * 10, 75, math.random(90, 110))
 
-			firer:FireBullets({
+			firer:FireLuaBullets({
 				Attacker = attacker,
 				Damage = powerMult,
 				Force = 0,

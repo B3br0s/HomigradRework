@@ -11,14 +11,14 @@ SWEP.Isclose = false
 SWEP.DetailsDraw = {}
 
 local suicide_pist_ang = Angle(120,0,0)
-local suicide_pist_pos = Vector(-32,-4.5,-1.5)
+local suicide_pist_pos = Vector(-25,-2,-1.5)
 
 local suicide_rifle_ang = Angle(100,0,0)
 local suicide_rifle_pos = Vector(-40,-4.35,-0.5)
 
 SWEP.speed = 0
 
-function SWEP:WorldModel_Transform()
+function SWEP:WorldModel_Transform(nomod)
     local ply = self:GetOwner()
 
     if ply:GetNWBool("otrub") then
@@ -32,6 +32,14 @@ function SWEP:WorldModel_Transform()
     if IsValid(self.worldModel) and ply:GetActiveWeapon() == self then
         self.worldModel:SetNoDraw(false)
         self.worldModel.NoRender = false
+
+        if CLIENT then
+            if self.Bodygroups then
+	            for k, v in ipairs(self.Bodygroups) do
+	                self.worldModel:SetBodygroup(k, v)
+	            end
+	        end
+        end
     end
 
     if !ply.prev_wep_ang then
@@ -96,12 +104,12 @@ function SWEP:WorldModel_Transform()
 
     local model = self.worldModel
 
-    if IsValid(model) then
+    if IsValid(model) and !nomod then
         model:SetPos(Pos)
         model:SetAngles(Ang)
         model:SetParent(ent)
-        local speed_pos = self:IsPistolHoldType() and (vector_up * (6 * self.speed)) - Ang:Forward() * (-4 * self.speed) or (Ang:Forward() * 2 + Ang:Right() * -8 + Ang:Up() * 0) * self.speed
-        local speed_ang = self:IsPistolHoldType() and Angle(30 * self.speed,0 * self.speed,0) or Angle(-20,-40,0) * self.speed
+        local speed_pos = (self:IsPistolHoldType() or self:GetRunAnim()) and (vector_up * (6 * self.speed)) - Ang:Forward() * (-4 * self.speed) or (Ang:Forward() * 2 + Ang:Right() * -8 + Ang:Up() * 0) * self.speed
+        local speed_ang = (self:IsPistolHoldType() or self:GetRunAnim()) and Angle(30 * self.speed,0 * self.speed,0) or Angle(-20,-40,0) * self.speed
 
         ply.prev_wep_ang[1] = ply.prev_wep_ang[1] * (1 - self.speed)
 
@@ -167,7 +175,7 @@ function SWEP:WorldModel_Details()
     end
 end
 
-function SWEP:WorldModel_Holster_Transform()
+function SWEP:WorldModel_Holster_Transform(nomod)
     local ply = self:GetOwner()
 
     if self:GetNWBool("DontShow") then
@@ -209,7 +217,7 @@ function SWEP:WorldModel_Holster_Transform()
 
     local model = self.worldModel
 
-    if IsValid(model) then
+    if IsValid(model) and !nomod then
         model.IsIcon = true
 
         model:SetPos(Pos)
@@ -233,8 +241,16 @@ function SWEP:GetWM()
     end
 end
 
+function SWEP:GetRunAnim()
+    if self.PistolRun then
+        return true
+    else
+        return false
+    end
+end
+
 function SWEP:CreateWorldModel()
-    self.worldModel = ClientsideModel(self.WorldModel)
+    self.worldModel = ClientsideModel(self.WorldModelReal or self.WorldModel)
 
     local wm = self.worldModel
 
@@ -250,6 +266,13 @@ function SWEP:DrawWorldModel()
 
     if !IsValid(ply) then
         self:DrawModel()
+
+        if self.Bodygroups then
+	        for k, v in ipairs(self.Bodygroups) do
+	            self:SetBodygroup(k, v)
+	        end
+	    end
+
         return
     else
         if not IsValid(self.worldModel) then
@@ -295,6 +318,15 @@ if CLIENT then
 
         for _, bg in ipairs(self:GetBodyGroups()) do
             print(_,bg)
+            PrintTable(bg)
+        end
+    end)
+
+    concommand.Add("wm_getmat",function(ply)
+        local self = hg.eyeTrace(ply,200).Entity
+
+        for _, bg in ipairs(self:GetMaterials()) do
+            print(bg)
         end
     end)
 end

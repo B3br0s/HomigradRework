@@ -62,7 +62,7 @@ if SERVER then
             end
 
             if util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 3 or util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 66 then
-                JMod.FragSplosion(ent, SelfPos + Vector(0, 0, 20), 1024, 50, 3500, ent.owner or game.GetWorld())
+                JMod.FragSplosion(ent, SelfPos + Vector(0, 0, 1), 1024, 50, 3500, ent.owner or game.GetWorld())
             end
 
             timer.Simple(.1,function()

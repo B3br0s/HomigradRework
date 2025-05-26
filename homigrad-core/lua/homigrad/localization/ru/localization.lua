@@ -175,6 +175,12 @@ l.hl2dm_cmb_desc = "Уничтожьте любое сопротивление."
 l.hl2dm_rebel = "Повстанцы"
 l.hl2dm_rebel_desc = "Уничтожьте всех комбайнов!"
 
+l.criresp_suspect = "Подозреваемые"
+l.criresp_suspect_desc = "Это мой ёбанный дом, суки, я могу делать все, что захочу."
+
+l.criresp_swat = "Оперативники SWAT"
+l.criresp_swat_desc = "Переговоры не удались, устранить цель. 10-4"
+
 l.coop_endsin = "Карта сменится через: %s"
 l.coop_rebel = "Повстанцы"
 l.coop_gondon = "Гордон Фримен"
@@ -293,6 +299,7 @@ l.weapon_hands = "Руки"
 
 l.weapon_handcuffs = "Стяжки"
 
+l.weapon_pbat = "Полицейская Дубина"
 l.weapon_sog = "SOG SEAL 2000"
 l.weapon_crowbar_hg = "Монтировка"
 l.weapon_fubar = "Фубар"

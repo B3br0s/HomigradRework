@@ -30,7 +30,7 @@ function StartRound()
     game.CleanUpMap(false)
 
     CURRENT_ROUND = CURRENT_ROUND + 1
-    if CURRENT_ROUND >= RTV_ROUNDS then
+    if CURRENT_ROUND >= RTV_ROUNDS and !GetGlobalBool("NoRTV") then
         SolidMapVote.start()
         RTV_ACTIVE = true
 
@@ -125,11 +125,11 @@ end
 --PrintTable(TableRound())
 
 local Replaces = {
-    ["weapon_pistol"] = "weapon_hl2_pistol",
-    ["weapon_357"] = "weapon_magnum357",
-    ["weapon_ar2"] = "weapon_ar2_hl2",
-    ["weapon_smg1"] = "weapon_mp7_hl2",
-    ["weapon_shotgun"] = "weapon_spas12_hl2",
+    ["weapon_pistol"] = "weapon_usp_match",
+    ["weapon_357"] = "weapon_329pd",
+    ["weapon_ar2"] = "weapon_hg_ar2",
+    ["weapon_smg1"] = "weapon_hg_smg1",
+    ["weapon_shotgun"] = "weapon_spas12",
     //["weapon_crowbar"] = "weapon_hg_crowbar",
 }
 

@@ -43,8 +43,8 @@ hook.Add("Homigrad_Organs","Organs_Damage",function(ent,dmginfo,physbone,bonenam
 		local ply = (ent:IsPlayer() and ent or RagdollOwner(ent))
 		local rag = ent
 
-		if rag:GetVelocity():Length() > 475
-		and (dmginfo:GetDamage() * 30) > 8 then
+		if rag:GetVelocity():Length() > 650
+		and (dmginfo:GetDamage() * 30) > 9 then
 			ply.KillReason = "dead_neck"
 			ply:SetNWString("KillReason",ply.KillReason)
             if ply:Alive() then
@@ -131,7 +131,7 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 
 	if dmginfo:GetDamage() > 27 then
 		if not ply.Fake then
-			hg.Faking(ply,(IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * 15 or Ang:Forward() * 150) * math.random(5,10))
+			hg.Faking(ply,(IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():EyeAngles():Forward() * 15 or (Ang and Ang:Forward() * 150 or Angle(90,0,0):Forward() * 150)) * math.random(5,10))
 			ply:SetHealth(ply:Health() - dmginfo:GetDamage())
 		end
 	end
@@ -197,7 +197,7 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 		ply:SetHealth(ply:Health() - dmginfo:GetDamage())	
 	end
 
-	print(ply:Health())
+	//print(ply:Health())
 
 	if dmginfo:IsDamageType(DMG_SLASH + DMG_BULLET + DMG_BUCKSHOT) then
 		if not ply.bleed then

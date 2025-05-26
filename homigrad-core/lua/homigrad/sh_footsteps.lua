@@ -327,8 +327,8 @@ if CLIENT then
             -- return true
         end
 
-        if ply:IsSprinting() and ply:GetVelocity():Length() > 300 and ply == LocalPlayer() then
-            Viewpunch(Angle(2,0,0))
+        if ply:IsSprinting() and ply:GetVelocity():Length() > 200 and ply == LocalPlayer() then
+            Viewpunch(Angle(3,0,0))
         end
 
         if GetConVar("developer"):GetBool() then
@@ -342,7 +342,7 @@ if CLIENT then
         snd = table.Random(hg.FootSteps[mat])
 
         if ply.armor and ply.armor.torso != "NoArmor" then
-            sound.Play(Sound("snd_jack_gear" .. math.random(1, 6) .. ".wav"), pos, 100, 100, 0.5)
+            //sound.Play(Sound("snd_jack_gear" .. math.random(1, 6) .. ".wav"), pos, 100, 100, 0.5)
         end
 
         if ply:GetNWBool("IsCombine") then

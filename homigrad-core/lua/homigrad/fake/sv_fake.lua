@@ -46,10 +46,11 @@ end
 
 function PlayerMeta:CreateFake(force)
     local rag = ents.Create("prop_ragdoll")
+    rag:SetNWEntity("RagdollOwner", self)
     rag:SetModel(self:GetModel())
     rag:SetSkin(self:GetSkin())
-    rag:SetNWEntity("RagdollOwner", self)
     rag:Spawn()
+    rag:SetNWEntity("RagdollOwner", self)
     rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 	rag:SetNWVector("PlayerColor",self:GetPlayerColor())
     rag:Activate()
@@ -70,6 +71,9 @@ function PlayerMeta:CreateFake(force)
     self.FakeRagdoll = rag
 
     self:SetNWEntity("FakeRagdoll", rag)
+	rag.armor = self.armor
+
+	rag:SetNetVar("Armor",self.armor)
 
     force = force or Vector(0, 0, 0)
     local vel = self:GetVelocity() + force
@@ -363,6 +367,9 @@ hook.Add("Player Think","FakeThink",function(ply,time)
 	if !IsValid(ply:GetActiveWeapon()) and !ply.Fake and ply:Alive() then
 		//ply:SelectWeapon("weapon_hands")
 	end
+	if ply:GetNWBool("Cuffed") then
+		ply:SetActiveWeapon(nil)
+	end
 	ply:SetNWBool("Fake",ply.Fake)
 	ply:SetNWEntity("FakeRagdoll",ply.FakeRagdoll)
     if not ply.Fake or not ply:Alive() then ply:SetNWBool("RightArm",false) ply:SetNWBool("LeftArm",false) return end
@@ -371,7 +378,10 @@ hook.Add("Player Think","FakeThink",function(ply,time)
 	if rag == NULL then return end
 	rag.Inventory = ply.Inventory
 	rag.JModEntInv = ply.JModEntInv
+	rag:SetNetVar("Armor",ply.armor)
+	rag.armor = ply.armor
 	rag:SetNWEntity("JModEntInv",ply.JModEntInv)
+	rag:SetNWString("PlayerName",ply:Name())
 	if ROUND_NAME == "dr" then
 		if ply.TimeToDeath and ply.TimeToDeath < CurTime() then
 			ply:Kill()
@@ -470,7 +480,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 
 		local sp = {
 			secondstoarrive = 0.35,
-			pos = Spine4:GetPos(),
+			pos = Spine4:GetPos() + ((ply:KeyDown(IN_ATTACK) and ply:KeyDown(IN_ATTACK2)) and ply:EyeAngles():Forward() * 0.5 or Vector()),
 			angle = angs,
 			maxangular = 360 * 3,
 			maxangulardamp = 1,
@@ -488,7 +498,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 
 		local sp2 = {
 			secondstoarrive = 0.1/1e8,
-			pos = Spine2:GetPos(),
+			pos = Spine2:GetPos() + ((ply:KeyDown(IN_ATTACK) and ply:KeyDown(IN_ATTACK2)) and ply:EyeAngles():Forward() * 0.5 or Vector()),
 			angle = angs,
 			maxangular = 360 * 3,
 			maxangulardamp = 1,
@@ -519,7 +529,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 750 then
 			local sp = {
 				secondstoarrive = 0.1/1e8,
-				pos = Spine4:GetPos() + ply:EyeAngles():Forward() * 8,
+				pos = Spine4:GetPos() + ply:EyeAngles():Forward() * 7,
 				angle = Spine4:GetAngles(),
 				maxangular = 360 * 3,
 				maxangulardamp = 0,
@@ -555,7 +565,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 750 then
 			local sp = {
 				secondstoarrive = 0.1/1e8,
-				pos = Spine4:GetPos() + ply:EyeAngles():Forward() * 8,
+				pos = Spine4:GetPos() + ply:EyeAngles():Forward() * 7,
 				angle = Spine4:GetAngles(),
 				maxangular = 360 * 3,
 				maxangulardamp = 0,
@@ -636,14 +646,14 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 		angs:RotateAroundAxis(angs:Right(),0)
 		angs:RotateAroundAxis(angs:Up(),120)
 		local sp = {
-			secondstoarrive = 0.1,
+			secondstoarrive = 0.01,
 				pos = Head:GetPos() + ply:EyeAngles():Forward() * 32 + ply:EyeAngles():Right() * 10,
 				angle = angs,
 				maxangular = 360,
 				maxangulardamp = 0.1/1e8,
 				maxspeeddamp = 150,
 				maxspeed = 650,
-				dampfactor = 0.75,
+				dampfactor = 0.65,
 				teleportdistance = 0,
 				deltatime=deltatime,
 		}
@@ -658,14 +668,14 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 		angs:RotateAroundAxis(angs:Right(),0)
 		angs:RotateAroundAxis(angs:Up(),120)
 		local sp = {
-			secondstoarrive = 0.1,
+			secondstoarrive = 0.01,
 				pos = Head:GetPos() + ply:EyeAngles():Forward() * 32 + ply:EyeAngles():Right() * -10,
 				angle = angs,
 				maxangular = 360,
 				maxangulardamp = 0.1/1e8,
 				maxspeeddamp = 150,
 				maxspeed = 650,
-				dampfactor = 0.75,
+				dampfactor = 0.65,
 				teleportdistance = 0,
 				deltatime=deltatime,
 		}

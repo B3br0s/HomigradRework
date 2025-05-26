@@ -13,9 +13,12 @@ SWEP.Primary.ReloadTime = 1.7
 SWEP.Primary.ClipSize = 45
 SWEP.Primary.DefaultClip = 45
 SWEP.Primary.Damage = 20
-SWEP.Primary.Ammo = "9x19 mm Parabellum"
+SWEP.Primary.Ammo = "4.6x30mm NATO"
 SWEP.Primary.Wait = 0.08
 SWEP.Sound = "pwb2/weapons/usptactical/usp_unsil-1.wav"
+
+SWEP.Slot = 2
+SWEP.SlotPos = 0
 
 SWEP.WorldPos = Vector(-6,-1.5,-0.5)
 SWEP.WorldAng = Angle(1,0,0)

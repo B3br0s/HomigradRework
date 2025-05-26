@@ -46,7 +46,8 @@ hg.loots.small_crate = {
 }
 
 hg.loots.medium_crate = {
-	"weapon_deagle",
+	"weapon_deagle_a",
+	"weapon_deagle_b",
 	"weapon_glock17",
 	"weapon_tec9",
 	"weapon_handcuffs",
@@ -65,7 +66,8 @@ hg.loots.large_crate = {
 	"weapon_shovel",
 	"weapon_sog",
 	"weapon_hammer",
-	"weapon_deagle",
+	"weapon_deagle_a",
+	"weapon_deagle_b",
 	"weapon_glock17",
 	"weapon_tec9",
 	"weapon_ak47",
@@ -74,6 +76,7 @@ hg.loots.large_crate = {
 	"weapon_870_b",
 	"weapon_870_a",
 	"weapon_doublebarrel",
+	//"weapon_rpg7"
 }
 
 hg.loots.melee_crate = {
@@ -105,7 +108,8 @@ hg.loots.explosives_crate = {
 hg.loots.weapon_crate = {
 	"weapon_mp5",
 	"weapon_mp7",
-	"weapon_deagle",
+	"weapon_deagle_a",
+	"weapon_deagle_b",
 	"weapon_glock17",
 	"weapon_tec9",
 	"weapon_ak47",
@@ -308,9 +312,9 @@ net.Receive("hg loot",function(len,ply)
 			end
 		end
 
-		if weapons.Get(taked).isMelee then
+		if weapons.Get(taked).isMelee and weapons.Get(taked).isTakeSlot then
 			for _, wep in ipairs(ply:GetWeapons()) do
-				if wep.isMelee and wep:GetClass() != taked then
+				if wep.isMelee and wep:GetClass() != taked and wep.isTakeSlot then
 					ply:DropWep(wep)
 				end
 			end
@@ -401,9 +405,9 @@ hook.Add("PlayerCanPickupWeapon","Homigrad_Shit",function(ply,ent)
 	if ply:KeyDown(IN_USE) and IsValid(ent) and ent:GetOwner() != ply and (hg.eyeTrace(ply,150).Entity == ent or ent:GetPos():Distance(ply:GetPos()) < 45 and (IsValid(hg.eyeTrace(ply).Entity) and !hg.eyeTrace(ply).Entity:IsWeapon() or !hg.eyeTrace(ply).Entity)) then
 		ply:SetNWFloat("LastPickup",CurTime() + 0.2)
 		sound.Play("snd_jack_gear"..math.random(1,6)..".wav",ent:GetPos(),75,100,1)
-		if ent.isMelee then
+		if ent.isMelee and ent.isTakeSlot then
 				for _, wep in ipairs(ply:GetWeapons()) do
-					if wep.isMelee then
+					if wep.isMelee and wep.isTakeSlot then
 						ply:DropWep(wep)
 					end
 				end
@@ -427,9 +431,9 @@ hook.Add("PlayerCanPickupWeapon","Homigrad_Shit",function(ply,ent)
 			return true
 		end
 		if !ent.IsSpawned then
-			if ent.isMelee then
+			if ent.isMelee and ent.isTakeSlot then
 				for _, wep in ipairs(ply:GetWeapons()) do
-					if wep.isMelee then
+					if wep.isMelee and wep.isTakeSlot then
 						ply:DropWep(wep)
 					end
 				end

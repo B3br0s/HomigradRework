@@ -193,13 +193,12 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 3, "Blocking")
 	self:NetworkVar("Bool", 4, "IsCarrying")
 
-	self:NetworkVar("Float", 5, "SequenceCycle")
-	self:NetworkVar("Float", 6, "SequenceIndex")
-	self:NetworkVar("Float", 7, "SequenceProxy")
-	self:NetworkVar("Float", 8, "IKTimeLineStart")
-    self:NetworkVar("Float", 9, "IKTime")
-    self:NetworkVar("Float", 10, "SequenceSpeed")
-    self:NetworkVar("Float", 11, "ProcessedValue")
+	self:NetworkVar("Float", 5, "SequenceIndex")
+	self:NetworkVar("Float", 6, "SequenceProxy")
+	self:NetworkVar("Float", 7, "IKTimeLineStart")
+    self:NetworkVar("Float", 8, "IKTime")
+    self:NetworkVar("Float", 9, "SequenceSpeed")
+    self:NetworkVar("Float", 10, "ProcessedValue")
 
 	self:NetworkVar("String", 0, "IKAnimation")
 end
@@ -334,142 +333,6 @@ function SWEP:GetAnimationEntry(seq)
     else
         return {}
     end
-end
-
-function SWEP:PlayAnim(anim, mult, lock, delayidle, noproxy, notranslate, noidle)
-    mult = mult or 1
-    lock = lock or false
-    local untranslatedanim = anim
-    //mult = self:RunHook("Hook_TranslateAnimSpeed", {mult = mult, anim = anim}).Mult or mult
-    local omult = mult
-
-    local mdl = hg.Zaebal_Day_VM(self)
-
-    if !IsValid(mdl) then return 0, 1 end
-
-    local animation = self:GetAnimationEntry(anim)
-
-    local source = animation.Source
-
-    local tsource = source
-
-    if mdl:LookupSequence(tsource) != -1 then
-        source = tsource
-    end
-
-    local seq = 0
-
-    if animation.ProxyAnimation and !noproxy then
-        if CLIENT then
-            mdl = animation.Model
-
-            if !mdl then
-                mdl = self:LocateSlotFromAddress(animation.Address).GunDriverModel
-            end
-        else
-            mdl = ents.Create("prop_physics")
-            mdl:SetModel(animation.ModelName)
-        end
-
-        self:SetSequenceProxy(animation.Address or 0)
-
-        if IsValid(mdl) then
-
-            seq = mdl:LookupSequence(source)
-
-            if seq == -1 then return 0, 1 end
-
-            if animation.AlsoPlayBase then
-                self:PlayAnim(anim, mult, lock, delayidle, true)
-            end
-
-        end
-    else
-        seq = mdl:LookupSequence(source)
-
-        if seq == -1 then return 0, 1 end
-
-        self:SetSequenceProxy(0)
-    end
-
-    local time = 0.1
-    local minprogress = 1
-
-    if IsValid(mdl) then
-        time = animation.Time or mdl:SequenceDuration(seq)
-
-        mult = mult * (animation.Mult or 1)
-
-        if animation.Reverse then
-            mult = mult * -1
-        end
-
-        local tmult = 1
-
-        tmult = (mdl:SequenceDuration(seq) / time) / mult
-
-        if animation.ProxyAnimation then
-            mdl:SetSequence(seq)
-            mdl:SetCycle(0)
-        else
-            mdl:SendViewModelMatchingSequence(seq)
-            mdl:SetPlaybackRate(math.Clamp(tmult, -12, 12)) -- It doesn't like it if you go higher
-        end
-
-        self:SetSequenceIndex(seq or 0)
-        self:SetSequenceSpeed((1 / time) / mult)
-
-        if mult < 0 then
-            self:SetSequenceCycle(1)
-        else
-            self:SetSequenceCycle(0)
-        end
-
-        mult = math.abs(mult)
-
-        if animation.EjectAt then
-            self:SetTimer(animation.EjectAt * mult, function()
-                self:DoEject()
-            end, "ejectat")
-        end
-
-        if animation.DropMagAt then
-            self:SetTimer(animation.DropMagAt * mult, function()
-                self:DropMagazine()
-            end)
-        end
-
-        if animation.DumpAmmo then
-            self:SetTimer((animation.MinProgress or 0.5) * mult, function()
-                if SERVER then
-                    self:Unload()
-                end
-            end)
-        end
-
-        minprogress = animation.MinProgress or 0.8
-        minprogress = math.min(minprogress, 1)
-
-        if animation.RestoreAmmo then
-            self:SetTimer(time * mult * minprogress, function()
-                self:RestoreClip(animation.RestoreAmmo)
-            end)
-        end
-
-        if animation.IKTimeLine then
-            self:SetIKAnimation(anim)
-            self:SetIKTimeLineStart(CurTime())
-            self:SetIKTime(time * mult)
-        end
-    end
-
-    if animation.PoseParamChanges then
-        for i, k in pairs(animation.PoseParamChanges) do
-            self.PoseParamState[i] = k
-        end
-    end
-
-    return time * mult, minprogress
 end
 
 local pickupWhiteList = {
@@ -749,9 +612,9 @@ function SWEP:PrimaryAttack()
 
 	if not self:GetFists() then
 		self:SetFists(true)
-		self:PlayAnim("idle")
+		hg.PlayAnim(self,"idle")
 
-		self:PlayAnim("draw")
+		hg.PlayAnim(self,"draw")
 		self:SetHoldType("camera")
 		//self:DoBFSAnimation("fists_draw")
 		self:SetNextPrimaryFire(CurTime() + .35)
@@ -775,9 +638,9 @@ function SWEP:PrimaryAttack()
 	self:GetOwner():GetViewModel():SetPlaybackRate(1.25)
 	self:UpdateNextIdle()
 
+		hg.PlayAnim(self,self.side)
 	if SERVER then
 		sound.Play("weapons/melee/swing_fists_0"..math.random(1,3)..".wav", self:GetPos(), 65, math.random(90, 110))
-		self:PlayAnim(self.side)
 
 		timer.Simple(.075, function()
 			if IsValid(self) then

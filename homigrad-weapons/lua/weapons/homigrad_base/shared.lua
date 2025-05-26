@@ -11,6 +11,8 @@ SWEP.DrawCrosshair = false
 SWEP.ishgwep = true
 SWEP.SupportTPIK = true
 
+SWEP.CanSuicide = true
+
 SWEP.IKAnimationProxy = {}
 SWEP.Animations = {}
 
@@ -125,17 +127,20 @@ function SWEP:Deploy()
 	if self.Animations then
         hg.PlayAnim(self,"draw")
     end
+
+    local pos,ang = self:WorldModel_Holster_Transform()
+
+    ply.prev_wep_ang = ang
 end
 
 function SWEP:SetupDataTables()
-	self:NetworkVar("Float", 1, "SequenceCycle")
-	self:NetworkVar("Float", 2, "SequenceIndex")
-	self:NetworkVar("Float", 3, "SequenceProxy")
-	self:NetworkVar("Float", 4, "IKTimeLineStart")
-    self:NetworkVar("Float", 5, "IKTime")
-    self:NetworkVar("Float", 6, "SequenceSpeed")
-    self:NetworkVar("Float", 7, "ProcessedValue")
-    self:NetworkVar("Float", 8, "NextShoot")
+	self:NetworkVar("Float", 1, "SequenceIndex")
+	self:NetworkVar("Float", 2, "SequenceProxy")
+	self:NetworkVar("Float", 3, "IKTimeLineStart")
+    self:NetworkVar("Float", 4, "IKTime")
+    self:NetworkVar("Float", 5, "SequenceSpeed")
+    self:NetworkVar("Float", 6, "ProcessedValue")
+    self:NetworkVar("Float", 7, "NextShoot")
 
 	self:NetworkVar("String", 0, "IKAnimation")
 end
@@ -153,7 +158,7 @@ function SWEP:PostAnim()
 end
 
 function SWEP:IsClose()
-    local Pos,Ang = self:GetTrace()
+    local Pos,Ang = self:GetTrace(true)
 
     local ply = self:GetOwner()
 
@@ -166,19 +171,19 @@ function SWEP:IsClose()
     local tr = util.TraceLine(tr_tbl)
 
     local tr_tbl2 = {
-        start = tr_tbl.start,
+        start = tr_tbl.start - Ang:Forward() * 10,
         endpos = (Pos) + Ang:Forward() * Pos:Distance(tr.HitPos),
         filter = {self.worldModel,hg.GetCurrentCharacter(ply)}
     }
 
     local tr = util.TraceLine(tr_tbl2)
 
-    local dist = (tr.Hit and Pos:Distance(tr.HitPos) or 0)
+    local dist = (tr.Hit and Pos:Distance(tr.HitPos) + 2 or LerpFT(0.1,(dist or 1),0))
 
     if GetConVar("developer"):GetBool() and CLIENT then
         local hit = tr.HitPos:ToScreen()
         surface.SetDrawColor( 255, 0, 0, 255)
-        surface.DrawRect(hit.x-2,hit.y+2,4,4)
+        surface.DrawRect(hit.x,hit.y,4,4)
     end
 
     self.ClosePos = LerpFT(0.1,self.ClosePos,dist)
@@ -212,7 +217,7 @@ function SWEP:Step()
 
     self:SetHoldType((ply:GetNWBool("suiciding") and "normal" or self.HoldType))
 
-    self.speed = (ply:GetNWBool("suiciding") and 0 or LerpFT(0.12,self.speed or 0,((self:IsSprinting() or self.ClosePos > 6) and 1 or 0)))
+    self.speed = (ply:GetNWBool("suiciding") and 0 or LerpFT(0.12,self.speed or 0,((self:IsSprinting() or self.ClosePos > 10) and 1 or 0)))
 end
 
 hook.Add("Think","Homigrad-Weapon",function()
@@ -226,7 +231,7 @@ hook.Add("Think","Homigrad-Weapon",function()
                     wep.ClosePos = dist
                     wep.Isclose = is
                 else
-                    wep.ClosePos = (wep:GetOwner() == LocalPlayer() and LerpFT(0.05,wep.ClosePos,dist) or 0)
+                    wep.ClosePos = (wep:GetOwner() == LocalPlayer() and dist or 0)
                     wep.Isclose = is
                 end
             end

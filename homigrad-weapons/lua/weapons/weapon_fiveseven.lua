@@ -12,7 +12,7 @@ SWEP.Primary.ReloadTime = 1.7
 SWEP.Primary.ClipSize = 12
 SWEP.Primary.DefaultClip = 12
 SWEP.Primary.Damage = 30
-SWEP.Primary.Ammo = "9x19 mm Parabellum"
+SWEP.Primary.Ammo = "5.7×28mm"
 SWEP.Primary.Wait = 0.1
 SWEP.Sound = "pwb2/weapons/fiveseven/fire.wav"
 
@@ -30,6 +30,9 @@ SWEP.IconPos = Vector(40,-18.25,3.5)
 SWEP.IconAng = Angle(0,90,0)
 
 SWEP.TwoHands = false
+
+SWEP.Slot = 2
+SWEP.SlotPos = 1
 
 SWEP.ZoomPos = Vector(5,-2.7275,-0.62)
 SWEP.ZoomAng = Angle(-1,-0.28,0)

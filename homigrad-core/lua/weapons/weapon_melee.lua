@@ -45,10 +45,11 @@ end
 SWEP.AnimWait = 0.8
 SWEP.AttackTime = 0.2
 SWEP.AttackAng = Angle(0,-50,0)
-SWEP.AttackWait = 0.1
+SWEP.AttackWait = 0.2
 SWEP.AttackDist = 70
 SWEP.AttackDamage = 25
 SWEP.AttackType = DMG_SLASH
+SWEP.isTakeSlot = true
 
 SWEP.AttackHitFlesh = "snd_jack_hmcd_knifestab.wav"
 SWEP.AttackHit = "snd_jack_hmcd_knifehit.wav"
@@ -324,6 +325,13 @@ function SWEP:PrimaryAttack()
             self:SetAttackTime(CurTime() + self.AttackTime)
             sound.Play("weapons/melee/swing_light_sharp_0"..math.random(1,3)..".wav",hg.GetCurrentCharacter(self:GetOwner()):GetPos(),75,math.random(100,125))
         end)
+    else
+        timer.Simple(self.AttackWait,function()
+            if CLIENT and self:GetOwner() == LocalPlayer() then
+                local ang = Angle(self.AttackAng[2] * -0.05,self.AttackAng[3] * 0.25,0)
+                ViewPunch(ang)
+            end
+        end)
     end
     hg.PlayAnim(self,"attack")
 end
@@ -332,14 +340,13 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:SetupDataTables()
-	self:NetworkVar("Float", 1, "SequenceCycle")
-	self:NetworkVar("Float", 2, "SequenceIndex")
-	self:NetworkVar("Float", 3, "SequenceProxy")
-	self:NetworkVar("Float", 4, "IKTimeLineStart")
-    self:NetworkVar("Float", 5, "IKTime")
-    self:NetworkVar("Float", 6, "SequenceSpeed")
-    self:NetworkVar("Float", 7, "ProcessedValue")
-    self:NetworkVar("Float", 8, "AttackTime")
+	self:NetworkVar("Float", 1, "SequenceIndex")
+	self:NetworkVar("Float", 2, "SequenceProxy")
+	self:NetworkVar("Float", 3, "IKTimeLineStart")
+    self:NetworkVar("Float", 4, "IKTime")
+    self:NetworkVar("Float", 5, "SequenceSpeed")
+    self:NetworkVar("Float", 6, "ProcessedValue")
+    self:NetworkVar("Float", 7, "AttackTime")
     self:NetworkVar("Bool", 0, "Attack")
 
 	self:NetworkVar("String", 0, "IKAnimation")
