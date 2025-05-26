@@ -56,6 +56,7 @@ function GM:PlayerSpawn(ply)
 
     ply:SetCanZoom(false)
     ply:Give("weapon_hands")
+    ply:SendLua('if !system.HasFocus() then system.FlashWindow() end')
     if not ply.PLYSPAWN_OVERRIDE then
     ply:SetModel(table.Random(NiggaModels))
     end
