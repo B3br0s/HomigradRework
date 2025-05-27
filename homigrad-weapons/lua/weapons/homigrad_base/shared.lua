@@ -120,6 +120,12 @@ function SWEP:IsPistolHoldType()
     end
 end
 
+function SWEP:Holster()
+    hg.PlayAnim(self,"idle")
+    //self.SequenceCycle = 1
+    return true
+end
+
 function SWEP:Deploy()
     local ply = self:GetOwner()
 	self:SetHoldType("normal")

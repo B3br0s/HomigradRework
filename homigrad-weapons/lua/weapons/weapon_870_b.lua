@@ -32,8 +32,8 @@ SWEP.WorldPos = Vector(-4,-0.5,-1)
 SWEP.WorldAng = Angle(1,0,0)
 SWEP.AttPos = Vector(37,3.7,-2.7)
 SWEP.AttAng = Angle(0.2,0,0)
-SWEP.HolsterAng = Angle(0,-10,0)
-SWEP.HolsterPos = Vector(-28,-1,3)
+SWEP.HolsterAng = Angle(0,-30,0)
+SWEP.HolsterPos = Vector(-28,5,7.5)
 
 SWEP.BoltBone = nil
 SWEP.BoltVec = nil

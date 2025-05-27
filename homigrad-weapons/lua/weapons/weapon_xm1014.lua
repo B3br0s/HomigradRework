@@ -26,8 +26,9 @@ SWEP.WorldPos = Vector(-3,-0.5,-1)
 SWEP.WorldAng = Angle(1,0,0)
 SWEP.AttPos = Vector(37,2.76,-2.2)
 SWEP.AttAng = Angle(0.2,-0.1,0)
-SWEP.HolsterAng = Angle(0,-90,0)
-SWEP.HolsterPos = Vector(-16,4,2)
+SWEP.HolsterAng = Angle(0,-20,0)
+SWEP.HolsterPos = Vector(-25,3,5)
+SWEP.HolsterBone = "ValveBiped.Bip01_Spine4"
 
 SWEP.BoltBone = "1014_bolt"
 SWEP.BoltVec = Vector(0,0,-2)

@@ -24,3 +24,6 @@ SWEP.Primary.Wait = 0.2
 SWEP.RecoilForce = 1.5
 
 SWEP.AttPos = Vector(15,1.5,-2.7)
+
+SWEP.IconPos = Vector(70,-10,0)
+SWEP.IconAng = Angle(0,90,0)

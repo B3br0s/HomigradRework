@@ -33,7 +33,7 @@ SWEP.HolsterAng = Angle(0,-10,0)
 SWEP.HolsterPos = Vector(-18,0,5.5)
 SWEP.HolsterBone = "ValveBiped.Bip01_Spine4"
 
-SWEP.IconPos = Vector(95,-14.5,-20)
+SWEP.IconPos = Vector(135,-21.25,-2)
 SWEP.IconAng = Angle(0,90,0)
 
 SWEP.TwoHands = true
