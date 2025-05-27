@@ -181,6 +181,16 @@ l.criresp_suspect_desc = "Это мой ёбанный дом, суки, я мо
 l.criresp_swat = "Оперативники SWAT"
 l.criresp_swat_desc = "Переговоры не удались, устранить цель. 10-4"
 
+l.zs_surv = "Люди"
+l.zs_surv_desc = "Выживи."
+
+l.zs_zombie = "Зомби"
+l.zs_zombie_desc = "УБЕЙ ВСЕХ"
+l.zs_wavein = "Следующая волна через: %s"
+l.zs_waveendin = "Волна закончиться через: %s"
+l.zs_peopleleft = "Осталось людей: %s"
+l.zs_buymenu_open = "Press F2 to open buymenu"
+
 l.coop_endsin = "Карта сменится через: %s"
 l.coop_rebel = "Повстанцы"
 l.coop_gondon = "Гордон Фримен"
@@ -274,6 +284,8 @@ l.item_notexist = "Предмет не существует."
 l.hasnt_pulse = "У него нет пульса."
 l.otrub_but_he_live = "Он лежит в отключке, но он всё ещё жив."
 l.has_pulse = "У него есть пульс."
+
+l.r_close = "Нажми R чтобы закрыть."
 
 //Локализация говна
 l.ied_plant = "Заложить IED"

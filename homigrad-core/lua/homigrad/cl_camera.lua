@@ -10,7 +10,7 @@ RecoilDown = false
 
 hg = hg or {}
 
-hg.viewpos = LocalPlayer():EyePos()
+hg.viewpos = Vector(0,0,0)
 
 CreateClientConVar("hg_fov","120",true,false,nil,70,120)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
@@ -96,6 +96,7 @@ local whitelistweps = {
 	["weapon_physgun"] = true,
 	["weapon_physcannon"] = true,
 	["gmod_tool"] = true,
+	["weapon_zombie"] = true,
 	["gmod_camera"] = true,
 	["drgbase_possessor"] = true,
 }
@@ -165,6 +166,10 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	Recoil = LerpFT(0.1,Recoil,0)
 	local fov = CameraSetFOV + ADDFOV
 	local lply = LocalPlayer()
+
+	if lply:GetNWBool("IsZombie") then
+        return
+    end
 
 	prevang = LerpAngleFT(0.075,prevang,ply:EyeAngles())
 	prevpos = LerpVectorFT(0.1,prevpos,ply:EyePos())
@@ -332,6 +337,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	if lply:InVehicle() or not firstPerson then return end
 
 	if not lply:Alive() or (IsValid(wep) and whitelistweps[wep:GetClass()]) or lply:GetMoveType() == MOVETYPE_NOCLIP or IsValid(wep) and string.match(wep:GetClass(),"_css") then
+		hg.viewpos = ply:EyePos()
 		return
 	end
 	

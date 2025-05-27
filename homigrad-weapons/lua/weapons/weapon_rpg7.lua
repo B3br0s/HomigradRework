@@ -40,7 +40,7 @@ SWEP.HolsterPos = Vector(-16,4,2)
 SWEP.BoltBone = "Weapon_Mag_Real"
 SWEP.BoltVec = Vector(1 ,1,1)
 
-SWEP.IconPos = Vector(210,0,-3.5)
+SWEP.IconPos = Vector(160,-8,-3.5)
 SWEP.IconAng = Angle(0,90,0)
 
 SWEP.Rarity = 6
@@ -115,10 +115,10 @@ function SWEP:Shoot()
     if SERVER then
         //print(ent:GetPhysicsObject())
         if IsValid(ent:GetPhysicsObject()) and !ent:IsPlayer() then
-            ent:GetPhysicsObject():ApplyForceCenter(-Ang:Forward() * 1000)
-            ent:GetPhysicsObject():SetVelocity(-Ang:Forward() * 500)
+            ent:GetPhysicsObject():ApplyForceCenter(-Ang:Forward() * 50)
+            ent:GetPhysicsObject():SetVelocity(-Ang:Forward() * 450)
         else
-            ent:SetVelocity(-Ang:Forward() * 125)
+            ent:SetVelocity(-Ang:Forward() * 250)
         end
     end
 

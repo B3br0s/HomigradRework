@@ -120,7 +120,7 @@ function hl2dm.SpawnRed(ply)
         ply:SetModel(table.Random(rebels))
         ply:SetSubMaterial()
 
-        if math.random(0,100) < 10 and !hl2dm.hasrpg then
+        if math.random(0,125) < 10 and !hl2dm.hasrpg then
             hl2dm.hasrpg = true
             ply:Give("weapon_rpg7")
         end

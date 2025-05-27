@@ -185,7 +185,7 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 	dmginfo:ScaleDamage((DamageMultipliers[dmginfo:GetDamageType()] and DamageMultipliers[dmginfo:GetDamageType()] or 0.7))
 
 	if dmginfo:IsDamageType(DMG_CRUSH) and rag then
-		dmginfo:ScaleDamage((rag:GetVelocity():Length() > 150 and (rag:GetVelocity():Length() / 15000) or 0))
+		dmginfo:ScaleDamage((rag:GetVelocity():Length() > 150 and (rag:GetVelocity():Length() / 7500) or 0))
 		ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (rag:GetVelocity():Length() / 200),0,400)
 	end
 

@@ -14,7 +14,7 @@ SWEP.HoldType = "ar2"
 
 SWEP.Primary.ClipSize = 2
 SWEP.Primary.DefaultClip = 2
-SWEP.Primary.Damage = 40
+SWEP.Primary.Damage = 20
 SWEP.Primary.Force = 40
 SWEP.NumBullet = 8
 SWEP.Primary.Ammo = "12/70 gauge"

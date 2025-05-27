@@ -29,9 +29,7 @@ if SERVER then
 
 			if State == JMod.EZ_STATE_OFF and Alt then
 				JMod.SetEZowner(self, Dude)
-				net.Start("JMod_ColorAndArm")
-					net.WriteEntity(self)
-				net.Send(Dude)
+				self:Arm(Dude,true)
 			end
 
 			JMod.ThrowablePickup(Dude, self, self.HardThrowStr, self.SoftThrowStr)

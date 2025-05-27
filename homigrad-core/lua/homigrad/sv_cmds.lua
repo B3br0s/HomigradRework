@@ -416,30 +416,3 @@ function team.DirectTeams(minTeam, maxTeam)
         end
     end
 end
-
-function PlayerIsCuffs(ply)
-	if not ply:Alive() then return end
-	local ent = hg.GetCurrentCharacter(ply)
-	if not IsValid(ent) then return end
-
-	if ent.weld and !table.IsEmpty(ent.weld) then
-		return true
-	end
-
-	return ply:GetNWBool("Cuffed",false)
-end
-
-function team.GetCountLive(list,func)
-	local count = 0
-	local result
-
-	for i,ply in pairs(list) do
-		if not IsValid(ply) then continue end
-
-		result = func and func(ply)
-		if result == true then count = count + 1 continue elseif result == false then continue end
-		if not PlayerIsCuffs(ply) and ply:Alive() then count = count + 1 end
-	end
-
-	return count
-end

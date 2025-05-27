@@ -92,6 +92,10 @@ function SWEP:PrimaryAttack()
     if !self:CanShoot() then
         return
     end
+    if self:GetNextShoot() > CurTime() then
+        return
+    end
+    
     self:Shoot()
 end
 
@@ -133,6 +137,14 @@ function SWEP:Deploy()
     ply.prev_wep_ang = ang
 end
 
+function SWEP:SetNextShoot(value)
+    self.NextShoot = value
+end
+
+function SWEP:GetNextShoot()
+    return self.NextShoot or 0
+end
+
 function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 1, "SequenceIndex")
 	self:NetworkVar("Float", 2, "SequenceProxy")
@@ -140,7 +152,6 @@ function SWEP:SetupDataTables()
     self:NetworkVar("Float", 4, "IKTime")
     self:NetworkVar("Float", 5, "SequenceSpeed")
     self:NetworkVar("Float", 6, "ProcessedValue")
-    self:NetworkVar("Float", 7, "NextShoot")
 
 	self:NetworkVar("String", 0, "IKAnimation")
 end
@@ -186,8 +197,8 @@ function SWEP:IsClose()
         surface.DrawRect(hit.x,hit.y,4,4)
     end
 
-    self.ClosePos = LerpFT(0.1,self.ClosePos,dist)
-    self.Isclose = tr.Hit
+    //self.ClosePos = LerpFT(0.1,self.ClosePos,dist)
+    //self.Isclose = tr.Hit
 
     return tr.Hit,dist
 end
@@ -227,13 +238,13 @@ hook.Add("Think","Homigrad-Weapon",function()
             if IsValid(wep:GetOwner()) and wep.IsClose and wep:GetOwner():GetActiveWeapon() == wep then
                 local is,dist = wep:IsClose()
 
-                if SERVER then
-                    wep.ClosePos = dist
-                    wep.Isclose = is
-                else
-                    wep.ClosePos = (wep:GetOwner() == LocalPlayer() and dist or 0)
-                    wep.Isclose = is
-                end
+                //if SERVER then
+                //    wep.ClosePos = dist
+                //    wep.Isclose = is
+                //else
+                //    wep.ClosePos = (wep:GetOwner() == LocalPlayer() and dist or 0)
+                //    wep.Isclose = is
+                //end
             end
         end
     end

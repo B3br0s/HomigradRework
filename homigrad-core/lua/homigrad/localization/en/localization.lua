@@ -181,6 +181,16 @@ l.criresp_suspect_desc = "This is my fucking house, bitches, I can do what I wan
 l.criresp_swat = "SWAT Operator"
 l.criresp_swat_desc = "Negotiations failed, eliminate the threat. 10-4"
 
+l.zs_surv = "Human"
+l.zs_surv_desc = "Survive."
+
+l.zs_zombie = "Zombie"
+l.zs_zombie_desc = "KILL EVERYONE"
+l.zs_wavein = "Next wave in: %s"
+l.zs_waveendin = "Wave will end in: %s"
+l.zs_peopleleft = "Humans left: %s"
+l.zs_buymenu_open = "Press F2 to open buymenu"
+
 l.coop_endsin = "Map will change in: %s"
 l.coop_rebel = "Rebels"
 l.coop_gondon = "Gordon Freeman"
@@ -274,6 +284,8 @@ l.item_notexist = "Item is not exist."
 l.hasnt_pulse = "He has no pulse."
 l.otrub_but_he_live = "He's unconscious, but he's still alive."
 l.has_pulse = "He has pulse."
+
+l.r_close = "Press R to close."
 
 //Локализация названий
 

@@ -14,7 +14,11 @@ util.AddNetworkString("DeadBodies")
 */
 
 local BlackListWep = {
-	["weapon_hands"] = true
+	["weapon_hands"] = true,
+	["weapon_zombie"] = true,
+	["weapon_zombie_ghoul"] = true,
+	["weapon_zombie_wraith"] = true,
+	["weapon_zombie_fast"] = true,
 }
 
 hg.ragdollFake = {}
@@ -197,6 +201,9 @@ function Faking(ply,force)
     ply.LastRagdollTime = CurTime() + 1.5
 
     if not ply.Fake then
+		if ply.isZombie then
+			return
+		end
 		--ply:SelectWeapon("weapon_hands")
 		ply.FakeWeps = ply:GetWeapons()
 		ply.CurWeapon = ply:GetActiveWeapon()
@@ -684,7 +691,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 		HandL:ComputeShadowControl(sp)
 	end
 	
-	if ply:KeyDown(IN_SPEED) then
+	if ply:KeyDown(IN_SPEED) and !ROUND_NAME == "zs" then
 		local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand"))
 		local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
 		if not IsValid(rag.ZacConsLH) and (not rag.ZacNextGrLH or rag.ZacNextGrLH <= CurTime()) then
@@ -727,7 +734,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 		end
 	end
 
-	if ply:KeyDown(IN_WALK) and !ply:GetActiveWeapon().SupportTPIK then
+	if ply:KeyDown(IN_WALK) and !ply:GetActiveWeapon().SupportTPIK and !ROUND_NAME == "zs" then
 		local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
 		local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
 		if not IsValid(rag.ZacConsRH) and (not rag.ZacNextGrRH or rag.ZacNextGrRH <= CurTime()) then

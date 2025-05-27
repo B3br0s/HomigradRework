@@ -12,14 +12,15 @@ SWEP.holdtypes = {
     ["revolver"] = {[1] = 0.3,[2] = 1.2,[3] = 1.7,[4] = 1.9},
 }
 
+SWEP.Primary.Automatic = true
 SWEP.Primary.ReloadTime = 1.7
 SWEP.Primary.ClipSize = 17
 SWEP.Primary.DefaultClip = 17
-SWEP.Primary.Damage = 25
+SWEP.Primary.Damage = 15
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
-SWEP.Primary.Wait = 0.1
+SWEP.Primary.Wait = 0.09
 SWEP.Primary.ReloadTime = 2.4
-SWEP.Sound = "arccw_go/tec9/tec9-1.wav"
+SWEP.Sound = "sounds_zcity/ab10/close.wav"
 
 SWEP.WorldPos = Vector(-6,-1.5,0)
 SWEP.WorldAng = Angle(1,0,0)

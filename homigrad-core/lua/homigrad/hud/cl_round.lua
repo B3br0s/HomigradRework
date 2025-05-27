@@ -59,6 +59,7 @@ net.Receive("SyncRound",function()
 
         if TableRound().RoundStart then
             TableRound().RoundStart()
+            system.FlashWindow()
         end
     end
 end)

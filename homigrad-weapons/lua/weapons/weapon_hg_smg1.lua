@@ -46,7 +46,7 @@ SWEP.Rarity = 4
 
 SWEP.TwoHands = true
 
-SWEP.IconPos = Vector(80,2,0)
+SWEP.IconPos = Vector(80,-25.5,-6)
 SWEP.IconAng = Angle(0,90,0)
 
 SWEP.Animations = {

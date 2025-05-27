@@ -338,12 +338,39 @@ hook.Add("Think", "Homigrad_Player_Think", function(ply)
 	end
 end)
 
+function PlayerIsCuffs(ply)
+	if not ply:Alive() then return end
+	local ent = hg.GetCurrentCharacter(ply)
+	if not IsValid(ent) then return end
+
+	return ply:GetNWBool("Cuffed",false)
+end
+
+function team.GetCountLive(list)
+	local count = 0
+	local result
+
+	for i,ply in pairs(list) do
+		if not IsValid(ply) then continue end
+
+		if not PlayerIsCuffs(ply) and ply:Alive() then count = count + 1 end
+
+		//print(PlayerIsCuffs(ply),ply)
+	end
+
+	//print(count)
+
+	return count
+end
+
 if SERVER then
     hook.Add("PlayerDeathSound", "DisableDeathSound", function()
         return true
     end)
 	hook.Add("Player Think","Homigrad_Organism",function(ply,time)
-	ply:GetViewModel():SetPlaybackRate(0.9) --а зачем? хз
+	if IsValid(ply:GetActiveWeapon()) and !weapons.Get(ply:GetActiveWeapon():GetClass()) then
+		ply:GetViewModel():SetPlaybackRate(0.9) --а зачем? хз
+	end
 	ply:SetNWFloat("pain",ply.pain)
 	ply:SetNWFloat("painlosing",ply.painlosing)
 	ply:SetNWBool("otrub",ply.otrub)
@@ -401,12 +428,14 @@ hook.Add("player_spawn","PlayerAdditional",function(data)
     end
 
     timer.Simple(0,function()
-        local ang = ply:EyeAngles()
-        if ang[3] == 180 then
-            ang[2] = ang[2] + 180
-        end
-        ang[3] = 0
-        ply:SetEyeAngles(ang)
+		if IsValid(ply) then
+        	local ang = ply:EyeAngles()
+        	if ang[3] == 180 then
+        	    ang[2] = ang[2] + 180
+        	end
+        	ang[3] = 0
+        	ply:SetEyeAngles(ang)
+		end
     end)
 
     if SERVER then

@@ -53,7 +53,7 @@ end
 function criresp.SpawnSuspect(ply)
     local SpawnList = ReadDataMap("criresp_suspect")
 
-    local weps_pri = {"weapon_870_b","weapon_doublebarrel"}
+    local weps_pri = {"weapon_870_b","weapon_doublebarrel","weapon_sawnoff"}
     local weps_sec = {"weapon_329pd","weapon_tec9","weapon_glock17"}
     local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_hammer"}
 
@@ -74,7 +74,7 @@ function criresp.SpawnSuspect(ply)
     end
 
     wep_secondary:SetClip1(wep_secondary:GetMaxClip1())
-    if math.random(0,20) < 5 then
+    if math.random(0,10) < 5 then
         local wep_primary = ply:Give(table.Random(weps_pri))
         wep_primary:SetClip1(wep_primary:GetMaxClip1())
         ply:GiveAmmo(wep_primary:GetMaxClip1() * math.random(1,2), wep_primary:GetPrimaryAmmoType(), true)
@@ -136,21 +136,6 @@ function criresp.RoundThink()
 
             EndRound(2)
         end
-    end
-end
-
-function criresp.CanStart()
-    local world = game.GetWorld()
-    
-    local min, max = world:GetModelBounds()
-    local size = max - min
-
-    local size_final = size:Length()
-
-    if size_final < 10000 then
-            return false
-    else
-        return true 
     end
 end
 

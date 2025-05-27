@@ -33,6 +33,16 @@ DEFAULT_STEP_SIZE = 18
 DEFAULT_MASS = 80
 DEFAULT_MODELSCALE = 1
 
+if CLIENT then
+	hook.Add("Think","1222251253",function()
+		local ply = LocalPlayer()
+
+		if ply.PlayerClassName != ply:GetNWString("PlayerClassName") then
+			ply.PlayerClassName = nil
+		end
+	end)
+end
+
 --[[
 local empty = {}
 hook.Add("Think", "PlayerClass", function()

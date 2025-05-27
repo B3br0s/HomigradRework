@@ -16,7 +16,7 @@ SWEP.Primary.ReloadTime = 3.5
 SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 6
 SWEP.Primary.DefaultClip = 6
-SWEP.Primary.Damage = 35
+SWEP.Primary.Damage = 85
 SWEP.Primary.Force = 60
 SWEP.Primary.Ammo = ".44 Magnum"
 SWEP.Primary.Wait = 0.09
@@ -56,7 +56,7 @@ function SWEP:CanShoot()
             if !self.can1 then
                 local pos,ang = self:GetTrace()
                 self.can1 = true
-                self:SetNextShoot(CurTime() + 0.4)
+                self:SetNextShoot(CurTime() + 0.2)
                 sound.Play("zcitysnd/sound/weapons/revolver/handling/revolver_cock_hammer.wav",pos,75,100,1)
                 hg.PlayAnim(self,"cock")
             end

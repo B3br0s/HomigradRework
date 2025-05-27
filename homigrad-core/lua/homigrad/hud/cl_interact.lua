@@ -38,6 +38,9 @@ local bases = {
 
 hook.Add("Think","Interact-Glow",function()
     local ply = LocalPlayer()
+    if ply:GetNWBool("IsZombie") then
+        return
+    end
     if !ply:Alive() then
         return
     end

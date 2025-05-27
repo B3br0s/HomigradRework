@@ -468,6 +468,8 @@ end)
 hook.Add("Player Think","Homigrad_Limit",function(ply)
 	local inv = {}
 
+	ply:SetAllowWeaponsInVehicle(true)
+
 	for _, wep in ipairs(ply:GetWeapons()) do
 		if wep.GetClass and BlackListWep[wep:GetClass()] then
 			continue 

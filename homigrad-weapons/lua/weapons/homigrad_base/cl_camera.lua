@@ -33,7 +33,7 @@ end
 hook.Add("AdjustMouseSensitivity","Homigrad-Camera",function()
 	local lply = LocalPlayer()
 
-	vis_recoil = LerpFT(0.1,vis_recoil,0)
+	vis_recoil = LerpFT(0.075,vis_recoil,0)
 
 	if !lply:Alive() then
 		return 1

@@ -155,7 +155,7 @@ hook.Add("Player Think","FootKick_niggadaun",function(ply)
     if ply.Fake then
         return
     end
-    if ROUND_NAME == "dr" then
+    if ROUND_NAME == "dr" or ROUND_NAME == "zs" then
         return
     end
     if ply:KeyDown(IN_ZOOM) and ply:GetNWFloat("KickCD",0) < CurTime() and !ply.kickd then

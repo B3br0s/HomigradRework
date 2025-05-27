@@ -32,6 +32,14 @@ hook.Add("PostDrawOpaqueRenderables","FixShit",function()
     end
 end)
 
+hook.Add("Think","123123",function()
+    for _, ply in ipairs(player.GetAll()) do
+        if ply:GetNWBool("Fake") then
+            hook.Run("PostDrawPlayerRagdoll",ply,hg.GetCurrentCharacter(ply))
+        end
+    end
+end)
+
 hook.Add("PrePlayerDraw","DrawArmor",function(ply)
     hook.Run("PostDrawPlayerRagdoll",ply,hg.GetCurrentCharacter(ply))
 end)
@@ -46,6 +54,9 @@ function hg.RenderArmor(ply)
     end
     
     if !ply:Alive() then
+        if !ply.armor_render then
+            ply.armor_render = {}
+        end
         for placement, armor in pairs(ply.armor) do
             if ply.armor_render[placement] != nil then
                 ply.armor_render[placement]:Remove()
@@ -82,7 +93,11 @@ function hg.RenderArmor(ply)
 
                 //table.insert(hg.csm,ply.armor_render[placement])
             end
-        
+
+            if !IsValid(ply.armor_render[placement]) then
+                ply.armor_render[placement] = nil
+            end        
+
             if ply.armor_render[placement]:GetModel() != tbl.Model then
                 ply.armor_render[placement]:Remove()
                 ply.armor_render[placement] = nil
@@ -247,7 +262,7 @@ hook.Add("PostDrawRagdoll","RenderArmor",function(rag)
 
     rag.armor = rag:GetNetVar("Armor")
 
-    if IsValid(hg.RagdollOwner(rag)) and (!hg.RagdollOwner(rag):Alive() or !hg.RagdollOwner(rag).Fake or hg.RagdollOwner(rag).FakeRagdoll != rag) then
+    if IsValid(hg.RagdollOwner(rag)) and (!hg.RagdollOwner(rag):Alive() or hg.RagdollOwner(rag):GetNWEntity("FakeRagdoll") != rag) then
         hg.RenderArmorEnt(rag)
     end
 end)

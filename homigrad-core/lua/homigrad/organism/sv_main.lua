@@ -12,6 +12,7 @@ hook.Add("Player Think","Main_Handler",function(ply)
 
     ply:SetNWBool("MistrGondon",ply.isGordon or false)
     ply:SetNWBool("IsCombine",ply.isCombine or false)
+    ply:SetNWBool("IsZombie",ply.isZombie or false)
     ply:SetNWBool("IsCombineSuper",ply.isCombineSuper or false)
     ply:SetNWFloat("rleg",ply.rleg)
     ply:SetNWFloat("lleg",ply.lleg)
@@ -97,6 +98,7 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
 	    ply.stamina = 100
 	    ply.otrub = false
 	    ply.suiciding = false
+        ply:SetNWBool("Cuffed",false)
 	    ply:SetNWBool("suiciding",false)
 	    ply.CanMove = true
         ply.JModEntInv = NULL
@@ -114,6 +116,7 @@ hook.Add("PlayerSpawn","Homigrad_Main_Handle",function(ply)
 
         ply.isGordon = false
         ply.isCombine = false
+        ply.isZombie = false
         ply.isCombineSuper = false
     
         ply:LagCompensation(false)

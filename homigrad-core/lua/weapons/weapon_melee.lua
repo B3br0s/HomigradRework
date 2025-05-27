@@ -309,6 +309,64 @@ end
 function SWEP:CanPrimaryAttack()
     return self:GetNextPrimaryFire() < CurTime()
 end
+if CLIENT then
+    local lerp = 0
+    local rlerp = 0
+    
+    function SWEP:DrawHUD()
+        local ply = self:GetOwner()
+
+        local tr = hg.eyeTrace(self:GetOwner())
+
+        if self:GetAttack() then
+            local progress = -((self:GetAttackTime() - CurTime()) / (self.AttackTime * 0.5) - 1)
+            local progress_fix = 1 - (self:GetAttackTime() - CurTime()) / self.AttackTime
+            
+            local ang_attack = Angle(
+                self.AttackAng[1] * progress,
+                self.AttackAng[2] * progress,
+                self.AttackAng[3] * progress
+            )
+    
+            local ang = ply:EyeAngles()
+            local fixed = Angle()
+            fixed:Set(ang:Forward():Angle())
+            fixed:RotateAroundAxis(ang:Forward(), ang_attack.p)
+            fixed:RotateAroundAxis(ang:Right(), ang_attack.y)
+            fixed:RotateAroundAxis(ang:Up(), ang_attack.r)
+
+            local eye_tr = hg.eyeTrace(ply, self.AttackDist * 2)
+
+            tr = util.TraceLine({
+                start = eye_tr.StartPos,
+                endpos = eye_tr.StartPos + fixed:Forward() * (self.AttackDist * 1.25) * progress_fix,
+                filter = hg.GetCurrentCharacter(ply),
+                mask = MASK_SHOT_HULL
+            })
+        end
+
+        if self:GetAttack() then
+            rlerp = LerpFT(0.2,rlerp,0)
+            lerp = LerpFT(0.1,lerp,1)
+        else
+            rlerp = LerpFT(0.1,rlerp,1)
+            lerp = LerpFT(0.2,lerp,0)
+        end
+
+        if tr.Hit and !self:GetAttack() then
+            lerp = LerpFT(0.1,lerp,1)
+        else
+            lerp = LerpFT(0.2,lerp,0)
+        end
+
+        surface.SetDrawColor(255,255 * rlerp,255 * rlerp,100 * lerp)
+        local sx,sy = 100,3
+        local tpos = tr.HitPos:ToScreen()
+        surface.DrawRect(tpos.x-sx/2,tpos.y-sy/2,sx,sy) 
+        surface.DrawRect(tpos.x-sy/2,tpos.y-sx/2,sy,sx) 
+    end
+
+end
 
 function SWEP:PrimaryAttack()
     if !self:CanPrimaryAttack() then
@@ -328,7 +386,7 @@ function SWEP:PrimaryAttack()
     else
         timer.Simple(self.AttackWait,function()
             if CLIENT and self:GetOwner() == LocalPlayer() then
-                local ang = Angle(self.AttackAng[2] * -0.05,self.AttackAng[3] * 0.25,0)
+                local ang = Angle(self.AttackAng[2] * -0.015,self.AttackAng[3] * 0.015,0)
                 ViewPunch(ang)
             end
         end)

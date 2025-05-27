@@ -239,15 +239,6 @@ function hg.AnimHandle(self)
     end
 end
 
-hook.Add("Tick","TPIK",function()
-	for _, ply in ipairs(player.GetAll()) do
-	    //hg.AnimHandle(ply:GetActiveWeapon())
-        if CLIENT and hg.GetCurrentCharacter(ply):IsRagdoll() then
-            hg.RenderOverride(ply)
-        end
-	end
-end)
-
 hook.Add("Player Think","TPIK",function(ply)
 	if CLIENT then
         if ply == LocalPlayer() then

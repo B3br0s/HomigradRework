@@ -129,6 +129,10 @@ function SWEP:SecondaryAttack()
 		    	ent2.weld = ent2.weld or {}
 		    	ent1.weld[weldEntity] = ent2
 		    	ent2.weld[weldEntity] = ent1
+
+				if ROUND_NAME == "zs" then
+					zs.AddPoints(att,3)
+				end
             
 		    	self:GetOwner():EmitSound("snd_jack_hmcd_hammerhit.wav", 65)
 		    end

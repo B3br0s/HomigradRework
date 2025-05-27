@@ -569,13 +569,9 @@ function hg.RenderOverride(ply)
 
     hg.RenderArmor(ply)
 
-    if !IsValid(ent) then
-        ent = ply
-    end
-
     hg.DoTPIK(ply,ent)
 
-    ent:DrawModel()
+    ply:DrawModel()
 end
 
 /*

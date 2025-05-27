@@ -98,7 +98,7 @@ function SWEP:Shoot()
 
     if self:IsLocal() then
         vis_recoil = vis_recoil + primary.Force / 15 * self.RecoilForce
-        Recoil = Recoil + 0.25
+        Recoil = Recoil + 0.25 + primary.Force / 100
     end
 
     local ply = self:GetOwner()
@@ -200,6 +200,7 @@ function SWEP:Shoot()
             Bullet.Spread = (i > 1 and VectorRand(-0.03 * (math.random(-1,2) - i),0.03 * (math.random(-3,2) - i)) or Vector(0,0,0))
             
             self:FireLuaBullets(Bullet)
+            //self:FireBullets(Bullet)
         end
     else
         //self:FireBullets(Bullet)

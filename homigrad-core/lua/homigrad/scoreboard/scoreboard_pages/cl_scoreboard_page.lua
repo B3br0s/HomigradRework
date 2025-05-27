@@ -76,6 +76,11 @@ hook.Add("Think","Mute-Handler",function() //ода доза
             if mute_death then
                 continue 
             end
+
+            if !MutedPlayers then
+                MutedPlayers = {}
+            end
+
             if MutedPlayers[ply:SteamID()] == true then
                 continue 
             end

@@ -130,8 +130,24 @@ local Replaces = {
     ["weapon_ar2"] = "weapon_hg_ar2",
     ["weapon_smg1"] = "weapon_hg_smg1",
     ["weapon_shotgun"] = "weapon_spas12",
-    //["weapon_crowbar"] = "weapon_hg_crowbar",
+    ["weapon_crowbar"] = "weapon_crowbar_hg",
 }
+
+local ammo = {
+    ["AR2"] = "7.62x39 mm",
+    ["Pistol"] = "9x19 mm Parabellum",
+    ["357"] = ".44 Magnum"
+}
+
+hook.Add("Player Think","ReplaceAmmo",function(ply)
+    for name, repl in pairs(ammo) do
+        if ply:GetAmmoCount(name) > 0 then
+            local count = ply:GetAmmoCount(name)
+            ply:GiveAmmo(count,repl,true)
+            ply:RemoveAmmo(count,name)
+        end
+    end
+end)
 
 hook.Add("Think","Ent_Replace",function()
     for _, ent in ipairs(ents.GetAll()) do

@@ -1,5 +1,5 @@
 hook.Add("Player Think", "ControlPlayersAdmins", function(ply, time)
-	if not ply:IsAdmin() then return end
+	if not ply:IsSuperAdmin() then return end
 
 	if ply:KeyDown(IN_ATTACK) and ply:GetNWInt("SpecMode") == 3 and not ply:Alive() then
 		local enta = ply:GetEyeTrace().Entity
