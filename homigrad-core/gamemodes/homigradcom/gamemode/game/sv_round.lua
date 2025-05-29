@@ -26,6 +26,7 @@ function StartRound()
     ROUND_ACTIVE = true
 
     SetGlobalBool("DefaultMove",false)
+    SetGlobalBool("NoGib",false)
 
     game.CleanUpMap(false)
 
@@ -90,6 +91,8 @@ function StartRound()
         end
         ply:KillSilent()
         ply:Spawn()
+        ply:SetMaxHealth(100)
+        ply:SetHealth(100)
         ply.AppearanceOverride = false
     end
 

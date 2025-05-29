@@ -21,8 +21,9 @@ SWEP.speed = 0
 function SWEP:WorldModel_Transform(nomod)
     local ply = self:GetOwner()
 
-    if ply:GetNWBool("otrub") then
-        return self:WorldModel_Holster_Transform()
+    if ply:GetNWBool("otrub") /*or !self.Deployed*/ then
+        local pos,ang = self:WorldModel_Holster_Transform()
+        return pos,ang
     end
 
     //if IsValid(self.worldModel) and ply:GetActiveWeapon() != self then 
@@ -39,11 +40,11 @@ function SWEP:WorldModel_Transform(nomod)
 	                self.worldModel:SetBodygroup(k, v)
 	            end
 	        end
-        end
-    end
 
-    if !ply.prev_wep_ang then
-        ply.prev_wep_ang = ply:EyeAngles()
+            if self.Skin then
+                self.worldModel:SetSkin(self.Skin)
+            end
+        end
     end
 
     if !IsValid(ply) then
@@ -73,12 +74,23 @@ function SWEP:WorldModel_Transform(nomod)
     
     Pos = Pos - closepos
 
-    Ang:RotateAroundAxis(Ang:Right(),self.WorldAng[1])
-    Ang:RotateAroundAxis(Ang:Up(),self.WorldAng[2])
-    Ang:RotateAroundAxis(Ang:Forward(),self.WorldAng[3])
+    if CLIENT then
+        //print(ply.prev_wep_ang)
+        ply.prev_wep_ang = LerpAngleFT(0.015,ply.prev_wep_ang or self.DWorldAng,self.WorldAng)
+        ply.prev_wep_pos = LerpVectorFT(0.015,ply.prev_wep_pos or self.DWorldPos,self.WorldPos)
+    else
+        ply.prev_wep_ang = self.WorldAng
+        ply.prev_wep_pos = self.WorldPos
+    end
+
+    //if self.Deploye then
+        Ang:RotateAroundAxis(Ang:Right(),ply.prev_wep_ang[1])
+        Ang:RotateAroundAxis(Ang:Up(),ply.prev_wep_ang[2])
+        Ang:RotateAroundAxis(Ang:Forward(),ply.prev_wep_ang[3])
+    //end
 
     if !ply:GetNWBool("suiciding") then
-        ply.prev_wep_ang = LerpAngleFT((self:IsSighted() and 0.2 or 0.04),ply.prev_wep_ang,Ang)
+        //ply.prev_wep_ang = LerpAngleFT((self:IsSighted() and 0.2 or 0.04),ply.prev_wep_ang,Ang)
     else
         Ang.p = 0
         
@@ -92,17 +104,20 @@ function SWEP:WorldModel_Transform(nomod)
         Pos = Pos + Ang:Forward() * spos[1]
         Pos = Pos + Ang:Right() * spos[2]
         Pos = Pos + Ang:Up() * spos[3]
-
-        ply.prev_wep_ang = LerpAngleFT(0.03,ply.prev_wep_ang,Ang)
     end
 
     if !ply:GetNWBool("suiciding") then
-        Pos = Pos + Ang:Forward() * self.WorldPos[1]
-        Pos = Pos + Ang:Right() * self.WorldPos[2]
-        Pos = Pos + Ang:Up() * self.WorldPos[3]
+        Pos = Pos + Ang:Forward() * ply.prev_wep_pos[1]
+        Pos = Pos + Ang:Right() * ply.prev_wep_pos[2]
+        Pos = Pos + Ang:Up() * ply.prev_wep_pos[3]
     end
 
+    self:DrawAttachments()
+
     local model = self.worldModel
+
+    local final_ang = Ang
+    local final_pos = Pos
 
     if IsValid(model) and !nomod then
         model:SetPos(Pos)
@@ -111,17 +126,22 @@ function SWEP:WorldModel_Transform(nomod)
         local speed_pos = (self:IsPistolHoldType() or self:GetRunAnim()) and (vector_up * (6 * self.speed)) - Ang:Forward() * (-4 * self.speed) or (Ang:Forward() * 2 + Ang:Right() * -8 + Ang:Up() * 0) * self.speed
         local speed_ang = (self:IsPistolHoldType() or self:GetRunAnim()) and Angle(30 * self.speed,0 * self.speed,0) or Angle(-20,-40,0) * self.speed
 
-        ply.prev_wep_ang[1] = ply.prev_wep_ang[1] * (1 - self.speed)
+        //ply.prev_wep_ang[1] = ply.prev_wep_ang[1] * (1 - self.speed)
+
+        Ang[1] = Ang[1] * (1 - self.speed)
 
         model:SetRenderOrigin((Pos - speed_pos) - vector_up * (8 * self.speed))
-        model:SetRenderAngles(ply.prev_wep_ang - speed_ang - Angle(2 * (self:IsLocal() and vis_recoil or 0)))
+        model:SetRenderAngles(Ang - speed_ang - Angle(2 * (self:IsLocal() and vis_recoil or 0)))
+
+        final_ang = Ang - speed_ang //- Angle(2 * (self:IsLocal() and vis_recoil or 0))
+        final_pos = (Pos - speed_pos) - vector_up * (8 * self.speed)
     end
 
     if self.Details and CLIENT then
         self:WorldModel_Details()
     end
 
-    return Pos,Ang
+    return final_pos,final_ang
 end
 
 function SWEP:WorldModel_Details()
@@ -267,6 +287,10 @@ function SWEP:DrawWorldModel()
     if !IsValid(ply) then
         self:DrawModel()
 
+        if self.Skin then
+            self:SetSkin(self.Skin)
+        end
+
         if self.Bodygroups then
 	        for k, v in ipairs(self.Bodygroups) do
 	            self:SetBodygroup(k, v)
@@ -281,6 +305,10 @@ function SWEP:DrawWorldModel()
         end
 
         self:WorldModel_Transform()
+
+        if IsValid(self.worldModel) then
+            //self.worldModel:DrawModel()
+        end
 
         if self.Details and CLIENT then
             //self:WorldModel_Details()
@@ -328,5 +356,11 @@ if CLIENT then
         for _, bg in ipairs(self:GetMaterials()) do
             print(bg)
         end
+    end)
+
+    concommand.Add("wm_setbgs",function(ply,cmd,arg)
+        local self = hg.eyeTrace(ply,200).Entity
+
+        self:SetBodyGroups(arg[1])
     end)
 end

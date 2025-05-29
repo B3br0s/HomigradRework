@@ -1,6 +1,6 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "SCAR"
-SWEP.Category = "Оружие: Автоматы"
+SWEP.Category = "Оружие: Винтовки"
 SWEP.Spawnable = true
 
 SWEP.WorldModel = "models/weapons/arccw_go/v_rif_scar.mdl"
@@ -40,7 +40,7 @@ SWEP.Rarity = 5
 SWEP.BoltBone = nil
 SWEP.BoltVec = nil
 
-SWEP.ZoomPos = Vector(10,-4.962,-0.78)
+SWEP.ZoomPos = Vector(10,-4.95,-0.75)
 SWEP.ZoomAng = Angle(0.2,-0.85,0)
 
 SWEP.Animations = {

@@ -1,6 +1,6 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "AK47"
-SWEP.Category = "Оружие: Автоматы"
+SWEP.Category = "Оружие: Винтовки"
 SWEP.Spawnable = true
 
 SWEP.WorldModel = "models/weapons/arccw_go/v_rif_ak47.mdl"
@@ -33,8 +33,8 @@ SWEP.SlotPos = 0
 SWEP.BoltBone = "v_weapon.AK47_bolt"
 SWEP.BoltVec = Vector(0,0,-3)
 
-SWEP.ZoomPos = Vector(10,-5.05,-1.1)
-SWEP.ZoomAng = Angle(-0.5,0,0)
+SWEP.ZoomPos = Vector(10,-5.07,-0.93)
+SWEP.ZoomAng = Angle(0,0,0)
 
 SWEP.Rarity = 4
 

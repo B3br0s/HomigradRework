@@ -1,4 +1,4 @@
-//нужна для контроля за количеством, и удалениме лишних объектов которые не рендерится.
+//нужна для контроля за количеством, и удаление лишних объектов которые не рендерится.
 
 hg = hg or {}
 
@@ -107,7 +107,7 @@ hook.Add("PreRender","Shit",function()
         local dtt = (hg.viewpos - ent:GetPos()):GetNormalized()
         local att = math.deg(math.acos(AimZalupa:Dot(dtt)))
 
-        if ent.DontOptimise then
+        if ent.DontOptimise or ent:IsVehicle() then
             ent:SetNoDraw(false)
             continue 
         end
@@ -157,7 +157,7 @@ hook.Add("PreRender","Shit",function()
             continue 
         end
 
-        if ent.DontOptimise then
+        if ent.DontOptimise or ent:IsVehicle() then
             ent:SetNoDraw(false)
             continue 
         end

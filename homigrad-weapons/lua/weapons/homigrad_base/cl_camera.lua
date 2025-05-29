@@ -6,6 +6,8 @@ local addfov = 0
 
 vis_recoil = 0
 
+local no_fov = (ConVarExists("hg_nofovzoom") and GetConVar("hg_nofovzoom") or CreateClientConVar("hg_nofovzoom","0",true,false,nil,0,1))
+
 function SWEP:Camera(ply, origin, angles, fov)
 	local pos, ang = self:WorldModel_Transform()
 
@@ -15,35 +17,29 @@ function SWEP:Camera(ply, origin, angles, fov)
 		return origin, angles, fov
 	end
 
+	ang[3] = 0
+
 	ang:RotateAroundAxis(ang:Right(),self.ZoomAng[1] * lerpaim)
     ang:RotateAroundAxis(ang:Up(),self.ZoomAng[2] * lerpaim)
     ang:RotateAroundAxis(ang:Forward(),self.ZoomAng[3] * lerpaim)
 	
-	local neworigin, _ = LocalToWorld(self.ZoomPos, self.ZoomAng, pos, ang)
+	local neworigin, _ = LocalToWorld(self.ZoomPos, self.ZoomAng, pos, ply:EyeAngles())
 	origin = Lerp(lerpaim,origin,neworigin)
 
-	origin = origin + ang:Forward() * 2 * Recoil + ang:Up() * vis_recoil / 2
+	if self.Attachments["sight"][1] then
+		if self.Attachments["sight"][1] and self.Attachments["sight"][1].ViewPos then
+			local neworigin, _ = LocalToWorld(self.Attachments["sight"][1].ViewPos, ang, neworigin, ang)
+			origin = Lerp(lerpaim,origin,neworigin)
+		end
+	end
 	origin = origin + ang:Forward() * Recoil
+	origin = origin + ang:Forward() * 2 * Recoil + ang:Up() * vis_recoil / 2
+
 	//ang = ang + Angle(5 * vis_recoil,0,0)
 	
-	addfov = LerpFT(0.1, addfov, self:IsSighted() and -(self.addfov or 10) or 0)
+	if !no_fov:GetBool() then
+		addfov = LerpFT(0.1, addfov, self:IsSighted() and -(self.addfov or 25) or 0)
+	end
+
 	return origin, (ang * lerpaim) + angles * (1 - lerpaim), fov + addfov
 end
-
-hook.Add("AdjustMouseSensitivity","Homigrad-Camera",function()
-	local lply = LocalPlayer()
-
-	vis_recoil = LerpFT(0.075,vis_recoil,0)
-
-	if !lply:Alive() then
-		return 1
-	end
-
-	local wep = lply:GetActiveWeapon()
-
-	if wep.IsSighted and wep:IsSighted() then
-		return 0.5
-	end
-	
-	return 1
-end)

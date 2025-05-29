@@ -6,6 +6,7 @@ hmcd.StartSounds = {
     ["standard"] = {"snd_jack_hmcd_psycho.mp3","snd_jack_hmcd_shining.mp3"},
 	["soe"] = "snd_jack_hmcd_disaster.mp3",
 	["gfz"] = "snd_jack_hmcd_panic.mp3" ,
+    ["ww"] = "snd_jack_hmcd_wildwest.mp3"
 }
 
 function hmcd.GetTeamName(ply)
@@ -37,6 +38,9 @@ function hmcd.HUDPaint()
 
     if !sound_played then
         sound_played = true
+        if !hmcd.Type then
+            hmcd.Type = "standard"
+        end
         local shit = hmcd.StartSounds[hmcd.Type]
         surface.PlaySound(istable(shit) and table.Random(shit) or shit)
     end

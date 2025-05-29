@@ -1,5 +1,5 @@
 SWEP.PrintName = "Zombie Wraith"
-SWEP.Category = "Оружие: ZS"
+SWEP.Category = "Остальное"
 SWEP.Spawnable = true
 
 SWEP.ViewModel = Model("models/Weapons/v_zombiearms.mdl")
@@ -10,7 +10,7 @@ SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "none"
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = 50
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
@@ -34,6 +34,22 @@ function SWEP:SendAttackAnim(owner)
 	owner:GetViewModel():SetPlaybackRate(1.65)
 end
 
+function SWEP:SecondaryAttack()
+    local ply = self:GetOwner()
+
+    if self:GetNextSecondaryFire() > CurTime() then
+        return
+    end
+
+    self:SetNextSecondaryFire(CurTime() + 10)
+
+    if SERVER then
+        ply:SetVelocity(ply:EyeAngles():Forward() * 500)
+
+        sound.Play("npc/stalker/go_alert2a.wav",ply:GetPos())
+    end
+end
+
 function SWEP:PrimaryAttack()
     local ply = self:GetOwner()
 
@@ -41,7 +57,7 @@ function SWEP:PrimaryAttack()
         return
     end
 
-    self:SetNextPrimaryFire(CurTime() + 2)
+    self:SetNextPrimaryFire(CurTime() + 1)
 
     if !IsValid(ply) or !ply:IsPlayer() then
         return
@@ -75,9 +91,6 @@ function SWEP:PrimaryAttack()
     end)
 
 	self:SendAttackAnim(ply)
-end
-
-function SWEP:SecondaryAttack()
 end
 
 function SWEP:Think()

@@ -17,7 +17,6 @@ SWEP.NumBullet = 8
 SWEP.Primary.Ammo = "12/70 gauge"
 SWEP.Sound = {"pwb2/weapons/ksg/shot1.wav","pwb2/weapons/ksg/shot2.wav","pwb2/weapons/ksg/shot3.wav","pwb2/weapons/ksg/shot4.wav"}//"zcitysnd/sound/weapons/firearms/shtg_berettasv10/beretta_fire_01.wav"
 SWEP.InsertSound = "pwb2/weapons/m4super90/shell.wav"
-SWEP.Pump = 0
 SWEP.PumpEnd = false
 SWEP.Pumped = true
 SWEP.PumpTarg = 0
@@ -45,8 +44,8 @@ SWEP.IconAng = Angle(0,90,0)
 
 SWEP.TwoHands = true
 
-SWEP.ZoomPos = Vector(12,-4.25,-1.65)
-SWEP.ZoomAng = Angle(-0.3,-0.2,0)
+SWEP.ZoomPos = Vector(12,-4.305,-1.5)
+SWEP.ZoomAng = Angle(0,0,0)
 
 SWEP.RecoilForce = 2
 

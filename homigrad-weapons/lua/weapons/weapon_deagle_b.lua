@@ -22,6 +22,8 @@ SWEP.holdtypes = {
     ["revolver_empty"] = {[1] = 0.15,[2] = 1.15,[3] = 1.6,[4] = 0},
 }
 
+SWEP.Skin = 1
+
 SWEP.RecoilForce = 2
 
 SWEP.Slot = 2
@@ -45,7 +47,7 @@ SWEP.Rarity = 5
 
 SWEP.TwoHands = false
 
-SWEP.ZoomPos = Vector(5,-2.55,-1.48)
+SWEP.ZoomPos = Vector(5,-2.65,-1.48)
 SWEP.ZoomAng = Angle(0,0,0)
 
 SWEP.Animations = {

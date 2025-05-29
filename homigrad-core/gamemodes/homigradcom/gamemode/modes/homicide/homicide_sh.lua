@@ -8,7 +8,7 @@ hmcd.TeamBased = false
 hmcd.SubTypes = {
     "gfz",
     "standard",
-    //"wildwest",
+    "ww", -- ВАЙЛДВЕСТ!!!!!!!!
     "soe"
 }
 

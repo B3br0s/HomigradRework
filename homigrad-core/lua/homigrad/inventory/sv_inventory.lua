@@ -51,6 +51,7 @@ hg.loots.medium_crate = {
 	"weapon_glock17",
 	"weapon_tec9",
 	"weapon_handcuffs",
+	"weapon_w1894",
 	"weapon_crowbar_hg",
 	"weapon_hatchet",
 	"weapon_axe",
@@ -66,11 +67,12 @@ hg.loots.large_crate = {
 	"weapon_shovel",
 	"weapon_sog",
 	"weapon_hammer",
+	"weapon_w1894",
 	"weapon_deagle_a",
 	"weapon_deagle_b",
 	"weapon_glock17",
 	"weapon_tec9",
-	"weapon_ak47",
+	"weapon_ak74",
 	"weapon_m4a1",
 	"weapon_xm1014",
 	"weapon_870_b",
@@ -111,8 +113,9 @@ hg.loots.weapon_crate = {
 	"weapon_deagle_a",
 	"weapon_deagle_b",
 	"weapon_glock17",
+	"weapon_w1894",
 	"weapon_tec9",
-	"weapon_ak47",
+	"weapon_ak74",
 	"weapon_m4a1",
 	"weapon_scar",
 	"weapon_xm1014",
@@ -302,6 +305,7 @@ net.Receive("hg loot",function(len,ply)
 
 					local wep2 = hg.RagdollOwner(ent):GetWeapon(taked)
 
+					wep.Attachments = wep2.Attachments
 					wep:SetClip1(wep2:Clip1())
 				end
 			end
@@ -468,10 +472,10 @@ end)
 hook.Add("Player Think","Homigrad_Limit",function(ply)
 	local inv = {}
 
-	ply:SetAllowWeaponsInVehicle(true)
+	ply:SetAllowWeaponsInVehicle(false)
 
 	for _, wep in ipairs(ply:GetWeapons()) do
-		if wep.GetClass and BlackListWep[wep:GetClass()] then
+		if isentity(wep) and IsValid(wep) and wep.GetClass and BlackListWep[wep:GetClass()] then
 			continue 
 		end
 		table.insert(inv,wep)
@@ -480,7 +484,7 @@ hook.Add("Player Think","Homigrad_Limit",function(ply)
 	local invs = {}
 
 	for _, wep in ipairs(ply:GetWeapons()) do
-		if BlackListWep[wep:GetClass()] then
+		if isentity(wep) and IsValid(wep) and wep.GetClass and BlackListWep[wep:GetClass()] then
 			continue 
 		end
 		table.insert(invs,wep:GetClass())

@@ -1,6 +1,6 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "AR2"
-SWEP.Category = "Оружие: Автоматы"
+SWEP.Category = "Оружие: Винтовки"
 SWEP.Spawnable = true
 
 SWEP.WorldModel = "models/weapons/arccw/w_irifle.mdl"
@@ -37,7 +37,7 @@ SWEP.HolsterBone = "ValveBiped.Bip01_Spine4"
 SWEP.BoltBone = "v_weapon.AK47_bolt"
 SWEP.BoltVec = Vector(0,0,-3)
 
-SWEP.ZoomPos = Vector(10,-5.135,-2.15)
+SWEP.ZoomPos = Vector(10,-5.18,-1.99)
 SWEP.ZoomAng = Angle(-0.5,0,0)
 
 SWEP.Slot = 2

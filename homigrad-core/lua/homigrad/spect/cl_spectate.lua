@@ -39,8 +39,11 @@ function DrawWHEnt(ent,pos)
 end
 
 local rp = false
+local wp = false
 local ap = false
 local a2p = false
+
+local show = false
 
 hook.Add("HUDPaint","Spectate-HUD",function()
 	local lply = LocalPlayer()
@@ -49,33 +52,36 @@ hook.Add("HUDPaint","Spectate-HUD",function()
         return
     end
 
-	if !lply:Alive() then
-		if lply:KeyDown(IN_RELOAD) and !rp then
-			rp = true
-			net.Start("spect_shit")
-			net.WriteFloat(IN_RELOAD)
-			net.SendToServer()
-		elseif !lply:KeyDown(IN_RELOAD) then
-			rp = false
-		end
+	if lply:KeyDown(IN_WALK) and !wp then
+		wp = true
+		show = not show
+	elseif !lply:KeyDown(IN_WALK) then
+		wp = false
+	end
 
-		if lply:KeyDown(IN_ATTACK) and !ap then
-			ap = true
-			net.Start("spect_shit")
-			net.WriteFloat(IN_ATTACK)
-			net.SendToServer()
-		elseif !lply:KeyDown(IN_ATTACK) then
-			ap = false
-		end
-
-		if lply:KeyDown(IN_ATTACK2) and !a2p then
-			a2p = true
-			net.Start("spect_shit")
-			net.WriteFloat(IN_ATTACK2)
-			net.SendToServer()
-		elseif !lply:KeyDown(IN_ATTACK2) then
-			a2p = false
-		end
+	if lply:KeyDown(IN_RELOAD) and !rp then
+		rp = true
+		net.Start("spect_shit")
+		net.WriteFloat(IN_RELOAD)
+		net.SendToServer()
+	elseif !lply:KeyDown(IN_RELOAD) then
+		rp = false
+	end
+	if lply:KeyDown(IN_ATTACK) and !ap then
+		ap = true
+		net.Start("spect_shit")
+		net.WriteFloat(IN_ATTACK)
+		net.SendToServer()
+	elseif !lply:KeyDown(IN_ATTACK) then
+		ap = false
+	end
+	if lply:KeyDown(IN_ATTACK2) and !a2p then
+		a2p = true
+		net.Start("spect_shit")
+		net.WriteFloat(IN_ATTACK2)
+		net.SendToServer()
+	elseif !lply:KeyDown(IN_ATTACK2) then
+		a2p = false
 	end
 
 	if lply:Team() == 1002 and lply:Alive() then
@@ -128,7 +134,7 @@ hook.Add("HUDPaint","Spectate-HUD",function()
 
 	end
     for _, v in ipairs(player.GetAll()) do --ESP
-        if not v:Alive() or v == ent then continue end
+        if not v:Alive() or v == ent or !show then continue end
 
         DrawWHEnt(v,((v:GetNWBool("Fake") and IsValid(v:GetNWEntity("FakeRagdoll"))) and v:GetNWEntity("FakeRagdoll"):GetPos() or v:GetPos()))
     end

@@ -61,28 +61,40 @@ function hmcd.StartRoundSV()
         net.WriteBool(ply.IsTraitor)
         net.WriteBool(ply.IsGunMan)
         net.Send(ply)
+        if hmcd.Type == "ww" and !ply.IsTraitor and !ply.IsGunMan then
+            ply:Give("weapon_329pd")
+        end
     end 
 end
 
 function hmcd.SpawnTraitor(ply)
-    if hmcd.Type != "gfz" then
-        local Wep1 = ply:Give("weapon_fiveseven")
+    if hmcd.Type != "ww" then
+        if hmcd.Type != "gfz" then
+            local Wep1 = ply:Give("weapon_fiveseven")
+            local Wep2 = ply:Give("weapon_sog")
+            ply:Give("weapon_f1")
+            ply:Give("weapon_ied")
+
+            Wep1:SetNWBool("DontShow",true)
+
+            ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
+        else
+            ply:Give("weapon_sog")
+            ply:Give("weapon_ied")
+
+            //local Wep1 = ply:Give("weapon_pnev")
+
+            //Wep1:SetNWBool("DontShow",true)
+
+            //ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
+        end
+    else
+        local Wep1 = ply:Give("weapon_329pd")
         local Wep2 = ply:Give("weapon_sog")
         ply:Give("weapon_f1")
         ply:Give("weapon_ied")
 
-        Wep1:SetNWBool("DontShow",true)
-
         ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
-    else
-        ply:Give("weapon_sog")
-        ply:Give("weapon_ied")
-
-        //local Wep1 = ply:Give("weapon_pnev")
-
-        //Wep1:SetNWBool("DontShow",true)
-
-        //ply:GiveAmmo(Wep1:GetMaxClip1() * 2, Wep1:GetPrimaryAmmoType(), true)
     end
 end
 
@@ -120,12 +132,18 @@ function hmcd.AssignGunMan(tbl)
 
     if hmcd.Type == "soe" then
         if math.random(1,2) == 2 then
-            RandomPlayer:Give("weapon_870_a")
+            RandomPlayer:Give("weapon_kar98k")
         else
             RandomPlayer:Give("weapon_870_b")
         end
     elseif hmcd.Type == "standard" then
-        RandomPlayer:Give("weapon_329pd")
+        RandomPlayer:Give("weapon_glock17")
+    elseif hmcd.Type == "ww" then
+        local w1 = RandomPlayer:Give("weapon_329pd")
+        local w2 = RandomPlayer:Give("weapon_w1894")
+
+        RandomPlayer:GiveAmmo(w1:GetMaxClip1() * 2, w1:GetPrimaryAmmoType(), true)
+        RandomPlayer:GiveAmmo(w2:GetMaxClip1() * 3, w2:GetPrimaryAmmoType(), true)
     elseif hmcd.Type == "gfz" then
         RandomPlayer:Give("weapon_pbat")
         RandomPlayer:Give("weapon_handcuffs")

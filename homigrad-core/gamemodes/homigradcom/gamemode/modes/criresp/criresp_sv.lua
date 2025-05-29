@@ -11,13 +11,14 @@ criresp.Models = {
 function criresp.SpawnSWAT(ply)
     local SpawnList = ReadDataMap("criresp_swat")
 
-    local weps_pri = "weapon_ar15"
     local weps_sec = {"weapon_usp_match"}
     local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_handcuffs"}
 
     ply:SetTeam(1)
 
     ply:Spawn()
+
+    ply:StripWeapons()
 
     ply.AppearanceOverride = true
 
@@ -27,11 +28,14 @@ function criresp.SpawnSWAT(ply)
     hg.Equip_Armor(ply,"helmet1")
     //hg.Equip_Armor(ply,"mask2")
 
-    local wep_primary = ply:Give(weps_pri)
+    local wep_primary = ply:Give("weapon_ar15")
+    //wep_primary:Initialize()
     local wep_secondary = ply:Give(table.Random(weps_sec))
     for _, wep in pairs(weps_oth) do
         ply:Give(wep)
     end
+
+    print(wep_primary)
 
     if IsValid(wep_primary) then
         wep_primary:SetClip1(wep_primary:GetMaxClip1())
@@ -44,9 +48,13 @@ function criresp.SpawnSWAT(ply)
 
 
     timer.Simple(0,function()
-        ply:SetModel("models/css_seb_swat/css_swat.mdl")
+        ply:SetModel("models/player/swa2.mdl")
         ply:SetPlayerColor(Color(0,0,255):ToVector())
         ply:SetSubMaterial()
+
+        timer.Simple(1,function()
+            hg.force_attachment(wep_primary,"holo3")
+        end)
     end)
 end
 

@@ -1,6 +1,6 @@
 SWEP.PrintName = "Стяжки" 
 //SWEP.Instructions = "Связать человека"
-SWEP.Category 				= "Оружие: Остальное"
+SWEP.Category 				= "Остальное"
 
 SWEP.Slot = 5
 SWEP.SlotPos = 3

@@ -332,6 +332,14 @@ function team.SpawnCommand(tbl, aviable, func, funcShould)
 	end
 end
 
+COMMANDS.nogib = {function(ply,args)
+	if not ply:IsAdmin() then return end
+
+	local value = tonumber(args[2]) > 0
+
+	SetGlobalBool("NoGib",value)
+end,1}
+
 COMMANDS.nextmode = {function(ply,args)
 	if not ply:IsAdmin() then return end
 

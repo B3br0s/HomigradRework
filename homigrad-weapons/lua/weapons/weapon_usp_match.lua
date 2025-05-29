@@ -1,5 +1,5 @@
 SWEP.Base = "homigrad_base"
-SWEP.PrintName = "USP Match"
+SWEP.PrintName = "HK USP"
 SWEP.Category = "Оружие: Пистолеты"
 SWEP.Spawnable = true
 
@@ -21,8 +21,8 @@ SWEP.Primary.ReloadTime = 1.9
 SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 12
 SWEP.Primary.DefaultClip = 12
-SWEP.Primary.Damage = 25
-SWEP.Primary.Force = 1
+SWEP.Primary.Damage = 45
+SWEP.Primary.Force = 12
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.Primary.Wait = 0.09
 SWEP.Sound = "sounds_zcity/hk_usp/close.wav"
@@ -40,7 +40,7 @@ SWEP.HolsterBone = "ValveBiped.Bip01_Spine4"
 SWEP.BoltBone = "Slide"
 SWEP.BoltVec = Vector(0,1.1,0)
 
-SWEP.ZoomPos = Vector(7,-2.02,-0.4)
+SWEP.ZoomPos = Vector(7,-2.085,-0.35)
 SWEP.ZoomAng = Angle(0,0,0)
 
 SWEP.Rarity = 4

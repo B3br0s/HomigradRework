@@ -1,7 +1,7 @@
 SWEP.Base = "weapon_base"
 
 SWEP.PrintName = "База Гранаты"
-SWEP.Category = "Оружие: Гранаты"
+SWEP.Category = "Гранаты"
 
 SWEP.Slot = 4
 SWEP.SlotPos = 0

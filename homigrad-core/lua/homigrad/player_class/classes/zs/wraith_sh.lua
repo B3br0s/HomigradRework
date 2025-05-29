@@ -6,9 +6,9 @@ end
 
 function CLASS.On(self)
 	if CLIENT then return end
-	self:SetHealth(200)
-	self:SetMaxHealth(200)
-	self:SetArmor(0)
+	self:SetHealth(800)
+	self:SetMaxHealth(800)
+	self:SetArmor(200)
 	self:Give("weapon_zombie_wraith")
 	self.isZombie = true
 	self:EmitSound("npc/zombie/zombie_alert"..math.random(1,3)..".wav")

@@ -10,7 +10,7 @@ hook.Add("HUDPaint","Round_Shit123",function()
         local shit_size = surface.GetTextSize(hg.GetPhrase("need_2_players"))
 
         surface.SetMaterial(Material('vgui/gradient-l'))
-        surface.SetDrawColor(255,20,20,255)
+        surface.SetDrawColor(255,20,20,125)
         surface.DrawTexturedRect(ScrW()/2,100,shit_size / 1.5,30)
         surface.SetMaterial(Material('vgui/gradient-r'))
         surface.DrawTexturedRect((ScrW()/2)-shit_size/1.505,100,shit_size / 1.5,30)

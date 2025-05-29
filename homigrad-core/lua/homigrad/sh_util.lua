@@ -168,7 +168,7 @@ if CLIENT then
 end
 
 function hg.RagdollOwner(ent)
-    if not ent:IsRagdoll() then return NULL end
+    if !IsValid(ent) or not ent:IsRagdoll() then return NULL end
 
     return ent:GetNWEntity("RagdollOwner",NULL)
 end
@@ -613,7 +613,7 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
     ply:SetCrouchedWalkSpeed(1 * stamina / 200)
 	
     if isSprinting and forwardSpeed > 30 then
-        ply.stamina = math.Clamp((ply.stamina or 100) - 0.01, 0, 100)
+        ply.stamina = math.Clamp((ply.stamina or 100) - 0.005, 0, 100)
     elseif velocity < 200 then
         ply.stamina = math.Clamp((ply.stamina or 0) + 0.035 + adrenalineBoost / 15, 0, 100)
     end
@@ -771,4 +771,50 @@ function hg.KeyPressed(owner,key)
 		end
 	end
 	return SERVER and owner:IsPlayer() and owner:KeyPressed(key) or CLIENT and localKey
+end
+
+//Функция с гита гмод-а
+
+if ( SERVER ) then
+
+	function StatueDuplicator( ply, ent, data )
+
+		if ( !data ) then
+
+			duplicator.ClearEntityModifier( ent, "statue_property" )
+			return
+
+		end
+
+		-- We have been pasted from duplicator, restore the necessary variables for the unstatue to work
+		
+		if ( ent.StatueInfo == nil ) then
+
+			-- Ew. Have to wait a frame for the constraints to get pasted
+			timer.Simple( 0, function()
+				if ( !IsValid( ent ) ) then return end
+
+				local bones = ent:GetPhysicsObjectCount()
+				if ( bones < 2 ) then return end
+
+				ent:SetNWBool( "IsStatue", true )
+				ent.StatueInfo = {}
+
+				local con = constraint.FindConstraints( ent, "Weld" )
+				for id, t in pairs( con ) do
+					if ( t.Ent1 != t.Ent2 || t.Ent1 != ent || t.Bone1 != 0 ) then continue end
+
+					ent.StatueInfo[ t.Bone2 ] = t.Constraint
+				end
+
+				local numC = table.Count( ent.StatueInfo )
+				if ( numC < 1 --[[or numC != bones - 1]] ) then duplicator.ClearEntityModifier( ent, "statue_property" ) end
+			end )
+		end
+
+		duplicator.StoreEntityModifier( ent, "statue_property", data )
+
+	end
+	duplicator.RegisterEntityModifier( "statue_property", StatueDuplicator )
+
 end

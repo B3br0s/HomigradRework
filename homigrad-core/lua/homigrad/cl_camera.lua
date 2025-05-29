@@ -12,7 +12,7 @@ hg = hg or {}
 
 hg.viewpos = Vector(0,0,0)
 
-CreateClientConVar("hg_fov","120",true,false,nil,70,120)
+CreateClientConVar("hg_fov","130",true,false,nil,70,130)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
 
 CreateClientConVar("hg_fakecam_mode","0",true,false,nil,0,1)
@@ -29,7 +29,6 @@ SETFOV()
 cvars.AddChangeCallback("hg_fov",function(cmd,_,value)
     timer.Simple(0,function()
 		SETFOV()
-		print("	hg: change fov")
 	end)
 end)
 
@@ -168,6 +167,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	local lply = LocalPlayer()
 
 	if lply:GetNWBool("IsZombie") then
+		hg.viewpos = ply:EyePos()
         return
     end
 
@@ -284,6 +284,18 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	
 	vecEye = tr.StartPos or lply:EyePos()
 
+	//debugoverlay.Line(tr.StartPos,tr.HitPos)
+
+	if lply:InVehicle() then
+		//return
+		local mat = lply:GetBoneMatrix(lply:LookupBone("ValveBiped.Bip01_Head1"))
+		local shit = lply:EyeAngles()
+		shit.p = 0
+		vecEye = mat:GetTranslation() + shit:Forward() * 6 + mat:GetAngles():Up() * 3
+		//angEye:RotateAroundAxis(angEye:Up() * -1,180)
+		//angEye[1] = angEye[1] * -1
+	end
+
 	local ragdoll = ply:GetNWEntity("FakeRagdoll")
 	follow = ragdoll
 
@@ -334,9 +346,9 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 	view.fov = fov
 
-	if lply:InVehicle() or not firstPerson then return end
+	if not firstPerson then return end
 
-	if not lply:Alive() or (IsValid(wep) and whitelistweps[wep:GetClass()]) or lply:GetMoveType() == MOVETYPE_NOCLIP or IsValid(wep) and string.match(wep:GetClass(),"_css") then
+	if not lply:Alive() or (IsValid(wep) and whitelistweps[wep:GetClass()]) or lply:GetMoveType() == MOVETYPE_NOCLIP and !lply:InVehicle() or IsValid(wep) and string.match(wep:GetClass(),"_css") then
 		hg.viewpos = ply:EyePos()
 		return
 	end

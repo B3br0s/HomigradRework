@@ -79,58 +79,58 @@ hg.TPIKBones = {
     "ValveBiped.Bip01_R_Finger0",
     "ValveBiped.Bip01_R_Finger01",
     "ValveBiped.Bip01_R_Finger02",
-    "R Clavicle",
-    "R UpperArm",
-    "R Forearm",
-    "R Hand",
-    "R Finger0",
-    "R Finger01",
-    "R Finger02",
-    "R Finger1",
-    "R Finger11",
-    "R Finger12",
-    "R Finger2",
-    "R Finger21",
-    "R Finger22",
-    "R Finger3",
-    "R Finger31",
-    "R Finger32",
-    "R Finger4",
-    "R Finger41",
-    "R Finger42",
-    "R ForeTwist",
-    "R ForeTwist1",
-    "R ForeTwist2",
-    "R ForeTwist3",
-    "R ForeTwist4",
-    "R ForeTwist5",
-    "R ForeTwist6",
-    "L Clavicle",
-    "L UpperArm",
-    "L Forearm",
-    "L Hand",
-    "L Finger0",
-    "L Finger01",
-    "L Finger02",
-    "L Finger1",
-    "L Finger11",
-    "L Finger12",
-    "L Finger2",
-    "L Finger21",
-    "L Finger22",
-    "L Finger3",
-    "L Finger31",
-    "L Finger32",
-    "L Finger4",
-    "L Finger41",
-    "L Finger42",
-    "L ForeTwist",
-    "L ForeTwist1",
-    "L ForeTwist2",
-    "L ForeTwist3",
-    "L ForeTwist4",
-    "L ForeTwist5",
-    "L ForeTwist6",
+    //"R Clavicle",
+    //"R UpperArm",
+    //"R Forearm",
+    //"R Hand",
+    //"R Finger0",
+    //"R Finger01",
+    //"R Finger02",
+    //"R Finger1",
+    //"R Finger11",
+    //"R Finger12",
+    //"R Finger2",
+    //"R Finger21",
+    //"R Finger22",
+    //"R Finger3",
+    //"R Finger31",
+    //"R Finger32",
+    //"R Finger4",
+    //"R Finger41",
+    //"R Finger42",
+    //"R ForeTwist",
+    //"R ForeTwist1",
+    //"R ForeTwist2",
+    //"R ForeTwist3",
+    //"R ForeTwist4",
+    //"R ForeTwist5",
+    //"R ForeTwist6",
+    //"L Clavicle",
+    //"L UpperArm",
+    //"L Forearm",
+    //"L Hand",
+    //"L Finger0",
+    //"L Finger01",
+    //"L Finger02",
+    //"L Finger1",
+    //"L Finger11",
+    //"L Finger12",
+    //"L Finger2",
+    //"L Finger21",
+    //"L Finger22",
+    //"L Finger3",
+    //"L Finger31",
+    //"L Finger32",
+    //"L Finger4",
+    //"L Finger41",
+    //"L Finger42",
+    //"L ForeTwist",
+    //"L ForeTwist1",
+    //"L ForeTwist2",
+    //"L ForeTwist3",
+    //"L ForeTwist4",
+    //"L ForeTwist5",
+    //"L ForeTwist6",
 
 }
 
@@ -447,8 +447,36 @@ function hg.DoTPIK(ply,ent)
 
     local eyeahg = ply:EyeAngles()
 
+    local offset = Vector()
+
+    local ang
+    local pos
+
+    if self.DrawAttachments then
+        self:DrawAttachments()
+        //self:DoHolo()
+    end
+
+    if !self.TPIK_Anims then
+        local poss,angg = self:WorldModel_Transform()
+
+        ang = angg
+        pos = poss
+
+        if self.AttachBone then
+            pos = self.worldModel:GetBoneMatrix(self.worldModel:LookupBone(self.AttachBone)):GetTranslation()
+            ang = self.worldModel:GetBoneMatrix(self.worldModel:LookupBone(self.AttachBone)):GetAngles()
+        end
+
+        ang:RotateAroundAxis(ang:Up(),self.RHandAng[1])
+        ang:RotateAroundAxis(ang:Right(),self.RHandAng[2])
+        ang:RotateAroundAxis(ang:Forward(),self.RHandAng[3])
+
+        offset = ang:Forward() * self.RHand[1] + ang:Right() * self.RHand[2] + ang:Up() * self.RHand[3]
+    end
+
     if shouldfulltpik then
-        ply_r_upperarm_pos, ply_r_forearm_pos, ply_r_upperarm_angle, ply_r_forearm_angle = hg.Solve2PartIK(ply_r_upperarm_matrix:GetTranslation(), ply_r_hand_matrix:GetTranslation(), r_upperarm_length, r_forearm_length, -1.3, eyeahg)
+        ply_r_upperarm_pos, ply_r_forearm_pos, ply_r_upperarm_angle, ply_r_forearm_angle = hg.Solve2PartIK(ply_r_upperarm_matrix:GetTranslation(), pos and pos + offset or ply_r_hand_matrix:GetTranslation(), r_upperarm_length, r_forearm_length, -1.3, eyeahg)
 
         ply.TPIKCache.r_upperarm_pos, ply.TPIKCache.ply_r_upperarm_angle = WorldToLocal(ply_r_upperarm_pos, ply_r_upperarm_angle, ply_r_upperarm_matrix:GetTranslation(), ply_r_upperarm_matrix:GetAngles())
         ply.TPIKCache.r_forearm_pos, ply.TPIKCache.ply_r_forearm_angle = WorldToLocal(ply_r_forearm_pos, ply_r_forearm_angle, ply_r_upperarm_matrix:GetTranslation(), ply_r_upperarm_matrix:GetAngles())
@@ -457,15 +485,31 @@ function hg.DoTPIK(ply,ent)
         ply_r_forearm_pos, ply_r_forearm_angle = LocalToWorld(ply.TPIKCache.r_forearm_pos, ply.TPIKCache.ply_r_forearm_angle, ply_r_upperarm_matrix:GetTranslation(), ply_r_upperarm_matrix:GetAngles())
     end
 
+    if pos then
+        ply_r_forearm_pos = pos + offset
+    end
+
     //ent:SetupBones()
     //ent:SetupModel()
 
     -- play rain world!!!
+
+    //if !ang then
+    //    ang = 
+    //end
+
+    local ply_r_hand_angle = ply_r_hand_matrix:GetAngles()
+
+    if ang then
+        ply_r_hand_angle = ang
+        ply_r_hand_angle:RotateAroundAxis(ply_r_hand_angle:Forward(),180)
+    end
     
     ply_r_upperarm_matrix:SetAngles(ply_r_upperarm_angle)
     ply_r_forearm_matrix:SetTranslation(ply_r_upperarm_pos)
     ply_r_forearm_matrix:SetAngles(ply_r_forearm_angle)
     ply_r_hand_matrix:SetTranslation(ply_r_forearm_pos)
+    ply_r_hand_matrix:SetAngles(ply_r_hand_angle)
 
     if self.Details then
         self:WorldModel_Details()
@@ -481,6 +525,15 @@ function hg.DoTPIK(ply,ent)
 
     if nolefthand then return end
 
+    if !self.TPIK_Anims then
+        local poss,angg = self:WorldModel_Transform()
+
+        ang = angg
+        pos = poss
+
+        offset = ang:Forward() * self.LHand[1] + ang:Right() * self.LHand[2] + ang:Up() * self.LHand[3]
+    end
+
     local ply_l_upperarm_matrix = ent:GetBoneMatrix(ply_l_upperarm_index)
     local ply_l_forearm_matrix = ent:GetBoneMatrix(ply_l_forearm_index)
     local ply_l_hand_matrix = ent:GetBoneMatrix(ply_l_hand_index)
@@ -488,7 +541,7 @@ function hg.DoTPIK(ply,ent)
     local ply_l_upperarm_pos, ply_l_forearm_pos, ply_l_upperarm_angle, ply_l_forearm_angle
 
     if shouldfulltpik or !(ply.TPIKCache.l_upperarm_pos and ply.TPIKCache.l_forearm_pos and ply.TPIKCache.ply_l_upperarm_angle and ply.TPIKCache.ply_l_forearm_angle) then
-        ply_l_upperarm_pos, ply_l_forearm_pos, ply_l_upperarm_angle, ply_l_forearm_angle = hg.Solve2PartIK(ply_l_upperarm_matrix:GetTranslation(), ply_l_hand_matrix:GetTranslation(), l_upperarm_length, l_forearm_length, 1, eyeahg)
+        ply_l_upperarm_pos, ply_l_forearm_pos, ply_l_upperarm_angle, ply_l_forearm_angle = hg.Solve2PartIK(ply_l_upperarm_matrix:GetTranslation(), pos and pos + offset or ply_l_hand_matrix:GetTranslation(), l_upperarm_length, l_forearm_length, 1.2, eyeahg)
 
         //ply.LastTPIKTime = CurTime()
         ply.TPIKCache.l_upperarm_pos, ply.TPIKCache.ply_l_upperarm_angle = WorldToLocal(ply_l_upperarm_pos, ply_l_upperarm_angle, ply_l_upperarm_matrix:GetTranslation(), ply_l_upperarm_matrix:GetAngles())
@@ -498,10 +551,24 @@ function hg.DoTPIK(ply,ent)
         ply_l_forearm_pos, ply_l_forearm_angle = LocalToWorld(ply.TPIKCache.l_forearm_pos, ply.TPIKCache.ply_l_forearm_angle, ply_l_upperarm_matrix:GetTranslation(), ply_l_upperarm_matrix:GetAngles())
     end
 
+    local ply_l_hand_angle = ply_l_hand_matrix:GetAngles()
+
+    if ang then
+        ply_l_hand_angle = ang
+        ply_l_hand_angle:RotateAroundAxis(ply_l_hand_angle:Forward(),-90)
+        ply_l_hand_angle:RotateAroundAxis(ply_l_hand_angle:Up(),0)
+        ply_l_hand_angle:RotateAroundAxis(ply_l_hand_angle:Right(),-90)
+
+        ply_l_hand_angle:RotateAroundAxis(ang:Up(),self.LHandAng[1])
+        ply_l_hand_angle:RotateAroundAxis(ang:Right(),self.LHandAng[2])
+        ply_l_hand_angle:RotateAroundAxis(ang:Forward(),self.LHandAng[3])
+    end
+
     ply_l_upperarm_matrix:SetAngles(ply_l_upperarm_angle)
     ply_l_forearm_matrix:SetTranslation(ply_l_upperarm_pos)
     ply_l_forearm_matrix:SetAngles(ply_l_forearm_angle)
     ply_l_hand_matrix:SetTranslation(ply_l_forearm_pos)
+    ply_l_hand_matrix:SetAngles(ply_l_hand_angle)
 
     bone_apply_matrix(ent, ply_l_upperarm_index, ply_l_upperarm_matrix, ply_l_forearm_index)
     bone_apply_matrix(ent, ply_l_forearm_index, ply_l_forearm_matrix, ply_l_hand_index)
@@ -556,22 +623,6 @@ function hg.Solve2PartIK(start_p, end_p, length0, length1, sign, angs)
     local Joint1_F = Joint0_F + Joint1
 
     return Joint0_F, Joint1_F, ang1, ang2
-end
-
-hook.Add("PostDrawPlayerRagdoll","Ragdoll_draw_tpik",function(ply,rag)
-    hg.DoTPIK(ply,rag) 
-    hg.RenderArmor(ply)
-    //print(ply)
-end)
-
-function hg.RenderOverride(ply)
-    local ent = hg.GetCurrentCharacter(ply)
-
-    hg.RenderArmor(ply)
-
-    hg.DoTPIK(ply,ent)
-
-    ply:DrawModel()
 end
 
 /*

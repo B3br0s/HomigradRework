@@ -10,8 +10,41 @@ hg.ammotypes = {
 		minsplash = 10,
 		maxsplash = 5
 	},
+	["5.45x39mm"] = {
+		name = "5.45x39 mm",
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 100,
+		maxcarry = 120,
+		minsplash = 10,
+		maxsplash = 5
+	},
 	["7.62x39mm"] = {
 		name = "7.62x39 mm",
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 160,
+		maxcarry = 120,
+		minsplash = 10,
+		maxsplash = 5
+	},
+	["7.62x51mm"] = {
+		name = "7.62x51 mm",
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 160,
+		maxcarry = 120,
+		minsplash = 10,
+		maxsplash = 5
+	},
+	[".30win"] = {
+		name = ".30-30 Winchester",
 		dmgtype = DMG_BULLET,
 		tracer = TRACER_LINE,
 		plydmg = 0,
@@ -110,6 +143,30 @@ hg.ammotypes = {
 		minsplash = 10,
 		maxsplash = 5
 	},
+	["nails"] = {
+		name = "Nails",
+		count = 4,
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 200,
+		maxcarry = 150,
+		minsplash = 10,
+		maxsplash = 5
+	},
+	["goldingot"] = {
+		name = "Golden Ingot",
+		count = 1,
+		dmgtype = DMG_BULLET,
+		tracer = TRACER_LINE,
+		plydmg = 0,
+		npcdmg = 0,
+		force = 200,
+		maxcarry = 150,
+		minsplash = 10,
+		maxsplash = 5
+	},
 }
 
 local ammotypes = hg.ammotypes
@@ -118,8 +175,23 @@ local ammoents = {
 		Material = "models/hmcd_ammobox_556",
 		Scale = 1
 	},
+	["5.45x39mm"] = {
+		Material = "models/hmcd_ammobox_556",
+		Scale = 1
+	},
 	["7.62x39mm"] = {
 		Scale = 1
+	},
+	["7.62x51mm"] = {
+		Scale = 1
+	},
+	[".30win"] = {
+		Scale = 1
+	},
+	["goldingot"] = {
+		Scale = 1,
+		Color = Color(150,150,0),
+		Model = "models/jmod/resources/ingot001.mdl",
 	},
 	["12/70gauge"] = {
 		Material = "models/hmcd_ammobox_12",
@@ -158,6 +230,11 @@ local ammoents = {
 		Scale = 1,
 		Color = Color(255, 255, 255)
 	},
+	["nails"] = {
+		Model = "models/Items/CrossbowRounds.mdl",
+		Scale = 1,
+		Color = Color(255, 255, 255)
+	},
 }
 
 local function addAmmoTypes()
@@ -184,3 +261,11 @@ end
 
 addAmmoTypes()
 hook.Add("Initialize", "init-ammo", addAmmoTypes)
+
+if CLIENT then
+	concommand.Add("hg_unload",function(ply)
+		net.Start("unload")
+		net.WriteEntity(ply:GetActiveWeapon())
+		net.SendToServer()
+	end)
+end

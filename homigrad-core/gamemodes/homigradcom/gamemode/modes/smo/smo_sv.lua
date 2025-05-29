@@ -3,7 +3,7 @@ bahmut = bahmut or {}
 function bahmut.SpawnBlue(ply)
     local SpawnList = ReadDataMap("bahmut_blue")
 
-    local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar"}
+    local weps_pri = {"weapon_ak74","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar"}
     local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glock17","weapon_fiveseven"}
     local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg","weapon_f1"}
 
@@ -36,7 +36,7 @@ end
 function bahmut.SpawnRed(ply)
     local SpawnList = ReadDataMap("bahmut_red")
 
-    local weps_pri = {"weapon_ak47","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar"}
+    local weps_pri = {"weapon_ak74","weapon_m4a1","weapon_mp7","weapon_xm1014","weapon_scar"}
     local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glock17","weapon_fiveseven"}
     local weps_oth = {"weapon_kabar","weapon_bandage","weapon_medkit_hg","weapon_rgd5"}
 

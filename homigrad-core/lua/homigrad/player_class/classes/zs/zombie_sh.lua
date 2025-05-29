@@ -6,8 +6,8 @@ end
 
 function CLASS.On(self)
 	if CLIENT then return end
-	self:SetHealth(300)
-	self:SetMaxHealth(300)
+	self:SetHealth(400)
+	self:SetMaxHealth(400)
 	self:SetArmor(50)
 	self:Give("weapon_zombie")
 	self.isZombie = true

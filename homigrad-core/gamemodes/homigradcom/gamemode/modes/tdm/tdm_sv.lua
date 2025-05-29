@@ -59,7 +59,7 @@ end
 function tdm.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"weapon_ak47","weapon_mp5"}
+    local weps_pri = {"weapon_ak74","weapon_mp5"}
     local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glock17","weapon_329pd"}
     local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_f1"}
 

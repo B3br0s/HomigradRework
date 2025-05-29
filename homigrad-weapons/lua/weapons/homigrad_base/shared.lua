@@ -4,7 +4,7 @@ SWEP.PrintName = "Homigrad Weapon Base"
 SWEP.ViewModel = "models/weapons/arccw_go/v_pist_p2000.mdl"
 SWEP.WorldModel = "models/weapons/arccw_go/v_pist_p2000.mdl"
 
-SWEP.Spawnable = true
+SWEP.Spawnable = false
 SWEP.Category = "Оружие: Базы"
 SWEP.DrawAmmo = false
 SWEP.DrawCrosshair = false
@@ -17,6 +17,8 @@ SWEP.IKAnimationProxy = {}
 SWEP.Animations = {}
 
 SWEP.Rarity = 3
+
+SWEP.TPIK_Anims = true
 
 SWEP.animmul = 0
 
@@ -33,11 +35,19 @@ SWEP.Sound = "arccw_go/hkp2000/hkp2000-1.wav"
 hg.Weapons = hg.Weapons or {}
 
 function SWEP:Initialize()
+    self.DWorldPos = self.WorldPos
+    self.DWorldAng = self.WorldAng
+
     hg.Weapons[self] = true
 
     self:SetHoldType(self.HoldType)
 
     self:Deploy()
+
+    self.Attachments = {
+        ["sight"] = {nil},
+        ["barrel"] = {nil},
+    }
 end
 
 function SWEP:CanShoot()
@@ -129,18 +139,41 @@ end
 function SWEP:Deploy()
     local ply = self:GetOwner()
 	self:SetHoldType("normal")
-	if self:IsPistolHoldType() then
-		self:EmitSound("homigrad/weapons/draw_pistol.mp3")
-	else
-		self:EmitSound("homigrad/weapons/draw_rifle.mp3")
-	end
-	if self.Animations then
+    self.NoLHand = true
+	if IsValid(ply) then
+        if self:IsPistolHoldType() then
+	    	self:EmitSound("homigrad/weapons/draw_pistol.mp3")
+	    else
+	    	self:EmitSound("homigrad/weapons/draw_rifle.mp3")
+	    end
+
+        if SERVER then
+            ply:EmitSound(math.random(1,2) == 1 and "arccw_go/glock18/glock_draw.wav" or "arccw_go/deagle/de_draw.wav",50,math.random(85,95),0.45)
+        end
+    end
+
+    if self.Animations then
         hg.PlayAnim(self,"draw")
     end
+
+    //self.Deployed = true
+
+    /*timer.Simple(0.2,function()
+	    self:SetHoldType(self.HoldType)  
+        self.NoLHand = false
+        self.Deployed = true
+        if self.Animations then
+            hg.PlayAnim(self,"draw")
+        end
+        timer.Simple(0.75,function()
+            self.Deploye = true
+        end)
+    end)
 
     local pos,ang = self:WorldModel_Holster_Transform()
 
     ply.prev_wep_ang = ang
+    self.WorldAng = ang*/
 end
 
 function SWEP:SetNextShoot(value)
@@ -226,13 +259,13 @@ function SWEP:Step()
 
     if ply:GetActiveWeapon() != self then
         self:WorldModel_Holster_Transform()
+        self.Deployed = false
+        self.Deploye = false
+    else
+        self:Post_Hands_Anim()
     end
     
     self:SetNWBool("sighted",ply:KeyDown(IN_ATTACK2))
-
-    self.NoLHand = (self:IsPistolHoldType() and ply:GetNWBool("suiciding") or false)
-
-    self:SetHoldType((ply:GetNWBool("suiciding") and "normal" or self.HoldType))
 
     self.speed = (ply:GetNWBool("suiciding") and 0 or LerpFT(0.12,self.speed or 0,((self:IsSprinting() or self.ClosePos > 10) and 1 or 0)))
 end
@@ -241,6 +274,9 @@ hook.Add("Think","Homigrad-Weapon",function()
     for wep, _ in pairs(hg.Weapons) do
         if IsValid(wep) and wep.Step then
             wep:Step()
+            if wep.DrawAttachments then
+                wep:DrawAttachments()
+            end
             if IsValid(wep:GetOwner()) and wep.IsClose and wep:GetOwner():GetActiveWeapon() == wep then
                 local is,dist = wep:IsClose()
 

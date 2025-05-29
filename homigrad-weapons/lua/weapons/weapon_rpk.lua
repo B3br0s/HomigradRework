@@ -40,11 +40,11 @@ SWEP.TwoHands = true
 
 SWEP.Rarity = 5
 
-SWEP.BoltBone = nil
-SWEP.BoltVec = nil
+SWEP.BoltBone = "vm_bolt"
+SWEP.BoltVec = Vector(0,2,0)
 
-SWEP.ZoomPos = Vector(6,-2.577,-0.88)
-SWEP.ZoomAng = Angle(0,-0.15,-4)
+SWEP.ZoomPos = Vector(6,-2.57,-0.8)
+SWEP.ZoomAng = Angle(0,-0.26,0)
 
 SWEP.Animations = {
 	["idle"] = {

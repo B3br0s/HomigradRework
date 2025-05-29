@@ -489,7 +489,7 @@ hook.Add("HUDPaint","InventoryPage",function()
 
         local SlotsSize = 75 * ScrMul()
 
-        //CreateLootFrame({[1] = "weapon_ak47"})
+        //CreateLootFrame({[1] = "weapon_ak74"})
         for _, wep in ipairs(LocalPlayer():GetWeapons()) do
             if !BlackList[wep:GetClass()] and !table.HasValue(weps,wep) then
                 table.insert(weps,wep)

@@ -36,8 +36,8 @@ SWEP.HolsterBone = "ValveBiped.Bip01_Spine4"
 SWEP.BoltBone = "v_weapon.AK47_bolt"
 SWEP.BoltVec = Vector(0,0,-3)
 
-SWEP.ZoomPos = Vector(8,-4.48,-1.55)
-SWEP.ZoomAng = Angle(-0.5,0.2,0)
+SWEP.ZoomPos = Vector(8,-4.79,-1.4)
+SWEP.ZoomAng = Angle(-0.5,0.4,0)
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0

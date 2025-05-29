@@ -37,8 +37,8 @@ SWEP.TwoHands = true
 
 SWEP.Rarity = 4
 
-SWEP.ZoomPos = Vector(11,-5.26,-0.76)
-SWEP.ZoomAng = Angle(-0.9,-0.1,0)
+SWEP.ZoomPos = Vector(11,-5.28,-0.76)
+SWEP.ZoomAng = Angle(-0.9,-0.23,0)
 
 SWEP.RecoilForce = 1
 

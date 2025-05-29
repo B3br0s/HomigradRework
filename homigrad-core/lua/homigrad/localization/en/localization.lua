@@ -155,18 +155,22 @@ l.hmcd_traitor_desc = "You're geared up with items, poisons, explosives and weap
 l.hmcd_gfz = "Gun-Free Zone"
 l.hmcd_soe = "State Of Emergency"
 l.hmcd_standard = "Standard"
+l.hmcd_ww = "Wild West"
 
 l.hmcd_traitor_soe = "You're geared up with items, poisons, explosives and weapons hidden in your pockets. Murder everyone here." 
 l.hmcd_traitor_gfz = "You're geared up with knife hidden in your pockets. Murder everyone here."
 l.hmcd_traitor_standard = "You're geared up with items, poisons, explosives and weapons hidden in your pockets. Murder everyone here."
+l.hmcd_traitor_ww = "This town ain't that big for all of us."
 
 l.hmcd_gunman_soe = "You are an innocent with a hunting weapon. Find and neutralize the traitor before it's too late." 
 l.hmcd_gunman_gfz = "You are a bystander of a murder scene, although it didn't happen to you, you better be cautious."
 l.hmcd_gunman_standard = "You are a bystander with a concealed firearm. You've tasked yourself to help police find the criminal faster."
+l.hmcd_gunman_ww = "You're the sheriff of this town. You gotta find and kill the lawless bastard."
 
 l.hmcd_bystander_soe = "You are an innocent, rely only on yourself, but stick around with crowds to make traitor's job harder."
 l.hmcd_bystander_gfz = "You are a bystander of a murder scene, although it didn't happen to you, you better be cautious."
 l.hmcd_bystander_standard = "You are a bystander of a murder scene, although it didn't happen to you, you better be cautious."
+l.hmcd_bystander_ww = "We gotta get justice served over here, there's a lawless prick murdering men."
 
 l.hl2dm_cmb_name = "UNIT %s"
 l.hl2dm_cmb = "Combine"
@@ -225,6 +229,12 @@ l.sc_status = "Status"
 l.sc_tps = "Server Tickrate: %s"
 l.sc_mutedead = "Mute dead"
 l.sc_muteall = "Mute all"
+
+//Радиалка
+l.hg_posture = "Change Posture"
+l.hg_resetposture = "Reset Posture"
+l.hg_suicide = "Commit suicide."
+l.hg_unload = "Unload"
 
 // Остальное
 l.inv_drop = "Drop"
@@ -306,6 +316,8 @@ l.weapon_ied = "Improved Explosive Device"
 l.ied_plant = "Plant IED"
 l.ied_metalprop = "in metallic prop"
 l.weapon_hands = "Hands"
+
+l.weapon_radio = "Radio"
 
 l.weapon_handcuffs = "Cuffs"
 

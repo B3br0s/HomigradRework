@@ -57,11 +57,11 @@ end)
 hook.Add("HomigradDamage", "PlayerClass", function(ply, hitGroup, dmgInfo, rag) return ply:PlayerClassEvent("HomigradDamage", hitGroup, dmgInfo, rag) end)
 
 hook.Add("Player Can Lisen", "PlayerClass", function(output, input, isChat)
-	local result = output:PlayerClassEvent("CanLisenOutput", input, isChat)
-	if result ~= nil then return result end
-
-	local result = input:PlayerClassEvent("CanLisenInput", output, isChat)
-	if result ~= nil then return result end
+	//local result = output:PlayerClassEvent("CanLisenOutput", input, isChat)
+	//if result ~= nil then return result end
+//
+	//local result = input:PlayerClassEvent("CanLisenInput", output, isChat)
+	//if result ~= nil then return result end
 end)
 
 hook.Add("Fake Up", "PlayerClass", function(ply)

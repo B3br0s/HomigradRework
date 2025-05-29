@@ -7,7 +7,7 @@ function jb.SpawnWarden(ply)
 
     local weps_pri = {"weapon_m4_css"}
     local weps_sec = {"weapon_deagle_css"}
-    local weps_oth = {"weapon_kknife","weapon_handcuffs","weapon_painkillers_hg","weapon_bandage"}
+    local weps_oth = {"weapon_kknife","weapon_handcuffs","weapon_painkillers_hg","weapon_bandage","weapon_radio_event"}
 
     if #ReadDataMap("jb_warden") == 0 then
 	    for i, ent in RandomPairs(ents.FindByClass("info_player_counterterrorist")) do
@@ -18,6 +18,9 @@ function jb.SpawnWarden(ply)
     ply:SetTeam(2)
 
     ply:Spawn()
+
+    ply:SetMaxHealth(200)
+    ply:SetHealth(200)
 
     if #ReadDataMap("jb_warden") != 0 then
         ply:SetPos(((table.Random(SpawnList) != nil and table.Random(SpawnList)[1] != nil) and table.Random(SpawnList)[1] or ply:GetPos()))

@@ -11,7 +11,7 @@ SWEP.HoldType = "revolver"
 SWEP.Primary.ReloadTime = 1.7
 SWEP.Primary.ClipSize = 7
 SWEP.Primary.DefaultClip = 7
-SWEP.Primary.Damage = 60
+SWEP.Primary.Damage = 40
 SWEP.Primary.Force = 30
 SWEP.Primary.Ammo = ".50 Action Express"
 SWEP.Primary.Wait = 0.2
@@ -39,7 +39,7 @@ SWEP.Rarity = 5
 
 SWEP.TwoHands = false
 
-SWEP.ZoomPos = Vector(6,-3.745,-0.3)
+SWEP.ZoomPos = Vector(6,-4,-0.3)
 SWEP.ZoomAng = Angle(-0.8,-0.3,0)
 
 SWEP.Animations = {

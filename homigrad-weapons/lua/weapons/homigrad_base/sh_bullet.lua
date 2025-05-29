@@ -1,6 +1,9 @@
 SWEP.AttPos = Vector(0,0,0)
 SWEP.AttAng = Angle(0,0,0)
 
+SWEP.SubSoundVolume = 0.85
+SWEP.SoundVolume = 1
+
 SWEP.MuzzleColor = Color(255,225,125)
 
 local Rand = math.Rand
@@ -90,6 +93,8 @@ function SWEP:Shoot()
         return
     end
 
+    local high_recoil = (self:IsPistolHoldType() and self:GetOwner():GetNWInt("post") == 2)
+
     self:PrimaryAdd()
 
     self:PrimarySpread()
@@ -97,8 +102,8 @@ function SWEP:Shoot()
     local primary = self.Primary
 
     if self:IsLocal() then
-        vis_recoil = vis_recoil + primary.Force / 15 * self.RecoilForce
-        Recoil = Recoil + 0.25 + primary.Force / 100
+        vis_recoil = vis_recoil + primary.Force / 15 * self.RecoilForce * (high_recoil and 3 or 1)
+        Recoil = Recoil + 0.25 + primary.Force / 100 * (high_recoil and 3 or 1)
     end
 
     local ply = self:GetOwner()
@@ -120,18 +125,29 @@ function SWEP:Shoot()
     end
 
     if SERVER then
-        sound.Play(istable(self.Sound) and self.Sound[math.random(1,#self.Sound)] or self.Sound,Pos,100,math.random(90,110),1)
+        if self.Attachments['barrel'][1] and self.Attachments['barrel'][1].IsSupp then
+            sound.Play(self.SuppressedSound,Pos,100,math.random(90,110),1)
+        else
+            sound.Play(istable(self.Sound) and self.Sound[math.random(1,#self.Sound)] or self.Sound,Pos,100,math.random(90,110),self.SoundVolume)
+            if self.SubSound then
+                sound.Play(self.SubSound,Pos,75,math.random(90,110),self.SubSoundVolume)
+            end
+        end
     end
 
     local tr_tbl = {
         start = Pos,
         endpos = Pos+Ang:Forward() * 100000,
-        filter = {ent,ply,self,self.worldModel}
+        filter = {ply,self,self.worldModel}
     }   
 
     local tr = util.TraceLine(tr_tbl)
 
     local dist = Pos:Distance(tr.HitPos)
+
+    if self.HitCallBack then
+        self:HitCallBack(tr)
+    end
 
     if self:GetOwner():IsSuperAdmin() then
         if CLIENT then

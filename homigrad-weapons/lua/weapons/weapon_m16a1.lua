@@ -1,6 +1,6 @@
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "M16A1"
-SWEP.Category = "Оружие: Автоматы"
+SWEP.Category = "Оружие: Винтовки"
 SWEP.Spawnable = true
 
 SWEP.WorldModel = "models/weapons/arccw/c_ud_m16.mdl"
@@ -41,7 +41,7 @@ SWEP.Rarity = 5
 SWEP.BoltBone = nil
 SWEP.BoltVec = nil
 
-SWEP.ZoomPos = Vector(8,-2.81,-1.23)
+SWEP.ZoomPos = Vector(8,-2.81,-1.19)
 SWEP.ZoomAng = Angle(-0.5,0,0)
 
 SWEP.CurBul = 0
@@ -55,7 +55,7 @@ end
 function SWEP:PrimaryAdd()
     self.CurBul = self.CurBul + 1
 
-    if self.CurBul > (CLIENT and 3 or 2) then
+    if self.CurBul > 2 then
         self.can = false
     end
 end

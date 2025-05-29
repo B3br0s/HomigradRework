@@ -26,13 +26,13 @@ end)
 
 hook.Add("PostDrawOpaqueRenderables","FixShit",function()
     for _, ply in ipairs(player.GetAll()) do
-        if ply:GetNWBool("Fake") then
+        //if ply:GetNWBool("Fake") then
             hook.Run("PostDrawPlayerRagdoll",ply,hg.GetCurrentCharacter(ply))
-        end
+        //end
     end
 end)
 
-hook.Add("Think","123123",function()
+hook.Add("PreRender","123123",function()
     for _, ply in ipairs(player.GetAll()) do
         if ply:GetNWBool("Fake") then
             hook.Run("PostDrawPlayerRagdoll",ply,hg.GetCurrentCharacter(ply))
@@ -96,7 +96,11 @@ function hg.RenderArmor(ply)
 
             if !IsValid(ply.armor_render[placement]) then
                 ply.armor_render[placement] = nil
-            end        
+            end   
+            
+            if !ply.armor_render[placement] then
+                continue 
+            end
 
             if ply.armor_render[placement]:GetModel() != tbl.Model then
                 ply.armor_render[placement]:Remove()
@@ -202,6 +206,15 @@ function hg.RenderArmorEnt(ent)
                 end)
             end
         
+            if !IsValid(ent) then
+                continue 
+            end
+
+            if !IsValid(ent.armor_render[placement]) then
+                ent.armor_render[placement] = nil
+                continue 
+            end
+
             if ent.armor_render[placement]:GetModel() != tbl.Model then
                 ent.armor_render[placement]:Remove()
                 ent.armor_render[placement] = nil

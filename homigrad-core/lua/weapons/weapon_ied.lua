@@ -3,7 +3,7 @@ SWEP.Base                   = "weapon_base"
 SWEP.PrintName 				= "Самодельное взрывное устройство"
 SWEP.Author 				= "Homigrad"
 //SWEP.Instructions			= "ЛКМ - Поставить | Заложить \n ПКМ - взорвать"
-SWEP.Category 				= "Оружие: Остальное"
+SWEP.Category 				= "Остальное"
 
 SWEP.Spawnable 				= true
 SWEP.AdminOnly 				= false

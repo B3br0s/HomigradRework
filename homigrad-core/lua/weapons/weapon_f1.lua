@@ -3,7 +3,7 @@ SWEP.Base = "weapon_gren_base"
 SWEP.PrintName = "F1"
 SWEP.Author = "Homigrad"
 SWEP.Instructions = ""
-SWEP.Category = "Оружие: Гранаты"
+SWEP.Category = "Гранаты"
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

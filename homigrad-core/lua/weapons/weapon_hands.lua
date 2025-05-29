@@ -1,5 +1,6 @@
 SWEP.IgnoreAll = true
 SWEP.IKAnimationProxy = {}
+SWEP.TPIK_Anims = true
 if SERVER then
 	AddCSLuaFile()
 	SWEP.Weight = 5
@@ -7,7 +8,7 @@ if SERVER then
 	SWEP.AutoSwitchFrom = false
 else
 	SWEP.PrintName = "Руки"
-	SWEP.Category = "Оружие: Остальное"
+	SWEP.Category = "Остальное"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
@@ -800,17 +801,14 @@ end
 function SWEP:DrawWorldModel()
 	local ply = self:GetOwner()
 
-	if ply:GetActiveWeapon() == self then
-		if IsValid(self.worldModel) then
-			local angs = ply:EyeAngles()
-			angs[1] = math.Clamp(angs[1],-89,60)
-			local pos = ply:GetBonePosition(6) - angs:Forward() * 8
-
-			self.worldModel:SetPos(pos)
-			self.worldModel:SetRenderOrigin(pos)
-			self.worldModel:SetAngles(angs)
-			self.worldModel:SetRenderAngles(angs)
-		end
+	if IsValid(self.worldModel) then
+		local angs = ply:EyeAngles()
+		angs[1] = math.Clamp(angs[1],-89,60)
+		local pos = ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1")) - angs:Forward() * 8
+		self.worldModel:SetPos(pos)
+		self.worldModel:SetRenderOrigin(pos)
+		self.worldModel:SetAngles(angs)
+		self.worldModel:SetRenderAngles(angs)
 	end
 
 	if !IsValid(ply) then

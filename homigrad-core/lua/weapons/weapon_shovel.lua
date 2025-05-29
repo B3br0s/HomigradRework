@@ -1,5 +1,5 @@
 SWEP.Base = "weapon_melee"
-SWEP.Category = "Оружие: Ближний Бой"
+SWEP.Category = "Ближний Бой"
 SWEP.Author = "Homigrad"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true

@@ -113,11 +113,23 @@ function SolidMapVote.getWinningMaps()
     end
 
     -- Count up all the votes
-    for steamId64, vote in pairs( SolidMapVote.votes ) do
-        local ply = player.GetBySteamID64( steamId64 )
-        local power = IsValid( ply ) and SolidMapVote[ 'Config' ][ 'Vote Power' ]( ply ) or 1
+    for steamId64, vote in pairs(SolidMapVote.votes) do
+        if not steamId64 or not vote then continue end
+        
+        local ply = player.GetBySteamID64(steamId64)
+        local power = 1
+        
+        if IsValid(ply) then
+            local votePowerFunc = SolidMapVote.Config and SolidMapVote.Config['Vote Power']
+            if isfunction(votePowerFunc) then
+                power = votePowerFunc(ply) or 1
+            end
+        end
 
-        mapVoteCounts[ vote ] = mapVoteCounts[ vote ] + power
+        power = tonumber(power) or 1
+        power = math.max(1, power)
+
+        mapVoteCounts[vote] = (mapVoteCounts[vote] or 0) + power
     end
 
     -- Find the winning amount

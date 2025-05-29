@@ -1,5 +1,5 @@
 SWEP.Base = "weapon_melee"
-SWEP.Category = "Оружие: Ближний Бой"
+SWEP.Category = "Ближний Бой"
 SWEP.Author = "Homigrad"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
@@ -23,6 +23,8 @@ SWEP.AutoSwitchFrom = false
 SWEP.Slot = 1
 SWEP.SlotPos = 2
 
+SWEP.Secondary.Ammo = "Nails"
+
 SWEP.Rarity = 4
 SWEP.HoldType = "melee"
 SWEP.AnimWait = 2
@@ -42,6 +44,9 @@ SWEP.IconPos = Vector(60,5.25,0)
 SWEP.AttackHitFlesh = {"weapons/melee/flesh_impact_blunt_01.wav","weapons/melee/flesh_impact_blunt_02.wav","weapons/melee/flesh_impact_blunt_05.wav","weapons/melee/flesh_impact_blunt_03.wav"}
 SWEP.AttackHit = "snd_jack_hmcd_hammerhit.wav"
 SWEP.DeploySnd = "physics/metal/metal_grenade_impact_soft2.wav"
+
+function SWEP:Reload()
+end
 
 SWEP.Animations = {
 	["idle"] = {
@@ -101,11 +106,12 @@ function SWEP:SecondaryAttack()
 		local tRes1, tRes2 = TwoTrace(att)
 		if not tRes1 then return end
 
-		if self:Clip2() == 0 then return end
+		if att:GetAmmoCount(self:GetSecondaryAmmoType()) <= 0 then return end
+
+		att:RemoveAmmo(1,"Nails")
 
 		timer.Simple(self.AttackTime,function()
             if SERVER then
-		    	self:SetClip2(self:Clip2() - 1)
                 
 		    	local ent1, ent2 = tRes1.Entity, tRes2.Entity
 		    	ent1.IsWeld = (ent1.IsWeld or 0) + 1
@@ -131,7 +137,7 @@ function SWEP:SecondaryAttack()
 		    	ent2.weld[weldEntity] = ent1
 
 				if ROUND_NAME == "zs" then
-					zs.AddPoints(att,3)
+					zs.AddPoints(att,math.random(5,10))
 				end
             
 		    	self:GetOwner():EmitSound("snd_jack_hmcd_hammerhit.wav", 65)
@@ -235,3 +241,9 @@ local bonenames = {
 	["ValveBiped.Bip01_L_Thigh"] = "#hg.bones.lthigh",
 	["ValveBiped.Bip01_L_Calf"] = "#hg.bones.lcalf"
 }
+
+function SWEP:DrawHUDAdd()
+	local sw,sh = ScrW(),ScrH()
+	
+	draw.DrawText(self:GetOwner():GetAmmoCount(self:GetSecondaryAmmoType()).." Nails","hg_HomicideMediumLarge",sw/1.4,sh/1.2,self:GetOwner():GetAmmoCount(self:GetSecondaryAmmoType()) <= 0 and Color(255,0,0) or Color(0,255,0),TEXT_ALIGN_LEFT)
+end

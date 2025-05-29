@@ -43,6 +43,9 @@ else
 end
 
 function hg.PlayAnim(self,anim, mult, lock, delayidle, noproxy, notranslate, noidle)
+    if !self.TPIK_Anims then
+        return
+    end
     if SERVER then
         local anim_tbl = {
             self,

@@ -1,5 +1,5 @@
 SWEP.Base = "weapon_melee"
-SWEP.Category = "Оружие: Ближний Бой"
+SWEP.Category = "Ближний Бой"
 SWEP.Author = "Homigrad"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
@@ -38,8 +38,8 @@ SWEP.AttackHitFlesh = {"weapons/melee/flesh_impact_blunt_01.wav","weapons/melee/
 SWEP.AttackHit = {"physics/flesh/flesh_impact_hard1.wav","physics/flesh/flesh_impact_hard2.wav","physics/flesh/flesh_impact_hard3.wav"}
 SWEP.DeploySnd = "physics/metal/weapon_impact_soft1.wav"
 
-SWEP.IconAng = Angle(90,0,-90)
-SWEP.IconPos = Vector(65,0,1.25)
+SWEP.IconAng = Angle(0,0,90)
+SWEP.IconPos = Vector(110,2.1,3)
 
 SWEP.Animations = {
 	["idle"] = {

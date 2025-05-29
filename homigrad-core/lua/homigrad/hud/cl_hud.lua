@@ -1,7 +1,7 @@
 hook.Add("HUDPaint","OpenShit",function()
     draw.SimpleText(hg.GetPhrase("open_alpha"),"H.25",ScrW() / 2,ScrH() / 1.3,Color(255,255,255,52.5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     //draw.SimpleText("homigrad.com 548 commit","HS.14",ScrW()/1.002,ScrH(),Color(255,255,255,255),TEXT_ALIGN_RIGHT,TEXT_ALIGN_BOTTOM) //затролл
-    draw.SimpleText("hg rework alpha 130 commit","HS.14",ScrW()/1.002,ScrH(),Color(255,255,255,255),TEXT_ALIGN_RIGHT,TEXT_ALIGN_BOTTOM)
+    draw.SimpleText("hg rework alpha 131 commit","HS.14",ScrW()/1.002,ScrH(),Color(255,255,255,255),TEXT_ALIGN_RIGHT,TEXT_ALIGN_BOTTOM)
     draw.SimpleText(hg.GetPhrase("report_bugs"),"H.18",ScrW() / 2,ScrH() / 1.27,Color(255,255,255,52.5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
     draw.SimpleText(LocalPlayer():SteamID(),"H.18",ScrW() / 2,ScrH() / 1.23,Color(255,255,255,100),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 end)

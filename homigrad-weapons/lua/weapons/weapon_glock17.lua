@@ -34,8 +34,8 @@ SWEP.IconAng = Angle(0,90,0)
 
 SWEP.TwoHands = false
 
-SWEP.ZoomPos = Vector(6,-2.8,-1.18)
-SWEP.ZoomAng = Angle(-0.8,-0.05,0)
+SWEP.ZoomPos = Vector(6,-2.81,-1.1)
+SWEP.ZoomAng = Angle(-1.2,-0.05,0)
 
 SWEP.Animations = {
 	["idle"] = {

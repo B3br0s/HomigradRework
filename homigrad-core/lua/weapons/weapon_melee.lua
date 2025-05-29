@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_base"
 
-SWEP.Category = "Оружие: Ближний Бой"
+SWEP.Category = "Ближний Бой"
 SWEP.Author = "Homigrad"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
@@ -15,6 +15,8 @@ SWEP.AnimAng = Angle(0,0,0)
 SWEP.AnimPos = Vector(-9,-2,0)
 
 SWEP.ModelScale = 1.2
+
+SWEP.TPIK_Anims = true
 
 SWEP.ViewModelFlip = false
 
@@ -207,6 +209,8 @@ function SWEP:DrawWorldModel(mat)
         end
     end
 
+    local ent = hg.GetCurrentCharacter(ply)
+
     if !ismatrix(mat) then
         return
     end
@@ -218,12 +222,14 @@ function SWEP:DrawWorldModel(mat)
 			local angs = ply:EyeAngles()
             local _,ang = LocalToWorld(vector_origin,(self.AnimAng or angle_zero),vector_origin,angs)
 			angs[1] = math.Clamp(angs[1],-89,40)
-			local pos = ent:GetBonePosition(6) + ply:EyeAngles():Forward() * self.AnimPos[1] + ply:EyeAngles():Right() * self.AnimPos[2] + ply:EyeAngles():Up() * self.AnimPos[3]
+			local pos = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1")) + ply:EyeAngles():Forward() * self.AnimPos[1] + ply:EyeAngles():Right() * self.AnimPos[2] + ply:EyeAngles():Up() * self.AnimPos[3]
 
 			self.worldModel:SetPos(pos)
 			self.worldModel:SetRenderOrigin(pos)
 			self.worldModel:SetAngles(ang)
 			self.worldModel.IsIcon = true
+			self.worldModel.DontOptimise = true
+            self.worldModel:SetPredictable(true)
 			self.worldModel:SetRenderAngles(ang)
 		end
 
@@ -238,7 +244,9 @@ function SWEP:DrawWorldModel(mat)
 			self.fakeWorldModel:SetRenderOrigin(pos)
 			self.fakeWorldModel:SetAngles(ang)
 			self.fakeWorldModel.IsIcon = true
+			self.fakeWorldModel.DontOptimise = true
 			self.fakeWorldModel:SetRenderAngles(ang)
+            self.fakeWorldModel:SetPredictable(true)
 
             if ply:IsSuperAdmin() then
                 self.fakeWorldModel:SetMaterial("models/mat_jack_gmod_brightwhite")
@@ -312,9 +320,14 @@ end
 if CLIENT then
     local lerp = 0
     local rlerp = 0
+
+    function SWEP:DrawHUDAdd()
+    end
     
     function SWEP:DrawHUD()
         local ply = self:GetOwner()
+
+        self:DrawHUDAdd()
 
         local tr = hg.eyeTrace(self:GetOwner())
 

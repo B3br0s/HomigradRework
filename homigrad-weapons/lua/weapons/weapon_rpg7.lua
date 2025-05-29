@@ -48,22 +48,15 @@ SWEP.Rarity = 6
 SWEP.TwoHands = true
 SWEP.CanSuicide = false
 
-SWEP.ZoomPos = Vector(2,-4.025,-0.11)
-SWEP.ZoomAng = Angle(-0.4,-0.18,-9)
+SWEP.ZoomPos = Vector(2,-4.03,-0.1)
+SWEP.ZoomAng = Angle(-0.4,-0.18,0)
 
 function SWEP:PostAnim()
-    if self.BoltBone and self.BoltVec and CLIENT then
-        local bone = self:GetWM():LookupBone(self.BoltBone)
-
-        if self:Clip1() == 0 then 
-            self.animmul = 0
-        else
-            self.animmul = 1
-        end
-
-        if bone then
-            self:GetWM():ManipulateBoneScale(bone,self.BoltVec * self.animmul)
-        end
+    if SERVER then
+        self:SetNWBool("IsEmpty",self:Clip1() == 0)
+    end
+    if self.BoltBone and self.BoltVec and IsValid(self.worldModel) and self:GetWM():LookupBone(self.BoltBone) then
+        self.worldModel:ManipulateBoneScale(self.worldModel:LookupBone(self.BoltBone),Vector(1,1,1) * (self:GetNWBool("IsEmpty") and 0 or 1))
     end
 end
 

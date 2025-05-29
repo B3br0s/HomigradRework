@@ -12,6 +12,9 @@ hook.Add("Think","Homigrad_Ragdoll_Color",function()
 		if ent:IsRagdoll() then
 			if ent:GetNWVector("PlayerColor") then
 				if IsValid(ent) then
+					function ent.RenderOverride()
+						hg.RagdollRender(ent)
+					end
 					ent.GetPlayerColor = function()
 						return ent:GetNWVector("PlayerColor")
 					end

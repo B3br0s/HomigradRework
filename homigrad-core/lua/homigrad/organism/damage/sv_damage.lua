@@ -65,7 +65,7 @@ hook.Add("PlayerDeath","Homigrad_DeathScreen",function(ply,attacker,killedby)
 	ply:SetNWEntity("LastAttacker",killedby)
 	ply.PLYSPAWN_OVERRIDE = false
 	timer.Simple(0,function()
-		if IsValid(ply.FakeRagdoll) then
+		if IsValid(ply.FakeRagdoll) and IsValid(ply.FakeRagdoll:GetPhysicsObject()) then
 			ply.FakeRagdoll:GetPhysicsObject():SetMass(20)
 			ply.AppearanceOverride = false
 		end

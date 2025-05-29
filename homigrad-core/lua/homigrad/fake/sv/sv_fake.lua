@@ -3,6 +3,7 @@ local EntityMeta = FindMetaTable("Entity")
 util.AddNetworkString("fake")
 util.AddNetworkString("RemoveRag")
 util.AddNetworkString("DeadBodies")
+util.AddNetworkString("unload")
 
 //Краткий гайд каким нужно делать рагдолл
 /*
@@ -28,6 +29,27 @@ net.Receive("fake",function(len,ply)
     Faking(ply,ply:GetVelocity())
 end)
 
+net.Receive("unload",function(l,ply)
+	local ent = net.ReadEntity()
+	if ent:GetOwner() != ply then
+		ply:Kick("Unloads your game.")
+		return
+	end
+
+	if !ent.Clip1 then
+		return
+	end
+
+	if ent:Clip1() == 0 then
+		return
+	end
+
+	sound.Play("snd_jack_hmcd_ammotake.wav",hg.GetCurrentCharacter(ply):GetPos(),75,100,1)
+
+	ply:GiveAmmo(ent:Clip1(),ent:GetPrimaryAmmoType(),true)
+	ent:SetClip1(0)
+end)
+
 function PlayerMeta:RagView()
 	local ply = self
 	ply:Spectate(OBS_MODE_CHASE)
@@ -47,6 +69,11 @@ function PlayerMeta:ChatPrintLocalized(string)
     net.WriteString(tostring(string))
     net.Send(self)
 end
+
+local weights = {
+	["models/css_seb_swat/css_swat.mdl"] = {[1] = 0.04},
+	["models/css_seb_swat/css_seb.mdl"] ={[1] = 0.04},
+}
 
 function PlayerMeta:CreateFake(force)
     local rag = ents.Create("prop_ragdoll")
@@ -71,6 +98,10 @@ function PlayerMeta:CreateFake(force)
 
 	rag:SetNWString("PlayerName",self:Name())
 	rag:GetPhysicsObject():SetMass(30)
+
+	//if weights[rag:GetModel()] then
+	//	rag:GetPhysicsObject():SetMass(weights[rag:GetModel()])
+	//end
 
     self.FakeRagdoll = rag
 
@@ -449,338 +480,13 @@ hook.Add("Player Think","FakeThink",function(ply,time)
 	hook.Run("FakeControl",ply,rag)
 end)
 
-hook.Add("FakeControl","PlayerControl",function(ply,rag)
-	local Head = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Head1" )) )
-	local Neck = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Neck1" )) )
-	local Spine4 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine4" )) )
-	local Spine2 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine2" )) )
-	local Spine1 = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine1" )) )
-	local Spine = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Spine" )) )
-	local Penis = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Pelvis" )) )
-	local CalfR = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Calf" )) )
-	local CalfL = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Calf" )) )
-	local FArmL = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Forearm" )) )
-	local FArmR = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Forearm" )) )
-	local HandL = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_L_Hand" )) )
-	local HandR = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )) )
-    local eyeangs = ply:EyeAngles()
-
-    local HeadAngles, HeadPosition = WorldToLocal(Spine2:GetPos(), Spine2:GetAngles(),Head:GetPos(), Head:GetAngles() )
-
-	if ply.otrub then return end
-
-	local HeadAng = ply:EyeAngles()
-	HeadAng:RotateAroundAxis(HeadAng:Forward(),90)
-	HeadAng:RotateAroundAxis(HeadAng:Up(),90)
-
-	local ismoving = (ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsRH)) or (ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH))
-
-	//Управление
-
-	if ply:KeyDown(IN_USE) or ply:GetActiveWeapon().SupportTPIK and ply:GetActiveWeapon():GetClass() != "weapon_hands" then
-		local angs = ply:EyeAngles()
-		angs:RotateAroundAxis(angs:Forward(),0)
-		angs:RotateAroundAxis(angs:Up(),-90)
-		angs:RotateAroundAxis(angs:Right(),90)
-
-		local mul = ismoving and 0.45 or 0.045
-
-		local sp = {
-			secondstoarrive = 0.35,
-			pos = Spine4:GetPos() + ((ply:KeyDown(IN_ATTACK) and ply:KeyDown(IN_ATTACK2)) and ply:EyeAngles():Forward() * 0.5 or Vector()),
-			angle = angs,
-			maxangular = 360 * 3,
-			maxangulardamp = 1,
-			dampfactor = mul,
-			maxspeeddamp = 75,
-			maxspeed = 400,
-			teleportdistance = 0,
-			deltatime=deltatime,
-		}
-
-		local angs = ply:EyeAngles()
-		angs:RotateAroundAxis(angs:Forward(),0)
-		angs:RotateAroundAxis(angs:Up(),-90)
-		angs:RotateAroundAxis(angs:Right(),90)
-
-		local sp2 = {
-			secondstoarrive = 0.1/1e8,
-			pos = Spine2:GetPos() + ((ply:KeyDown(IN_ATTACK) and ply:KeyDown(IN_ATTACK2)) and ply:EyeAngles():Forward() * 0.5 or Vector()),
-			angle = angs,
-			maxangular = 360 * 3,
-			maxangulardamp = 1,
-			dampfactor = mul,
-			maxspeeddamp = 125,
-			maxspeed = 200,
-			teleportdistance = 0,
-			deltatime=deltatime,
-		}
-
-		Spine4:Wake()
-		Spine4:ComputeShadowControl(sp)
-
-		Spine2:Wake()
-		Spine2:ComputeShadowControl(sp2)
-	end
-
-	if ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH) then
-		local angs = ply:EyeAngles()
-		angs:RotateAroundAxis(angs:Forward(),0)
-		angs:RotateAroundAxis(angs:Up(),-90)
-		angs:RotateAroundAxis(angs:Right(),90)
-
-		local dist = HandR:GetPos():Distance(Spine4:GetPos())
-
-		local velo = rag:GetVelocity():Length() / 400
-
-		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 750 then
-			local sp = {
-				secondstoarrive = 0.1/1e8,
-				pos = Spine4:GetPos() + ply:EyeAngles():Forward() * 7,
-				angle = Spine4:GetAngles(),
-				maxangular = 360 * 3,
-				maxangulardamp = 0,
-				dampfactor = 0,
-				maxspeeddamp = 0,
-				maxspeed = (ply:KeyDown(IN_USE) and 425 or 25),
-				teleportdistance = 23,
-				deltatime=deltatime,
-			}
-
-			Spine4:Wake()
-			Spine4:ComputeShadowControl(sp)
-
-			sp.angle = Spine:GetAngles()
-			sp.secondstoarrive = 0.5// * (1 + velo)
-			Spine:Wake()
-			Spine:ComputeShadowControl(sp)
-		end
-	end
-
-	if ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsRH) then
-		local angs = ply:EyeAngles()
-		angs:RotateAroundAxis(angs:Forward(),0)
-		angs:RotateAroundAxis(angs:Up(),-90)
-		angs:RotateAroundAxis(angs:Right(),90)
-
-		local dist = HandL:GetPos():Distance(Spine4:GetPos())
-
-		local mul = math.Clamp(1 - dist / 30,0,0.6)
-
-		local velo = rag:GetVelocity():Length() / 400
-
-		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 750 then
-			local sp = {
-				secondstoarrive = 0.1/1e8,
-				pos = Spine4:GetPos() + ply:EyeAngles():Forward() * 7,
-				angle = Spine4:GetAngles(),
-				maxangular = 360 * 3,
-				maxangulardamp = 0,
-				dampfactor = 0,
-				maxspeeddamp = 0,
-				maxspeed = (ply:KeyDown(IN_USE) and 425 or 25),
-				teleportdistance = 23,
-				deltatime=deltatime,
-			}
-
-			Spine4:Wake()
-			Spine4:ComputeShadowControl(sp)
-
-			sp.angle = Spine:GetAngles()
-			sp.secondstoarrive = 0.45// * (1 + velo)
-			Spine:Wake()
-			Spine:ComputeShadowControl(sp)
-		end
-	end
-
-	if ply:KeyDown(IN_BACK) and IsValid(rag.ZacConsLH) then
-		local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Spine2")))
-		local chst = rag:GetPhysicsObjectNum(0)
-		local angs = ply:EyeAngles()
-		angs:RotateAroundAxis(angs:Forward(), 90)
-		angs:RotateAroundAxis(angs:Up(), 90)
-		local speed = 60
-		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 4000 then
-			local shadowparams = {
-				secondstoarrive = 1,
-				pos = chst:GetPos() + ply:EyeAngles():Forward() * -20 + ply:EyeAngles():Up() * -5,
-				angle = phys:GetAngles(),
-				maxangulardamp = 1/1e8,
-				maxspeeddamp = 10,
-				maxangular = 30,
-				dampfactor = 0,
-				maxspeed = speed,
-				teleportdistance = 0,
-				deltatime = deltatime,
-			}
-
-			phys:Wake()
-			phys:ComputeShadowControl(shadowparams)
-		end
-	end
-
-	if ply:KeyDown(IN_BACK) and IsValid(rag.ZacConsRH) then
-		local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Spine2")))
-		local chst = rag:GetPhysicsObjectNum(0)
-		local angs = ply:EyeAngles()
-		angs:RotateAroundAxis(angs:Forward(), 90)
-		angs:RotateAroundAxis(angs:Up(), 90)
-		local speed = 60
-		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 4000 then
-			local shadowparams = {
-				secondstoarrive = 1,
-				pos = chst:GetPos() + ply:EyeAngles():Forward() * -20 + ply:EyeAngles():Up() * -5,
-				angle = phys:GetAngles(),
-				maxangulardamp = 1/1e8,
-				maxspeeddamp = 10,
-				maxangular = 30,
-				dampfactor = 0,
-				maxspeed = speed,
-				teleportdistance = 0,
-				deltatime = deltatime,
-			}
-
-			phys:Wake()
-			phys:ComputeShadowControl(shadowparams)
-		end
-	end
-
-	//Руки
-
-	if ply:KeyDown(IN_ATTACK2) and !ply:GetActiveWeapon().SupportTPIK then
-		local angs = ply:EyeAngles()
-		angs:RotateAroundAxis(angs:Forward(),90)
-		angs:RotateAroundAxis(angs:Right(),0)
-		angs:RotateAroundAxis(angs:Up(),120)
-		local sp = {
-			secondstoarrive = 0.01,
-				pos = Head:GetPos() + ply:EyeAngles():Forward() * 32 + ply:EyeAngles():Right() * 10,
-				angle = angs,
-				maxangular = 360,
-				maxangulardamp = 0.1/1e8,
-				maxspeeddamp = 150,
-				maxspeed = 650,
-				dampfactor = 0.65,
-				teleportdistance = 0,
-				deltatime=deltatime,
-		}
-
-		HandR:Wake()
-		HandR:ComputeShadowControl(sp)
-	end
-
-	if ply:KeyDown(IN_ATTACK) and !ply:GetActiveWeapon().SupportTPIK then
-		local angs = ply:EyeAngles()
-		angs:RotateAroundAxis(angs:Forward(),90)
-		angs:RotateAroundAxis(angs:Right(),0)
-		angs:RotateAroundAxis(angs:Up(),120)
-		local sp = {
-			secondstoarrive = 0.01,
-				pos = Head:GetPos() + ply:EyeAngles():Forward() * 32 + ply:EyeAngles():Right() * -10,
-				angle = angs,
-				maxangular = 360,
-				maxangulardamp = 0.1/1e8,
-				maxspeeddamp = 150,
-				maxspeed = 650,
-				dampfactor = 0.65,
-				teleportdistance = 0,
-				deltatime=deltatime,
-		}
-
-		HandL:Wake()
-		HandL:ComputeShadowControl(sp)
-	end
-	
-	if ply:KeyDown(IN_SPEED) and !ROUND_NAME == "zs" then
-		local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand"))
-		local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
-		if not IsValid(rag.ZacConsLH) and (not rag.ZacNextGrLH or rag.ZacNextGrLH <= CurTime()) then
-			rag.ZacNextGrLH = CurTime() + 0.01
-			for i = 1, 3 do
-				local offset = phys:GetAngles():Up() * 9
-				if i == 2 then
-					offset = phys:GetAngles():Right() * 9
-				end
-
-				if i == 3 then
-					offset = phys:GetAngles():Right() * -9
-				end
-
-				local traceinfo = {
-					start = phys:GetPos(),
-					endpos = phys:GetPos() + offset,
-					filter = rag,
-					output = trace,
-				}
-
-				local trace = util.TraceLine(traceinfo)
-				if trace.Hit and not trace.HitSky then
-					local cons = constraint.Weld(rag, trace.Entity, bone, trace.PhysicsBone, 0, false, false)
-					if trace.Entity:IsPlayer() and !trace.Entity.Fake then
-						Faking(trace.Entity)
-					end
-					if IsValid(cons) then
-						rag.ZacConsLH = cons
-					end
-
-					break
-				end
-			end
-		end
-	else
-		if IsValid(rag.ZacConsLH) then
-			rag.ZacConsLH:Remove()
-			rag.ZacConsLH = nil
-		end
-	end
-
-	if ply:KeyDown(IN_WALK) and !ply:GetActiveWeapon().SupportTPIK and !ROUND_NAME == "zs" then
-		local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
-		local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
-		if not IsValid(rag.ZacConsRH) and (not rag.ZacNextGrRH or rag.ZacNextGrRH <= CurTime()) then
-			rag.ZacNextGrRH = CurTime() + 0.01
-			for i = 1, 3 do
-				local offset = phys:GetAngles():Up() * 9
-				if i == 2 then
-					offset = phys:GetAngles():Right() * 9
-				end
-
-				if i == 3 then
-					offset = phys:GetAngles():Right() * -9
-				end
-
-				local traceinfo = {
-					start = phys:GetPos(),
-					endpos = phys:GetPos() + offset,
-					filter = rag,
-					output = trace,
-				}
-
-				local trace = util.TraceLine(traceinfo)
-				if trace.Hit and not trace.HitSky then
-					local cons = constraint.Weld(rag, trace.Entity, bone, trace.PhysicsBone, 0, false, false)
-					if trace.Entity:IsPlayer() and !trace.Entity.Fake then
-						Faking(trace.Entity)
-					end
-					if IsValid(cons) then
-						rag.ZacConsRH = cons
-					end
-
-					break
-				end
-			end
-		end
-	else
-		if IsValid(rag.ZacConsRH) then
-			rag.ZacConsRH:Remove()
-			rag.ZacConsRH = nil
-		end
-	end
+hook.Add("PlayerSpawn","collide",function(ply)
+	ply:AddCallback("PhysicsCollide",function(ent,data) hook.Run("Player Collide",ply,ent,data) end)
 end)
 
 hook.Add("Player Collide","Ragdolling-Collide",function(ply,ent,data)
-	local LIMIT_MASS = 80
-	local LIMIT_SPEED = 120
+	local LIMIT_MASS = 40
+	local LIMIT_SPEED = 130
 	if ROUND_NAME == "dr" then
 		return
 	end

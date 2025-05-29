@@ -12,15 +12,20 @@ SWEP.holdtypes = {
     ["revolver"] = {[1] = 0.3,[2] = 1.2,[3] = 1.7,[4] = 1.9},
 }
 
+SWEP.Bodygroups = {[1] = 2,[2] = 2}
+
 SWEP.Primary.Automatic = true
 SWEP.Primary.ReloadTime = 1.7
-SWEP.Primary.ClipSize = 17
-SWEP.Primary.DefaultClip = 17
-SWEP.Primary.Damage = 15
+SWEP.Primary.ClipSize = 32
+SWEP.Primary.DefaultClip = 32
+SWEP.Primary.Damage = 25
+SWEP.Primary.Force = 15
 SWEP.Primary.Ammo = "9x19 mm Parabellum"
-SWEP.Primary.Wait = 0.09
+SWEP.Primary.Wait = 0.05
 SWEP.Primary.ReloadTime = 2.4
-SWEP.Sound = "sounds_zcity/ab10/close.wav"
+SWEP.Sound = "zcitysnd/sound/weapons/firearms/rifle_cz858/cz858_fire_01.wav"
+SWEP.SubSound = "hmcd/hndg_beretta92fs/beretta92_fire1.wav"
+SWEP.RecoilForce = 1
 
 SWEP.WorldPos = Vector(-6,-1.5,0)
 SWEP.WorldAng = Angle(1,0,0)
@@ -32,12 +37,12 @@ SWEP.HolsterPos = Vector(-16,4,2)
 SWEP.BoltBone = "v_weapon.Slide"
 SWEP.BoltVec = Vector(0,0,-2)
 
-SWEP.IconPos = Vector(70,-25,0)
+SWEP.IconPos = Vector(70,-27,0)
 SWEP.IconAng = Angle(0,90,0)
 
 SWEP.TwoHands = false
 
-SWEP.ZoomPos = Vector(9.5,-5.1,-2.5)
+SWEP.ZoomPos = Vector(9.5,-5.11,-2.4)
 SWEP.ZoomAng = Angle(-0.8,-0.05,0)
 
 SWEP.Animations = {

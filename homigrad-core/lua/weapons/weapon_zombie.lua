@@ -1,5 +1,5 @@
 SWEP.PrintName = "Zombie"
-SWEP.Category = "Оружие: ZS"
+SWEP.Category = "Остальное"
 SWEP.Spawnable = true
 
 SWEP.ViewModel = Model("models/Weapons/v_zombiearms.mdl")

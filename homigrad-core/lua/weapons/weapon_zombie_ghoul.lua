@@ -1,5 +1,5 @@
 SWEP.PrintName = "Zombie Ghoul"
-SWEP.Category = "Оружие: ZS"
+SWEP.Category = "Остальное"
 SWEP.Spawnable = true
 
 SWEP.ViewModel = Model("models/Weapons/v_zombiearms.mdl")
@@ -21,6 +21,22 @@ SWEP.SwapAnims = false
 
 function SWEP:Deploy()
 	self:SendWeaponAnim(ACT_VM_IDLE)
+end
+
+function SWEP:SecondaryAttack()
+    local ply = self:GetOwner()
+
+    if self:GetNextSecondaryFire() > CurTime() then
+        return
+    end
+
+    self:SetNextSecondaryFire(CurTime() + 10)
+
+    if SERVER then
+        ply:SetVelocity(ply:EyeAngles():Forward() * 450)
+
+        sound.Play("npc/strider/striderx_pain8.wav",ply:GetPos())
+    end
 end
 
 function SWEP:SendAttackAnim(owner)
@@ -71,9 +87,6 @@ function SWEP:PrimaryAttack()
     end)
 
 	self:SendAttackAnim(ply)
-end
-
-function SWEP:SecondaryAttack()
 end
 
 function SWEP:Think()

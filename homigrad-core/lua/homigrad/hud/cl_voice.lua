@@ -34,9 +34,18 @@ function CreateVoice(ply,istalking)
             self:Remove()
         end
 
-        self.ZalupaAvatar = VoiceAvatar
-
         local clr_mul = ply:VoiceVolume() * (ply:Alive() and 1 or 0.2)
+
+        if TableRound and TableRound().TeamBased and ply:Alive() then
+            if ply:Team() != 1002 then
+                local clr = TableRound().Teams[ply:Team()].Color
+                surface.SetDrawColor(clr.r,clr.g,clr.b,250 * self.TalkAmt)
+                surface.SetMaterial(Material("vgui/gradient-r"))
+                surface.DrawTexturedRect(w-w/2 * (clr_mul + 0.3),0,w/2 * (clr_mul + 0.3),h)
+            end
+        end
+
+        self.ZalupaAvatar = VoiceAvatar
 
         self.TalkAmt = LerpFT(0.2,self.TalkAmt,(istalking and 1 or 0))
 
@@ -55,15 +64,6 @@ function CreateVoice(ply,istalking)
 
         draw.SimpleText(ply:Name(),"HO.18",w/1.96,h/1.9,Color(0,0,0,255 * self.TalkAmt),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
         draw.SimpleText(ply:Name(),"HO.18",w/1.97,h/2,Color(255,255,255,255 * self.TalkAmt),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-
-        if TableRound and TableRound().TeamBased and ply:Alive() then
-            if !ply:Team() == 1002 then
-            local clr = TableRound().Teams[ply:Team()].Color
-            surface.SetDrawColor(clr.r,clr.g,clr.b,100 * self.TalkAmt)
-            surface.SetMaterial(Material("vgui/gradient-r"))
-            surface.DrawTexturedRect(w-w/1.18,0,w/1.22,h)
-            end
-        end
     end
 end 
 
@@ -117,6 +117,7 @@ end)
 hook.Add("PlayerEndVoice", "HUD_Indicator", function(ply)
     if IsValid(hg.voicepanel[ply:SteamID()]) then
         hg.voicepanel[ply:SteamID()]:Remove()
+        hg.voicepanel[ply:SteamID()] = nil
         CreateVoice(ply,false)
     end
     return

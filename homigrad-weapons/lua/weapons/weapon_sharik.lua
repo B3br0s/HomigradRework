@@ -1,7 +1,7 @@
 do return end //Создано чтобы потроллить хомяков))
 SWEP.Base = "homigrad_base"
 SWEP.PrintName = "M4A1 SHARIK"
-SWEP.Category = "Оружие: Автоматы"
+SWEP.Category = "Оружие: Винтовки"
 SWEP.Spawnable = true
 
 SWEP.WorldModel = "models/weapons/arc9/darsu_eft/c_hk416.mdl"

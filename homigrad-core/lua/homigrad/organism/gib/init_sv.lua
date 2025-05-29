@@ -113,6 +113,8 @@ end
 hook.Add("Homigrad_Gib", "Gib_Main", function(rag, dmginfo, physbone, hitgroup, bone)
 	if WhiteList[rag:GetModel()] then return end
 
+	if GetGlobalBool("NoGib",false) then return end
+
 	local owner = rag:GetNWEntity("RagdollOwner")
 	if IsValid(owner) and owner.FakeRagdoll == rag then
 		owner.LastHitBone = bone

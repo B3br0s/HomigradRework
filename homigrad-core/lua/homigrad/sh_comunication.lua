@@ -1,7 +1,7 @@
 local function ChatLogic(output, input, isChat, teamonly, text)
     if not IsValid(output) or not IsValid(input) then return false end
     
-    local result, is3D = hook.Run("ChatingCanLisen", output, input, isChat, teamonly, text)
+    local result, is3D = hook.Run("Player Can Lisen", output, input, isChat, teamonly, text)
     if result ~= nil then return result, is3D end
 
     if ROUND_ENDED or !ROUND_ACTIVE then
