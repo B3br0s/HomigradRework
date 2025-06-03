@@ -1,12 +1,12 @@
 SWEP.Base = "homigrad_base"
-SWEP.PrintName = "AK74"
+SWEP.PrintName = "AKM"
 SWEP.Category = "Оружие: Винтовки"
 SWEP.Spawnable = true
 
 SWEP.WorldModel = "models/weapons/arccw/c_ur_ak.mdl"
 SWEP.ViewModel = "models/weapons/arccw/c_ur_ak.mdl"
 
-SWEP.Bodygroups = {[1] = 3,[2] = 9,[3] = 0,[4] = 0,[5] = 0,[6] = 12,[7] = 0,[8] = 0,[9] = 2,[10] = 2}
+SWEP.Bodygroups = {[1] = 1,[2] = 0,[3] = 0,[4] = 0,[5] = 0,[6] = 8,[7] = 0,[8] = 0,[9] = 2,[10] = 2}
 
 SWEP.HoldType = "ar2"
 
@@ -19,10 +19,11 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 30
 SWEP.Primary.Damage = 35
-SWEP.Primary.Force = 15
-SWEP.Primary.Ammo = "5.45x39 mm"
+SWEP.Primary.Force = 1
+SWEP.Primary.Ammo = "7.62x39 mm"
 SWEP.Primary.Wait = 0.09
-SWEP.Sound = "zcitysnd/sound/weapons/firearms/rifle_cz858/cz858_fire_01.wav"
+SWEP.Sound = "zcitysnd/sound/weapons/firearms/rifle_fnfal/fnfal_fire_01.wav"
+SWEP.SubSound = "hmcd/rifle_win1892/win1892_fire_01.wav"
 SWEP.SuppressedSound = "sounds_zcity/ak74/supressor.wav"
 SWEP.RecoilForce = 0.4
 

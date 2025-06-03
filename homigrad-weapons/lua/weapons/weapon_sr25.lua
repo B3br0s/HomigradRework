@@ -1,12 +1,12 @@
+do return end 
 SWEP.Base = "homigrad_base"
-SWEP.PrintName = "AR-15"
-SWEP.Category = "Оружие: Винтовки"
+SWEP.PrintName = "SR-25"
+SWEP.Category = "Оружие: Снайперские Винтовки"
 SWEP.Spawnable = true
 
-SWEP.WorldModel = "models/weapons/arccw/c_ud_m16.mdl"
-SWEP.ViewModel = "models/weapons/arccw/c_ud_m16.mdl"
-
-SWEP.Bodygroups = {[1] = 1,[2] = 0,[3] = 2,[4] = 2,[5] = 5,[6] = 2,[7] = 8}
+SWEP.WorldModel = "models/weapons/w_sr25_ins2_eft.mdl"
+SWEP.WorldModelReal = "models/weapons/v_sr25_eft.mdl" //МОДЕЛЬКА ГАВНО!!!!!
+SWEP.ViewModel = "models/weapons/v_sr25_eft.mdl"
 
 SWEP.HoldType = "ar2"
 
@@ -55,18 +55,15 @@ SWEP.MountType = "picatinny"
 SWEP.AvaibleAtt = {
     ["sight"] = true,
     ["barrel"] = true,
-    ["grip"] = true
 }
 
 SWEP.AttachmentPos = {
     ['sight'] = Vector(2,0,1.55),
     ['barrel'] = Vector(15.5,0,0.35),
-    ['grip'] = Vector(-9,0,-1)
 }
 SWEP.AttachmentAng = {
     ['sight'] = Angle(-90,0,-90),
     ['barrel'] = Angle(-90,0,-90),
-    ['grip'] = Angle(-90,0,90)
 }
 
 SWEP.Animations = {

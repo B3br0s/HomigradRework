@@ -41,14 +41,14 @@ hg.loots.small_crate = {
 	"weapon_hammer",
 	"weapon_sog",
 	"weapon_hatchet",
-	"weapon_glock17",
+	"weapon_glockp80",
 	"weapon_tec9"
 }
 
 hg.loots.medium_crate = {
 	"weapon_deagle_a",
 	"weapon_deagle_b",
-	"weapon_glock17",
+	"weapon_glockp80",
 	"weapon_tec9",
 	"weapon_handcuffs",
 	"weapon_w1894",
@@ -70,7 +70,7 @@ hg.loots.large_crate = {
 	"weapon_w1894",
 	"weapon_deagle_a",
 	"weapon_deagle_b",
-	"weapon_glock17",
+	"weapon_glockp80",
 	"weapon_tec9",
 	"weapon_ak74",
 	"weapon_m4a1",
@@ -112,7 +112,7 @@ hg.loots.weapon_crate = {
 	"weapon_mp7",
 	"weapon_deagle_a",
 	"weapon_deagle_b",
-	"weapon_glock17",
+	"weapon_glockp80",
 	"weapon_w1894",
 	"weapon_tec9",
 	"weapon_ak74",

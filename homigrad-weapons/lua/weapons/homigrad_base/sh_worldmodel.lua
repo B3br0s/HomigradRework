@@ -5,10 +5,17 @@ SWEP.HolsterAng = Angle(0,0,0)
 SWEP.HolsterPos = Vector(0,0,0)
 SWEP.HolsterBone = "ValveBiped.Bip01_Pelvis"
 
+//SWEP.LHandAng = Angle(0,0,0)
+//SWEP.LHand = Vector(0,0,0)
+//SWEP.RHandAng = Angle(0,0,0)
+//SWEP.RHand = Vector(0,0,0)
+
 SWEP.ClosePos = 0
 SWEP.Isclose = false    
 
 SWEP.DetailsDraw = {}
+
+SWEP.Bodygroups = {}
 
 local suicide_pist_ang = Angle(120,0,0)
 local suicide_pist_pos = Vector(-25,-2,-1.5)
@@ -65,7 +72,9 @@ function SWEP:WorldModel_Transform(nomod)
         return
     end
 
-    local Pos = mat:GetTranslation()
+    local zapasnoy_plan = hg.eyeTrace(ply)
+
+    local Pos = mat:GetTranslation() or zapasnoy_plan.StartPos// + (ply:EyeAngles().p > 0 and ply:EyeAngles():Up() * 5 or Vector())
     local Ang = ply:EyeAngles()
 
     local isclose = self.Isclose
@@ -112,7 +121,7 @@ function SWEP:WorldModel_Transform(nomod)
         Pos = Pos + Ang:Up() * ply.prev_wep_pos[3]
     end
 
-    self:DrawAttachments()
+    //self:DrawAttachments()
 
     local model = self.worldModel
 

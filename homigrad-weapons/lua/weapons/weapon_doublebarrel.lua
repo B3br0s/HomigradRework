@@ -8,6 +8,7 @@ SWEP.ViewModel = "models/weapons/arccw/c_ur_dbs.mdl"
 
 SWEP.holdtypes = {
     ["ar2"] = {[1] = 0.27,[2] = 0.7,[3] = 1.75,[4] = 2.2},
+    ["revolver"] = {[1] = 0.27,[2] = 0.7,[3] = 1.75,[4] = 2.2},
 }
 
 SWEP.HoldType = "ar2"

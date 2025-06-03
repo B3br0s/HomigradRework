@@ -113,7 +113,7 @@ end
 
 function hmcd.SpawnCop(ply)
     local Wep1 = ply:Give("weapon_taser")
-    local Wep2 = ply:Give("weapon_glock17")
+    local Wep2 = ply:Give("weapon_glockp80")
 
    // ply:GiveAmmo(Wep1:GetMaxClip1() * 1, Wep1:GetPrimaryAmmoType(), true)
     ply:GiveAmmo(Wep2:GetMaxClip1() * 3, Wep2:GetPrimaryAmmoType(), true)
@@ -137,7 +137,7 @@ function hmcd.AssignGunMan(tbl)
             RandomPlayer:Give("weapon_870_b")
         end
     elseif hmcd.Type == "standard" then
-        RandomPlayer:Give("weapon_glock17")
+        RandomPlayer:Give("weapon_glockp80")
     elseif hmcd.Type == "ww" then
         local w1 = RandomPlayer:Give("weapon_329pd")
         local w2 = RandomPlayer:Give("weapon_w1894")

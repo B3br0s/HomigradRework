@@ -218,7 +218,7 @@ local cost = {
     ["ent_ammo_rpg7proj"] = 300,
     ["ent_ammo_.30win"] = 45,
     ["ent_ammo_nails"] = 5,
-    ["weapon_glock17"] = 50,  
+    ["weapon_glockp80"] = 50,  
     ["weapon_fiveseven"] = 60,
     ["weapon_tec9"] = 50,     
     ["weapon_usp_match"] = 60,
@@ -367,3 +367,13 @@ hook.Add("PlayerDeath","ZS_Kill",function(ply)
         util.BlastDamage(ply,ply,ply:GetPos(),100,20)
 	end
 end)
+
+function zs.CanStart(forced)
+    local chance = math.random(0,100) > 90
+
+    if !chance and !forced then
+        return false
+    end
+    
+    return true
+end

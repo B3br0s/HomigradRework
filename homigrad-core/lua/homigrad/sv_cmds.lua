@@ -259,6 +259,14 @@ COMMANDS.getmats = {function(ply,args)
 	end
 end,1}
 
+COMMANDS.force_posture = {function(ply,args) // :)))
+	if not ply:IsAdmin() then return end
+
+	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+		ply.posture = tonumber(args[2])
+	end
+end,1}
+
 COMMANDS.notarget = {function(ply,args)
 	if not ply:IsAdmin() then return end
 	local value = tonumber(args[2]) > 0
@@ -390,7 +398,7 @@ COMMANDS.avaiblemodes = {function(ply,args)
         if TableRound(lvl).CantRandom then
             continue 
         end
-        if TableRound(lvl).CanStart and TableRound(lvl).CanStart() then
+        if TableRound(lvl).CanStart and TableRound(lvl).CanStart(forced) then
             table.insert(CanBeStarted,lvl)
 			ply:ChatPrint(lvl)
         elseif !TableRound(lvl).CanStart then

@@ -199,7 +199,7 @@ function Open_Zshoppa()
             ["type"] = "weps",
             ["name"] = "Tier-1",
             ["weapon_hammer"] = 10,    
-            ["weapon_glock17"] = 50,  
+            ["weapon_glockp80"] = 50,  
             ["weapon_fiveseven"] = 60,
             ["weapon_tec9"] = 50,     
             ["weapon_usp_match"] = 60,

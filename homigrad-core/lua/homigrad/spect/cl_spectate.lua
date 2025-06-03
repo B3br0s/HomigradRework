@@ -48,7 +48,7 @@ local show = false
 hook.Add("HUDPaint","Spectate-HUD",function()
 	local lply = LocalPlayer()
 	
-    if lply:Alive() and lply:Team() != 1002 then
+    if lply:Alive() and lply:Team() != 1002 and lply:GetMoveType() != 8 then
         return
     end
 

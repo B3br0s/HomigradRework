@@ -52,7 +52,7 @@ function criresp.SpawnSWAT(ply)
         ply:SetPlayerColor(Color(0,0,255):ToVector())
         ply:SetSubMaterial()
 
-        timer.Simple(1,function()
+        timer.Simple(0.5,function()
             hg.force_attachment(wep_primary,"holo3")
         end)
     end)
@@ -62,7 +62,7 @@ function criresp.SpawnSuspect(ply)
     local SpawnList = ReadDataMap("criresp_suspect")
 
     local weps_pri = {"weapon_870_b","weapon_doublebarrel","weapon_sawnoff"}
-    local weps_sec = {"weapon_329pd","weapon_tec9","weapon_glock17"}
+    local weps_sec = {"weapon_329pd","weapon_tec9","weapon_glockp80"}
     local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_hammer"}
 
     ply:SetTeam(2)

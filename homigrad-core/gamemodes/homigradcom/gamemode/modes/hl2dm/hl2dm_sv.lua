@@ -177,7 +177,7 @@ function hl2dm.RoundThink()
     end
 end
 
-function hl2dm.CanStart()
+function hl2dm.CanStart(forced)
     local world = game.GetWorld()
     
     local min, max = world:GetModelBounds()

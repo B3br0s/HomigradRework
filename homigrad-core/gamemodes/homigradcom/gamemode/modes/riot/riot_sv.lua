@@ -38,7 +38,7 @@ end
 function riot.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
-    local weps_pri = {"","","","","","","","","weapon_glock17","","",""}
+    local weps_pri = {"","","","","","","","","weapon_glockp80","","",""}
     local weps_sec = {"weapon_shovel","weapon_hatchet","weapon_sog","weapon_hammer"}
 
     ply:SetTeam(2)
@@ -104,7 +104,7 @@ function riot.RoundThink()
     end
 end
 
-function riot.CanStart()
+function riot.CanStart(forced)
     local nonspect = {}
     for _, ply in ipairs(player.GetAll()) do
         if ply:Team() != 1002 then

@@ -552,7 +552,7 @@ function coop.RoundThink()
     end
 end
 
-function coop.CanStart()
+function coop.CanStart(forced)
     local mapname = string.lower(game.GetMap())
 
     if !string.match(mapname,"d1_") and !string.match(mapname,"d2_") and !string.match(mapname,"d3_") then

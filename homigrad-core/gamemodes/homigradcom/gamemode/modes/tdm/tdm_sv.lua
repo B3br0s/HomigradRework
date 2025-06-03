@@ -23,7 +23,7 @@ function tdm.SpawnBlue(ply)
     local SpawnList = ReadDataMap("tdm_blue")
 
     local weps_pri = {"weapon_m16a1","weapon_mp7"}
-    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glock17","weapon_329pd"}
+    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glockp80","weapon_329pd"}
     local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_f1"}
 
     ply:SetTeam(1)
@@ -60,7 +60,7 @@ function tdm.SpawnRed(ply)
     local SpawnList = ReadDataMap("tdm_red")
 
     local weps_pri = {"weapon_ak74","weapon_mp5"}
-    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glock17","weapon_329pd"}
+    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_glockp80","weapon_329pd"}
     local weps_oth = {"weapon_sog","weapon_bandage","weapon_medkit_hg","weapon_f1"}
 
     ply:SetTeam(2)
@@ -129,7 +129,7 @@ function tdm.RoundThink()
     end
 end
 
-function tdm.CanStart()
+function tdm.CanStart(forced)
     local world = game.GetWorld()
     
     local min, max = world:GetModelBounds()
@@ -137,8 +137,14 @@ function tdm.CanStart()
 
     local size_final = size:Length()
 
+    local chance = math.random(20,100) > 40
+
+    if !chance and !forced then
+        return false
+    end
+
     if size_final < 10000 then
-            return false
+        return false
     else
         return true 
     end

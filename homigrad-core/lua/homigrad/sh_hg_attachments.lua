@@ -6,6 +6,9 @@ hg.Attachments = {
         WorldAng = Angle(0,0,0),
         CorrectSize = 1,
         Placement = "sight",
+        ViewPos = Vector(0,0,0.15),
+
+        MountType = "picatinny",
 
         IsHolo = true,
         Reticle = "vgui/arc9_eft_shared/reticles/new/scope_all_aimpoint_micro_h1_high_marks.png",
@@ -20,7 +23,9 @@ hg.Attachments = {
         WorldAng = Angle(0,0,0),
         CorrectSize = 1,
         Placement = "sight",
-        ViewPos = Vector(0,0,-0.25),
+        ViewPos = Vector(0,0,-0.1),
+
+        MountType = "picatinny",
 
         IsHolo = true,
         Reticle = "vgui/arc9_eft_shared/reticles/new/scope_all_vomz_pilad_p1x42_mark_mode_001",
@@ -35,6 +40,9 @@ hg.Attachments = {
         WorldAng = Angle(0,0,0),
         CorrectSize = 0.65,
         Placement = "sight",
+        ViewPos = Vector(0,0,0),
+
+        MountType = "picatinny",
 
         IsHolo = true,
         Reticle = "vgui/arc9_eft_shared/reticles/new/scope_all_eotech_xps3-4_marks.png",
@@ -50,7 +58,7 @@ hg.Attachments = {
         CorrectSize = 0.7,
         Placement = "sight",
 
-        ScopePos = Vector(3,0,0.95),
+        ScopePos = Vector(3,0,0.83),
         ScopeAng = Angle(0,0,0),
         ViewPos = Vector(0,0,-0.25),
 
@@ -66,6 +74,8 @@ hg.Attachments = {
         BlackSize = 2070,
         BlackScope = 400,
 
+        MountType = "picatinny",
+
         Rotation = 0
     },
     ["optic2"] = {
@@ -76,7 +86,7 @@ hg.Attachments = {
         CorrectSize = 0.7,
         Placement = "sight",
 
-        ScopePos = Vector(3,0,1.15),
+        ScopePos = Vector(3,0,0.99),
         ScopeAng = Angle(0,0,0),
         ViewPos = Vector(0,0,-0.1),
 
@@ -92,11 +102,41 @@ hg.Attachments = {
         BlackSize = 2070,
         BlackScope = 400,
 
+        MountType = "picatinny",
+
         Rotation = 0
     },
+    ["grip1"] = {
+        Name = "Ergo Grip",
+        Model = "models/weapons/arccw_go/atts/foregrip_ergo.mdl",
+        WorldPos = Vector(0,0,0),
+        WorldAng = Angle(0,0,0),
+        CorrectSize = 1,
+        Placement = "grip",
+
+        LHandAng = Angle(30,-140,90),
+        LHand = Vector(1.2,3,-3),
+
+        DrawFunction = function(self) 
+            if !IsValid(self:GetOwner()) then
+                return
+            end
+            //hg.bone.Set(self:GetOwner(),"r_finger0",Vector(0,0,0),Angle(0,0,0),1,0.1)
+            //hg.bone.Set(self:GetOwner(),"r_finger1",Vector(0,0,0),Angle(0,0,0),1,0.1)
+        end
+    },
     ["supp1"] = {
-        Name = "Eotech553",
+        Name = "SilencerCo Hybrid",
         Model = "models/weapons/arc9_eft_shared/atts/muzzle/silencer_mount_silencerco_hybrid_46_multi.mdl",
+        WorldPos = Vector(0,0,0),
+        WorldAng = Angle(0,0,0),
+        CorrectSize = 1,
+        Placement = "barrel",
+        IsSupp = true
+    },
+    ["supp2"] = {
+        Name = "AWC Thor PSR",
+        Model = "models/weapons/arc9/darsu_eft/mods/silencer_base_awc_thor_psr_xl_multi.mdl",
         WorldPos = Vector(0,0,0),
         WorldAng = Angle(0,0,0),
         CorrectSize = 1,
@@ -111,7 +151,7 @@ if SERVER then
         if !self.Attachments then
             self.Attachments = {}
         end
-        self.Attachments[att.Placement][1] = att
+        self.Attachments[att.Placement][1] = att_name
 
         timer.Simple(0,function()
             net.Start("att sync")

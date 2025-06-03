@@ -118,7 +118,7 @@ function dr.RoundThink()
     end
 end
 
-function dr.CanStart()
+function dr.CanStart(forced)
     local mapname = string.lower(game.GetMap())
 
     if !string.match(mapname,"deathrun_") then

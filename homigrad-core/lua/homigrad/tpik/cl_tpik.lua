@@ -83,55 +83,54 @@ hg.TPIKBones = {
     //"R UpperArm",
     //"R Forearm",
     //"R Hand",
-    //"R Finger0",
-    //"R Finger01",
-    //"R Finger02",
-    //"R Finger1",
-    //"R Finger11",
-    //"R Finger12",
-    //"R Finger2",
-    //"R Finger21",
-    //"R Finger22",
-    //"R Finger3",
-    //"R Finger31",
-    //"R Finger32",
-    //"R Finger4",
-    //"R Finger41",
-    //"R Finger42",
-    //"R ForeTwist",
-    //"R ForeTwist1",
-    //"R ForeTwist2",
-    //"R ForeTwist3",
-    //"R ForeTwist4",
-    //"R ForeTwist5",
-    //"R ForeTwist6",
+    "R Finger0",
+    "R Finger01",
+    "R Finger02",
+    "R Finger1",
+    "R Finger11",
+    "R Finger12",
+    "R Finger2",
+    "R Finger21",
+    "R Finger22",
+    "R Finger3",
+    "R Finger31",
+    "R Finger32",
+    "R Finger4",
+    "R Finger41",
+    "R Finger42",
+    "R ForeTwist",
+    "R ForeTwist1",
+    "R ForeTwist2",
+    "R ForeTwist3",
+    "R ForeTwist4",
+    "R ForeTwist5",
+    "R ForeTwist6",
     //"L Clavicle",
     //"L UpperArm",
     //"L Forearm",
-    //"L Hand",
-    //"L Finger0",
-    //"L Finger01",
-    //"L Finger02",
-    //"L Finger1",
-    //"L Finger11",
-    //"L Finger12",
-    //"L Finger2",
-    //"L Finger21",
-    //"L Finger22",
-    //"L Finger3",
-    //"L Finger31",
-    //"L Finger32",
-    //"L Finger4",
-    //"L Finger41",
-    //"L Finger42",
-    //"L ForeTwist",
-    //"L ForeTwist1",
-    //"L ForeTwist2",
-    //"L ForeTwist3",
-    //"L ForeTwist4",
-    //"L ForeTwist5",
-    //"L ForeTwist6",
-
+    "L Hand",
+    "L Finger0",
+    "L Finger01",
+    "L Finger02",
+    "L Finger1",
+    "L Finger11",
+    "L Finger12",
+    "L Finger2",
+    "L Finger21",
+    "L Finger22",
+    "L Finger3",
+    "L Finger31",
+    "L Finger32",
+    "L Finger4",
+    "L Finger41",
+    "L Finger42",
+    "L ForeTwist",
+    "L ForeTwist1",
+    "L ForeTwist2",
+    "L ForeTwist3",
+    "L ForeTwist4",
+    "L ForeTwist5",
+    "L ForeTwist6",
 }
 
 hg.LHIKBones = {
@@ -181,9 +180,9 @@ hg.RHIKBones = {
 }
 
 hg.TranslateBones = {
-    //["R Clavicle"] = "ValveBiped.Bip01_R_Clavicle",
-    //["R UpperArm"] = "ValveBiped.Bip01_R_UpperArm",
-    //["R Forearm"] = "ValveBiped.Bip01_R_Forearm",
+    ["R Clavicle"] = "ValveBiped.Bip01_R_Clavicle",
+    ["R UpperArm"] = "ValveBiped.Bip01_R_UpperArm",
+    ["R Forearm"] = "ValveBiped.Bip01_R_Forearm",
     ["R Hand"] = "ValveBiped.Bip01_R_Hand",
     ["R Finger0"] = "ValveBiped.Bip01_R_Finger0",
     ["R Finger01"] = "ValveBiped.Bip01_R_Finger01",
@@ -201,8 +200,8 @@ hg.TranslateBones = {
     ["R Finger41"] = "ValveBiped.Bip01_R_Finger41",
     ["R Finger42"] = "ValveBiped.Bip01_R_Finger42",
     ["R ForeTwist"] = "ValveBiped.Bip01_R_Ulna",
-    //["L Clavicle"] = "ValveBiped.Bip01_L_Clavicle",
-    //["L UpperArm"] = "ValveBiped.Bip01_L_UpperArm",
+    ["L Clavicle"] = "ValveBiped.Bip01_L_Clavicle",
+    ["L UpperArm"] = "ValveBiped.Bip01_L_UpperArm",
     ["L Forearm"] = "ValveBiped.Bip01_L_Forearm",
     ["L Hand"] = "ValveBiped.Bip01_L_Hand",
     ["L Finger0"] = "ValveBiped.Bip01_L_Finger0",
@@ -220,7 +219,7 @@ hg.TranslateBones = {
     ["L Finger4"] = "ValveBiped.Bip01_L_Finger4",
     ["L Finger41"] = "ValveBiped.Bip01_L_Finger41",
     ["L Finger42"] = "ValveBiped.Bip01_L_Finger42",
-    ["L ForeTwist"] = "ValveBiped.Bip01_L_Ulna"
+    ["L ForeTwist"] = "ValveBiped.Bip01_L_Ulna",
 }
 local Lerp = Lerp
 
@@ -396,6 +395,16 @@ function hg.DoTPIK(ply,ent)
         local wm_bonematrix = wm:GetBoneMatrix(wm_boneindex)
         if not wm_bonematrix then continue end
 
+        //local matched = nil
+
+        /*for _, bonee in ipairs(hg.bones_shit) do
+            local Z = string.match(bone,bonee)
+
+            if Z and Z != bone then
+                matched = bone
+            end
+        end*/
+
         local translated = hg.TranslateBones[bone] != nil and hg.TranslateBones[bone] or bone
 
         local ply_boneindex = ent:LookupBone(translated)
@@ -534,6 +543,17 @@ function hg.DoTPIK(ply,ent)
         offset = ang:Forward() * self.LHand[1] + ang:Right() * self.LHand[2] + ang:Up() * self.LHand[3]
     end
 
+    if self.Attachments and !self.reload then
+        if self.Attachments["grip"][1] then
+            pos = self.AttDrawModels["grip"]:GetPos()
+            ang = self.AttDrawModels["grip"]:GetAngles()
+
+            local tbl = hg.GetAtt(self.Attachments["grip"][1])
+
+            offset = ang:Forward() * tbl.LHand[1] + ang:Right() * tbl.LHand[2] + ang:Up() * tbl.LHand[3]
+        end
+    end
+
     local ply_l_upperarm_matrix = ent:GetBoneMatrix(ply_l_upperarm_index)
     local ply_l_forearm_matrix = ent:GetBoneMatrix(ply_l_forearm_index)
     local ply_l_hand_matrix = ent:GetBoneMatrix(ply_l_hand_index)
@@ -559,9 +579,20 @@ function hg.DoTPIK(ply,ent)
         ply_l_hand_angle:RotateAroundAxis(ply_l_hand_angle:Up(),0)
         ply_l_hand_angle:RotateAroundAxis(ply_l_hand_angle:Right(),-90)
 
-        ply_l_hand_angle:RotateAroundAxis(ang:Up(),self.LHandAng[1])
-        ply_l_hand_angle:RotateAroundAxis(ang:Right(),self.LHandAng[2])
-        ply_l_hand_angle:RotateAroundAxis(ang:Forward(),self.LHandAng[3])
+        if self.LHandAng then
+            ply_l_hand_angle:RotateAroundAxis(ang:Up(),self.LHandAng[1])
+            ply_l_hand_angle:RotateAroundAxis(ang:Right(),self.LHandAng[2])
+            ply_l_hand_angle:RotateAroundAxis(ang:Forward(),self.LHandAng[3])
+        end
+
+        if self.Attachments then
+            if self.Attachments["grip"][1] then
+                local tbl = hg.GetAtt(self.Attachments["grip"][1])
+                ply_l_hand_angle:RotateAroundAxis(ang:Up(),tbl.LHandAng[1])
+                ply_l_hand_angle:RotateAroundAxis(ang:Right(),tbl.LHandAng[2])
+                ply_l_hand_angle:RotateAroundAxis(ang:Forward(),tbl.LHandAng[3])
+            end
+        end
     end
 
     ply_l_upperarm_matrix:SetAngles(ply_l_upperarm_angle)

@@ -15,12 +15,6 @@ function hg.RagdollRender(ent)
     if (IsValid(ply) and IsValid(ent)) and ply.FakeRagdoll == ent then
         hg.DoTPIK(ply,ent)
         hg.RenderArmor(ply)
-
-        if ply:GetActiveWeapon().ishgwep then
-            ply:GetActiveWeapon():DoHolo(true)
-            //ply:GetActiveWeapon():DoRT()
-            //ply:GetActiveWeapon():DrawAttachments()
-        end
     else
         //hg.RenderArmorEnt(ent)
     end
@@ -31,12 +25,6 @@ function hg.RenderOverride(ply)
     local ent = hg.GetCurrentCharacter(ply)
 
     hg.RenderArmor(ply)
-
-    if ply:GetActiveWeapon().ishgwep then
-        ply:GetActiveWeapon():DoHolo(true)
-        //ply:GetActiveWeapon():DoRT()
-        //ply:GetActiveWeapon():DrawAttachments()
-    end
 
     hg.DoTPIK(ply,ent)
 

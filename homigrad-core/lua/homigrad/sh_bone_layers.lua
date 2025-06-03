@@ -24,6 +24,24 @@ local tbl = {
 	["l_calf"] = "ValveBiped.Bip01_L_Calf",
 	["l_foot"] = "ValveBiped.Bip01_L_Foot",
 	["l_toe"] = "ValveBiped.Bip01_L_Toe0",
+	
+	["r_finger0"] = "ValveBiped.Bip01_R_Finger0",
+	["r_finger1"] = "ValveBiped.Bip01_R_Finger1",
+	["r_finger11"] = "ValveBiped.Bip01_R_Finger11",
+	["r_finger12"] = "ValveBiped.Bip01_R_Finger12",
+	["r_finger2"] = "ValveBiped.Bip01_R_Finger2",
+	["r_finger21"] = "ValveBiped.Bip01_R_Finger21",
+	["l_finger0"] = "ValveBiped.Bip01_L_Finger0",
+	["l_finger01"] = "ValveBiped.Bip01_L_Finger01",
+	["l_finger02"] = "ValveBiped.Bip01_L_Finger02",
+	["l_finger1"] = "ValveBiped.Bip01_L_Finger1",
+	["l_finger11"] = "ValveBiped.Bip01_L_Finger11",
+	["l_finger2"] = "ValveBiped.Bip01_L_Finger2",
+	["l_finger21"] = "ValveBiped.Bip01_L_Finger21",
+	["l_finger3"] = "ValveBiped.Bip01_L_Finger3",
+	["l_finger31"] = "ValveBiped.Bip01_L_Finger31",
+	["l_finger4"] = "ValveBiped.Bip01_L_Finger4",
+	["l_finger41"] = "ValveBiped.Bip01_L_Finger41",
 }
 
 hg.bone.client_only = {

@@ -185,6 +185,11 @@ l.criresp_suspect_desc = "This is my fucking house, bitches, I can do what I wan
 l.criresp_swat = "SWAT Operator"
 l.criresp_swat_desc = "Negotiations failed, eliminate the threat. 10-4"
 
+l.gw_blue = "Groove Member"
+l.gw_red = "Bloodz Member"
+l.gw_blue_desc = "Kill all bloodz mazafakas"
+l.gw_red_desc = "Kill all groove mazafakas"
+
 l.zs_surv = "Human"
 l.zs_surv_desc = "Survive."
 

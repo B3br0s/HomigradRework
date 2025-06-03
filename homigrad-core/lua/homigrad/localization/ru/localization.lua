@@ -183,7 +183,12 @@ l.criresp_suspect = "Подозреваемые"
 l.criresp_suspect_desc = "Это мой ёбанный дом, суки, я могу делать все, что захочу."
 
 l.criresp_swat = "Оперативники SWAT"
-l.criresp_swat_desc = "Переговоры не удались, устранить цель. 10-4"
+l.criresp_swat_desc = "Переговоры не удались, устранить угрозу. 10-4"
+
+l.gw_blue = "Участники банды Groove"
+l.gw_red = "Участники банды Bloodz"
+l.gw_blue_desc = "Убей всех уёбков из bloodz"
+l.gw_red_desc = "Убей всех уёбков из groove"
 
 l.zs_surv = "Люди"
 l.zs_surv_desc = "Выживи."

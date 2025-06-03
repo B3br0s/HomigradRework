@@ -1,3 +1,12 @@
+local weights = {
+	["models/css_seb_swat/css_swat.mdl"] = {[1] = 0.04},
+	["models/css_seb_swat/css_seb.mdl"] ={[1] = 0.04},
+	["models/gang_groove/gang_1.mdl"] =		   {[1] = 3},
+	["models/gang_groove/gang_2.mdl"] =		   {[1] = 3},
+	["models/gang_ballas/gang_ballas_1.mdl"] = {[1] = 3},
+	["models/gang_ballas/gang_ballas_2.mdl"] = {[1] = 3},
+}
+
 hook.Add("FakeControl","PlayerControl",function(ply,rag)
 	local Head = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Head1" )) )
 	local Neck = rag:GetPhysicsObjectNum( rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_Neck1" )) )
@@ -66,6 +75,8 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 		Spine2:ComputeShadowControl(sp2)
 	end
 
+	local weight = weights[rag:GetModel()] and weights[rag:GetModel()][1] or 1
+
 	if ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH) then
 		local angs = ply:EyeAngles()
 		angs:RotateAroundAxis(angs:Forward(),0)
@@ -82,8 +93,8 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 				pos = Spine4:GetPos() + ply:EyeAngles():Forward() * (IsValid(rag.ZacConsRH) and 2 or 5),
 				angle = Spine4:GetAngles(),
 				maxangular = 360 * 3,
-				maxangulardamp = 0,
-				dampfactor = 0,
+				maxangulardamp = 3,
+				dampfactor = 0.05,
 				maxspeeddamp = 0,
 				maxspeed = (ply:KeyDown(IN_USE) and 300 or 25),
 				teleportdistance = 23,
@@ -94,7 +105,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 			Spine4:ComputeShadowControl(sp)
 
 			sp.angle = Spine:GetAngles()
-			sp.secondstoarrive = 0.35// * (1 + velo)
+			sp.secondstoarrive = (0.35 * (1.25 + velo)) * weight
 			Spine:Wake()
 			Spine:ComputeShadowControl(sp)
 		end
@@ -118,8 +129,8 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 				pos = Spine4:GetPos() + ply:EyeAngles():Forward() * (IsValid(rag.ZacConsLH) and 2 or 5),
 				angle = Spine4:GetAngles(),
 				maxangular = 360 * 3,
-				maxangulardamp = 0,
-				dampfactor = 0,
+				maxangulardamp = 3,
+				dampfactor = 0.05,
 				maxspeeddamp = 0,
 				maxspeed = (ply:KeyDown(IN_USE) and 300 or 25),
 				teleportdistance = 23,
@@ -130,7 +141,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 			Spine4:ComputeShadowControl(sp)
 
 			sp.angle = Spine:GetAngles()
-			sp.secondstoarrive = 0.35// * (1 + velo)
+			sp.secondstoarrive = (0.35 * (1.25 + velo)) * weight
 			Spine:Wake()
 			Spine:ComputeShadowControl(sp)
 		end

@@ -6,7 +6,7 @@ hunter.UntilSwat = 1e8
 
 function hunter.SWATSpawn(ply)
     local weps_pri = {"weapon_m4a1"}
-    local weps_sec = {"weapon_glock17"}
+    local weps_sec = {"weapon_glockp80"}
     local weps_main = {"weapon_sog","weapon_handcuffs","weapon_medkit_hg","weapon_bandage"}
 
     ply:SetTeam(3)
@@ -36,7 +36,7 @@ function hunter.SpawnHunter(ply)
     local SpawnList = ReadDataMap("hunt_hunter")
 
     local weps_pri = {"weapon_ak74","weapon_doublebarrel","weapon_870_a","weapon_870_b","weapon_xm1014"}
-    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_fiveseven","weapon_glock17","weapon_tec9"}
+    local weps_sec = {"weapon_deagle_a","weapon_deagle_b","weapon_fiveseven","weapon_glockp80","weapon_tec9"}
     local weps_oth = {"weapon_hatchet","weapon_axe","weapon_sog"}
     local weps_main = {"weapon_ied","weapon_handcuffs","weapon_f1"}
 
@@ -159,7 +159,7 @@ function hunter.RoundThink()
     end
 end
 
-function hunter.CanStart()
+function hunter.CanStart(forced)
     local nonspect = {}
     for _, ply in ipairs(player.GetAll()) do
         if ply:Team() != 1002 then

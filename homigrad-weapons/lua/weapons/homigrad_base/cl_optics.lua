@@ -1,17 +1,39 @@
 function SWEP:GetSightPos()
     local placement = "sight"
+    
+    if not IsValid(self.worldModel) then
+        return Vector(0, 0, 0), Angle(0, 0, 0)
+    end
+    
     local modeltodraw = self.worldModel
-    local tbl = self.Attachments[placement]
-    local shit_pos = (self.AttBone and modeltodraw:LookupBone(self.AttBone)) and modeltodraw:GetBoneMatrix(modeltodraw:LookupBone(self.AttBone)):GetTranslation() or nil
-    local shit_ang = (self.AttBone and modeltodraw:LookupBone(self.AttBone)) and modeltodraw:GetBoneMatrix(modeltodraw:LookupBone(self.AttBone)):GetAngles() or nil
-    local Pos = shit_pos or modeltodraw:GetPos()
-    local Ang = shit_ang or modeltodraw:GetAngles()
-    local aaa = self.AttachmentAng[placement]
-    Ang:RotateAroundAxis(Ang:Forward(),aaa[1])
-    Ang:RotateAroundAxis(Ang:Right(),aaa[2])
-    Ang:RotateAroundAxis(Ang:Up(),aaa[3])
-    Pos = Pos + Ang:Forward() * self.AttachmentPos[placement][1] + Ang:Right() * self.AttachmentPos[placement][2] + Ang:Up() * self.AttachmentPos[placement][3]
-    return Pos,Ang
+    local tbl = self.Attachments[placement][1] and hg.GetAtt(self.Attachments[placement][1])
+    
+    local Pos = modeltodraw:GetPos()
+    local Ang = modeltodraw:GetAngles()
+    
+    if self.AttBone then
+        local boneIndex = modeltodraw:LookupBone(self.AttBone)
+        if boneIndex then
+            local boneMatrix = modeltodraw:GetBoneMatrix(boneIndex)
+            if boneMatrix then
+                Pos = boneMatrix:GetTranslation()
+                Ang = boneMatrix:GetAngles()
+            end
+        end
+    end
+    
+    if self.AttachmentAng and self.AttachmentAng[placement] then
+        local aaa = self.AttachmentAng[placement]
+        Ang:RotateAroundAxis(Ang:Forward(), aaa[1])
+        Ang:RotateAroundAxis(Ang:Right(), aaa[2])
+        Ang:RotateAroundAxis(Ang:Up(), aaa[3])
+    end
+    
+    if self.AttachmentPos and self.AttachmentPos[placement] then
+        Pos = Pos + Ang:Forward() * self.AttachmentPos[placement][1] + Ang:Right() * self.AttachmentPos[placement][2] + Ang:Up() * self.AttachmentPos[placement][3]
+    end
+    
+    return Pos, Ang
 end
 
 local delta = 0
@@ -42,7 +64,7 @@ end)
 function SWEP:DoHolo(IsRender)
     cam.Start3D()
         local placement = "sight"
-        local tbl = self.Attachments[placement][1]
+        local tbl = hg.GetAtt(self.Attachments[placement][1])
         local mdl = self.AttDrawModels[placement]
         if !IsValid(mdl) then
             cam.End3D()
@@ -145,10 +167,10 @@ local rt_mat = Material("rt-z-glass")
 
 function SWEP:DoRT()
     if !self.Attachments["sight"][1] then return end
-    if !self.Attachments["sight"][1].IsOptic then return end
+    if !hg.GetAtt(self.Attachments["sight"][1]).IsOptic then return end
     local view = render.GetViewSetup(true)
 
-    local att = self.Attachments["sight"][1]
+    local att = hg.GetAtt(self.Attachments["sight"][1])
 
     local mdl = self.AttDrawModels["sight"]
 
@@ -245,13 +267,6 @@ function SWEP:DoRT()
 	DisableClipping(old)
 	render.PopRenderTarget()
 end
-
-hook.Add("PostDrawPlayerRagdoll","holo",function()
-    local ply = LocalPlayer()
-    if ply:GetActiveWeapon().ishgwep then
-        //ply:GetActiveWeapon():DoHolo(true)
-    end
-end)
 
 hook.Add("HUDPaint","holo",function() //как я додумался? не спрашивайте,но оно рендерит блять.
     local ply = LocalPlayer()

@@ -128,7 +128,7 @@ function jb.RoundThink()
     end
 end
 
-function jb.CanStart()
+function jb.CanStart(forced)
     local mapname = string.lower(game.GetMap())
 
     if !string.match(mapname,"jb_") then

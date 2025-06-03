@@ -85,6 +85,10 @@ function SWEP:Shoot()
         return
     end
 
+    local primary = self.Primary
+    
+    self:SetNextShoot(CurTime() + primary.Wait)
+
     if !IsValid(self:GetOwner()) then
         return
     end
@@ -99,8 +103,6 @@ function SWEP:Shoot()
 
     self:PrimarySpread()
 
-    local primary = self.Primary
-
     if self:IsLocal() then
         vis_recoil = vis_recoil + primary.Force / 15 * self.RecoilForce * (high_recoil and 3 or 1)
         Recoil = Recoil + 0.25 + primary.Force / 100 * (high_recoil and 3 or 1)
@@ -109,8 +111,6 @@ function SWEP:Shoot()
     local ply = self:GetOwner()
 
     local ent = hg.GetCurrentCharacter(ply)
-
-    self:SetNextShoot(CurTime() + primary.Wait)
 
     local Pos,Ang = self:GetTrace()
 
@@ -125,7 +125,7 @@ function SWEP:Shoot()
     end
 
     if SERVER then
-        if self.Attachments['barrel'][1] and self.Attachments['barrel'][1].IsSupp then
+        if self.Attachments['barrel'][1] and hg.GetAtt(self.Attachments['barrel'][1]).IsSupp then
             sound.Play(self.SuppressedSound,Pos,100,math.random(90,110),1)
         else
             sound.Play(istable(self.Sound) and self.Sound[math.random(1,#self.Sound)] or self.Sound,Pos,100,math.random(90,110),self.SoundVolume)
@@ -216,6 +216,7 @@ function SWEP:Shoot()
             Bullet.Spread = (i > 1 and VectorRand(-0.03 * (math.random(-1,2) - i),0.03 * (math.random(-3,2) - i)) or Vector(0,0,0))
             
             self:FireLuaBullets(Bullet)
+            self:SetNextShoot(CurTime() + primary.Wait)
             //self:FireBullets(Bullet)
         end
     else

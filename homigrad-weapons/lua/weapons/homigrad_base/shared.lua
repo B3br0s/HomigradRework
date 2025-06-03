@@ -44,10 +44,7 @@ function SWEP:Initialize()
 
     self:Deploy()
 
-    self.Attachments = {
-        ["sight"] = {nil},
-        ["barrel"] = {nil},
-    }
+    self:InitAttachments()
 end
 
 function SWEP:CanShoot()

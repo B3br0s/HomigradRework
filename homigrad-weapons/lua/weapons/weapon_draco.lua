@@ -1,35 +1,36 @@
 SWEP.Base = "homigrad_base"
-SWEP.PrintName = "AK74"
-SWEP.Category = "Оружие: Винтовки"
+SWEP.PrintName = "Draco"
+SWEP.Category = "Оружие: Пистолеты"
 SWEP.Spawnable = true
 
 SWEP.WorldModel = "models/weapons/arccw/c_ur_ak.mdl"
 SWEP.ViewModel = "models/weapons/arccw/c_ur_ak.mdl"
 
-SWEP.Bodygroups = {[1] = 3,[2] = 9,[3] = 0,[4] = 0,[5] = 0,[6] = 12,[7] = 0,[8] = 0,[9] = 2,[10] = 2}
+SWEP.Bodygroups = {[1] = 6,[2] = 0,[3] = 0,[4] = 2,[5] = 1,[6] = 9,[7] = 5,[8] = 2,[9] = 0,[10] = 0}
 
-SWEP.HoldType = "ar2"
+SWEP.HoldType = "revolver"
 
 SWEP.holdtypes = {
-    ["ar2"] = {[1] = 0.55,[2] = 1.2,[3] = 1.85,[4] = 2},
+    ["revolver"] = {[1] = 0.55,[2] = 1.2,[3] = 1.85,[4] = 2},
 }
 
 SWEP.Primary.ReloadTime = 2.4
-SWEP.Primary.Automatic = true
+SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 30
-SWEP.Primary.Damage = 35
-SWEP.Primary.Force = 15
-SWEP.Primary.Ammo = "5.45x39 mm"
+SWEP.Primary.Damage = 45
+SWEP.Primary.Force = 45
+SWEP.Primary.Ammo = "7.62x39 mm"
 SWEP.Primary.Wait = 0.09
-SWEP.Sound = "zcitysnd/sound/weapons/firearms/rifle_cz858/cz858_fire_01.wav"
+SWEP.Sound = "sounds_zcity/sr25/close.wav"
+SWEP.SubSound = "hmcd/rifle_win1892/win1892_fire_01.wav"
 SWEP.SuppressedSound = "sounds_zcity/ak74/supressor.wav"
 SWEP.RecoilForce = 0.4
 
 SWEP.WorldPos = Vector(-5,-0.5,0)
 SWEP.WorldAng = Angle(0,0,6)
-SWEP.AttPos = Vector(37,2.93,-2.4)
-SWEP.AttAng = Angle(0.45,-0.25,0)
+SWEP.AttPos = Vector(27,2.91,-2.4)
+SWEP.AttAng = Angle(1.8,-0.15,0)
 SWEP.HolsterAng = Angle(140,0,180)
 SWEP.HolsterPos = Vector(-16,6,5.5)
 SWEP.HolsterBone = "ValveBiped.Bip01_Spine2"
@@ -40,8 +41,8 @@ SWEP.SlotPos = 0
 SWEP.BoltBone = "vm_bolt"
 SWEP.BoltVec = Vector(0,2,0)
 
-SWEP.ZoomPos = Vector(6,-2.55,-0.8)
-SWEP.ZoomAng = Angle(-0.9,-0.26,0)
+SWEP.ZoomPos = Vector(7,-2.55,-1.3)
+SWEP.ZoomAng = Angle(1.3,-0.26,0)
 
 SWEP.Rarity = 4
 
@@ -65,7 +66,7 @@ SWEP.AttachmentAng = {
     ['barrel'] = Angle(0,0,-90),
 }
 
-SWEP.IconPos = Vector(130,-23.2,-1)
+SWEP.IconPos = Vector(80,-18.5,-1.5)
 SWEP.IconAng = Angle(0,90,0)
 
 SWEP.Animations = {

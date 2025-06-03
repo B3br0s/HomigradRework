@@ -8,7 +8,7 @@ SWEP.Bodygroups = {[1] = 3,[2] = 1,[3] = 1}
 SWEP.WorldModel = "models/weapons/arccw/c_ur_dbs.mdl"
 SWEP.ViewModel = "models/weapons/arccw/c_ur_dbs.mdl"
 
-SWEP.HoldType = "ar2"
+SWEP.HoldType = "revolver"
 
 SWEP.Primary.ClipSize = 2
 SWEP.Primary.DefaultClip = 2

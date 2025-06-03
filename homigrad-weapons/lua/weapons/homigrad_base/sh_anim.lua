@@ -2,17 +2,28 @@
 1 - Дефолт
 2 - Одна рука | Занижено (ДВУРУЧНЫЕ)
 3 - Сверху
+4 - Сомали
+5 - 
 */
 
 local Postures = {
-    [1] = {[0] = {Angle(0,0,0),Vector(0,0,0)},
-           [1] = {Angle(0,0,0),Vector(0,0,0)}},
+    [1] = {[0] = {Angle(0,0,0),Vector(0,0,0)}, //ля пистоля
+           [1] = {Angle(0,0,0),Vector(0,0,0)}}, //Автомат нахуй
 
     [2] = {[0] = {Angle(0,0,-25),Vector(2,-1.5,-2)},
-           [1] = {Angle(0,0,-15),Vector(0,-2,-1)}},
+           [1] = {Angle(0,0,-15),Vector(0,-2,-1)},
+           [2] = true},
 
     [3] = {[0] = {Angle(0,0,-40),Vector(5,4,5)},
-           [1] = {Angle(0,0,-40),Vector(0,2,4)}},
+           [1] = {Angle(0,0,-40),Vector(0,2,4)},
+           [2] = true},
+
+    [4] = {[0] = {Angle(0,0,20),Vector(4,13.25,6)},
+           [1] = {Angle(0,0,20),Vector(0,7.25,4)},
+           [2] = true},
+    [5] = {[0] = {Angle(0,0,-3),Vector(9,0,-1)},
+           [1] = {Angle(0,0,15),Vector(0,-2.25,0)},
+           [2] = true},
 }
 
 if SERVER then
@@ -30,7 +41,7 @@ if SERVER then
                     ply.posture = 1
                 end
                 ply.posture = ply.posture + 1 
-                if ply.posture > 3 then
+                if ply.posture > #Postures then
                     ply.posture = 1
                 end
             else
@@ -77,7 +88,7 @@ function SWEP:Post_Hands_Anim()
         ang[3] = 0
     end
 
-    if is == 0 and (cur_pos == 2 or cur_pos == 3) and !self.reload and !self:IsSprinting() then
+    if self:IsPistolHoldType() and Postures[cur_pos][2] and !self.reload and !self:IsSprinting() then
         self.NoLHand = true
         self:SetHoldType("melee")
     else

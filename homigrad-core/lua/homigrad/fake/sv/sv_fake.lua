@@ -73,6 +73,11 @@ end
 local weights = {
 	["models/css_seb_swat/css_swat.mdl"] = {[1] = 0.04},
 	["models/css_seb_swat/css_seb.mdl"] ={[1] = 0.04},
+
+	["models/gang_groove/gang_1.mdl"] =		   {[1] = 40},
+	["models/gang_groove/gang_2.mdl"] =		   {[1] = 40},
+	["models/gang_ballas/gang_ballas_1.mdl"] = {[1] = 40},
+	["models/gang_ballas/gang_ballas_2.mdl"] = {[1] = 40},
 }
 
 function PlayerMeta:CreateFake(force)
@@ -99,9 +104,9 @@ function PlayerMeta:CreateFake(force)
 	rag:SetNWString("PlayerName",self:Name())
 	rag:GetPhysicsObject():SetMass(30)
 
-	//if weights[rag:GetModel()] then
-	//	rag:GetPhysicsObject():SetMass(weights[rag:GetModel()])
-	//end
+	if weights[rag:GetModel()] then
+		rag:GetPhysicsObject():SetMass(weights[rag:GetModel()][1])
+	end
 
     self.FakeRagdoll = rag
 
@@ -486,7 +491,7 @@ end)
 
 hook.Add("Player Collide","Ragdolling-Collide",function(ply,ent,data)
 	local LIMIT_MASS = 40
-	local LIMIT_SPEED = 130
+	local LIMIT_SPEED = 280
 	if ROUND_NAME == "dr" then
 		return
 	end

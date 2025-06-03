@@ -2,10 +2,10 @@ local radialOpen = false
 local prevSelected, prevSelectedVertex
 local elmss
 local elements = {
-    [1] = {Name = "hg_posture", Action = function() RunConsoleCommand("hg_change_posture") end},
+    [1] = {Name = "hg_posture", Action = function() LocalPlayer():ConCommand("hg_change_posture") end},
     //[2] = {Name = "hg_suicide", Action = function() if !LocalPlayer():GetNWBool("suiciding") then RunConsoleCommand("suicide") end RunConsoleCommand("+attack") timer.Simple(0,function() RunConsoleCommand("-attack") end) end}
-    [2] = {Name = "hg_resetposture", Action = function() RunConsoleCommand("hg_change_posture","1") end},
-    [3] = {Name = "hg_unload", Action = function() RunConsoleCommand("hg_unload") end}
+    [2] = {Name = "hg_resetposture", Action = function() LocalPlayer():ConCommand("hg_change_posture 1") end},
+    [3] = {Name = "hg_unload", Action = function() LocalPlayer():ConCommand("hg_unload") end}
 }
 function OpenRadialMenu(elms)
 	if not LocalPlayer():Alive() then return end
