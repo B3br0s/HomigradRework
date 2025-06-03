@@ -183,6 +183,8 @@ function SolidMapVote.checkForVoteEnd()
     end
 end
 
+local zalupa123 = false
+
 -- Checks if the map vote is over and changes the level
 function SolidMapVote.postMapVoteChange()
     if SolidMapVote.changeTime < RealTime() and SolidMapVote.finished then
@@ -205,9 +207,11 @@ function SolidMapVote.postMapVoteChange()
                 RTV_ACTIVE = false
                 StartRound()
             end
-        elseif SolidMapVote.realWinner == 'random' then
+        elseif SolidMapVote.realWinner == 'random' and !zalupa123 then
+            zalupa123 = true
             RunConsoleCommand( 'changelevel', SolidMapVote.fixedWinner )
-        else
+        elseif !zalupa123 then
+            zalupa123 = true
             RunConsoleCommand( 'changelevel', SolidMapVote.realWinner )
         end
     end
