@@ -212,6 +212,7 @@ function SWEP:DrawWorldModel(mat)
     local ent = hg.GetCurrentCharacter(ply)
 
     if !ismatrix(mat) then
+        //mat = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_R_Hand"))
         return
     end
 
@@ -226,11 +227,12 @@ function SWEP:DrawWorldModel(mat)
 
 			self.worldModel:SetPos(pos)
 			self.worldModel:SetRenderOrigin(pos)
+			self.worldModel:SetRenderAngles(ang)
 			self.worldModel:SetAngles(ang)
+            self.worldModel:SetParent(ply)
 			self.worldModel.IsIcon = true
 			self.worldModel.DontOptimise = true
-            self.worldModel:SetPredictable(true)
-			self.worldModel:SetRenderAngles(ang)
+            //self.worldModel:SetPredictable(true)
 		end
 
         if IsValid(self.fakeWorldModel) then
@@ -243,10 +245,11 @@ function SWEP:DrawWorldModel(mat)
 			self.fakeWorldModel:SetPos(pos)
 			self.fakeWorldModel:SetRenderOrigin(pos)
 			self.fakeWorldModel:SetAngles(ang)
+            self.fakeWorldModel:SetParent(ply)
+			self.fakeWorldModel:SetRenderAngles(ang)
 			self.fakeWorldModel.IsIcon = true
 			self.fakeWorldModel.DontOptimise = true
-			self.fakeWorldModel:SetRenderAngles(ang)
-            self.fakeWorldModel:SetPredictable(true)
+            //self.fakeWorldModel:SetPredictable(true)
 
             if ply:IsSuperAdmin() then
                 self.fakeWorldModel:SetMaterial("models/mat_jack_gmod_brightwhite")

@@ -240,6 +240,7 @@ l.hg_posture = "Сменить Позу"
 l.hg_resetposture = "Сбросить Позу"
 l.hg_suicide = "Совершить суицид."
 l.hg_unload = "Разрядить"
+l.hg_drop = "Выкинуть"
 
 // Остальное
 l.inv_drop = "Выкинуть"

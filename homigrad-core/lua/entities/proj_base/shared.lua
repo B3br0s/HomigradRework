@@ -7,3 +7,4 @@ ENT.ModelScale = 1
 ENT.CollideSound = ""
 ENT.ExplodeSound = ""
 ENT.deton = false
+ENT.Frag = true

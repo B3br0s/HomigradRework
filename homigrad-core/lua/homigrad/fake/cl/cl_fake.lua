@@ -5,6 +5,42 @@ hook.Add("PlayerFootstep", "CustomFootstep", function(ply) if IsValid(ply.FakeRa
 hook.Add("Player Think","Player_Fake",function(ply,time)
 	ply.Fake = ply:GetNWBool("Fake")
 	ply.FakeRagdoll = ply:GetNWEntity("FakeRagdoll")
+
+	local ent = hg.GetCurrentCharacter(ply)
+
+	if ent:IsRagdoll() then
+		if ply:GetNWBool("LeftArm") then
+			hg.bone.Set(ent,"l_finger0",Vector(0,0,0),Angle(0,20,0),1,0.2)
+			hg.bone.Set(ent,"l_finger01",Vector(0,0,0),Angle(0,20,0),1,0.2)
+			hg.bone.Set(ent,"l_finger1",Vector(0,0,0),Angle(0,-40,0),1,0.2)
+			hg.bone.Set(ent,"l_finger11",Vector(0,0,0),Angle(0,-80,0),1,0.2)
+			hg.bone.Set(ent,"l_finger2",Vector(0,0,0),Angle(0,-40,0),1,0.2)
+			hg.bone.Set(ent,"l_finger21",Vector(0,0,0),Angle(0,-80,0),1,0.2)
+		else
+			hg.bone.Set(ent,"l_finger0",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"l_finger01",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"l_finger1",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"l_finger11",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"l_finger2",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"l_finger21",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		end
+
+		if ply:GetNWBool("RightArm") then
+			hg.bone.Set(ent,"r_finger0",Vector(0,0,0),Angle(0,20,0),1,0.2)
+			hg.bone.Set(ent,"r_finger01",Vector(0,0,0),Angle(0,20,0),1,0.2)
+			hg.bone.Set(ent,"r_finger1",Vector(0,0,0),Angle(0,-40,0),1,0.2)
+			hg.bone.Set(ent,"r_finger11",Vector(0,0,0),Angle(0,-80,0),1,0.2)
+			hg.bone.Set(ent,"r_finger2",Vector(0,0,0),Angle(0,-40,0),1,0.2)
+			hg.bone.Set(ent,"r_finger21",Vector(0,0,0),Angle(0,-80,0),1,0.2)
+		else
+			hg.bone.Set(ent,"r_finger0",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"r_finger01",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"r_finger1",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"r_finger11",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"r_finger2",Vector(0,0,0),Angle(0,0,0),1,0.1)
+			hg.bone.Set(ent,"r_finger21",Vector(0,0,0),Angle(0,0,0),1,0.1)
+		end
+	end
 end)
 
 hook.Add("Think","Homigrad_Ragdoll_Color",function()

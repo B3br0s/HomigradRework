@@ -3,8 +3,8 @@ SWEP.PrintName = "MP5"
 SWEP.Category = "Оружие: ПП"
 SWEP.Spawnable = true
 
-SWEP.WorldModel = "models/weapons/arccw_go/v_smg_mp5.mdl"
-SWEP.ViewModel = "models/weapons/arccw_go/v_smg_mp5.mdl"
+SWEP.WorldModel = "models/weapons/arccw/c_ur_mp5.mdl"
+SWEP.ViewModel = "models/weapons/arccw/c_ur_mp5.mdl"
 
 SWEP.HoldType = "ar2"
 
@@ -19,8 +19,8 @@ SWEP.Primary.Ammo = "9x19 mm Parabellum"
 SWEP.Primary.Wait = 0.08
 SWEP.Sound = "pwb/weapons/mp7/shoot.wav"
 
-SWEP.WorldPos = Vector(-8,-2.5,0)
-SWEP.WorldAng = Angle(1,0,0)
+SWEP.WorldPos = Vector(-5,-1,0)
+SWEP.WorldAng = Angle(0,0,5)
 SWEP.AttPos = Vector(30,5.2,-4.05)
 SWEP.AttAng = Angle(-0.4,-0.05,0)
 SWEP.HolsterAng = Angle(0,-90,0)
@@ -32,7 +32,7 @@ SWEP.BoltBone = nil
 SWEP.BoltVec = nil
 
 SWEP.holdtypes = {
-    ["ar2"] = {[1] = 0.3,[2] = 1.3,[3] = 0.1,[4] = 1.7},
+    ["ar2"] = {[1] = 0.3,[2] = 0.7,[3] = 0.1,[4] = 1.7},
 }
 
 SWEP.IconPos = Vector(110,-10,1.5)

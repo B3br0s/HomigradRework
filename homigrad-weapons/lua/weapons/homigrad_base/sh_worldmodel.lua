@@ -72,9 +72,9 @@ function SWEP:WorldModel_Transform(nomod)
         return
     end
 
-    local zapasnoy_plan = hg.eyeTrace(ply)
+    local tr_shit = hg.eyeTrace(ply)
 
-    local Pos = mat:GetTranslation() or zapasnoy_plan.StartPos// + (ply:EyeAngles().p > 0 and ply:EyeAngles():Up() * 5 or Vector())
+    local Pos = ent:IsRagdoll() and mat:GetTranslation() or (tr_shit.StartPos + ply:EyeAngles():Right() * 0.5 + ply:EyeAngles():Up() * -2)// + (ply:EyeAngles().p > 0 and ply:EyeAngles():Up() * 5 or Vector())
     local Ang = ply:EyeAngles()
 
     local isclose = self.Isclose
@@ -139,8 +139,8 @@ function SWEP:WorldModel_Transform(nomod)
 
         Ang[1] = Ang[1] * (1 - self.speed)
 
-        model:SetRenderOrigin((Pos - speed_pos) - vector_up * (8 * self.speed))
-        model:SetRenderAngles(Ang - speed_ang - Angle(2 * (self:IsLocal() and vis_recoil or 0)))
+        model:SetRenderOrigin(((Pos - speed_pos) - vector_up * (8 * self.speed)) - Ang:Forward() * (vis_recoil / 2) - Ang:Right() * (self:IsLocal() and govno_recoil * Recoil or 0))
+        model:SetRenderAngles(Ang - speed_ang - Angle(2 * (self:IsLocal() and vis_recoil or 0)) - Angle(0,2 * (self:IsLocal() and govno_recoil * Recoil or 0),0))
 
         final_ang = Ang - speed_ang //- Angle(2 * (self:IsLocal() and vis_recoil or 0))
         final_pos = (Pos - speed_pos) - vector_up * (8 * self.speed)
@@ -255,6 +255,12 @@ function SWEP:WorldModel_Holster_Transform(nomod)
         model:SetRenderOrigin(Pos)
         model:SetRenderAngles(Ang)
 
+        if IsValid(self:GetOwner()) then
+            model:SetParent(self:GetOwner())
+        end
+
+        model:DrawModel()
+
         //ply.prev_wep_ang = Ang
     end
 
@@ -282,6 +288,12 @@ function SWEP:CreateWorldModel()
     self.worldModel = ClientsideModel(self.WorldModelReal or self.WorldModel)
 
     local wm = self.worldModel
+
+    wm.DontOptimise = true
+    if IsValid(self:GetOwner()) then
+        wm:SetParent(self:GetOwner())
+    end
+    //wm:SetPredictable(true)
 
     self:CallOnRemove("zaebal_remove",function()
         wm:Remove()

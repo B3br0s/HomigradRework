@@ -1,7 +1,7 @@
 util.AddNetworkString("localized_chat")
 
 hook.Add("Player Think","Hunger_Handler",function(ply)
-    if !ply:Alive() then
+    if !ply:Alive() or #player.GetAll() < 2 then
         return
     end
     if ply.hungerNext < CurTime() then
@@ -20,7 +20,7 @@ hook.Add("Player Think","Hunger_Handler",function(ply)
 
         if ply.hunger == 0 then
             ply.KillReason = "dead_hungry"
-            ply:Kill()
+            ply:TakeDamage(10,ply,ply)
         end
     end
 end)

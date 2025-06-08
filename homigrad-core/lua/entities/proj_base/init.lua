@@ -13,7 +13,7 @@ function ENT:Initialize()
 	self:SetModelScale(self:GetModelScale()*self.ModelScale,0)
 	local phys = self:GetPhysicsObject()
 	if IsValid(phys) then
-		phys:SetMass(25)
+		phys:SetMass(self.Mass or 25)
 		phys:Wake()
 		phys:EnableMotion(true)
 	end
@@ -59,18 +59,32 @@ function ENT:Detonate()
 
 	self.deton = true
 
-	sound.Play(istable(self.ExplodeSound) and table.Random(self.ExplodeSound) or self.ExplodeSound,self:GetPos(),150,100,1)
+	sound.Play(istable(self.ExplodeSound) and table.Random(self.ExplodeSound) or self.ExplodeSound,self:GetPos() + vector_up * 6,150,100,1)
 
 	local plooie = EffectData()
-	plooie:SetOrigin(self:GetPos())
+	plooie:SetOrigin(self:GetPos() + vector_up * 6)
 	plooie:SetScale(.01)
 	plooie:SetRadius(.5)
 	plooie:SetNormal(vector_up)
-	ParticleEffect("pcf_jack_groundsplode_large",self:GetPos(),vector_up:Angle())
+	ParticleEffect(self.Effect or "pcf_jack_groundsplode_large",self:GetPos(),vector_up:Angle())
 	util.ScreenShake(self:GetPos(), 20, 20, 1, 1000)
 
-	JMod.FragSplosion(self, self:GetPos(), 500, 1500, 1500, IsValid(self:GetOwner()) and self:GetOwner() or game.GetWorld())
-	//JMod.FragSplosion(self, self:GetPos(), 800, 2450, 3500, IsValid(self:GetOwner()) and self:GetOwner() or game.GetWorld())
+	JMod.FragSplosion(self, self:GetPos() + vector_up * 6, (self.Frag and 500 or 0), 1500, 1500, IsValid(self:GetOwner()) and self:GetOwner() or game.GetWorld())
+
+	if self.Nahuy then
+		for _, ent in ipairs(ents.FindInSphere(self:GetPos(),self.Rad or 500)) do
+			if !IsValid(ent) then
+				continue 
+			end
+			if ent.IsMotionEnabled and !ent:IsMotionEnabled() then
+				continue 
+			end
+
+			local dir = (ent:GetPos() - self:GetPos()):Angle():Forward()
+
+			ent:SetVelocity(dir * 100)
+		end
+	end
 end
 
 function ENT:PhysicsCollide(c,collide)

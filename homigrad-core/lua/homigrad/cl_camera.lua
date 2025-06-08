@@ -15,7 +15,7 @@ hg.viewpos = Vector(0,0,0)
 CreateClientConVar("hg_fov","130",true,false,nil,70,130)
 local smooth_cam = CreateClientConVar("hg_smooth_cam","1",true,false,nil,0,1)
 
-CreateClientConVar("hg_fakecam_mode","0",true,false,nil,0,1)
+CreateClientConVar("hg_cshs_fake","0",true,false,nil,0,1)
 
 CreateClientConVar("hg_deathsound","1",true,false,nil,0,1)
 CreateClientConVar("hg_deathscreen","1",true,false,nil,0,1)
@@ -157,6 +157,20 @@ local lastcall = 0
 local prevang = Angle(0,0,0)
 local prevpos = LocalPlayer():EyePos()
 
+hook.Add("AdjustMouseSensitivity","beg_zalupki1337",function(mul)
+	local ply = LocalPlayer()
+
+	if !ply:IsSprinting() or !ply:Alive() then
+		return
+	end
+
+	local run_mul = math.Clamp(200 / ply:GetVelocity():Length(),0,1)
+
+	return run_mul
+end)
+
+local govno = Angle(0,0,0)
+
 function CalcView(ply,vec,ang,fov,znear,zfar)
 	shit_ang = LerpAngleFT(0.1,shit_ang,ang)
 	local dtime = SysTime() - lastcall
@@ -172,6 +186,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
     end
 
 	prevang = LerpAngleFT(0.075,prevang,ply:EyeAngles())
+	govno = ply:EyeAngles()//LerpAngle(0.45,govno,ply:EyeAngles())
 	prevpos = LerpVectorFT(0.1,prevpos,ply:EyePos())
 
 	local ydiff = math.AngleDifference(prevang.y,ply:EyeAngles().y)
@@ -280,7 +295,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 	//hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.1)
 
-	angEye = lply:EyeAngles()
+	angEye = govno
 	
 	vecEye = tr.StartPos or lply:EyePos()
 
@@ -300,23 +315,24 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 	follow = ragdoll
 
 	if ply:Alive() and IsValid(ragdoll) then
-		ragdoll:ManipulateBoneScale(ragdoll:LookupBone("ValveBiped.Bip01_Head1"),vecZero)
-		
-		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))
-		
-		local eyeAngs = lply:EyeAngles()
-		LerpEyeRagdoll = eyeAngs
-		//LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + att.Ang[3] * 0.01
+		ragdoll:ManipulateBoneScale(ragdoll:LookupBone("ValveBiped.Bip01_Head1"), vecZero)
 
+		local att = ragdoll:GetAttachment(ragdoll:LookupAttachment("eyes"))
+		local eyeAngs = lply:EyeAngles()
+
+		local anghook = GetConVar("hg_cshs_fake"):GetBool() and 0.5 or 0
+
+		LerpEyeRagdoll = LerpAngleFT((ply:GetActiveWeapon().Camera and 0.45 or 0.05), LerpEyeRagdoll, LerpAngle(anghook, eyeAngs, att.Ang))
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL
 
-
 		local pos,ang = ragdoll:GetBonePosition(ragdoll:LookupBone("ValveBiped.Bip01_Head1"))
-		local att = {Pos = pos + ang:Up() * 1.5 + ang:Right() * 1,Ang = ang}
+		local att = {Pos = pos,Ang = LerpEyeRagdoll}
 
 		local output_pos,output_ang = att.Pos,LerpEyeRagdoll
 
 		local wep = ply:GetActiveWeapon()
+
+		local output_pos,output_ang = att.Pos,LerpEyeRagdoll
 
 		if wep and wep.Camera then
 			output_pos, output_ang, fov = wep:Camera(ply, output_pos, output_ang, fov)
@@ -324,16 +340,11 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 		local view = {
 			origin = output_pos,
-			angles = output_ang,
+			angles = LerpEyeRagdoll,
 			fov = fov,
 			drawviewer = true,
-			zfar = zfar,
-			znear = 1.5,
+			znear = 1,
 		}
-
-		if IsValid(helmEnt) then
-			helmEnt:SetNoDraw(true)
-		end
 
 		return view
 	end

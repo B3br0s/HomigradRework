@@ -578,50 +578,55 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
     	ply:SetJumpPower(200)
 		return
 	end
-    
-    local isSprinting = ply:IsSprinting()
-    local forwardSpeed = mv:GetForwardSpeed()
-    local sideSpeed = mv:GetSideSpeed()
-    local maxSpeed = mv:GetMaxSpeed()
-    local velocity = ply:GetVelocity():Length()
-    
-	local stamina = ply:GetNWFloat("stamina")
-    local adrenalineBoost = (ply.adrenaline or 0) * 50
-    
-    if SERVER and ply.CanMove == false then
-        mv:SetMaxSpeed(0)
-        ply:SetCrouchedWalkSpeed(0)
-        return
-    end
-  
-    ply.move = forwardSpeed
-    ply.sidemove = sideSpeed
-    
-    ply:SetDuckSpeed(0.5)
-    ply:SetUnDuckSpeed(0.5)
-    ply:SetSlowWalkSpeed(30)
-    ply:SetWalkSpeed(170)
-    ply:SetJumpPower(185)
-    
-    local targetRunSpeed = isSprinting and ((forwardSpeed > 1 and 340 or 260) + adrenalineBoost) * stamina / 85
-                          or (ply:GetWalkSpeed() / 1.5) * stamina / 100
-    
-    local lerpFactor = isSprinting and 0.025 or 0.1
-    local newRunSpeed = Lerp(lerpFactor, ply:GetRunSpeed(), targetRunSpeed)
-    ply:SetRunSpeed(newRunSpeed)
 
-    ply:SetCrouchedWalkSpeed(1 * stamina / 200)
-	
-    if isSprinting and forwardSpeed > 30 then
-        ply.stamina = math.Clamp((ply.stamina or 100) - 0.005, 0, 100)
-    elseif velocity < 200 then
-        ply.stamina = math.Clamp((ply.stamina or 0) + 0.035 + adrenalineBoost / 15, 0, 100)
-    end
-    
-    if not ply:Crouching() then
-        mv:SetMaxSpeed(maxSpeed)
-        mv:SetMaxClientSpeed(newRunSpeed)
-    end
+	local speed = ply:IsSprinting() and 390 or 100
+
+	//Штрафы за бег спиной|боком
+
+	local side = mv:GetSideSpeed()
+	local forw = mv:GetForwardSpeed()
+
+	if side < 0 then
+		side = side * -1
+	end
+
+	if side > 0 then
+		speed = speed - ply:GetVelocity():Length() / 2
+	end
+
+	if forw < 0 then
+		speed = speed - ply:GetVelocity():Length()
+	end
+
+	//Штрафы за резкие повороты
+
+	ply.govno_ang = LerpAngle(0.025,ply.govno_ang or ply:EyeAngles(),ply:EyeAngles())
+
+	local diffang = math.AngleDifference(ply.govno_ang[2],ply:EyeAngles()[2]) * 2.5
+
+	if diffang < 0 then
+		diffang = diffang * -1
+	end
+
+	if ply:IsSprinting() and forw > 0 then
+		speed = speed - diffang
+	end
+
+	//print(speed)
+
+	local cur_speed = Lerp(0.04,ply:GetRunSpeed(),speed)
+
+	ply:SetRunSpeed(cur_speed)
+    ply:SetJumpPower(150)
+
+	mv:SetMaxSpeed(cur_speed)
+	mv:SetMaxClientSpeed(cur_speed)
+end)
+
+hook.Add( "CalcMainActivity", "RunningAnim", function( Player, Velocity )
+	if (not Player:InVehicle()) and Player:IsOnGround() and Velocity:Length() > 250 and IsValid(Player:GetActiveWeapon()) and Player:GetActiveWeapon():GetClass() == "weapon_hands" then
+		return ACT_HL2MP_RUN_FAST, -1
+	end
 end)
 
 function hg.GetCurrentCharacter(ent)

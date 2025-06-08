@@ -267,6 +267,9 @@ function hg.RenderArmorEnt(ent)
 end
 
 hook.Add("PostDrawRagdoll","RenderArmor",function(rag)
+    if !IsValid(hg.RagdollOwner(rag)) then
+        return
+    end
     if rag:GetNWBool("NoHead") then
         rag:ManipulateBoneScale(6,Vector(0,0,0))
     else

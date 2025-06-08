@@ -24,7 +24,7 @@ hook.Add("Player Think", "ControlPlayersAdmins", function(ply, time)
 
 		if IsValid(ply.CarryEnt) and physbone != nil and ply.CarryEntPhysbone != nil and ply.CarryEnt:GetPhysicsObjectNum(ply.CarryEntPhysbone) != nil then
 			if ply:KeyPressed(IN_ATTACK) then
-				local text = tostring(ply:Name()) .. "поднял" .. tostring(IsValid(hg.RagdollOwner(ply.CarryEnt)) and hg.RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
+				local text = tostring(ply:Name()) .. " поднял " .. tostring(IsValid(hg.RagdollOwner(ply.CarryEnt)) and hg.RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
 				print(text)
 			end
 

@@ -271,6 +271,9 @@ hook.Add("Think","Homigrad-Weapon",function()
     for wep, _ in pairs(hg.Weapons) do
         if IsValid(wep) and wep.Step then
             wep:Step()
+            /*if IsValid(wep:GetOwner()) and wep:GetOwner():GetActiveWeapon() != wep and wep.WorldModel_Holster_Transform then
+                wep:WorldModel_Holster_Transform()
+            end*/
             if wep.DrawAttachments then
                 wep:DrawAttachments()
             end

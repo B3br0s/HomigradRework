@@ -61,7 +61,8 @@ hook.Add("InputMouseApply", "ChangeZoom", function(cmd,x,y,ang)
 	end
 end)
 
-function SWEP:DoHolo(IsRender)
+/*function SWEP:DoHolo(IsRender)
+    do return end
     cam.Start3D()
         local placement = "sight"
         local tbl = hg.GetAtt(self.Attachments[placement][1])
@@ -113,8 +114,9 @@ function SWEP:DoHolo(IsRender)
         mdl:SetAngles(Ang)
         mdl:SetRenderAngles(Ang)
         mdl:SetRenderOrigin(Pos)
-        mdl:SetPredictable(true)
-        mdl:SetupBones()
+        //mdl:SetPredictable(true)
+        //mdl:SetupBones()
+        mdl:SetParent(self:GetOwner())
         
         if IsRender then
             mdl:DrawModel()
@@ -142,7 +144,7 @@ function SWEP:DoHolo(IsRender)
         render.DepthRange(0, 1)
         render.SetStencilEnable(false)
     cam.End3D()
-end
+end*/
 
 function surface.DrawTexturedRectRotatedHuy(x, y, w, h, rot, offsetX, offsetY, rotHuy)
 	rotHuy = rotHuy or 0
@@ -271,15 +273,94 @@ end
 hook.Add("HUDPaint","holo",function() //как я додумался? не спрашивайте,но оно рендерит блять.
     local ply = LocalPlayer()
     if ply:GetActiveWeapon().ishgwep then
-        ply:GetActiveWeapon():DoHolo(true)
         ply:GetActiveWeapon():DoRT()
+
+        local self = ply:GetActiveWeapon()
+
+        cam.Start3D()
+        local placement = "sight"
+        local tbl = hg.GetAtt(self.Attachments[placement][1])
+        local mdl = self.AttDrawModels[placement]
+        if !IsValid(mdl) then
+            cam.End3D()
+            return
+        end
+
+        if !tbl then
+            return
+        end
+
+        if !tbl.IsHolo then
+            cam.End3D()
+            return
+        end
+
+        local Pos,Ang = self:GetSightPos()
+        
+        local material = Material(tbl.Reticle or "empty", "noclamp nocull smooth")
+        local size = tbl.ReticleSize or 1
+        local pos = mdl:GetPos()
+        local ang = mdl:GetAngles()
+        local up = ang:Up()
+        local right = ang:Right()
+        local forward = ang:Forward()
+
+        pos = pos + forward * 100 + up * (tbl.ReticleUp or 0) + right * (tbl.ReticleRight or 0)
+
+        render.UpdateScreenEffectTexture()
+        render.ClearStencil()
+        render.SetStencilEnable(true)
+        render.SetStencilCompareFunction(STENCIL_ALWAYS)
+        render.SetStencilPassOperation(STENCIL_REPLACE)
+        render.SetStencilFailOperation(STENCIL_KEEP)
+        render.SetStencilZFailOperation(STENCIL_REPLACE)
+        render.SetStencilWriteMask(255)
+        render.SetStencilTestMask(255)
+	    render.DepthRange(0, 0)
+
+        render.SetBlend(0)
+
+        render.SetStencilReferenceValue(1)
+
+        //self:DrawAttachments()
+
+        mdl:SetPos(Pos)
+        mdl:SetAngles(Ang)
+        mdl:SetRenderAngles(Ang)
+        mdl:SetRenderOrigin(Pos)
+        //mdl:SetPredictable(true)
+        //mdl:SetupBones()
+        mdl:SetParent(self:GetOwner())
+        
+            mdl:DrawModel()
+        
+        render.SetBlend(1)
+
+        render.SetStencilPassOperation(STENCIL_KEEP)
+        render.SetStencilCompareFunction(STENCIL_EQUAL)
+
+	    render.SetMaterial(material or Material("empty"))
+        
+        render.SetStencilCompareFunction(STENCIL_EQUAL)
+        render.SetStencilPassOperation(STENCIL_KEEP)
+        
+        render.SetMaterial(material)
+        render.DrawQuad(
+        	pos + (up * size / 2) - (right * size / 2),
+        	pos + (up * size / 2) + (right * size / 2),
+        	pos - (up * size / 2) + (right * size / 2),
+        	pos - (up * size / 2) - (right * size / 2),
+        Color(255,255,255,255)
+        )
+
+        render.DepthRange(0, 1)
+        render.SetStencilEnable(false)
+    cam.End3D()
     end
 end)
 
 hook.Add("AdjustMouseSensitivity","Homigrad-Camera",function()
 	local lply = LocalPlayer()
-
-	vis_recoil = LerpFT(0.075,vis_recoil,0)
 
 	if !lply:Alive() then
 		return 1

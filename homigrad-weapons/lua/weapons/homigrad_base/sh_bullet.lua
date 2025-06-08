@@ -88,6 +88,7 @@ function SWEP:Shoot()
     local primary = self.Primary
     
     self:SetNextShoot(CurTime() + primary.Wait)
+    self.NextShoot = CurTime() + primary.Wait
 
     if !IsValid(self:GetOwner()) then
         return
@@ -106,6 +107,7 @@ function SWEP:Shoot()
     if self:IsLocal() then
         vis_recoil = vis_recoil + primary.Force / 15 * self.RecoilForce * (high_recoil and 3 or 1)
         Recoil = Recoil + 0.25 + primary.Force / 100 * (high_recoil and 3 or 1)
+        govno_recoil = govno_recoil + math.random(-1,1)
     end
 
     local ply = self:GetOwner()
@@ -152,9 +154,9 @@ function SWEP:Shoot()
     if self:GetOwner():IsSuperAdmin() then
         if CLIENT then
             //debugoverlay.Line(Pos,Pos + Ang:Forward() * dist,2,Color(255,0,0))
-            debugoverlay.SweptBox(Pos + Ang:Right() * 1.25 - Ang:Up() * 0.75,Pos + Ang:Forward() * dist,Vector(1,1,1),Vector(1.5,1.5,1.5),Ang,2,Color(255,255,0))
             debugoverlay.BoxAngles(Pos+Ang:Forward()*dist,Vector(0,0,0),Vector(2,2,2),Ang,5,Color(255,0,0))
         else
+            debugoverlay.SweptBox(Pos + Ang:Right() * 1.25 - Ang:Up() * 0.75,Pos + Ang:Forward() * dist,Vector(1,1,1),Vector(1.5,1.5,1.5),Ang,2,Color(255,255,0))
             debugoverlay.BoxAngles(Pos+Ang:Forward()*dist,Vector(0,0,0),Vector(2,2,2),Ang,5,Color(0,0,255))
         end
     end

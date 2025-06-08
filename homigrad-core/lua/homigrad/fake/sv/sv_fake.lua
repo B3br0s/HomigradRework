@@ -71,8 +71,8 @@ function PlayerMeta:ChatPrintLocalized(string)
 end
 
 local weights = {
-	["models/css_seb_swat/css_swat.mdl"] = {[1] = 0.04},
-	["models/css_seb_swat/css_seb.mdl"] ={[1] = 0.04},
+	["models/css_seb_swat/css_swat.mdl"] = {[1] = 10},
+	["models/css_seb_swat/css_seb.mdl"] ={[1] = 10},
 
 	["models/gang_groove/gang_1.mdl"] =		   {[1] = 40},
 	["models/gang_groove/gang_2.mdl"] =		   {[1] = 40},
@@ -94,6 +94,10 @@ function PlayerMeta:CreateFake(force)
 	rag.Inventory = self.Inventory
 	rag.JModEntInv = self.JModEntInv
 	rag:SetNWEntity("JModEntInv",self.JModEntInv)
+	for i = 0,#self:GetBodyGroups() do
+		//print(rag:GetBodygroup(i))
+		rag:SetBodygroup(i,self:GetBodygroup(i))
+	end
 	if ROUND_NAME == "dr" then
 		self.TimeToDeath = CurTime() + 7
 		self:SetNWFloat("TimeToDeath",CurTime() + 7)
@@ -490,7 +494,7 @@ hook.Add("PlayerSpawn","collide",function(ply)
 end)
 
 hook.Add("Player Collide","Ragdolling-Collide",function(ply,ent,data)
-	local LIMIT_MASS = 40
+	local LIMIT_MASS = 100
 	local LIMIT_SPEED = 280
 	if ROUND_NAME == "dr" then
 		return

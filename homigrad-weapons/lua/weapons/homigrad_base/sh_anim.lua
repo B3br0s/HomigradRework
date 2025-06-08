@@ -21,7 +21,7 @@ local Postures = {
     [4] = {[0] = {Angle(0,0,20),Vector(4,13.25,6)},
            [1] = {Angle(0,0,20),Vector(0,7.25,4)},
            [2] = true},
-    [5] = {[0] = {Angle(0,0,-3),Vector(9,0,-1)},
+    [5] = {[0] = {Angle(0,0,-3),Vector(4,0,-1)},
            [1] = {Angle(0,0,15),Vector(0,-2.25,0)},
            [2] = true},
 }
@@ -93,7 +93,7 @@ function SWEP:Post_Hands_Anim()
         self:SetHoldType("melee")
     else
         self:SetHoldType((ply:GetNWBool("suiciding") and "normal" or self.HoldType))
-        self.NoLHand = ((ply:GetNWBool("suiciding") and self:IsPistolHoldType()) and true or false)
+        self.NoLHand = ply:GetNWBool("suiciding") and (self:IsPistolHoldType() and true or false) or ply:GetNWBool("LeftArm")
         cur_pos = 1
         if self.reload or self:IsSprinting() then
             pos = Vector()

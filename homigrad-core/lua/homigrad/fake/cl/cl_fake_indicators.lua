@@ -1,13 +1,16 @@
-local vec = Vector(1,1,1)
-
 local math_hand1 = Material("icon32/hand_point_180.png")
 local math_hand2 = Material("icon32/hand_point_090.png")
 
 local Clamp = math.Clamp
 
+local casual_nigger = (ConVarExists("hg_casual") and GetConVar("hg_casual") or CreateClientConVar("hg_casual","0",true,false,"казуал плееры идут нахуй!",0,1))
+
 hook.Add("HUDPaint","Fake",function()
     local ply = LocalPlayer()
     if not ply.Fake then return end
+    if !casual_nigger:GetBool() then 
+        return
+    end
 
     surface.SetDrawColor(255,255,255,255)
 

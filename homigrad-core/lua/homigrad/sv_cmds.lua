@@ -409,26 +409,26 @@ COMMANDS.avaiblemodes = {function(ply,args)
 end,1}
 
 
-function team.DirectTeams(minTeam, maxTeam)
-    local players = {}
-    for _, ply in ipairs(player.GetAll()) do
-        if ply:Team() != 1002 then
-            table.insert(players, ply)
-        end
-    end
+	function team.DirectTeams(minTeam, maxTeam)
+		local players = {}
+		for _, ply in ipairs(player.GetAll()) do
+			if ply:Team() != 1002 then
+				table.insert(players, ply)
+			end
+		end
 
-    for i = #players, 2, -1 do
-        local j = math.random(i)
-        players[i], players[j] = players[j], players[i]
-    end
+		for i = #players, 2, -1 do
+			local j = math.random(i)
+			players[i], players[j] = players[j], players[i]
+		end
 
-    local splitPoint = math.ceil(#players / 2)
+		local splitPoint = math.ceil(#players / 2)
 
-    for i, ply in ipairs(players) do
-        if i <= splitPoint then
-            ply:SetTeam(minTeam)
-        else
-            ply:SetTeam(maxTeam)
-        end
-    end
-end
+		for i, ply in ipairs(players) do
+			if i <= splitPoint then
+				ply:SetTeam(minTeam)
+			else
+				ply:SetTeam(maxTeam)
+			end
+		end
+	end

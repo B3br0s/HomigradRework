@@ -35,7 +35,7 @@ function criresp.SpawnSWAT(ply)
         ply:Give(wep)
     end
 
-    print(wep_primary)
+    //print(wep_primary)
 
     if IsValid(wep_primary) then
         wep_primary:SetClip1(wep_primary:GetMaxClip1())
@@ -79,6 +79,11 @@ function criresp.SpawnSuspect(ply)
     local wep_secondary = ply:Give(table.Random(weps_sec))
     for _, wep in pairs(weps_oth) do
         ply:Give(wep)
+
+        
+        if wep.GetSecondaryAmmoType and wep:GetSecondaryAmmoType() != "none" then
+            ply:GiveAmmo(5, wep:GetSecondaryAmmoType(), true)
+        end
     end
 
     wep_secondary:SetClip1(wep_secondary:GetMaxClip1())

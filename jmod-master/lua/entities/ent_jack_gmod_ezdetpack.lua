@@ -200,7 +200,7 @@ if SERVER then
 			if IsValid(self) then
 				if self.SympatheticDetonated then return end
 				local SelfPos, PowerMult = self:IncludeSympatheticDetpacks(self:LocalToWorld(self:OBBCenter()))
-				PowerMult = (PowerMult ^ .75) * JMod.Config.Explosives.Detpack.PowerMult
+				PowerMult = (PowerMult ^ .75) * 2
 				--
 				local Blam = EffectData()
 				Blam:SetOrigin(SelfPos)

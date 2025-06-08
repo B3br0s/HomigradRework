@@ -63,7 +63,7 @@ function StartRound()
 
     ROUND_NAME = (ROUND_NEXT or table.Random(CanBeStarted))
     if !GetGlobalBool("NoLevelChange",false) then
-        ROUND_NEXT = table.Random(CanBeStarted)
+        ROUND_NEXT = (math.random(0,20) < 7 and table.Random(CanBeStarted) or "hmcd")
     end
 
     if string.match(game.GetMap(),"jb_") then

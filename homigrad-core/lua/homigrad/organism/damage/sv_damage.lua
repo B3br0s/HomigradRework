@@ -32,30 +32,6 @@ hook.Add("Player Think","Player_Health",function(ply,time)
     end
 end)
 
-hook.Add("Homigrad_Organs","Organs_Damage",function(ent,dmginfo,physbone,bonename)
-	local ply = (ent:IsPlayer() and ent or RagdollOwner(ent))
-	if IsValid(ply) then
-		ply.LastHitBone = bonename
-		ply:SetNWString("LastHitBone",bonename)
-	end
-
-	if BoneIntoHG[bonename] == HITGROUP_HEAD and dmginfo:GetDamageType() == DMG_CRUSH then
-		local ply = (ent:IsPlayer() and ent or RagdollOwner(ent))
-		local rag = ent
-
-		if rag:GetVelocity():Length() > 650
-		and (dmginfo:GetDamage() * 30) > 9 then
-			ply.KillReason = "dead_neck"
-			ply:SetNWString("KillReason",ply.KillReason)
-            if ply:Alive() then
-			ply:Kill()
-            end
-			sound.Play("homigrad/player/neck_snap_01.wav",rag:GetPos(),75,100,1,0)
-		end
-	end
-	
-end)
-
 hook.Add("PlayerDeath","Homigrad_DeathScreen",function(ply,attacker,killedby)
 	if !ply.LastDMGInfo then
 		return
@@ -67,7 +43,7 @@ hook.Add("PlayerDeath","Homigrad_DeathScreen",function(ply,attacker,killedby)
 	timer.Simple(0,function()
 		if IsValid(ply.FakeRagdoll) and IsValid(ply.FakeRagdoll:GetPhysicsObject()) then
 			ply.FakeRagdoll:GetPhysicsObject():SetMass(20)
-			ply.AppearanceOverride = false
+			ply.AppearanceOverride = false	
 		end
 	end)
 end)
@@ -185,7 +161,7 @@ hook.Add("EntityTakeDamage", "Homigrad_damage", function(ent, dmginfo)
 	dmginfo:ScaleDamage((DamageMultipliers[dmginfo:GetDamageType()] and DamageMultipliers[dmginfo:GetDamageType()] or 0.7))
 
 	if dmginfo:IsDamageType(DMG_CRUSH) and rag then
-		dmginfo:ScaleDamage((rag:GetVelocity():Length() > 150 and (rag:GetVelocity():Length() / 7500) or 0))
+		dmginfo:ScaleDamage((rag:GetVelocity():Length() > 50 and (rag:GetVelocity():Length() / 8500) or 0))
 		ply.pain = math.Clamp(ply.pain + dmginfo:GetDamage() * (rag:GetVelocity():Length() / 200),0,400)
 	end
 

@@ -1,11 +1,12 @@
 local radialOpen = false
 local prevSelected, prevSelectedVertex
-local elmss
+local elmss = {}
 local elements = {
     [1] = {Name = "hg_posture", Action = function() LocalPlayer():ConCommand("hg_change_posture") end},
     //[2] = {Name = "hg_suicide", Action = function() if !LocalPlayer():GetNWBool("suiciding") then RunConsoleCommand("suicide") end RunConsoleCommand("+attack") timer.Simple(0,function() RunConsoleCommand("-attack") end) end}
     [2] = {Name = "hg_resetposture", Action = function() LocalPlayer():ConCommand("hg_change_posture 1") end},
-    [3] = {Name = "hg_unload", Action = function() LocalPlayer():ConCommand("hg_unload") end}
+    [3] = {Name = "hg_unload", Action = function() LocalPlayer():ConCommand("hg_unload") end},
+    [4] = {Name = "hg_drop", Action = function() LocalPlayer():ConCommand("say *drop") end}
 }
 function OpenRadialMenu(elms)
 	if not LocalPlayer():Alive() then return end
@@ -75,7 +76,8 @@ end
 
 local tex = surface.GetTextureID("VGUI/white.vmt")
 local function drawShadow(n, f, x, y, color, pos)
-	draw.DrawText(n, f, x + 1, y + 1, color_black, pos)
+	local colorr_black = Color(0,0,0,color.a)
+	draw.DrawText(n, f, x + 1, y + 1, colorr_black, pos)
 	draw.DrawText(n, f, x, y, color, pos)
 end
 
@@ -100,15 +102,17 @@ end
 
 local circleVertex
 local fontHeight = draw.GetFontHeight("hg_HomicideMedium")
+local anim = 0
 function DrawRadialMenu()
-	if radialOpen then
+	anim = LerpFT(math.ease.OutBounce(radialOpen and 0.1 or 0.15),anim,radialOpen and 1 or 0)
+	//if radialOpen then
 		local sw, sh = ScrW(), ScrH()
 		local total = #elmss
-		local w = math.min(sw * 0.6, sh * 0.45)
+		local w = math.min(sw * 0.6, sh * 0.45) *  anim
 		local h = w
 		local sx, sy = sw / 2, sh / 2
 		local selected = getSelected() or -1
-		if not circleVertex then
+		//if not circleVertex then
 			circleVertex = {}
 			local max = 50
 			for i = 0, max do
@@ -121,15 +125,17 @@ function DrawRadialMenu()
 					}
 				)
 			end
-		end
+		//end
 
 		surface.SetTexture(tex)
-		local defaultTextCol = color_white
+		local defaultTextCol = Color(255,255,255)
 		if selected <= 0 or selected ~= selected then
-			surface.SetDrawColor(20, 20, 20, 180)
+			local col = LocalPlayer():GetPlayerColor():ToColor()
+			surface.SetDrawColor(col.r, col.g, col.b, 180)
 		else
-			surface.SetDrawColor(20, 20, 20, 120)
-			defaultTextCol = Color(150, 150, 150)
+			local col = LocalPlayer():GetPlayerColor():ToColor()
+			surface.SetDrawColor(col.r, col.g, col.b, 120)
+			defaultTextCol = Color(col.r * 1.5, col.g * 1.5, col.b * 2, 180)
 		end
 
 		surface.DrawPoly(circleVertex)
@@ -139,7 +145,7 @@ function DrawRadialMenu()
 			local x, y = math.cos((k - 1) / total * math.pi * 2 + math.pi * 1.5), math.sin((k - 1) / total * math.pi * 2 + math.pi * 1.5)
 			local lx, ly = math.cos((k - 1) / total * math.pi * 2 + add), math.sin((k - 1) / total * math.pi * 2 + add)
 			local textCol = defaultTextCol
-			if selected == k then
+			if selected == k and radialOpen then
 				local vertexes = prevSelectedVertex -- uhh, you mean VERTICES? Dumbass.
 				if prevSelected ~= selected then
 					prevSelected = selected
@@ -188,7 +194,7 @@ function DrawRadialMenu()
 				surface.SetDrawColor(129, 129, 129, 120)
 
 				surface.DrawPoly(vertexes)
-				textCol = color_white
+				textCol = Color(255,255,255)
 			end
 			local ply = LocalPlayer()
 			local Main, Sub
@@ -202,9 +208,11 @@ function DrawRadialMenu()
     			Sub = "?"
 			end
 
+			textCol.a = 255 * anim
+
 			drawShadow(Main, "hg_HomicideMedium", sx + w * 0.6 * x, sy + h * 0.6 * y - fontHeight, textCol, 1)
 		end
-	end
+	//end
 end
 
 hook.Add("HUDPaint","Draw_Radial",function()
@@ -212,8 +220,8 @@ hook.Add("HUDPaint","Draw_Radial",function()
 end)
 
 hook.Add("PlayerBindPress","Radial_shit",function(ply,bind,is)
-    if string.find(bind, (ply:IsAdmin() and "+menu_context" or "+menu")) then
-        local canopen = ply:IsAdmin() and !ply:KeyDown(IN_USE)
+    if string.match(bind, (ply:IsAdmin() and "+menu_context" or "+menu")) then
+        local canopen = (ply:IsAdmin() and !ply:KeyDown(IN_USE) or !ply:IsAdmin())
 
 		local elms = table.Copy(elements)
 

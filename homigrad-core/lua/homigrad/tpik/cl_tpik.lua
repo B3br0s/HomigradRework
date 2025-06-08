@@ -79,9 +79,9 @@ hg.TPIKBones = {
     "ValveBiped.Bip01_R_Finger0",
     "ValveBiped.Bip01_R_Finger01",
     "ValveBiped.Bip01_R_Finger02",
-    //"R Clavicle",
-    //"R UpperArm",
-    //"R Forearm",
+    "R Clavicle",
+    "R UpperArm",
+    "R Forearm",
     //"R Hand",
     "R Finger0",
     "R Finger01",
@@ -105,9 +105,9 @@ hg.TPIKBones = {
     "R ForeTwist4",
     "R ForeTwist5",
     "R ForeTwist6",
-    //"L Clavicle",
-    //"L UpperArm",
-    //"L Forearm",
+    "L Clavicle",
+    "L UpperArm",
+    "L Forearm",
     "L Hand",
     "L Finger0",
     "L Finger01",
@@ -307,6 +307,7 @@ function hg.DoTPIK(ply,ent)
         return
     end
     local self = ply:GetActiveWeapon()
+
     if not self or not IsValid(ent) or not self.SupportTPIK or ply:GetNWBool("otrub") then return end
     local wm = self.worldModel
     if not IsValid(wm) then return end
@@ -485,7 +486,7 @@ function hg.DoTPIK(ply,ent)
     end
 
     if shouldfulltpik then
-        ply_r_upperarm_pos, ply_r_forearm_pos, ply_r_upperarm_angle, ply_r_forearm_angle = hg.Solve2PartIK(ply_r_upperarm_matrix:GetTranslation(), pos and pos + offset or ply_r_hand_matrix:GetTranslation(), r_upperarm_length, r_forearm_length, -1.3, eyeahg)
+        ply_r_upperarm_pos, ply_r_forearm_pos, ply_r_upperarm_angle, ply_r_forearm_angle = hg.Solve2PartIK(ply_r_upperarm_matrix:GetTranslation(), pos and pos + offset or ply_r_hand_matrix:GetTranslation(), r_upperarm_length, r_forearm_length, -1.1, eyeahg)
 
         ply.TPIKCache.r_upperarm_pos, ply.TPIKCache.ply_r_upperarm_angle = WorldToLocal(ply_r_upperarm_pos, ply_r_upperarm_angle, ply_r_upperarm_matrix:GetTranslation(), ply_r_upperarm_matrix:GetAngles())
         ply.TPIKCache.r_forearm_pos, ply.TPIKCache.ply_r_forearm_angle = WorldToLocal(ply_r_forearm_pos, ply_r_forearm_angle, ply_r_upperarm_matrix:GetTranslation(), ply_r_upperarm_matrix:GetAngles())
