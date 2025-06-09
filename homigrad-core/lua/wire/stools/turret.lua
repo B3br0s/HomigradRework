@@ -50,7 +50,8 @@ local ValidTurretModels = {
 	["models/weapons/w_rif_m4a1.mdl"] = true,
 	["models/weapons/w_357.mdl"] = true,
 	["models/weapons/w_shot_m3super90.mdl"] = true,
-	["models/weapons/w_nam_m60.mdl"] = true
+	["models/weapons/w_nam_m60.mdl"] = true,
+	["models/weapons/w_snip_scout.mdl"] = true
 }
 
 function TOOL:GetModel()
@@ -72,6 +73,7 @@ function TOOL.BuildCPanel( CPanel )
 		weaponSounds["Options"]["#Airboat Heavy"]	= { wire_turret_sound = "Airboat.FireGunHeavy" }
 		weaponSounds["Options"]["#Zap"]	= { wire_turret_sound = "ambient.electrical_zap_3" }
 		weaponSounds["Options"]["#M60"]	= { wire_turret_sound = "sounds_zcity/m60/close.wav" }
+		weaponSounds["Options"]["#Scout"]	= { wire_turret_sound = "weapons/scout/scout_fire-1.wav" }
 
 
 	CPanel:AddControl("ComboBox", weaponSounds )

@@ -160,6 +160,10 @@ local prevpos = LocalPlayer():EyePos()
 hook.Add("AdjustMouseSensitivity","beg_zalupki1337",function(mul)
 	local ply = LocalPlayer()
 
+	if ply:GetMoveType() == 8 then
+		return
+	end
+
 	if !ply:IsSprinting() or !ply:Alive() then
 		return
 	end
@@ -301,15 +305,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 
 	//debugoverlay.Line(tr.StartPos,tr.HitPos)
 
-	if lply:InVehicle() then
-		//return
-		local mat = lply:GetBoneMatrix(lply:LookupBone("ValveBiped.Bip01_Head1"))
-		local shit = lply:EyeAngles()
-		shit.p = 0
-		vecEye = mat:GetTranslation() + shit:Forward() * 6 + mat:GetAngles():Up() * 3
-		//angEye:RotateAroundAxis(angEye:Up() * -1,180)
-		//angEye[1] = angEye[1] * -1
-	end
+
 
 	local ragdoll = ply:GetNWEntity("FakeRagdoll")
 	follow = ragdoll
@@ -364,7 +360,7 @@ function CalcView(ply,vec,ang,fov,znear,zfar)
 		return
 	end
 	
-	local output_ang = angEye
+	local output_ang = (lply:InVehicle() and ang or angEye)
 	local output_pos = vecEye
 
 	//output_ang[1] = output_ang[1] + eye.Ang[1] * 0.1

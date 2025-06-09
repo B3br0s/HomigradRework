@@ -614,13 +614,19 @@ hook.Add("Move", "Homigrad_Move", function(ply, mv)
 
 	//print(speed)
 
-	local cur_speed = Lerp(0.04,ply:GetRunSpeed(),speed)
+	local cur_speed = Lerp(0.04,ply:GetRunSpeed(),ply:GetVelocity():Length() > 50 and speed or 100)
 
 	ply:SetRunSpeed(cur_speed)
     ply:SetJumpPower(150)
 
 	mv:SetMaxSpeed(cur_speed)
 	mv:SetMaxClientSpeed(cur_speed)
+
+	if SERVER then
+		if ply:GetVelocity():Length() < 50 and !ply:IsSprinting() then
+			ply.stamina = ply.stamina + 0.05
+		end
+	end
 end)
 
 hook.Add( "CalcMainActivity", "RunningAnim", function( Player, Velocity )

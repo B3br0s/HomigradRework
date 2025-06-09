@@ -94,18 +94,6 @@ if SERVER then
 
 	function ENT:OnTakeDamage(dmginfo)
 		self:TakePhysicsDamage(dmginfo)
-
-		if JMod.LinCh(dmginfo:GetDamage(), 10, 50) then
-			local Pos, State = self:GetPos(), self:GetState()
-
-			if State == STATE_ARMED then
-				self:Detonate()
-			elseif not (State == STATE_BROKEN) then
-				sound.Play("Metal_Box.Break", Pos)
-				self:SetState(STATE_BROKEN)
-				SafeRemoveEntityDelayed(self, 10)
-			end
-		end
 	end
 
 	function ENT:Use(activator)
@@ -161,7 +149,7 @@ if SERVER then
 		util.ScreenShake(SelfPos, 99999, 99999, 1, 500)
 		self:EmitSound("snd_jack_fragsplodeclose.ogg", 90, 100)
 		JMod.Sploom(Owner, SelfPos, math.random(10, 20))
-		JMod.FragSplosion(self, SelfPos + Up * 5, 1000, 25 * JMod.Config.Explosives.Mine.Power, 3000, Owner, Up, 1.2, 3)
+		JMod.FragSplosion(self, SelfPos + Up * 5, 1000, 25 * 3, 3000, Owner, Up, 1.2, 3)
 		self:Remove()
 	end
 
@@ -217,7 +205,7 @@ if SERVER then
 						self:SetState(STATE_WARNING)
 						sound.Play("snds_jack_gmod/mine_warn.ogg", self:GetPos() + Vector(0, 0, 30), 60, 100)
 
-						timer.Simple(math.Rand(.05, .3) * JMod.Config.Explosives.Mine.Delay, function()
+						timer.Simple(math.Rand(.05, .3) * 1, function()
 							if IsValid(self) then
 								if self:GetState() == STATE_WARNING then
 									self:Detonate()

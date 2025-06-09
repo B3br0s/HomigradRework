@@ -87,7 +87,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 
 		if rag.ZacConsLH.Ent2:GetVelocity():LengthSqr() < 750 then
 			local sp = {
-				secondstoarrive = 0.65,
+				secondstoarrive = 0.5,
 				pos = HandL:GetPos() + ply:EyeAngles():Forward() * 13 + ply:EyeAngles():Up() * 15 + (IsValid(rag.ZacConsRH) and vector_up * 4 or Vector()),
 				angle = Spine2:GetAngles(),
 				maxangular = 360 * 3,
@@ -123,7 +123,7 @@ hook.Add("FakeControl","PlayerControl",function(ply,rag)
 
 		if rag.ZacConsRH.Ent2:GetVelocity():LengthSqr() < 750 then
 			local sp = {
-				secondstoarrive = 0.65,
+				secondstoarrive = 0.5,
 				pos = HandR:GetPos() + ply:EyeAngles():Forward() * 13 + ply:EyeAngles():Up() * 15 + (IsValid(rag.ZacConsLH) and vector_up * 4 or Vector()),
 				angle = Spine2:GetAngles(),
 				maxangular = 360 * 3,

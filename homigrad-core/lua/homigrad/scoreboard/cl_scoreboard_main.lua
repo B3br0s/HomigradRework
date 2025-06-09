@@ -178,6 +178,9 @@ local tabPressed = false
 fastloot = false
 local nextUpdateTime = RealTime() - 1
 hook.Add("HUDPaint", "HomigradScoreboardToggle", function()
+    if !TableRound then
+        return
+    end
     if !IsValid(ScoreBoardPanel) then
         cam.Start2D()
             local w = ScrW()

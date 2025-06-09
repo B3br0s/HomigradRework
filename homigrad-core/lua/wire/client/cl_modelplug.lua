@@ -379,7 +379,8 @@ local turretmodels = {
 	"models/weapons/w_rif_m4a1.mdl",
 	"models/weapons/w_357.mdl",
 	"models/weapons/w_shot_m3super90.mdl",
-	"models/weapons/w_nam_m60.mdl"
+	"models/weapons/w_nam_m60.mdl",
+	"models/weapons/w_snip_scout.mdl"
 }
 for k,v in pairs(turretmodels) do
 	if file.Exists(v,"GAME") then list.Set( "WireTurretModels", v, true ) end

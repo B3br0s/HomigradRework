@@ -493,13 +493,34 @@ hook.Add("PlayerSpawn","collide",function(ply)
 	ply:AddCallback("PhysicsCollide",function(ent,data) hook.Run("Player Collide",ply,ent,data) end)
 end)
 
+function PlayerMeta:IsStandingOn(ent)
+	local tr = {
+		start = self:EyePos(),
+		endpos = self:EyePos() - vector_up * 82,
+		filter = self
+	}
+	
+	local zhopa = util.TraceLine(tr)
+
+	//print(ent,zhopa.Entity)
+
+	if zhopa.Entity == ent then
+		return true
+	else
+		return false
+	end
+
+	return false
+end
+
 hook.Add("Player Collide","Ragdolling-Collide",function(ply,ent,data)
 	local LIMIT_MASS = 100
 	local LIMIT_SPEED = 280
 	if ROUND_NAME == "dr" then
 		return
 	end
-	if ent:GetVelocity():Length() > LIMIT_SPEED or ent:GetPhysicsObject():GetMass() > LIMIT_MASS and ent:GetVelocity():Length() > LIMIT_SPEED / 2 then
+	if (ent:GetVelocity():Length() > LIMIT_SPEED or ent:GetPhysicsObject():GetMass() > LIMIT_MASS and ent:GetVelocity():Length() > LIMIT_SPEED / 2) and ent != ply and !ply:IsStandingOn(ent) then
+		//print(!ply:IsStandingOn(ent))
 		timer.Simple(0,function()
 			if not IsValid(ply) or ply.Fake then return end
 			if ent:IsPlayerHolding() then
