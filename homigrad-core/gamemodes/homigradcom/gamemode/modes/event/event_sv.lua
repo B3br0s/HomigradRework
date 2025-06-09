@@ -23,3 +23,7 @@ end
 function event.RoundThink()
     
 end
+
+function event.LootSpawn()
+    return false
+end

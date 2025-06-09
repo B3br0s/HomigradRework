@@ -241,6 +241,9 @@ function Faking(ply,force)
     ply.LastRagdollTime = CurTime() + 1.5
 
     if not ply.Fake then
+		if GetGlobalBool("NoFake") then
+			return
+		end
 		if ply.isZombie then
 			return
 		end

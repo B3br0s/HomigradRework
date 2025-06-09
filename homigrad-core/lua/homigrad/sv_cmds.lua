@@ -348,6 +348,14 @@ COMMANDS.nogib = {function(ply,args)
 	SetGlobalBool("NoGib",value)
 end,1}
 
+COMMANDS.nofake = {function(ply,args)
+	if not ply:IsAdmin() then return end
+
+	local value = tonumber(args[2]) > 0
+
+	SetGlobalBool("NoFake",value)
+end,1}
+
 COMMANDS.nextmode = {function(ply,args)
 	if not ply:IsAdmin() then return end
 

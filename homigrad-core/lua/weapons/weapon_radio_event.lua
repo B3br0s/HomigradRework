@@ -17,6 +17,10 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
 
+SWEP.NoLHand = true
+
+SWEP.SupportTPIK = true
+
 SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
@@ -28,6 +32,7 @@ SWEP.DrawCrosshair			= false
 
 SWEP.ViewModel				= "models/radio/w_radio.mdl"
 SWEP.WorldModel				= "models/radio/w_radio.mdl"
+SWEP.WorldModelReal				= "models/radio/c_radio.mdl"
 
 
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
@@ -38,6 +43,23 @@ SWEP.IconAng = Angle(-90,0,0)
 SWEP.IconPos = Vector(70,-0.5,0)
 
 SWEP.Rarity = 2
+
+SWEP.TPIK_Anims = true
+
+function SWEP:GetWM()
+    return self.worldModel or self
+end
+
+function SWEP:SetupDataTables()
+	self:NetworkVar("Float", 1, "SequenceIndex")
+	self:NetworkVar("Float", 2, "SequenceProxy")
+	self:NetworkVar("Float", 3, "IKTimeLineStart")
+    self:NetworkVar("Float", 4, "IKTime")
+    self:NetworkVar("Float", 5, "SequenceSpeed")
+    self:NetworkVar("Float", 6, "ProcessedValue")
+
+	self:NetworkVar("String", 0, "IKAnimation")
+end
 
 function SWEP:Initialize()
         self:SetHoldType("normal")
@@ -124,25 +146,7 @@ if SERVER then
     end)
 else
     function SWEP:Step()
-        if IsValid(self:GetOwner()) then
-            local ply = self:GetOwner()
-
-            if self:GetNWBool("Tran") then
-                if !ply:KeyDown(IN_DUCK) then
-                    hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-20,0),1,0.125)
-                    hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(-5,-110,50),1,0.125)
-                    hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.125)
-                else
-                    hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,-20,0),1,0.125)
-                    hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(-10,-10,50),1,0.125)
-                    hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.125)
-                end
-            else
-                hg.bone.Set(ply,"r_upperarm",Vector(0,0,0),Angle(0,0,0),1,0.125)
-                hg.bone.Set(ply,"r_forearm",Vector(0,0,0),Angle(0,0,0),1,0.125)
-                hg.bone.Set(ply,"r_hand",Vector(0,0,0),Angle(0,0,0),1,0.125)
-            end
-        end
+        self:DrawWM()
     end
 end
 
@@ -174,13 +178,13 @@ function SWEP:OwnerChanged()
     end
 end
 
-SWEP.WorldAng = Angle(-90,0,-90)
-SWEP.WorldPos = Vector(3,0,1.5)
+SWEP.WorldAng = Angle(20,0,0)
+SWEP.WorldPos = Vector(-6,-2,0)
 
 function SWEP:CreateWorldModel()
     if not IsValid(self:GetOwner()) then return end
     if IsValid(self.worldModel) then return end
-    local WorldModel = ClientsideModel(self.WorldModel)
+    local WorldModel = ClientsideModel(self.WorldModelReal)
     WorldModel.IsIcon = true
 
     WorldModel:SetOwner(self:GetOwner())
@@ -201,9 +205,13 @@ function SWEP:DrawWM()
             return
         end
         if not IsValid(WM) then self:CreateWorldModel() return end
-        if owner.Fake then self.worldModel:Remove() return end 
+        //if owner.Fake then self.worldModel:Remove() return end 
         if !owner:Alive() then return end
-        local Att = owner:GetAttachment(owner:LookupAttachment("anim_attachment_RH"))
+        local asdasdasd = hg.eyeTrace(owner)
+        local ent = hg.GetCurrentCharacter(owner)
+        local mat = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Head1"))
+        local pos = ent:IsRagdoll() and mat:GetTranslation() or asdasdasd.StartPos
+        local Att = {Pos = pos,Ang = owner:EyeAngles()}//owner:GetAttachment(owner:LookupAttachment("anim_attachment_RH"))
         WM.IsIcon = true
         //WM:SetNoDraw(false)
         
